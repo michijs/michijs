@@ -1,4 +1,5 @@
 import { formatToLowerCase } from "./formatToLowerCase";
+import { ObservedAttributesType, LSCustomElement, ElementsType, PropertiesType } from "./types";
 
 interface ComponentConfig {
     tag?: string;
@@ -40,50 +41,114 @@ export const LSElement = (config?: ComponentConfig) => (element: CustomElementCo
         }
     }
 
-    const observedAttributes = element.prototype.observedAttributes;
-    // delete element.prototype.observedAttributes;
+    const elements: Array<ElementsType> | undefined = element.prototype.elements;
+    const properties: Array<PropertiesType> | undefined = element.prototype.properties;
+    const observedAttributes: Array<ObservedAttributesType> | undefined = element.prototype.observedAttributes;
 
     Object.defineProperty(element.prototype.constructor, 'observedAttributes', {
         get() {
-            return observedAttributes;
+            return observedAttributes ? observedAttributes.map(attribute => formatToLowerCase(attribute.propertyName)) : [];
         },
     })
 
     element.prototype.connectedCallback = function () {
-        const renderResult: Array<HTMLElement> = this.render();
-        if (!renderResult || renderResult.length === 0) {
-            throw new Error('You need to pass a template for the element');
-        }
-
         //If it is a builtin element cannot use shadow dom
-        const canUseShadow = config?.elementDefinitionOptions?.extends === undefined;
-        const useShadow = config?.shadow !== false && canUseShadow;
+        const useShadow = config?.shadow !== false;
         if (useShadow) {
             const shadowMode = config?.shadow ? config?.shadow : 'open';
             this.attachShadow({ mode: shadowMode });
         }
-        const appendTarget = useShadow ? this.shadowRoot : this;
+        const rootElement: ShadowRoot = useShadow ? this.shadowRoot : this;
+        const renderResult: HTMLElement | Array<HTMLElement> = this.render();
 
-        renderResult.forEach(element => {
-            appendTarget.appendChild(element);
+        if (!renderResult) {
+            throw new Error('You need to pass a template for the element');
+        }
+        if (Array.isArray(renderResult)) {
+            renderResult.forEach(element => {
+                rootElement.appendChild(element);
+            });
+        } else {
+            rootElement.appendChild(renderResult);
+        }
+
+        if (this.styles()) {
+            const styleElement = document.createElement('style');
+            styleElement.setAttribute('scoped', '');
+            Promise.all((this.styles() as Array<Promise<string>>)).then(styles => {
+                let textArray = new Array<string>();
+                if (typeof styles[0] === 'string') {
+                    textArray = styles;
+                    //@ts-ignore
+                } else if (styles[0].default) {//Stenciljs
+                    //@ts-ignore
+                    textArray = styles.map(style => style.default);
+                }
+                styleElement.textContent = minifyString(textArray.join(' '));
+                rootElement.appendChild(styleElement);
+            })
+        }
+
+        elements.forEach(element => {
+            delete this[element.propertyName]
+            Object.defineProperty(this, element.propertyName, {
+                get() {
+                    return rootElement.getElementById(element.id);
+                },
+            })
         });
 
-        // this.styles().forEach((styles) => {
-            const element = document.createElement('style');
-            element.setAttribute('scoped','')
-            element.textContent = minifyString((this.styles() as string[]).join(' '));
-            appendTarget.appendChild(element);
-        // })
-
-        this.observedAttributes.forEach(attribute => {
-            //ver
-            const value = this.getAttribute(attribute);
-            if (value === 'true' || value === 'false') {
-                this[attribute] = this.hasAttribute(attribute);
-            } else if (value) {
-                this[attribute] = value;
+        properties.forEach(property => {
+            const oldValue = this[property.propertyName];
+            delete this[property.propertyName];
+            if (property.options?.reflect) {
+                const formattedKey = formatToLowerCase(property.propertyName);
+                Object.defineProperty(this, property.propertyName, {
+                    set(newValue) {
+                        const oldValue = this[property.propertyName];
+                        if (typeof newValue === "boolean") {
+                            if (newValue) {
+                                this.setAttribute(formattedKey, '');
+                            } else {
+                                this.removeAttribute(formattedKey)
+                            }
+                        } else {
+                            this.setAttribute(formattedKey, newValue);
+                        }
+                        if (property.options.onChange) {
+                            this[property.options.onChange](newValue, oldValue);
+                        }
+                    },
+                    get() {
+                        if (this.getAttribute(formattedKey) === 'true' || this.getAttribute(formattedKey) === 'false') {
+                            return this.hasAttribute(formattedKey);
+                        } else {
+                            return this.getAttribute(formattedKey);
+                        }
+                    },
+                });
+            } else {
+                Object.defineProperty(this, property.propertyName, createGetterAndSetterWithObserver(this, property.propertyName, property.options?.onChange));
             }
-        });
+            this[property.propertyName] = oldValue;
+        })
+
+        observedAttributes.forEach(attribute => {
+            const newAttributeId = formatToLowerCase(attribute.propertyName);
+            const initialValue = this[attribute.propertyName];
+            delete this[attribute.propertyName];
+            Object.defineProperty(this, newAttributeId, createGetterAndSetterWithObserver(this, newAttributeId, attribute.options?.onChange));
+
+            //First init for observedAttributes
+            const attributeValue = this.getAttribute(newAttributeId);
+            if (attributeValue === 'true' || attributeValue === 'false') {
+                this[newAttributeId] = this.hasAttribute(newAttributeId);
+            } else if (attributeValue) {
+                this[newAttributeId] = attributeValue;
+            } else {
+                this.setAttribute(newAttributeId, initialValue)
+            }
+        })
 
         //Lifecycle methods
         if (this.componentWillMount) {
@@ -122,3 +187,18 @@ function minifyString(string) {
     return string.replace(/\s+/g, ' ').trim();
 }
 
+const createGetterAndSetterWithObserver = (target: LSCustomElement, propertyKey: string, onChange: string) => {
+    let propertyRealKey = `_${propertyKey}`;
+    return {
+        set(newValue) {
+            const oldValue = target[propertyRealKey];
+            if (target[onChange]) {
+                target[onChange](newValue, oldValue);
+            }
+            target[propertyRealKey] = newValue;
+        },
+        get() {
+            return target[propertyRealKey];
+        },
+    };
+}
