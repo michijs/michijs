@@ -1,0 +1,19 @@
+{
+	"presets": [
+		"env"
+	],
+	"plugins": [
+		// [
+		// 	"transform-react-jsx",
+		// 	{
+		// 		"pragma": "jsxElem"
+		// 	}
+		// ],
+		// [
+		// 	"@babel/plugin-transform-typescript",
+		// 	{
+		// 		"isTSX": true
+		// 	}
+		// ]
+	]
+}

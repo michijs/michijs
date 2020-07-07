@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        //Temas de iconos
+        "pkief.material-icon-theme",
+        "mikebovenlander.formate",
+        "natemoo-re.vscode-stencil-tools",
+        "blanu.vscode-styled-jsx"
+    ]
+}

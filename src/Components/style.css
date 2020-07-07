@@ -1,0 +1,6 @@
+:host {
+  display         : block;
+  background-color: blue;
+  width           : fit-content;
+  height          : fit-content;
+}
