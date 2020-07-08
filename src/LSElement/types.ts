@@ -17,10 +17,12 @@ export type PropertiesType = {
     options: PropertyOptionsType
 }
 
-export type ElementsType = { 
+export type ElementsType = {
     propertyName: string,
     id: string
 };
+
+export type StylesType = Array<Promise<{ default: string } | string>>;
 
 export interface LSCustomElement {
     elements?: ElementsType[],
@@ -33,6 +35,6 @@ export interface LSCustomElement {
     connectedCallback?(): void;
     disconnectedCallback?(): void;
     render(): HTMLElement | Array<HTMLElement>;
-    styles(): Array<Promise<string>>;
+    styles(): StylesType;
     [memberName: string]: any;
 }

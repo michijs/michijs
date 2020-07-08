@@ -1,10 +1,14 @@
 {
-  "name": "@lsegurado/ls-material-design",
+  "name": "@lsegurado/ls-element",
   "license": "MIT",
   "version": "0.0.1",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/lsegurado"
   },
+  "files": [
+    "dist/"
+  ],
+  "baseUrl": "./src",
   "repository": {
     "type": "git",
     "url": "https://github.com/lsegurado/ls-element.git"
@@ -13,15 +17,13 @@
   "main": "index.html",
   "scripts": {
     "start": "parcel index.html --open",
-    "build_old": "parcel build ./src/index.tsx --no-source-maps",
-    "build": "npm run copy && tsc",
-    "copy": "cpx src/**/*.css dist",
+    "convert_css_to_js": "node node_modules/@lsegurado/ls-convert-css-to-js/bin/index.js --srcDir=src --outDir=dist",
+    "build": "tsc && npm run convert_css_to_js",
     "publish-patch-version": "npm version patch && npm run publish-npm",
     "publish-npm": "npm run build && npm publish --access restricted"
   },
   "keywords": [
-    "web-components",
-    "lit-html"
+    "web-components"
   ],
   "parcel-plugin-css-to-string": {
     "assetType": [
@@ -30,23 +32,12 @@
     "minify": true
   },
   "devDependencies": {
-    "@babel/core": "^7.10.4",
-    "@babel/plugin-proposal-decorators": "^7.10.4",
-    "@babel/plugin-syntax-jsx": "^7.10.4",
-    "@babel/plugin-transform-react-jsx": "^7.10.4",
-    "@babel/plugin-transform-runtime": "^7.10.4",
-    "@babel/plugin-transform-typescript": "^7.10.4",
-    "@babel/preset-react": "^7.10.4",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-preset-env": "^1.7.0",
-    "copyfiles": "^2.3.0",
-    "parcel": "^1.12.4",
+    "@types/node": "^14.0.14",
+    "parcel-bundler": "^1.12.4",
     "parcel-plugin-css-to-string": "^2.5.0",
     "typescript": "^3.9.6"
   },
   "dependencies": {
-    "@types/node": "^14.0.14",
-    "cpx": "^1.5.0",
-    "parcel-bundler": "^1.12.4"
+    "@lsegurado/ls-convert-css-to-js": "0.0.8"
   }
 }
