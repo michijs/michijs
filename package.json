@@ -16,7 +16,7 @@
   "description": "Typescript framework to build web components",
   "main": "index.html",
   "scripts": {
-    "start": "parcel index.html --open",
+    "start": "parcel index.html --open --out-dir build",
     "convert_css_to_js": "node node_modules/@lsegurado/ls-convert-css-to-js/bin/index.js --srcDir=src --outDir=dist",
     "build": "tsc && npm run convert_css_to_js",
     "publish-patch-version": "npm version patch && npm run publish-npm",
