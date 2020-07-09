@@ -350,8 +350,11 @@ export interface HTMLAttributes extends DOMAttributes {
     vocab?: string;
 }
 
+
+
+
 declare global {
-    namespace JSX {
+    export namespace JSX {
         type Element = HTMLElement;
 
         interface ElementAttributesProperty {
@@ -364,6 +367,6 @@ declare global {
 
         type IntrinsicElementsHTML = { [K in keyof HTMLElementTagNameMap]?: HTMLAttributes };
 
-        interface IntrinsicElements extends IntrinsicElementsHTML { }
+        type IntrinsicElements = IntrinsicElementsHTML
     }
 }

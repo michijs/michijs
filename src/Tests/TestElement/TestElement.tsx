@@ -9,42 +9,42 @@ export class LsTestElement extends HTMLElement implements LSCustomElement  {
   @EventDispatcher() allAnimationsFinished: CustomEventDispatcher<string>;
 
   onChangeXd(newValue) {
-    this.xdElement.textContent = newValue;
-    // const event = new CustomEvent('allanimationsfinished', {
-    //   detail: 'hola',
-    //   bubbles: true,
-    //   cancelable: false,
-    // });
-    console.log(this.allAnimationsFinished);
-    // this.dispatchEvent(event);
-    this.allAnimationsFinished.dispatch('holaxd');
+  	this.xdElement.textContent = newValue;
+  	// const event = new CustomEvent('allanimationsfinished', {
+  	//   detail: 'hola',
+  	//   bubbles: true,
+  	//   cancelable: false,
+  	// });
+  	console.log(this.allAnimationsFinished);
+  	// this.dispatchEvent(event);
+  	this.allAnimationsFinished.dispatch('holaxd');
   }
 
   onChangeXD2(newValue) {
-    this.xd2Element.textContent = newValue;
+  	this.xd2Element.textContent = newValue;
   }
 
   styles() {
-    return [
-      import('./style.css'),
-      import('./style2.css')
-    ]
+  	return [
+  		import('./style.css'),
+  		import('./style2.css')
+  	];
   }
 
   render() {
-    return (
-      <>
-        <h1 id="xd" onClick={(_ev) => { this.xd++ }}>{this.xd}</h1>
-        <h1 id="xd2">{this.xd2}</h1>
-      </>
-    );
+  	return (
+  		<>
+  			<h1 id="xd" onClick={(_ev) => { this.xd++; }}>{this.xd}</h1>
+  			<h1 id="xd2">{this.xd2}</h1>
+  		</>
+  	);
   }
 }
 
 declare global {
-  namespace JSX {
+  export namespace JSX {
     interface IntrinsicElements {
-      "ls-test-element": {
+      'ls-test-element': {
           xd2?: string;
           onAllAnimationsFinished?: (event: CustomEvent<string>) => void;
       } & HTMLAttributes;

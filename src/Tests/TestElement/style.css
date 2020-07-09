@@ -1,8 +1,8 @@
 :host {
-  display         : block;
-  background-color: blue;
-  width           : fit-content;
-  height          : fit-content;
-  min-width: 40px;
-  min-height: 40px;
+	display: block;
+	background-color: blue;
+	width: fit-content;
+	height: fit-content;
+	min-width: 40px;
+	min-height: 40px;
 }
