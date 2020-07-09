@@ -16,9 +16,10 @@
   "description": "Typescript framework to build web components",
   "main": "index.html",
   "scripts": {
+    "clean": "del-cli --force dist",
     "start": "parcel ./src/Tests/index.html --open --out-dir build",
     "convert_css_to_js": "node node_modules/@lsegurado/ls-convert-css-to-js/bin/index.js --srcDir=src --outDir=dist",
-    "build": "tsc && npm run convert_css_to_js",
+    "build": "npm run clean && tsc && npm run convert_css_to_js",
     "publish-patch-version": "npm version patch && npm run publish-npm",
     "publish-npm": "npm run build && npm publish --access restricted"
   },
@@ -32,10 +33,10 @@
     "minify": true
   },
   "devDependencies": {
-    "@types/node": "^14.0.14",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-css-to-string": "^2.5.0",
-    "typescript": "^3.9.6"
+    "typescript": "^3.9.6",
+    "del-cli": "^3.0.1"
   },
   "dependencies": {
     "@lsegurado/ls-convert-css-to-js": "0.0.8"
