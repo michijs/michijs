@@ -22,12 +22,22 @@ export type ElementsType = {
     id: string
 };
 
+export type eventsDispatchersType = {
+    propertyName: string,
+    eventInit?: Omit<CustomEventInit, 'detail'>
+}
+
+export type LsAttributesType = {
+    elements: ElementsType[],
+    observedAttributes: ObservedAttributesType[],
+    properties: PropertiesType[],
+    eventsDispatchers: eventsDispatchersType[]
+}
+
 export type StylesType = Array<Promise<{ default: string } | string>>;
 
 export interface LSCustomElement {
-    elements?: ElementsType[],
-    observedAttributes?: ObservedAttributesType[],
-    properties?: PropertiesType[],
+    ls?: LsAttributesType,
     componentWillMount?(),
     componentDidMount?(),
     componentWillUnmount?(),

@@ -1,10 +1,11 @@
-import { formatToLowerCase } from "./formatToLowerCase";
-import { ObservedAttributesType, LSCustomElement, ElementsType, PropertiesType, StylesType } from "./types";
+import { formatToLowerCase } from "../utils/formatToLowerCase";
+import { LSCustomElement, StylesType, LsAttributesType } from "../types";
+import { CustomEventDispatcher } from "../utils/CustomEventDispatcher";
 
-interface ComponentConfig {
+interface AutonomousCustomElementConfig {
     tag?: string;
     shadow?: false | 'open' | 'closed';
-    elementDefinitionOptions?: ElementDefinitionOptions
+    // elementDefinitionOptions?: ElementDefinitionOptions
 }
 
 const emptyFunction = () => { };
@@ -15,8 +16,8 @@ const validateTag = (tag: string) => {
     }
 };
 
-export const LSElement = (config?: ComponentConfig) => (element: CustomElementConstructor) => {
-    let tag = config?.tag ? config.tag : formatToLowerCase(element.name);
+export const AutonomousCustomElement = (config?: AutonomousCustomElementConfig) => (element: CustomElementConstructor) => {
+    let tag = config?.tag || formatToLowerCase(element.name);
     validateTag(tag);
 
     // if (!config?.elementDefinitionOptions?.extends) {
@@ -41,13 +42,11 @@ export const LSElement = (config?: ComponentConfig) => (element: CustomElementCo
         }
     }
 
-    const elements: Array<ElementsType> | undefined = element.prototype.elements;
-    const properties: Array<PropertiesType> | undefined = element.prototype.properties;
-    const observedAttributes: Array<ObservedAttributesType> | undefined = element.prototype.observedAttributes;
+    const lsAttributes: LsAttributesType = element.prototype.ls;
 
     Object.defineProperty(element.prototype.constructor, 'observedAttributes', {
         get() {
-            return observedAttributes ? observedAttributes.map(attribute => formatToLowerCase(attribute.propertyName)) : [];
+            return lsAttributes.observedAttributes.map(attribute => formatToLowerCase(attribute.propertyName));
         },
     })
 
@@ -88,7 +87,17 @@ export const LSElement = (config?: ComponentConfig) => (element: CustomElementCo
                 })
             }
 
-            elements.forEach(element => {
+            lsAttributes.eventsDispatchers.forEach(eventDispatcher => {
+                this[eventDispatcher.propertyName] = new CustomEventDispatcher(
+                    eventDispatcher.propertyName,
+                    this,
+                    eventDispatcher.eventInit?.bubbles,
+                    eventDispatcher.eventInit?.cancelable,
+                    eventDispatcher.eventInit?.composed
+                );
+            });
+
+            lsAttributes.elements.forEach(element => {
                 delete this[element.propertyName]
                 Object.defineProperty(this, element.propertyName, {
                     get() {
@@ -97,7 +106,7 @@ export const LSElement = (config?: ComponentConfig) => (element: CustomElementCo
                 })
             });
 
-            properties.forEach(property => {
+            lsAttributes.properties.forEach(property => {
                 const oldValue = this[property.propertyName];
                 delete this[property.propertyName];
                 if (property.options?.reflect) {
@@ -132,7 +141,7 @@ export const LSElement = (config?: ComponentConfig) => (element: CustomElementCo
                 this[property.propertyName] = oldValue;
             })
 
-            observedAttributes.forEach(attribute => {
+            lsAttributes.observedAttributes.forEach(attribute => {
                 const newAttributeId = formatToLowerCase(attribute.propertyName);
                 const initialValue = this[attribute.propertyName];
                 delete this[attribute.propertyName];
@@ -170,7 +179,7 @@ export const LSElement = (config?: ComponentConfig) => (element: CustomElementCo
         }
     };
 
-    window.customElements.define(tag, element, config?.elementDefinitionOptions);
+    window.customElements.define(tag, element);
 };
 
 // function getTagOf(prototype) {
