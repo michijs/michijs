@@ -367,6 +367,6 @@ declare global {
 
         type IntrinsicElementsHTML = { [K in keyof HTMLElementTagNameMap]?: HTMLAttributes };
 
-        type IntrinsicElements = IntrinsicElementsHTML
+        interface IntrinsicElements extends IntrinsicElementsHTML { }
     }
 }
