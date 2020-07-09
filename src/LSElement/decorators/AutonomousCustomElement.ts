@@ -64,18 +64,17 @@ export const AutonomousCustomElement = (config?: AutonomousCustomElementConfig) 
                 this.attachShadow({ mode: shadowMode });
             }
             const rootElement: ShadowRoot = useShadow ? this.shadowRoot : this;
-            const renderResult: HTMLElement | Array<HTMLElement> = this.render();
-            const styles: StylesType = this.styles();
+            const renderResult: HTMLElement | Array<HTMLElement> | undefined = this.render ? this.render() : undefined;
+            const styles: StylesType | undefined = this.styles ? this.styles(): undefined;
 
-            if (!renderResult) {
-                throw new Error('You need to pass a template for the element');
-            }
-            if (Array.isArray(renderResult)) {
-                renderResult.forEach(element => {
-                    rootElement.appendChild(element);
-                });
-            } else {
-                rootElement.appendChild(renderResult);
+            if (renderResult) {
+                if (Array.isArray(renderResult)) {
+                    renderResult.forEach(element => {
+                        rootElement.appendChild(element);
+                    });
+                } else {
+                    rootElement.appendChild(renderResult);
+                }
             }
 
             if (styles && styles.length > 0) {

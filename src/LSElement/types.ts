@@ -36,7 +36,7 @@ export type LsAttributesType = {
 
 export type StylesType = Array<Promise<{ default: string } | string>>;
 
-export interface LSCustomElement {
+export interface LSCustomElement extends HTMLElement {
     ls?: LsAttributesType,
     componentWillMount?(),
     componentDidMount?(),
@@ -44,7 +44,7 @@ export interface LSCustomElement {
     componentDidUnmount?(),
     connectedCallback?(): void;
     disconnectedCallback?(): void;
-    render(): HTMLElement | Array<HTMLElement>;
-    styles(): StylesType;
+    render?(): HTMLElement | Array<HTMLElement>;
+    styles?(): StylesType;
     [memberName: string]: any;
 }

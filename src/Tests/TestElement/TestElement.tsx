@@ -1,7 +1,7 @@
-import { AutonomousCustomElement, Attribute, Property, h, Child, LSCustomElement, HTMLAttributes, EventDispatcher, CustomEventDispatcher } from '../..';
+import { AutonomousCustomElement, Attribute, Property, h, Child, HTMLAttributes, EventDispatcher, CustomEventDispatcher, LSCustomElement } from '../..';
 
 @AutonomousCustomElement()
-export class LsTestElement extends HTMLElement implements LSCustomElement {
+export class LsTestElement extends HTMLElement implements LSCustomElement  {
   @Property({ reflect: true, onChange: 'onChangeXd' }) xd = 234;
   @Attribute({ onChange: 'onChangeXD2' }) xd2: string = 'xd';
   @Child('xd') xdElement: HTMLHeadingElement;
