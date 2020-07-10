@@ -4,3 +4,5 @@ export { Attribute, Property, Child, EventDispatcher } from './LSElement/decorat
 export { LSCustomElement } from './LSElement/types';
 export { HTMLAttributes } from './LSElement/utils/h/JSXBase';
 export { CustomEventDispatcher } from './LSElement/utils/CustomEventDispatcher';
+import './LSElement/utils/global';
+import './LSElement/utils/h/external';
