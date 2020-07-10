@@ -1,22 +1,9 @@
 {
 	"extensions.ignoreRecommendations": false,
-	// "terminal.integrated.shell.windows": "C:\\Program Files\\Git\\bin\\bash.exe",
-	"emmet.includeLanguages": {
-		"razor": "html"
-	},
-	"files.associations": {
-		"*.cshtml": "html",
-		"*.vue": "vue"
-	},
 	"workbench.iconTheme": "material-icon-theme",
 	"editor.minimap.enabled": false,
-	// Controls the font family.
-	// "editor.fontFamily": "Operator Mono",
-	// Controls the line height. Use 0 to compute the lineHeight from the fontSize.
 	"editor.lineHeight": 24,
-	// Enables font ligatures
 	"editor.fontLigatures": true,
-	// Controls if file decorations should use badges.
 	"explorer.decorations.badges": true,
 	"workbench.colorTheme": "Visual Studio Dark",
 	"workbench.colorCustomizations": {
