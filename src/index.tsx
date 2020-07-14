@@ -1,8 +1,8 @@
-export { h } from './LSElement/utils/h';
+export { h } from './LSElement/h';
 export { AutonomousCustomElement } from './LSElement/decorators/AutonomousCustomElement';
 export { Attribute, Property, Child, EventDispatcher } from './LSElement/decorators/PropertyDecorators';
 export { LSCustomElement } from './LSElement/types';
-export { HTMLAttributes } from './LSElement/utils/h/JSXBase';
-export { CustomEventDispatcher } from './LSElement/utils/CustomEventDispatcher';
-import './LSElement/utils/global';
-import './LSElement/utils/h/external';
+export { HTMLAttributes } from './LSElement/h/JSXBase';
+export { CustomEventDispatcher } from './LSElement/decorators/utils/CustomEventDispatcher';
+import './LSElement/h/global';
+import './LSElement/h/external';

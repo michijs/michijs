@@ -13,11 +13,6 @@
         "module": "esnext",
         "target": "es2017",
         "baseUrl": "./src",
-        "paths": {
-            "@/*": [
-                "./*"
-            ],
-        },
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "jsx": "react",

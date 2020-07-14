@@ -22,17 +22,20 @@ export type ElementsType = {
     id: string
 };
 
-export type eventsDispatchersType = {
+export type EventsDispatchersType = {
     propertyName: string,
     eventInit?: Omit<CustomEventInit, 'detail'>
 }
 
 export type LsAttributesType = {
-    elements: ElementsType[],
-    observedAttributes: ObservedAttributesType[],
-    properties: PropertiesType[],
-    eventsDispatchers: eventsDispatchersType[]
+    alreadyConnected?: boolean,
+    elements?: ElementsType[],
+    observedAttributes?: ObservedAttributesType[],
+    properties?: PropertiesType[],
+    eventsDispatchers?: EventsDispatchersType[]
 }
+
+export type RootElement = LSCustomElement | ShadowRoot;
 
 export type StylesType = Array<Promise<{ default: string } | string>>;
 

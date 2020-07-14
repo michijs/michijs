@@ -1,11 +1,12 @@
 import { formatToLowerCase } from '../utils/formatToLowerCase';
-import { LSCustomElement, StylesType, LsAttributesType } from '../types';
-import { CustomEventDispatcher } from '../utils/CustomEventDispatcher';
+import { LSCustomElement, StylesType } from '../types';
+import { executeFirstRender, addStyles } from './utils/RenderUtils';
+import { addEventDispatchers, addElementsReferences, addProperties, addAttributes, createGetterAndSetterForObservedAttributes } from './utils/PropertyDecoratorsUtils';
 
 interface AutonomousCustomElementConfig {
-    tag?: string;
-    shadow?: false | 'open' | 'closed';
-    // elementDefinitionOptions?: ElementDefinitionOptions
+	tag?: string;
+	shadow?: false | 'open' | 'closed';
+	// elementDefinitionOptions?: ElementDefinitionOptions
 }
 
 const validateTag = (tag: string) => {
@@ -35,135 +36,44 @@ export const AutonomousCustomElement = (config?: AutonomousCustomElementConfig) 
 	const connectedCallback = element.prototype.connectedCallback || emptyFunction;
 	const disconnectedCallback = element.prototype.disconnectedCallback || emptyFunction;
 
-	element.prototype.attributeChangedCallback = function (name, oldValue, newValue) {
+	element.prototype.attributeChangedCallback = function (name: string, oldValue, newValue) {
 		if (newValue != oldValue) {
 			this[name] = newValue;
 		}
 	};
 
-	const lsAttributes: LsAttributesType = element.prototype.ls;
-
-	Object.defineProperty(element.prototype.constructor, 'observedAttributes', {
-		get() {
-			return lsAttributes.observedAttributes.map(attribute => formatToLowerCase(attribute.propertyName));
-		},
-	});
+	Object.defineProperty(element.prototype.constructor, 'observedAttributes', createGetterAndSetterForObservedAttributes(element.prototype.ls));
 
 	element.prototype.connectedCallback = function () {
-		if (!this.ls?.alreadyConnected) {
-			if (this.ls) {
-				this.ls.alreadyConnected = true;
-			} else {
-				this.ls = { alreadyConnected: true };
+		const self: LSCustomElement = this;
+		if (!self.ls?.alreadyConnected) {
+			if (!self.ls) {
+				self.ls = {};
 			}
 			//If it is a builtin element cannot use shadow dom
 			const useShadow = config?.shadow !== false;
 			if (useShadow) {
-				const shadowMode = config?.shadow ? config?.shadow : 'open';
-				this.attachShadow({ mode: shadowMode });
+				const shadowMode = config?.shadow || 'open';
+				self.attachShadow({ mode: shadowMode });
 			}
-			const rootElement: ShadowRoot = useShadow ? this.shadowRoot : this;
-			const renderResult: HTMLElement | Array<HTMLElement> | undefined = this.render ? this.render() : undefined;
-			const styles: StylesType | undefined = this.styles ? this.styles(): undefined;
-
-			if (renderResult) {
-				if (Array.isArray(renderResult)) {
-					renderResult.forEach(element => {
-						rootElement.appendChild(element);
-					});
-				} else {
-					rootElement.appendChild(renderResult);
-				}
-			}
-
-			if (styles && styles.length > 0) {
-				const styleElement = document.createElement('style');
-				styleElement.setAttribute('scoped', '');
-				Promise.all(styles).then(styleArray => {
-					styleElement.textContent = styleArray.map(x => typeof x === 'string' ? x : x.default).join(' ');
-					rootElement.appendChild(styleElement);
-				});
-			}
-
-			lsAttributes.eventsDispatchers.forEach(eventDispatcher => {
-				this[eventDispatcher.propertyName] = new CustomEventDispatcher(
-					eventDispatcher.propertyName,
-					this,
-                    eventDispatcher.eventInit?.bubbles,
-                    eventDispatcher.eventInit?.cancelable,
-                    eventDispatcher.eventInit?.composed
-				);
-			});
-
-			lsAttributes.elements.forEach(element => {
-				delete this[element.propertyName];
-				Object.defineProperty(this, element.propertyName, {
-					get() {
-						return rootElement.getElementById(element.id);
-					},
-				});
-			});
-
-			lsAttributes.properties.forEach(property => {
-				const oldValue = this[property.propertyName];
-				delete this[property.propertyName];
-				if (property.options?.reflect) {
-					const formattedKey = formatToLowerCase(property.propertyName);
-					Object.defineProperty(this, property.propertyName, {
-						set(newValue) {
-							const oldValue = this[property.propertyName];
-							if (typeof newValue === 'boolean') {
-								if (newValue) {
-									this.setAttribute(formattedKey, '');
-								} else {
-									this.removeAttribute(formattedKey);
-								}
-							} else {
-								this.setAttribute(formattedKey, newValue);
-							}
-							if (property.options.onChange) {
-								this[property.options.onChange](newValue, oldValue);
-							}
-						},
-						get() {
-							if (this.getAttribute(formattedKey) === 'true' || this.getAttribute(formattedKey) === 'false') {
-								return this.hasAttribute(formattedKey);
-							} else {
-								return this.getAttribute(formattedKey);
-							}
-						},
-					});
-				} else {
-					Object.defineProperty(this, property.propertyName, createGetterAndSetterWithObserver(this, property.propertyName, property.options?.onChange));
-				}
-				this[property.propertyName] = oldValue;
-			});
-
-			lsAttributes.observedAttributes.forEach(attribute => {
-				const newAttributeId = formatToLowerCase(attribute.propertyName);
-				const initialValue = this[attribute.propertyName];
-				delete this[attribute.propertyName];
-				Object.defineProperty(this, newAttributeId, createGetterAndSetterWithObserver(this, newAttributeId, attribute.options?.onChange));
-
-				//First init for observedAttributes
-				const attributeValue = this.getAttribute(newAttributeId);
-				if (attributeValue === 'true' || attributeValue === 'false') {
-					this[newAttributeId] = this.hasAttribute(newAttributeId);
-				} else if (attributeValue) {
-					this[newAttributeId] = attributeValue;
-				} else {
-					this.setAttribute(newAttributeId, initialValue);
-				}
-			});
+			const styles: StylesType = self.styles ? self.styles() : undefined;
+			executeFirstRender(self);
+			addStyles(self, styles);
+			addEventDispatchers(self);
+			addElementsReferences(self);
+			addProperties(self);
+			addAttributes(self);
 
 			//Lifecycle methods
-			if (this.componentWillMount) {
-				this.componentWillMount();
+			if (self.componentWillMount) {
+				self.componentWillMount();
 			}
-			connectedCallback.call(this);
-			if (this.componentDidMount) {
-				this.componentDidMount();
+			connectedCallback.call(self);
+			if (self.componentDidMount) {
+				self.componentDidMount();
 			}
+
+			self.ls.alreadyConnected = true;
 		}
 	};
 
@@ -189,19 +99,3 @@ export const AutonomousCustomElement = (config?: AutonomousCustomElementConfig) 
 //         default: return undefined;
 //     }
 // }
-
-const createGetterAndSetterWithObserver = (target: LSCustomElement, propertyKey: string, onChange: string) => {
-	const propertyRealKey = `_${propertyKey}`;
-	return {
-		set(newValue) {
-			const oldValue = target[propertyRealKey];
-			if (target[onChange]) {
-				target[onChange](newValue, oldValue);
-			}
-			target[propertyRealKey] = newValue;
-		},
-		get() {
-			return target[propertyRealKey];
-		},
-	};
-};

@@ -1,5 +1,5 @@
 export interface FunctionComponent {
-    (attrs: any, ...children): HTMLElement;
+	(attrs: any, ...children): HTMLElement;
 }
 
 export const h = {
@@ -12,7 +12,7 @@ export const h = {
 			return createAndAppendSVG(tag, attrs, ...children);
 		}
 
-		if(typeof tag === 'function'){
+		if (typeof tag === 'function') {
 			return tag(attrs, children);
 		}
 
@@ -79,7 +79,7 @@ function addAttributes(elem, attrs) {
 		} else if (value !== false && value !== null && value !== undefined) {
 			if (value instanceof Object) {
 				const modifier =
-                    attr === 'style' ? splitCamelCase : str => str.toLowerCase();
+					attr === 'style' ? splitCamelCase : str => str.toLowerCase();
 
 				value = Object.entries(value)
 					.map(([key, val]) => `${modifier(key)}: ${val}`)
