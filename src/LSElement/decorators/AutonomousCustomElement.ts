@@ -1,7 +1,7 @@
 import { formatToLowerCase } from '../utils/formatToLowerCase';
 import { LSCustomElement, StylesType } from '../types';
 import { executeFirstRender, addStyles } from './utils/RenderUtils';
-import { addEventDispatchers, addElementsReferences, addProperties, addAttributes, createGetterAndSetterForObservedAttributes } from './utils/PropertyDecoratorsUtils';
+import { addEventDispatchers, addElementsReferences, addProperties, addAttributes, createGetterAndSetterForObservedAttributes, convertStringToDataType } from './utils/PropertyDecoratorsUtils';
 
 interface AutonomousCustomElementConfig {
 	tag?: string;
@@ -38,7 +38,7 @@ export const AutonomousCustomElement = (config?: AutonomousCustomElementConfig) 
 
 	element.prototype.attributeChangedCallback = function (name: string, oldValue, newValue) {
 		if (newValue != oldValue) {
-			this[name] = newValue;
+			this[name] = convertStringToDataType(newValue);
 		}
 	};
 
@@ -50,6 +50,7 @@ export const AutonomousCustomElement = (config?: AutonomousCustomElementConfig) 
 			if (!self.ls) {
 				self.ls = {};
 			}
+
 			//If it is a builtin element cannot use shadow dom
 			const useShadow = config?.shadow !== false;
 			if (useShadow) {
@@ -57,12 +58,12 @@ export const AutonomousCustomElement = (config?: AutonomousCustomElementConfig) 
 				self.attachShadow({ mode: shadowMode });
 			}
 			const styles: StylesType = self.styles ? self.styles() : undefined;
-			executeFirstRender(self);
 			addStyles(self, styles);
 			addEventDispatchers(self);
 			addElementsReferences(self);
 			addProperties(self);
 			addAttributes(self);
+			executeFirstRender(self);
 
 			//Lifecycle methods
 			if (self.componentWillMount) {

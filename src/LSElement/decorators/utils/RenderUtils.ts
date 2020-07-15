@@ -1,5 +1,8 @@
 import { LSCustomElement, StylesType, RootElement } from '../../types';
 
+const unknownElement = document.createElement('unknown');
+unknownElement.style.display = 'none';
+
 function updateAttributes(currentElement: Element, newElement: Element) {
 	//Remove attributes that doesn´t exists now
 	currentElement.getAttributeNames().forEach(attribute => {
@@ -29,7 +32,7 @@ function updateElement(currentElement: Element, newElement: Element, root: RootE
 			for (let i = 0; i < newElement.children.length; i++) {
 				updateElement(currentElement.children.item(i), newElement.children.item(i), root);
 			}
-		} else {
+		} else if(newElement.constructor.name !== 'HTMLElement') {
 			currentElement.textContent = newElement.textContent;
 		}
 	}
@@ -37,11 +40,9 @@ function updateElement(currentElement: Element, newElement: Element, root: RootE
 
 export function updateChangesInDom(self: LSCustomElement) {
 	const newTemplate = render(self);
-
-	if (Array.isArray(newTemplate)) {
-		for (let i = 0; i < getChildrens(self).length; i++) {
-			updateElement(getChildrens(self).item(i), newTemplate[i], getRootNode(self));
-		}
+	const childrens = getChildrens(self);
+	for (let i = 0; i < childrens.length; i++) {
+		updateElement(childrens.item(i), newTemplate[i], getRootNode(self));
 	}
 }
 
@@ -58,9 +59,7 @@ function render(self: LSCustomElement) {
 	const renderResult = self.render();
 	if (renderResult) {
 		let result = !Array.isArray(renderResult) ? [renderResult] : renderResult;
-		const unknownElement = document.createElement('unknown');
-		unknownElement.style.display = 'none';
-		result = result.map(x => !x ? unknownElement : x);
+		result = result.map(x => !x ? unknownElement.cloneNode(true) as HTMLElement : x);
 		return result;
 	} else return undefined;
 }
