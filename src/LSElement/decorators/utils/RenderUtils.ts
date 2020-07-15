@@ -32,7 +32,7 @@ function updateElement(currentElement: Element, newElement: Element, root: RootE
 			for (let i = 0; i < newElement.children.length; i++) {
 				updateElement(currentElement.children.item(i), newElement.children.item(i), root);
 			}
-		} else if(newElement.constructor.name !== 'HTMLElement') {
+		} else if (newElement.constructor.name !== 'HTMLElement') {
 			currentElement.textContent = newElement.textContent;
 		}
 	}
@@ -60,18 +60,21 @@ function render(self: LSCustomElement) {
 	if (renderResult) {
 		let result = !Array.isArray(renderResult) ? [renderResult] : renderResult;
 		result = result.map(x => !x ? unknownElement.cloneNode(true) as HTMLElement : x);
+		if (self.ls.styles) {
+			result.push(self.ls.styles);
+		}
 		return result;
 	} else return undefined;
 }
 
-export function addStyles(rootElement: RootElement, styles?: StylesType) {
+export function addStyles(self: LSCustomElement, styles?: StylesType) {
 	if (styles && styles.length > 0) {
 		const styleElement = document.createElement('style');
 		styleElement.setAttribute('scoped', '');
 		Promise.all(styles).then(styleArray => {
 			styleElement.textContent = styleArray.map(x => typeof x === 'string' ? x : x.default).join(' ');
-			rootElement.appendChild(styleElement);
 		});
+		self.ls.styles = styleElement;
 	}
 }
 

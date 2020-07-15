@@ -32,7 +32,8 @@ export type LsAttributesType = {
     elements?: ElementsType[],
     observedAttributes?: ObservedAttributesType[],
     properties?: PropertiesType[],
-    eventsDispatchers?: EventsDispatchersType[]
+    eventsDispatchers?: EventsDispatchersType[],
+    styles?: HTMLStyleElement,
 }
 
 export type RootElement = LSCustomElement | ShadowRoot;
