@@ -67,7 +67,7 @@ function render(self: LSCustomElement) {
 	} else return undefined;
 }
 
-export function addStyles(self: LSCustomElement, styles?: StylesType) {
+export function importStyles(self: LSCustomElement, styles?: StylesType) {
 	if (styles && styles.length > 0) {
 		const styleElement = document.createElement('style');
 		styleElement.setAttribute('scoped', '');
