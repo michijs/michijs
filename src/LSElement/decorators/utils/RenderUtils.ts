@@ -1,7 +1,4 @@
-import { LSCustomElement, StylesType, RootElement } from '../../types';
-
-const unknownElement = document.createElement('unknown');
-unknownElement.style.display = 'none';
+import { LSCustomElement, StylesType } from '../../types';
 
 function updateAttributes(currentElement: Element, newElement: Element) {
 	//Remove attributes that doesn´t exists now
@@ -19,9 +16,17 @@ function updateAttributes(currentElement: Element, newElement: Element) {
 	});
 }
 
-function updateElement(currentElement: Element, newElement: Element, root: RootElement) {
+function updateElement(currentElement: Element, newElement: Element, parent: Element) {
+	if (!currentElement) {
+		return parent.appendChild(newElement);
+	}
+
+	if (!newElement) {
+		return parent.removeChild(currentElement);
+	}
+
 	if (currentElement.tagName !== newElement.tagName) {
-		root.replaceChild(newElement, currentElement);
+		return parent.replaceChild(newElement, currentElement);
 	}
 
 	if (currentElement && newElement) {
@@ -29,9 +34,7 @@ function updateElement(currentElement: Element, newElement: Element, root: RootE
 		updateAttributes(currentElement, newElement);
 		if (currentElement.outerHTML === newElement.outerHTML) return true;
 		if (newElement.children.length > 0) {
-			for (let i = 0; i < newElement.children.length; i++) {
-				updateElement(currentElement.children.item(i), newElement.children.item(i), root);
-			}
+			updateChildrens(Array.from(newElement.children), Array.from(currentElement.children), currentElement);
 		} else if (newElement.constructor.name !== 'HTMLElement') {
 			currentElement.textContent = newElement.textContent;
 		}
@@ -41,8 +44,15 @@ function updateElement(currentElement: Element, newElement: Element, root: RootE
 export function updateChangesInDom(self: LSCustomElement) {
 	const newTemplate = render(self);
 	const childrens = getChildrens(self);
-	for (let i = 0; i < childrens.length; i++) {
-		updateElement(childrens.item(i), newTemplate[i], getRootNode(self));
+	updateChildrens(newTemplate, childrens, getRootNode(self));
+}
+
+export function updateChildrens(newTemplate: Element[], currentChildrens: Element[], parent: Element) {
+	const maxIndex = currentChildrens.length > newTemplate.length ? currentChildrens.length : newTemplate.length;
+	for (let i = 0; i < maxIndex; i++) {
+		const currentChildren = i < currentChildrens.length ? currentChildrens[i] : undefined;
+		const newChildren = i < newTemplate.length ? newTemplate[i].cloneNode(true) as Element : undefined;
+		updateElement(currentChildren, newChildren, parent);
 	}
 }
 
@@ -58,8 +68,19 @@ export function executeFirstRender(self: LSCustomElement) {
 function render(self: LSCustomElement) {
 	const renderResult = self.render();
 	if (renderResult) {
-		let result = !Array.isArray(renderResult) ? [renderResult] : renderResult;
-		result = result.map(x => !x ? unknownElement.cloneNode(true) as HTMLElement : x);
+		let arrayResult = !Array.isArray(renderResult) ? [renderResult] : renderResult;
+		const result = new Array<HTMLElement>();
+
+		for (let i = 0; i < arrayResult.length; i++) {
+			const x = arrayResult[i];
+			if (x) {
+				if (Array.isArray(x)) {
+					result.push(...x)
+				} else {
+					result.push(x);
+				}
+			}
+		}
 		if (self.ls.styles) {
 			result.push(self.ls.styles);
 		}
@@ -79,9 +100,9 @@ export function importStyles(self: LSCustomElement, styles?: StylesType) {
 }
 
 export function getChildrens(self: LSCustomElement) {
-	return self.shadowRoot ? self.shadowRoot.children : self.children;
+	return Array.from(self.shadowRoot ? self.shadowRoot.children : self.children);
 }
 
-export function getRootNode(self: LSCustomElement): RootElement {
-	return self.shadowRoot ? self.shadowRoot : self;
+export function getRootNode(self: LSCustomElement): Element {
+	return (self.shadowRoot ? self.shadowRoot : self) as Element;
 }
