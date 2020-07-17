@@ -33,7 +33,7 @@ function updateElement(currentElement: Element, newElement: Element, parent: Ele
 
 function updateChildrens(newChildrens: Element[], parent: Element) {
 	for (let i = 0; i < newChildrens.length; i++) {
-			updateElement(newChildrens[i], parent.children.namedItem(newChildrens[i].id), parent);
+		updateElement(newChildrens[i], parent.children.namedItem(newChildrens[i].id), parent);
 	}
 }
 
@@ -43,11 +43,11 @@ function removeChildrens(childsToRemove: Element[], parent: Element) {
 
 function insertNewChildrens(childsToAdd: ChildrensToAddType[], parent: Element) {
 	childsToAdd.forEach(child => {
-		if (!child.index) child.index = 0
+		if (!child.index) child.index = 0;
 		if (child.index >= parent.children.length) {
-			parent.appendChild(child.element)
+			parent.appendChild(child.element);
 		} else {
-			parent.insertBefore(child.element, parent.children[child.index])
+			parent.insertBefore(child.element, parent.children[child.index]);
 		}
 	});
 }
@@ -64,7 +64,7 @@ function updateChangesInElement(newChildrens: Element[], oldChildrens: Element[]
 	const childsToAdd = newChildrens.map((value, index) => ({ element: value, index: index })).filter(x => !oldChildrensIds.includes(x.element.id));
 	const childsToUpdate = newChildrens.filter(x => oldChildrensIds.includes(x.id));
 
-	removeChildrens(childsToRemove, parent)
+	removeChildrens(childsToRemove, parent);
 	updateChildrens(childsToUpdate, parent);
 	insertNewChildrens(childsToAdd, parent);
 }
@@ -112,7 +112,7 @@ export function importStyles(self: LSCustomElement, styles?: StylesType) {
 	if (styles && styles.length > 0) {
 		const styleElement = document.createElement('style');
 		styleElement.setAttribute('scoped', '');
-		styleElement.id = "ls-style";
+		styleElement.id = 'ls-style';
 		Promise.all(styles).then(styleArray => {
 			styleElement.textContent = styleArray.map(x => typeof x === 'string' ? x : x.default).join(' ');
 		});

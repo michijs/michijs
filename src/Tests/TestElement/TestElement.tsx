@@ -44,7 +44,7 @@ export class LsTestElement extends HTMLElement implements LSCustomElement {
 				{this.xd > 256 ? <h1 id="<256">{'>256'}</h1> : undefined}
 				{this.xd > 245 ? <h1 id="<245">{'>245'}</h1> : undefined}
 				{this.xd < 236 ? <h1 id="<236">{'<236'}</h1> : undefined}
-				{this.arrayExample.map(x => <h2 id={"example" + x}>{x}</h2>)}
+				{this.arrayExample.map(x => <h2 id={'example' + x}>{x}</h2>)}
 				<h1 id="xd2">{this.xd2}</h1>
 			</>
 		);
