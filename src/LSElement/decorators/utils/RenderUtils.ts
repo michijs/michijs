@@ -68,14 +68,14 @@ export function executeFirstRender(self: LSCustomElement) {
 function render(self: LSCustomElement) {
 	const renderResult = self.render();
 	if (renderResult) {
-		let arrayResult = !Array.isArray(renderResult) ? [renderResult] : renderResult;
+		const arrayResult = !Array.isArray(renderResult) ? [renderResult] : renderResult;
 		const result = new Array<HTMLElement>();
 
 		for (let i = 0; i < arrayResult.length; i++) {
 			const x = arrayResult[i];
 			if (x) {
 				if (Array.isArray(x)) {
-					result.push(...x)
+					result.push(...x);
 				} else {
 					result.push(x);
 				}

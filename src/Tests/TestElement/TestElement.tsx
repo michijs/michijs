@@ -38,7 +38,7 @@ export class LsTestElement extends HTMLElement implements LSCustomElement {
 			<>
 				<div>
 					{/* <h1 id="xd" value={this.xd < 240 ? this.xd2 + this.xd : undefined} onClick={(_ev) => { this.xd++;  }}>{this.xd}</h1> */}
-					<h1 id="xd" value={this.xd < 240 ? this.xd2 + this.xd : undefined} onClick={(_ev) => { this.xd++; this.arrayExample = [...this.arrayExample, this.xd] }}>{this.xd}</h1>
+					<h1 id="xd" value={this.xd < 240 ? this.xd2 + this.xd : undefined} onClick={(_ev) => { this.xd++; this.arrayExample = [...this.arrayExample, this.xd]; }}>{this.xd}</h1>
 					{/* <h1>{this.xd2}</h1> */}
 				</div>
 				{this.xd > 256 ? <h1 id="xd2">{'>256'}</h1> : undefined}
