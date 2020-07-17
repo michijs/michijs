@@ -621,7 +621,7 @@ declare global {
             children: ComponentChildren[] | ComponentChildren;
         }
 
-        type IntrinsicElementsHTML = { [K in keyof HTMLElementTagNameMap]?: HTMLAttributes } & { [K in keyof SVGElementTagNameMap]?: SVGAttributes };
+        type IntrinsicElementsHTML = { [K in keyof HTMLElementTagNameMap]?: HTMLAttributes & {id: string} } & { [K in keyof SVGElementTagNameMap]?: SVGAttributes & {id: string} };
 
         interface IntrinsicElements extends IntrinsicElementsHTML { }
     }

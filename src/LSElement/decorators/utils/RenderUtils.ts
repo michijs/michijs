@@ -17,43 +17,63 @@ function updateAttributes(currentElement: Element, newElement: Element) {
 }
 
 function updateElement(currentElement: Element, newElement: Element, parent: Element) {
-	if (!currentElement) {
-		return parent.appendChild(newElement);
-	}
-
-	if (!newElement) {
-		return parent.removeChild(currentElement);
-	}
-
 	if (currentElement.tagName !== newElement.tagName) {
-		return parent.replaceChild(newElement, currentElement);
-	}
-
-	if (currentElement && newElement) {
+		parent.replaceChild(newElement, currentElement);
+	} else {
 		if (currentElement.outerHTML === newElement.outerHTML) return true;
 		updateAttributes(currentElement, newElement);
 		if (currentElement.outerHTML === newElement.outerHTML) return true;
 		if (newElement.children.length > 0) {
-			updateChildrens(Array.from(newElement.children), Array.from(currentElement.children), currentElement);
+			updateChangesInElement(Array.from(newElement.children), Array.from(currentElement.children), currentElement);
 		} else if (newElement.constructor.name !== 'HTMLElement') {
 			currentElement.textContent = newElement.textContent;
 		}
 	}
 }
 
-export function updateChangesInDom(self: LSCustomElement) {
-	const newTemplate = render(self);
-	const childrens = getChildrens(self);
-	updateChildrens(newTemplate, childrens, getRootNode(self));
+function updateChildrens(newChildrens: Element[], parent: Element) {
+	for (let i = 0; i < newChildrens.length; i++) {
+			updateElement(newChildrens[i], parent.children.namedItem(newChildrens[i].id), parent);
+	}
 }
 
-export function updateChildrens(newTemplate: Element[], currentChildrens: Element[], parent: Element) {
-	const maxIndex = currentChildrens.length > newTemplate.length ? currentChildrens.length : newTemplate.length;
-	for (let i = 0; i < maxIndex; i++) {
-		const currentChildren = i < currentChildrens.length ? currentChildrens[i] : undefined;
-		const newChildren = i < newTemplate.length ? newTemplate[i].cloneNode(true) as Element : undefined;
-		updateElement(currentChildren, newChildren, parent);
-	}
+function removeChildrens(childsToRemove: Element[], parent: Element) {
+	childsToRemove.forEach(child => parent.removeChild(child));
+}
+
+function insertNewChildrens(childsToAdd: ChildrensToAddType[], parent: Element) {
+	childsToAdd.forEach(child => {
+		if (!child.index) child.index = 0
+		if (child.index >= parent.children.length) {
+			parent.appendChild(child.element)
+		} else {
+			parent.insertBefore(child.element, parent.children[child.index])
+		}
+	});
+}
+
+type ChildrensToAddType = {
+	element: Element;
+	index: number;
+};
+
+function updateChangesInElement(newChildrens: Element[], oldChildrens: Element[], parent: Element) {
+	const newChildrensIds = newChildrens.map(x => x.id);
+	const oldChildrensIds = oldChildrens.map(x => x.id);
+	const childsToRemove = oldChildrens.filter(x => !newChildrensIds.includes(x.id));
+	const childsToAdd = newChildrens.map((value, index) => ({ element: value, index: index })).filter(x => !oldChildrensIds.includes(x.element.id));
+	const childsToUpdate = newChildrens.filter(x => oldChildrensIds.includes(x.id));
+
+	removeChildrens(childsToRemove, parent)
+	updateChildrens(childsToUpdate, parent);
+	insertNewChildrens(childsToAdd, parent);
+}
+
+export function updateChangesInDom(self: LSCustomElement) {
+	const newChildrens = render(self);
+	const oldChildrens = getChildrens(self);
+	const rootNode = getRootNode(self);
+	updateChangesInElement(newChildrens, oldChildrens, rootNode);
 }
 
 export function executeFirstRender(self: LSCustomElement) {
@@ -69,7 +89,7 @@ function render(self: LSCustomElement) {
 	const renderResult = self.render();
 	if (renderResult) {
 		const arrayResult = !Array.isArray(renderResult) ? [renderResult] : renderResult;
-		const result = new Array<HTMLElement>();
+		const result = new Array<Element>();
 
 		for (let i = 0; i < arrayResult.length; i++) {
 			const x = arrayResult[i];
@@ -92,6 +112,7 @@ export function importStyles(self: LSCustomElement, styles?: StylesType) {
 	if (styles && styles.length > 0) {
 		const styleElement = document.createElement('style');
 		styleElement.setAttribute('scoped', '');
+		styleElement.id = "ls-style";
 		Promise.all(styles).then(styleArray => {
 			styleElement.textContent = styleArray.map(x => typeof x === 'string' ? x : x.default).join(' ');
 		});
@@ -100,9 +121,9 @@ export function importStyles(self: LSCustomElement, styles?: StylesType) {
 }
 
 export function getChildrens(self: LSCustomElement) {
-	return Array.from(self.shadowRoot ? self.shadowRoot.children : self.children);
+	return Array.from(self.shadowRoot ? self.shadowRoot.children : self.children) as Element[];
 }
 
-export function getRootNode(self: LSCustomElement): Element {
+export function getRootNode(self: LSCustomElement) {
 	return (self.shadowRoot ? self.shadowRoot : self) as Element;
 }
