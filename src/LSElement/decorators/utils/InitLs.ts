@@ -1,4 +1,4 @@
-import { LsAttributesType } from "LSElement/types";
+import { LsAttributesType } from 'LSElement/types';
 
 export function initLs(ls: LsAttributesType): LsAttributesType {
 	if (ls) {

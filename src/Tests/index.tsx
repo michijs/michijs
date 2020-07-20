@@ -6,14 +6,14 @@ import { Property } from '../LSElement/decorators/PropertyDecorators';
 @AutonomousCustomElement()
 export class LsRootTestElement extends HTMLElement implements LSCustomElement {
 
-    // @Child('test') element: HTMLElement;
+	// @Child('test') element: HTMLElement;
 
     @Property({ reflect: true }) xd2 = 35;
 
     componentWillMount() {
-        // this.element.addEventListener('allanimationsfinished', function (e: CustomEvent) {
-        //     // console.log(e.detail);
-        // }, false);
+    	// this.element.addEventListener('allanimationsfinished', function (e: CustomEvent) {
+    	//     // console.log(e.detail);
+    	// }, false);
     }
 
     // styles() {
@@ -22,12 +22,12 @@ export class LsRootTestElement extends HTMLElement implements LSCustomElement {
     // }
 
     render() {
-        return (
-            <>
-                <ls-test-element id="test" xd2={this.xd2} onAllAnimationsFinished={(ev) => console.log(ev.detail)}></ls-test-element>
-                <h1 onClick={(_ev) => { this.xd2++ }} id="test2">{this.xd2}</h1>
-            </>
-        );
+    	return (
+    		<>
+    			<ls-test-element id="test" xd2={this.xd2} onAllAnimationsFinished={(ev) => console.log(ev.detail)}></ls-test-element>
+    			<h1 onClick={(_ev) => { this.xd2++; }} id="test2">{this.xd2}</h1>
+    		</>
+    	);
     }
 }
 
