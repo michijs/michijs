@@ -8,7 +8,7 @@ export class LsRootTestElement extends HTMLElement implements LSCustomElement {
 
 	// @Child('test') element: HTMLElement;
 
-    @Property({ reflect: true }) xd2 = 35;
+    @Property() xd2 = 35;
 
     componentWillMount() {
     	// this.element.addEventListener('allanimationsfinished', function (e: CustomEvent) {

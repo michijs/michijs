@@ -26,7 +26,6 @@ function updateElement(newElement: Element, currentElement: Element, parent: Ele
 		if (newElement.children.length > 0) {
 			updateChangesInElement(Array.from(newElement.children), Array.from(currentElement.children), currentElement);
 		} else if (newElement.constructor.name !== 'HTMLElement') {
-			console.log('pase');
 			currentElement.textContent = newElement.textContent;
 		}
 	}
