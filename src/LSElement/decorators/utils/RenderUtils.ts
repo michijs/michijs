@@ -16,7 +16,7 @@ function updateAttributes(currentElement: Element, newElement: Element) {
 	});
 }
 
-function updateElement(currentElement: Element, newElement: Element, parent: Element) {
+function updateElement(newElement: Element, currentElement: Element, parent: Element | DocumentFragment) {
 	if (currentElement.tagName !== newElement.tagName) {
 		parent.replaceChild(newElement, currentElement);
 	} else {
@@ -26,22 +26,23 @@ function updateElement(currentElement: Element, newElement: Element, parent: Ele
 		if (newElement.children.length > 0) {
 			updateChangesInElement(Array.from(newElement.children), Array.from(currentElement.children), currentElement);
 		} else if (newElement.constructor.name !== 'HTMLElement') {
+			console.log('pase')
 			currentElement.textContent = newElement.textContent;
 		}
 	}
 }
 
-function updateChildrens(newChildrens: Element[], parent: Element) {
+function updateChildrens(newChildrens: Element[], parent: Element | DocumentFragment) {
 	for (let i = 0; i < newChildrens.length; i++) {
 		updateElement(newChildrens[i], parent.children.namedItem(newChildrens[i].id), parent);
 	}
 }
 
-function removeChildrens(childsToRemove: Element[], parent: Element) {
+function removeChildrens(childsToRemove: Element[], parent: Element | DocumentFragment) {
 	childsToRemove.forEach(child => parent.removeChild(child));
 }
 
-function insertNewChildrens(childsToAdd: ChildrensToAddType[], parent: Element) {
+function insertNewChildrens(childsToAdd: ChildrensToAddType[], parent: Element | DocumentFragment) {
 	childsToAdd.forEach(child => {
 		if (!child.index) child.index = 0;
 		if (child.index >= parent.children.length) {
@@ -57,7 +58,7 @@ type ChildrensToAddType = {
 	index: number;
 };
 
-function updateChangesInElement(newChildrens: Element[], oldChildrens: Element[], parent: Element) {
+function updateChangesInElement(newChildrens: Element[], oldChildrens: Element[], parent: Element | DocumentFragment) {
 	const newChildrensIds = newChildrens.map(x => x.id);
 	const oldChildrensIds = oldChildrens.map(x => x.id);
 	const childsToRemove = oldChildrens.filter(x => !newChildrensIds.includes(x.id));
@@ -108,7 +109,8 @@ function render(self: LSCustomElement) {
 	} else return undefined;
 }
 
-export function importStyles(self: LSCustomElement, styles?: StylesType) {
+export function importStyles(self: LSCustomElement) {
+	const styles: StylesType = self.styles ? self.styles() : undefined;
 	if (styles && styles.length > 0) {
 		const styleElement = document.createElement('style');
 		styleElement.setAttribute('scoped', '');
@@ -120,10 +122,10 @@ export function importStyles(self: LSCustomElement, styles?: StylesType) {
 	}
 }
 
-export function getChildrens(self: LSCustomElement) {
+function getChildrens(self: LSCustomElement) {
 	return Array.from(self.shadowRoot ? self.shadowRoot.children : self.children) as Element[];
 }
 
 export function getRootNode(self: LSCustomElement) {
-	return (self.shadowRoot ? self.shadowRoot : self) as Element;
+	return (self.shadowRoot ? self.shadowRoot : self) as DocumentFragment;
 }

@@ -1,7 +1,8 @@
 import { formatToLowerCase } from '../utils/formatToLowerCase';
-import { LSCustomElement, StylesType } from '../types';
+import { LSCustomElement } from '../types';
 import { executeFirstRender, importStyles } from './utils/RenderUtils';
 import { addEventDispatchers, addElementsReferences, addProperties, addAttributes, createGetterAndSetterForObservedAttributes, convertStringToDataType } from './utils/PropertyDecoratorsUtils';
+import { initLs } from './utils/InitLs';
 
 interface AutonomousCustomElementConfig {
 	tag?: string;
@@ -42,23 +43,20 @@ export const AutonomousCustomElement = (config?: AutonomousCustomElementConfig) 
 		}
 	};
 
+	element.prototype.ls = initLs(element.prototype.ls);
+
 	Object.defineProperty(element.prototype.constructor, 'observedAttributes', createGetterAndSetterForObservedAttributes(element.prototype.ls));
 
 	element.prototype.connectedCallback = function () {
 		const self: LSCustomElement = this;
 		if (!self.ls?.alreadyConnected) {
-			if (!self.ls) {
-				self.ls = {};
-			}
-
-			//If it is a builtin element cannot use shadow dom
 			const useShadow = config?.shadow !== false;
 			if (useShadow) {
 				const shadowMode = config?.shadow || 'open';
 				self.attachShadow({ mode: shadowMode });
 			}
-			const styles: StylesType = self.styles ? self.styles() : undefined;
-			importStyles(self, styles);
+
+			importStyles(self);
 			addEventDispatchers(self);
 			addElementsReferences(self);
 			addProperties(self);

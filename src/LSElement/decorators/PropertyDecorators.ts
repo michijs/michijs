@@ -1,4 +1,5 @@
-import { LSCustomElement, AttributeOptionsType, PropertyOptionsType, LsAttributesType } from '../types';
+import { LSCustomElement, AttributeOptionsType, PropertyOptionsType } from '../types';
+import { initLs } from './utils/InitLs';
 
 export function Attribute(options?: AttributeOptionsType) {
 	return function (target: LSCustomElement, propertyKey: string) {
@@ -26,17 +27,4 @@ export function EventDispatcher(eventInitOptions?: Omit<CustomEventInit, 'detail
 		target.ls = initLs(target.ls);
 		target.ls.eventsDispatchers.push({ propertyName: propertyKey, eventInit: eventInitOptions });
 	};
-}
-
-function initLs(ls: LsAttributesType): LsAttributesType {
-	if (ls) {
-		return ls;
-	} else {
-		return {
-			elements: [],
-			observedAttributes: [],
-			properties: [],
-			eventsDispatchers: []
-		};
-	}
 }
