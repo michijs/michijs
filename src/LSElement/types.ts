@@ -34,6 +34,8 @@ export type LsAttributesType = {
     properties?: PropertiesType[],
     eventsDispatchers?: EventsDispatchersType[],
     styles?: HTMLStyleElement,
+    propertiesProxy: ProxyConstructor,
+    attributesProxy: any
 }
 
 export type RootElement = LSCustomElement | ShadowRoot;
@@ -42,13 +44,15 @@ export type StylesType = Array<Promise<{ default: string } | string>>;
 
 export interface LSCustomElement extends HTMLElement {
     ls?: LsAttributesType,
-    componentWillMount?(),
-    componentDidMount?(),
-    componentWillUnmount?(),
-    componentDidUnmount?(),
+    componentWillMount?(): void,
+    componentDidMount?(): void,
+    componentWillUnmount?(): void,
+    componentDidUnmount?(): void,
     connectedCallback?(): void;
     disconnectedCallback?(): void;
     render?(): HTMLElement | Array<HTMLElement>;
     styles?(): StylesType;
     [memberName: string]: any;
 }
+
+export type CallbackType = (propertyName: string, newValue: any, oldValue: any) => void;
