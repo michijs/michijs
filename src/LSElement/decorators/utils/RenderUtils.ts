@@ -1,6 +1,6 @@
 import { LSCustomElement, StylesType } from '../../types';
 
-function updateAttributes(currentElement: Element, newElement: Element) {
+function updateAttributes(newElement: Element, currentElement: Element) {
 	//Remove attributes that doesn´t exists now
 	currentElement.getAttributeNames().forEach(attribute => {
 		if (!newElement.getAttributeNames().includes(attribute)) {
@@ -21,7 +21,7 @@ function updateElement(newElement: Element, currentElement: Element, parent: Ele
 		parent.replaceChild(newElement, currentElement);
 	} else {
 		if (currentElement.outerHTML === newElement.outerHTML) return true;
-		updateAttributes(currentElement, newElement);
+		updateAttributes(newElement, currentElement);
 		if (currentElement.outerHTML === newElement.outerHTML) return true;
 		if (newElement.children.length > 0) {
 			updateChangesInElement(Array.from(newElement.children), Array.from(currentElement.children), currentElement);
