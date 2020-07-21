@@ -1,10 +1,10 @@
-import { LSCustomElement, LsAttributesType, CallbackType } from '../../types';
+import { LSCustomElement, LsAttributesType, CallbackType, LsStaticAttributesType } from '../../types';
 import { updateChangesInDom, getRootNode } from './RenderUtils';
 import { CustomEventDispatcher } from './CustomEventDispatcher';
 import { formatToLowerCase } from '../../utils/formatToLowerCase';
 
 export function addEventDispatchers(self: LSCustomElement) {
-	self.ls.eventsDispatchers.forEach(eventDispatcher => {
+	self.lsStatic.eventsDispatchers.forEach(eventDispatcher => {
 		self[eventDispatcher.propertyName] = new CustomEventDispatcher(
 			eventDispatcher.propertyName,
 			self,
@@ -16,7 +16,7 @@ export function addEventDispatchers(self: LSCustomElement) {
 }
 
 export function addElementsReferences(self: LSCustomElement) {
-	self.ls.elements.forEach(element => {
+	self.lsStatic.elements.forEach(element => {
 		delete self[element.propertyName];
 		Object.defineProperty(self, element.propertyName, {
 			get() {
@@ -28,7 +28,7 @@ export function addElementsReferences(self: LSCustomElement) {
 
 export function addProperties(self: LSCustomElement) {
 	const initialProxyValue = {};
-	self.ls.properties.forEach(property => {
+	self.lsStatic.properties.forEach(property => {
 		initialProxyValue[property.propertyName] = self[property.propertyName];
 		delete self[property.propertyName];
 		Object.defineProperty(self, property.propertyName, {
@@ -47,7 +47,7 @@ export function addProperties(self: LSCustomElement) {
 	const callback = (propertyName: string, newValue, oldValue) => {
 		if (self.ls.alreadyConnected) {
 			updateChangesInDom(self);
-			const property = self.ls.properties.find(x => x.propertyName === propertyName);
+			const property = self.lsStatic.properties.find(x => x.propertyName === propertyName);
 			const onChange = property?.options?.onChange;
 			if (onChange) {
 				self[onChange](newValue, oldValue);
@@ -112,7 +112,7 @@ function createProxy(initialValue, callback: CallbackType, self: LSCustomElement
 
 export function addAttributes(self: LSCustomElement) {
 	self.ls.attributesProxy = {};
-	self.ls.observedAttributes.forEach(attribute => {
+	self.lsStatic.observedAttributes.forEach(attribute => {
 		const attributeName = standardizePropertyName(attribute.propertyName);
 		
 		if (self.hasAttribute(attributeName)) {
@@ -129,7 +129,7 @@ export function addAttributes(self: LSCustomElement) {
 				self.ls.attributesProxy[attribute.propertyName] = newValue;
 				if (self.ls?.alreadyConnected) {
 					updateChangesInDom(self);
-					const property = self.ls.properties.find(x => x.propertyName === attribute.propertyName);
+					const property = self.lsStatic.properties.find(x => x.propertyName === attribute.propertyName);
 					if (self[property?.options?.onChange]) {
 						self[property?.options?.onChange](newValue, oldValue);
 					}
@@ -160,10 +160,10 @@ export function createGetterAndSetterWithObserver(self: LSCustomElement, proxyKe
 	};
 }
 
-export function createGetterAndSetterForObservedAttributes(ls: LsAttributesType) {
+export function createGetterAndSetterForObservedAttributes(lsStatic: LsStaticAttributesType) {
 	return {
 		get() {
-			return ls.observedAttributes.map(attribute => standardizePropertyName(attribute.propertyName));
+			return lsStatic.observedAttributes.map(attribute => standardizePropertyName(attribute.propertyName));
 		},
 	};
 }

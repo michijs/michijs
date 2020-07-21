@@ -2,7 +2,7 @@ import { formatToLowerCase } from '../utils/formatToLowerCase';
 import { LSCustomElement } from '../types';
 import { executeFirstRender, importStyles } from './utils/RenderUtils';
 import { addEventDispatchers, addElementsReferences, addProperties, addAttributes, createGetterAndSetterForObservedAttributes, convertStringToDataType } from './utils/PropertyDecoratorsUtils';
-import { initLs } from './utils/InitLs';
+import { initLsStatic } from './utils/initLsStatic';
 
 interface AutonomousCustomElementConfig {
 	tag?: string;
@@ -42,14 +42,18 @@ export const AutonomousCustomElement = (config?: AutonomousCustomElementConfig) 
 			this[name] = convertStringToDataType(newValue);
 		}
 	};
+	
+	element.prototype.lsStatic = initLsStatic(element.prototype.lsStatic);
 
-	element.prototype.ls = initLs(element.prototype.ls);
-
-	Object.defineProperty(element.prototype.constructor, 'observedAttributes', createGetterAndSetterForObservedAttributes(element.prototype.ls));
+	Object.defineProperty(element.prototype.constructor, 'observedAttributes', createGetterAndSetterForObservedAttributes(element.prototype.lsStatic));
 
 	element.prototype.connectedCallback = function () {
 		const self: LSCustomElement = this;
+		console.log(element.prototype.lsStatic);
+		// console.log(self.ls);
+		// console.log(self.lsStatic);
 		if (!self.ls?.alreadyConnected) {
+			self.ls = {};
 			const useShadow = config?.shadow !== false;
 			if (useShadow) {
 				const shadowMode = config?.shadow || 'open';
@@ -71,7 +75,6 @@ export const AutonomousCustomElement = (config?: AutonomousCustomElementConfig) 
 			if (self.componentDidMount) {
 				self.componentDidMount();
 			}
-
 			self.ls.alreadyConnected = true;
 		}
 	};

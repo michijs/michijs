@@ -24,8 +24,9 @@ export class LsRootTestElement extends HTMLElement implements LSCustomElement {
     render() {
     	return (
     		<>
+    			
     			<ls-test-element id="test" xd2={this.xd2} onAllAnimationsFinished={(ev) => console.log(ev.detail)}></ls-test-element>
-    			<h1 onClick={(_ev) => { this.xd2++; }} id="test2">{this.xd2}</h1>
+    			<ls-test-element id="test2" xd2={this.xd2} onAllAnimationsFinished={(ev) => console.log(ev.detail)}></ls-test-element>
     		</>
     	);
     }

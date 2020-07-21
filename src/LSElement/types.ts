@@ -27,15 +27,18 @@ export type EventsDispatchersType = {
     eventInit?: Omit<CustomEventInit, 'detail'>
 }
 
-export type LsAttributesType = {
-    alreadyConnected?: boolean,
+export type LsStaticAttributesType = {
     elements?: ElementsType[],
     observedAttributes?: ObservedAttributesType[],
     properties?: PropertiesType[],
-    eventsDispatchers?: EventsDispatchersType[],
+    eventsDispatchers?: EventsDispatchersType[]
+}
+
+export type LsAttributesType = {
+    alreadyConnected?: boolean,
     styles?: HTMLStyleElement,
-    propertiesProxy: ProxyConstructor,
-    attributesProxy: any
+    propertiesProxy?: ProxyConstructor,
+    attributesProxy?: any
 }
 
 export type RootElement = LSCustomElement | ShadowRoot;
@@ -43,6 +46,7 @@ export type RootElement = LSCustomElement | ShadowRoot;
 export type StylesType = Array<Promise<{ default: string } | string>>;
 
 export interface LSCustomElement extends HTMLElement {
+    lsStatic?: LsStaticAttributesType,
     ls?: LsAttributesType,
     componentWillMount?(): void,
     componentDidMount?(): void,
