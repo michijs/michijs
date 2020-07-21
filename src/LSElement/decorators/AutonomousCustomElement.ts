@@ -67,6 +67,7 @@ export const AutonomousCustomElement = (config?: AutonomousCustomElementConfig) 
 			addProperties(self);
 			addAttributes(self);
 			executeFirstRender(self);
+			self.ls.alreadyConnected = true;
 
 			//Lifecycle methods
 			if (self.componentWillMount) {
@@ -76,7 +77,6 @@ export const AutonomousCustomElement = (config?: AutonomousCustomElementConfig) 
 			if (self.componentDidMount) {
 				self.componentDidMount();
 			}
-			self.ls.alreadyConnected = true;
 		}
 	};
 
