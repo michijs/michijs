@@ -18,7 +18,7 @@
   "scripts": {
     "clean": "del-cli --force dist",
     "start": "parcel ./src/Tests/index.html --open --out-dir build",
-    "convert_css_to_js": "node node_modules/@lsegurado/ls-convert-css-to-js/bin/index.js --srcDir=src --outDir=dist",
+    "convert_css_to_js": "node node_modules/@lsegurado/ls-convert-css-to-js-module/bin/index.js --srcDir=src --outDir=dist",
     "build": "npm run clean && tsc && npm run convert_css_to_js",
     "publish-patch-version": "npm version patch && npm run publish-npm",
     "publish-npm": "npm run build && npm publish --access restricted",
@@ -38,8 +38,7 @@
     "stylelint": "^13.6.1",
     "husky": "^4.2.5",
     "stylelint-config-standard": "^20.0.0",
-    "@lsegurado/parcel-plugin-ls-convert-css-to-js-module": "0.0.8",
-    "@lsegurado/ls-convert-css-to-js": "0.0.11"
+    "@lsegurado/parcel-plugin-ls-convert-css-to-js-module": "0.0.9"
   },
   "husky": {
     "hooks": {
