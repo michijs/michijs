@@ -1,4 +1,4 @@
-import { LSCustomElement, LsAttributesType, CallbackType, LsStaticAttributesType } from '../../types';
+import { LSCustomElement, CallbackType, LsStaticAttributesType } from '../../types';
 import { updateChangesInDom, getRootNode } from './RenderUtils';
 import { CustomEventDispatcher } from './CustomEventDispatcher';
 import { formatToLowerCase } from '../../utils/formatToLowerCase';

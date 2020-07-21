@@ -28,10 +28,10 @@ export type EventsDispatchersType = {
 }
 
 export type LsStaticAttributesType = {
-    elements?: ElementsType[],
-    observedAttributes?: ObservedAttributesType[],
-    properties?: PropertiesType[],
-    eventsDispatchers?: EventsDispatchersType[]
+    elements: ElementsType[],
+    observedAttributes: ObservedAttributesType[],
+    properties: PropertiesType[],
+    eventsDispatchers: EventsDispatchersType[]
 }
 
 export type LsAttributesType = {
