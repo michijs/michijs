@@ -1,5 +1,5 @@
-import { LsStaticAttributesType } from "../types";
-import { standardizePropertyName } from "./standardizePropertyName";
+import { LsStaticAttributesType } from '../types';
+import { standardizePropertyName } from './standardizePropertyName';
 
 export function createGetterAndSetterForObservedAttributes(lsStatic: LsStaticAttributesType) {
 	return {
