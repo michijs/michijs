@@ -28,15 +28,8 @@
   "keywords": [
     "web-components"
   ],
-  "parcel-plugin-css-to-string": {
-    "assetType": [
-      "css"
-    ],
-    "minify": true
-  },
   "devDependencies": {
     "parcel-bundler": "^1.12.4",
-    "parcel-plugin-css-to-string": "^2.5.0",
     "typescript": "^3.9.6",
     "del-cli": "^3.0.1",
     "eslint": "^7.3.0",
@@ -44,10 +37,9 @@
     "@typescript-eslint/parser": "^3.3.0",
     "stylelint": "^13.6.1",
     "husky": "^4.2.5",
-    "stylelint-config-standard": "^20.0.0"
-  },
-  "dependencies": {
-    "@lsegurado/ls-convert-css-to-js": "0.0.8"
+    "stylelint-config-standard": "^20.0.0",
+    "@lsegurado/parcel-plugin-ls-convert-css-to-js-module": "0.0.8",
+    "@lsegurado/ls-convert-css-to-js": "0.0.11"
   },
   "husky": {
     "hooks": {

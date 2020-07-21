@@ -16,9 +16,6 @@ export function render(self: LSCustomElement) {
 				}
 			}
 		}
-		if (self.ls.styles) {
-			result.push(self.ls.styles);
-		}
 		return result;
 	} else return undefined;
 }

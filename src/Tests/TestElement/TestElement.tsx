@@ -1,4 +1,5 @@
 import { AutonomousCustomElement, Attribute, Property, h, Child, HTMLAttributes, EventDispatcher, CustomEventDispatcher, LSCustomElement } from '../..';
+import style from './style.css';
 
 @AutonomousCustomElement()
 export class LsTestElement extends HTMLElement implements LSCustomElement {
@@ -26,19 +27,10 @@ export class LsTestElement extends HTMLElement implements LSCustomElement {
 		// this.xd2Element.textContent = newValue;
 	}
 
-	styles() {
-		return [
-			import('./style.css'),
-			// import('./style2.css')
-		];
-	}
-
 	render() {
 		return (
 			<>
-				<style id="style">
-					{'@import "./style.css";'}
-				</style>
+				<style id="style">{style}</style>
 				<div id="parent_div">
 					{/* <h1 id="xd" value={this.xd < 240 ? this.xd2 + this.xd : undefined} onClick={(_ev) => { this.xd++;  }}>{this.xd}</h1> */}
 					<h1 id="xd" value={this.xd < 240 ? this.xd2 + this.xd : undefined} onClick={(_ev) => { this.xd++; this.arrayExample.push(this.xd); }}>{this.xd}</h1>

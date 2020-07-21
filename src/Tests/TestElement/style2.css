@@ -1,3 +1,5 @@
 :host {
 	color: red;
 }
+
+@import './style2 copy.css';

@@ -1,6 +1,6 @@
 import { formatToLowerCase } from '../utils/formatToLowerCase';
 import type { LSCustomElement } from '../types';
-import { executeFirstRender, importStyles } from '../render/executeFirstRender';
+import { executeFirstRender } from '../render/executeFirstRender';
 import { initLsStatic } from '../properties/initLsStatic';
 import { convertStringToDataType } from '../utils/convertStringToDataType';
 import { createGetterAndSetterForObservedAttributes } from '../properties/createGetterAndSetterForObservedAttributes';
@@ -62,7 +62,6 @@ export const AutonomousCustomElement = (config?: AutonomousCustomElementConfig) 
 				self.attachShadow({ mode: shadowMode });
 			}
 
-			importStyles(self);
 			addEventDispatchers(self);
 			addElementsReferences(self);
 			addProperties(self);

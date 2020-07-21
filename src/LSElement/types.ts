@@ -36,14 +36,11 @@ export type LsStaticAttributesType = {
 
 export type LsAttributesType = {
     alreadyConnected?: boolean,
-    styles?: HTMLStyleElement,
     propertiesProxy?: ProxyConstructor,
     attributesProxy?: any
 }
 
 export type RootElement = LSCustomElement | ShadowRoot;
-
-export type StylesType = Array<Promise<{ default: string } | string>>;
 
 export type LSCustomElement = {
     lsStatic?: LsStaticAttributesType,
@@ -55,7 +52,6 @@ export type LSCustomElement = {
     connectedCallback?(): void;
     disconnectedCallback?(): void;
     render?(): HTMLElement | Array<HTMLElement>;
-    styles?(): StylesType;
     [memberName: string]: any;
 } & HTMLElement;
 

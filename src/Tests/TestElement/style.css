@@ -6,3 +6,5 @@
 	min-width: 40px;
 	min-height: 40px;
 }
+
+@import './style2.css';
