@@ -1,4 +1,4 @@
-import type { LsStaticAttributesType } from 'LSElement/types';
+import type { LsStaticAttributesType } from '../types';
 
 export function initLsStatic(ls: LsStaticAttributesType): LsStaticAttributesType {
 	if (ls) {
