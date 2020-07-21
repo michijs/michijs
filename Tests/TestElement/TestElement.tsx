@@ -1,5 +1,7 @@
-import { AutonomousCustomElement, Attribute, Property, h, Child, HTMLAttributes, EventDispatcher, CustomEventDispatcher, LSCustomElement } from '../..';
+import { AutonomousCustomElement, Attribute, Property, h, Child, HTMLAttributes, EventDispatcher, CustomEventDispatcher, LSCustomElement, Redux } from '../../src';
 import style from './style.css';
+import { increment } from '../redux/CounterSlice';
+import { store, StoreType } from '../redux/store';
 
 @AutonomousCustomElement()
 export class LsTestElement extends HTMLElement implements LSCustomElement {
@@ -10,6 +12,7 @@ export class LsTestElement extends HTMLElement implements LSCustomElement {
 	@Child('xd') xdElement: HTMLHeadingElement;
 	@Child('xd2') xd2Element: HTMLHeadingElement;
 	@EventDispatcher() allAnimationsFinished: CustomEventDispatcher<string>;
+	@Redux(store) reduxStore: StoreType;
 
 	onChangeXd(_newValue, _oldValue) {
 		// this.xdElement.textContent = newValue;
@@ -27,13 +30,25 @@ export class LsTestElement extends HTMLElement implements LSCustomElement {
 		// this.xd2Element.textContent = newValue;
 	}
 
+	componentWillMount() {
+		// console.log('pase');
+		// console.log(this.xd);
+		this.xd = store.getState().counterStore.count;
+		// console.log(this.xd);
+		store.subscribe(() => {
+			console.log(store.getState().counterStore.count);
+			this.xd = store.getState().counterStore.count;
+		});
+	}
+
 	render() {
 		return (
 			<>
 				<style id="style">{style}</style>
 				<div id="parent_div">
 					{/* <h1 id="xd" value={this.xd < 240 ? this.xd2 + this.xd : undefined} onClick={(_ev) => { this.xd++;  }}>{this.xd}</h1> */}
-					<h1 id="xd" value={this.xd < 240 ? this.xd2 + this.xd : undefined} onClick={(_ev) => { this.xd++; this.arrayExample.push(this.xd); }}>{this.xd}</h1>
+					<h1 id="xd" onClick={(_ev) => { store.dispatch(increment()); }}>{'store' + this.reduxStore.counterStore.count}</h1>
+					{/* <h1 id="xd" value={this.xd < 240 ? this.xd2 + this.xd : undefined} onClick={(_ev) => { this.xd++; this.arrayExample.push(this.xd); }}>{this.xd}</h1> */}
 
 				</div>
 				{this.xd > 256 ? <h1 id="<256">{'>256'}</h1> : undefined}

@@ -8,6 +8,7 @@ import { addEventDispatchers } from '../properties/addEventDispatchers';
 import { addElementsReferences } from '../properties/addElementsReferences';
 import { addProperties } from '../properties/addProperties';
 import { addAttributes } from '../properties/addAttributes';
+import { addReduxStores } from '../properties/addReduxStores';
 
 interface AutonomousCustomElementConfig {
 	tag?: string;
@@ -66,6 +67,7 @@ export const AutonomousCustomElement = (config?: AutonomousCustomElementConfig) 
 			addElementsReferences(self);
 			addProperties(self);
 			addAttributes(self);
+			addReduxStores(self);
 			executeFirstRender(self);
 			self.ls.alreadyConnected = true;
 

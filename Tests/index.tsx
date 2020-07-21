@@ -1,7 +1,7 @@
 export * from './TestElement/TestElement';
 
-import { AutonomousCustomElement, h, LSCustomElement, HTMLAttributes } from '..';
-import { Property } from '../LSElement/decorators/PropertyDecorators';
+import { AutonomousCustomElement, h, LSCustomElement, HTMLAttributes } from '../src';
+import { Property } from '../src/LSElement/decorators/PropertyDecorators';
 
 @AutonomousCustomElement()
 export class LsRootTestElement extends HTMLElement implements LSCustomElement {

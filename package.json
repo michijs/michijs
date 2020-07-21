@@ -17,9 +17,8 @@
   "main": "index.html",
   "scripts": {
     "clean": "del-cli --force dist",
-    "start": "parcel ./src/Tests/index.html --open --out-dir build",
-    "convert_css_to_js": "node node_modules/@lsegurado/ls-convert-css-to-js-module/bin/index.js --srcDir=src --outDir=dist",
-    "build": "npm run clean && tsc && npm run convert_css_to_js",
+    "start": "parcel ./Tests/index.html --open --out-dir build",
+    "build": "npm run clean && tsc",
     "publish-patch-version": "npm version patch && npm run publish-npm",
     "publish-npm": "npm run build && npm publish --access restricted",
     "lint": "eslint --fix src/**/*{.ts,.tsx}",
@@ -38,7 +37,13 @@
     "stylelint": "^13.6.1",
     "husky": "^4.2.5",
     "stylelint-config-standard": "^20.0.0",
-    "@lsegurado/parcel-plugin-ls-convert-css-to-js-module": "0.0.9"
+    "@lsegurado/parcel-plugin-ls-convert-css-to-js-module": "0.0.9",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
+    "@reduxjs/toolkit": "^1.3.6"
+  },
+  "dependencies": {
+    "redux": "^4.0.5"
   },
   "husky": {
     "hooks": {

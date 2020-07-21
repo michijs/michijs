@@ -1,3 +1,5 @@
+import { Store } from "redux";
+
 export type AttributeOptionsType = {
     onChange?: string;
 }
@@ -27,7 +29,13 @@ export type EventsDispatchersType = {
     eventInit?: Omit<CustomEventInit, 'detail'>
 }
 
+export type StoresType = {
+    propertyName: string,
+    store: Store
+}
+
 export type LsStaticAttributesType = {
+    stores: StoresType[],
     elements: ElementsType[],
     observedAttributes: ObservedAttributesType[],
     properties: PropertiesType[],

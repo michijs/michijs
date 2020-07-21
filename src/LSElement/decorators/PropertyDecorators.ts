@@ -1,5 +1,6 @@
 import type { LSCustomElement, AttributeOptionsType, PropertyOptionsType } from '../types';
 import { initLsStatic } from '../properties/initLsStatic';
+import { Store } from 'redux';
 
 export function Attribute(options?: AttributeOptionsType) {
 	return function (target: LSCustomElement, propertyKey: string) {
@@ -26,5 +27,12 @@ export function EventDispatcher(eventInitOptions?: Omit<CustomEventInit, 'detail
 	return function (target: LSCustomElement, propertyKey: string) {
 		target.lsStatic = initLsStatic(target.lsStatic);
 		target.lsStatic.eventsDispatchers.push({ propertyName: propertyKey, eventInit: eventInitOptions });
+	};
+}
+
+export function Redux(store: Store) {
+	return function (target: LSCustomElement, propertyKey: string) {
+		target.lsStatic = initLsStatic(target.lsStatic);
+		target.lsStatic.stores.push({ propertyName: propertyKey, store: store });
 	};
 }

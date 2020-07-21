@@ -5,6 +5,7 @@ export function initLsStatic(ls: LsStaticAttributesType): LsStaticAttributesType
 		return ls;
 	} else {
 		return {
+			stores: [],
 			elements: [],
 			observedAttributes: [],
 			properties: [],
