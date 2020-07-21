@@ -1,6 +1,6 @@
 export * from './TestElement/TestElement';
 
-import { AutonomousCustomElement, h, LSCustomElement, HTMLAttributes, Child } from '..';
+import { AutonomousCustomElement, h, LSCustomElement, HTMLAttributes } from '..';
 import { Property } from '../LSElement/decorators/PropertyDecorators';
 
 @AutonomousCustomElement()

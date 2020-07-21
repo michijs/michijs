@@ -11,7 +11,7 @@ export class LsTestElement extends HTMLElement implements LSCustomElement {
 	@Child('xd2') xd2Element: HTMLHeadingElement;
 	@EventDispatcher() allAnimationsFinished: CustomEventDispatcher<string>;
 
-	onChangeXd(newValue, oldValue) {
+	onChangeXd(_newValue, _oldValue) {
 		// this.xdElement.textContent = newValue;
 		// const event = new CustomEvent('allanimationsfinished', {
 		//   detail: 'hola',
@@ -23,7 +23,7 @@ export class LsTestElement extends HTMLElement implements LSCustomElement {
 
 	}
 
-	onChangeXD2(newValue) {
+	onChangeXD2(_newValue) {
 		// this.xd2Element.textContent = newValue;
 	}
 
