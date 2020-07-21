@@ -45,7 +45,7 @@ export type RootElement = LSCustomElement | ShadowRoot;
 
 export type StylesType = Array<Promise<{ default: string } | string>>;
 
-export interface LSCustomElement extends HTMLElement {
+export type LSCustomElement = {
     lsStatic?: LsStaticAttributesType,
     ls?: LsAttributesType,
     componentWillMount?(): void,
@@ -57,6 +57,6 @@ export interface LSCustomElement extends HTMLElement {
     render?(): HTMLElement | Array<HTMLElement>;
     styles?(): StylesType;
     [memberName: string]: any;
-}
+} & HTMLElement;
 
 export type CallbackType = (propertyName: string, newValue: any, oldValue: any) => void;

@@ -1,8 +1,13 @@
 import { formatToLowerCase } from '../utils/formatToLowerCase';
-import { LSCustomElement } from '../types';
-import { executeFirstRender, importStyles } from './utils/RenderUtils';
-import { addEventDispatchers, addElementsReferences, addProperties, addAttributes, createGetterAndSetterForObservedAttributes, convertStringToDataType } from './utils/PropertyDecoratorsUtils';
-import { initLsStatic } from './utils/initLsStatic';
+import type { LSCustomElement } from '../types';
+import { executeFirstRender, importStyles } from '../render/executeFirstRender';
+import { initLsStatic } from '../properties/initLsStatic';
+import { convertStringToDataType } from '../utils/convertStringToDataType';
+import { createGetterAndSetterForObservedAttributes } from '../properties/createGetterAndSetterForObservedAttributes';
+import { addEventDispatchers } from '../properties/addEventDispatchers';
+import { addElementsReferences } from '../properties/addElementsReferences';
+import { addProperties } from '../properties/addProperties';
+import { addAttributes } from '../properties/addAttributes';
 
 interface AutonomousCustomElementConfig {
 	tag?: string;
@@ -49,9 +54,6 @@ export const AutonomousCustomElement = (config?: AutonomousCustomElementConfig) 
 
 	element.prototype.connectedCallback = function () {
 		const self: LSCustomElement = this;
-		console.log(element.prototype.lsStatic);
-		// console.log(self.ls);
-		// console.log(self.lsStatic);
 		if (!self.ls?.alreadyConnected) {
 			self.ls = {};
 			const useShadow = config?.shadow !== false;

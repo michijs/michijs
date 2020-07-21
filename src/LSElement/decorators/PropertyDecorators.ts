@@ -1,5 +1,5 @@
-import { LSCustomElement, AttributeOptionsType, PropertyOptionsType } from '../types';
-import { initLsStatic } from './utils/initLsStatic';
+import type { LSCustomElement, AttributeOptionsType, PropertyOptionsType } from '../types';
+import { initLsStatic } from '../properties/initLsStatic';
 
 export function Attribute(options?: AttributeOptionsType) {
 	return function (target: LSCustomElement, propertyKey: string) {

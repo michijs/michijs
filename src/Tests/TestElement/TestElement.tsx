@@ -3,7 +3,7 @@ import { AutonomousCustomElement, Attribute, Property, h, Child, HTMLAttributes,
 @AutonomousCustomElement()
 export class LsTestElement extends HTMLElement implements LSCustomElement {
 	@Property({ reflect: true, onChange: 'onChangeXd' }) xd = 234;
-	@Property() xdfg = { id: 123, text: 'asdfasdf'};
+	@Property() xdfg = { id: 123, text: 'asdfasdf' };
 	@Property() arrayExample = [1, 2, 3, 4, 5, 6, 7, 8];
 	@Attribute({ onChange: 'onChangeXD2' }) xd2: number = 1;
 	@Child('xd') xdElement: HTMLHeadingElement;
@@ -17,7 +17,6 @@ export class LsTestElement extends HTMLElement implements LSCustomElement {
 		//   bubbles: true,
 		//   cancelable: false,
 		// });
-		// console.log(this.allAnimationsFinished);
 		// this.dispatchEvent(event);
 		// this.allAnimationsFinished.dispatch('holaxd');
 
@@ -30,16 +29,19 @@ export class LsTestElement extends HTMLElement implements LSCustomElement {
 	styles() {
 		return [
 			import('./style.css'),
-			import('./style2.css')
+			// import('./style2.css')
 		];
 	}
 
 	render() {
 		return (
 			<>
+				<style id="style">
+					{'@import "./style.css";'}
+				</style>
 				<div id="parent_div">
 					{/* <h1 id="xd" value={this.xd < 240 ? this.xd2 + this.xd : undefined} onClick={(_ev) => { this.xd++;  }}>{this.xd}</h1> */}
-					<h1 id="xd" value={this.xd < 240 ? this.xd2 + this.xd : undefined} onClick={(_ev) => { this.xd++; this.arrayExample.push(this.xd);}}>{this.xd}</h1>
+					<h1 id="xd" value={this.xd < 240 ? this.xd2 + this.xd : undefined} onClick={(_ev) => { this.xd++; this.arrayExample.push(this.xd); }}>{this.xd}</h1>
 
 				</div>
 				{this.xd > 256 ? <h1 id="<256">{'>256'}</h1> : undefined}
