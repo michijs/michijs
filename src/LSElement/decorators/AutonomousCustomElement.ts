@@ -13,7 +13,6 @@ import { addReduxStores } from '../properties/addReduxStores';
 interface AutonomousCustomElementConfig {
 	tag?: string;
 	shadow?: false | 'open' | 'closed';
-	// elementDefinitionOptions?: ElementDefinitionOptions
 }
 
 const validateTag = (tag: string) => {
@@ -25,19 +24,6 @@ const validateTag = (tag: string) => {
 export const AutonomousCustomElement = (config?: AutonomousCustomElementConfig) => (element: CustomElementConstructor) => {
 	const tag = config?.tag || formatToLowerCase(element.name);
 	validateTag(tag);
-
-	// if (!config?.elementDefinitionOptions?.extends) {
-	//     // const tag = getTagOf(element.prototype);
-	//     if (tag) {
-	//         if(!config){
-	//             config = {};
-	//         }
-	//         if(!config.elementDefinitionOptions){
-	//             config.elementDefinitionOptions = {};
-	//         }
-	//         config.elementDefinitionOptions.extends = tag;
-	//     }
-	// }
 
 	const emptyFunction = () => { };
 	const connectedCallback = element.prototype.connectedCallback || emptyFunction;
@@ -94,13 +80,3 @@ export const AutonomousCustomElement = (config?: AutonomousCustomElementConfig) 
 
 	window.customElements.define(tag, element);
 };
-
-// function getTagOf(prototype) {
-//     switch (true) {
-//         case prototype instanceof HTMLElement:
-//             return undefined;
-//         case prototype instanceof HTMLButtonElement:
-//             return 'button';
-//         default: return undefined;
-//     }
-// }

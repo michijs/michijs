@@ -1,10 +1,10 @@
-import { AutonomousCustomElement, Attribute, Property, h, Child, HTMLAttributes, EventDispatcher, CustomEventDispatcher, LSCustomElement, Redux } from '../../src';
+import { CustomizedBuiltInElement, Attribute, Property, h, Child, HTMLAttributes, EventDispatcher, CustomEventDispatcher, LSCustomElement, Redux } from '../../src';
 import style from './style.css';
 import { increment } from '../redux/CounterSlice';
 import { store, StoreType } from '../redux/store';
 
-@AutonomousCustomElement()
-export class LsTestElement extends HTMLElement implements LSCustomElement {
+@CustomizedBuiltInElement({extends: 'button'})
+export class LsTestElementBuiltIn extends HTMLButtonElement implements LSCustomElement {
 	@Property({ reflect: true, onChange: 'onChangeXd' }) xd = 234;
 	@Property() xdfg = { id: 123, text: 'asdfasdf' };
 	@Property() arrayExample = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -37,7 +37,7 @@ export class LsTestElement extends HTMLElement implements LSCustomElement {
 				<div id="parent_div">
 					{/* <h1 id="xd" value={this.xd < 240 ? this.xd2 + this.xd : undefined} onClick={(_ev) => { this.xd++;  }}>{this.xd}</h1> */}
 					<h1 id="xd" onClick={(_ev) => { store.dispatch(increment()); }}>{'store' + this.reduxStore.counterStore.count}</h1>
-					{/* <h1 id="xd" value={this.xd < 240 ? this.xd2 + this.xd : undefined} onClick={(_ev) => { this.xd++; this.arrayExample.push(this.xd); }}>{this.xd}</h1> */}
+					<h1 id="xda" value={this.xd < 240 ? this.xd2 + this.xd : undefined} onClick={(_ev) => { this.xd++; this.arrayExample.push(this.xd); }}>{this.xd}</h1>
 
 				</div>
 				{this.xd > 256 ? <h1 id="<256">{'>256'}</h1> : undefined}
@@ -55,7 +55,8 @@ export class LsTestElement extends HTMLElement implements LSCustomElement {
 declare global {
 	export namespace JSX {
 		interface IntrinsicElements {
-			'ls-test-element': {
+			'button': {
+				is?: 'ls-test-element-built-in'
 				xd2?: number;
 				onAllAnimationsFinished?: (event: CustomEvent<string>) => void;
 			} & HTMLAttributes;

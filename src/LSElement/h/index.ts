@@ -58,7 +58,7 @@ function createElement(elem, attrs) {
 		return elem;
 	}
 
-	const element = document.createElement(elem);
+	const element = document.createElement(elem, attrs['is']);
 	addAttributes(element, attrs);
 	return element;
 }

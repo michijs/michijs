@@ -1,5 +1,6 @@
 export { h } from './LSElement/h';
 export { AutonomousCustomElement } from './LSElement/decorators/AutonomousCustomElement';
+export { CustomizedBuiltInElement } from './LSElement/decorators/CustomizedBuiltInElement';
 export { Attribute, Property, Child, EventDispatcher, Redux } from './LSElement/decorators/PropertyDecorators';
 export type { LSCustomElement } from './LSElement/types';
 export type { HTMLAttributes } from './LSElement/h/JSXBase';

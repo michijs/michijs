@@ -1,11 +1,17 @@
 import type { LSCustomElement } from '../types';
 import { render } from './render';
 import { getRootNode } from './gerRootNode';
+import { standardizePropertyName } from '../properties/standardizePropertyName';
 
 function updateAttributes(newElement: Element, currentElement: Element) {
+	const properties = (newElement as LSCustomElement).lsStatic?.properties;
+	let reflectedProperties = new Array<string>();
+	if(properties){
+		reflectedProperties = properties.filter(x => x.options?.reflect).map(x => standardizePropertyName(x.propertyName));
+	}
 	//Remove attributes that doesn´t exists now
 	currentElement.getAttributeNames().forEach(attribute => {
-		if (!newElement.getAttributeNames().includes(attribute)) {
+		if (!newElement.getAttributeNames().includes(attribute) && !reflectedProperties.includes(attribute)) {
 			currentElement.removeAttribute(attribute);
 		}
 	});
@@ -25,9 +31,11 @@ function updateElement(newElement: Element, currentElement: Element, parent: Ele
 		if (currentElement.outerHTML === newElement.outerHTML) return true;
 		updateAttributes(newElement, currentElement);
 		if (currentElement.outerHTML === newElement.outerHTML) return true;
-		if (newElement.children.length > 0) {
+		const isACustomElement = window.customElements.get(newElement.getAttribute('is') || newElement.tagName.toLowerCase()) !== undefined;
+		const hasShadowRoot = currentElement.shadowRoot;
+		if (newElement.children.length > 0 && (!isACustomElement || (isACustomElement && hasShadowRoot))) {
 			updateChangesInElement(Array.from(newElement.children), Array.from(currentElement.children), currentElement);
-		} else if (newElement.constructor.name !== 'HTMLElement') {
+		} else if (!isACustomElement) {
 			currentElement.textContent = newElement.textContent;
 		}
 	}
@@ -55,8 +63,8 @@ function insertNewChildrens(childsToAdd: ChildrensToAddType[], parent: Element |
 }
 
 type ChildrensToAddType = {
-    element: Element;
-    index: number;
+	element: Element;
+	index: number;
 };
 
 function updateChangesInElement(newChildrens: Element[], oldChildrens: Element[], parent: Element | DocumentFragment) {
