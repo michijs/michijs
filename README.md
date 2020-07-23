@@ -172,7 +172,7 @@ If you REALLY need polyfills i recommend you to read this topics:
 - https://custom-elements-everywhere.com
 
 ## Supporting LS Element
-You can support me with [this link](https://www.paypal.com/paypalme/lsegurado)
+This could be just the beginning of a amazing era. With your support we could make big things, which help us to improve our community and the way that we work. Let's go to revolutionize the IT Industry. You can support us with [this link](https://www.paypal.com/paypalme/lsegurado)
 
 ## License
  - [MIT](https://github.com/lsegurado/ls-element/blob/master/LICENSE.md)
