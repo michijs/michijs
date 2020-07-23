@@ -14,7 +14,7 @@
     "type": "git",
     "url": "https://github.com/lsegurado/ls-element.git"
   },
-  "description": "Typescript framework to build web components",
+  "description": "Typescript library to build web components with decorators",
   "main": "index.html",
   "scripts": {
     "clean": "del-cli --force dist",
