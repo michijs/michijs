@@ -112,8 +112,8 @@ render() {
 This class will use (uuid)[https://github.com/uuidjs/uuid] to generate an ID with the key gived. The result will be like this:
 
 ```html
-  <style id="093dc6b7-315d-43c1-86ef-fcd49130ea32" scoped="scoped"></style>
-  <button id="c8d61264-45ee-42ce-9f74-1d76402d1f48">-</button>
+<style id="093dc6b7-315d-43c1-86ef-fcd49130ea32" scoped="scoped"></style>
+<button id="c8d61264-45ee-42ce-9f74-1d76402d1f48">-</button>
 ```
 
 ## Decorators
