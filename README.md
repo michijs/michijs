@@ -1,4 +1,4 @@
-# LS-Element: A vainilla Library for Web Components
+# LS-Element: A Vainilla Library for Web Components
 ![npm][github-version] [![license][github-license]][github-license-url]
 ## Why "LS-Element?"
 
