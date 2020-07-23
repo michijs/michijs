@@ -13,7 +13,6 @@ log.txt
 *.sublime-project
 *.sublime-workspace
 
-.stencil/
 .idea/
 .sass-cache/
 .versions/
@@ -26,8 +25,4 @@ Thumbs.db
 UserInterfaceState.xcuserstate
 .env
 
-src/components.d.ts
-
 package-lock.json
-
-loader
