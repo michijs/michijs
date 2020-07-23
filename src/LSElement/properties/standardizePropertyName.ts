@@ -1,5 +1,5 @@
-import { formatToLowerCase } from '../utils/formatToLowerCase';
+import { formatToKebabCase } from '../utils/formatToKebabCase';
 
 export function standardizePropertyName(propertyName: string) {
-	return formatToLowerCase(propertyName);
+	return formatToKebabCase(propertyName);
 }

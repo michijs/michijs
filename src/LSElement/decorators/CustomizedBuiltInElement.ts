@@ -1,4 +1,4 @@
-import { formatToLowerCase } from '../utils/formatToLowerCase';
+import { formatToKebabCase } from '../utils/formatToKebabCase';
 import type { LSCustomElement } from '../types';
 import { executeFirstRender } from '../render/executeFirstRender';
 import { initLsStatic } from '../properties/initLsStatic';
@@ -22,7 +22,7 @@ const validateTag = (tag: string) => {
 };
 
 export const CustomizedBuiltInElement = (config: CustomizedBuiltInElement) => (element: CustomElementConstructor) => {
-	const tag = config?.tag || formatToLowerCase(element.name);
+	const tag = config?.tag || formatToKebabCase(element.name);
 	validateTag(tag);
 
 	const emptyFunction = () => { };
