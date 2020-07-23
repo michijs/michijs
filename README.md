@@ -25,7 +25,7 @@ If you want a library that:
 - Uses [KISS](https://en.wikipedia.org/wiki/KISS_principle) as a principal pattern
 
 
-This library is for you
+This library is for you.
 
 ## Getting Started
 
@@ -86,18 +86,14 @@ Please note that all elements included in the components in this library require
 ## How this works? 
 When you update an item, the library looks for your changes and only updates the attributes / children / etc that really changed (similar to how the virtual dom works). By forcing the use of IDs it is easy to find changes and update them without replacing nodes in the dom and without the need for the virtual dom.
 
-
-
-
 ### But ... wait, the elements of the sun should not be unique?
   
 In this case I am going to quote Eric Bidelman, a Google engineer on [this topic](https://developers.google.com/web/fundamentals/web-components/shadowdom):
 *For example, when you use a new HTML id/class, there's no telling if it will conflict with an existing name used by the page.*
 That is to say that while it is inside the shadow dom you should not worry about if your id is repeated with one outside the shadow dom.
 
-### Why not uses keys like React
+### Why not use keys like React?
 Search with ids is so much faster than searching by queryselector. You can look at [this topic](https://measurethat.net/Embed?id=99697) and [this another](http://vanilla-js.com)
-
 
 ## Decorators
 If you are not familiar with decorators please check [this link](https://www.typescriptlang.org/docs/handbook/decorators.html).
@@ -149,6 +145,9 @@ https://www.chromestatus.com/feature/4670146924773376
 ### Autonomous custom elements
 https://www.chromestatus.com/feature/4696261944934400
 https://www.webcomponents.org/
+
+## Supporting LS Element
+You can support me with [this link](https://www.paypal.com/paypalme/lsegurado)
 
 ## License
  - [MIT](https://github.com/lsegurado/ls-element/blob/master/LICENSE.md)
