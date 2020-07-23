@@ -173,6 +173,6 @@ You can support me with [this link](https://www.paypal.com/paypalme/lsegurado)
 ## License
  - [MIT](https://github.com/lsegurado/ls-element/blob/master/LICENSE.md)
 
-[github-version]: https://img.shields.io/github/package-json/v/lsegurado/ls-element/master?color=%231182c3&label=Current%20version.svg
-[github-license]: https://img.shields.io/github/license/lsegurado/ls-element.svg
+[github-version]: http://img.shields.io/github/package-json/v/lsegurado/ls-element/master?color=%231182c3&label=Current%20version
+[github-license]: https://img.shields.io/github/license/lsegurado/ls-element
 [github-license-url]: https://github.com/lsegurado/ls-element/blob/master/LICENSE.md
