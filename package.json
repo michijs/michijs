@@ -1,7 +1,7 @@
 {
   "name": "@lsegurado/ls-element",
   "license": "MIT",
-  "version": "0.0.8",
+  "version": "1.0.0",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/lsegurado"
   },
@@ -29,22 +29,24 @@
     "web-components"
   ],
   "devDependencies": {
-    "parcel-bundler": "^1.12.4",
-    "typescript": "^3.9.6",
-    "del-cli": "^3.0.1",
-    "eslint": "^7.3.0",
+    "@lsegurado/parcel-plugin-ls-convert-css-to-js-module": "0.0.9",
+    "@reduxjs/toolkit": "^1.3.6",
+    "@types/uuid": "^8.0.0",
     "@typescript-eslint/eslint-plugin": "^3.3.0",
     "@typescript-eslint/parser": "^3.3.0",
-    "stylelint": "^13.6.1",
+    "del-cli": "^3.0.1",
+    "eslint": "^7.3.0",
     "husky": "^4.2.5",
-    "stylelint-config-standard": "^20.0.0",
-    "@lsegurado/parcel-plugin-ls-convert-css-to-js-module": "0.0.9",
+    "parcel-bundler": "^1.12.4",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "@reduxjs/toolkit": "^1.3.6"
+    "stylelint": "^13.6.1",
+    "stylelint-config-standard": "^20.0.0",
+    "typescript": "^3.9.6"
   },
   "dependencies": {
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "uuid": "^8.2.0"
   },
   "husky": {
     "hooks": {

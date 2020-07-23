@@ -1,10 +1,11 @@
-import { AutonomousCustomElement, h, Property, HTMLAttributes, EventDispatcher, CustomEventDispatcher, LSCustomElement } from '../../src';
+import { AutonomousCustomElement, h, Property, HTMLAttributes, EventDispatcher, CustomEventDispatcher, LSCustomElement, IdGenerator } from '../../src';
 import style from './Counter.css';
 
 @AutonomousCustomElement()
 export class MyCounter extends HTMLElement implements LSCustomElement {
 	@Property({ onChange: 'onChangeCount' }) count = 0;
 	@EventDispatcher() countChanged: CustomEventDispatcher<number>;
+	idGen = new IdGenerator();
 
 	onChangeCount(newValue: number, _oldValue: number) {
 		this.countChanged.dispatch(newValue);
@@ -13,8 +14,8 @@ export class MyCounter extends HTMLElement implements LSCustomElement {
 	render() {
 		return (
 			<>
-				<style id="style" scoped>{style}</style>
-				<button id="decrement-count" onPointerUp={() => this.count--}>-</button>
+				<style {...this.idGen.get('style')} scoped>{style}</style>
+				<button {...this.idGen.get('decrement-count')} onPointerUp={() => this.count--}>-</button>
 				<span id="count">{this.count.toString()}</span>
 				<button id="increment-count" onPointerUp={() => this.count++}>+</button>
 			</>

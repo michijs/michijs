@@ -5,5 +5,6 @@ export { Attribute, Property, Child, EventDispatcher, Redux } from './LSElement/
 export type { LSCustomElement } from './LSElement/types';
 export type { HTMLAttributes } from './LSElement/h/JSXBase';
 export { CustomEventDispatcher } from './LSElement/classes/CustomEventDispatcher';
+export { IdGenerator } from './LSElement/classes/IdGenerator';
 import './LSElement/h/global';
 import './LSElement/h/external';
