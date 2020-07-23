@@ -21,12 +21,15 @@
     "start": "parcel ./Tests/index.html --open --out-dir build",
     "build": "npm run clean && tsc",
     "publish-patch-version": "npm version patch && npm run publish-npm",
-    "publish-npm": "npm run build && npm publish --access restricted",
+    "publish-npm": "npm run build && npm publish",
     "lint": "eslint --fix src/**/*{.ts,.tsx}",
     "stylelint": "npx stylelint --fix **/*.css"
   },
   "keywords": [
-    "web-components"
+    "web-components",
+    "custom elements",
+    "built-in elements",
+    "Autonomous custom elements"
   ],
   "devDependencies": {
     "@lsegurado/parcel-plugin-ls-convert-css-to-js-module": "0.0.9",
