@@ -85,18 +85,18 @@ To use this component, just use it like any other HTML element:
 Please note that all elements included in the components in this library require an ID to work properly. This allows avoiding the use of the virtual DOM.
 
 ## How this works? 
-When you update an item, the library looks for your changes and only updates the attributes / children / etc that really changed (similar to how the virtual DOM works). By forcing the use of IDs it is easy to find changes and update them without replacing nodes in the DOM and without the need for the virtual DOM.
+When you update an item, the library looks for your changes and only updates the attributes / children / etc that really changed (similar to how the virtual DOM works). By forcing the use of IDs it is easy to find changes and update them without replacing nodes in the DOM and without using the virtual DOM.
 
-### But... wait, DOM elements shouldn't be unique?
+### But... Wait, DOM elements shouldn't be unique?
   
 In this case I am going to quote Eric Bidelman, a Google engineer on [this topic](https://developers.google.com/web/fundamentals/web-components/shadowdom):
 *For example, when you use a new HTML id/class, there's no telling if it will conflict with an existing name used by the page.*
 That is to say that while it is inside the Shadow DOM you should not worry about if your ID is repeated with one outside the Shadow DOM.
 
 ### Why not use keys like React?
-Search with IDs is so much faster than searching by queryselector. You can look at [this topic](https://measurethat.net/Embed?id=99697) and [this another](http://vanilla-js.com)
+Searching with IDs is so much faster than searching by queryselector. You can look at [this topic](https://measurethat.net/Embed?id=99697) and [this another](http://vanilla-js.com)
 
-### But... what if I don't want to use virtual dom?
+### But... What if I don't want to use virtual dom?
 You can import IdGenerator class to create unique IDs for each element in your component. 
 ```tsx
 idGen = new IdGenerator();
@@ -110,7 +110,7 @@ render() {
     );
 }
 ```
-This class will use (uuid)[https://github.com/uuidjs/uuid] to generate an ID with the key gived. The result will be like this:
+This class will use [uuid](https://github.com/uuidjs/uuid) to generate an ID with the key gived. The result will be like this:
 
 ```html
 <style id="093dc6b7-315d-43c1-86ef-fcd49130ea32" scoped="scoped"></style>
@@ -127,7 +127,7 @@ If you are not familiar with decorators please check [this link](https://www.typ
 | `@AutonomousCustomElement()` | Indicate a class is a [Autonomous custom element](https://developers.google.com/web/fundamentals/web-components/customelements#shadowdom). By default uses Shadow DOM. |
 | `@CustomizedBuiltInElement()` | Indicate a class is a [Customized built-in element](https://developers.google.com/web/fundamentals/web-components/customelements#extendhtml). . You must define the native element tag to extend. Cannot use Shadow DOM. |
 
-Class decorators allows to define the [custom elements](https://developers.google.com/web/fundamentals/web-components/customelements#define) and are mandatory to build ls elements. By default the tag name will be generated from the class name following the [Kebab case](https://en.wikipedia.org/wiki/Letter_case) but can be defined inside the decorator.
+Class decorators allows to define the [custom elements](https://developers.google.com/web/fundamentals/web-components/customelements#define) and are mandatory to build LS elements. By default the tag name will be generated from the class name following the [Kebab case](https://en.wikipedia.org/wiki/Letter_case) but can be defined inside the decorator.
 For example MyCounter will be generated as my-counter.
 
 ### Property Decorators
@@ -162,11 +162,14 @@ If you REALLY need polyfills i recommend you to read this topics:
 ## Browser Support
 
 ### Customized built-in elements
-https://www.chromestatus.com/feature/4670146924773376
+- https://www.chromestatus.com/feature/4670146924773376
 
 ### Autonomous custom elements
-https://www.chromestatus.com/feature/4696261944934400
-https://www.webcomponents.org/
+- https://www.chromestatus.com/feature/4696261944934400
+- https://www.webcomponents.org/
+
+### Compatibility with frameworks
+- https://custom-elements-everywhere.com
 
 ## Supporting LS Element
 You can support me with [this link](https://www.paypal.com/paypalme/lsegurado)
