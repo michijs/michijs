@@ -95,7 +95,7 @@ That is to say that while it is inside the Shadow DOM you should not worry about
 ### Why not use keys like React?
 Search with IDs is so much faster than searching by queryselector. You can look at [this topic](https://measurethat.net/Embed?id=99697) and [this another](http://vanilla-js.com)
 
-### but... what if I don't want to use virtual dom?
+### But... what if I don't want to use virtual dom?
 You can import IdGenerator class to create unique IDs for each element in your component. 
 ```tsx
 idGen = new IdGenerator();
