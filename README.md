@@ -35,7 +35,8 @@ You can use [this template](https://github.com/lsegurado/ls-element-template).
 
 LS Element custom elements are plain ES6/TypeScript classes with some decorator metadata.
 
-Create new components by creating files with a `.tsx` extension, such as `my-counter.tsx`.
+
+New components can be created using the `.tsx` extension, such as `my-counter.tsx`.
 
 ```tsx
 import { AutonomousCustomElement, h, Property, HTMLAttributes, EventDispatcher, CustomEventDispatcher, LSCustomElement } from '@lsegurado/ls-element/dist';
