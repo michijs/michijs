@@ -4,7 +4,7 @@
 
 If you want a library that:
 
-- Do NOT uses virtual-dom
+- Do NOT uses Virtual-DOM
 
 - Uses standard APIs to build web components
 
@@ -81,19 +81,40 @@ To use this component, just use it like any other HTML element:
 <my-counter  id="my-counter"  onCountChanged={(ev) => console.log(`New count value: ${ev.detail}`)}></my-counter>
 ```
   
-Please note that all elements included in the components in this library require an ID to work properly. This allows avoiding the use of the virtual dom.
+Please note that all elements included in the components in this library require an ID to work properly. This allows avoiding the use of the virtual DOM.
 
 ## How this works? 
-When you update an item, the library looks for your changes and only updates the attributes / children / etc that really changed (similar to how the virtual dom works). By forcing the use of IDs it is easy to find changes and update them without replacing nodes in the dom and without the need for the virtual dom.
+When you update an item, the library looks for your changes and only updates the attributes / children / etc that really changed (similar to how the virtual DOM works). By forcing the use of IDs it is easy to find changes and update them without replacing nodes in the DOM and without the need for the virtual DOM.
 
-### But ... wait, the elements of the sun should not be unique?
+### But... wait, DOM elements shouldn't be unique?
   
 In this case I am going to quote Eric Bidelman, a Google engineer on [this topic](https://developers.google.com/web/fundamentals/web-components/shadowdom):
 *For example, when you use a new HTML id/class, there's no telling if it will conflict with an existing name used by the page.*
-That is to say that while it is inside the shadow dom you should not worry about if your id is repeated with one outside the shadow dom.
+That is to say that while it is inside the Shadow DOM you should not worry about if your ID is repeated with one outside the Shadow DOM.
 
 ### Why not use keys like React?
-Search with ids is so much faster than searching by queryselector. You can look at [this topic](https://measurethat.net/Embed?id=99697) and [this another](http://vanilla-js.com)
+Search with IDs is so much faster than searching by queryselector. You can look at [this topic](https://measurethat.net/Embed?id=99697) and [this another](http://vanilla-js.com)
+
+### but... what if I don't want to use virtual dom?
+You can import IdGenerator class to create unique IDs for each element in your component. 
+```tsx
+idGen = new IdGenerator();
+    
+render() {
+    return (
+        <>
+            <style {...this.idGen.get('style')} scoped>{style}</style>
+            <button {...this.idGen.get('decrement-count')} onPointerUp={() => this.count--}>-</button>
+        </>
+    );
+}
+```
+This class will use (uuid)[https://github.com/uuidjs/uuid] to generate an ID with the key gived. The result will be like this:
+
+```html
+  <style id="093dc6b7-315d-43c1-86ef-fcd49130ea32" scoped="scoped"></style>
+  <button id="c8d61264-45ee-42ce-9f74-1d76402d1f48">-</button>
+```
 
 ## Decorators
 If you are not familiar with decorators please check [this link](https://www.typescriptlang.org/docs/handbook/decorators.html).
@@ -102,8 +123,8 @@ If you are not familiar with decorators please check [this link](https://www.typ
 
 | Decorator | Description  |
 |--|--|
-| `@AutonomousCustomElement()` | Indicate a class is a [Autonomous custom element](https://developers.google.com/web/fundamentals/web-components/customelements#shadowdom). By default uses shadow dom. |
-| `@CustomizedBuiltInElement()` | Indicate a class is a [Customized built-in element](https://developers.google.com/web/fundamentals/web-components/customelements#extendhtml). . You must define the native element tag to extend. Cannot use shadow dom. |
+| `@AutonomousCustomElement()` | Indicate a class is a [Autonomous custom element](https://developers.google.com/web/fundamentals/web-components/customelements#shadowdom). By default uses Shadow DOM. |
+| `@CustomizedBuiltInElement()` | Indicate a class is a [Customized built-in element](https://developers.google.com/web/fundamentals/web-components/customelements#extendhtml). . You must define the native element tag to extend. Cannot use Shadow DOM. |
 
 Class decorators allows to define the [custom elements](https://developers.google.com/web/fundamentals/web-components/customelements#define) and are mandatory to build ls elements. By default the tag name will be generated from the class name following the [Kebab case](https://en.wikipedia.org/wiki/Letter_case) but can be defined inside the decorator.
 For example MyCounter will be generated as my-counter.
@@ -116,7 +137,7 @@ For example MyCounter will be generated as my-counter.
 | `@Attribute()` | Allows to define an attribute. It follows the Kebab case. |
 | `@Property()` | Allows to define a property. It can be [reflected as an attribute](https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr); using Kebab case. |
 | `@EventDispatcher()` | Allows to define an [event](https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events) to his parent and triggering it easily. It will be defined using Lower case. For example countChanged will be registered as countchanged. |
-| `@Redux()` | Allows you to use Redux stores and update the dom when a change occurs in the store. |
+| `@Redux()` | Allows you to use Redux stores and update the DOM when a change occurs in the store. |
 | `@Child()` | Gets a reference to an element with his id. |
 
 
