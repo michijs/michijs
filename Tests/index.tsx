@@ -1,4 +1,5 @@
 export * from './TestElement/TestElement';
+import './Counter/Counter';
 export * from './TestElement2/ls-test-element-built-in';
 
 import { AutonomousCustomElement, h, LSCustomElement, HTMLAttributes } from '../src';
@@ -25,7 +26,7 @@ export class LsRootTestElement extends HTMLElement implements LSCustomElement {
     render() {
         return (
             <>
-
+                <my-counter id="counter" onCountChanged={(ev) => console.log(`New count value: ${ev.detail}`)}></my-counter>
                 <ls-test-element id="test" xd2={this.xd2} onAllAnimationsFinished={(ev) => console.log(ev.detail)}><div id="div">{this.xd2}</div></ls-test-element>
                 <ls-test-element id="test2" xd2={this.xd2} onAllAnimationsFinished={(ev) => console.log(ev.detail)}></ls-test-element>
 

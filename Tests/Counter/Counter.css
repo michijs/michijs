@@ -1,0 +1,9 @@
+:host {
+	display: flex;
+	flex-direction: row;
+}
+
+span{
+	min-width: 60px;
+	text-align: center;
+}
