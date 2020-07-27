@@ -1,4 +1,4 @@
-import { LSCustomElement } from '../types';
+import type { LSCustomElement } from '../types';
 import { getRootNode } from '../render/gerRootNode';
 
 export function addElementsReferences(self: LSCustomElement) {
