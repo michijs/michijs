@@ -17,12 +17,26 @@ export function addAttributes(self: LSCustomElement) {
 		}
 		delete self[attribute.propertyName];
 
+		if (attribute.propertyName !== attributeName) {
+			Object.defineProperty(self, attribute.propertyName, {
+				set(newValue) {
+					convertDataTypeToAttribute(newValue, self, attributeName);
+				},
+				get() {
+					return self.ls.attributesProxy[attribute.propertyName];
+				},
+			});
+		}
+
 		Object.defineProperty(self, attributeName, {
 			set(newValue) {
 				const oldValue = self.ls.attributesProxy[attribute.propertyName];
 				self.ls.attributesProxy[attribute.propertyName] = newValue;
 				if (self.ls?.alreadyConnected) {
 					updateChangesInDom(self);
+					if (attribute.propertyName === attributeName){
+						convertDataTypeToAttribute(newValue, self, attributeName);
+					}
 					const property = self.lsStatic.properties.find(x => x.propertyName === attribute.propertyName);
 					if (self[property?.options?.onChange]) {
 						self[property?.options?.onChange](newValue, oldValue);
