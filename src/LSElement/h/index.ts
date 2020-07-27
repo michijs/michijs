@@ -58,7 +58,12 @@ function createElement(elem, attrs) {
 		return elem;
 	}
 
-	const element = document.createElement(elem, attrs['is']);
+	let element;
+	if (attrs && attrs['is']) {
+		element = document.createElement(elem, attrs['is']);
+	}else{
+		element = document.createElement(elem);
+	}
 	addAttributes(element, attrs);
 	return element;
 }
