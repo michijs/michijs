@@ -79,7 +79,9 @@ function addAttributes(elem, attrs) {
 		const attr = entry[0];
 		let value = entry[1];
 		if (value === true) elem.setAttribute(attr, attr);
-		else if (attr.startsWith('on') && typeof value === 'function') {
+		else if (attr.startsWith('on-') && typeof value === 'function') {
+			elem.addEventListener(attr.substr(3), value);
+		} else if (attr.startsWith('on') && typeof value === 'function') {
 			elem.addEventListener(attr.substr(2).toLowerCase(), value);
 		} else if (value !== false && value !== null && value !== undefined) {
 			if (value instanceof Object) {
