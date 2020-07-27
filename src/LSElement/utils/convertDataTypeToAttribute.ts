@@ -12,6 +12,10 @@ export function convertDataTypeToAttribute(newValue: any, self: LSCustomElement,
 			}
 			break;
 		}
+		case typeof newValue === 'object': {
+			self.setAttribute(formattedKey, JSON.stringify(newValue));
+			break;
+		}
 		default: {
 			self.setAttribute(formattedKey, newValue);
 		}

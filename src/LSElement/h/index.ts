@@ -61,7 +61,7 @@ function createElement(elem, attrs) {
 	let element;
 	if (attrs && attrs['is']) {
 		element = document.createElement(elem, attrs['is']);
-	}else{
+	} else {
 		element = document.createElement(elem);
 	}
 	addAttributes(element, attrs);
@@ -85,12 +85,17 @@ function addAttributes(elem, attrs) {
 			elem.addEventListener(attr.substr(2).toLowerCase(), value);
 		} else if (value !== false && value !== null && value !== undefined) {
 			if (value instanceof Object) {
-				const modifier =
-					attr === 'style' ? splitCamelCase : str => str.toLowerCase();
+				if (attr === 'style') {
+					const modifier =
+						attr === 'style' ? splitCamelCase : str => str.toLowerCase();
 
-				value = Object.entries(value)
-					.map(([key, val]) => `${modifier(key)}: ${val}`)
-					.join('; ');
+					value = Object.entries(value)
+						.map(([key, val]) => `${modifier(key)}: ${val}`)
+						.join('; ');
+				} 
+				else {
+					value = JSON.stringify(value);
+				}
 			}
 
 			if (attr === 'className' && value !== '')
