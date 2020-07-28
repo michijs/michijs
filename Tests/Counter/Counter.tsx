@@ -1,4 +1,4 @@
-import { AutonomousCustomElement, h, Property, HTMLElementAttributes, EventDispatcher, CustomEventDispatcher, LSCustomElement } from '../../src';
+import { AutonomousCustomElement, h, Property, HTMLElementAttributes, EventDispatcher, CustomEventDispatcher, LSCustomElement, HTMLElementAttributesWithMandatoryId } from '../../src';
 import style from './Counter.css';
 
 @AutonomousCustomElement()
@@ -27,7 +27,7 @@ declare global {
         interface IntrinsicElements {
             'my-counter': {
                 oncountchanged?: (event: CustomEvent<number>) => void;
-            } & HTMLElementAttributes;
+            } & HTMLElementAttributesWithMandatoryId;
         }
     }
 }
