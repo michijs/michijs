@@ -1,4 +1,4 @@
-import { AutonomousCustomElement, Attribute, Property, h, Child, HTMLAttributes, EventDispatcher, CustomEventDispatcher, LSCustomElement, Redux } from '../../src';
+import { AutonomousCustomElement, Attribute, Property, h, Child, EventDispatcher, CustomEventDispatcher, LSCustomElement, Redux, HTMLElementAttributes, HTMLElementAttributesWithMandatoryId } from '../../src';
 import style from './style.css';
 import { increment } from '../redux/CounterSlice';
 import { store, StoreType } from '../redux/store';
@@ -36,7 +36,7 @@ export class LsTestElement extends HTMLElement implements LSCustomElement {
 				<style id="style">{style}</style>
 				<div id="parent_div">
 					{/* <h1 id="xd" value={this.xd < 240 ? this.xd2 + this.xd : undefined} onClick={(_ev) => { this.xd++;  }}>{this.xd}</h1> */}
-					<h1 id="xd" onClick={(_ev) => { store.dispatch(increment()); }}>{'store' + this.reduxStore.counterStore.count}</h1>
+					<h1 id="xd" onclick={(_ev) => { store.dispatch(increment()); }}>{'store' + this.reduxStore.counterStore.count}</h1>
 					{/* <h1 id="xd" value={this.xd < 240 ? this.xd2 + this.xd : undefined} onClick={(_ev) => { this.xd++; this.arrayExample.push(this.xd); }}>{this.xd}</h1> */}
 
 				</div>
@@ -45,7 +45,7 @@ export class LsTestElement extends HTMLElement implements LSCustomElement {
 				{this.xd < 236 ? <h1 id="<236">{'<236'}</h1> : undefined}
 				{this.arrayExample.map(x => <h2 id={'example' + x}>{x}</h2>)}
 				<h1 id="xd2">{this.xd2}</h1>
-				<h1 id="xdfg" onClick={() => this.xdfg.text = 'hola'}>{this.xdfg.text}</h1>
+				<h1 id="asdf" onclick={() => this.xdfg.text = 'hola'}>{this.xdfg.text}</h1>
 				<slot id="slot"></slot>
 			</>
 		);
@@ -57,8 +57,8 @@ declare global {
 		interface IntrinsicElements {
 			'ls-test-element': {
 				xd2?: number;
-				onAllAnimationsFinished?: (event: CustomEvent<string>) => void;
-			} & HTMLAttributes;
+				onallanimationsfinished?: (event: CustomEvent<string>) => void;
+			} & HTMLElementAttributesWithMandatoryId;
 		}
 	}
 }

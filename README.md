@@ -39,7 +39,7 @@ LS Element custom elements are plain ES6/TypeScript classes with some decorator 
 New components can be created using the `.tsx` extension, such as `my-counter.tsx`.
 
 ```tsx
-import { AutonomousCustomElement, h, Property, HTMLAttributes, EventDispatcher, CustomEventDispatcher, LSCustomElement } from '@lsegurado/ls-element/dist';
+import { AutonomousCustomElement, h, Property, HTMLElementAttributes, EventDispatcher, CustomEventDispatcher, LSCustomElement } from '@lsegurado/ls-element/dist';
 import style from './Counter.css';
 
 @AutonomousCustomElement()
@@ -54,10 +54,10 @@ export class MyCounter extends HTMLElement implements LSCustomElement {
     render() {
         return (
             <>
-                <style id="style" scoped>{style}</style>
-                <button id="decrement-count" onPointerUp={() => this.count--}>-</button>
+                <style id="style">{style}</style>
+                <button id="decrement-count" onpointerup={() => this.count--}>-</button>
                 <span id="count">{this.count.toString()}</span>
-                <button id="increment-count" onPointerUp={() => this.count++}>+</button>
+                <button id="increment-count" onpointerup={() => this.count++}>+</button>
             </>
         );
     }
@@ -67,8 +67,8 @@ declare global {
     export namespace JSX {
         interface IntrinsicElements {
             'my-counter': {
-                onCountChanged?: (event: CustomEvent<number>) => void;
-            } & HTMLAttributes;
+                oncountchanged?: (event: CustomEvent<number>) => void;
+            } & HTMLElementAttributes;
         }
     }
 }
@@ -79,7 +79,7 @@ Note: the `.tsx` extension is required, as this is the standard for TypeScript c
 To use this component, just use it like any other HTML element:
 
 ```tsx
-<my-counter  id="my-counter"  onCountChanged={(ev) => console.log(`New count value: ${ev.detail}`)}></my-counter>
+<my-counter id="my-counter" oncountchanged={(ev) => console.log(`New count value: ${ev.detail}`)}></my-counter>
 ```
   
 Please note that all elements included in the components in this library require an ID to work properly. This allows avoiding the use of the virtual DOM.
@@ -104,8 +104,8 @@ idGen = new IdGenerator();
 render() {
     return (
         <>
-            <style {...this.idGen.get('style')} scoped>{style}</style>
-            <button {...this.idGen.get('decrement-count')} onPointerUp={() => this.count--}>-</button>
+            <style {...this.idGen.get('style')}>{style}</style>
+            <button {...this.idGen.get('decrement-count')} onpointerup={() => this.count--}>-</button>
         </>
     );
 }
@@ -113,7 +113,7 @@ render() {
 This class will use [uuid](https://github.com/uuidjs/uuid) to generate an ID with the key gived. The result will be like this:
 
 ```html
-<style id="093dc6b7-315d-43c1-86ef-fcd49130ea32" scoped="scoped"></style>
+<style id="093dc6b7-315d-43c1-86ef-fcd49130ea32"></style>
 <button id="c8d61264-45ee-42ce-9f74-1d76402d1f48">-</button>
 ```
 

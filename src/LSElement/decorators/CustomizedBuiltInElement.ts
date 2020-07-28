@@ -2,13 +2,13 @@ import { formatToKebabCase } from '../utils/formatToKebabCase';
 import type { LSCustomElement } from '../types';
 import { executeFirstRender } from '../render/executeFirstRender';
 import { initLsStatic } from '../properties/initLsStatic';
-import { convertStringToDataType } from '../utils/convertStringToDataType';
 import { createGetterAndSetterForObservedAttributes } from '../properties/createGetterAndSetterForObservedAttributes';
 import { addEventDispatchers } from '../properties/addEventDispatchers';
 import { addElementsReferences } from '../properties/addElementsReferences';
 import { addProperties } from '../properties/addProperties';
 import { addAttributes } from '../properties/addAttributes';
 import { addReduxStores } from '../properties/addReduxStores';
+import { getAttributeValue } from '../utils/getAttribute';
 
 interface CustomizedBuiltInElement {
     tag?: string;
@@ -31,7 +31,7 @@ export const CustomizedBuiltInElement = (config: CustomizedBuiltInElement) => (e
 
 	element.prototype.attributeChangedCallback = function (name: string, oldValue, newValue) {
 		if (newValue != oldValue) {
-			this[name] = convertStringToDataType(newValue);
+			this[name] = getAttributeValue(newValue);
 		}
 	};
 

@@ -2,13 +2,13 @@ import { formatToKebabCase } from '../utils/formatToKebabCase';
 import type { LSCustomElement } from '../types';
 import { executeFirstRender } from '../render/executeFirstRender';
 import { initLsStatic } from '../properties/initLsStatic';
-import { convertStringToDataType } from '../utils/convertStringToDataType';
 import { createGetterAndSetterForObservedAttributes } from '../properties/createGetterAndSetterForObservedAttributes';
 import { addEventDispatchers } from '../properties/addEventDispatchers';
 import { addElementsReferences } from '../properties/addElementsReferences';
 import { addProperties } from '../properties/addProperties';
 import { addAttributes } from '../properties/addAttributes';
 import { addReduxStores } from '../properties/addReduxStores';
+import { getAttributeValue } from '../utils/getAttribute';
 
 interface AutonomousCustomElementConfig {
 	tag?: string;
@@ -31,14 +31,14 @@ export const AutonomousCustomElement = (config?: AutonomousCustomElementConfig) 
 
 	element.prototype.attributeChangedCallback = function (name: string, oldValue, newValue) {
 		if (newValue != oldValue) {
-			this[name] = convertStringToDataType(newValue);
+			this[name] = getAttributeValue(newValue);
 		}
 	};
-	
+
 	element.prototype.lsStatic = initLsStatic(element.prototype.lsStatic);
 
 	Object.defineProperty(element.prototype.constructor, 'observedAttributes', createGetterAndSetterForObservedAttributes(element.prototype.lsStatic));
-
+	
 	element.prototype.connectedCallback = function () {
 		const self: LSCustomElement = this;
 		if (!self.ls?.alreadyConnected) {

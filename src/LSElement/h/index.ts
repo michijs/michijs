@@ -1,3 +1,5 @@
+import { setAttribute } from "../utils/setAttribute";
+
 export interface FunctionComponent {
 	(attrs: any, ...children): HTMLElement;
 }
@@ -42,10 +44,6 @@ function appendChild(elem, children) {
 	elem.appendChild(child);
 }
 
-function splitCamelCase(str) {
-	return str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
-}
-
 function createElement(elem, attrs) {
 	if (typeof elem.render === 'function') {
 		return elem.render();
@@ -78,34 +76,20 @@ function addAttributes(elem, attrs) {
 	for (const entry of Object.entries(attrs)) {
 		const attr = entry[0];
 		let value = entry[1];
-		if (value === true) elem.setAttribute(attr, attr);
-		else if (attr.startsWith('on-') && typeof value === 'function') {
-			elem.addEventListener(attr.substr(3), value);
-		} else if (attr.startsWith('on') && typeof value === 'function') {
-			elem.addEventListener(attr.substr(2).toLowerCase(), value);
-		} else if (value !== false && value !== null && value !== undefined) {
-			if (value instanceof Object) {
-				if (attr === 'style') {
-					const modifier =
-						attr === 'style' ? splitCamelCase : str => str.toLowerCase();
 
-					value = Object.entries(value)
-						.map(([key, val]) => `${modifier(key)}: ${val}`)
-						.join('; ');
-				} 
-				else {
-					value = JSON.stringify(value);
-				}
+		if (attr.startsWith('on') && typeof value === 'function') {
+			elem.addEventListener(attr.substr(2), value);
+		} else {
+			if (elem[attr] === undefined && value) {
+				setAttribute(elem, value, attr);
 			}
-
-			if (attr === 'className' && value !== '')
-				elem.classList.add(
-					...value
-						.toString()
-						.trim()
-						.split(' ')
-				);
-			else elem.setAttribute(attr, value.toString());
+			if (attr === 'style') {
+				Object.keys(value).forEach(styleKey => {
+					elem.style[styleKey] = value[styleKey];
+				});
+			} else {
+				elem[attr] = value;
+			}
 		}
 	}
 }

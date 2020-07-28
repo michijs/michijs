@@ -1,6 +1,7 @@
-import { LSCustomElement, CallbackType } from '../types';
-import { convertDataTypeToAttribute } from '../utils/convertDataTypeToAttribute';
+import { LSCustomElement } from '../types';
 import { updateChangesInDom } from '../render/updateChangesInDom';
+import { convertToProxy } from '../utils/convertToProxy';
+import { setAttribute } from '../utils/setAttribute';
 
 export function addProperties(self: LSCustomElement) {
 	const initialProxyValue = {};
@@ -16,7 +17,7 @@ export function addProperties(self: LSCustomElement) {
 			},
 		});
 		if (property?.options?.reflect) {
-			convertDataTypeToAttribute(initialProxyValue[property.propertyName], self, property.propertyName);
+			setAttribute(self, initialProxyValue[property.propertyName], property.propertyName);
 		}
 	});
 
@@ -29,59 +30,10 @@ export function addProperties(self: LSCustomElement) {
 				self[onChange](newValue, oldValue);
 			}
 			if (property?.options?.reflect) {
-				convertDataTypeToAttribute(newValue, self, propertyName);
+				setAttribute(self, newValue, propertyName);
 			}
 		}
 	};
 
-	self.ls.propertiesProxy = createProxyForEachValue(initialProxyValue, callback, self);
-}
-
-function createProxyForEachValue(initialValue, callback: CallbackType, self: LSCustomElement, propertyName?: string) {
-	const proxyInitialValue = {};
-	Object.keys(initialValue).forEach(key => {
-		if (Array.isArray(initialValue[key])) {
-			proxyInitialValue[key] = createProxy(initialValue[key], callback, self, propertyName || key);
-		} else if (typeof initialValue[key] === 'object') {
-			proxyInitialValue[key] = createProxyForEachValue(initialValue[key], callback, self, propertyName || key);
-		} else {
-			proxyInitialValue[key] = initialValue[key];
-		}
-	});
-	return createProxy(proxyInitialValue, callback, self, propertyName);
-
-}
-
-function createProxy(initialValue, callback: CallbackType, self: LSCustomElement, propertyName?: string) {
-	return new Proxy(initialValue, {
-		deleteProperty: function (_target, property: string) {
-			callback(propertyName || property, undefined, undefined);
-			return true;
-		},
-		get: function (target, property: string) {
-			if (typeof target[property] === 'function') {
-				return function (...args) {
-					const callBackPropertyName = propertyName;
-					const callBackOldValue = self[callBackPropertyName];
-					const oldValue = Object.values(target);
-					const result = Array.prototype[property].apply(target, args);
-					const newValue = target;
-					if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
-						const callBackNewValue = self[callBackPropertyName];
-						callback(callBackPropertyName, callBackNewValue, callBackOldValue);
-					}
-					return result;
-				};
-			}
-			return target[property];
-		},
-		set: function (target, property: string, newValue, _receiver) {
-			const callBackPropertyName = propertyName || property;
-			const callBackOldValue = self[callBackPropertyName];
-			target[property] = newValue;
-			const callBackNewValue = self[callBackPropertyName];
-			callback(callBackPropertyName, callBackNewValue, callBackOldValue);
-			return true;
-		}
-	});
+	self.ls.propertiesProxy = convertToProxy(initialProxyValue, callback, self);
 }

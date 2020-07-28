@@ -3,7 +3,7 @@ export { AutonomousCustomElement } from './LSElement/decorators/AutonomousCustom
 export { CustomizedBuiltInElement } from './LSElement/decorators/CustomizedBuiltInElement';
 export { Attribute, Property, Child, EventDispatcher, Redux } from './LSElement/decorators/PropertyDecorators';
 export type { LSCustomElement } from './LSElement/types';
-export type { HTMLAttributes } from './LSElement/h/JSXBase';
+export type { HTMLAttributes, HTMLElementAttributes, SVGAttributes, HTMLAttributesWithMandatoryId, SVGAttributesWithMandatoryId, HTMLElementAttributesWithMandatoryId } from './LSElement/h/JSXBase';
 export { CustomEventDispatcher } from './LSElement/classes/CustomEventDispatcher';
 export { IdGenerator } from './LSElement/classes/IdGenerator';
 import './LSElement/h/global';

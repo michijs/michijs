@@ -1,9 +1,10 @@
 import { LSCustomElement } from '../types';
 import { standardizePropertyName } from '../properties/standardizePropertyName';
 
-export function convertDataTypeToAttribute(newValue: any, self: LSCustomElement, key: string) {
+export function setAttribute(self: LSCustomElement, newValue: any, key: string) {
 	const formattedKey = standardizePropertyName(key);
 	switch (true) {
+		case newValue === undefined:
 		case typeof newValue === 'boolean': {
 			if (newValue) {
 				self.setAttribute(formattedKey, '');

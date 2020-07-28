@@ -45,7 +45,7 @@ export type LsStaticAttributesType = {
 export type LsAttributesType = {
     alreadyConnected?: boolean,
     propertiesProxy?: ProxyConstructor,
-    attributesProxy?: any
+    attributesProxy?: ProxyConstructor
 }
 
 export type RootElement = LSCustomElement | ShadowRoot;

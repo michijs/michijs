@@ -1,4 +1,4 @@
-import { CustomizedBuiltInElement, Attribute, Property, h, Child, HTMLAttributes, EventDispatcher, CustomEventDispatcher, LSCustomElement, Redux } from '../../src';
+import { CustomizedBuiltInElement, Attribute, Property, h, Child, EventDispatcher, CustomEventDispatcher, LSCustomElement, Redux, HTMLAttributesWithMandatoryId } from '../../src';
 import style from './style.css';
 import { increment } from '../redux/CounterSlice';
 import { store, StoreType } from '../redux/store';
@@ -36,16 +36,15 @@ export class LsTestElementBuiltIn extends HTMLButtonElement implements LSCustomE
 				<style id="style">{style}</style>
 				<div id="parent_div">
 					{/* <h1 id="xd" value={this.xd < 240 ? this.xd2 + this.xd : undefined} onClick={(_ev) => { this.xd++;  }}>{this.xd}</h1> */}
-					<h1 id="xd" onClick={(_ev) => { store.dispatch(increment()); }}>{'store' + this.reduxStore.counterStore.count}</h1>
-					<h1 id="xda" value={this.xd < 240 ? this.xd2 + this.xd : undefined} onClick={(_ev) => { this.xd++; this.arrayExample.push(this.xd); }}>{this.xd}</h1>
-
+					<h1 id="xd" onclick={(_ev) => { store.dispatch(increment()); }}>{'store' + this.reduxStore.counterStore.count}</h1>
+					<h1 id="xda" onclick={(_ev) => { this.xd++; this.arrayExample.push(this.xd); }}>{this.xd}</h1>
 				</div>
 				{this.xd > 256 ? <h1 id="<256">{'>256'}</h1> : undefined}
 				{this.xd > 245 ? <h1 id="<245">{'>245'}</h1> : undefined}
 				{this.xd < 236 ? <h1 id="<236">{'<236'}</h1> : undefined}
 				{this.arrayExample.map(x => <h2 id={'example' + x}>{x}</h2>)}
 				<h1 id="xd2">{this.xd2}</h1>
-				<h1 id="xdfg" onClick={() => this.xdfg.text = 'hola'}>{this.xdfg.text}</h1>
+				<h1 id="xdfg" onclick={() => this.xdfg.text = 'hola'}>{this.xdfg.text}</h1>
 				<slot id="slot"></slot>
 			</>
 		);
@@ -58,8 +57,8 @@ declare global {
 			'button': {
 				is?: 'ls-test-element-built-in'
 				xd2?: number;
-				onAllAnimationsFinished?: (event: CustomEvent<string>) => void;
-			} & HTMLAttributes;
+				onallanimationsfinished?: (event: CustomEvent<string>) => void;
+			} & HTMLAttributesWithMandatoryId['button'];
 		}
 	}
 }

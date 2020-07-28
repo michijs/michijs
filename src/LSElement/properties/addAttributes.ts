@@ -1,51 +1,43 @@
 import { LSCustomElement } from '../types';
-import { standardizePropertyName } from './standardizePropertyName';
-import { convertStringToDataType } from '../utils/convertStringToDataType';
-import { convertDataTypeToAttribute } from '../utils/convertDataTypeToAttribute';
 import { updateChangesInDom } from '../render/updateChangesInDom';
+import { convertToProxy } from '../utils/convertToProxy';
+import { setAttribute } from '../utils/setAttribute';
+import { standardizePropertyName } from './standardizePropertyName';
 
 export function addAttributes(self: LSCustomElement) {
-	self.ls.attributesProxy = {};
+	const initialProxyValue = {};
 	self.lsStatic.observedAttributes.forEach(attribute => {
 		const attributeName = standardizePropertyName(attribute.propertyName);
-
-		if (self.hasAttribute(attributeName)) {
-			self.ls.attributesProxy[attribute.propertyName] = convertStringToDataType(self.getAttribute(attributeName));
-		} else {
-			self.ls.attributesProxy[attribute.propertyName] = self[attribute.propertyName];
-			convertDataTypeToAttribute(self[attribute.propertyName], self, attributeName);
-		}
+		initialProxyValue[attribute.propertyName] = self[attribute.propertyName];
 		delete self[attribute.propertyName];
-
-		if (attribute.propertyName !== attributeName) {
-			Object.defineProperty(self, attribute.propertyName, {
-				set(newValue) {
-					convertDataTypeToAttribute(newValue, self, attributeName);
-				},
-				get() {
-					return self.ls.attributesProxy[attribute.propertyName];
-				},
-			});
-		}
-
-		Object.defineProperty(self, attributeName, {
+		const definedProperty = {
 			set(newValue) {
-				const oldValue = self.ls.attributesProxy[attribute.propertyName];
-				self.ls.attributesProxy[attribute.propertyName] = newValue;
-				if (self.ls?.alreadyConnected) {
-					updateChangesInDom(self);
-					if (attribute.propertyName === attributeName){
-						convertDataTypeToAttribute(newValue, self, attributeName);
-					}
-					const property = self.lsStatic.properties.find(x => x.propertyName === attribute.propertyName);
-					if (self[property?.options?.onChange]) {
-						self[property?.options?.onChange](newValue, oldValue);
-					}
+				if (self.ls.alreadyConnected) {
+					self.ls.attributesProxy[attribute.propertyName] = newValue;
 				}
 			},
 			get() {
 				return self.ls.attributesProxy[attribute.propertyName];
 			},
-		});
+		};
+		Object.defineProperty(self, attribute.propertyName, definedProperty);
+		if (attribute.propertyName !== attributeName) {
+			Object.defineProperty(self, attributeName, definedProperty);
+		}
+		setAttribute(self, initialProxyValue[attribute.propertyName], attribute.propertyName);
 	});
+
+	const callback = (propertyName: string, newValue, oldValue) => {
+		if (self.ls.alreadyConnected) {
+			updateChangesInDom(self);
+			const property = self.lsStatic.observedAttributes.find(x => x.propertyName === propertyName);
+			const onChange = property?.options?.onChange;
+			if (onChange) {
+				self[onChange](newValue, oldValue);
+			}
+			setAttribute(self, newValue, propertyName);
+		}
+	};
+
+	self.ls.attributesProxy = convertToProxy(initialProxyValue, callback, self);
 }

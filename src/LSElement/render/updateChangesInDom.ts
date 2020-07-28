@@ -6,20 +6,23 @@ import { standardizePropertyName } from '../properties/standardizePropertyName';
 function updateAttributes(newElement: Element, currentElement: Element) {
 	const properties = (newElement as LSCustomElement).lsStatic?.properties;
 	let reflectedProperties = new Array<string>();
-	if(properties){
+	if (properties) {
 		reflectedProperties = properties.filter(x => x.options?.reflect).map(x => standardizePropertyName(x.propertyName));
 	}
-	//Remove attributes that doesn´t exists now
+
 	currentElement.getAttributeNames().forEach(attribute => {
 		if (!newElement.getAttributeNames().includes(attribute) && !reflectedProperties.includes(attribute)) {
-			currentElement.removeAttribute(attribute);
+			currentElement[attribute] = newElement[attribute];
 		}
 	});
 
-	//Add and update new attributes
 	newElement.getAttributeNames().forEach(attribute => {
 		if (currentElement.getAttribute(attribute) !== newElement.getAttribute(attribute)) {
-			currentElement.setAttribute(attribute, newElement.getAttribute(attribute));
+			if (attribute === 'class') {
+				currentElement.className = newElement.className;
+			} else {
+				currentElement[attribute] = newElement[attribute];
+			}
 		}
 	});
 }
