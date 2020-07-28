@@ -1,4 +1,4 @@
-import { setAttribute } from "../utils/setAttribute";
+import { setAttribute } from '../utils/setAttribute';
 
 export interface FunctionComponent {
 	(attrs: any, ...children): HTMLElement;
@@ -75,7 +75,7 @@ function addAttributes(elem, attrs) {
 
 	for (const entry of Object.entries(attrs)) {
 		const attr = entry[0];
-		let value = entry[1];
+		const value = entry[1];
 
 		if (attr.startsWith('on') && typeof value === 'function') {
 			elem.addEventListener(attr.substr(2), value);
