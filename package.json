@@ -1,7 +1,7 @@
 {
   "name": "@lsegurado/ls-element",
   "license": "MIT",
-  "version": "1.0.5",
+  "version": "1.0.0",
   "files": [
     "dist/"
   ],
@@ -18,7 +18,7 @@
     "start": "parcel ./Tests/index.html --open --out-dir build",
     "build": "npm run clean && tsc",
     "publish-patch-version": "npm version patch && npm run publish-npm",
-    "publish-npm": "npm run build && npm publish",
+    "publish-npm": "npm run build && npm publish --access public",
     "lint": "eslint --fix src/**/*{.ts,.tsx}",
     "stylelint": "npx stylelint --fix **/*.css"
   },
@@ -29,7 +29,7 @@
     "Autonomous custom elements"
   ],
   "devDependencies": {
-    "@lsegurado/parcel-plugin-ls-convert-css-to-js-module": "0.0.10",
+    "@lsegurado/parcel-plugin-ls-convert-css-to-js-module": "1.0.0",
     "@reduxjs/toolkit": "^1.3.6",
     "@types/uuid": "^8.0.0",
     "@typescript-eslint/eslint-plugin": "^3.3.0",
