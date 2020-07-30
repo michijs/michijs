@@ -1,5 +1,5 @@
-import { SVGAttributesWithMandatoryId } from "./JSX/SVGAttributes";
-import { HTMLAttributesWithMandatoryId } from "./JSX/HTMLAttributes";
+import { SVGAttributesWithMandatoryId } from './JSX/SVGAttributes';
+import { HTMLAttributesWithMandatoryId } from './JSX/HTMLAttributes';
 
 declare global {
     namespace JSX {

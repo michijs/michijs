@@ -1,4 +1,4 @@
-import { DOMAttributes } from "./DOMAttributes";
+import { DOMAttributes } from './DOMAttributes';
 
 export interface SVGDOMAttributes extends DOMAttributes {
     accentHeight?: number | string;
