@@ -1,4 +1,4 @@
-import { setAttribute } from '../utils/setAttribute';
+import { setAttributeValue } from '../utils/setAttribute';
 
 export interface FunctionComponent {
 	(attrs: any, ...children): HTMLElement;
@@ -81,14 +81,18 @@ function addAttributes(elem, attrs) {
 			elem.addEventListener(attr.substr(2), value);
 		} else {
 			if (elem[attr] === undefined && value) {
-				setAttribute(elem, value, attr);
+				setAttributeValue(elem, value, attr);
 			}
 			if (attr === 'style') {
 				Object.keys(value).forEach(styleKey => {
 					elem.style[styleKey] = value[styleKey];
 				});
 			} else {
-				elem[attr] = value;
+				try {
+					elem[attr] = value;
+				} catch (_) {//For readonly values only set attribute
+					setAttributeValue(elem, value, attr);
+				}
 			}
 		}
 	}

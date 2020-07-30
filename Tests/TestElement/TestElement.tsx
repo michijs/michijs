@@ -1,4 +1,4 @@
-import { AutonomousCustomElement, Attribute, Property, h, Child, EventDispatcher, CustomEventDispatcher, LSCustomElement, Redux, HTMLElementAttributes, HTMLElementAttributesWithMandatoryId } from '../../src';
+import { AutonomousCustomElement, Attribute, Property, h, Child, EventDispatcher, CustomEventDispatcher, LSCustomElement, Redux, HTMLAttributes, HTMLAttributesWithMandatoryId } from '../../src';
 import style from './style.css';
 import { increment } from '../redux/CounterSlice';
 import { store, StoreType } from '../redux/store';
@@ -8,7 +8,7 @@ export class LsTestElement extends HTMLElement implements LSCustomElement {
 	@Property({ reflect: true, onChange: 'onChangeXd' }) xd = 234;
 	@Property() xdfg = { id: 123, text: 'asdfasdf' };
 	@Property() arrayExample = [1, 2, 3, 4, 5, 6, 7, 8];
-	@Attribute({ onChange: 'onChangeXD2' }) xd2: number = 1;
+	@Attribute({ onChange: 'onChangeXD2' }) xd2A: number = 1;
 	@Child('xd') xdElement: HTMLHeadingElement;
 	@Child('xd2') xd2Element: HTMLHeadingElement;
 	@EventDispatcher() allAnimationsFinished: CustomEventDispatcher<string>;
@@ -44,7 +44,7 @@ export class LsTestElement extends HTMLElement implements LSCustomElement {
 				{this.xd > 245 ? <h1 id="<245">{'>245'}</h1> : undefined}
 				{this.xd < 236 ? <h1 id="<236">{'<236'}</h1> : undefined}
 				{this.arrayExample.map(x => <h2 id={'example' + x}>{x}</h2>)}
-				<h1 id="xd2">{this.xd2}</h1>
+				<h1 id="xd2">{this.xd2A}</h1>
 				<h1 id="asdf" onclick={() => this.xdfg.text = 'hola'}>{this.xdfg.text}</h1>
 				<slot id="slot"></slot>
 			</>
@@ -56,9 +56,9 @@ declare global {
 	export namespace JSX {
 		interface IntrinsicElements {
 			'ls-test-element': {
-				xd2?: number;
+				'xd2-a'?: number;
 				onallanimationsfinished?: (event: CustomEvent<string>) => void;
-			} & HTMLElementAttributesWithMandatoryId;
+			} & HTMLAttributesWithMandatoryId;
 		}
 	}
 }

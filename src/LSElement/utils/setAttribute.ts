@@ -3,22 +3,26 @@ import { standardizePropertyName } from '../properties/standardizePropertyName';
 
 export function setAttribute(self: LSCustomElement, newValue: any, key: string) {
 	const formattedKey = standardizePropertyName(key);
+	setAttributeValue(self, newValue, formattedKey);
+}
+
+export function setAttributeValue(self: LSCustomElement, newValue: any, key: string) {
 	switch (true) {
 		case newValue === undefined:
 		case typeof newValue === 'boolean': {
 			if (newValue) {
-				self.setAttribute(formattedKey, '');
+				self.setAttribute(key, '');
 			} else {
-				self.removeAttribute(formattedKey);
+				self.removeAttribute(key);
 			}
 			break;
 		}
 		case typeof newValue === 'object': {
-			self.setAttribute(formattedKey, JSON.stringify(newValue));
+			self.setAttribute(key, JSON.stringify(newValue));
 			break;
 		}
 		default: {
-			self.setAttribute(formattedKey, newValue);
+			self.setAttribute(key, newValue);
 		}
 	}
 }

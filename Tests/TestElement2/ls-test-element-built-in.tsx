@@ -58,7 +58,7 @@ declare global {
 				is?: 'ls-test-element-built-in'
 				xd2?: number;
 				onallanimationsfinished?: (event: CustomEvent<string>) => void;
-			} & HTMLAttributesWithMandatoryId['button'];
+			} & HTMLAttributesWithMandatoryId;
 		}
 	}
 }
