@@ -3,7 +3,7 @@
   "license": "MIT",
   "version": "1.0.1",
   "files": [
-    "dist/"
+    "dist/*"
   ],
   "author": "Lucas M. Segurado",
   "baseUrl": "./src",
