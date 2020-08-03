@@ -8,6 +8,7 @@ export function setAttribute(self: LSCustomElement, newValue: any, key: string) 
 
 export function setAttributeValue(self: LSCustomElement | Element, newValue: any, key: string) {
 	switch (true) {
+		case newValue === null:
 		case newValue === undefined:
 		case typeof newValue === 'boolean': {
 			if (newValue) {

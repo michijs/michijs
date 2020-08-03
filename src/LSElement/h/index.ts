@@ -1,5 +1,6 @@
 import { isCustomBuiltInElement } from '../utils/isCustomBuilInElement';
 import { updateAttribute } from '../utils/updateAttribute';
+import { formatToKebabCase } from '../utils/formatToKebabCase';
 
 export interface FunctionComponent {
 	(attrs: any, ...children): HTMLElement;
@@ -84,13 +85,24 @@ function addAttributes(elem, attrs) {
 	const attrsToListen = [];
 
 	for (const entry of Object.entries(attrs)) {
-		const attr = entry[0];
-		const value = entry[1];
+		let attr = entry[0];
+		let value = entry[1];
 
 		if (attr.startsWith('on') && typeof value === 'function') {
 			elem.addEventListener(attr.substr(2), value);
 		} else {
 			attrsToListen.push(attr);
+			if (attr === 'style') {
+				const modifier =
+					attr === 'style' ? formatToKebabCase : str => str.toLowerCase();
+
+				value = Object.entries(value)
+					.map(([key, val]) => `${modifier(key)}: ${val}`)
+					.join('; ');
+			} else if (attr === 'className') {
+				attr = 'class';
+				value = value === '' ? undefined : value;
+			}
 			updateAttribute(elem, attr, value);
 		}
 	}

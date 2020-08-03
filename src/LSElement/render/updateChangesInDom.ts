@@ -7,8 +7,16 @@ import { updateAttribute } from '../utils/updateAttribute';
 
 function updateAttributes(newElement: Element, currentElement: Element) {
 	(newElement as LSCustomElement).ls?.attrsToListen.map(attr => {
-		const value = newElement[attr];
-		updateAttribute(currentElement, attr, value);
+		let value = newElement[attr] || newElement.getAttribute(attr);
+		if (attr === 'style') {
+			value = newElement.getAttribute('style');
+		} else if (attr === 'className') {
+			attr = 'class';
+			value = value === '' ? undefined : value;
+		}
+		if (currentElement.getAttribute(attr) !== newElement.getAttribute(attr)) {
+			updateAttribute(currentElement, attr, value);
+		}
 	});
 }
 
