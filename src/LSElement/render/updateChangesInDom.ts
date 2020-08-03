@@ -12,7 +12,7 @@ function updateAttributes(newElement: Element, currentElement: Element) {
 			if (attr === 'className' && !value) {
 				setAttributeValue(currentElement, undefined, 'class');
 			} else if (attr === 'style') {
-				currentElement.setAttribute('style', newElement.getAttribute('style'))
+				currentElement.setAttribute('style', newElement.getAttribute('style'));
 			} else {
 				try {
 					currentElement[attr] = value;
@@ -21,7 +21,7 @@ function updateAttributes(newElement: Element, currentElement: Element) {
 				}
 			}
 		}
-	})
+	});
 }
 
 function updateElement(newElement: Element, currentElement: Element, parent: Element | DocumentFragment) {
@@ -44,7 +44,7 @@ function updateElement(newElement: Element, currentElement: Element, parent: Ele
 			Object.keys(slot).forEach((slotName) => {
 				let selectedSlot: HTMLSlotElement;
 				if (slotName !== 'default') {
-					selectedSlot = allElementSlots.namedItem(slotName)
+					selectedSlot = allElementSlots.namedItem(slotName);
 				} else {
 					selectedSlot = Array.from(allElementSlots).find(x => !x.hasAttribute('name'));
 				}
@@ -52,7 +52,7 @@ function updateElement(newElement: Element, currentElement: Element, parent: Ele
 					const newChildren = slot[slotName];
 					updateChildren(newChildren, selectedSlot);
 				}
-			})
+			});
 		}
 	}
 }

@@ -46,20 +46,20 @@ export const AutonomousCustomElement = function (config?: AutonomousCustomElemen
 
 			attributeChangedCallback(name: string, oldValue, newValue) {
 				attributeChangedCallback(this, name, oldValue, newValue);
-			};
+			}
 
-			static get observedAttributes() { return getObservedAttributes(element.prototype.lsStatic) };
+			static get observedAttributes() { return getObservedAttributes(element.prototype.lsStatic); }
 
 			connectedCallback() {
 				connectedCallback(this);
-			};
+			}
 
 			disconnectedCallback() {
 				disconnectedCallback(this);
-			};
+			}
 		}
 
 		window.customElements.define(tag, newClass);
 
 	};
-}
+};
