@@ -1,14 +1,14 @@
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 import type { LSCustomElement } from '../types';
-import { executeFirstRender } from '../render/executeFirstRender';
 import { initLsStatic } from '../properties/initLsStatic';
-import { createGetterAndSetterForObservedAttributes } from '../properties/createGetterAndSetterForObservedAttributes';
 import { addEventDispatchers } from '../properties/addEventDispatchers';
 import { addElementsReferences } from '../properties/addElementsReferences';
-import { addProperties } from '../properties/addProperties';
 import { addAttributes } from '../properties/addAttributes';
 import { addReduxStores } from '../properties/addReduxStores';
-import { getAttributeValue } from '../utils/getAttribute';
+import { getObservedAttributes } from '../properties/createGetterAndSetterForObservedAttributes';
+import { connectedCallback } from '../render/connectedCallback';
+import { disconnectedCallback } from '../render/disconnectedCallback';
+import { attributeChangedCallback } from '../render/attributeChangedCallback';
 
 interface AutonomousCustomElementConfig {
 	tag?: string;
@@ -21,62 +21,45 @@ const validateTag = (tag: string) => {
 	}
 };
 
-export const AutonomousCustomElement = (config?: AutonomousCustomElementConfig) => (element: CustomElementConstructor) => {
-	const tag = config?.tag || formatToKebabCase(element.name);
-	validateTag(tag);
+export const AutonomousCustomElement = function (config?: AutonomousCustomElementConfig) {
+	return function (element: CustomElementConstructor) {
+		const tag = config?.tag || formatToKebabCase(element.name);
+		validateTag(tag);
 
-	const emptyFunction = () => { };
-	const connectedCallback = element.prototype.connectedCallback || emptyFunction;
-	const disconnectedCallback = element.prototype.disconnectedCallback || emptyFunction;
+		element.prototype.lsStatic = initLsStatic(element.prototype.lsStatic);
 
-	element.prototype.attributeChangedCallback = function (name: string, oldValue, newValue) {
-		if (newValue != oldValue) {
-			this[name] = getAttributeValue(newValue);
-		}
-	};
-
-	element.prototype.lsStatic = initLsStatic(element.prototype.lsStatic);
-
-	Object.defineProperty(element.prototype.constructor, 'observedAttributes', createGetterAndSetterForObservedAttributes(element.prototype.lsStatic));
-	
-	element.prototype.connectedCallback = function () {
-		const self: LSCustomElement = this;
-		if (!self.ls?.alreadyConnected) {
-			self.ls = {};
-			const useShadow = config?.shadow !== false;
-			if (useShadow) {
-				const shadowMode = config?.shadow || 'open';
-				self.attachShadow({ mode: shadowMode });
+		class newClass extends element {
+			constructor() {
+				super();
+				const self: LSCustomElement = this;
+				const useShadow = config?.shadow !== false;
+				if (useShadow) {
+					const shadowMode = config?.shadow || 'open';
+					self.attachShadow({ mode: shadowMode });
+				}
+				self.ls = self.ls || {};
+				addEventDispatchers(self);
+				addReduxStores(self);
+				addElementsReferences(self);
+				addAttributes(self);
 			}
 
-			addEventDispatchers(self);
-			addElementsReferences(self);
-			addProperties(self);
-			addAttributes(self);
-			addReduxStores(self);
-			executeFirstRender(self);
-			self.ls.alreadyConnected = true;
+			attributeChangedCallback(name: string, oldValue, newValue) {
+				attributeChangedCallback(this, name, oldValue, newValue);
+			};
 
-			//Lifecycle methods
-			if (self.componentWillMount) {
-				self.componentWillMount();
-			}
-			connectedCallback.call(self);
-			if (self.componentDidMount) {
-				self.componentDidMount();
-			}
+			static get observedAttributes() { return getObservedAttributes(element.prototype.lsStatic) };
+
+			connectedCallback() {
+				connectedCallback(this);
+			};
+
+			disconnectedCallback() {
+				disconnectedCallback(this);
+			};
 		}
+
+		window.customElements.define(tag, newClass);
+
 	};
-
-	element.prototype.disconnectedCallback = function () {
-		if (this.componentWillUnmount) {
-			this.componentWillUnmount();
-		}
-		disconnectedCallback.call(this);
-		if (this.componentDidUnmount) {
-			this.componentDidUnmount();
-		}
-	};
-
-	window.customElements.define(tag, element);
-};
+}

@@ -1,10 +1,6 @@
 import { LsStaticAttributesType } from '../types';
 import { standardizePropertyName } from './standardizePropertyName';
 
-export function createGetterAndSetterForObservedAttributes(lsStatic: LsStaticAttributesType) {
-	return {
-		get() {
-			return lsStatic.observedAttributes.map(attribute => standardizePropertyName(attribute.propertyName));
-		},
-	};
+export function getObservedAttributes(lsStatic: LsStaticAttributesType) {
+	return lsStatic.observedAttributes.filter(attribute => attribute.options?.reflect).map(attribute => standardizePropertyName(attribute.propertyName));
 }

@@ -1,9 +1,9 @@
-import { AutonomousCustomElement, h, Property, EventDispatcher, CustomEventDispatcher, LSCustomElement, HTMLAttributesWithMandatoryId } from '../../src';
+import { AutonomousCustomElement, h, EventDispatcher, CustomEventDispatcher, LSCustomElement, HTMLAttributesWithMandatoryId, Attribute } from '../../src';
 import style from './Counter.css';
 
 @AutonomousCustomElement()
 export class MyCounter extends HTMLElement implements LSCustomElement {
-    @Property({ onChange: 'onChangeCount' }) count = 0;
+    @Attribute({ onChange: 'onChangeCount' }) count = 0;
     @EventDispatcher() countChanged: CustomEventDispatcher<number>;
 
     onChangeCount(newValue: number, _oldValue: number) {

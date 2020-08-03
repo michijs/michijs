@@ -1,13 +1,13 @@
-import { AutonomousCustomElement, Attribute, Property, h, Child, EventDispatcher, CustomEventDispatcher, LSCustomElement, Redux, HTMLAttributes, HTMLAttributesWithMandatoryId } from '../../src';
+import { AutonomousCustomElement, Attribute, h, Child, EventDispatcher, CustomEventDispatcher, LSCustomElement, Redux, HTMLAttributes, HTMLAttributesWithMandatoryId } from '../../src';
 import style from './style.css';
 import { increment } from '../redux/CounterSlice';
 import { store, StoreType } from '../redux/store';
 
 @AutonomousCustomElement()
 export class LsTestElement extends HTMLElement implements LSCustomElement {
-	@Property({ reflect: true, onChange: 'onChangeXd' }) xd = 234;
-	@Property() xdfg = { id: 123, text: 'asdfasdf' };
-	@Property() arrayExample = [1, 2, 3, 4, 5, 6, 7, 8];
+	@Attribute({ reflect: true, onChange: 'onChangeXd' }) xd = 234;
+	@Attribute() xdfg = { id: 123, text: 'asdfasdf' };
+	@Attribute() arrayExample = [1, 2, 3, 4, 5, 6, 7, 8];
 	@Attribute({ onChange: 'onChangeXD2' }) xd2A: number = 1;
 	@Child('xd') xdElement: HTMLHeadingElement;
 	@Child('xd2') xd2Element: HTMLHeadingElement;

@@ -1,30 +1,27 @@
 import type { LSCustomElement } from '../types';
 import { render } from './render';
 import { getRootNode } from './gerRootNode';
-import { standardizePropertyName } from '../properties/standardizePropertyName';
+import { setAttributeValue } from '../utils/setAttribute';
 
 function updateAttributes(newElement: Element, currentElement: Element) {
-	const properties = (newElement as LSCustomElement).lsStatic?.properties;
-	let reflectedProperties = new Array<string>();
-	if (properties) {
-		reflectedProperties = properties.filter(x => x.options?.reflect).map(x => standardizePropertyName(x.propertyName));
-	}
-
-	currentElement.getAttributeNames().forEach(attribute => {
-		if (!newElement.getAttributeNames().includes(attribute) && !reflectedProperties.includes(attribute)) {
-			currentElement[attribute] = newElement[attribute];
-		}
-	});
-
-	newElement.getAttributeNames().forEach(attribute => {
-		if (currentElement.getAttribute(attribute) !== newElement.getAttribute(attribute)) {
-			if (attribute === 'class') {
-				currentElement.className = newElement.className;
+	(newElement as LSCustomElement).ls?.attrsToListen.map(attr => {
+		const value = newElement[attr];
+		if (newElement[attr] === undefined && value) {
+			setAttributeValue(currentElement, value, attr);
+		} else {
+			if (attr === 'className' && !value) {
+				setAttributeValue(currentElement, undefined, 'class');
+			} else if (attr === 'style') {
+				currentElement.setAttribute('style', newElement.getAttribute('style'))
 			} else {
-				currentElement[attribute] = newElement[attribute];
+				try {
+					currentElement[attr] = value;
+				} catch (_) {//For readonly values only set attribute
+					setAttributeValue(currentElement, value, attr);
+				}
 			}
 		}
-	});
+	})
 }
 
 function updateElement(newElement: Element, currentElement: Element, parent: Element | DocumentFragment) {
@@ -41,21 +38,37 @@ function updateElement(newElement: Element, currentElement: Element, parent: Ele
 		} else if (!isACustomElement) {
 			currentElement.textContent = newElement.textContent;
 		}
+		if (isACustomElement && !hasShadowRoot) {
+			const slot = (newElement as LSCustomElement).ls?.slot;
+			const allElementSlots = (currentElement as HTMLElement).getElementsByTagName('slot');
+			Object.keys(slot).forEach((slotName) => {
+				let selectedSlot: HTMLSlotElement;
+				if (slotName !== 'default') {
+					selectedSlot = allElementSlots.namedItem(slotName)
+				} else {
+					selectedSlot = Array.from(allElementSlots).find(x => !x.hasAttribute('name'));
+				}
+				if (selectedSlot) {
+					const newChildren = slot[slotName];
+					updateChildren(newChildren, selectedSlot);
+				}
+			})
+		}
 	}
 }
 
-function updateChildrens(newChildrens: Element[], parent: Element | DocumentFragment) {
-	for (let i = 0; i < newChildrens.length; i++) {
-		updateElement(newChildrens[i], parent.children.namedItem(newChildrens[i].id), parent);
+function updateChildren(newChildren: Element[], parent: Element | DocumentFragment) {
+	for (let i = 0; i < newChildren.length; i++) {
+		updateElement(newChildren[i], parent.children.namedItem(newChildren[i].id), parent);
 	}
 }
 
-function removeChildrens(childsToRemove: Element[], parent: Element | DocumentFragment) {
-	childsToRemove.forEach(child => parent.removeChild(child));
+function removeChildren(childToRemove: Element[], parent: Element | DocumentFragment) {
+	childToRemove.forEach(child => parent.removeChild(child));
 }
 
-function insertNewChildrens(childsToAdd: ChildrensToAddType[], parent: Element | DocumentFragment) {
-	childsToAdd.forEach(child => {
+function insertNewChildren(childrenToAdd: ChildrenToAddType[], parent: Element | DocumentFragment) {
+	childrenToAdd.forEach(child => {
 		if (!child.index) child.index = 0;
 		if (child.index >= parent.children.length) {
 			parent.appendChild(child.element);
@@ -65,30 +78,38 @@ function insertNewChildrens(childsToAdd: ChildrensToAddType[], parent: Element |
 	});
 }
 
-type ChildrensToAddType = {
+type ChildrenToAddType = {
 	element: Element;
 	index: number;
 };
 
-function updateChangesInElement(newChildrens: Element[], oldChildrens: Element[], parent: Element | DocumentFragment) {
-	const newChildrensIds = newChildrens.map(x => x.id);
-	const oldChildrensIds = oldChildrens.map(x => x.id);
-	const childsToRemove = oldChildrens.filter(x => !newChildrensIds.includes(x.id));
-	const childsToAdd: Array<ChildrensToAddType> = newChildrens.map((value, index) => ({ element: value, index: index })).filter(x => !oldChildrensIds.includes(x.element.id));
-	const childsToUpdate = newChildrens.filter(x => oldChildrensIds.includes(x.id));
+function updateChangesInElement(newChildren: Element[], oldChildren: Element[], parent: Element | DocumentFragment) {
+	const newChildrenIds = newChildren.map(x => x.id);
+	const oldChildrenIds = oldChildren.map(x => x.id);
+	const childrenToRemove = oldChildren.filter(x => !newChildrenIds.includes(x.id));
+	const childrenToAdd: Array<ChildrenToAddType> = newChildren.map((value, index) => ({ element: value, index: index })).filter(x => !oldChildrenIds.includes(x.element.id));
+	const childrenToUpdate = newChildren.filter(x => oldChildrenIds.includes(x.id));
 
-	removeChildrens(childsToRemove, parent);
-	updateChildrens(childsToUpdate, parent);
-	insertNewChildrens(childsToAdd, parent);
+	removeChildren(childrenToRemove, parent);
+	updateChildren(childrenToUpdate, parent);
+	insertNewChildren(childrenToAdd, parent);
 }
 
 export function updateChangesInDom(self: LSCustomElement) {
-	const newChildrens = render(self);
-	const oldChildrens = getChildrens(self);
-	const rootNode = getRootNode(self);
-	updateChangesInElement(newChildrens, oldChildrens, rootNode);
+	if (self.ls.alreadyRendered) {
+		if (self.componentWillUpdate) {
+			self.componentWillUpdate();
+		}
+		const newChildren = render(self);
+		const oldChildren = getChildren(self);
+		const rootNode = getRootNode(self);
+		updateChangesInElement(newChildren, oldChildren, rootNode);
+		if (self.componentDidUpdate) {
+			self.componentDidUpdate();
+		}
+	}
 }
 
-function getChildrens(self: LSCustomElement) {
+function getChildren(self: LSCustomElement) {
 	return Array.from(self.shadowRoot ? self.shadowRoot.children : self.children) as Element[];
 }

@@ -8,7 +8,6 @@ export function initLsStatic(ls: LsStaticAttributesType): LsStaticAttributesType
 			stores: [],
 			elements: [],
 			observedAttributes: [],
-			properties: [],
 			eventsDispatchers: []
 		};
 	}

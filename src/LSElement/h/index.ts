@@ -37,11 +37,20 @@ function appendChild(elem, children) {
 
 	let child = children;
 
+	const isACustomElement = window.customElements.get(elem.getAttribute('is') || elem.tagName.toLowerCase()) !== undefined;
+
 	if (!(child instanceof Node)) {
 		child = document.createTextNode(child.toString());
 	}
-
-	elem.appendChild(child);
+	if (!isACustomElement) {
+		elem.appendChild(child);
+	} else {
+		elem.ls = elem.ls || {};
+		elem.ls.slot = elem.ls.slot || {};
+		const slotName: string = child.getAttribute('slot') || 'default';
+		elem.ls.slot[slotName] = elem.ls.slot[slotName] || [];
+		elem.ls.slot[slotName].push(child);
+	}
 }
 
 function createElement(elem, attrs) {
@@ -72,6 +81,8 @@ export function render(elem, parent) {
 
 function addAttributes(elem, attrs) {
 	if (attrs === null || attrs === undefined) attrs = {};
+	elem.ls = elem.ls || {};
+	const attrsToListen = [];
 
 	for (const entry of Object.entries(attrs)) {
 		const attr = entry[0];
@@ -82,20 +93,25 @@ function addAttributes(elem, attrs) {
 		} else {
 			if (elem[attr] === undefined && value) {
 				setAttributeValue(elem, value, attr);
-			}
-			if (attr === 'style') {
-				Object.keys(value).forEach(styleKey => {
-					elem.style[styleKey] = value[styleKey];
-				});
 			} else {
-				try {
-					elem[attr] = value;
-				} catch (_) {//For readonly values only set attribute
-					setAttributeValue(elem, value, attr);
+				attrsToListen.push(attr);
+				if (attr === 'className' && !value) {
+					setAttributeValue(elem, undefined, 'class');
+				} else if (attr === 'style') {
+					Object.keys(value).forEach(styleKey => {
+						elem.style[styleKey] = value[styleKey];
+					});
+				} else {
+					try {
+						elem[attr] = value;
+					} catch (_) {//For readonly values only set attribute
+						setAttributeValue(elem, value, attr);
+					}
 				}
 			}
 		}
 	}
+	elem.ls.attrsToListen = attrsToListen;
 }
 
 const createAndAppendSVG = (_tag, attrs, ...children) => {

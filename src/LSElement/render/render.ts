@@ -5,7 +5,6 @@ export function render(self: LSCustomElement) {
 	if (renderResult) {
 		const arrayResult = !Array.isArray(renderResult) ? [renderResult] : renderResult;
 		const result = new Array<Element>();
-
 		for (let i = 0; i < arrayResult.length; i++) {
 			const x = arrayResult[i];
 			if (x) {
@@ -24,6 +23,13 @@ export function render(self: LSCustomElement) {
 					if (itemWithSameId) {
 						console.error(`Element "${x.outerHTML}" has a repeated id with "${itemWithSameId.outerHTML}". Please change the id of this element.`);
 						continue;
+					}
+					if (x.tagName === 'SLOT' && self.ls?.slot) {
+						const slotName = x.getAttribute('name') || 'default';
+						const children = self.ls?.slot[slotName] || [];
+						children.forEach(child => {
+							x.appendChild(child);
+						});
 					}
 					result.push(x);
 				}

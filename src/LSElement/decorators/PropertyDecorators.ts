@@ -1,4 +1,4 @@
-import type { LSCustomElement, AttributeOptionsType, PropertyOptionsType } from '../types';
+import type { LSCustomElement, AttributeOptionsType } from '../types';
 import { initLsStatic } from '../properties/initLsStatic';
 import { Store } from 'redux';
 
@@ -6,13 +6,6 @@ export function Attribute(options?: AttributeOptionsType) {
 	return function (target: LSCustomElement, propertyKey: string) {
 		target.lsStatic = initLsStatic(target.lsStatic);
 		target.lsStatic.observedAttributes.push({ propertyName: propertyKey, options: options });
-	};
-}
-
-export function Property(options?: PropertyOptionsType) {
-	return function (target: LSCustomElement, propertyKey: string) {
-		target.lsStatic = initLsStatic(target.lsStatic);
-		target.lsStatic.properties.push({ propertyName: propertyKey, options: options });
 	};
 }
 

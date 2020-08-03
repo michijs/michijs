@@ -1,7 +1,7 @@
 export { h } from './LSElement/h';
 export { AutonomousCustomElement } from './LSElement/decorators/AutonomousCustomElement';
 export { CustomizedBuiltInElement } from './LSElement/decorators/CustomizedBuiltInElement';
-export { Attribute, Property, Child, EventDispatcher, Redux } from './LSElement/decorators/PropertyDecorators';
+export { Attribute, Child, EventDispatcher, Redux } from './LSElement/decorators/PropertyDecorators';
 export type { LSCustomElement } from './LSElement/types';
 export type { HTMLAttributes, HTMLAttributesWithMandatoryId } from './LSElement/h/JSX/HTMLAttributes';
 export type { SVGAttributes, SVGAttributesWithMandatoryId } from './LSElement/h/JSX/SVGAttributes';

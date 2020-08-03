@@ -24,6 +24,7 @@ If you want a library that:
 
 - Uses [KISS](https://en.wikipedia.org/wiki/KISS_principle) as a principal pattern
 
+- Can use [slots](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/slot) without Shadow DOM
 
 This library is for you.
 
@@ -39,12 +40,12 @@ LS Element custom elements are plain ES6/TypeScript classes with some decorator 
 New components can be created using the `.tsx` extension, such as `my-counter.tsx`.
 
 ```tsx
-import { AutonomousCustomElement, h, Property, HTMLAttributes, EventDispatcher, CustomEventDispatcher, LSCustomElement } from '@lsegurado/ls-element/dist';
+import { AutonomousCustomElement, h, Attribute, HTMLAttributes, EventDispatcher, CustomEventDispatcher, LSCustomElement } from '@lsegurado/ls-element/dist';
 import style from './Counter.css';
 
 @AutonomousCustomElement()
 export class MyCounter extends HTMLElement implements LSCustomElement {
-    @Property({ onChange: 'onChangeCount' }) count = 0;
+    @Attribute({ onChange: 'onChangeCount' }) count = 0;
     @EventDispatcher() countChanged: CustomEventDispatcher<number>;
 
     onChangeCount(newValue: number, _oldValue: number) {
@@ -135,11 +136,21 @@ For example MyCounter will be generated as my-counter.
 
 | Decorator | Description  |
 |--|--|
-| `@Attribute()` | Allows to define an attribute. It follows the Kebab case. |
-| `@Property()` | Allows to define a property. It can be [reflected as an attribute](https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr); using Kebab case. |
+| `@Attribute()` | Allows to define an attribute. It can be [reflected](https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr) and follows the Kebab case. |
 | `@EventDispatcher()` | Allows to define an [event](https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events) to his parent and triggering it easily. It will be defined using Lower case. For example countChanged will be registered as countchanged. |
 | `@Redux()` | Allows you to use Redux stores and update the DOM when a change occurs in the store. |
 | `@Child()` | Gets a reference to an element with his id. |
+
+### Hooks
+
+| Hook | Description  |
+|--|--|
+| `componentWillMount()` | This method is called right before a component mounts. |
+| `componentDidMount()` | This method is called after the component has mounted. |
+| `componentWillReceiveAttribute()` | This method is called before a component does anything with a new attribute. |
+| `componentWillUpdate()` | This method is called before re-rendering occurs. |
+| `componentDidUpdate()` | This method is called after re-rendering occurs. |
+| `componentDidUnmount()` | This method is called after a component is removed from the DOM. |
 
 
 ## Limitations

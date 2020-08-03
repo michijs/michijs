@@ -12,9 +12,7 @@ export function addAttributes(self: LSCustomElement) {
 		delete self[attribute.propertyName];
 		const definedProperty = {
 			set(newValue) {
-				if (self.ls.alreadyConnected) {
-					self.ls.attributesProxy[attribute.propertyName] = newValue;
-				}
+				self.ls.attributesProxy[attribute.propertyName] = newValue;
 			},
 			get() {
 				return self.ls.attributesProxy[attribute.propertyName];
@@ -24,17 +22,19 @@ export function addAttributes(self: LSCustomElement) {
 		if (attribute.propertyName !== attributeName) {
 			Object.defineProperty(self, attributeName, definedProperty);
 		}
-		setAttribute(self, initialProxyValue[attribute.propertyName], attribute.propertyName);
+		if (attribute.options?.reflect) {
+			setAttribute(self, initialProxyValue[attribute.propertyName], attribute.propertyName);
+		}
 	});
 
 	const callback = (propertyName: string, newValue, oldValue) => {
-		if (self.ls.alreadyConnected) {
-			updateChangesInDom(self);
-			const property = self.lsStatic.observedAttributes.find(x => x.propertyName === propertyName);
-			const onChange = property?.options?.onChange;
-			if (onChange) {
-				self[onChange](newValue, oldValue);
-			}
+		const property = self.lsStatic.observedAttributes.find(x => x.propertyName === propertyName);
+		updateChangesInDom(self);
+		const onChange = property?.options?.onChange;
+		if (onChange) {
+			self[onChange](newValue, oldValue);
+		}
+		if (property.options?.reflect) {
 			setAttribute(self, newValue, propertyName);
 		}
 	};

@@ -1,18 +1,18 @@
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 import type { LSCustomElement } from '../types';
-import { executeFirstRender } from '../render/executeFirstRender';
 import { initLsStatic } from '../properties/initLsStatic';
-import { createGetterAndSetterForObservedAttributes } from '../properties/createGetterAndSetterForObservedAttributes';
 import { addEventDispatchers } from '../properties/addEventDispatchers';
 import { addElementsReferences } from '../properties/addElementsReferences';
-import { addProperties } from '../properties/addProperties';
 import { addAttributes } from '../properties/addAttributes';
 import { addReduxStores } from '../properties/addReduxStores';
-import { getAttributeValue } from '../utils/getAttribute';
+import { getObservedAttributes } from '../properties/createGetterAndSetterForObservedAttributes';
+import { connectedCallback } from '../render/connectedCallback';
+import { disconnectedCallback } from '../render/disconnectedCallback';
+import { attributeChangedCallback } from '../render/attributeChangedCallback';
 
-interface CustomizedBuiltInElement {
-    tag?: string;
-    extends: keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap;
+interface CustomizedBuiltInElementConfig {
+	tag?: string;
+	extends: keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap;
 }
 
 const validateTag = (tag: string) => {
@@ -21,56 +21,40 @@ const validateTag = (tag: string) => {
 	}
 };
 
-export const CustomizedBuiltInElement = (config: CustomizedBuiltInElement) => (element: CustomElementConstructor) => {
-	const tag = config?.tag || formatToKebabCase(element.name);
-	validateTag(tag);
+export const CustomizedBuiltInElement = function (config: CustomizedBuiltInElementConfig) {
+	return function (element: CustomElementConstructor) {
+		const tag = config?.tag || formatToKebabCase(element.name);
+		validateTag(tag);
 
-	const emptyFunction = () => { };
-	const connectedCallback = element.prototype.connectedCallback || emptyFunction;
-	const disconnectedCallback = element.prototype.disconnectedCallback || emptyFunction;
+		element.prototype.lsStatic = initLsStatic(element.prototype.lsStatic);
 
-	element.prototype.attributeChangedCallback = function (name: string, oldValue, newValue) {
-		if (newValue != oldValue) {
-			this[name] = getAttributeValue(newValue);
-		}
-	};
-
-	element.prototype.lsStatic = initLsStatic(element.prototype.lsStatic);
-
-	Object.defineProperty(element.prototype.constructor, 'observedAttributes', createGetterAndSetterForObservedAttributes(element.prototype.lsStatic));
-
-	element.prototype.connectedCallback = function () {
-		const self: LSCustomElement = this;
-		if (!self.ls?.alreadyConnected) {
-			self.ls = {};
-			addEventDispatchers(self);
-			addElementsReferences(self);
-			addProperties(self);
-			addAttributes(self);
-			addReduxStores(self);
-			executeFirstRender(self);
-			self.ls.alreadyConnected = true;
-
-			//Lifecycle methods
-			if (self.componentWillMount) {
-				self.componentWillMount();
+		class newClass extends element {
+			constructor() {
+				super();
+				const self: LSCustomElement = this;
+				self.ls = self.ls || {};
+				addEventDispatchers(self);
+				addReduxStores(self);
+				addElementsReferences(self);
+				addAttributes(self);
 			}
-			connectedCallback.call(self);
-			if (self.componentDidMount) {
-				self.componentDidMount();
-			}
-		}
-	};
 
-	element.prototype.disconnectedCallback = function () {
-		if (this.componentWillUnmount) {
-			this.componentWillUnmount();
-		}
-		disconnectedCallback.call(this);
-		if (this.componentDidUnmount) {
-			this.componentDidUnmount();
-		}
-	};
+			attributeChangedCallback(name: string, oldValue, newValue) {
+				attributeChangedCallback(this, name, oldValue, newValue);
+			};
 
-	window.customElements.define(tag, element, { extends: config.extends });
-};
+			static get observedAttributes() { return getObservedAttributes(element.prototype.lsStatic) };
+
+			connectedCallback() {
+				connectedCallback(this);
+			};
+
+			disconnectedCallback() {
+				disconnectedCallback(this);
+			};
+		}
+
+		window.customElements.define(tag, newClass, { extends: config.extends });
+
+	};
+}

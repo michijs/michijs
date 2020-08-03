@@ -15,6 +15,7 @@ export function getAttributeValue(value) {
 		case value === null: {
 			return false;
 		}
+		case !isNaN(Number(value)):
 		case typeof value === 'object': {
 			return JSON.parse(value);
 		}

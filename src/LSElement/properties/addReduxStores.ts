@@ -5,10 +5,8 @@ export function addReduxStores(self: LSCustomElement) {
 	self.lsStatic.stores.forEach(storeProperty => {
 		self[storeProperty.propertyName] = storeProperty.store.getState();
 		storeProperty.store.subscribe(() => {
-			if (self.ls.alreadyConnected) {
-				updateChangesInDom(self);
-				self[storeProperty.propertyName] = storeProperty.store.getState();
-			}
+			self[storeProperty.propertyName] = storeProperty.store.getState();
+			updateChangesInDom(self);
 		});
 	});
 }

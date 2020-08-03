@@ -6,7 +6,7 @@ export function setAttribute(self: LSCustomElement, newValue: any, key: string) 
 	setAttributeValue(self, newValue, formattedKey);
 }
 
-export function setAttributeValue(self: LSCustomElement, newValue: any, key: string) {
+export function setAttributeValue(self: LSCustomElement | Element, newValue: any, key: string) {
 	switch (true) {
 		case newValue === undefined:
 		case typeof newValue === 'boolean': {
