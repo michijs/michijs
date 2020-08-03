@@ -90,8 +90,9 @@ function addAttributes(elem, attrs) {
 		if (attr.startsWith('on') && typeof value === 'function') {
 			elem.addEventListener(attr.substr(2), value);
 		} else {
-			if (attr === 'className' && !value) {
-				setAttributeValue(elem, undefined, 'class');
+			attrsToListen.push(attr);
+			if (attr === 'className') {
+				setAttributeValue(elem, value, 'class');
 			} else if (attr === 'style') {
 				Object.keys(value).forEach(styleKey => {
 					elem.style[styleKey] = value[styleKey];
