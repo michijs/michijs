@@ -9,7 +9,7 @@ function updateAttributes(newElement: Element, currentElement: Element) {
 	(newElement as LSCustomElement).ls?.attrsToListen.map(attr => {
 		const value = newElement[attr];
 		if (attr === 'className') {
-			let classValue = value === '' ? undefined: value;
+			const classValue = value === '' ? undefined: value;
 			setAttributeValue(currentElement, classValue, 'class');
 		} else if (attr === 'style') {
 			currentElement.setAttribute('style', newElement.getAttribute('style'));
