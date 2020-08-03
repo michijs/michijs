@@ -1,5 +1,5 @@
-import { setAttributeValue } from '../utils/setAttribute';
 import { isCustomBuiltInElement } from '../utils/isCustomBuilInElement';
+import { updateAttribute } from '../utils/updateAttribute';
 
 export interface FunctionComponent {
 	(attrs: any, ...children): HTMLElement;
@@ -91,22 +91,7 @@ function addAttributes(elem, attrs) {
 			elem.addEventListener(attr.substr(2), value);
 		} else {
 			attrsToListen.push(attr);
-			if (attr === 'className') {
-				setAttributeValue(elem, value, 'class');
-			} else if (attr === 'style') {
-				Object.keys(value).forEach(styleKey => {
-					elem.style[styleKey] = value[styleKey];
-				});
-			} else {
-				try {
-					elem[attr] = value;
-					if (!elem.hasAttribute(attr)) {
-						setAttributeValue(elem, value, attr);
-					}
-				} catch (_) {//For readonly values only set attribute
-					setAttributeValue(elem, value, attr);
-				}
-			}
+			updateAttribute(elem, attr, value);
 		}
 	}
 	elem.ls.attrsToListen = attrsToListen;

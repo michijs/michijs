@@ -1,28 +1,14 @@
 import type { LSCustomElement } from '../types';
 import { render } from './render';
 import { getRootNode } from './gerRootNode';
-import { setAttributeValue } from '../utils/setAttribute';
 import { isCustomElement } from '../utils/isCustomElement';
 import { isCustomBuiltInElement } from '../utils/isCustomBuilInElement';
+import { updateAttribute } from '../utils/updateAttribute';
 
 function updateAttributes(newElement: Element, currentElement: Element) {
 	(newElement as LSCustomElement).ls?.attrsToListen.map(attr => {
 		const value = newElement[attr];
-		if (attr === 'className') {
-			const classValue = value === '' ? undefined: value;
-			setAttributeValue(currentElement, classValue, 'class');
-		} else if (attr === 'style') {
-			currentElement.setAttribute('style', newElement.getAttribute('style'));
-		} else {
-			try {
-				currentElement[attr] = value;
-				if (!currentElement.hasAttribute(attr)) {
-					setAttributeValue(currentElement, value, attr);
-				}
-			} catch (_) {//For readonly values only set attribute
-				setAttributeValue(currentElement, value, attr);
-			}
-		}
+		updateAttribute(currentElement, attr, value);
 	});
 }
 
