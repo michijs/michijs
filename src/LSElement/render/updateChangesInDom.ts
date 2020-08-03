@@ -2,23 +2,24 @@ import type { LSCustomElement } from '../types';
 import { render } from './render';
 import { getRootNode } from './gerRootNode';
 import { setAttributeValue } from '../utils/setAttribute';
+import { isCustomElement } from '../utils/isCustomElement';
+import { isCustomBuiltInElement } from '../utils/isCustomBuilInElement';
 
 function updateAttributes(newElement: Element, currentElement: Element) {
 	(newElement as LSCustomElement).ls?.attrsToListen.map(attr => {
 		const value = newElement[attr];
-		if (newElement[attr] === undefined && value) {
-			setAttributeValue(currentElement, value, attr);
+		if (attr === 'className' && !value) {
+			setAttributeValue(currentElement, undefined, 'class');
+		} else if (attr === 'style') {
+			currentElement.setAttribute('style', newElement.getAttribute('style'));
 		} else {
-			if (attr === 'className' && !value) {
-				setAttributeValue(currentElement, undefined, 'class');
-			} else if (attr === 'style') {
-				currentElement.setAttribute('style', newElement.getAttribute('style'));
-			} else {
-				try {
-					currentElement[attr] = value;
-				} catch (_) {//For readonly values only set attribute
+			try {
+				currentElement[attr] = value;
+				if (!currentElement.hasAttribute(attr)) {
 					setAttributeValue(currentElement, value, attr);
 				}
+			} catch (_) {//For readonly values only set attribute
+				setAttributeValue(currentElement, value, attr);
 			}
 		}
 	});
@@ -31,14 +32,14 @@ function updateElement(newElement: Element, currentElement: Element, parent: Ele
 		if (currentElement.outerHTML === newElement.outerHTML) return true;
 		updateAttributes(newElement, currentElement);
 		if (currentElement.outerHTML === newElement.outerHTML) return true;
-		const isACustomElement = window.customElements.get(newElement.getAttribute('is') || newElement.tagName.toLowerCase()) !== undefined;
+		const isACustomElement = isCustomElement(newElement);
 		const hasShadowRoot = currentElement.shadowRoot;
 		if (newElement.children.length > 0 && (!isACustomElement || (isACustomElement && hasShadowRoot))) {
 			updateChangesInElement(Array.from(newElement.children), Array.from(currentElement.children), currentElement);
 		} else if (!isACustomElement) {
 			currentElement.textContent = newElement.textContent;
 		}
-		if (isACustomElement && !hasShadowRoot) {
+		if (isCustomBuiltInElement(newElement)) {
 			const slot = (newElement as LSCustomElement).ls?.slot;
 			const allElementSlots = (currentElement as HTMLElement).getElementsByTagName('slot');
 			Object.keys(slot).forEach((slotName) => {

@@ -3,7 +3,6 @@ import type { LSCustomElement } from '../types';
 import { initLsStatic } from '../properties/initLsStatic';
 import { addEventDispatchers } from '../properties/addEventDispatchers';
 import { addElementsReferences } from '../properties/addElementsReferences';
-import { addAttributes } from '../properties/addAttributes';
 import { addReduxStores } from '../properties/addReduxStores';
 import { getObservedAttributes } from '../properties/createGetterAndSetterForObservedAttributes';
 import { connectedCallback } from '../render/connectedCallback';
@@ -36,7 +35,6 @@ export const CustomizedBuiltInElement = function (config: CustomizedBuiltInEleme
 				addEventDispatchers(self);
 				addReduxStores(self);
 				addElementsReferences(self);
-				addAttributes(self);
 			}
 
 			attributeChangedCallback(name: string, oldValue, newValue) {

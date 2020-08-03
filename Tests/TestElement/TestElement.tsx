@@ -56,7 +56,7 @@ declare global {
 	export namespace JSX {
 		interface IntrinsicElements {
 			'ls-test-element': {
-				'xd2-a'?: number;
+				'xd'?: number;
 				onallanimationsfinished?: (event: CustomEvent<string>) => void;
 			} & HTMLAttributesWithMandatoryId;
 		}

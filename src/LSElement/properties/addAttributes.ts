@@ -22,9 +22,6 @@ export function addAttributes(self: LSCustomElement) {
 		if (attribute.propertyName !== attributeName) {
 			Object.defineProperty(self, attributeName, definedProperty);
 		}
-		if (attribute.options?.reflect) {
-			setAttribute(self, initialProxyValue[attribute.propertyName], attribute.propertyName);
-		}
 	});
 
 	const callback = (propertyName: string, newValue, oldValue) => {
@@ -40,4 +37,9 @@ export function addAttributes(self: LSCustomElement) {
 	};
 
 	self.ls.attributesProxy = convertToProxy(initialProxyValue, callback, self);
+	self.lsStatic.observedAttributes.forEach(attribute => {
+		if (attribute.options?.reflect) {
+			setAttribute(self, initialProxyValue[attribute.propertyName], attribute.propertyName);
+		}
+	});
 }

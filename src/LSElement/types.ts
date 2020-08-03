@@ -36,7 +36,6 @@ type LsSlotType = { [memberName: string]: Array<Element>; }
 
 export type LsAttributesType = {
     alreadyRendered?: boolean,
-    propertiesProxy?: ProxyConstructor,
     attributesProxy?: ProxyConstructor,
     attrsToListen?: string[],
     slot?: LsSlotType
