@@ -8,8 +8,9 @@ export function updateAttribute(elem: Element, attr: string, value: any) {
 		elem.setAttribute('style', elem.getAttribute('style'));
 	} else {
 		try {
-			elem[attr] = value;
-			if (attr === 'is' && !elem.hasAttribute(attr)) {
+			if (Object.keys(elem).includes(attr)) {
+				elem[attr] = value;
+			} else {
 				setAttributeValue(elem, value, attr);
 			}
 		} catch (_) {//For readonly values only set attribute
