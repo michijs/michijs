@@ -7,7 +7,7 @@ export type AttributeOptionsType = {
 
 export type ObservedAttributesType = {
     propertyName: string,
-    options: AttributeOptionsType
+    options?: AttributeOptionsType
 }
 
 export type ElementsType = {
