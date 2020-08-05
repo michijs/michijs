@@ -1,12 +1,12 @@
 import type { LSCustomElement } from '../types';
-import { isCustomBuiltInElement } from '../utils/isCustomBuilInElement';
+import { isCustomElementWithoutShadowRoot } from '../utils/isCustomElementWithoutShadowRoot';
 
 export function render(self: LSCustomElement) {
 	const renderResult = self.render();
 	if (renderResult) {
 		const arrayResult = !Array.isArray(renderResult) ? [renderResult] : renderResult;
 		const result = new Array<Element>();
-		const isACustomBuiltInElement = isCustomBuiltInElement(self);
+		const isACustomBuiltInElement = isCustomElementWithoutShadowRoot(self);
 		for (let i = 0; i < arrayResult.length; i++) {
 			const x = arrayResult[i];
 			if (x) {

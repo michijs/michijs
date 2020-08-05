@@ -1,4 +1,4 @@
-import { isCustomBuiltInElement } from '../utils/isCustomBuilInElement';
+import { isCustomElementWithoutShadowRoot } from '../utils/isCustomElementWithoutShadowRoot';
 import { updateAttribute } from '../utils/updateAttribute';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 
@@ -22,7 +22,7 @@ export const h = {
 
 		const elem = createElement(tag, attrs);
 		for (const child of children) {
-			appendChild(elem, child, isCustomBuiltInElement(elem));
+			appendChild(elem, child, isCustomElementWithoutShadowRoot(elem));
 		}
 		return elem;
 	},
@@ -117,7 +117,7 @@ const createAndAppendSVG = (_tag, attrs, ...children) => {
 			childElement.setAttributeNS(null, attribute.nodeName, attribute.nodeValue);
 		}
 
-		appendChild(element, childElement, isCustomBuiltInElement(element));
+		appendChild(element, childElement, isCustomElementWithoutShadowRoot(element));
 	}
 
 	return element;

@@ -2,7 +2,7 @@ import type { LSCustomElement } from '../types';
 import { render } from './render';
 import { getRootNode } from './gerRootNode';
 import { isCustomElement } from '../utils/isCustomElement';
-import { isCustomBuiltInElement } from '../utils/isCustomBuilInElement';
+import { isCustomElementWithoutShadowRoot } from '../utils/isCustomElementWithoutShadowRoot';
 import { updateAttribute } from '../utils/updateAttribute';
 
 function updateAttributes(newElement: Element, currentElement: Element) {
@@ -31,7 +31,7 @@ function updateElement(newElement: Element, currentElement: Element, parent: Ele
 		} else if (!isACustomElement) {
 			currentElement.textContent = newElement.textContent;
 		}
-		if (isCustomBuiltInElement(newElement)) {
+		if (isCustomElementWithoutShadowRoot(newElement)) {
 			const slot = (newElement as LSCustomElement).ls?.slot;
 			const allElementSlots = (currentElement as HTMLElement).getElementsByTagName('slot');
 			Object.keys(slot).forEach((slotName) => {

@@ -3,7 +3,7 @@ import style from './style.css';
 import { increment } from '../redux/CounterSlice';
 import { store, StoreType } from '../redux/store';
 
-@AutonomousCustomElement()
+@AutonomousCustomElement({shadow: false})
 export class LsTestElement extends HTMLElement implements LSCustomElement {
 	@Attribute({ reflect: true, onChange: 'onChangeXd' }) xd = 234;
 	@Attribute() xdfg = { id: 123, text: 'asdfasdf' };
@@ -45,8 +45,8 @@ export class LsTestElement extends HTMLElement implements LSCustomElement {
 				{this.xd < 236 ? <h1 id="<236">{'<236'}</h1> : undefined}
 				{this.arrayExample.map(x => <h2 id={'example' + x}>{x}</h2>)}
 				<h1 id="xd2">{this.xd2A}</h1>
-				<h1 id="asdf" onclick={() => this.xdfg.text = 'hola'}>{this.xdfg.text}</h1>
 				<slot id="slot"></slot>
+				<h1 id="asdf" onclick={() => this.xdfg.text = 'hola'}>{this.xdfg.text}</h1>
 			</>
 		);
 	}
