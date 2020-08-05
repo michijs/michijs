@@ -10,9 +10,6 @@ function updateAttributes(newElement: Element, currentElement: Element) {
 		let value = newElement[attr] || newElement.getAttribute(attr);
 		if (attr === 'style') {
 			value = newElement.getAttribute('style');
-		} else if (attr === 'className') {
-			attr = 'class';
-			value = value === '' ? undefined : value;
 		}
 		if (currentElement.getAttribute(attr) !== newElement.getAttribute(attr)) {
 			updateAttribute(currentElement, attr, value);

@@ -1,6 +1,5 @@
 import { setAttributeValue } from './setAttribute';
-import { LSCustomElement } from '../types';
-import { standardizePropertyName } from '../properties/standardizePropertyName';
+import { AllDomAttributes } from '../classes/AllDomAttributes';
 
 export function updateAttribute(elem: Element, attr: string, value: any) {
 	try {
@@ -8,14 +7,7 @@ export function updateAttribute(elem: Element, attr: string, value: any) {
 	} catch (_) {//For readonly values only set attribute
 	}
 
-	const self = elem as LSCustomElement;
-	let reflectAttribute = true;
-	if (self.lsStatic?.observedAttributes) {
-		const observedAttribute = self.lsStatic?.observedAttributes.find(x => standardizePropertyName(x.propertyName) === attr);
-		if (observedAttribute) {
-			reflectAttribute = observedAttribute.options?.reflect;
-		}
-	}
+	const reflectAttribute = AllDomAttributes.includes(attr);
 	if (reflectAttribute) {
 		setAttributeValue(elem, value, attr);
 	}

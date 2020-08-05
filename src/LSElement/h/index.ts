@@ -99,9 +99,6 @@ function addAttributes(elem, attrs) {
 				value = Object.entries(value)
 					.map(([key, val]) => `${modifier(key)}: ${val}`)
 					.join('; ');
-			} else if (attr === 'className') {
-				attr = 'class';
-				value = value === '' ? undefined : value;
 			}
 			updateAttribute(elem, attr, value);
 		}
