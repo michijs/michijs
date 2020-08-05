@@ -1,7 +1,7 @@
 {
   "name": "@lsegurado/ls-element",
   "license": "MIT",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "files": [
     "dist/*"
   ],
