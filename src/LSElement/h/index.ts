@@ -85,7 +85,7 @@ function addAttributes(elem, attrs) {
 	const attrsToListen = [];
 
 	for (const entry of Object.entries(attrs)) {
-		let attr = entry[0];
+		const attr = entry[0];
 		let value = entry[1];
 
 		if (attr.startsWith('on') && typeof value === 'function') {

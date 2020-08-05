@@ -1,17 +1,17 @@
-import { SVGDOMAttributes } from "../h/JSX/SVGDOMAttributes";
+import { SVGDOMAttributes } from '../h/JSX/SVGDOMAttributes';
 
 type allAttributes = SVGDOMAttributes & { id: string };
 
 class AuxiliarAllDomAttributes implements allAttributes {
     id: string = '';
     accentHeight: string | number = '';
-    accumulate: "none" | "sum" = 'none';
-    additive: "sum" | "replace" = 'sum';
-    alignmentBaseline: "alphabetic" | "hanging" | "ideographic" | "mathematical" | "auto" | "baseline" | "before-edge" | "text-before-edge" | "middle" | "central" | "after-edge" | "text-after-edge" | "inherit" = 'alphabetic';
-    allowReorder: "no" | "yes" = 'yes';
+    accumulate: 'none' | 'sum' = 'none';
+    additive: 'sum' | 'replace' = 'sum';
+    alignmentBaseline: 'alphabetic' | 'hanging' | 'ideographic' | 'mathematical' | 'auto' | 'baseline' | 'before-edge' | 'text-before-edge' | 'middle' | 'central' | 'after-edge' | 'text-after-edge' | 'inherit' = 'alphabetic';
+    allowReorder: 'no' | 'yes' = 'yes';
     alphabetic: string | number = '';
     amplitude: string | number = '';
-    arabicForm: "initial" | "medial" | "terminal" | "isolated" = 'initial';
+    arabicForm: 'initial' | 'medial' | 'terminal' | 'isolated' = 'initial';
     ascent: string | number = '';
     attributeName: string = '';
     attributeType: string = '';
@@ -31,7 +31,7 @@ class AuxiliarAllDomAttributes implements allAttributes {
     clipPathUnits: string | number = '';
     clipRule: string | number = '';
     colorInterpolation: string | number = '';
-    colorInterpolationFilters: "auto" | "inherit" | "sRGB" | "linearRGB" = 'auto';
+    colorInterpolationFilters: 'auto' | 'inherit' | 'sRGB' | 'linearRGB' = 'auto';
     colorProfile: string | number = '';
     colorRendering: string | number = '';
     contentScriptType: string | number = '';
@@ -58,7 +58,7 @@ class AuxiliarAllDomAttributes implements allAttributes {
     externalResourcesRequired: string | number = '';
     fill: string = '';
     fillOpacity: string | number = '';
-    fillRule: "inherit" | "nonzero" | "evenodd" = 'inherit';
+    fillRule: 'inherit' | 'nonzero' | 'evenodd' = 'inherit';
     filter: string = '';
     filterRes: string | number = '';
     filterUnits: string | number = '';
@@ -180,8 +180,8 @@ class AuxiliarAllDomAttributes implements allAttributes {
     stroke: string = '';
     strokeDasharray: string | number = '';
     strokeDashoffset: string | number = '';
-    strokeLinecap: "inherit" | "butt" | "round" | "square" = 'inherit';
-    strokeLinejoin: "inherit" | "round" | "miter" | "bevel" = 'inherit';
+    strokeLinecap: 'inherit' | 'butt' | 'round' | 'square' = 'inherit';
+    strokeLinejoin: 'inherit' | 'round' | 'miter' | 'bevel' = 'inherit';
     strokeMiterlimit: string = '';
     strokeOpacity: string | number = '';
     strokeWidth: string | number = '';
@@ -279,7 +279,7 @@ class AuxiliarAllDomAttributes implements allAttributes {
     dateTime: string = '';
     default: boolean = false;
     defer: boolean = false;
-    dir: "auto" | "rtl" | "ltr" = 'auto';
+    dir: 'auto' | 'rtl' | 'ltr' = 'auto';
     disabled: boolean = false;
     disableRemotePlayback: boolean = false;
     download: any = '';
@@ -386,4 +386,4 @@ class AuxiliarAllDomAttributes implements allAttributes {
     itemRef: string = '';
 }
 
-export const AllDomAttributes = Object.keys(new AuxiliarAllDomAttributes())
+export const AllDomAttributes = Object.keys(new AuxiliarAllDomAttributes());
