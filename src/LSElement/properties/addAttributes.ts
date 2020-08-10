@@ -8,7 +8,7 @@ export function addAttributes(self: LSCustomElement) {
 	const initialProxyValue = {};
 	self.lsStatic.observedAttributes.forEach(attribute => {
 		const attributeName = standardizePropertyName(attribute.propertyName);
-		initialProxyValue[attribute.propertyName] = self[attribute.propertyName];
+		initialProxyValue[attribute.propertyName] = self[attributeName] || self[attribute.propertyName];
 		delete self[attribute.propertyName];
 		const definedProperty = {
 			set(newValue) {
@@ -20,6 +20,7 @@ export function addAttributes(self: LSCustomElement) {
 		};
 		Object.defineProperty(self, attribute.propertyName, definedProperty);
 		if (attribute.propertyName !== attributeName) {
+			delete self[attributeName];
 			Object.defineProperty(self, attributeName, definedProperty);
 		}
 	});
