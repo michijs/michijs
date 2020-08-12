@@ -53,6 +53,6 @@ export interface LSCustomElement extends HTMLElement{
     componentDidUpdate?(): void,
     componentWillReceiveAttribute?: (name: string, oldValue, newValue) => void;
     render?(): HTMLElement | Array<HTMLElement> | any;
-};
+}
 
 export type CallbackType = (propertyName: string, newValue: any, oldValue: any) => void;
