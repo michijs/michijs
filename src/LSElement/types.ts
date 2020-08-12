@@ -43,7 +43,7 @@ export type LsAttributesType = {
 
 export type RootElement = LSCustomElement | ShadowRoot;
 
-export type LSCustomElement = {
+export interface LSCustomElement extends HTMLElement{
     lsStatic?: LsStaticAttributesType,
     ls?: LsAttributesType,
     componentWillMount?(): void,
@@ -52,8 +52,7 @@ export type LSCustomElement = {
     componentWillUpdate?(): void,
     componentDidUpdate?(): void,
     componentWillReceiveAttribute?: (name: string, oldValue, newValue) => void;
-    render?(): HTMLElement | Array<HTMLElement>;
-    [memberName: string]: any;
-} & HTMLElement;
+    render?(): HTMLElement | Array<HTMLElement> | any;
+};
 
 export type CallbackType = (propertyName: string, newValue: any, oldValue: any) => void;

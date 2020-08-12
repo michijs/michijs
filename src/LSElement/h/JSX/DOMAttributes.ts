@@ -21,6 +21,7 @@ export interface DOMAttributes {
     charSet: string;
     challenge: string;
     checked: boolean;
+    children: any;
     class: string;
     cols: number;
     colSpan: number;
