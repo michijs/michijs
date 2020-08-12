@@ -17,6 +17,7 @@ class AuxiliarAllDomAttributes implements allAttributes {
     attributeType: string = '';
     autoReverse: string | number = '';
     azimuth: string | number = '';
+    children: any = undefined;
     baseFrequency: string | number = '';
     baselineShift: string | number = '';
     baseProfile: string | number = '';
