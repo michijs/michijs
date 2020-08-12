@@ -14,7 +14,7 @@ If you want a library that:
 
 - Uses [JSX](https://es.reactjs.org/docs/introducing-jsx.html) as template language
 
-- Uses [Parcel](https://parceljs.org) as default bundler
+- Uses [Webpack](https://webpack.js.org) as default bundler
 
 - It is reactive to his properties
 
