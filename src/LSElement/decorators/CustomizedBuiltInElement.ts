@@ -15,44 +15,44 @@ interface CustomizedBuiltInElementConfig {
 }
 
 const validateTag = (tag: string) => {
-	if (tag.indexOf('-') <= 0) {
-		throw new Error('You need at least 1 dash in the custom element name!');
-	}
+  if (tag.indexOf('-') <= 0) {
+    throw new Error('You need at least 1 dash in the custom element name!');
+  }
 };
 
 export const CustomizedBuiltInElement = function (config: CustomizedBuiltInElementConfig) {
-	return function (element: CustomElementConstructor) {
-		const tag = config?.tag || formatToKebabCase(element.name);
-		validateTag(tag);
+  return function (element: CustomElementConstructor) {
+    const tag = config?.tag || formatToKebabCase(element.name);
+    validateTag(tag);
 
-		element.prototype.lsStatic = initLsStatic(element.prototype.lsStatic);
+    element.prototype.lsStatic = initLsStatic(element.prototype.lsStatic);
 
-		class newClass extends element {
-			constructor() {
-				super();
-				const self: LSCustomElement = this;
-				self.ls = self.ls || {};
-				addEventDispatchers(self);
-				addReduxStores(self);
-				addElementsReferences(self);
-			}
+    class newClass extends element {
+      constructor() {
+        super();
+        const self: LSCustomElement = this;
+        self.ls = self.ls || {};
+        addEventDispatchers(self);
+        addReduxStores(self);
+        addElementsReferences(self);
+      }
 
-			attributeChangedCallback(name: string, oldValue, newValue) {
-				attributeChangedCallback(this, name, oldValue, newValue);
-			}
+      attributeChangedCallback(name: string, oldValue, newValue) {
+        attributeChangedCallback(this, name, oldValue, newValue);
+      }
 
-			static get observedAttributes() { return getObservedAttributes(element.prototype.lsStatic); }
+      static get observedAttributes() { return getObservedAttributes(element.prototype.lsStatic); }
 
-			connectedCallback() {
-				connectedCallback(this);
-			}
+      connectedCallback() {
+        connectedCallback(this);
+      }
 
-			disconnectedCallback() {
-				disconnectedCallback(this);
-			}
-		}
+      disconnectedCallback() {
+        disconnectedCallback(this);
+      }
+    }
 
-		window.customElements.define(tag, newClass, { extends: config.extends });
+    window.customElements.define(tag, newClass, { extends: config.extends });
 
-	};
+  };
 };

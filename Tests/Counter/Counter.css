@@ -1,9 +1,9 @@
 :host {
-	display: flex;
-	flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 span {
-	min-width: 60px;
-	text-align: center;
+  min-width: 60px;
+  text-align: center;
 }
