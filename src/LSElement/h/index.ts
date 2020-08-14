@@ -98,7 +98,7 @@ function addAttributes(elem, attrs) {
 
         value = Object.entries(value)
           .map(([key, val]) => `${modifier(key)}: ${val}`)
-          .join('; ');
+          .join('; ')+';';
       }
       updateAttribute(elem, attr, value);
     }

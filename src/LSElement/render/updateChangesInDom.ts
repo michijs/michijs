@@ -6,15 +6,13 @@ import { isCustomElementWithoutShadowRoot } from '../utils/isCustomElementWithou
 import { updateAttribute } from '../utils/updateAttribute';
 
 function updateAttributes(newElement: Element, currentElement: Element) {
-	(newElement as LSCustomElement).ls?.attrsToListen.map(attr => {
-	  let value = newElement[attr] || newElement.getAttribute(attr);
-	  if (attr === 'style') {
-	    value = newElement.getAttribute('style');
-	  }
-	  if (currentElement.getAttribute(attr) !== newElement.getAttribute(attr)) {
-	    updateAttribute(currentElement, attr, value);
-	  }
-	});
+  (newElement as LSCustomElement).ls?.attrsToListen.map(attr => {
+    let value = newElement[attr];
+    if (attr === 'style') {
+      value = newElement.getAttribute('style');
+    }
+    updateAttribute(currentElement, attr, value);
+  });
 }
 
 function updateElement(newElement: Element, currentElement: Element, parent: Element | DocumentFragment) {
@@ -72,8 +70,8 @@ function insertNewChildren(childrenToAdd: ChildrenToAddType[], parent: Element |
 }
 
 type ChildrenToAddType = {
-	element: Element;
-	index: number;
+  element: Element;
+  index: number;
 };
 
 function updateChangesInElement(newChildren: Element[], oldChildren: Element[], parent: Element | DocumentFragment) {

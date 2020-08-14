@@ -1,7 +1,6 @@
-import { LSCustomElement } from '../types';
 import { standardizePropertyName } from '../properties/standardizePropertyName';
 
-export function getAttribute(self: LSCustomElement, key: string) {
+export function getAttribute(self: Element, key: string) {
   const formattedKey = standardizePropertyName(key);
   const newValue = self.getAttribute(formattedKey);
   return getAttributeValue(newValue);
