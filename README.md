@@ -1,5 +1,6 @@
 # LS-Element: A Vainilla Library for Web Components
-![npm][github-version] [![license][github-license]][github-license-url]
+![npm][github-version] [![license][github-license]][github-license-url] ![npm][npm-downloads] ![npm][repo-size]
+
 ## Why "LS-Element?"
 
 If you want a library that:
@@ -188,6 +189,8 @@ This could be just the beginning of a amazing era. With your support we could ma
 ## License
  - [MIT](https://github.com/lsegurado/ls-element/blob/master/LICENSE.md)
 
+[repo-size]: https://img.shields.io/github/repo-size/lsegurado/ls-element
+[npm-downloads]: https://img.shields.io/npm/dt/@lsegurado/ls-element
 [github-version]: http://img.shields.io/github/package-json/v/lsegurado/ls-element/master?color=%231182c3&label=Current%20version
 [github-license]: https://img.shields.io/github/license/lsegurado/ls-element
 [github-license-url]: https://github.com/lsegurado/ls-element/blob/master/LICENSE.md
