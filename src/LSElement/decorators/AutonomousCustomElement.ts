@@ -10,8 +10,8 @@ import { disconnectedCallback } from '../render/disconnectedCallback';
 import { attributeChangedCallback } from '../render/attributeChangedCallback';
 
 interface AutonomousCustomElementConfig {
-	tag?: string;
-	shadow?: false | 'open' | 'closed';
+  tag?: string;
+  shadow?: false | 'open' | 'closed';
 }
 
 const validateTag = (tag: string) => {

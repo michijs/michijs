@@ -3,13 +3,15 @@ import { executeFirstRender } from './executeFirstRender';
 import { addAttributes } from '../properties/addAttributes';
 
 export function connectedCallback(self: LSCustomElement) {
-  if (self.componentWillMount) {
-    self.componentWillMount();
-  }
-  addAttributes(self);
-  executeFirstRender(self);
-  self.ls.alreadyRendered = true;
-  if (self.componentDidMount) {
-    self.componentDidMount();
+  if (!self.ls?.alreadyRendered) {
+    if (self.componentWillMount) {
+      self.componentWillMount();
+    }
+    addAttributes(self);
+    executeFirstRender(self);
+    self.ls.alreadyRendered = true;
+    if (self.componentDidMount) {
+      self.componentDidMount();
+    }
   }
 }
