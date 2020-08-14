@@ -12,6 +12,6 @@ export function updateAttribute(elem: Element, attr: string, value: any) {
 
   const reflectAttribute = AllDomAttributes.includes(attr);
   if (reflectAttribute && getAttribute(elem, attr) !== value) {
-      setAttributeValue(elem, value, attr);
+    setAttributeValue(elem, value, attr);
   }
 }
