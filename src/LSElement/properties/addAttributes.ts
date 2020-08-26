@@ -16,9 +16,9 @@ export function addAttributes(self: LSCustomElement) {
     const newState = state;
     Object.keys(action.payload).forEach(key => {
       newState[key] = action.payload[key];
-    })
+    });
     return newState;
-  }
+  };
 
   const AttributesSlice = createSlice({
     name: 'AttributesSlice',
