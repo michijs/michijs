@@ -7,19 +7,19 @@ export function getAttribute(self: Element, key: string) {
 }
 
 export function getAttributeValue(value) {
-  switch (true) {
-    case value === '' || value === 'true': {
-      return true;
-    }
-    case value === null: {
-      return false;
-    }
-    case !isNaN(Number(value)):
-    case typeof value === 'object': {
-      return JSON.parse(value);
-    }
-    default: {
-      return value;
+  try {
+    return JSON.parse(value);
+  } catch {
+    switch (true) {
+      case value === '' || value === 'true': {
+        return true;
+      }
+      case value === null: {
+        return false;
+      }
+      default: {
+        return value;
+      }
     }
   }
 }

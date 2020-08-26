@@ -37,7 +37,6 @@ type computedReflectedAttribute = { [attribute: string]: string; }
 
 export type LsAttributesType = {
     alreadyRendered?: boolean,
-    attributesProxy?: ProxyConstructor,
     attrsToListen?: string[],
     slot?: LsSlotType
 }

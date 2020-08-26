@@ -30,7 +30,6 @@
   ],
   "devDependencies": {
     "@lsegurado/parcel-plugin-ls-convert-css-to-js-module": "1.0.0",
-    "@reduxjs/toolkit": "^1.3.6",
     "@types/uuid": "^8.0.0",
     "@typescript-eslint/eslint-plugin": "^3.3.0",
     "@typescript-eslint/parser": "^3.3.0",
@@ -45,6 +44,7 @@
     "typescript": "^3.9.6"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.3.6",
     "redux": "^4.0.5",
     "uuid": "^8.2.0"
   },

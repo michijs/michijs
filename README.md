@@ -156,6 +156,7 @@ For example MyCounter will be generated as my-counter.
 
 
 ## Limitations
+### Enclosed statements
 Given the need to establish ID in each element. Statements like this are not valid:
 ```tsx
 {this.count.toString()}
@@ -165,6 +166,22 @@ You need to enclose the statement like this:
 <span id="count">{this.count.toString()}</span>
 ```
 You will be notified if this occurs.
+
+### Variable assignment
+You need to assign a value using = operator (Similar to React). For example:
+For arrays:
+```tsx
+@Attribute() array = [1,2,3]
+// Adding a new element
+this.array = [...this.array, 4]
+```
+
+For objects:
+```tsx
+@Attribute() xd2a = { id: 1, text: 'Hello' };
+//Changing text
+this.xd2a = {...this.xd2a, text: "World"}
+```
 
 ## Polyfills
 If you REALLY need polyfills i recommend you to read this topics:
