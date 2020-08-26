@@ -151,6 +151,7 @@ For example MyCounter will be generated as my-counter.
 | `componentWillUpdate()` | This method is called before re-rendering occurs. |
 | `componentDidUpdate()` | This method is called after re-rendering occurs. |
 | `componentDidUnmount()` | This method is called after a component is removed from the DOM. |
+| `computedReflectedAttributes()` | This method is called in each render. Returns an object with attributes to be reflected to the Custom element. |
 
 
 ## Limitations

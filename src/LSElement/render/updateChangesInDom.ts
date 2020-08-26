@@ -4,6 +4,8 @@ import { getRootNode } from './gerRootNode';
 import { isCustomElement } from '../utils/isCustomElement';
 import { isCustomElementWithoutShadowRoot } from '../utils/isCustomElementWithoutShadowRoot';
 import { updateAttribute } from '../utils/updateAttribute';
+import { updateLsSlots } from './updateLsSlots';
+import { updateComputedReflectedAttributes } from './updateComputedReflectedAttributes';
 
 function updateAttributes(newElement: Element, currentElement: Element) {
   (newElement as LSCustomElement).ls?.attrsToListen.map(attr => {
@@ -16,6 +18,7 @@ function updateAttributes(newElement: Element, currentElement: Element) {
 }
 
 function updateElement(newElement: Element, currentElement: Element, parent: Element | DocumentFragment) {
+  updateLsSlots(newElement as LSCustomElement);
   if (currentElement.tagName !== newElement.tagName) {
     parent.replaceChild(newElement, currentElement);
   } else {
@@ -88,6 +91,7 @@ function updateChangesInElement(newChildren: Element[], oldChildren: Element[], 
 
 export function updateChangesInDom(self: LSCustomElement) {
   if (self.ls.alreadyRendered) {
+    updateComputedReflectedAttributes(self);
     if (self.componentWillUpdate) {
       self.componentWillUpdate();
     }

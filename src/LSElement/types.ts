@@ -33,6 +33,7 @@ export type LsStaticAttributesType = {
 }
 
 type LsSlotType = { [memberName: string]: Array<Element>; }
+type computedReflectedAttribute = { [attribute: string]: string; }
 
 export type LsAttributesType = {
     alreadyRendered?: boolean,
@@ -52,6 +53,7 @@ export interface LSCustomElement extends HTMLElement{
     componentWillUpdate?(): void,
     componentDidUpdate?(): void,
     componentWillReceiveAttribute?: (name: string, oldValue, newValue) => void;
+    computedReflectedAttributes?: () => computedReflectedAttribute;
     render?(): HTMLElement | Array<HTMLElement> | any;
 }
 

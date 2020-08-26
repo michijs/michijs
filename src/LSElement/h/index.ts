@@ -3,7 +3,7 @@ import { updateAttribute } from '../utils/updateAttribute';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 
 export interface FunctionComponent {
-	(attrs: any, ...children): HTMLElement;
+  (attrs: any, ...children): HTMLElement;
 }
 
 export const h = {
@@ -42,15 +42,7 @@ function appendChild(elem, children, isACustomBuiltInElement: boolean) {
   if (!(child instanceof Node)) {
     child = document.createTextNode(child.toString());
   }
-  if (isACustomBuiltInElement) {
-    elem.ls = elem.ls || {};
-    elem.ls.slot = elem.ls.slot || {};
-    const slotName: string = child.getAttribute('slot') || 'default';
-    elem.ls.slot[slotName] = elem.ls.slot[slotName] || [];
-    elem.ls.slot[slotName].push(child);
-  } else {
-    elem.appendChild(child);
-  }
+  elem.appendChild(child);
 }
 
 function createElement(elem, attrs) {
@@ -94,11 +86,11 @@ function addAttributes(elem, attrs) {
       attrsToListen.push(attr);
       if (attr === 'style') {
         const modifier =
-					attr === 'style' ? formatToKebabCase : str => str.toLowerCase();
+          attr === 'style' ? formatToKebabCase : str => str.toLowerCase();
 
         value = Object.entries(value)
           .map(([key, val]) => `${modifier(key)}: ${val}`)
-          .join('; ')+';';
+          .join('; ') + ';';
       }
       updateAttribute(elem, attr, value);
     }

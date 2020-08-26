@@ -23,11 +23,17 @@ export class LsRootTestElement extends HTMLElement implements LSCustomElement {
     //     return [
     //     ]
     // }
+    computedReflectedAttributes() {
+        return {
+            asdf: this.xd2a+'xd',
+            tabIndexAasdf: 'asdf'
+        }
+    }
 
     render() {
         return (
             <>
-                <ls-test-element id="test" xd={this.xd2a} onallanimationsfinished={(ev) => console.log(ev.detail)}><div id="div">{this.xd2a}</div></ls-test-element>
+                <ls-test-element onclick={() => this.xd2a++} id="test" xd={this.xd2a} onallanimationsfinished={(ev) => console.log(ev.detail)}><div id="div">{this.xd2a}</div></ls-test-element>
                 {/* <my-counter id="counter" oncountchanged={(ev) => console.log(`New count value: ${ev.detail}`)}></my-counter>*/}
                 {/* <button style={this.xd2a > 70 ? { backgroundColor: 'red' } : { color: 'blue' }} class={this.xd2a > 70 && this.xd2a < 75 ? 'asdf' : undefined} onclick={() => this.xd2a++} is="ls-test-element-built-in" id="button">
                     <div id="test">{this.xd2a}</div>

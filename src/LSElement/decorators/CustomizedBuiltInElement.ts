@@ -10,8 +10,8 @@ import { disconnectedCallback } from '../render/disconnectedCallback';
 import { attributeChangedCallback } from '../render/attributeChangedCallback';
 
 interface CustomizedBuiltInElementConfig {
-	tag?: string;
-	extends: keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap;
+  tag?: string;
+  extends: keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap;
 }
 
 const validateTag = (tag: string) => {
