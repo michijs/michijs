@@ -33,7 +33,7 @@ export type LsStaticAttributesType = {
 }
 
 type LsSlotType = { [memberName: string]: Array<Element>; }
-type computedReflectedAttribute = { [attribute: string]: string; }
+type computedReflectedAttribute = { [attribute: string]: any; }
 
 export type LsAttributesType = {
     alreadyRendered?: boolean,
