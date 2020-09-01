@@ -1,34 +1,25 @@
 import type { LSCustomElement } from '../types';
 import { isCustomElementWithoutShadowRoot } from '../utils/isCustomElementWithoutShadowRoot';
+import { validateElement } from './validateElement';
 
 export function render(self: LSCustomElement) {
   const renderResult = self.render();
   if (renderResult) {
     const renderResultAsArray = !Array.isArray(renderResult) ? [renderResult] : renderResult;
-    return processArray(renderResultAsArray, self);
+    const isACustomBuiltInElement = isCustomElementWithoutShadowRoot(self);
+    return processArray(renderResultAsArray, self, isACustomBuiltInElement);
   } else return undefined;
 }
 
-function processArray(arrayResult: Array<any>, self: LSCustomElement) {
+function processArray(arrayResult: Array<any>, self: LSCustomElement, isACustomBuiltInElement: boolean) {
   const result = new Array<Element>();
-  const isACustomBuiltInElement = isCustomElementWithoutShadowRoot(self);
   for (let i = 0; i < arrayResult.length; i++) {
     const x = arrayResult[i];
     if (x) {
       if (Array.isArray(x)) {
-        result.push(...processArray(x, self));
+        result.push(...processArray(x, self, isACustomBuiltInElement));
       } else {
-        if (!x.tagName) {
-          console.error(`"${x}" is not valid. Please enclose it inside an element.`);
-          continue;
-        }
-        if (!x.id) {
-          console.error(`Element "${x.outerHTML}" is not valid. Please add an id to this element.`);
-          continue;
-        }
-        const itemWithSameId = result.find(resultItem => resultItem.id === x.id);
-        if (itemWithSameId) {
-          console.error(`Element "${x.outerHTML}" has a repeated id with "${itemWithSameId.outerHTML}". Please change the id of this element.`);
+        if (!validateElement(x, result)) {
           continue;
         }
         if (x.tagName === 'SLOT' && self.ls?.slot && isACustomBuiltInElement) {
