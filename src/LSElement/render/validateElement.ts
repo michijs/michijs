@@ -25,11 +25,8 @@ export function validateDeepElement(x: Element, otherElements: Array<any>) {
         result = result && validateDeepElement(children, otherElements);
       });
       return result;
-    } else {
-      return true;
-    }
+    } 
+    return true;
   }
-  else {
-    return false;
-  }
+  return false;
 }

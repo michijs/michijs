@@ -6,8 +6,8 @@ export function CustomElementWrapper<T>(component: {prototype: LSCustomElement})
     const lsStatic = component.prototype.lsStatic;
     if (lsStatic.extends) {
       return h.createElement(lsStatic.extends, { ...attrs, is: lsStatic.tag }, children);
-    } else {
-      return h.createElement(lsStatic.tag, attrs, children);
-    }
+    } 
+    return h.createElement(lsStatic.tag, attrs, children);
+    
   };
 }

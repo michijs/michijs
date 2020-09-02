@@ -88,9 +88,9 @@ function addAttributes(elem, attrs) {
         const modifier =
           attr === 'style' ? formatToKebabCase : str => str.toLowerCase();
 
-        value = Object.entries(value)
+        value = `${Object.entries(value)
           .map(([key, val]) => `${modifier(key)}: ${val}`)
-          .join('; ') + ';';
+          .join('; ')  };`;
       }
       updateAttribute(elem, attr, value);
     }

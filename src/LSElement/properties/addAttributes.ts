@@ -22,7 +22,7 @@ export function addAttributes(self: LSCustomElement) {
 
   const AttributesSlice = createSlice({
     name: 'AttributesSlice',
-    initialState: initialState,
+    initialState,
     reducers: {
       setState: setStateAction
     }

@@ -81,7 +81,7 @@ function updateChangesInElement(newChildren: Element[], oldChildren: Element[], 
   const newChildrenIds = newChildren.map(x => x.id);
   const oldChildrenIds = oldChildren.map(x => x.id);
   const childrenToRemove = oldChildren.filter(x => !newChildrenIds.includes(x.id));
-  const childrenToAdd: Array<ChildrenToAddType> = newChildren.map((value, index) => ({ element: value, index: index })).filter(x => !oldChildrenIds.includes(x.element.id));
+  const childrenToAdd: Array<ChildrenToAddType> = newChildren.map((value, index) => ({ element: value, index })).filter(x => !oldChildrenIds.includes(x.element.id));
   const childrenToUpdate = newChildren.filter(x => oldChildrenIds.includes(x.id));
 
   removeChildren(childrenToRemove, parent);

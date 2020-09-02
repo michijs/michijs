@@ -41,39 +41,35 @@ LS Element custom elements are plain ES6/TypeScript classes with some decorator 
 New components can be created using the `.tsx` extension, such as `my-counter.tsx`.
 
 ```tsx
-import { AutonomousCustomElement, h, Attribute, HTMLAttributes, EventDispatcher, CustomEventDispatcher, LSCustomElement } from '@lsegurado/ls-element/dist';
-import style from './Counter.css';
+import { AutonomousCustomElement, h, EventDispatcher, CustomEventDispatcher, LSCustomElement, HTMLAttributes, Attribute, CustomElementWrapper } from '@lsegurado/ls-element/dist';
+import style from './index.css';
 
 @AutonomousCustomElement()
 export class MyCounter extends HTMLElement implements LSCustomElement {
-    @Attribute({ onChange: 'onChangeCount' }) count = 0;
-    @EventDispatcher() countChanged: CustomEventDispatcher<number>;
+	@Attribute({ onChange: 'onChangeCount' }) count = 0;
+	@EventDispatcher() countChanged: CustomEventDispatcher<number>;
 
-    onChangeCount(newValue: number, _oldValue: number) {
-        this.countChanged.dispatch(newValue);
-    }
+	onChangeCount(newValue: number, _oldValue: number) {
+	  this.countChanged.dispatch(newValue);
+	}
 
-    render() {
-        return (
-            <>
-                <style id="style">{style}</style>
-                <button id="decrement-count" onpointerup={() => this.count--}>-</button>
-                <span id="count">{this.count.toString()}</span>
-                <button id="increment-count" onpointerup={() => this.count++}>+</button>
-            </>
-        );
-    }
+	render() {
+	  return (
+	    <>
+	      <style id="style">{style}</style>
+	      <button id="decrement-count" onpointerup={() => this.count--}>-</button>
+	      <span id="count">{this.count.toString()}</span>
+	      <button id="increment-count" onpointerup={() => this.count++}>+</button>
+	    </>
+	  );
+	}
 }
 
-declare global {
-    export namespace JSX {
-        interface IntrinsicElements {
-            'my-counter': {
-                oncountchanged?: (event: CustomEvent<number>) => void;
-            } & HTMLAttributes;
-        }
-    }
-}
+type CounterAttributes = {
+	oncountchanged?: (event: CustomEvent<number>) => void;
+} & HTMLAttributes;
+
+export default CustomElementWrapper<CounterAttributes>(MyCounter);
 ```
 
 Note: the `.tsx` extension is required, as this is the standard for TypeScript classes that use JSX.
@@ -81,7 +77,16 @@ Note: the `.tsx` extension is required, as this is the standard for TypeScript c
 To use this component, just use it like any other HTML element:
 
 ```tsx
-<my-counter id="my-counter" oncountchanged={(ev) => console.log(`New count value: ${ev.detail}`)}></my-counter>
+import '../Counter';
+
+<my-counter id="my-counter" oncountchanged={(ev) => console.log(`New count value: ${ev.detail}`)} />
+```
+
+Or if you are using jsx
+```tsx
+import Counter from '../Counter';
+
+<Counter id="my-counter" oncountchanged={(ev) => console.log(`New count value: ${ev.detail}`)} />
 ```
   
 Please note that all elements included in the components in this library require an ID to work properly. This allows avoiding the use of the virtual DOM.

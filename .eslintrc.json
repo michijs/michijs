@@ -5,6 +5,7 @@
     },
     "extends": [
         "eslint:recommended",
+        "preact",
         "plugin:@typescript-eslint/recommended"
     ],
     "parser": "@typescript-eslint/parser",
@@ -16,6 +17,7 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "react/display-name": "off",
         "@typescript-eslint/no-empty-interface": "off",
         "no-mixed-spaces-and-tabs": "off",
         "@typescript-eslint/explicit-function-return-type": "off",

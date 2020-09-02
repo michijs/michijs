@@ -8,7 +8,7 @@ export function render(self: LSCustomElement) {
     const renderResultAsArray = !Array.isArray(renderResult) ? [renderResult] : renderResult;
     const isACustomBuiltInElement = isCustomElementWithoutShadowRoot(self);
     return processArray(renderResultAsArray, self, isACustomBuiltInElement);
-  } else return undefined;
+  } return undefined;
 }
 
 function processArray(arrayResult: Array<any>, self: LSCustomElement, isACustomBuiltInElement: boolean) {

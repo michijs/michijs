@@ -7,9 +7,9 @@ export class CustomEventDispatcher<T> {
     	this.propertyName = propertyName.toLowerCase();
     	this.element = element;
     	this.eventInit = {
-    		bubbles: bubbles,
-    		cancelable: cancelable,
-    		composed: composed
+    		bubbles,
+    		cancelable,
+    		composed
     	};
     }
 
