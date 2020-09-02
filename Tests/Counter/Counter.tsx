@@ -1,4 +1,4 @@
-import { AutonomousCustomElement, h, EventDispatcher, CustomEventDispatcher, LSCustomElement, HTMLAttributesWithMandatoryId, Attribute } from '../../src';
+import { AutonomousCustomElement, h, EventDispatcher, CustomEventDispatcher, LSCustomElement, HTMLAttributesWithMandatoryId, Attribute, CustomElementWrapper } from '../../src';
 import style from './Counter.css';
 
 @AutonomousCustomElement()
@@ -22,12 +22,8 @@ export class MyCounter extends HTMLElement implements LSCustomElement {
     }
 }
 
-declare global {
-    export namespace JSX {
-        interface IntrinsicElements {
-            'my-counter': {
-                oncountchanged?: (event: CustomEvent<number>) => void;
-            } & HTMLAttributesWithMandatoryId;
-        }
-    }
-}
+export type MyCounterAttributes = {
+    oncountchanged?: (event: CustomEvent<number>) => void;
+} & HTMLAttributesWithMandatoryId;
+
+export default CustomElementWrapper<MyCounterAttributes>(MyCounter);

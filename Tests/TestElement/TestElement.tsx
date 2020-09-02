@@ -1,9 +1,9 @@
-import { AutonomousCustomElement, Attribute, h, Child, EventDispatcher, CustomEventDispatcher, LSCustomElement, Redux, HTMLAttributes, HTMLAttributesWithMandatoryId } from '../../src';
+import { AutonomousCustomElement, Attribute, h, Child, EventDispatcher, CustomEventDispatcher, LSCustomElement, Redux, HTMLAttributes, HTMLAttributesWithMandatoryId, CustomElementWrapper } from '../../src';
 import style from './style.css';
 import { increment } from '../redux/CounterSlice';
 import { store, StoreType } from '../redux/store';
 
-@AutonomousCustomElement({shadow: false})
+@AutonomousCustomElement({ shadow: false })
 export class LsTestElement extends HTMLElement implements LSCustomElement {
 	@Attribute({ reflect: true, onChange: 'onChangeXd' }) xd = 234;
 	@Attribute() xdfg = { id: 123, text: 'asdfasdf' };
@@ -52,13 +52,9 @@ export class LsTestElement extends HTMLElement implements LSCustomElement {
 	}
 }
 
-declare global {
-	export namespace JSX {
-		interface IntrinsicElements {
-			'ls-test-element': {
-				'xd'?: number;
-				onallanimationsfinished?: (event: CustomEvent<string>) => void;
-			} & HTMLAttributesWithMandatoryId;
-		}
-	}
-}
+type TestElementAttributes = {
+	'xd'?: number;
+	onallanimationsfinished?: (event: CustomEvent<string>) => void;
+} & HTMLAttributesWithMandatoryId;
+
+export default CustomElementWrapper<TestElementAttributes>(LsTestElement);

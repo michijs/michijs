@@ -1,4 +1,4 @@
-import { CustomizedBuiltInElement, Attribute, h, LSCustomElement, HTMLAttributesWithMandatoryId } from '../../src';
+import { CustomizedBuiltInElement, Attribute, h, LSCustomElement, HTMLAttributesWithMandatoryId, CustomElementWrapper } from '../../src';
 import style from './style.css';
 
 @CustomizedBuiltInElement({ extends: 'button' })
@@ -32,14 +32,9 @@ export class LsTestElementBuiltIn extends HTMLButtonElement implements LSCustomE
 	}
 }
 
-declare global {
-	export namespace JSX {
-		interface IntrinsicElements {
-			'button': {
-				is?: 'ls-test-element-built-in'
-				xd2?: number;
-				onallanimationsfinished?: (event: CustomEvent<string>) => void;
-			} & HTMLAttributesWithMandatoryId;
-		}
-	}
-}
+type TestElementAttributes = {
+	xd2?: number;
+	onallanimationsfinished?: (event: CustomEvent<string>) => void;
+} & HTMLAttributesWithMandatoryId;
+
+export default CustomElementWrapper<TestElementAttributes>(LsTestElementBuiltIn);

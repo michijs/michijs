@@ -26,6 +26,7 @@ export const AutonomousCustomElement = function (config?: AutonomousCustomElemen
     validateTag(tag);
 
     element.prototype.lsStatic = initLsStatic(element.prototype.lsStatic);
+    element.prototype.lsStatic.tag = tag;
 
     class newClass extends element {
       constructor() {

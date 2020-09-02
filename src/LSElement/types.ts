@@ -29,7 +29,9 @@ export type LsStaticAttributesType = {
     stores: StoresType[],
     elements: ElementsType[],
     observedAttributes: ObservedAttributesType[],
-    eventsDispatchers: EventsDispatchersType[]
+    eventsDispatchers: EventsDispatchersType[],
+    tag: string;
+    extends: string;
 }
 
 type LsSlotType = { [memberName: string]: Array<Element>; }

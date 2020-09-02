@@ -8,5 +8,6 @@ export type { SVGAttributes, SVGAttributesWithMandatoryId } from './LSElement/h/
 import './LSElement/h/JSXBase';
 export { CustomEventDispatcher } from './LSElement/classes/CustomEventDispatcher';
 export { IdGenerator } from './LSElement/classes/IdGenerator';
+export { CustomElementWrapper } from './LSElement/wrappers/CustomElementWrapper';
 import './LSElement/h/global';
 import './LSElement/h/external';

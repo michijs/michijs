@@ -26,6 +26,8 @@ export const CustomizedBuiltInElement = function (config: CustomizedBuiltInEleme
     validateTag(tag);
 
     element.prototype.lsStatic = initLsStatic(element.prototype.lsStatic);
+    element.prototype.lsStatic.tag = tag;
+    element.prototype.lsStatic.extends = config.extends;
 
     class newClass extends element {
       constructor() {

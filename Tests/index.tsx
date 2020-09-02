@@ -1,9 +1,10 @@
-export * from './TestElement/TestElement';
 import './Counter/Counter';
 export * from './TestElement2/ls-test-element-built-in';
 
 import { AutonomousCustomElement, h, LSCustomElement, HTMLAttributes } from '../src';
 import { Attribute } from '../src/LSElement/decorators/PropertyDecorators';
+import LsTestElement from './TestElement/TestElement';
+import LsTestElementBuiltIn from './TestElement2/ls-test-element-built-in';
 
 @AutonomousCustomElement()
 export class LsRootTestElement extends HTMLElement implements LSCustomElement {
@@ -33,7 +34,8 @@ export class LsRootTestElement extends HTMLElement implements LSCustomElement {
     render() {
         return (
             <>
-                <ls-test-element onclick={() => this.xd2a++} id="test" xd={this.xd2a} onallanimationsfinished={(ev) => console.log(ev.detail)}><div id="div">{this.xd2a}</div></ls-test-element>
+                <LsTestElementBuiltIn id="test-built-in"/>
+                <LsTestElement onclick={() => this.xd2a++} id="test" xd={this.xd2a} onallanimationsfinished={(ev) => console.log(ev.detail)}><div id="div">{this.xd2a}</div></LsTestElement>
                 {/* <my-counter id="counter" oncountchanged={(ev) => console.log(`New count value: ${ev.detail}`)}></my-counter>*/}
                 {/* <button style={this.xd2a > 70 ? { backgroundColor: 'red' } : { color: 'blue' }} class={this.xd2a > 70 && this.xd2a < 75 ? 'asdf' : undefined} onclick={() => this.xd2a++} is="ls-test-element-built-in" id="button">
                     <div id="test">{this.xd2a}</div>
