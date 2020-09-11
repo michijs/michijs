@@ -1,4 +1,4 @@
-import { CustomizedBuiltInElement, Attribute, h, LSCustomElement, HTMLAttributesWithMandatoryId, CustomElementWrapper } from '../../src';
+import { CustomizedBuiltInElement, Attribute, AdoptedStyle, h, LSCustomElement, HTMLAttributesWithMandatoryId, CustomElementWrapper } from '../../src';
 import style from './style.css';
 
 @CustomizedBuiltInElement({ extends: 'button' })
@@ -24,7 +24,7 @@ export class LsTestElementBuiltIn extends HTMLButtonElement implements LSCustomE
 	render() {
 		return (
 			<>
-				<style id="style">{style}</style>
+				<AdoptedStyle parentRef={this} id="style">{style}</AdoptedStyle>
 				<h1 id="xd2" onclick={() => this.xd2++}>{this.xd2}</h1>
 				<slot id="test"></slot>
 			</>

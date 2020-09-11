@@ -25,6 +25,8 @@ If you want a library that:
 
 - Uses [KISS](https://en.wikipedia.org/wiki/KISS_principle) as a principal pattern
 
+- Has support for [Constructable Stylesheets](https://developers.google.com/web/updates/2019/02/constructable-stylesheets)
+
 - Can use [slots](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/slot) without Shadow DOM
 
 This library is for you.
@@ -41,7 +43,7 @@ LS Element custom elements are plain ES6/TypeScript classes with some decorator 
 New components can be created using the `.tsx` extension, such as `my-counter.tsx`.
 
 ```tsx
-import { AutonomousCustomElement, h, EventDispatcher, CustomEventDispatcher, LSCustomElement, HTMLAttributes, Attribute, CustomElementWrapper } from '@lsegurado/ls-element/dist';
+import { AutonomousCustomElement, h, EventDispatcher, CustomEventDispatcher, LSCustomElement, HTMLAttributes, Attribute, CustomElementWrapper, AdoptedStyle } from '@lsegurado/ls-element/dist';
 import style from './index.css';
 
 @AutonomousCustomElement()
@@ -56,7 +58,7 @@ export class MyCounter extends HTMLElement implements LSCustomElement {
 	render() {
 	  return (
 	    <>
-	      <style id="style">{style}</style>
+	      <AdoptedStyle parentRef={this} id="style">{style}</AdoptedStyle>
 	      <button id="decrement-count" onpointerup={() => this.count--}>-</button>
 	      <span id="count">{this.count.toString()}</span>
 	      <button id="increment-count" onpointerup={() => this.count++}>+</button>
@@ -159,6 +161,10 @@ For example MyCounter will be generated as my-counter.
 | `componentDidUnmount()` | This method is called after a component is removed from the DOM. |
 | `computedReflectedAttributes()` | This method is called in each render. Returns an object with attributes to be reflected to the Custom element. |
 
+## Constructable Stylesheets
+If you are not familiar with decorators please check [this link](https://developers.google.com/web/updates/2019/02/constructable-stylesheets).
+To use constructable stylesheets simply import AdoptedStyle and use it like an style tag (see example). In case your browser doesn't support constructable style sheets, it will return a style tag.
+Remember that you need to use Shadow DOM to be able to use constructable stylesheets. 
 
 ## Limitations
 ### Enclosed statements

@@ -1,4 +1,4 @@
-import { AutonomousCustomElement, Attribute, h, Child, EventDispatcher, CustomEventDispatcher, LSCustomElement, Redux, HTMLAttributes, HTMLAttributesWithMandatoryId, CustomElementWrapper } from '../../src';
+import { AutonomousCustomElement, AdoptedStyle, Attribute, h, Child, EventDispatcher, CustomEventDispatcher, LSCustomElement, Redux, HTMLAttributes, HTMLAttributesWithMandatoryId, CustomElementWrapper } from '../../src';
 import style from './style.css';
 import { increment } from '../redux/CounterSlice';
 import { store, StoreType } from '../redux/store';
@@ -33,7 +33,7 @@ export class LsTestElement extends HTMLElement implements LSCustomElement {
 	render() {
 		return (
 			<>
-				<style id="style">{style}</style>
+				<AdoptedStyle parentRef={this} id="style">{style}</AdoptedStyle>
 				<div id="parent_div">
 					{/* <h1 id="xd" value={this.xd < 240 ? this.xd2 + this.xd : undefined} onClick={(_ev) => { this.xd++;  }}>{this.xd}</h1> */}
 					<h1 id="xd" onclick={(_ev) => { store.dispatch(increment()); }}>{'store' + this.reduxStore.counterStore.count}</h1>

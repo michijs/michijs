@@ -35,17 +35,19 @@ export type LsStaticAttributesType = {
 }
 
 type LsSlotType = { [memberName: string]: Array<Element>; }
-type computedReflectedAttribute = { [attribute: string]: any; }
+type ComputedReflectedAttribute = { [attribute: string]: any; }
+type AdoptedStyleSheet = { id: string, value: CSSStyleSheet };
 
 export type LsAttributesType = {
     alreadyRendered?: boolean,
     attrsToListen?: string[],
-    slot?: LsSlotType
+    slot?: LsSlotType,
+    adoptedStyleSheets?: AdoptedStyleSheet[]
 }
 
 export type RootElement = LSCustomElement | ShadowRoot;
 
-export interface LSCustomElement extends HTMLElement{
+export interface LSCustomElement extends HTMLElement {
     lsStatic?: LsStaticAttributesType,
     ls?: LsAttributesType,
     componentWillMount?(): void,
@@ -54,7 +56,7 @@ export interface LSCustomElement extends HTMLElement{
     componentWillUpdate?(): void,
     componentDidUpdate?(): void,
     componentWillReceiveAttribute?: (name: string, oldValue, newValue) => void;
-    computedReflectedAttributes?: () => computedReflectedAttribute;
+    computedReflectedAttributes?: () => ComputedReflectedAttribute;
     render?(): HTMLElement | Array<HTMLElement> | any;
 }
 

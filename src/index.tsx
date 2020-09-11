@@ -2,6 +2,7 @@ export { h } from './LSElement/h';
 export { AutonomousCustomElement } from './LSElement/decorators/AutonomousCustomElement';
 export { CustomizedBuiltInElement } from './LSElement/decorators/CustomizedBuiltInElement';
 export { Attribute, Child, EventDispatcher, Redux } from './LSElement/decorators/PropertyDecorators';
+export { AdoptedStyle } from './LSElement/components/AdoptedStyle';
 export type { LSCustomElement } from './LSElement/types';
 export type { HTMLAttributes, HTMLAttributesWithMandatoryId } from './LSElement/h/JSX/HTMLAttributes';
 export type { SVGAttributes, SVGAttributesWithMandatoryId } from './LSElement/h/JSX/SVGAttributes';

@@ -1,4 +1,4 @@
-import { AutonomousCustomElement, h, EventDispatcher, CustomEventDispatcher, LSCustomElement, HTMLAttributesWithMandatoryId, Attribute, CustomElementWrapper } from '../../src';
+import { AutonomousCustomElement, h, AdoptedStyle, EventDispatcher, CustomEventDispatcher, LSCustomElement, HTMLAttributesWithMandatoryId, Attribute, CustomElementWrapper } from '../../src';
 import style from './Counter.css';
 
 @AutonomousCustomElement()
@@ -13,7 +13,7 @@ export class MyCounter extends HTMLElement implements LSCustomElement {
     render() {
         return (
             <>
-                <style id="style">{style}</style>
+                <AdoptedStyle parentRef={this} id="style">{style}</AdoptedStyle>
                 <button id="decrement-count" onpointerup={() => this.count--}>-</button>
                 <span id='count'>{this.count.toString()}</span>
                 <button style={{backgroundColor: 'red', color: 'green'}} id="increment-count" onpointerup={() => this.count++}>+</button>
