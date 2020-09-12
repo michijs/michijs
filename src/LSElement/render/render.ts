@@ -22,13 +22,6 @@ function processArray(arrayResult: Array<any>, self: LSCustomElement, isACustomB
         if (!validateElement(x, result)) {
           continue;
         }
-        if (x.tagName === 'SLOT' && self.ls?.slot && isACustomBuiltInElement) {
-          const slotName = x.getAttribute('name') || 'default';
-          const children = self.ls?.slot[slotName] || [];
-          children.forEach(child => {
-            x.appendChild(child);
-          });
-        }
         result.push(x);
       }
     }

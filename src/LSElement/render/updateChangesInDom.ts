@@ -4,8 +4,6 @@ import { getRootNode } from './gerRootNode';
 import { isCustomElement } from '../utils/isCustomElement';
 import { updateAttribute } from '../utils/updateAttribute';
 import { updateComputedReflectedAttributes } from './updateComputedReflectedAttributes';
-import { isCustomElementWithoutShadowRoot } from '../utils/isCustomElementWithoutShadowRoot';
-import { updateLsSlots } from './updateLsSlots';
 
 function updateAttributes(newElement: Element, currentElement: Element) {
   (newElement as LSCustomElement).ls?.attrsToListen.map(attr => {
@@ -30,23 +28,6 @@ function updateElement(newElement: Element, currentElement: Element, parent: Ele
       updateChangesInElement(Array.from(newElement.children), Array.from(currentElement.children), currentElement);
     } else if (!isACustomElement) {
       currentElement.textContent = newElement.textContent;
-    }
-    if (isCustomElementWithoutShadowRoot(newElement)) {
-      updateLsSlots((newElement as LSCustomElement));
-      const slot = (newElement as LSCustomElement).ls?.slot;
-      const allElementSlots = (currentElement as HTMLElement).getElementsByTagName('slot');
-      Object.keys(slot).forEach((slotName) => {
-        let selectedSlot: HTMLSlotElement;
-        if (slotName !== 'default') {
-          selectedSlot = allElementSlots.namedItem(slotName);
-        } else {
-          selectedSlot = Array.from(allElementSlots).find(x => !x.hasAttribute('name'));
-        }
-        if (selectedSlot) {
-          const newChildren = slot[slotName];
-          updateChildren(newChildren, selectedSlot);
-        }
-      });
     }
   }
 }

@@ -1,9 +1,9 @@
 import { HTMLAttributesWithMandatoryId } from '../h/JSX/HTMLAttributes';
 import { LSCustomElement } from '../types';
 import { h } from '../h';
-
-//@ts-ignore
-export const supportsAdoptingStyleSheets = window.ShadowRoot && (window.ShadyCSS === undefined || window.ShadyCSS.nativeShadow) && 'adoptedStyleSheets' in Document.prototype && 'replace' in CSSStyleSheet.prototype;
+import { supportsAdoptingStyleSheets } from './supportsAdoptingStyleSheets';
+import { createStyleSheet } from './createStyleSheet';
+import { addStyleSheetToElement } from './addStyleSheetToElement';
 
 export function AdoptedStyle({ parentRef, ...attrs }: { parentRef: LSCustomElement } & HTMLAttributesWithMandatoryId, children: any) {
   if (parentRef.shadowRoot && supportsAdoptingStyleSheets) {
@@ -17,12 +17,9 @@ export function AdoptedStyle({ parentRef, ...attrs }: { parentRef: LSCustomEleme
       //@ts-ignore
       currentStyleSheet.value.replaceSync(children);
     } else {
-      const sheet = new CSSStyleSheet();
-      //@ts-ignore
-      sheet.replaceSync(children);
+      const sheet = createStyleSheet(children);
+      addStyleSheetToElement(parentRef,sheet);
       parentRef.ls.adoptedStyleSheets.push({ id: attrs.id, value: sheet });
-      //@ts-ignore
-      parentRef.shadowRoot.adoptedStyleSheets = parentRef.shadowRoot.adoptedStyleSheets.concat(sheet);
     }
   } else {
     return <style {...attrs}>{children}</style>;

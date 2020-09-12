@@ -27,7 +27,7 @@ If you want a library that:
 
 - Has support for [Constructable Stylesheets](https://developers.google.com/web/updates/2019/02/constructable-stylesheets)
 
-- Can use [slots](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/slot) without Shadow DOM
+- Can have children's without Shadow DOM (using attributes)
 
 This library is for you.
 

@@ -34,14 +34,12 @@ export type LsStaticAttributesType = {
     extends: string;
 }
 
-type LsSlotType = { [memberName: string]: Array<Element>; }
 type ComputedReflectedAttribute = { [attribute: string]: any; }
 type AdoptedStyleSheet = { id: string, value: CSSStyleSheet };
 
 export type LsAttributesType = {
     alreadyRendered?: boolean,
     attrsToListen?: string[],
-    slot?: LsSlotType,
     adoptedStyleSheets?: AdoptedStyleSheet[]
 }
 
