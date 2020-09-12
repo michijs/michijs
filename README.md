@@ -162,7 +162,7 @@ For example MyCounter will be generated as my-counter.
 | `computedReflectedAttributes()` | This method is called in each render. Returns an object with attributes to be reflected to the Custom element. |
 
 ## Constructable Stylesheets
-If you are not familiar with decorators please check [this link](https://developers.google.com/web/updates/2019/02/constructable-stylesheets).
+If you are not familiar with constructable Stylesheets please check [this link](https://developers.google.com/web/updates/2019/02/constructable-stylesheets).
 To use constructable stylesheets simply import AdoptedStyle and use it like an style tag (see example). In case your browser doesn't support constructable style sheets, it will return a style tag.
 Remember that you need to use Shadow DOM to be able to use constructable stylesheets. 
 
