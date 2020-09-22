@@ -1,3 +1,4 @@
+import { AriaAttributes } from './AriaAttributes';
 import { DOMAttributes } from './DOMAttributes';
 
 export interface SVGDOMAttributes extends DOMAttributes {
@@ -255,8 +256,8 @@ export interface SVGDOMAttributes extends DOMAttributes {
     zoomAndPan: string;
 }
 
-export interface SVGDOMAttributesWithoutMandatoryId extends Partial<SVGDOMAttributesWithMandatoryId> {}
+export interface SVGDOMAttributesWithoutMandatoryId extends Partial<SVGDOMAttributesWithMandatoryId>, Partial<AriaAttributes> {}
 
-export interface SVGDOMAttributesWithMandatoryId extends Partial<SVGDOMAttributes> {
+export interface SVGDOMAttributesWithMandatoryId extends Partial<SVGDOMAttributes>, Partial<AriaAttributes> {
     id: string;
 }

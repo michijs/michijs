@@ -1,3 +1,5 @@
+import { AriaAttributes } from "./AriaAttributes";
+
 export interface DOMAttributes {
     accept: string;
     acceptCharset: string;
@@ -147,8 +149,8 @@ export interface DOMAttributes {
     itemRef: string;
 }
 
-export interface DOMAttributesWithoutMandatoryId extends Partial<DOMAttributesWithMandatoryId> {}
+export interface DOMAttributesWithoutMandatoryId extends Partial<DOMAttributesWithMandatoryId>, Partial<AriaAttributes> {}
 
-export interface DOMAttributesWithMandatoryId extends Partial<DOMAttributes> {
+export interface DOMAttributesWithMandatoryId extends Partial<DOMAttributes>, Partial<AriaAttributes> {
     id: string;
 }

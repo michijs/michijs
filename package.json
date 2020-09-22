@@ -3,7 +3,8 @@
   "license": "MIT",
   "version": "1.1.1",
   "files": [
-    "dist/*"
+    "dist/*",
+    "index.ts"
   ],
   "author": "Lucas M. Segurado",
   "baseUrl": "./src",
