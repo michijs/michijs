@@ -1,4 +1,4 @@
-import { AriaAttributes } from "./AriaAttributes";
+import { AriaAttributes } from './AriaAttributes';
 
 export interface DOMAttributes {
     accept: string;
