@@ -36,11 +36,12 @@ export type LsStaticAttributesType = {
 
 type ComputedReflectedAttribute = { [attribute: string]: any; }
 type AdoptedStyleSheet = { id: string, value: CSSStyleSheet };
+export type ElementMap = {tag: string, attrs: {[attribute: string]: any}, children: ElementMap[] | string[]}
 
 export type LsAttributesType = {
     alreadyRendered?: boolean,
-    attrsToListen?: string[],
-    adoptedStyleSheets?: AdoptedStyleSheet[]
+    attrsManagedByH?: {[attribute: string]: any},
+    adoptedStyleSheets?: AdoptedStyleSheet[],
 }
 
 export type RootElement = LSCustomElement | ShadowRoot;
@@ -55,7 +56,7 @@ export interface LSCustomElement extends HTMLElement {
     componentDidUpdate?(): void,
     componentWillReceiveAttribute?: (name: string, oldValue, newValue) => void;
     computedReflectedAttributes?: () => ComputedReflectedAttribute;
-    render?(): HTMLElement | Array<HTMLElement> | any;
+    render?(): ElementMap | ElementMap[] | any;
 }
 
 export type CallbackType = (propertyName: string, newValue: any, oldValue: any) => void;

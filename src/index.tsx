@@ -7,6 +7,7 @@ export type { LSCustomElement } from './LSElement/types';
 export type { HTMLAttributes, HTMLAttributesWithMandatoryId } from './LSElement/h/JSX/HTMLAttributes';
 export type { SVGAttributes, SVGAttributesWithMandatoryId } from './LSElement/h/JSX/SVGAttributes';
 import './LSElement/h/JSXBase';
+export { renderFunctionalComponent } from './LSElement/render/renderFunctionalComponent';
 export { CustomEventDispatcher } from './LSElement/classes/CustomEventDispatcher';
 export { IdGenerator } from './LSElement/classes/IdGenerator';
 export { CustomElementWrapper } from './LSElement/wrappers/CustomElementWrapper';

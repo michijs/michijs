@@ -1,5 +1,5 @@
 import { LSCustomElement } from '../types';
-import { executeFirstRender } from './executeFirstRender';
+import { executeFirstRender } from '../render/executeFirstRender';
 import { addAttributes } from '../properties/addAttributes';
 
 export function connectedCallback(self: LSCustomElement) {

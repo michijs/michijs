@@ -1,9 +1,9 @@
 export class CustomEventDispatcher<T> {
     private eventInit: CustomEventInit<T>;
-    private element: HTMLElement;
+    private element: Element;
     private propertyName: string;
 
-    constructor(propertyName: string, element: HTMLElement, bubbles = true, cancelable = false, composed = undefined) {
+    constructor(propertyName: string, element: Element, bubbles = true, cancelable = false, composed = undefined) {
     	this.propertyName = propertyName.toLowerCase();
     	this.element = element;
     	this.eventInit = {

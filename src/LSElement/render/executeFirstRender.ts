@@ -1,15 +1,16 @@
 import type { LSCustomElement } from '../types';
 import { render } from './render';
-import { getRootNode } from './gerRootNode';
+import { getRootNode } from './getRootNode';
 import { updateComputedReflectedAttributes } from './updateComputedReflectedAttributes';
+import { createElement } from './createElement';
 
 export function executeFirstRender(self: LSCustomElement) {
   updateComputedReflectedAttributes(self);
-
   const renderResult = render(self);
+
   if (renderResult) {
     renderResult.forEach(element => {
-      getRootNode(self).appendChild(element);
+      getRootNode(self).appendChild(createElement(element));
     });
   }
 }

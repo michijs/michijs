@@ -3,7 +3,7 @@ import style from './Counter.css';
 
 @AutonomousCustomElement()
 export class MyCounter extends HTMLElement implements LSCustomElement {
-    @Attribute({ onChange: 'onChangeCount' }) count = 0;
+    @Attribute({ onChange: 'onChangeCount', reflect: true }) count = 0;
     @EventDispatcher() countChanged: CustomEventDispatcher<number>;
 
     onChangeCount(newValue: number, _oldValue: number) {
@@ -14,9 +14,11 @@ export class MyCounter extends HTMLElement implements LSCustomElement {
         return (
             <>
                 <AdoptedStyle parentRef={this} id="style">{style}</AdoptedStyle>
-                <button id="decrement-count" onpointerup={() => this.count--}>-</button>
-                <span id='count'>{this.count.toString()}</span>
+                {this.count <= 0 ?<div id="test">test</div>: undefined}
+                <button style={this.count > 0 ? {backgroundColor:'red'}: undefined} id="decrement-count" onpointerup={() => this.count--}>-</button>
+                <span id='count'>{this.count}</span>
                 <button style={{backgroundColor: 'red', color: 'green'}} id="increment-count" onpointerup={() => this.count++}>+</button>
+                {this.count > 0 ?<div id="test">test</div>: undefined}
             </>
         );
     }

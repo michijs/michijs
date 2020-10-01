@@ -1,12 +1,12 @@
 import { LSCustomElement } from '../types';
-import { setAttribute } from '../utils/setAttribute';
+import { setStandardAttribute } from '../utils/setStandardAttribute';
 
 export function updateComputedReflectedAttributes(self: LSCustomElement) {
   if (self.computedReflectedAttributes) {
     const computedReflectedAttributes = self.computedReflectedAttributes();
     if (computedReflectedAttributes) {
       Object.keys(computedReflectedAttributes).forEach(attribute => {
-        setAttribute(self, computedReflectedAttributes[attribute], attribute);
+        setStandardAttribute(self, attribute, computedReflectedAttributes[attribute]);
       });
     } else {
       console.error('Computed reflected attributes cannot be empty.');

@@ -1,8 +1,8 @@
 import { LSCustomElement } from '../types';
 import { createSlice, CaseReducer, PayloadAction, createStore } from '@reduxjs/toolkit';
-import { setAttribute } from '../utils/setAttribute';
+import { setStandardAttribute } from '../utils/setStandardAttribute';
 import { standardizePropertyName } from './standardizePropertyName';
-import { updateChangesInDom } from '../render/updateChangesInDom';
+import { rerender } from '../render/rerender';
 
 export function addAttributes(self: LSCustomElement) {
   const initialState: any = {};
@@ -47,9 +47,9 @@ export function addAttributes(self: LSCustomElement) {
           if (onChange) {
             self[onChange](newValue, oldValue);
           }
-          updateChangesInDom(self);
+          rerender(self);
           if (attribute.options?.reflect) {
-            setAttribute(self, newValue, attribute.propertyName);
+            setStandardAttribute(self, attribute.propertyName, newValue);
           }
         }
       },
@@ -63,7 +63,7 @@ export function addAttributes(self: LSCustomElement) {
       Object.defineProperty(self, attributeName, definedProperty);
     }
     if (attribute.options?.reflect) {
-      setAttribute(self, self[attribute.propertyName], attribute.propertyName);
+      setStandardAttribute(self, attribute.propertyName, self[attribute.propertyName]);
     }
   });
 }

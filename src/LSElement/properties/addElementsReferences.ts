@@ -1,5 +1,5 @@
 import type { LSCustomElement } from '../types';
-import { getRootNode } from '../render/gerRootNode';
+import { getRootNode } from '../render/getRootNode';
 
 export function addElementsReferences(self: LSCustomElement) {
   self.lsStatic.elements.forEach(element => {

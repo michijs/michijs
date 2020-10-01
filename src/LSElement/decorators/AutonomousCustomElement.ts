@@ -5,9 +5,9 @@ import { addEventDispatchers } from '../properties/addEventDispatchers';
 import { addElementsReferences } from '../properties/addElementsReferences';
 import { addReduxStores } from '../properties/addReduxStores';
 import { getObservedAttributes } from '../properties/createGetterAndSetterForObservedAttributes';
-import { connectedCallback } from '../render/connectedCallback';
-import { disconnectedCallback } from '../render/disconnectedCallback';
-import { attributeChangedCallback } from '../render/attributeChangedCallback';
+import { connectedCallback } from '../callbacks/connectedCallback';
+import { disconnectedCallback } from '../callbacks/disconnectedCallback';
+import { attributeChangedCallback } from '../callbacks/attributeChangedCallback';
 
 interface AutonomousCustomElementConfig {
   tag?: string;
