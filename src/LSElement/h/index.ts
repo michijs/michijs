@@ -11,7 +11,7 @@ export const h = {
     if (typeof tag === 'function') {
       return tag(attrs, children);
     }
-    let processedChildren = [];
+    const processedChildren = [];
     children.forEach(child => Array.isArray(child) ? processedChildren.push(...child): processedChildren.push(child));
     return { tag, attrs, children: processedChildren };
   },

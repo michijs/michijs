@@ -46,7 +46,7 @@ export function rerender(self: LSCustomElement) {
     }
     movedElements = [];
     const newChildren = render(self);
-    const rootElement = (self.shadowRoot ? self.shadowRoot : self.getRootNode()) as DocumentFragment
+    const rootElement = (self.shadowRoot ? self.shadowRoot : self.getRootNode()) as DocumentFragment;
     const parent = self.shadowRoot ? self.shadowRoot : self;
     updateElement(rootElement, parent as HTMLElement, newChildren);
     if (self.componentDidUpdate) {
@@ -89,7 +89,7 @@ function updateElement(rootElement: DocumentFragment, parent: HTMLElement, newCh
       insertNewChild(parent, i, newChildMap);
     }
   }
-  removeUnexistentChilds(parent, newChildrenMap)
+  removeUnexistentChilds(parent, newChildrenMap);
 }
 
 function elementWasMoved(newChildMap: ElementMap) {
@@ -114,7 +114,7 @@ function updateChildren(rootElement: DocumentFragment, parent: HTMLElement, newC
         parent.innerHTML = newInnerText;
       }
     } else {
-      updateElement(rootElement, parent, newChildrenMap as ElementMap[])
+      updateElement(rootElement, parent, newChildrenMap as ElementMap[]);
     }
   }
 }
@@ -128,7 +128,7 @@ function hasDifferentAttributes(newChildMap: ElementMap, element: LSCustomElemen
 }
 
 function moveToPosition(rootElement: DocumentFragment, parent: HTMLElement, childMapToMove: ElementMap, childInThatPosition: HTMLElement) {
-  let childToMove: HTMLElement = rootElement.getElementById(childMapToMove.attrs.id);
+  const childToMove: HTMLElement = rootElement.getElementById(childMapToMove.attrs.id);
   movedElements.push(childInThatPosition);
   parent.replaceChild(childToMove, childInThatPosition);
   return childToMove;

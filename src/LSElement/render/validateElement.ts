@@ -1,4 +1,4 @@
-import { ElementMap } from "../types";
+import { ElementMap } from '../types';
 
 export function validateElement(x: ElementMap, otherElements: Array<ElementMap>) {
   if (!x.tag) {
