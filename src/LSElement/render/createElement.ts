@@ -18,8 +18,14 @@ export function createElement(elementMap: ElementMap, isSVGParam?: boolean) {
   } else {
     element = document.createElement(elementMap.tag);
   }
+
   Object.keys(elementMap.attrs).forEach(name => {
-    setAttribute(element, name, elementMap.attrs[name]);
+    const value = elementMap.attrs[name];
+    if (name.startsWith('on') && typeof value === 'function') {
+      element.addEventListener(name.substr(2), value);
+    } else {
+      setAttribute(element, name, value);
+    }
   });
   if (!element.ls) {
     element.ls = {};
