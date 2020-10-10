@@ -105,7 +105,7 @@ That is to say that while it is inside the Shadow DOM you should not worry about
 ### Why not use keys like React?
 Searching with IDs is so much faster than searching by queryselector. You can look at [this topic](https://measurethat.net/Embed?id=99697) and [this another](http://vanilla-js.com)
 
-### But... What if I don't want to use virtual dom?
+### But... What if I don't want to use Shadow DOM?
 You can import IdGenerator class to create unique IDs for each element in your component. 
 ```tsx
 idGen = new IdGenerator();
@@ -167,17 +167,6 @@ To use Constructable Stylesheets simply import AdoptedStyle and use it like an s
 Remember that you need to use Shadow DOM to be able to use Constructable Stylesheets. 
 
 ## Limitations
-### Enclosed statements
-Given the need to establish ID in each element. Statements like this are not valid:
-```tsx
-{this.count.toString()}
-```
-You need to enclose the statement like this:
-```tsx
-<span id="count">{this.count.toString()}</span>
-```
-You will be notified if this occurs.
-
 ### Variable assignment
 You need to assign a value using = operator (Similar to React). For example:
 For arrays:

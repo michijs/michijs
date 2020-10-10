@@ -5,17 +5,17 @@ export function render(self: LSCustomElement) {
   const renderResult = self.render();
   if (renderResult) {
     const renderResultAsArray = !Array.isArray(renderResult) ? [renderResult] : renderResult;
-    return processArray(renderResultAsArray, self);
+    return processRenderResult(renderResultAsArray);
   } return undefined;
 }
 
-function processArray(arrayResult: Array<ElementMap>, self: LSCustomElement) {
+function processRenderResult(arrayResult: Array<ElementMap>) {
   const result = new Array<ElementMap>();
   for (let i = 0; i < arrayResult.length; i++) {
     const x = arrayResult[i];
     if (x) {
       if (Array.isArray(x)) {
-        result.push(...processArray(x, self));
+        result.push(...processRenderResult(x));
       } else {
         if (!validateElement(x, result)) {
           continue;

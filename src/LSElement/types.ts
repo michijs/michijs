@@ -44,6 +44,8 @@ export type LsAttributesType = {
     adoptedStyleSheets?: AdoptedStyleSheet[],
 }
 
+export type LSNode = Node & {ls?: LsAttributesType}
+
 export type RootElement = LSCustomElement | ShadowRoot;
 
 export interface LSCustomElement extends HTMLElement {
