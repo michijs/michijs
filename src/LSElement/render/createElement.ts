@@ -36,7 +36,7 @@ export function createElement(elementMap: string | ElementMap, isSVGParam?: bool
       element.appendChild(createElement(childElementMap, isSVG));
     });
   } else {
-    element = document.createTextNode(createTextNodeContent(elementMap))
+    element = document.createTextNode(createTextNodeContent(elementMap));
   }
   return element;
 }

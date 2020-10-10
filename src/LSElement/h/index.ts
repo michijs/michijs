@@ -1,4 +1,4 @@
-import { isAnElementMap } from "../render/isAnElementMap";
+import { isAnElementMap } from '../render/isAnElementMap';
 
 export interface FunctionComponent {
   (attrs: any, ...children): HTMLElement;
