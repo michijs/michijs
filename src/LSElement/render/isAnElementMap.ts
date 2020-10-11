@@ -1,5 +1,5 @@
-import { ElementMap } from '../types';
+import { ElementMap, ElementMapChild } from '../types';
 
-export function isAnElementMap(childMap: ElementMap | string): childMap is ElementMap {
+export function isAnElementMap(childMap: ElementMapChild): childMap is ElementMap {
   return typeof childMap === 'object' && childMap && childMap.tag !== undefined && childMap.attrs !== undefined && childMap.children !== undefined;
 }

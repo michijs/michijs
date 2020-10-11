@@ -36,15 +36,16 @@ export type LsStaticAttributesType = {
 
 type ComputedReflectedAttribute = { [attribute: string]: any; }
 type AdoptedStyleSheet = { id: string, value: CSSStyleSheet };
-export type ElementMap = {tag: string, attrs: {[attribute: string]: any}, children: ElementMap[] | string[]}
+export type ElementMap = { tag: string, attrs: { [attribute: string]: any }, children: ElementMapChild[] };
+export type ElementMapChild = ElementMap | string;
 
 export type LsAttributesType = {
     alreadyRendered?: boolean,
-    attrsManagedByH?: {[attribute: string]: any},
+    attrsManagedByH?: { [attribute: string]: any },
     adoptedStyleSheets?: AdoptedStyleSheet[],
 }
 
-export type LSNode = Node & {ls?: LsAttributesType}
+export type LSNode = Node & { ls?: LsAttributesType }
 
 export type RootElement = LSCustomElement | ShadowRoot;
 

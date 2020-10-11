@@ -1,4 +1,4 @@
-import type { ElementMap, LSCustomElement } from '../../types';
+import type { ElementMapChild, LSCustomElement } from '../../types';
 import { render } from '../render';
 import { updateComputedReflectedAttributes } from '../updateComputedReflectedAttributes';
 import { elementExists } from './elementExists';
@@ -35,10 +35,9 @@ export function rerender(self: LSCustomElement) {
   }
 }
 
-export function updateElement(rootElement: DocumentFragment, parent: HTMLElement, newChildrenMap: ElementMap[] | string[]) {
+export function updateElement(rootElement: DocumentFragment, parent: HTMLElement, newChildrenMap: ElementMapChild[]) {
   for (let i = 0; i < newChildrenMap.length; i++) {
     const newChildMap = newChildrenMap[i];
-
     const oldChildren = Array.from(parent.childNodes);
 
     if (isAnElementMap(newChildMap)) {
@@ -72,7 +71,7 @@ export function updateElement(rootElement: DocumentFragment, parent: HTMLElement
       }
     } else {
       const newChildText = createTextNodeContent(newChildMap);
-      if (oldChildren.length < i) {
+      if (i > oldChildren.length) {
         insertNewChild(parent, i, newChildText);
       } else if (oldChildren[i].textContent !== newChildText) {
         if (oldChildren[i].nodeType === 1) {

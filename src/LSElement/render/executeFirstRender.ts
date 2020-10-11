@@ -9,8 +9,7 @@ export function executeFirstRender(self: LSCustomElement) {
   const renderResult = render(self);
 
   if (renderResult) {
-    renderResult.forEach(element => {
-      getRootNode(self).appendChild(createElement(element));
-    });
+    const createdElements = renderResult.map(element => createElement(element));
+    getRootNode(self).append(...createdElements);
   }
 }
