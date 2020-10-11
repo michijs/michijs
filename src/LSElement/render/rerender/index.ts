@@ -72,7 +72,7 @@ export function updateElement(rootElement: DocumentFragment, parent: HTMLElement
       }
     } else {
       const newChildText = createTextNodeContent(newChildMap);
-      if (oldChildren.length > i) {
+      if (oldChildren.length < i) {
         insertNewChild(parent, i, newChildText);
       } else if (oldChildren[i].textContent !== newChildText) {
         if (oldChildren[i].nodeType === 1) {
