@@ -16,7 +16,7 @@
   "main": "index.html",
   "scripts": {
     "clean": "del-cli --force dist",
-    "start": "parcel ./Tests/index.html --open --out-dir build",
+    "start": "webpack-dev-server --mode development",
     "build": "npm run clean && tsc",
     "publish-patch-version": "npm version patch && npm run publish-npm",
     "publish-npm": "npm run build && npm publish --access public",
@@ -30,7 +30,6 @@
     "Autonomous custom elements"
   ],
   "devDependencies": {
-    "@lsegurado/parcel-plugin-ls-convert-css-to-js-module": "1.0.0",
     "@types/uuid": "^8.0.0",
     "@typescript-eslint/eslint-plugin": "^3.3.0",
     "@typescript-eslint/parser": "^3.3.0",
@@ -38,12 +37,22 @@
     "eslint": "^7.8.1",
     "eslint-config-preact": "^1.1.1",
     "husky": "^4.2.5",
-    "parcel-bundler": "^1.12.4",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "stylelint": "^13.6.1",
     "stylelint-config-standard": "^20.0.0",
-    "typescript": "^3.9.6"
+    "css-loader": "^4.2.1",
+    "clean-webpack-plugin": "^3.0.0",
+    "typescript": "^3.9.6",
+    "file-loader": "^6.0.0",
+    "html-webpack-plugin": "^4.3.0",
+    "terser-webpack-plugin": "^4.1.0",
+    "to-string-loader": "^1.1.6",
+    "ts-loader": "^8.0.2",
+    "url-loader": "^4.1.0",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.3.6",
