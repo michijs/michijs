@@ -13,3 +13,4 @@ export { IdGenerator } from './LSElement/classes/IdGenerator';
 export { CustomElementWrapper } from './LSElement/wrappers/CustomElementWrapper';
 import './LSElement/h/global';
 import './LSElement/h/external';
+export {useStore} from './LSElement/hooks/useStore';

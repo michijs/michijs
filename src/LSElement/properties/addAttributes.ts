@@ -1,8 +1,8 @@
 import { LSCustomElement } from '../types';
-import { createSlice, CaseReducer, PayloadAction, createStore } from '@reduxjs/toolkit';
 import { setStandardAttribute } from '../utils/setStandardAttribute';
 import { standardizePropertyName } from './standardizePropertyName';
 import { rerender } from '../render/rerender';
+import { useStore } from '../hooks/useStore';
 
 export function addAttributes(self: LSCustomElement) {
   const initialState: any = {};
@@ -12,37 +12,17 @@ export function addAttributes(self: LSCustomElement) {
     initialState[attribute.propertyName] = self[attributeName] || self[attribute.propertyName];
   });
 
-  const setStateAction: CaseReducer<Date, PayloadAction<any>> = (state, action) => {
-    const newState = state;
-    Object.keys(action.payload).forEach(key => {
-      newState[key] = action.payload[key];
-    });
-    return newState;
-  };
-
-  const AttributesSlice = createSlice({
-    name: 'AttributesSlice',
-    initialState,
-    reducers: {
-      setState: setStateAction
-    }
-  });
-
-  const { reducer, actions } = AttributesSlice;
-
-  const { setState } = actions;
-
-  const store = createStore(reducer);
+  const [getState, setState] = useStore(initialState);
 
   self.lsStatic.observedAttributes.forEach(attribute => {
     const attributeName = standardizePropertyName(attribute.propertyName);
     delete self[attribute.propertyName];
     const definedProperty = {
       set(newValue) {
-        const oldValue = store.getState()[attribute.propertyName];
+        const oldValue = getState()[attribute.propertyName];
         if (newValue != oldValue) {
           const payload = { [attribute.propertyName]: newValue };
-          store.dispatch(setState(payload));
+          setState(payload);
           const onChange = attribute?.options?.onChange;
           if (onChange) {
             self[onChange](newValue, oldValue);
@@ -54,7 +34,7 @@ export function addAttributes(self: LSCustomElement) {
         }
       },
       get() {
-        return store.getState()[attribute.propertyName];
+        return getState()[attribute.propertyName];
       },
     };
     Object.defineProperty(self, attribute.propertyName, definedProperty);
