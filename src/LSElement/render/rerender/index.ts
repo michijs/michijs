@@ -1,21 +1,17 @@
 import type { ElementMapChild, LSCustomElement } from '../../types';
 import { render } from '../render';
 import { updateComputedReflectedAttributes } from '../updateComputedReflectedAttributes';
-import { elementExists } from './elementExists';
-import { isInDifferentPosition } from './isInDifferentPosition';
-import { moveToPosition } from './moveToPosition';
-import { hasDifferentAttributes } from './hasDifferentAttributes';
 import { tagsAreDifferent } from './tagsAreDifferent';
 import { updateChildren } from './updateChildren';
 import { removeUnexistentChilds } from './removeUnexistentChilds';
-import { elementWasMoved } from './elementWasMoved';
 import { isAnElementMap } from '../isAnElementMap';
 import { insertChildAt } from './insertChildAt';
 import { insertNewChild } from './insertNewChild';
 import { updateAttributes } from './updateAttributes';
 import { createTextNodeContent } from '../createTextNodeContent';
-
-export let movedElements: HTMLElement[] = [];
+import { findElement } from './findElement';
+import { nodeIsHTMLElement } from './nodeIsHTMLElement';
+import { insertNewChildren } from '../insertNewChildren';
 
 export function rerender(self: LSCustomElement) {
   if (self.ls.alreadyRendered) {
@@ -26,62 +22,52 @@ export function rerender(self: LSCustomElement) {
     const newChildren = render(self);
     const rootElement = (self.shadowRoot ? self.shadowRoot : self.getRootNode()) as DocumentFragment;
     const parent = self.shadowRoot ? self.shadowRoot : self;
-    movedElements = [];
     updateElement(rootElement, parent as HTMLElement, newChildren);
-    movedElements = [];
     if (self.componentDidUpdate) {
       self.componentDidUpdate();
     }
   }
 }
 
-export function updateElement(rootElement: DocumentFragment, parent: HTMLElement, newChildrenMap: ElementMapChild[]) {
+export function updateElement(rootElement: DocumentFragment, parent: HTMLElement, newChildrenMap: ElementMapChild[] = []) {
   for (let i = 0; i < newChildrenMap.length; i++) {
-    const newChildMap = newChildrenMap[i];
-    const oldChildren = Array.from(parent.childNodes);
-
-    if (isAnElementMap(newChildMap)) {
-      const existentElement = elementExists(rootElement, newChildMap);
-      const movedElement = elementWasMoved(newChildMap);
-      if (existentElement || movedElement) {
-        // @ts-ignore
-        let oldChild: HTMLElement = oldChildren[i];
-
-        // If the element was moved reinsert it to the dom
-        if (movedElement) {
-          oldChild = movedElement;
-          insertChildAt(parent, i, movedElement);
-        } else if (isInDifferentPosition(newChildMap, oldChild)) {
-          oldChild = moveToPosition(rootElement, parent, newChildMap, oldChild);
-        }
-
-        // Still have to validate equality
-        if (tagsAreDifferent(newChildMap, oldChild)) {
-          parent.removeChild(oldChild);
-          insertNewChild(parent, i, newChildMap);
-          continue;
-        }
-        if (hasDifferentAttributes(newChildMap, oldChild)) {
-          updateAttributes(oldChild, newChildMap);
-        }
-        // You cannot know if childs changed, it must be sons responsability
-        updateChildren(rootElement, oldChild, newChildMap.children);
-      } else {
-        insertNewChild(parent, i, newChildMap);
-      }
+    if (i >= parent.childNodes.length) {
+      insertNewChildren(parent, newChildrenMap.slice(i));
+      break;
     } else {
-      const newChildText = createTextNodeContent(newChildMap);
-      if (i > oldChildren.length) {
-        insertNewChild(parent, i, newChildText);
-      } else if (oldChildren[i].textContent !== newChildText) {
-        if (oldChildren[i].nodeType === 1) {
-          movedElements.push(parent.childNodes.item(i) as HTMLElement);
+      const newChildMap = newChildrenMap[i];
+      if (isAnElementMap(newChildMap)) {//Element map is an element
+        let oldChild = parent.childNodes[i] as HTMLElement;
+        if (!nodeIsHTMLElement(oldChild) || oldChild.id !== newChildMap.attrs.id) {
+          oldChild = findElement(rootElement, newChildMap);
+          if (oldChild) {//Element in another position -> move to the desired position
+            insertChildAt(parent, i, oldChild);
+          }
         }
-        parent.childNodes.item(i).replaceWith(newChildText);
+        if (oldChild) {//Node currently exists
+          if (tagsAreDifferent(newChildMap, oldChild)) {
+            parent.removeChild(oldChild);
+            insertNewChild(parent, i, newChildMap);
+          }
+          updateAttributes(oldChild, newChildMap);
+          // You can't tell if the children have changed, it must be the children's responsibility
+          updateChildren(rootElement, oldChild, newChildMap.children);
+        } else {//Node does not exist
+          insertNewChild(parent, i, newChildMap);
+        }
+      } 
+      //Element map is a text node
+      else if (nodeIsHTMLElement(parent.childNodes[i])) {//Old child is an element - Create a new text node on his position
+        insertNewChild(parent, i, newChildMap);
+      } else {//Old child is an text node - I replace his text if it is different
+        const newChildText = createTextNodeContent(newChildMap);
+        if (parent.childNodes[i].textContent !== newChildText) {//Texts are different - Update text content
+          parent.childNodes[i].textContent = newChildText;
+        }
       }
+      
     }
   }
   removeUnexistentChilds(parent, newChildrenMap);
 }
-
 

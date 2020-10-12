@@ -49,6 +49,8 @@ export type LSNode = Node & { ls?: LsAttributesType }
 
 export type RootElement = LSCustomElement | ShadowRoot;
 
+export type RenderResult = ElementMap | ElementMap[] | any;
+
 export interface LSCustomElement extends HTMLElement {
     lsStatic?: LsStaticAttributesType,
     ls?: LsAttributesType,
@@ -59,7 +61,7 @@ export interface LSCustomElement extends HTMLElement {
     componentDidUpdate?(): void,
     componentWillReceiveAttribute?: (name: string, oldValue, newValue) => void;
     computedReflectedAttributes?: () => ComputedReflectedAttribute;
-    render?(): ElementMap | ElementMap[] | any;
+    render?(): RenderResult;
 }
 
 export type CallbackType = (propertyName: string, newValue: any, oldValue: any) => void;

@@ -1,5 +1,6 @@
 import { ElementMapChild, LSNode } from '../types';
 import { createTextNodeContent } from './createTextNodeContent';
+import { insertNewChildren } from './insertNewChildren';
 import { isAnElementMap } from './isAnElementMap';
 import { setAttribute } from './setAttribute';
 
@@ -33,8 +34,7 @@ export function createElement(elementMap: ElementMapChild, isSVGParam?: boolean)
     }
     element.ls.attrsManagedByH = elementMap.attrs;
     if (elementMap.children.length > 0) {
-      const createdElements = elementMap.children.map(childElementMap => createElement(childElementMap, isSVG));
-      (element as DocumentFragment).append(...createdElements);
+      insertNewChildren(element as Element,elementMap.children, isSVG);
     }
   } else {
     element = document.createTextNode(createTextNodeContent(elementMap));

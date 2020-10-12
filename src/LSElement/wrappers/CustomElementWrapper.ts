@@ -1,13 +1,12 @@
 import { h } from '../h';
-import { LSCustomElement } from '../types';
+import { LSCustomElement, RenderResult } from '../types';
 
-export function CustomElementWrapper<T>(component: {prototype: LSCustomElement}) {
+export function CustomElementWrapper<T>(component: {prototype: LSCustomElement}): RenderResult {
   return function (attrs: T, children) {
     const lsStatic = component.prototype.lsStatic;
     if (lsStatic.extends) {
       return h.createElement(lsStatic.extends, { ...attrs, is: lsStatic.tag }, ...children);
     } 
     return h.createElement(lsStatic.tag, attrs, ...children);
-    
   };
 }
