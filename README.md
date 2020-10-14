@@ -17,7 +17,7 @@ If you want a library that:
 
 - Uses [Webpack](https://webpack.js.org) as default bundler
 
-- It is reactive to his properties
+- Is reactive
 
 - Uses decorators to keep your code clean and easy 
 
@@ -33,14 +33,13 @@ This library is for you.
 
 ## Getting Started
 
-You can use [this template](https://github.com/lsegurado/ls-element-template).
+You can use [this template](https://github.com/lsegurado/ls-element-template) or you can see on [Code Sandbox](https://codesandbox.io/s/github/lsegurado/ls-element-template/tree/master/?file=/src/components/RootComponent/index.tsx).
   
-  ## Creating components
+## Creating components
 
 LS Element custom elements are plain ES6/TypeScript classes with some decorator metadata.
 
-
-New components can be created using the `.tsx` extension, such as `my-counter.tsx`.
+New components can be created using the `.tsx` extension, such as `MyCounter.tsx`.
 
 ```tsx
 import { AutonomousCustomElement, h, EventDispatcher, CustomEventDispatcher, LSCustomElement, HTMLAttributes, Attribute, CustomElementWrapper, AdoptedStyle } from '@lsegurado/ls-element';
@@ -165,6 +164,11 @@ For example MyCounter will be generated as my-counter.
 If you are not familiar with Constructable Stylesheets please check [this link](https://developers.google.com/web/updates/2019/02/constructable-stylesheets).
 To use Constructable Stylesheets simply import AdoptedStyle and use it like an style tag (see [example](https://github.com/lsegurado/ls-element#creating-components)). In case your browser doesn't support this feature, it will return a style tag.
 Remember that you need to use Shadow DOM to be able to use Constructable Stylesheets. 
+
+## Performance optimizations
+If you want to help the library to make some optimizations you can use the following attributes:
+-  dynamicAttributes: An array with the names of the attributes that can change. 
+-  staticChildren: It indicates that children never change. If you use static Children, there is no need to use staticChildren or dynamicAttributes on your children.
 
 ## Limitations
 ### Variable assignment
