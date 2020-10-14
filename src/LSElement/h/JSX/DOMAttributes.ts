@@ -147,6 +147,8 @@ export interface DOMAttributes {
     itemType: string;
     itemID: string;
     itemRef: string;
+    dynamicAttributes?: string[];
+    staticChildren?: boolean;
 }
 
 export interface DOMAttributesWithoutMandatoryId extends Partial<DOMAttributesWithMandatoryId>, Partial<AriaAttributes> {}

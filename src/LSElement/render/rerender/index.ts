@@ -22,24 +22,29 @@ export function rerender(self: LSCustomElement) {
     const newChildren = render(self);
     const rootElement = (self.shadowRoot ? self.shadowRoot : self.getRootNode()) as DocumentFragment;
     const parent = self.shadowRoot ? self.shadowRoot : self;
-    updateElement(rootElement, parent as HTMLElement, newChildren);
+    const movedElements = document.createDocumentFragment();
+    updateElement(rootElement, movedElements, parent as HTMLElement, newChildren);
     if (self.componentDidUpdate) {
       self.componentDidUpdate();
     }
   }
 }
 
-export function updateElement(rootElement: DocumentFragment, parent: HTMLElement, newChildrenMap: ElementMapChild[] = []) {
+export function updateElement(rootElement: DocumentFragment, movedElements: DocumentFragment, parent: HTMLElement, newChildrenMap: ElementMapChild[] = []) {
   for (let i = 0; i < newChildrenMap.length; i++) {
-    if (i >= parent.childNodes.length) {
+    if (i >= parent.childNodes.length + movedElements.childNodes.length) {
       insertNewChildren(parent, newChildrenMap.slice(i));
       break;
     } else {
       const newChildMap = newChildrenMap[i];
       if (isAnElementMap(newChildMap)) {//Element map is an element
         let oldChild = parent.childNodes[i] as HTMLElement;
-        if (!nodeIsHTMLElement(oldChild) || oldChild.id !== newChildMap.attrs.id) {
-          oldChild = findElement(rootElement, newChildMap);
+        const isHTMLElement = nodeIsHTMLElement(oldChild);
+        if (!isHTMLElement || oldChild.id !== newChildMap.attrs.id) {
+          if (isHTMLElement) {
+            movedElements.appendChild(oldChild);//Only save keyeble elements
+          }
+          oldChild = findElement(rootElement, movedElements, newChildMap);
           if (oldChild) {//Element in another position -> move to the desired position
             insertChildAt(parent, i, oldChild);
           }
@@ -51,11 +56,11 @@ export function updateElement(rootElement: DocumentFragment, parent: HTMLElement
           }
           updateAttributes(oldChild, newChildMap);
           // You can't tell if the children have changed, it must be the children's responsibility
-          updateChildren(rootElement, oldChild, newChildMap.children);
+          updateChildren(rootElement,movedElements, oldChild, newChildMap.children);
         } else {//Node does not exist
           insertNewChild(parent, i, newChildMap);
         }
-      } 
+      }
       //Element map is a text node
       else if (nodeIsHTMLElement(parent.childNodes[i])) {//Old child is an element - Create a new text node on his position
         insertNewChild(parent, i, newChildMap);
@@ -65,7 +70,6 @@ export function updateElement(rootElement: DocumentFragment, parent: HTMLElement
           parent.childNodes[i].textContent = newChildText;
         }
       }
-      
     }
   }
   removeUnexistentChilds(parent, newChildrenMap);

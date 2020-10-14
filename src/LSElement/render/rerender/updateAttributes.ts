@@ -3,12 +3,11 @@ import { setAttribute } from '../setAttribute';
 import { deepEqual } from './deepEqual';
 
 export function updateAttributes(currentElement: LSCustomElement, newElementMap: ElementMap) {
-  const attributesNames = Object.keys(newElementMap.attrs);
-
+  const attributesNames = newElementMap.attrs.dynamicAttributes || Object.keys(newElementMap.attrs);
   attributesNames.forEach(name => {
     const newValue = newElementMap.attrs[name];
     const oldValue = currentElement.ls.attrsManagedByH[name];
-    if (!name.startsWith('on') && !deepEqual(newValue, oldValue)) {
+    if (!name.startsWith('on') && !deepEqual(newValue, oldValue)) {// Events don't change with jsx
       if (name === 'style') {
         // TODO: remove only listened styles
         currentElement.removeAttribute('style');

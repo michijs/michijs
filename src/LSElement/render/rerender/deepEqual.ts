@@ -10,8 +10,7 @@ export function deepEqual(object1, object2) {
       return object1.toString() === object2.toString();
     }
     case type === 'object': {
-      const areObjects = isObject(object1) && isObject(object2);
-      if (areObjects) {
+      if (object1 !== null && object2 !== null) {
         const keys1 = Object.keys(object1);
         const keys2 = Object.keys(object2);
 
@@ -20,21 +19,13 @@ export function deepEqual(object1, object2) {
         }
 
         for (const key of keys1) {
-          const val1 = object1[key];
-          const val2 = object2[key];
-
-          const areObjects = isObject(val1) && isObject(val2);
-          if (areObjects && !deepEqual(val1, val2) ||
-            !areObjects && val1 !== val2) {
+          if (!deepEqual(object1[key], object2[key])) {
             return false;
           }
         }
         return true;
-      } return false;
+      } return object1 === object2;//One of them is null or both
     }
     default: return object1 === object2;
   }
-}
-function isObject(object) {
-  return object != null && typeof object === 'object';
 }
