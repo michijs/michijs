@@ -1,6 +1,6 @@
 import { createElement } from './createElement';
-import { ElementMap } from '../types';
+import { RenderResult } from '../types';
 
-export function renderFunctionalComponent(elementMap: ElementMap){
+export function renderFunctionalComponent(elementMap: RenderResult){
   return createElement(elementMap);
 }
