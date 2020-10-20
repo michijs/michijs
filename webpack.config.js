@@ -2,6 +2,7 @@ var path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const { ESBuildPlugin } = require('esbuild-loader')
 
 const commonConfig = {
     module: {
@@ -23,15 +24,20 @@ const commonConfig = {
             },
             {
                 test: /\.tsx?$/,
-                use: 'ts-loader',
-                exclude: /node_modules/,
+                loader: 'esbuild-loader',
+                options: {
+                    loader: 'tsx',
+                    target: 'es2019',
+                    jsxFactory: 'h.createElement',
+                    jsxFragment: 'h.Fragment'
+                },
             },
             {
-              test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/i,
-              loader: 'url-loader',
-              options: {
-                limit: 8192,
-              },
+                test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/i,
+                loader: 'url-loader',
+                options: {
+                    limit: 8192,
+                },
             },
         ],
     },
@@ -40,6 +46,7 @@ const commonConfig = {
         new HtmlWebpackPlugin({
             template: 'tests/index.html'
         }),
+        new ESBuildPlugin()
     ],
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
