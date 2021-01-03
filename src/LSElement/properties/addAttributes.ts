@@ -1,13 +1,15 @@
 import { LSCustomElement } from '../types';
 import { setStandardAttribute } from '../utils/setStandardAttribute';
 import { definePropertyFromStore } from './definePropertyFromStore';
+import { formatToKebabCase } from '../utils/formatToKebabCase';
 
 export function addAttributes(self: LSCustomElement) {
-  self.lsStatic.attributes.forEach(propertyKey => {
+  self.lsStatic.attributes.concat(self.lsStatic.reflectedAttributes).forEach(propertyKey => {
     definePropertyFromStore(self, propertyKey);
-  });
-  self.lsStatic.reflectedAttributes.forEach(propertyKey => {
-    definePropertyFromStore(self, propertyKey);
+    const standarizedAttributeName = formatToKebabCase(propertyKey);
+    if (propertyKey !== standarizedAttributeName) {
+      definePropertyFromStore(self, standarizedAttributeName, propertyKey);
+    }
   });
 
   // Not standarized name
