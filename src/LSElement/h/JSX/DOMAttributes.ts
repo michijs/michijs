@@ -1,3 +1,4 @@
+import { CSSProperties } from '../../../LSElement/types';
 import { AriaAttributes } from './AriaAttributes';
 
 export interface DOMAttributes {
@@ -5,7 +6,7 @@ export interface DOMAttributes {
     acceptCharset: string;
     accessKey: string;
     action: string;
-    allowFullScreen: boolean;
+    allowfullscreen: boolean;
     allowTransparency: boolean;
     alt: string;
     as: string;
@@ -118,7 +119,7 @@ export interface DOMAttributes {
     srcSet: string;
     start: number;
     step: number | string;
-    style: Partial<CSSStyleDeclaration>;
+    style: CSSProperties;
     summary: string;
     tabIndex: number;
     target: string;

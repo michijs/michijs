@@ -1,8 +1,9 @@
 export { h } from './LSElement/h';
 export { AutonomousCustomElement } from './LSElement/decorators/AutonomousCustomElement';
 export { CustomizedBuiltInElement } from './LSElement/decorators/CustomizedBuiltInElement';
-export { Attribute, Child, EventDispatcher, Redux } from './LSElement/decorators/PropertyDecorators';
-export { AdoptedStyle } from './LSElement/adoptedStyleSheets/AdoptedStyle';
+export * from './LSElement/decorators/PropertyDecorators';
+export * from './LSElement/decorators/MethodDecorators';
+export * from './LSElement/components';
 export type { LSCustomElement } from './LSElement/types';
 export type { HTMLAttributes, HTMLAttributesWithMandatoryId } from './LSElement/h/JSX/HTMLAttributes';
 export type { SVGAttributes, SVGAttributesWithMandatoryId } from './LSElement/h/JSX/SVGAttributes';
@@ -13,4 +14,4 @@ export { IdGenerator } from './LSElement/classes/IdGenerator';
 export { CustomElementWrapper } from './LSElement/wrappers/CustomElementWrapper';
 import './LSElement/h/global';
 import './LSElement/h/external';
-export {useStore} from './LSElement/hooks/useStore';
+export * from './LSElement/hooks';

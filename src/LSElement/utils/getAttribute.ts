@@ -1,7 +1,7 @@
-import { standardizePropertyName } from '../properties/standardizePropertyName';
+import { formatToKebabCase } from './formatToKebabCase';
 
 export function getAttribute(self: Element, key: string) {
-  const formattedKey = standardizePropertyName(key);
+  const formattedKey = formatToKebabCase(key);
   const newValue = self.getAttribute(formattedKey);
   return getAttributeValue(newValue);
 }

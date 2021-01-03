@@ -2,7 +2,7 @@ import type { LSCustomElement, ElementMap } from '../types';
 import { validateElement } from './validateElement';
 
 export function render(self: LSCustomElement) {
-  const renderResult = self.render();
+  const renderResult = self.render?.();
   if (renderResult) {
     const renderResultAsArray = !Array.isArray(renderResult) ? [renderResult] : renderResult;
     return processRenderResult(renderResultAsArray);

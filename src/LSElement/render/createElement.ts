@@ -1,4 +1,4 @@
-import { ElementMapChild, LSNode } from '../types';
+import { ElementMapChild, LSCustomElement, LSNode } from '../types';
 import { createTextNodeContent } from './createTextNodeContent';
 import { insertNewChildren } from './insertNewChildren';
 import { isAnElementMap } from './isAnElementMap';
@@ -26,15 +26,13 @@ export function createElement(elementMap: ElementMapChild, isSVGParam?: boolean)
       if (name.startsWith('on') && typeof value === 'function') {
         element.addEventListener(name.substr(2), value);
       } else {
-        setAttribute(element as Element, name, value);
+        setAttribute(element as LSCustomElement, name, value);
       }
     });
-    if (!element.ls) {
-      element.ls = {};
-    }
+    element.ls = element.ls || {};
     element.ls.attrsManagedByH = elementMap.attrs;
     if (elementMap.children.length > 0) {
-      insertNewChildren(element as Element,elementMap.children, isSVG);
+      insertNewChildren(element as Element, elementMap.children, isSVG);
     }
   } else {
     element = document.createTextNode(createTextNodeContent(elementMap));

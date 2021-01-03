@@ -1,34 +1,48 @@
-import { CaseReducer, createSlice, createStore, PayloadAction } from '@reduxjs/toolkit';
+import { ChangeFunction, Store } from '../types';
+import { deepEqual } from '../utils/deepEqual';
 
-const setStateReducer: CaseReducer<any, PayloadAction<any>> = (state, action) => {
-  if (typeof action.payload === 'object') {
-    const newState = state;
-    Object.keys(action.payload).forEach(key => {
-      newState[key] = action.payload[key];
+export function useStore<T extends object>(initialState: T): Store<T> {
+  const listeners: Array<ChangeFunction> = [];
+  const listenersOnFinishChanges: Array<() => any> = [];
+  let pendingChanges = 0;
+
+  function onChange(propertyKey: string, newValue: any, oldValue: any) {
+    pendingChanges++;
+    listeners.forEach(listener => {
+      listener(propertyKey, newValue, oldValue);
     });
-    return newState;
-  }
-  return action.payload;
-};
-
-export function useStore<T>(initialState: T): [() => T, (payload: T) => void] {
-  const AttributesSlice = createSlice({
-    name: 'AttributesSlice',
-    initialState,
-    reducers: {
-      setStateAction: setStateReducer
+    pendingChanges--;
+    if (pendingChanges === 0) {
+      listenersOnFinishChanges.forEach(listener => {
+        listener();
+      });
     }
-  });
+  }
 
-  const { reducer, actions } = AttributesSlice;
+  const state = initialState;
 
-  const { setStateAction } = actions;
+  function getState() {
+    return state;
+  }
 
-  const store = createStore(reducer);
+  function setState(newState: Partial<T>) {
+    Object.keys(newState).forEach(propertyKey => {
+      const oldValue = getState()[propertyKey];
+      state[propertyKey] = newState[propertyKey];
+      const newValue = newState[propertyKey];
+      if (!deepEqual(newValue, oldValue)) {
+        onChange(propertyKey, newValue, oldValue);
+      }
+    });
+  }
 
-  const setState = (payload: T) => {
-    store.dispatch(setStateAction(payload));
-  };
+  function subscribe(listener: ChangeFunction) {
+    listeners.push(listener);
+  }
 
-  return [store.getState, setState];
+  function onFinishChanges(listener: () => any) {
+    listenersOnFinishChanges.push(listener);
+  }
+
+  return { getState, setState, subscribe, onFinishChanges };
 }

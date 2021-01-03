@@ -16,7 +16,7 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "jsx": "react",
-        "reactNamespace": "h"
+        "reactNamespace": "h",
     },
     "include": [
         "src"

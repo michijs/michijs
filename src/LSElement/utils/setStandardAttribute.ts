@@ -1,8 +1,8 @@
 import { LSCustomElement } from '../types';
-import { standardizePropertyName } from '../properties/standardizePropertyName';
 import { setAttributeValue } from './setAttributeValue';
+import { formatToKebabCase } from './formatToKebabCase';
 
 export function setStandardAttribute(self: LSCustomElement, key: string, newValue: any) {
-  const formattedKey = standardizePropertyName(key);
+  const formattedKey = formatToKebabCase(key);
   setAttributeValue(self, formattedKey, newValue);
 }

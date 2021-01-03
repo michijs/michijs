@@ -1,16 +1,13 @@
 import type { LsStaticAttributesType } from '../types';
 
-export function initLsStatic(ls: LsStaticAttributesType): LsStaticAttributesType {
-  if (ls) {
-    return ls;
-  } 
-  return {
+export function initLsStatic(lsStatic: LsStaticAttributesType): LsStaticAttributesType {
+  return lsStatic ?? {
     stores: [],
-    elements: [],
-    observedAttributes: [],
-    eventsDispatchers: [],
+    reflectedAttributes: [],
+    attributes: [],
+    observers: [],
+    storedAttributes: [],
     tag: undefined,
     extends: undefined
   };
-  
 }

@@ -1,48 +1,58 @@
-import { Store } from 'redux';
+import { Properties } from 'csstype';
 
 export type AttributeOptionsType = {
-    onChange?: string;
     reflect?: boolean;
 }
 
-export type ObservedAttributesType = {
-    propertyName: string,
-    options?: AttributeOptionsType
-}
+export type StoredAttributeOptionsType = {
+    key: string;
+    method?: 'localStorage' | 'sessionStorage';
+} & AttributeOptionsType
 
-export type ElementsType = {
-    propertyName: string,
-    id: string
-};
+export type EventDispatcherOptionsType = Omit<CustomEventInit, 'detail'>
 
-export type EventsDispatchersType = {
-    propertyName: string,
-    eventInit?: Omit<CustomEventInit, 'detail'>
+export type StoredAttributeType = {
+    propertyKey: string,
+    options?: Omit<StoredAttributeOptionsType, 'reflect'>
 }
 
 export type StoresType = {
-    propertyName: string,
-    store: Store
+    propertyKey: string,
+    store: Store<any>
+}
+
+export type ObserverType = {
+    observedProperty: string,
+    observerName: string,
 }
 
 export type LsStaticAttributesType = {
     stores: StoresType[],
-    elements: ElementsType[],
-    observedAttributes: ObservedAttributesType[],
-    eventsDispatchers: EventsDispatchersType[],
+    storedAttributes: StoredAttributeType[],
+    reflectedAttributes: string[],
+    attributes: string[],
+    observers: ObserverType[],
     tag: string;
     extends: string;
 }
 
-type ComputedReflectedAttribute = { [attribute: string]: any; }
-type AdoptedStyleSheet = { id: string, value: CSSStyleSheet };
+export type AdoptedStyleSheet = { id: string, value: CSSStyleSheet };
 export type ElementMap = { tag: string, attrs: { [attribute: string]: any }, children: ElementMapChild[] };
 export type ElementMapChild = ElementMap | string;
+export type Store<T> = { 
+    getState?: () => T, 
+    subscribe?: (listener: ChangeFunction) => any,
+    onFinishChanges?: (listener: () => void) => any,
+    setState?: (newState: Partial<T>) => void
+}
+export type WindowEventListener = (event: any) => void;
 
 export type LsAttributesType = {
     alreadyRendered?: boolean,
     attrsManagedByH?: { [attribute: string]: any },
     adoptedStyleSheets?: AdoptedStyleSheet[],
+    stateStore?: Store<any>,
+    windowEventListeners?: WindowEventListener[],
 }
 
 export type LSNode = Node & { ls?: LsAttributesType }
@@ -59,9 +69,25 @@ export interface LSCustomElement extends HTMLElement {
     componentDidUnmount?(): void,
     componentWillUpdate?(): void,
     componentDidUpdate?(): void,
-    componentWillReceiveAttribute?: (name: string, oldValue, newValue) => void;
-    computedReflectedAttributes?: () => ComputedReflectedAttribute;
+    componentWillReceiveAttribute?: (name: string, newValue, oldValue) => void;
+    computedReflectedAttributes?: () => { [attribute: string]: any; };
     render?(): RenderResult;
 }
 
-export type CallbackType = (propertyName: string, newValue: any, oldValue: any) => void;
+export type CSSProperties = Properties & { [selector: string]: string };
+
+export type AdoptedStyleChild = string | CSSStyleSheet;
+
+export type ChangeFunction = (propertyKey?: string | number | symbol, newValue?: any, oldValue?: any) => any;
+
+export type StorageLocalChangeEventType = { key: string, newValue: any };
+
+export type CustomizedBuiltInElementConfig = {
+    tag?: string;
+    extends: keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap;
+}
+
+export type AutonomousCustomElementConfig = {
+    tag?: string;
+    shadow?: false | 'open' | 'closed';
+}

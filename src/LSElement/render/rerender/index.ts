@@ -14,20 +14,14 @@ import { nodeIsHTMLElement } from './nodeIsHTMLElement';
 import { insertNewChildren } from '../insertNewChildren';
 
 export function rerender(self: LSCustomElement) {
-  if (self.ls.alreadyRendered) {
-    updateComputedReflectedAttributes(self);
-    if (self.componentWillUpdate) {
-      self.componentWillUpdate();
-    }
-    const newChildren = render(self);
-    const rootElement = (self.shadowRoot ? self.shadowRoot : self.getRootNode()) as DocumentFragment;
-    const parent = self.shadowRoot ? self.shadowRoot : self;
-    const movedElements = document.createDocumentFragment();
-    updateElement(rootElement, movedElements, parent as HTMLElement, newChildren);
-    if (self.componentDidUpdate) {
-      self.componentDidUpdate();
-    }
-  }
+  updateComputedReflectedAttributes(self);
+  self.componentWillUpdate?.();
+  const newChildren = render(self);
+  const rootElement = (self.shadowRoot ? self.shadowRoot : self.getRootNode()) as DocumentFragment;
+  const parent = self.shadowRoot ? self.shadowRoot : self;
+  const movedElements = document.createDocumentFragment();
+  updateElement(rootElement, movedElements, parent as HTMLElement, newChildren);
+  self.componentDidUpdate?.();
 }
 
 export function updateElement(rootElement: DocumentFragment, movedElements: DocumentFragment, parent: HTMLElement, newChildrenMap: ElementMapChild[] = []) {
@@ -56,7 +50,7 @@ export function updateElement(rootElement: DocumentFragment, movedElements: Docu
           }
           updateAttributes(oldChild, newChildMap);
           // You can't tell if the children have changed, it must be the children's responsibility
-          updateChildren(rootElement,movedElements, oldChild, newChildMap.children);
+          updateChildren(rootElement, movedElements, oldChild, newChildMap.children);
         } else {//Node does not exist
           insertNewChild(parent, i, newChildMap);
         }

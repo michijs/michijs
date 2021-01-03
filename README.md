@@ -9,7 +9,7 @@ If you want a library that:
 
 - Uses standard APIs to build web components
 
-- Uses [Redux](https://redux.js.org/introduction/getting-started) as a default Flux store
+- Can use stores like [Redux](https://redux.js.org/introduction/getting-started)
 
 - Uses [TypeScript](https://www.typescriptlang.org) for typing
 
@@ -42,14 +42,15 @@ LS Element custom elements are plain ES6/TypeScript classes with some decorator 
 New components can be created using the `.tsx` extension, such as `MyCounter.tsx`.
 
 ```tsx
-import { AutonomousCustomElement, h, EventDispatcher, CustomEventDispatcher, LSCustomElement, HTMLAttributes, Attribute, CustomElementWrapper, AdoptedStyle } from '@lsegurado/ls-element';
+import { AutonomousCustomElement, Observer, h, EventDispatcher, CustomEventDispatcher, LSCustomElement, HTMLAttributes, Attribute, CustomElementWrapper, AdoptedStyle } from '@lsegurado/ls-element';
 import style from './index.css';
 
 @AutonomousCustomElement()
 export class MyCounter extends HTMLElement implements LSCustomElement {
-	@Attribute({ onChange: 'onChangeCount' }) count = 0;
+	@Attribute() count = 0;
 	@EventDispatcher() countChanged: CustomEventDispatcher<number>;
 
+	@Observer('count')
 	onChangeCount(newValue: number, _oldValue: number) {
 	  this.countChanged.dispatch(newValue);
 	}
@@ -140,13 +141,19 @@ For example MyCounter will be generated as my-counter.
 
 ### Property Decorators
 
-
 | Decorator | Description  |
 |--|--|
 | `@Attribute()` | Allows to define an attribute. It can be [reflected](https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr) and follows the Kebab case. |
+| `@StoredAttribute()` | Allows to use storages (like [LocalStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) or [SessionStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage)) and synchronizes the attribute between windows. |
 | `@EventDispatcher()` | Allows to define an [event](https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events) to his parent and triggering it easily. It will be defined using Lower case. For example countChanged will be registered as countchanged. |
-| `@Redux()` | Allows you to use Redux stores and update the DOM when a change occurs in the store. |
+| `@Store()` | Allows to use stores (like Redux) and update the DOM when a change occurs in the store. |
 | `@Child()` | Gets a reference to an element with his id. |
+
+### Method Decorators
+
+| Decorator | Description  |
+|--|--|
+| `@Observer()` | Runs the decorated function once the attribute changes its value. |
 
 ### Hooks
 
@@ -154,7 +161,7 @@ For example MyCounter will be generated as my-counter.
 |--|--|
 | `componentWillMount()` | This method is called right before a component mounts. |
 | `componentDidMount()` | This method is called after the component has mounted. |
-| `componentWillReceiveAttribute()` | This method is called before a component does anything with a new attribute. |
+| `componentWillReceiveAttribute()` | This method is called before a component does anything with an attribute. |
 | `componentWillUpdate()` | This method is called before re-rendering occurs. |
 | `componentDidUpdate()` | This method is called after re-rendering occurs. |
 | `componentDidUnmount()` | This method is called after a component is removed from the DOM. |
@@ -182,9 +189,9 @@ this.array = [...this.array, 4]
 
 For objects:
 ```tsx
-@Attribute() xd2a = { id: 1, text: 'Hello' };
+@Attribute() object = { id: 1, text: 'Hello' };
 //Changing text
-this.xd2a = {...this.xd2a, text: "World"}
+this.object = {...this.object, text: "World"}
 ```
 
 ## Polyfills

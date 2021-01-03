@@ -4,7 +4,7 @@ import { SVGDOMAttributes } from '../../h/JSX/SVGDOMAttributes';
 type AllAttributes = SVGDOMAttributes & AriaAttributes & { id: string };
 type AllAttributesType = { [K in keyof Omit<AllAttributes, 'style'>]: null }
 
-class AuxiliarAllDomAttributes implements AllAttributesType {
+class AuxiliarAllDomAttributes implements AllAttributesType {//TODO: Candidate to be removed
     ['aria-activedescendant'] = null;
     ['aria-atomic'] = null;
     ['aria-autocomplete'] = null;
@@ -298,7 +298,7 @@ class AuxiliarAllDomAttributes implements AllAttributesType {
     acceptCharset = null;
     accessKey = null;
     action = null;
-    allowFullScreen = null;
+    allowfullscreen = null;
     allowTransparency = null;
     alt = null;
     as = null;

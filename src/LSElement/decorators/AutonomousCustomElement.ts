@@ -1,26 +1,14 @@
 import { formatToKebabCase } from '../utils/formatToKebabCase';
-import type { LSCustomElement } from '../types';
+import type { AutonomousCustomElementConfig, LSCustomElement } from '../types';
 import { initLsStatic } from '../properties/initLsStatic';
-import { addEventDispatchers } from '../properties/addEventDispatchers';
-import { addElementsReferences } from '../properties/addElementsReferences';
-import { addReduxStores } from '../properties/addReduxStores';
-import { getObservedAttributes } from '../properties/createGetterAndSetterForObservedAttributes';
-import { connectedCallback } from '../callbacks/connectedCallback';
-import { disconnectedCallback } from '../callbacks/disconnectedCallback';
-import { attributeChangedCallback } from '../callbacks/attributeChangedCallback';
+import { initObservedAttributes } from '../properties/initObservedAttributes';
+import { connectedCallback } from './shared/connectedCallback';
+import { disconnectedCallback } from './shared/disconnectedCallback';
+import { attributeChangedCallback } from './shared/attributeChangedCallback';
+import { elementConstructor } from './shared/elementConstructor';
+import { validateTag } from './shared/validateTag';
 
-interface AutonomousCustomElementConfig {
-  tag?: string;
-  shadow?: false | 'open' | 'closed';
-}
-
-const validateTag = (tag: string) => {
-  if (tag.indexOf('-') <= 0) {
-    throw new Error('You need at least 1 dash in the custom element name!');
-  }
-};
-
-export const AutonomousCustomElement = function (config?: AutonomousCustomElementConfig) {
+export function AutonomousCustomElement(config?: AutonomousCustomElementConfig) {
   return function (element: CustomElementConstructor) {
     const tag = config?.tag || formatToKebabCase(element.name);
     validateTag(tag);
@@ -37,17 +25,14 @@ export const AutonomousCustomElement = function (config?: AutonomousCustomElemen
           const shadowMode = config?.shadow || 'open';
           self.attachShadow({ mode: shadowMode });
         }
-        self.ls = self.ls || {};
-        addEventDispatchers(self);
-        addReduxStores(self);
-        addElementsReferences(self);
+        elementConstructor(self);
       }
 
       attributeChangedCallback(name: string, oldValue, newValue) {
         attributeChangedCallback(this, name, oldValue, newValue);
       }
 
-      static get observedAttributes() { return getObservedAttributes(element.prototype.lsStatic); }
+      static get observedAttributes() { return initObservedAttributes(element.prototype.lsStatic); }
 
       connectedCallback() {
         connectedCallback(this);
@@ -59,6 +44,5 @@ export const AutonomousCustomElement = function (config?: AutonomousCustomElemen
     }
 
     window.customElements.define(tag, newClass);
-
   };
-};
+}
