@@ -12,15 +12,17 @@ import { createTextNodeContent } from '../createTextNodeContent';
 import { findElement } from './findElement';
 import { nodeIsHTMLElement } from './nodeIsHTMLElement';
 import { insertNewChildren } from '../insertNewChildren';
+import { getRootNode } from '../getRootNode';
+import { getMountPoint } from '../getMountPoint';
 
 export function rerender(self: LSCustomElement) {
   updateComputedReflectedAttributes(self);
   self.componentWillUpdate?.();
   const newChildren = render(self);
-  const rootElement = (self.shadowRoot ? self.shadowRoot : self.getRootNode()) as DocumentFragment;
-  const parent = self.shadowRoot ? self.shadowRoot : self;
+  const rootElement = getRootNode(self);
+  const parent = getMountPoint(self) as HTMLElement;
   const movedElements = document.createDocumentFragment();
-  updateElement(rootElement, movedElements, parent as HTMLElement, newChildren);
+  updateElement(rootElement, movedElements, parent, newChildren);
   self.componentDidUpdate?.();
 }
 
