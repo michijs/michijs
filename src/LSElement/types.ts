@@ -62,7 +62,7 @@ export type RootElement = LSCustomElement | ShadowRoot;
 export type RenderResult = ElementMap | ElementMap[] | any;
 
 export interface LSCustomElement extends HTMLElement {
-    _shadowRoot: ShadowRoot;
+    _shadowRoot?: ShadowRoot;
     lsStatic?: LsStaticAttributesType,
     ls?: LsAttributesType,
     componentWillMount?(): void,
