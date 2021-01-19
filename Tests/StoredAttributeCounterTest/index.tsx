@@ -12,13 +12,21 @@ export class StoredAttributeCounter extends HTMLElement implements LSCustomEleme
         this.countChanged.dispatch(newValue);
     }
 
+    decrementCount(){
+        this.count--;
+    }
+
+    incrementCount(){
+        this.count++;
+    }
+
     render() {
         return (
             <>
                 <AdoptedStyle parentRef={this} id="style">{css}</AdoptedStyle>
-                <button id="decrement-count" onpointerup={() => this.count--}>-</button>
+                <button id="decrement-count" onpointerup={this.decrementCount}>-</button>
                 <span id='count'>{this.count}</span>
-                <button id="increment-count" onpointerup={() => this.count++}>+</button>
+                <button id="increment-count" onpointerup={this.incrementCount}>+</button>
             </>
         );
     }

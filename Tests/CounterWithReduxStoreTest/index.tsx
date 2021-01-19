@@ -20,13 +20,21 @@ export class CounterWithReduxStore extends HTMLElement implements LSCustomElemen
         }
     }
 
+    decrementCount(){
+        store.dispatch(decrement())
+    }
+
+    incrementCount(){
+        store.dispatch(increment())
+    }
+
     render() {
         return (
             <>
                 <AdoptedStyle parentRef={this} id="style">{css}</AdoptedStyle>
-                <button id="decrement-count" onpointerup={() => store.dispatch(decrement())}>-</button>
+                <button id="decrement-count" onpointerup={this.decrementCount}>-</button>
                 <span id='count'>{this.reduxStore.counterStore.count}</span>
-                <button id="increment-count" onpointerup={() => store.dispatch(increment())}>+</button>
+                <button id="increment-count" onpointerup={this.incrementCount}>+</button>
             </>
         );
     }

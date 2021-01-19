@@ -7,10 +7,11 @@ import { convertChildToCSSText } from './convertersToCSSText/convertChildToCSSTe
 import { updateStyleSheet } from './updateStyleSheet';
 import { createStyleSheet } from './createStyleSheet';
 import { findStyleSheet } from './findStyleSheet';
+import { getShadowRoot } from '../../utils/getShadowRoot';
 
 export function AdoptedStyle({ parentRef, ...attrs }: { parentRef: LSCustomElement } & Omit<HTMLAttributesWithMandatoryId,'media'>, children: (AdoptedStyleChild) | (AdoptedStyleChild)[]) {
   const child = children[0] || children;
-  if (parentRef.shadowRoot && supportsAdoptingStyleSheets) {
+  if (getShadowRoot(parentRef) && supportsAdoptingStyleSheets) {
     parentRef.ls.adoptedStyleSheets = parentRef.ls.adoptedStyleSheets || [];
     const currentStyleSheet: AdoptedStyleSheet = findStyleSheet(parentRef, attrs.id);
     if (currentStyleSheet) {

@@ -62,6 +62,7 @@ export type RootElement = LSCustomElement | ShadowRoot;
 export type RenderResult = ElementMap | ElementMap[] | any;
 
 export interface LSCustomElement extends HTMLElement {
+    _shadowRoot: ShadowRoot;
     lsStatic?: LsStaticAttributesType,
     ls?: LsAttributesType,
     componentWillMount?(): void,
@@ -89,5 +90,5 @@ export type CustomizedBuiltInElementConfig = {
 
 export type AutonomousCustomElementConfig = {
     tag?: string;
-    shadow?: false | 'open' | 'closed';
-}
+    shadow?: false | ShadowRootMode;
+} & Omit<ShadowRootInit, 'mode'>

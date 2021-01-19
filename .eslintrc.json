@@ -22,7 +22,8 @@
             {
                 "extendDefaults": true,
                 "types": {
-                    "object": false
+                    "object": false,
+                    "Function": false
                 }
             }
         ],

@@ -1,3 +1,5 @@
+import { isAFunction } from '../typeWards/IsAFunction';
+
 export interface FunctionComponent {
   (attrs: any, ...children): HTMLElement;
 }
@@ -8,7 +10,7 @@ export const h = {
     if (tag === undefined) {
       return children;
     }
-    if (typeof tag === 'function') {
+    if (isAFunction(tag)) {
       return tag(attrs, children);
     }
     const processedChildren = [];

@@ -10,20 +10,25 @@ import { validateTag } from './shared/validateTag';
 
 export function AutonomousCustomElement(config?: AutonomousCustomElementConfig) {
   return function (element: CustomElementConstructor) {
-    const tag = config?.tag || formatToKebabCase(element.name);
+    const {tag: configTag, shadow, ...otherShadowOptions} = config || {};
+    const tag = configTag || formatToKebabCase(element.name);
     validateTag(tag);
 
     element.prototype.lsStatic = initLsStatic(element.prototype.lsStatic);
     element.prototype.lsStatic.tag = tag;
 
     class newClass extends element {
+      _shadowRoot: ShadowRoot;
+
       constructor() {
         super();
         const self: LSCustomElement = this;
-        const useShadow = config?.shadow !== false;
-        if (useShadow) {
-          const shadowMode = config?.shadow || 'open';
-          self.attachShadow({ mode: shadowMode });
+        if (shadow !== false) {
+          const shadowMode = shadow || 'open';
+          const attachedShadow = self.attachShadow({ mode: shadowMode, ...otherShadowOptions });
+          if (shadowMode === 'closed') {
+            self._shadowRoot = attachedShadow;
+          }
         }
         elementConstructor(self);
       }

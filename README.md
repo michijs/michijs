@@ -55,13 +55,21 @@ export class MyCounter extends HTMLElement implements LSCustomElement {
 	  this.countChanged.dispatch(newValue);
 	}
 
+	decrementCount(){
+	  this.count--;
+	}
+
+	incrementCount(){
+	  this.count++;
+	}
+
 	render() {
 	  return (
 	    <>
 	      <AdoptedStyle parentRef={this} id="style">{style}</AdoptedStyle>
-	      <button id="decrement-count" onpointerup={() => this.count--}>-</button>
-	      <span id="count">{this.count.toString()}</span>
-	      <button id="increment-count" onpointerup={() => this.count++}>+</button>
+	      <button id="decrement-count" onpointerup={this.decrementCount}>-</button>
+	      <span id="count">{this.count}</span>
+	      <button id="increment-count" onpointerup={this.incrementCount}>+</button>
 	    </>
 	  );
 	}
@@ -114,7 +122,7 @@ render() {
     return (
         <>
             <style {...this.idGen.get('style')}>{style}</style>
-            <button {...this.idGen.get('decrement-count')} onpointerup={() => this.count--}>-</button>
+            <button {...this.idGen.get('decrement-count')} onpointerup={this.decrementCount}>-</button>
         </>
     );
 }

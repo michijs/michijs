@@ -7,6 +7,6 @@ export function executeFirstRender(self: LSCustomElement) {
   const renderResult = render(self);
 
   if (renderResult) {
-    insertNewChildren(getMountPoint(self), renderResult);
+    insertNewChildren(self, getMountPoint(self), renderResult);
   }
 }
