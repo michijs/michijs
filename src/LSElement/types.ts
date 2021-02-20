@@ -36,7 +36,6 @@ export type LsStaticAttributesType = {
     extends: string;
 }
 
-export type AdoptedStyleSheet = { id: string, value: CSSStyleSheet };
 export type ElementMap = { tag: string, attrs: { [attribute: string]: any }, children: ElementMapChild[] };
 export type ElementMapChild = ElementMap | string;
 export type Store<T> = { 
@@ -47,10 +46,18 @@ export type Store<T> = {
 }
 export type WindowEventListener = (event: any) => void;
 
+export type StyleSheetContainer = {
+    adoptedStyleSheets: CSSStyleSheet[]
+}
+
+export type AdoptedStyleSheetList = {
+    id: string
+} & StyleSheetContainer
+
 export type LsAttributesType = {
     alreadyRendered?: boolean,
     attrsManagedByH?: { [attribute: string]: any },
-    adoptedStyleSheets?: AdoptedStyleSheet[],
+    adoptedStyleSheets?: AdoptedStyleSheetList[],
     stateStore?: Store<any>,
     windowEventListeners?: WindowEventListener[],
 }
@@ -83,12 +90,16 @@ export type ChangeFunction = (propertyKey?: string | number | symbol, newValue?:
 
 export type StorageLocalChangeEventType = { key: string, newValue: any };
 
-export type CustomizedBuiltInElementConfig = {
+export type ShadowOption = false | ShadowRootMode;
+export type OtherShadowOptions = Omit<ShadowRootInit, 'mode'>;
+
+export type CustomElementConfig = {
     tag?: string;
+    shadow?: ShadowOption;
+} & OtherShadowOptions
+
+export type CustomizedBuiltInElementConfig = CustomElementConfig & {
     extends: keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap;
 }
 
-export type AutonomousCustomElementConfig = {
-    tag?: string;
-    shadow?: false | ShadowRootMode;
-} & Omit<ShadowRootInit, 'mode'>
+export type AutonomousCustomElementConfig = CustomElementConfig

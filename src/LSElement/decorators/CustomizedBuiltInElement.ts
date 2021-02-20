@@ -1,5 +1,5 @@
 import { formatToKebabCase } from '../utils/formatToKebabCase';
-import type { CustomizedBuiltInElementConfig, LSCustomElement } from '../types';
+import type { CustomizedBuiltInElementConfig } from '../types';
 import { initLsStatic } from '../properties/initLsStatic';
 import { initObservedAttributes } from '../properties/initObservedAttributes';
 import { connectedCallback } from './shared/connectedCallback';
@@ -11,7 +11,8 @@ import { validateTag } from './shared/validateTag';
 
 export function CustomizedBuiltInElement(config: CustomizedBuiltInElementConfig) {
   return function (element: CustomElementConstructor) {
-    const tag = config?.tag || formatToKebabCase(element.name);
+    const {tag: configTag, shadow, ...otherShadowOptions} = config || {};
+    const tag = configTag || formatToKebabCase(element.name);
     validateTag(tag);
 
     element.prototype.lsStatic = initLsStatic(element.prototype.lsStatic);
@@ -21,8 +22,7 @@ export function CustomizedBuiltInElement(config: CustomizedBuiltInElementConfig)
     class newClass extends element {
       constructor() {
         super();
-        const self: LSCustomElement = this;
-        elementConstructor(self);
+        elementConstructor(this, shadow || false, otherShadowOptions);
       }
 
       attributeChangedCallback(name: string, oldValue, newValue) {

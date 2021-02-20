@@ -8,9 +8,9 @@ export function EventDispatcher(eventInitOptions?: EventDispatcherOptionsType): 
         return new CustomEventDispatcher(
           propertyKey,
           this,
-                    eventInitOptions?.bubbles,
-                    eventInitOptions?.cancelable,
-                    eventInitOptions?.composed
+          eventInitOptions?.bubbles,
+          eventInitOptions?.cancelable,
+          eventInitOptions?.composed
         );
       },
     };

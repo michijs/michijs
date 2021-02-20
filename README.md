@@ -15,7 +15,7 @@ If you want a library that:
 
 - Uses [JSX](https://es.reactjs.org/docs/introducing-jsx.html) as template language
 
-- Uses [Webpack](https://webpack.js.org) as default bundler
+- Uses [esbuild](https://esbuild.github.io/) as default bundler
 
 - Is reactive
 
@@ -142,7 +142,7 @@ If you are not familiar with decorators please check [this link](https://www.typ
 | Decorator | Description  |
 |--|--|
 | `@AutonomousCustomElement()` | Indicate a class is a [Autonomous custom element](https://developers.google.com/web/fundamentals/web-components/customelements#shadowdom). By default uses Shadow DOM. |
-| `@CustomizedBuiltInElement()` | Indicate a class is a [Customized built-in element](https://developers.google.com/web/fundamentals/web-components/customelements#extendhtml). . You must define the native element tag to extend. Cannot use Shadow DOM. |
+| `@CustomizedBuiltInElement()` | Indicate a class is a [Customized built-in element](https://developers.google.com/web/fundamentals/web-components/customelements#extendhtml). . You must define the native element tag to extend. Only [this elements](https://dom.spec.whatwg.org/#dom-element-attachshadow) are allowed to use Shadow DOM. |
 
 Class decorators allows to define the [custom elements](https://developers.google.com/web/fundamentals/web-components/customelements#define) and are mandatory to build LS elements. By default the tag name will be generated from the class name following the [Kebab case](https://en.wikipedia.org/wiki/Letter_case) but can be defined inside the decorator.
 For example MyCounter will be generated as my-counter.

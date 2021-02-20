@@ -27,7 +27,7 @@ export function createElement<T = LSNode>(self: LSCustomElement | null, elementM
         const value = elementMap.attrs[name];
         if (isAFunction(value) && name.startsWith('on')) {
           if (self) {
-            element.addEventListener(name.substr(2), (ev) => value.apply(self, [ev]));
+            element.addEventListener(name.substr(2), (...args) => value.apply(self, [...args]));
           } else {
             element.addEventListener(name.substr(2), value);
           }

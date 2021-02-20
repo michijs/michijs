@@ -11,9 +11,9 @@
             },
         },
         {
-            "label": "build",
+            "label": "dist",
             "type": "npm",
-            "script": "build",
+            "script": "dist",
             "group": {
                 "kind": "build",
                 "isDefault": true

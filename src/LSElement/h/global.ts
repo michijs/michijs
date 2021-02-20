@@ -1,1 +1,4 @@
-declare module '*.css';
+declare module '*.css' {
+    const css: string | CSSStyleSheet;
+    export = css;
+}

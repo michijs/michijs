@@ -1,5 +1,5 @@
 import { formatToKebabCase } from '../utils/formatToKebabCase';
-import type { AutonomousCustomElementConfig, LSCustomElement } from '../types';
+import type { AutonomousCustomElementConfig } from '../types';
 import { initLsStatic } from '../properties/initLsStatic';
 import { initObservedAttributes } from '../properties/initObservedAttributes';
 import { connectedCallback } from './shared/connectedCallback';
@@ -18,19 +18,9 @@ export function AutonomousCustomElement(config?: AutonomousCustomElementConfig) 
     element.prototype.lsStatic.tag = tag;
 
     class newClass extends element {
-      _shadowRoot: ShadowRoot;
-
       constructor() {
         super();
-        const self: LSCustomElement = this;
-        if (shadow !== false) {
-          const shadowMode = shadow || 'open';
-          const attachedShadow = self.attachShadow({ mode: shadowMode, ...otherShadowOptions });
-          if (shadowMode === 'closed') {
-            self._shadowRoot = attachedShadow;
-          }
-        }
-        elementConstructor(self);
+        elementConstructor(this, shadow || 'open', otherShadowOptions);
       }
 
       attributeChangedCallback(name: string, oldValue, newValue) {

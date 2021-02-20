@@ -6,7 +6,7 @@
         "experimentalDecorators": true,
         "lib": [
             "dom",
-            "es2015"
+            "es2020"
         ],
         "outDir": "dist",
         "moduleResolution": "node",
@@ -16,7 +16,8 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "jsx": "react",
-        "reactNamespace": "h",
+        "jsxFactory": "h.createElement",
+        "jsxFragmentFactory": "h.Fragment"
     },
     "include": [
         "src"
