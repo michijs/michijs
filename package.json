@@ -2,7 +2,7 @@
   "name": "@lsegurado/ls-element",
   "author": "Lucas M. Segurado",
   "license": "MIT",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "files": [
     "dist/"
   ],
