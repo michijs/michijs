@@ -8,7 +8,7 @@ export class StoredAttributeCounter extends HTMLElement implements LSCustomEleme
     @EventDispatcher() countChanged: CustomEventDispatcher<number>;
 
     @Observer('count')
-    onChangeCount(newValue: number, _oldValue: number) {
+    onCountChanged(newValue: number, _oldValue: number) {
         this.countChanged.dispatch(newValue);
     }
 

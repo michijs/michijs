@@ -1,7 +1,8 @@
+import { RenderResult } from '../types';
 import { isAFunction } from '../typeWards/IsAFunction';
 
 export interface FunctionComponent {
-  (attrs: any, ...children): HTMLElement;
+  (attrs: any, ...children): RenderResult;
 }
 
 export const h = {

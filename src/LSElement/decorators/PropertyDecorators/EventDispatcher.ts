@@ -1,17 +1,17 @@
 import { LSCustomElement, EventDispatcherOptionsType } from '../../types';
-import { CustomEventDispatcher } from '../../classes/CustomEventDispatcher';
 
-export function EventDispatcher(eventInitOptions?: EventDispatcherOptionsType): PropertyDecorator {
+export function EventDispatcher(eventInitOptions: EventDispatcherOptionsType = {}): PropertyDecorator {
   return function (_target: LSCustomElement, propertyKey: string) {
+    const { bubbles = true, cancelable = false, composed = undefined } = eventInitOptions;
     return {
       get() {
-        return new CustomEventDispatcher(
-          propertyKey,
-          this,
-          eventInitOptions?.bubbles,
-          eventInitOptions?.cancelable,
-          eventInitOptions?.composed
-        );
+        const element = this;
+        return {
+          dispatch<T>(detail: T) {
+            const event = new CustomEvent(propertyKey.toLowerCase(), { bubbles, cancelable, composed, detail });
+            return element.dispatchEvent(event);
+          }
+        };
       },
     };
   };

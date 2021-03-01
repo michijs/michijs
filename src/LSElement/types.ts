@@ -9,6 +9,8 @@ export type StoredAttributeOptionsType = {
     method?: 'localStorage' | 'sessionStorage';
 } & AttributeOptionsType
 
+export type CustomEventDispatcher<T> = { dispatch: (detail: T) => boolean }
+
 export type EventDispatcherOptionsType = Omit<CustomEventInit, 'detail'>
 
 export type StoredAttributeType = {

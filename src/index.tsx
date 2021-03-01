@@ -9,7 +9,6 @@ export type { HTMLAttributes, HTMLAttributesWithMandatoryId } from './LSElement/
 export type { SVGAttributes, SVGAttributesWithMandatoryId } from './LSElement/h/JSX/SVGAttributes';
 import './LSElement/h/JSXBase';
 export { renderFunctionalComponent } from './LSElement/render/renderFunctionalComponent';
-export { CustomEventDispatcher } from './LSElement/classes/CustomEventDispatcher';
 export { IdGenerator } from './LSElement/classes/IdGenerator';
 export { CustomElementWrapper } from './LSElement/wrappers/CustomElementWrapper';
 import './LSElement/h/global';

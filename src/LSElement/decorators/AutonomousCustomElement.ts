@@ -10,8 +10,7 @@ import { validateTag } from './shared/validateTag';
 
 export function AutonomousCustomElement(config?: AutonomousCustomElementConfig) {
   return function (element: CustomElementConstructor) {
-    const {tag: configTag, shadow, ...otherShadowOptions} = config || {};
-    const tag = configTag || formatToKebabCase(element.name);
+    const {tag = formatToKebabCase(element.name), shadow = 'open', ...otherShadowOptions} = config || {};
     validateTag(tag);
 
     element.prototype.lsStatic = initLsStatic(element.prototype.lsStatic);
@@ -20,7 +19,7 @@ export function AutonomousCustomElement(config?: AutonomousCustomElementConfig) 
     class newClass extends element {
       constructor() {
         super();
-        elementConstructor(this, shadow || 'open', otherShadowOptions);
+        elementConstructor(this, shadow, otherShadowOptions);
       }
 
       attributeChangedCallback(name: string, oldValue, newValue) {

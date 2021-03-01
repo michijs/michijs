@@ -8,7 +8,7 @@ export class SimpleCounter extends HTMLElement implements LSCustomElement {
     @EventDispatcher() countChanged: CustomEventDispatcher<number>;
 
     @Observer('count')
-    onChangeCount(newValue: number, _oldValue: number) {
+    onCountChanged(newValue: number, _oldValue: number) {
         this.countChanged.dispatch(newValue);
     }
 

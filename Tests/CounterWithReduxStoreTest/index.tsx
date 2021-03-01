@@ -10,7 +10,7 @@ export class CounterWithReduxStore extends HTMLElement implements LSCustomElemen
 	@Store(store) reduxStore: StoreType;
 
     @Observer('reduxStore')
-    onChangeCount(newValue: StoreType, _oldValue: StoreType) {
+    onCountChanged(newValue: StoreType, _oldValue: StoreType) {
         this.countChanged.dispatch(newValue.counterStore.count);
     }
 
