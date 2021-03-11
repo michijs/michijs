@@ -1,4 +1,4 @@
-import { GetAttributes, GetMinAndMax, GetType, GetValue } from "../DOMAttributes/utils";
+import { GetAttributes, GetMinAndMax, GetType, GetValue } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 import { Color, DateLocalString, DateString, MonthString, TimeString, Type, WeekString } from "../DOMAttributes/types";
 import { AllAttributes } from "../DOMAttributes/AllAttributes";

@@ -37,6 +37,7 @@ import { link } from './JSX/HTMLElements/link';
 import { map } from './JSX/HTMLElements/map';
 import { meta } from './JSX/HTMLElements/meta';
 import { meter } from './JSX/HTMLElements/meter';
+import { _object } from './JSX/HTMLElements/object';
 
 type LSTag<T extends Partial<GlobalAttributes> = GlobalAttributes, M extends keyof T = 'id'> = Exclude<T, M> & LSAttributes & Required<Pick<T, M>>;
 
@@ -368,6 +369,14 @@ export interface HTMLElements {
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/noscript
      */
     noscript: LSTag<noscript>;
+
+    /**
+     * The HTML <object> element represents an external resource, which can be treated as an image, a nested browsing context, or a resource to be handled by a plugin.
+     * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object
+     */
+    object: LSTag<_object>;
+
+
     /**
      * The HTML <q> element indicates that the enclosed text is a short inline quotation. Most modern browsers implement this by surrounding the text in quotation marks. This element is intended for short quotations that don't require paragraph breaks; for long quotations use the <blockquote> element.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/q

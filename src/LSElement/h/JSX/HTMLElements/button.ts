@@ -1,4 +1,4 @@
-import { GetAttributes, GetType, GetValue } from "../DOMAttributes/utils";
+import { GetAttributes, GetType, GetValue } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 import { GetRoles } from "../DOMAttributes/Utils";
 

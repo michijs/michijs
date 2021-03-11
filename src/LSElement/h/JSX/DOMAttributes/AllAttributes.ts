@@ -452,6 +452,10 @@ export interface AllAttributes {
      */
     translate: YesNo;
     /**
+     * This Boolean attribute indicates if the type attribute and the actual content type of the resource must match to be used.
+     */
+    typemustmatch: boolean;
+    /**
      * Specifies an image as a client-side image map
      */
     usemap: string;

@@ -1,4 +1,4 @@
-import { GetAttributes, GetType } from "../DOMAttributes/utils";
+import { GetAttributes, GetType } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 
 export type link = Partial<GlobalAttributes & GetAttributes<'as'
