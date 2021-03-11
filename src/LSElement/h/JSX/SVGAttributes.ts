@@ -1,5 +1,5 @@
 import { SVGDOMAttributesWithoutMandatoryId, SVGDOMAttributesWithMandatoryId } from './SVGDOMAttributes';
-import { SVGDOMEvents } from './SVGDOMEvents';
+import { SVGDOMEvents } from './DOMEvents/SVGDOMEvents';
 
 export interface SVGAttributes extends SVGDOMAttributesWithoutMandatoryId, SVGDOMEvents { }
 export interface SVGAttributesWithMandatoryId extends SVGDOMAttributesWithMandatoryId, SVGDOMEvents { }

@@ -1,10 +1,10 @@
-import { AriaAttributes } from '../../h/JSX/AriaAttributes';
+import { AriaAttributes } from '../../h/JSX/DOMAttributes/AriaAttributes';
 import { SVGDOMAttributes } from '../../h/JSX/SVGDOMAttributes';
 
 type AllAttributes = SVGDOMAttributes & AriaAttributes & { id: string };
 type AllAttributesType = { [K in keyof Omit<AllAttributes, 'style'>]: null }
 
-class AuxiliarAllDomAttributes implements AllAttributesType {//TODO: Candidate to be removed
+class AuxiliarAllDomAttributes implements AllAttributesType {
     ['aria-activedescendant'] = null;
     ['aria-atomic'] = null;
     ['aria-autocomplete'] = null;

@@ -1,0 +1,1 @@
+export interface GlobalEvents extends Omit<Partial<GlobalEventHandlers>, 'addEventListener' | 'removeEventListener'> { }

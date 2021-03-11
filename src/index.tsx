@@ -4,10 +4,10 @@ export { CustomizedBuiltInElement } from './LSElement/decorators/CustomizedBuilt
 export * from './LSElement/decorators/PropertyDecorators';
 export * from './LSElement/decorators/MethodDecorators';
 export * from './LSElement/components';
-export type { LSCustomElement } from './LSElement/types';
+export type { LSCustomElement, CustomEventDispatcher } from './LSElement/types';
 export type { HTMLAttributes, HTMLAttributesWithMandatoryId } from './LSElement/h/JSX/HTMLAttributes';
 export type { SVGAttributes, SVGAttributesWithMandatoryId } from './LSElement/h/JSX/SVGAttributes';
-import './LSElement/h/JSXBase';
+import './LSElement/h/JSX';
 export { renderFunctionalComponent } from './LSElement/render/renderFunctionalComponent';
 export { IdGenerator } from './LSElement/classes/IdGenerator';
 export { CustomElementWrapper } from './LSElement/wrappers/CustomElementWrapper';

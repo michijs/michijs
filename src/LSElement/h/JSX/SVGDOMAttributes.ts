@@ -1,4 +1,4 @@
-import { AriaAttributes } from './AriaAttributes';
+import { AriaAttributes } from './DOMAttributes/AriaAttributes';
 import { DOMAttributes } from './DOMAttributes';
 
 export interface SVGDOMAttributes extends DOMAttributes {

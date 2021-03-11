@@ -17,7 +17,8 @@ export class LsRootTestElement extends HTMLElement implements LSCustomElement {
     render() {
         return (
             <>
-                <h1 id="SimpleCounter">Simple counter</h1>
+                <a id="test" rel="alternate"></a>
+                {/* <h1 id="SimpleCounter">Simple counter</h1>
                 <SimpleCounter id="SimpleCounterTest" />
                 <SimpleCounter id="SimpleCounterTest2" />
                 <h1 id="CounterWithReduxStore">Counter with redux store</h1>
@@ -32,7 +33,7 @@ export class LsRootTestElement extends HTMLElement implements LSCustomElement {
                 <h1 {...this.idGen.get('builtIn')}>Built-in component</h1>
                 <BuiltInButton {...this.idGen.get('builtInButton')} text="Sample customized button"/>
                 <h1 {...this.idGen.get('arrays')}>Arrays</h1>
-                {this.arrayTest.map(x => <div id={x.toString()} onclick={() => { this.arrayTest = [...this.arrayTest, this.arrayTest.length + 1] }}>{x}</div>)}
+                {this.arrayTest.map(x => <div id={x.toString()} onclick={() => { this.arrayTest = [...this.arrayTest, this.arrayTest.length + 1] }}>{x}</div>)} */}
             </>
         );
     }

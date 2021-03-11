@@ -1,1 +1,0 @@
-export interface DOMEvents extends Omit<Partial<GlobalEventHandlers>, 'addEventListener' | 'removeEventListener'> { }

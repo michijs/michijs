@@ -1,5 +1,3 @@
-import { Properties } from 'csstype';
-
 export type AttributeOptionsType = {
     reflect?: boolean;
 }
@@ -84,7 +82,6 @@ export interface LSCustomElement extends HTMLElement {
     render?(): RenderResult;
 }
 
-export type CSSProperties = Properties & { [selector: string]: string };
 
 export type AdoptedStyleChild = string | CSSStyleSheet;
 
