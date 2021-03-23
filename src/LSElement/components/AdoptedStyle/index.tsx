@@ -1,4 +1,3 @@
-import { HTMLAttributesWithMandatoryId } from '../../h/JSX/HTMLAttributes';
 import { AdoptedStyleChild, LSCustomElement } from '../../types';
 import { h } from '../../h';
 import { supportsAdoptingStyleSheets } from './supportsAdoptingStyleSheets';
@@ -7,8 +6,9 @@ import { convertChildToCSSText } from './convertersToCSSText/convertChildToCSSTe
 import { updateStyleSheet } from './updateStyleSheet';
 import { createStyleSheet } from './createStyleSheet';
 import { getShadowRoot } from '../../utils/getShadowRoot';
+import { HTMLElements } from 'src/LSElement/h/tags/HTMLElements';
 
-export function AdoptedStyle({ parentRef, ...attrs }: { parentRef: LSCustomElement | Document } & Omit<HTMLAttributesWithMandatoryId, 'media'>, children: (AdoptedStyleChild) | (AdoptedStyleChild)[]) {
+export function AdoptedStyle({ parentRef, ...attrs }: { parentRef: LSCustomElement | Document } & HTMLElements['style'], children: (AdoptedStyleChild) | (AdoptedStyleChild)[]) {
   const childrenAsSingleArray: Array<AdoptedStyleChild> = Array.isArray(children[0]) ? children[0] : [children[0]];
 
   // @ts-ignore

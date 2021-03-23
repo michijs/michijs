@@ -1,5 +1,4 @@
 import { LSCustomElement } from '../types';
-import { isCustomElement } from '../utils/isCustomElement';
 import { setAttributeValue } from '../utils/setAttributeValue';
 
 export function setAttribute(element: LSCustomElement, name: string, value: any) {
@@ -7,19 +6,7 @@ export function setAttribute(element: LSCustomElement, name: string, value: any)
     element.removeAttribute('style');
     setStyle(element, value);
   } else {
-    if (isCustomElement(element)) {
-      const blackList = element.lsStatic?.attributes || [];
-      if (!(name in element) && !blackList.includes(name)) {
-        setAttributeValue(element, name, value);
-      } else {
-        try {
-          element[name] = value;
-        } catch (_) {
-        }
-      }
-    } else {
-      setAttributeValue(element, name, value);
-    }
+    setAttributeValue(element, name, value);
   }
 }
 
