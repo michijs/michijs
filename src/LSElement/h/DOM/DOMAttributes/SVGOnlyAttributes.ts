@@ -31,7 +31,7 @@ export interface SVGOnlyAttributes extends SvgPropertiesHyphen {
      */
     begin: BeginValueList;
     /**
-     * The bias attribute shifts the range of the filter. After applying the kernelMatrix of the <feConvolveMatrix> element to the input image to yield a number and applied the divisor attribute, the bias attribute is added to each component. This allows representation of values that would otherwise be clamped to 0 or 1.
+     * The bias attribute shifts the range of the filter. After applying the kernelMatrix of the `<feConvolveMatrix>` element to the input image to yield a number and applied the divisor attribute, the bias attribute is added to each component. This allows representation of values that would otherwise be clamped to 0 or 1.
      */
     bias: number;
     /**
@@ -263,7 +263,7 @@ export interface SVGOnlyAttributes extends SvgPropertiesHyphen {
      */
     pointsAtZ: number;
     /**
-     * The preserveAlpha attribute indicates how a <feConvolveMatrix> element handled alpha transparency.
+     * The preserveAlpha attribute indicates how a `<feConvolveMatrix>` element handled alpha transparency.
      */
     preserveAlpha: StringBoolean;
     /**

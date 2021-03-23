@@ -32,4 +32,4 @@ export class StoredAttributeCounter extends HTMLElement implements LSCustomEleme
     }
 }
 
-export default CustomElementWrapper<MyCounterAttributes>(StoredAttributeCounter);
+export default CustomElementWrapper<MyCounterAttributes>()(StoredAttributeCounter);

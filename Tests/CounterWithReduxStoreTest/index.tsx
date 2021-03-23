@@ -40,4 +40,4 @@ export class CounterWithReduxStore extends HTMLElement implements LSCustomElemen
     }
 }
 
-export default CustomElementWrapper<MyCounterAttributes>(CounterWithReduxStore);
+export default CustomElementWrapper<MyCounterAttributes>()(CounterWithReduxStore);

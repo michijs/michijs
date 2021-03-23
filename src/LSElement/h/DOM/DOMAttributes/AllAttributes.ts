@@ -51,7 +51,7 @@ export interface AllAttributes extends SVGOnlyAttributes {
      */
     autoplay: boolean;
     /**
-     * This attribute is only used when rel="preload" or rel="prefetch" has been set on the <link> element. It specifies the type of content being loaded by the <link>
+     * This attribute is only used when rel="preload" or rel="prefetch" has been set on the `<link>` element. It specifies the type of content being loaded by the `<link>`
      */
     as: As;
     /**
@@ -336,7 +336,7 @@ export interface AllAttributes extends SVGOnlyAttributes {
      */
     part: string;
     /**
-     * Specifies a regular expression that an <input> element's value is checked against
+     * Specifies a regular expression that an `<input>` element's value is checked against
      */
     pattern: string;//TODO: Could be a regex?
     /**
@@ -388,7 +388,7 @@ export interface AllAttributes extends SVGOnlyAttributes {
      */
     rowspan: number;
     /**
-     * Enables an extra set of restrictions for the content in an <iframe>
+     * Enables an extra set of restrictions for the content in an `<iframe>`
      */
     sandbox: Sandbox;
     /**
@@ -404,7 +404,7 @@ export interface AllAttributes extends SVGOnlyAttributes {
      */
     shape: Shape
     /**
-     * Specifies the width, in characters (for <input>) or specifies the number of visible options (for <select>)
+     * Specifies the width, in characters (for `<input>`) or specifies the number of visible options (for `<select>`)
      */
     size: number;
     /**
@@ -428,7 +428,7 @@ export interface AllAttributes extends SVGOnlyAttributes {
      */
     src: string;
     /**
-     * Specifies the HTML content of the page to show in the <iframe>
+     * Specifies the HTML content of the page to show in the `<iframe>`
      */
     srcdoc: string;
     /**
