@@ -1,7 +1,7 @@
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 import { GetAttributes } from "../DOMAttributes/Utils";
 
-export type map = Partial<
+export interface map extends Partial<
     GlobalAttributes
     & GetAttributes<'name'>
->
+>{}

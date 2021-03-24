@@ -2,7 +2,7 @@ import { AllAttributes } from "../DOMAttributes/AllAttributes";
 import { SVGAnimationAdditionAttributes, SVGAnimationAttributeTargetAttributes, SVGAnimationTimingAttributes, SVGAnimationValueAttributes, SVGGenericAttributes } from "../DOMAttributes/SVG";
 import { SVGEvents } from "../DOMEvents/SVGEvents";
 
-export type animateMotion = Partial<
+export interface animateMotion extends Partial<
     Pick<AllAttributes, 'keyPoints' | 'path' | 'rotate'>
     & SVGGenericAttributes
     & SVGEvents
@@ -10,4 +10,4 @@ export type animateMotion = Partial<
     & SVGAnimationTimingAttributes
     & SVGAnimationValueAttributes
     & SVGAnimationAdditionAttributes
->
+>{}

@@ -1,4 +1,4 @@
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 import { GetRoles } from "../DOMAttributes/Utils";
 
-export type dl = Partial<GlobalAttributes & GetRoles<'group' | 'list' | 'none' | 'presentation'>>
+export interface dl extends Partial<GlobalAttributes & GetRoles<'group' | 'list' | 'none' | 'presentation'>>{}

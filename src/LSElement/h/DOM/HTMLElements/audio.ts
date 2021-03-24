@@ -2,7 +2,7 @@ import { GetAttributes } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 import { GetRoles } from "../DOMAttributes/Utils";
 
-export type audio = Partial<
+export interface audio extends Partial<
     GlobalAttributes
     & GetAttributes<'autoplay'
         | 'controls'
@@ -13,4 +13,4 @@ export type audio = Partial<
         | 'src'
     >
     & GetRoles<'application'>
->
+>{}

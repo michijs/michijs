@@ -1,8 +1,8 @@
 import { GetAttributes, GetValue } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 
-export type option = Partial<
+export interface option extends Partial<
     GlobalAttributes
     & GetAttributes<'disabled' | 'label' | 'selected'>
     & GetValue
->
+>{}

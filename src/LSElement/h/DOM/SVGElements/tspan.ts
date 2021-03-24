@@ -3,7 +3,7 @@ import { SVGAriaAttributes, SVGConditionalProcessingAttributes, SVGGenericAttrib
 import { GetXY } from "../DOMAttributes/Utils";
 import { SVGEvents } from "../DOMEvents/SVGEvents";
 
-export type tspan = Partial<
+export interface tspan extends Partial<
     Pick<AllAttributes,
         'dx'
         | 'dy'
@@ -17,4 +17,4 @@ export type tspan = Partial<
     & SVGEvents
     & SVGPresentationAttributes
     & SVGAriaAttributes
->
+>{}

@@ -1,7 +1,7 @@
 import { GetRoles } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 
-export type section = Partial<
+export interface section extends Partial<
     GlobalAttributes
     & GetRoles<
         'alert'
@@ -23,4 +23,4 @@ export type section = Partial<
         | 'search'
         | 'status'
         | 'tabpanel'>
->
+>{}

@@ -2,7 +2,7 @@ import { AllAttributes } from "../DOMAttributes/AllAttributes";
 import { SVGAnimationTargetElementAttributes, SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
 import { SVGEvents } from "../DOMEvents/SVGEvents";
 
-export type radialGradient = Partial<
+export interface radialGradient extends Partial<
     Pick<AllAttributes,
         'cx'
         | 'cy'
@@ -18,4 +18,4 @@ export type radialGradient = Partial<
     & SVGGenericAttributes
     & SVGEvents
     & SVGPresentationAttributes
->
+>{}

@@ -3,10 +3,10 @@ import { SVGConditionalProcessingAttributes, SVGGenericAttributes, SVGPresentati
 import { SVGEvents } from "../DOMEvents/SVGEvents";
 import { a as HTMLA } from '../HTMLElements/a';
 
-export type a = Partial<
+export interface a extends Partial<
     Omit<HTMLA, keyof GlobalAttributes>
     & SVGGenericAttributes
     & SVGEvents
     & SVGConditionalProcessingAttributes
     & SVGPresentationAttributes
->
+>{}

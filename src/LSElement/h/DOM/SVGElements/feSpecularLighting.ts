@@ -1,7 +1,7 @@
 import { AllAttributes } from "../DOMAttributes/AllAttributes";
 import { SVGFilterPrimitiveAttributes, SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
 
-export type feSpecularLighting = Partial<
+export interface feSpecularLighting extends Partial<
     Pick<AllAttributes,
         'in'
         | 'surfaceScale'
@@ -11,4 +11,4 @@ export type feSpecularLighting = Partial<
     & SVGGenericAttributes
     & SVGPresentationAttributes
     & SVGFilterPrimitiveAttributes
->
+>{}

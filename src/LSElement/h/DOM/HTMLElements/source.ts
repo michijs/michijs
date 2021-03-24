@@ -1,8 +1,8 @@
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 import { GetAttributes, GetType } from "../DOMAttributes/Utils";
 
-export type source = Partial<
+export interface source extends Partial<
     GlobalAttributes
     & GetAttributes<'media' | 'sizes' | 'src' | 'srcset'>
     & GetType<'Source'>
->
+>{}

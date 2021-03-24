@@ -3,16 +3,16 @@ import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 
 export type commonElementWithoutRoles = Partial<GlobalAttributes>
 
-export type caption = commonElementWithoutRoles;
-export type datalist = commonElementWithoutRoles;
-export type dd = commonElementWithoutRoles;
-export type head = commonElementWithoutRoles;
-export type legend = commonElementWithoutRoles;
-export type main = commonElementWithoutRoles;
-export type nav = commonElementWithoutRoles;
-export type noscript = commonElementWithoutRoles;
-export type summary = commonElementWithoutRoles;
-export type tbody = commonElementWithoutRoles;
-export type template = commonElementWithoutRoles;
-export type title = commonElementWithoutRoles;
-export type _var = commonElementWithoutRoles;
+export interface caption extends commonElementWithoutRoles{};
+export interface datalist extends commonElementWithoutRoles{};
+export interface dd extends commonElementWithoutRoles{};
+export interface head extends commonElementWithoutRoles{};
+export interface legend extends commonElementWithoutRoles{};
+export interface main extends commonElementWithoutRoles{};
+export interface nav extends commonElementWithoutRoles{};
+export interface noscript extends commonElementWithoutRoles{};
+export interface summary extends commonElementWithoutRoles{};
+export interface tbody extends commonElementWithoutRoles{};
+export interface template extends commonElementWithoutRoles{};
+export interface title extends commonElementWithoutRoles{};
+export interface _var extends commonElementWithoutRoles{};

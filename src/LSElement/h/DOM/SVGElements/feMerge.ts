@@ -1,7 +1,7 @@
 import { SVGFilterPrimitiveAttributes, SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
 
-export type feMerge = Partial<
+export interface feMerge extends Partial<
     SVGGenericAttributes
     & SVGPresentationAttributes
     & SVGFilterPrimitiveAttributes
->
+>{}

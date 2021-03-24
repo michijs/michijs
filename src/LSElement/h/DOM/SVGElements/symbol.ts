@@ -3,7 +3,7 @@ import { SVGAriaAttributes, SVGGenericAttributes, SVGPresentationAttributes } fr
 import { GetXY } from "../DOMAttributes/Utils";
 import { SVGEvents } from "../DOMEvents/SVGEvents";
 
-export type _symbol = Partial<
+export interface _symbol extends Partial<
     Pick<AllAttributes,
         'height'
         | 'preserveAspectRatio'
@@ -17,4 +17,4 @@ export type _symbol = Partial<
     & SVGEvents
     & SVGPresentationAttributes
     & SVGAriaAttributes
->
+>{}

@@ -1,8 +1,8 @@
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 import { GetAttributes, GetType } from "../DOMAttributes/Utils";
 
-export type style = Partial<
+export interface style extends Partial<
     GlobalAttributes
     & GetAttributes<'media' | 'nonce' | 'title'>
     & GetType<'Style'>
->
+>{}

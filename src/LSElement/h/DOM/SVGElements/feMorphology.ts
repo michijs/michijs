@@ -1,7 +1,7 @@
 import { AllAttributes } from "../DOMAttributes/AllAttributes";
 import { SVGFilterPrimitiveAttributes, SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
 
-export type feMorphology = Partial<
+export interface feMorphology extends Partial<
     Pick<AllAttributes,
         'in'
         | 'operator'
@@ -10,4 +10,4 @@ export type feMorphology = Partial<
     & SVGGenericAttributes
     & SVGPresentationAttributes
     & SVGFilterPrimitiveAttributes
->
+>{}

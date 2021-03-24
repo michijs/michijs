@@ -1,7 +1,7 @@
 import { GetAttributes, GetRoles } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 
-export type form = Partial<
+export interface form extends Partial<
     GlobalAttributes
     & GetAttributes<'accept-charset'
         | 'autocomplete'
@@ -14,4 +14,4 @@ export type form = Partial<
         | 'target'
     >
     & GetRoles<'search' | 'none' | 'presentation'>
->
+>{}

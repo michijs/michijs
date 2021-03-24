@@ -1,7 +1,7 @@
 import { GetAttributes } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 
-export type textarea = Partial<
+export interface textarea extends Partial<
     GlobalAttributes
     & GetAttributes<'autocapitalize'
         | 'autocomplete'
@@ -19,4 +19,4 @@ export type textarea = Partial<
         | 'spellcheck'
         | 'wrap'
     >
->
+>{}

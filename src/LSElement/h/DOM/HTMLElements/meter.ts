@@ -1,7 +1,7 @@
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 import { GetAttributes, GetMinAndMax, GetValue } from "../DOMAttributes/Utils";
 
-export type meter = Partial<
+export interface meter extends Partial<
     GlobalAttributes
     & GetAttributes<'high'
         | 'low'
@@ -10,4 +10,4 @@ export type meter = Partial<
     >
     & GetValue<number>
     & GetMinAndMax<number>
->
+>{}

@@ -1,7 +1,7 @@
 import { GetAttributes, GetRoles } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 
-export type iframe = Partial<
+export interface iframe extends Partial<
     GlobalAttributes
     & GetAttributes<'allow'
         | 'height'
@@ -13,4 +13,4 @@ export type iframe = Partial<
         | 'width'
     >
     & GetRoles<'application' | 'document' | 'img' | 'none' | 'presentation'>
->
+>{}

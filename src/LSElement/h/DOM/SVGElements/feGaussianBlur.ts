@@ -1,7 +1,7 @@
 import { AllAttributes } from "../DOMAttributes/AllAttributes";
 import { SVGFilterPrimitiveAttributes, SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
 
-export type feGaussianBlur = Partial<
+export interface feGaussianBlur extends Partial<
     Pick<AllAttributes,
         'in'
         | 'stdDeviation'
@@ -10,4 +10,4 @@ export type feGaussianBlur = Partial<
     & SVGGenericAttributes
     & SVGPresentationAttributes
     & SVGFilterPrimitiveAttributes
->
+>{}

@@ -2,7 +2,7 @@ import { AllAttributes } from "../DOMAttributes/AllAttributes";
 import { SVGFilterPrimitiveAttributes, SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
 import { GetType, GetValues } from "../DOMAttributes/Utils";
 
-export type feColorMatrix = Partial<
+export interface feColorMatrix extends Partial<
     Pick<AllAttributes, 'in'>
     /**
      * TODO: Default value	If type="matrix", identity matrix,
@@ -14,4 +14,4 @@ if type="hueRotate", 0, resulting in identity matrix
     & SVGGenericAttributes
     & SVGFilterPrimitiveAttributes
     & SVGPresentationAttributes
->
+>{}

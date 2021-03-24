@@ -1,7 +1,7 @@
 import { AllAttributes } from "../DOMAttributes/AllAttributes";
 import { SVGFilterPrimitiveAttributes, SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
 
-export type feConvolveMatrix = Partial<
+export interface feConvolveMatrix extends Partial<
     Pick<AllAttributes,
         'in'
         | 'order'
@@ -16,4 +16,4 @@ export type feConvolveMatrix = Partial<
     & SVGGenericAttributes
     & SVGPresentationAttributes
     & SVGFilterPrimitiveAttributes
->
+>{}

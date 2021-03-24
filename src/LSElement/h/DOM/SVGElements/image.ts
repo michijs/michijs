@@ -3,7 +3,7 @@ import { SVGAnimationTargetElementAttributes, SVGAriaAttributes, SVGConditionalP
 import { GetXY } from "../DOMAttributes/Utils";
 import { SVGEvents } from "../DOMEvents/SVGEvents";
 
-export type image = Partial<
+export interface image extends Partial<
     Pick<AllAttributes,
         'width'
         | 'height'
@@ -17,4 +17,4 @@ export type image = Partial<
     & SVGPresentationAttributes
     & SVGAriaAttributes
     & SVGAnimationTargetElementAttributes
->
+>{}

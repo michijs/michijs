@@ -2,10 +2,10 @@ import { AllAttributes } from "../DOMAttributes/AllAttributes";
 import { SVGFilterPrimitiveAttributes, SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
 import { GetDxAndDy } from "../DOMAttributes/Utils";
 
-export type feOffset = Partial<
+export interface feOffset extends Partial<
     Pick<AllAttributes,'in'>
     & GetDxAndDy
     & SVGGenericAttributes
     & SVGPresentationAttributes
     & SVGFilterPrimitiveAttributes
->
+>{}

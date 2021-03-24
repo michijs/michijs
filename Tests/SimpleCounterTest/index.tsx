@@ -4,10 +4,8 @@ import { MyCounterAttributes } from '../Types';
 
 @AutonomousCustomElement()
 export class SimpleCounter extends HTMLElement implements LSCustomElement {
-    @Attribute({ reflect: true }) 
-    private count: number = 0;
-    @EventDispatcher() 
-    private countChanged: CustomEventDispatcher<number>;
+    @Attribute({ reflect: true }) count: number = 0;
+    @EventDispatcher() countChanged: CustomEventDispatcher<number>;
 
     @Observer('count')
     onCountChanged(newValue: number, _oldValue: number) {

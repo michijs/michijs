@@ -1,8 +1,7 @@
 import { GetAttributes, GetRoles } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 
-
-export type img = Partial<
+type imgType = Partial<
     GlobalAttributes
     & GetAttributes<
         'alt'
@@ -39,5 +38,6 @@ export type img = Partial<
         | 'presentation'
     //with no alt attribute, no role permitted
     >
->
-    & GetAttributes<'src'>
+> & GetAttributes<'src'>
+
+export interface img extends imgType { }

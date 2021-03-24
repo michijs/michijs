@@ -2,7 +2,7 @@ import { AllAttributes } from "../DOMAttributes/AllAttributes";
 import { SVGAnimationTargetElementAttributes, SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
 import { SVGEvents } from "../DOMEvents/SVGEvents";
 
-export type linearGradient = Partial<
+export interface linearGradient extends Partial<
     Pick<AllAttributes,
         'gradientUnits'
         | 'gradientTransform'
@@ -16,4 +16,4 @@ export type linearGradient = Partial<
     & SVGEvents
     & SVGPresentationAttributes
     & SVGAnimationTargetElementAttributes
->
+>{}

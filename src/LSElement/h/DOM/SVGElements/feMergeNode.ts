@@ -1,7 +1,7 @@
 import { AllAttributes } from "../DOMAttributes/AllAttributes";
 import { SVGCoreAttributes } from "../DOMAttributes/SVG";
 
-export type feMergeNode = Partial<
+export interface feMergeNode extends Partial<
     Pick<AllAttributes, 'in'>
     & SVGCoreAttributes
->
+>{}

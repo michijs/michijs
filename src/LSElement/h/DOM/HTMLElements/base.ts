@@ -1,7 +1,7 @@
 import { GetAttributes } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 
-export type base = Partial<
+export interface base extends Partial<
     GlobalAttributes
     & GetAttributes<'href'| 'target'>
->
+>{}

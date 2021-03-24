@@ -2,7 +2,7 @@ import { AllAttributes } from "../DOMAttributes/AllAttributes";
 import { SVGConditionalProcessingAttributes, SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
 import { GetXY } from "../DOMAttributes/Utils";
 
-export type mask = Partial<
+export interface mask extends Partial<
     Pick<AllAttributes,
         'height'
         | 'maskContentUnits'
@@ -13,4 +13,4 @@ export type mask = Partial<
     & SVGGenericAttributes
     & SVGConditionalProcessingAttributes
     & SVGPresentationAttributes
->
+>{}

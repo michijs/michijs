@@ -1,10 +1,10 @@
 import { SVGAriaAttributes, SVGConditionalProcessingAttributes, SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
 import { SVGEvents } from "../DOMEvents/SVGEvents";
 
-export type g = Partial<
+export interface g extends Partial<
     & SVGGenericAttributes
     & SVGConditionalProcessingAttributes
     & SVGEvents
     & SVGPresentationAttributes
     & SVGAriaAttributes
->
+>{}

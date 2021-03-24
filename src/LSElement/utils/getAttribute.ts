@@ -1,9 +1,12 @@
-import { formatToKebabCase } from './formatToKebabCase';
+import { LSCustomElement } from "../types";
 
-export function getAttribute(self: Element, key: string) {
-  const formattedKey = formatToKebabCase(key);
-  const newValue = self.getAttribute(formattedKey);
-  return getAttributeValue(newValue);
+export function getAttribute(element: LSCustomElement, name: string) {
+  if (name.startsWith('_')) {
+    const key = name.substr(1);
+    return element[key]
+  } else {
+    return getAttributeValue(element.getAttribute(name));
+  }
 }
 
 export function getAttributeValue(value) {

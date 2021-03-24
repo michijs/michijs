@@ -10,10 +10,10 @@ import { br } from '../DOM/HTMLElements/br';
 import { button } from '../DOM/HTMLElements/button';
 import { canvas } from '../DOM/HTMLElements/canvas';
 import { caption, datalist, dd, head, legend, main, nav, noscript, summary, tbody, template, title, _var } from '../DOM/HTMLElements/commonElementsWithoutRoles';
-import { colAndColGroup } from '../DOM/HTMLElements/colAndColGroup';
+import { col, colgroup } from '../DOM/HTMLElements/colAndColGroup';
 import { abbr, address, b, bdi, bdo, cite, code, dfn, div, em, figure, i, kbd, mark, p, picture, pre, rp, rt, ruby, s, samp, small, span, strong, sub, sup, table, tfoot, thead, tr, u, wbr } from '../DOM/HTMLElements/commonElementsWithAllRoles';
 import { data } from '../DOM/HTMLElements/data';
-import { mod } from '../DOM/HTMLElements/mod';
+import { ins, del } from '../DOM/HTMLElements/mod';
 import { details } from '../DOM/HTMLElements/details';
 import { embed } from '../DOM/HTMLElements/embed';
 import { fieldset } from '../DOM/HTMLElements/fieldset';
@@ -26,7 +26,7 @@ import { q } from '../DOM/HTMLElements/q';
 import { dialog } from '../DOM/HTMLElements/dialog';
 import { dl } from '../DOM/HTMLElements/dl';
 import { dt } from '../DOM/HTMLElements/dt';
-import { figcaptionAndFooterAndHeader } from '../DOM/HTMLElements/figcaptionAndFooterAndHeader';
+import { figcaption, footer, header } from '../DOM/HTMLElements/figcaptionAndFooterAndHeader';
 import { headingElement } from '../DOM/HTMLElements/headingElement';
 import { hr } from '../DOM/HTMLElements/hr';
 import { label } from '../DOM/HTMLElements/label';
@@ -158,12 +158,12 @@ export interface HTMLElements {
      * The HTML `<col>` element defines a column within a table and is used for defining common semantics on all common cells. It is generally found within a `<colgroup>` element
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/col
      */
-    col: LSTag<colAndColGroup, HTMLElementTagNameMap['col']>;
+    col: LSTag<col, HTMLElementTagNameMap['col']>;
     /**
      * The HTML `<colgroup>` element defines a group of columns within a table.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/colgroup
      */
-    colgroup: LSTag<colAndColGroup, HTMLElementTagNameMap['colgroup']>;
+    colgroup: LSTag<colgroup, HTMLElementTagNameMap['colgroup']>;
     /**
      * The HTML `<data>` element links a given piece of content with a machine-readable translation. If the content is time- or date-related, the `<time>` element must be used.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/data
@@ -183,7 +183,7 @@ export interface HTMLElements {
      * The HTML `<del>` element represents a range of text that has been deleted from a document. This can be used when rendering "track changes" or source code diff information, for example. The `<ins>` element can be used for the opposite purpose: to indicate text that has been added to the document.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/del
      */
-    del: LSTag<mod, HTMLElementTagNameMap['del']>;
+    del: LSTag<del, HTMLElementTagNameMap['del']>;
     /**
      * The HTML Details Element (`<details>`) creates a disclosure widget in which information is visible only when the widget is toggled into an "open" state. A summary or label can be provided using the `<summary>` element.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details
@@ -233,7 +233,7 @@ export interface HTMLElements {
      * The HTML `<figcaption>` or Figure Caption element represents a caption or legend describing the rest of the contents of its parent `<figure>` element.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/figcaption
      */
-    figcaption: LSTag<figcaptionAndFooterAndHeader, HTMLElementTagNameMap['figcaption']>;
+    figcaption: LSTag<figcaption, HTMLElementTagNameMap['figcaption']>;
     /**
      * The HTML `<figure>` (Figure With Optional Caption) element represents self-contained content, potentially with an optional caption, which is specified using the (`<figcaption>`) element. The figure, its caption, and its contents are referenced as a single unit.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/figure
@@ -244,7 +244,7 @@ export interface HTMLElements {
      * The HTML `<footer>` element represents a footer for its nearest sectioning content or sectioning root element. A footer typically contains information about the author of the section, copyright data or links to related documents.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/footer
      */
-    footer: LSTag<figcaptionAndFooterAndHeader, HTMLElementTagNameMap['footer']>;
+    footer: LSTag<footer, HTMLElementTagNameMap['footer']>;
     /**
      * The HTML `<form>` element represents a document section containing interactive controls for submitting information.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form
@@ -289,7 +289,7 @@ export interface HTMLElements {
      * The HTML `<header>` element represents introductory content, typically a group of introductory or navigational aids. It may contain some heading elements but also a logo, a search form, an author name, and other elements.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/header
      */
-    header: LSTag<figcaptionAndFooterAndHeader, HTMLElementTagNameMap['header']>;
+    header: LSTag<header, HTMLElementTagNameMap['header']>;
     /**
      * The HTML `<hr>` element represents a thematic break between paragraph-level elements: for example, a change of scene in a story, or a shift of topic within a section.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/hr
@@ -324,7 +324,7 @@ export interface HTMLElements {
      * The HTML `<ins>` element represents a range of text that has been added to a document.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ins
      */
-    ins: LSTag<mod, HTMLElementTagNameMap['ins']>;
+    ins: LSTag<ins, HTMLElementTagNameMap['ins']>;
     /**
      * The HTML Keyboard Input element (`<kbd>`) represents a span of inline text denoting textual user input from a keyboard, voice input, or any other text entry device. By convention, the user agent defaults to rendering the contents of a `<kbd>` element using its default monospace font, although this is not mandated by the HTML standard.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/kbd

@@ -1,4 +1,4 @@
 import { SVGGenericAttributes } from "../DOMAttributes/SVG";
 import { SVGEvents } from "../DOMEvents/SVGEvents";
 
-export type title = Partial<SVGGenericAttributes & SVGEvents>
+export interface title extends Partial<SVGGenericAttributes & SVGEvents>{}

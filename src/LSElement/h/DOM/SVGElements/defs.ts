@@ -1,8 +1,8 @@
 import { SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
 import { SVGEvents } from "../DOMEvents/SVGEvents";
 
-export type defs = Partial<
+export interface defs extends Partial<
     & SVGGenericAttributes
     & SVGEvents
     & SVGPresentationAttributes
->
+>{}

@@ -1,7 +1,7 @@
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 import { WindowEvents } from "../DOMEvents/WindowEvents";
 
-export type body = Partial<
+export interface body extends Partial<
     GlobalAttributes
     & WindowEvents
->
+>{}

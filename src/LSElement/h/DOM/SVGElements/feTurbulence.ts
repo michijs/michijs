@@ -2,7 +2,7 @@ import { AllAttributes } from "../DOMAttributes/AllAttributes";
 import { SVGFilterPrimitiveAttributes, SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
 import { GetType } from "../DOMAttributes/Utils";
 
-export type feTurbulence = Partial<
+export interface feTurbulence extends Partial<
     Pick<AllAttributes,
         'baseFrequency'
         | 'numOctaves'
@@ -13,4 +13,4 @@ export type feTurbulence = Partial<
     & SVGGenericAttributes
     & SVGPresentationAttributes
     & SVGFilterPrimitiveAttributes
->
+>{}

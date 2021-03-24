@@ -3,7 +3,7 @@ import { SVGAriaAttributes, SVGConditionalProcessingAttributes, SVGGenericAttrib
 import { GetXY } from "../DOMAttributes/Utils";
 import { SVGEvents } from "../DOMEvents/SVGEvents";
 
-export type foreignObject = Partial<
+export interface foreignObject extends Partial<
     Pick<AllAttributes,
         'width'
         | 'height'
@@ -14,4 +14,4 @@ export type foreignObject = Partial<
     & SVGEvents
     & SVGPresentationAttributes
     & SVGAriaAttributes
->
+>{}

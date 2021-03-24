@@ -1,7 +1,7 @@
 import { GetAttributes, GetRoles, GetType } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 
-export type embed = Partial<
+export interface embed extends Partial<
     GlobalAttributes
     & GetAttributes<'height'
         | 'src'
@@ -9,4 +9,4 @@ export type embed = Partial<
     >
     & GetType<'Embed'>
     & GetRoles<'application' | 'document' | 'img' | 'none' | 'presentation'>
->
+>{}

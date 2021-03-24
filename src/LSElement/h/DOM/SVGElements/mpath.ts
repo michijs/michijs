@@ -1,3 +1,3 @@
 import { SVGCoreAttributes } from "../DOMAttributes/SVG";
 
-export type mpath = Partial<SVGCoreAttributes>
+export interface mpath extends Partial<SVGCoreAttributes>{}

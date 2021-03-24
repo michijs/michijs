@@ -3,7 +3,7 @@ import { SVGAriaAttributes, SVGConditionalProcessingAttributes, SVGGenericAttrib
 import { GetXY } from "../DOMAttributes/Utils";
 import { SVGEvents } from "../DOMEvents/SVGEvents";
 
-export type text = Partial<
+export interface text extends Partial<
     Pick<AllAttributes,
         'dx'
         | 'dy'
@@ -17,4 +17,4 @@ export type text = Partial<
     & SVGEvents
     & SVGPresentationAttributes
     & SVGAriaAttributes
->
+>{}

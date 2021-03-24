@@ -1,7 +1,7 @@
 import { GetAttributes, GetRoles } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 
-export type th = Partial<
+export interface th extends Partial<
     GlobalAttributes
     & GetAttributes<'abbr'
         | 'colspan'
@@ -10,4 +10,4 @@ export type th = Partial<
         | 'scope'
     >
     & GetRoles
->
+>{}

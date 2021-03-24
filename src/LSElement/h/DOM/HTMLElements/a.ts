@@ -2,7 +2,7 @@ import { GetAttributes, GetType } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 import { GetRoles } from "../DOMAttributes/Utils";
 
-export type a = Partial<
+export interface a extends Partial<
     GlobalAttributes
     & GetAttributes<'download'
         | 'href'
@@ -23,4 +23,4 @@ export type a = Partial<
         | 'tab'
         | 'treeitem'
     >
->
+>{}

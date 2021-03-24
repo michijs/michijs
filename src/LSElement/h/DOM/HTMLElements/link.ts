@@ -1,7 +1,7 @@
 import { GetAttributes, GetType } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 
-export type link = Partial<
+export interface link extends Partial<
     GlobalAttributes
     & GetAttributes<'as'
         | 'crossorigin'
@@ -17,4 +17,4 @@ export type link = Partial<
         | 'title'
     >
     & GetType<'Link'>
->
+>{}

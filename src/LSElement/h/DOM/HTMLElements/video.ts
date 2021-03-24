@@ -1,7 +1,7 @@
 import { GetAttributes, GetRoles } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 
-export type video = Partial<
+export interface video extends Partial<
     GlobalAttributes
     & GetAttributes<'autoplay'
         | 'controls'
@@ -16,4 +16,4 @@ export type video = Partial<
         | 'width'
     >
     & GetRoles<'application'>
->
+>{}

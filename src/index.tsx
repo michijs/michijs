@@ -1,6 +1,5 @@
 export { h } from './LSElement/h';
-export { AutonomousCustomElement } from './LSElement/decorators/AutonomousCustomElement';
-export { CustomizedBuiltInElement } from './LSElement/decorators/CustomizedBuiltInElement';
+export { AutonomousCustomElement, CustomizedBuiltInElement } from './LSElement/decorators/CustomElement';
 export * from './LSElement/decorators/PropertyDecorators';
 export * from './LSElement/decorators/MethodDecorators';
 export * from './LSElement/components';

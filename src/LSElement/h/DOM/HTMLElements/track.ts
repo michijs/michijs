@@ -1,7 +1,7 @@
 import { GetAttributes } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 
-export type track = Partial<
+export interface track extends Partial<
     GlobalAttributes
     & GetAttributes<'default'
         | 'kind'
@@ -9,4 +9,4 @@ export type track = Partial<
         | 'src'
         | 'srclang'
     >
->
+>{}

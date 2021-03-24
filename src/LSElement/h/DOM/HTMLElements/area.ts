@@ -1,7 +1,7 @@
 import { GetAttributes } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 
-export type area = Partial<
+export interface area extends Partial<
     GlobalAttributes
     & GetAttributes<
         'alt'
@@ -14,4 +14,4 @@ export type area = Partial<
         | 'shape'
         | 'target'
     >
->
+>{}

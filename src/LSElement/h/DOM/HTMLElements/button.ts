@@ -2,7 +2,7 @@ import { GetAttributes, GetType, GetValue } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 import { GetRoles } from "../DOMAttributes/Utils";
 
-export type button = Partial<
+export interface button extends Partial<
     GlobalAttributes
     & GetAttributes<'autofocus'
         | 'disabled'
@@ -17,4 +17,4 @@ export type button = Partial<
     & GetValue
     & GetRoles<'checkbox' | 'link' | 'menuitem' | 'menuitemcheckbox' | 'menuitemradio' | 'option' | 'radio' | 'switch' | 'tab'>
     & GetType<'Button'>
->
+>{}

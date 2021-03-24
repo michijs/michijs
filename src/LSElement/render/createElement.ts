@@ -36,8 +36,6 @@ export function createElement<T = LSNode>(self: LSCustomElement | null, elementM
         }
       });
     }
-    element.ls = element.ls || {};
-    element.ls.attrsManagedByH = elementMap.attrs || {};
     if (elementMap.children.length > 0) {
       insertNewChildren(self, element as Element, elementMap.children, isSVG);
     }

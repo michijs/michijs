@@ -1,7 +1,7 @@
 import { AllAttributes } from "../DOMAttributes/AllAttributes";
 import { SVGFilterPrimitiveAttributes, SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
 
-export type feDisplacementMap = Partial<
+export interface feDisplacementMap extends Partial<
     Pick<AllAttributes,
         'in'
         | 'in2'
@@ -12,4 +12,4 @@ export type feDisplacementMap = Partial<
     & SVGGenericAttributes
     & SVGPresentationAttributes
     & SVGFilterPrimitiveAttributes
->
+>{}

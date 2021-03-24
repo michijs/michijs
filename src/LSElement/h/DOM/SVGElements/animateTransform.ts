@@ -3,7 +3,7 @@ import { SVGAnimationAdditionAttributes, SVGAnimationAttributeTargetAttributes, 
 import { GetType } from "../DOMAttributes/Utils";
 import { SVGEvents } from "../DOMEvents/SVGEvents";
 
-export type animateTransform = Partial<
+export interface animateTransform extends Partial<
     Pick<AllAttributes, 'by' | 'from' | 'to'>
     & SVGConditionalProcessingAttributes
     & SVGCoreAttributes
@@ -13,4 +13,4 @@ export type animateTransform = Partial<
     & SVGAnimationValueAttributes
     & SVGAnimationAdditionAttributes
     & GetType<'AnimateTransform'>
->
+>{}

@@ -1,7 +1,7 @@
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 import { GetRoles } from "../DOMAttributes/Utils";
 
-export type br = Partial<
+export interface br extends Partial<
     GlobalAttributes
     & GetRoles<'none' | 'presentation'>
->
+>{}

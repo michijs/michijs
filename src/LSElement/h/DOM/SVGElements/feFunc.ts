@@ -5,7 +5,7 @@ type feFunc = Partial<
     & SVGTransferFunctionAttributes<'FeFunc'>
 >
 
-export type feFuncA = feFunc;
-export type feFuncB = feFunc;
-export type feFuncG = feFunc;
-export type feFuncR = feFunc;
+export interface feFuncA extends feFunc{};
+export interface feFuncB extends feFunc{};
+export interface feFuncG extends feFunc{};
+export interface feFuncR extends feFunc{};

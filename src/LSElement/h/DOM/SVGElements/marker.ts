@@ -2,7 +2,7 @@ import { AllAttributes } from "../DOMAttributes/AllAttributes";
 import { SVGAnimationTargetElementAttributes, SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
 import { SVGEvents } from "../DOMEvents/SVGEvents";
 
-export type marker = Partial<
+export interface marker extends Partial<
     Pick<AllAttributes,
         'markerHeight'
         | 'markerUnits'
@@ -17,4 +17,4 @@ export type marker = Partial<
     & SVGEvents
     & SVGPresentationAttributes
     & SVGAnimationTargetElementAttributes
->
+>{}

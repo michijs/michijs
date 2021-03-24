@@ -1,7 +1,7 @@
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 import { GetAttributes, GetType } from "../DOMAttributes/Utils";
 
-export type script = Partial<
+export interface script extends Partial<
     GlobalAttributes
     & GetAttributes<'async'
         | 'crossorigin'
@@ -13,4 +13,4 @@ export type script = Partial<
         | 'src'
     >
     & GetType<'Script'>
->
+>{}

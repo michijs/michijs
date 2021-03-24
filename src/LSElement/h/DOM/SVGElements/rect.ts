@@ -3,7 +3,7 @@ import { SVGAriaAttributes, SVGConditionalProcessingAttributes, SVGGenericAttrib
 import { GetXY } from "../DOMAttributes/Utils";
 import { SVGEvents } from "../DOMEvents/SVGEvents";
 
-export type rect = Partial<
+export interface rect extends Partial<
     Pick<AllAttributes,
         'width'
         | 'height'
@@ -17,4 +17,4 @@ export type rect = Partial<
     & SVGEvents
     & SVGPresentationAttributes
     & SVGAriaAttributes
->
+>{}

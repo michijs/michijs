@@ -7,7 +7,7 @@ export function updateChildren(self: LSCustomElement, rootElement: DocumentFragm
   const isACustomElement = isCustomElement(parent);
   const hasShadowRoot = getShadowRoot(parent);
 
-  if (!parent.ls.attrsManagedByH.staticChildren && (!isACustomElement || hasShadowRoot)) {
-    updateElement(self, rootElement,movedElements, parent, newChildrenMap as ElementMap[]);
+  if (!parent.staticChildren && (!isACustomElement || hasShadowRoot)) {
+    updateElement(self, rootElement, movedElements, parent, newChildrenMap as ElementMap[]);
   }
 }

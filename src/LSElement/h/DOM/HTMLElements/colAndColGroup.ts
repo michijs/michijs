@@ -1,6 +1,6 @@
 import { GetAttributes } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 
-export type colAndColGroup = Partial<GlobalAttributes & GetAttributes<'span'>>;
-export type col = colAndColGroup;
-export type colgroup = colAndColGroup;
+type colAndColGroup = Partial<GlobalAttributes & GetAttributes<'span'>>;
+export interface col extends colAndColGroup{};
+export interface colgroup extends colAndColGroup{};

@@ -1,12 +1,8 @@
-import { GetAttributes, GetMinAndMax, GetType, GetValue } from "../DOMAttributes/Utils";
+import { GetAttributes, GetMinAndMax, GetRoles, GetType, GetValue } from "../DOMAttributes/Utils";
 import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
 import { Color, DateLocalString, DateString, MonthString, TimeString, Type, WeekString } from "../DOMAttributes/types";
 import { AllAttributes } from "../DOMAttributes/AllAttributes";
-
-export type inputType<T extends Type['Input']> = GetType<'Input', T>;
-
-export type InputAttributeSet<A extends keyof AllAttributes, T extends Type['Input']> = inputType<T> & GetAttributes<A>;
-export type InputValueSet<T extends Type['Input'], V> = inputType<T> & GetValue<V>;
+import { AllRoles } from "../DOMAttributes/Roles";
 
 type baseInput = GlobalAttributes & GetAttributes<
     'autocomplete'
@@ -19,34 +15,72 @@ type baseInput = GlobalAttributes & GetAttributes<
     | 'required'
 >
 
-export type input = Partial<
+export type InputFactory<T extends Type['Input'], A extends keyof AllAttributes = 'id', R extends AllRoles = never> = Partial<
     baseInput &
-    (
-        InputAttributeSet<'accept', 'file'>
-        | InputAttributeSet<'alt', 'image'>
-        | InputAttributeSet<'capture', 'file'>
-        | InputAttributeSet<'indeterminate', 'checkbox'>
-        | InputAttributeSet<'checked', 'radio' | 'checkbox'>
-        | InputAttributeSet<'dirname', 'text' | 'search'>
-        | InputAttributeSet<'formaction' | 'formenctype' | 'formmethod' | 'formnovalidate' | 'formtarget', 'image' | 'submit'>
-        | InputAttributeSet<'height', 'image'>
-        | InputAttributeSet<'multiple', 'email' | 'file'>
-        | InputAttributeSet<'pattern' | 'placeholder' | 'size' | 'maxlength' | 'minlength', 'email' | 'password' | 'search' | 'tel' | 'text' | 'url'>
-        | InputAttributeSet<'src', 'image'>
-        | InputAttributeSet<'step', 'number' | 'date' | 'datetime-local' | 'month' | 'range'>
-        | InputAttributeSet<'width', 'image'>
-        | (GetMinAndMax<DateString> & inputType<'date'>)
-        | (GetMinAndMax<DateLocalString> & inputType<'datetime-local'>)
-        | (GetMinAndMax<MonthString> & inputType<'month'>)
-        | (GetMinAndMax<TimeString> & inputType<'time'>)
-        | (GetMinAndMax<WeekString> & inputType<'week'>)
-        | (GetMinAndMax<number> & inputType<'number' | 'range'>)
-        | InputValueSet<'button' | 'checkbox' | 'radio' | 'email' | 'file' | 'hidden' | 'password' | 'reset' | 'search' | 'email' | 'submit' | 'url' | 'text', string>
-        | InputValueSet<'color', Color>
-        | InputValueSet<'date', DateString>
-        | InputValueSet<'datetime-local', DateLocalString>
-        | InputValueSet<'month', MonthString>
-        | InputValueSet<'time', TimeString>
-        | InputValueSet<'week', WeekString>
-        | InputValueSet<'number' | 'range', number>
-    )>;
+    GetType<'Input', T> &
+    Pick<AllAttributes, A> &
+    GetRoles<R>
+>
+
+type InputFactoryWithValue<T extends Type['Input'], A extends keyof AllAttributes = 'id', R extends AllRoles = never, V = string> = & InputFactory<T, A, R> & Partial<GetValue<V>>
+type NumericInputFactoryWithValue<T extends Type['Input'], A extends keyof AllAttributes = 'id', R extends AllRoles = never, V = number> = InputFactoryWithValue<T, A, R, V> & Partial<GetMinAndMax<V>>
+
+export interface ImageInput extends InputFactory<'image',
+    'alt' | 'formaction' | 'formenctype' | 'formmethod' | 'formnovalidate' | 'formtarget' | 'height' | 'src' | 'width',
+    'link' | 'menuitem' | 'menuitemcheckbox' | 'menuitemradio' | 'radio' | 'switch'
+> { }
+
+export interface FileInput extends InputFactoryWithValue<'file', 'accept' | 'capture' | 'multiple'> { }
+export interface CheckboxInput extends InputFactoryWithValue<'checkbox',
+    'checked' | 'indeterminate',
+    'button' | 'menuitemcheckbox' | 'option' | 'switch'
+> { }
+export interface RadioInput extends InputFactoryWithValue<'radio', 'checked', 'menuitemradio'> { }
+export interface TextInput extends InputFactoryWithValue<'text',
+    'dirname' | 'pattern' | 'placeholder' | 'size' | 'maxlength' | 'minlength',
+    'combobox' | 'searchbox' | 'spinbutton'
+> { }
+export interface SearchInput extends InputFactoryWithValue<'search', 'pattern' | 'placeholder' | 'size' | 'maxlength' | 'minlength'> { }
+export interface SubmitInput extends InputFactoryWithValue<'submit', 'formaction' | 'formenctype' | 'formmethod' | 'formnovalidate' | 'formtarget'> { }
+export interface EmailInput extends InputFactoryWithValue<'email', 'multiple' | 'pattern' | 'placeholder' | 'size' | 'maxlength' | 'minlength'> { }
+export interface PasswordInput extends InputFactoryWithValue<'password', 'pattern' | 'placeholder' | 'size' | 'maxlength' | 'minlength'> { }
+export interface TelInput extends InputFactoryWithValue<'tel', 'pattern' | 'placeholder' | 'size' | 'maxlength' | 'minlength'> { }
+export interface UrlInput extends InputFactoryWithValue<'url', 'pattern' | 'placeholder' | 'size' | 'maxlength' | 'minlength'> { }
+export interface ButtonInput extends InputFactoryWithValue<'button', 
+'id',
+'link' | 'menuitem' | 'menuitemcheckbox' | 'menuitemradio' | 'option' | 'radio' | 'switch' | 'tab'
+> { }
+export interface ResetInput extends InputFactoryWithValue<'reset', 'id'> { }
+export interface HiddenInput extends InputFactoryWithValue<'hidden', 'id'> { }
+export interface ColorInput extends InputFactoryWithValue<'color', 'id', never, Color> { }
+
+export interface NumberInput extends NumericInputFactoryWithValue<'number', 'step', never, number> { }
+export interface RangeInput extends NumericInputFactoryWithValue<'range', 'step', never, number> { }
+export interface DateInput extends NumericInputFactoryWithValue<'date', 'step', never, DateString> { }
+export interface DatetimeLocalInput extends NumericInputFactoryWithValue<'datetime-local', 'step', never, DateLocalString> { }
+export interface MonthInput extends NumericInputFactoryWithValue<'month', 'step', never, MonthString> { }
+export interface TimeInput extends NumericInputFactoryWithValue<'time', 'id', never, TimeString> { }
+export interface WeekInput extends NumericInputFactoryWithValue<'week', 'id', never, WeekString> { }
+
+export type input = ImageInput
+    | FileInput
+    | CheckboxInput
+    | RadioInput
+    | TextInput
+    | SearchInput
+    | SubmitInput
+    | EmailInput
+    | PasswordInput
+    | TelInput
+    | UrlInput
+    | ButtonInput
+    | ResetInput
+    | HiddenInput
+    | ColorInput
+    | NumberInput
+    | RangeInput
+    | DateInput
+    | DatetimeLocalInput
+    | MonthInput
+    | TimeInput
+    | WeekInput

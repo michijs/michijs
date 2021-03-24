@@ -38,8 +38,8 @@ export type LsStaticAttributesType = {
 
 export type ElementMap = { tag: string, attrs: { [attribute: string]: any }, children: ElementMapChild[] };
 export type ElementMapChild = ElementMap | string;
-export type Store<T> = { 
-    getState?: () => T, 
+export type Store<T> = {
+    getState?: () => T,
     subscribe?: (listener: ChangeFunction) => any,
     onFinishChanges?: (listener: () => void) => any,
     setState?: (newState: Partial<T>) => void
@@ -56,7 +56,6 @@ export type AdoptedStyleSheetList = {
 
 export type LsAttributesType = {
     alreadyRendered?: boolean,
-    attrsManagedByH?: { [attribute: string]: any },
     adoptedStyleSheets?: AdoptedStyleSheetList[],
     stateStore?: Store<any>,
     windowEventListeners?: WindowEventListener[],
@@ -66,9 +65,9 @@ export type LSNode = Node & { ls?: LsAttributesType }
 
 export type RootElement = LSCustomElement | ShadowRoot;
 
-export type RenderResult = ElementMap | ElementMap[] | any;
+export type RenderResult = ElementMap | ElementMap[] | undefined;
 
-export interface LSCustomElement extends HTMLElement {
+export interface LSCustomElement extends Element {
     _shadowRoot?: ShadowRoot;
     lsStatic?: LsStaticAttributesType,
     ls?: LsAttributesType,
@@ -79,9 +78,9 @@ export interface LSCustomElement extends HTMLElement {
     componentDidUpdate?(): void,
     componentWillReceiveAttribute?: (name: string, newValue, oldValue) => void;
     computedReflectedAttributes?: () => { [attribute: string]: any; };
-    render?(): RenderResult;
+    render(): RenderResult;
+    staticChildren?: boolean;
 }
-
 
 export type AdoptedStyleChild = string | CSSStyleSheet;
 
@@ -92,13 +91,15 @@ export type StorageLocalChangeEventType = { key: string, newValue: any };
 export type ShadowOption = false | ShadowRootMode;
 export type OtherShadowOptions = Omit<ShadowRootInit, 'mode'>;
 
-export type CustomElementConfig = {
+export type AutonomousCustomElementConfig = {
     tag?: string;
     shadow?: ShadowOption;
 } & OtherShadowOptions
 
-export type CustomizedBuiltInElementConfig = CustomElementConfig & {
-    extends: keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap;
+export type CustomizedBuiltInElementConfig = AutonomousCustomElementConfig & {
+    extends: keyof JSX.IntrinsicElements;
 }
 
-export type AutonomousCustomElementConfig = CustomElementConfig
+export type CustomElementConfig = Partial<CustomizedBuiltInElementConfig>;
+
+

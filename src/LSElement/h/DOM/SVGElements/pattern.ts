@@ -2,7 +2,7 @@ import { AllAttributes } from "../DOMAttributes/AllAttributes";
 import { SVGAnimationTargetElementAttributes, SVGConditionalProcessingAttributes, SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
 import { GetXY } from "../DOMAttributes/Utils";
 
-export type pattern = Partial<
+export interface pattern extends Partial<
     Pick<AllAttributes,
         'height'
         | 'patternContentUnits'
@@ -17,4 +17,4 @@ export type pattern = Partial<
     & SVGGenericAttributes
     & SVGConditionalProcessingAttributes
     & SVGPresentationAttributes
->
+>{}
