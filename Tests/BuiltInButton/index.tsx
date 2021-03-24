@@ -6,12 +6,12 @@ export class BuiltInButton extends HTMLButtonElement implements LSCustomElement 
 	@Attribute({reflect: true }) text: string;
 
 	render() {
-		return (
-			<>
-				<AdoptedStyle parentRef={this} id="style">{style}</AdoptedStyle>
-				{this.text}
-			</>
-		);
+	  return (
+	    <>
+	      <AdoptedStyle parentRef={this} id="style">{style}</AdoptedStyle>
+	      {this.text}
+	    </>
+	  );
 	}
 }
 
