@@ -1,5 +1,5 @@
-import { SVGConditionalProcessingAttributes, SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
-import { SVGEvents } from "../DOMEvents/SVGEvents";
+import { SVGConditionalProcessingAttributes, SVGGenericAttributes, SVGPresentationAttributes } from '../DOMAttributes/SVG';
+import { SVGEvents } from '../DOMEvents/SVGEvents';
 
 export interface _switch extends Partial<
     SVGGenericAttributes

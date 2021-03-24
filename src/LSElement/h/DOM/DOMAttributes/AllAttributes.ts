@@ -1,5 +1,5 @@
-import { SVGOnlyAttributes } from "./SVGOnlyAttributes";
-import { As, Autocapitalize, Autocomplete, Capture, Charset, Crossorigin, CSSProperties, DateTime, Decoding, Dir, Enctype, EnterKeyHint, HTTPEquiv, InputMode, Kind, Language, Length, Loading, Method, Preload, Rel, Sandbox, Scope, Shape, StringBoolean, Target, Wrap, YesNo } from "./types";
+import { SVGOnlyAttributes } from './SVGOnlyAttributes';
+import { As, Autocapitalize, Autocomplete, Capture, Charset, Crossorigin, CSSProperties, DateTime, Decoding, Dir, Enctype, EnterKeyHint, HTTPEquiv, InputMode, Kind, Language, Length, Loading, Method, Preload, Rel, Sandbox, Scope, Shape, StringBoolean, Target, Wrap, YesNo } from './types';
 
 export interface AllAttributes extends SVGOnlyAttributes {
     /**

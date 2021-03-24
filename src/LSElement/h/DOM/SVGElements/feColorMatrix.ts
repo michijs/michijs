@@ -1,6 +1,6 @@
-import { AllAttributes } from "../DOMAttributes/AllAttributes";
-import { SVGFilterPrimitiveAttributes, SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
-import { GetType, GetValues } from "../DOMAttributes/Utils";
+import { AllAttributes } from '../DOMAttributes/AllAttributes';
+import { SVGFilterPrimitiveAttributes, SVGGenericAttributes, SVGPresentationAttributes } from '../DOMAttributes/SVG';
+import { GetType, GetValues } from '../DOMAttributes/Utils';
 
 export interface feColorMatrix extends Partial<
     Pick<AllAttributes, 'in'>

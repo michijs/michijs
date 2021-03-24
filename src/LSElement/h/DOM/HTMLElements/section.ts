@@ -1,5 +1,5 @@
-import { GetRoles } from "../DOMAttributes/Utils";
-import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
+import { GetRoles } from '../DOMAttributes/Utils';
+import { GlobalAttributes } from '../DOMAttributes/GlobalAttributes';
 
 export interface section extends Partial<
     GlobalAttributes

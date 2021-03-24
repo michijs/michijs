@@ -1,6 +1,5 @@
-import { GetAttributes } from "../DOMAttributes/Utils";
-import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
-import { GetRoles } from "../DOMAttributes/Utils";
+import { GetAttributes, GetRoles } from '../DOMAttributes/Utils';
+import { GlobalAttributes } from '../DOMAttributes/GlobalAttributes';
 
 export interface blockquote extends Partial<
     GlobalAttributes

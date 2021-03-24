@@ -1,6 +1,6 @@
-import { AllAttributes } from "./AllAttributes";
-import { AllRoles } from "./Roles";
-import { Length, Type } from "./types";
+import { AllAttributes } from './AllAttributes';
+import { AllRoles } from './Roles';
+import { Length, Type } from './types';
 
 export type GetRoles<T extends AllRoles = AllRoles> = {
     /**

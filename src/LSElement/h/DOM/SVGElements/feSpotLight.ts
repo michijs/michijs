@@ -1,6 +1,6 @@
-import { AllAttributes } from "../DOMAttributes/AllAttributes";
-import { SVGCoreAttributes } from "../DOMAttributes/SVG";
-import { GetXYZ } from "../DOMAttributes/Utils";
+import { AllAttributes } from '../DOMAttributes/AllAttributes';
+import { SVGCoreAttributes } from '../DOMAttributes/SVG';
+import { GetXYZ } from '../DOMAttributes/Utils';
 
 export interface feSpotLight extends Partial<
     Pick<AllAttributes,

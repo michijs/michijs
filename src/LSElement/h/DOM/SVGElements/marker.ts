@@ -1,6 +1,6 @@
-import { AllAttributes } from "../DOMAttributes/AllAttributes";
-import { SVGAnimationTargetElementAttributes, SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
-import { SVGEvents } from "../DOMEvents/SVGEvents";
+import { AllAttributes } from '../DOMAttributes/AllAttributes';
+import { SVGAnimationTargetElementAttributes, SVGGenericAttributes, SVGPresentationAttributes } from '../DOMAttributes/SVG';
+import { SVGEvents } from '../DOMEvents/SVGEvents';
 
 export interface marker extends Partial<
     Pick<AllAttributes,

@@ -1,8 +1,8 @@
-import { GetAttributes, GetMinAndMax, GetRoles, GetType, GetValue } from "../DOMAttributes/Utils";
-import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
-import { Color, DateLocalString, DateString, MonthString, TimeString, Type, WeekString } from "../DOMAttributes/types";
-import { AllAttributes } from "../DOMAttributes/AllAttributes";
-import { AllRoles } from "../DOMAttributes/Roles";
+import { GetAttributes, GetMinAndMax, GetRoles, GetType, GetValue } from '../DOMAttributes/Utils';
+import { GlobalAttributes } from '../DOMAttributes/GlobalAttributes';
+import { Color, DateLocalString, DateString, MonthString, TimeString, Type, WeekString } from '../DOMAttributes/types';
+import { AllAttributes } from '../DOMAttributes/AllAttributes';
+import { AllRoles } from '../DOMAttributes/Roles';
 
 type baseInput = GlobalAttributes & GetAttributes<
     'autocomplete'

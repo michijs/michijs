@@ -1,6 +1,6 @@
-import { AriaAttributes } from "./AriaAttributes";
-import { GlobalEvents } from "../DOMEvents/GlobalEvents";
-import { AllAttributes } from "./AllAttributes";
+import { AriaAttributes } from './AriaAttributes';
+import { GlobalEvents } from '../DOMEvents/GlobalEvents';
+import { AllAttributes } from './AllAttributes';
 
 export interface GlobalAttributes extends AriaAttributes,
     GlobalEvents,

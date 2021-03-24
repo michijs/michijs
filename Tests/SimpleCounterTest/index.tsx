@@ -17,7 +17,7 @@ export class SimpleCounter extends HTMLElement implements LSCustomElement {
     }
 
     incrementCount(){
-        this.count++;
+                    this.count++;
     }
 
     render() {

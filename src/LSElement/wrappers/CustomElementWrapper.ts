@@ -12,5 +12,5 @@ export function CustomElementWrapper<T>() {
       }
       return h.createElement(lsStatic.tag, attrs, ...children);
     };
-  }
+  };
 }

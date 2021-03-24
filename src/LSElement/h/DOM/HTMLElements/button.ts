@@ -1,6 +1,5 @@
-import { GetAttributes, GetType, GetValue } from "../DOMAttributes/Utils";
-import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
-import { GetRoles } from "../DOMAttributes/Utils";
+import { GetAttributes, GetType, GetValue, GetRoles } from '../DOMAttributes/Utils';
+import { GlobalAttributes } from '../DOMAttributes/GlobalAttributes';
 
 export interface button extends Partial<
     GlobalAttributes

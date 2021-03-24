@@ -1,4 +1,4 @@
-import { Properties, Property, Globals } from "csstype";
+import { Properties, Property, Globals } from 'csstype';
 
 export type Accumulate = 'none' | 'sum';
 export type Additive = 'replace' | 'sum';
@@ -14,7 +14,7 @@ export type As = 'audio'
     | 'track'
     | 'video'
     | 'worker'
-export type Angle = `${number}${"deg" | "grad" | "rad"}`
+export type Angle = `${number}${'deg' | 'grad' | 'rad'}`
 export type Autocapitalize = OnOff | 'none' | 'sentences' | 'words' | 'characters';
 export type Autocomplete = OnOff
     | 'name'
@@ -120,7 +120,7 @@ export type Kind = 'captions'
     | 'metadata'
     | 'subtitles'
 export type Language = string; //TODO: find all languages
-export type Length = number | `${number}${"em" | "ex" | "px" | "in" | "cm" | "mm" | "pt" | "pc" | "%"}`
+export type Length = number | `${number}${'em' | 'ex' | 'px' | 'in' | 'cm' | 'mm' | 'pt' | 'pc' | '%'}`
 export type LengthAdjust = 'spacing' | 'spacingAndGlyphs';
 export type ListOfNumbers = string; //TODO:https://developer.mozilla.org/en-US/docs/Web/SVG/Content_type#list-of-ts
 export type Loading = 'eager' | 'lazy';
@@ -180,7 +180,7 @@ export type Sandbox = true
 export type Scope = 'col' | 'row' | 'colgroup' | 'rowgroup';
 export type Shape = 'rect' | 'circle' | 'poly' | 'default';
 export type SpreadMethod = 'pad' | 'reflect' | 'repeat';
-export type StringBoolean = "true" | "false";
+export type StringBoolean = 'true' | 'false';
 export type Stich = 'noStitch' | 'stitch';
 export type Target = '_self' | '_blank' | '_parent' | '_top';
 export type TransformFunction = string;//TODO: https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function

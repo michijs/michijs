@@ -1,5 +1,5 @@
-import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
-import { GetAttributes, GetType } from "../DOMAttributes/Utils";
+import { GlobalAttributes } from '../DOMAttributes/GlobalAttributes';
+import { GetAttributes, GetType } from '../DOMAttributes/Utils';
 
 export interface script extends Partial<
     GlobalAttributes

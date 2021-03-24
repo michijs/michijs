@@ -1,5 +1,5 @@
-import { GetAttributes, GetRoles } from "../DOMAttributes/Utils";
-import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
+import { GetAttributes, GetRoles } from '../DOMAttributes/Utils';
+import { GlobalAttributes } from '../DOMAttributes/GlobalAttributes';
 
 export interface canvas extends Partial<
     GlobalAttributes

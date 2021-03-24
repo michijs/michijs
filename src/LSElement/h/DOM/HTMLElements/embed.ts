@@ -1,5 +1,5 @@
-import { GetAttributes, GetRoles, GetType } from "../DOMAttributes/Utils";
-import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
+import { GetAttributes, GetRoles, GetType } from '../DOMAttributes/Utils';
+import { GlobalAttributes } from '../DOMAttributes/GlobalAttributes';
 
 export interface embed extends Partial<
     GlobalAttributes

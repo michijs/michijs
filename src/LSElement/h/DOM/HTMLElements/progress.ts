@@ -1,5 +1,5 @@
-import { GlobalAttributes } from "../DOMAttributes/GlobalAttributes";
-import { GetMax, GetValue } from "../DOMAttributes/Utils";
+import { GlobalAttributes } from '../DOMAttributes/GlobalAttributes';
+import { GetMax, GetValue } from '../DOMAttributes/Utils';
 
 export interface progress extends Partial<
     GlobalAttributes

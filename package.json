@@ -27,8 +27,10 @@
     "link": "tsc && npm link --force && tsc -w",
     "publish-patch-version": "npm version patch && npm run publish-npm",
     "publish-npm": "npm run dist && npm publish --access public",
-    "lint": "eslint --fix src/**/*{.ts,.tsx}",
-    "stylelint": "npx stylelint --fix **/*.css"
+    "lint": "eslint --fix src/**/*{.ts,.tsx} && eslint --fix tests/**/*{.ts,.tsx}",
+    "stylelint": "npx stylelint --fix **/*.css",
+    "postinstall": "husky install",
+    "prepare": "husky install"
   },
   "keywords": [
     "web-components",
@@ -42,7 +44,7 @@
     "@lsegurado/stylelint-config-ls-element": "^0.0.2",
     "@reduxjs/toolkit": "^1.5.0",
     "eslint": "^7.19.0",
-    "husky": "^5.0.9",
+    "husky": "^5.2.0",
     "redux": "^4.0.5",
     "stylelint": "^13.8.0",
     "typescript": "^4.2.3"
@@ -55,10 +57,5 @@
   },
   "dependencies": {
     "csstype": "^3.0.5"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint && npm run stylelint"
-    }
   }
 }

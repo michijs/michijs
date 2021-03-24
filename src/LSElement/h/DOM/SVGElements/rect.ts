@@ -1,7 +1,7 @@
-import { AllAttributes } from "../DOMAttributes/AllAttributes";
-import { SVGAriaAttributes, SVGConditionalProcessingAttributes, SVGGenericAttributes, SVGPresentationAttributes } from "../DOMAttributes/SVG";
-import { GetXY } from "../DOMAttributes/Utils";
-import { SVGEvents } from "../DOMEvents/SVGEvents";
+import { AllAttributes } from '../DOMAttributes/AllAttributes';
+import { SVGAriaAttributes, SVGConditionalProcessingAttributes, SVGGenericAttributes, SVGPresentationAttributes } from '../DOMAttributes/SVG';
+import { GetXY } from '../DOMAttributes/Utils';
+import { SVGEvents } from '../DOMEvents/SVGEvents';
 
 export interface rect extends Partial<
     Pick<AllAttributes,
