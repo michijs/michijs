@@ -1,6 +1,6 @@
 import { AutonomousCustomElement, h, AdoptedStyle, EventDispatcher, CustomEventDispatcher, LSCustomElement, CustomElementWrapper, Observer, StoredAttribute } from '../../src';
 import css from '../Shared/Counter.css';
-import { MyCounterAttributes } from '../Types';
+import { MyCounterAttributes } from "../Types";
 
 @AutonomousCustomElement()
 export class StoredAttributeCounter extends HTMLElement implements LSCustomElement {
