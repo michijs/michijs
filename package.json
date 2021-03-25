@@ -26,11 +26,7 @@
     "build": "ls-server --build",
     "link": "tsc && npm link --force && tsc -w",
     "publish-patch-version": "npm version patch && npm run publish-npm",
-    "publish-npm": "npm run dist && npm publish --access public",
-    "lint": "eslint --fix src/**/*{.ts,.tsx} && eslint --fix tests/**/*{.ts,.tsx}",
-    "stylelint": "npx stylelint --fix **/*.css",
-    "postinstall": "husky install",
-    "prepare": "husky install"
+    "publish-npm": "npm run dist && npm publish --access public"
   },
   "keywords": [
     "web-components",
@@ -39,15 +35,16 @@
     "Autonomous custom elements"
   ],
   "devDependencies": {
-    "@lsegurado/eslint-config-ls-element": "0.0.3",
-    "@lsegurado/ls-server": "^0.0.17",
+    "@lsegurado/eslint-config-ls-element": "0.0.4",
+    "@lsegurado/ls-server": "^0.0.18",
     "@lsegurado/stylelint-config-ls-element": "^0.0.2",
     "@reduxjs/toolkit": "^1.5.0",
     "eslint": "^7.19.0",
-    "husky": "^5.2.0",
+    "lint-staged": "^10.5.4",
     "redux": "^4.0.5",
+    "simple-git-hooks": "^2.2.0",
     "stylelint": "^13.8.0",
-    "typescript": "^4.2.3"
+    "typescript": "^4.2.0"
   },
   "eslintConfig": {
     "extends": "@lsegurado/eslint-config-ls-element"
@@ -57,5 +54,13 @@
   },
   "dependencies": {
     "csstype": "^3.0.5"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "src/**/*{.ts,.tsx}": "eslint --cache --fix",
+    "tests/**/*{.ts,.tsx}": "eslint --cache --fix",
+    "**/*.css": "stylelint --fix"
   }
 }
