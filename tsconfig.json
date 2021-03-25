@@ -20,7 +20,7 @@
         "jsxFragmentFactory": "h.Fragment"
     },
     "include": [
-        "testsr",
+        "tests",
         "src"
     ],
     "exclude": [
