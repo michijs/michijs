@@ -1,60 +1,110 @@
-import { a } from '../DOM/HTMLElements/a';
-import { area } from '../DOM/HTMLElements/area';
-import { article } from '../DOM/HTMLElements/article';
-import { aside } from '../DOM/HTMLElements/aside';
-import { audio } from '../DOM/HTMLElements/audio';
-import { base } from '../DOM/HTMLElements/base';
-import { blockquote } from '../DOM/HTMLElements/blockquote';
-import { body } from '../DOM/HTMLElements/body';
-import { br } from '../DOM/HTMLElements/br';
-import { button } from '../DOM/HTMLElements/button';
-import { canvas } from '../DOM/HTMLElements/canvas';
-import { caption, datalist, dd, head, legend, main, nav, noscript, summary, tbody, template, title, _var } from '../DOM/HTMLElements/commonElementsWithoutRoles';
-import { col, colgroup } from '../DOM/HTMLElements/colAndColGroup';
-import { abbr, address, b, bdi, bdo, cite, code, dfn, div, em, figure, i, kbd, mark, p, picture, pre, rp, rt, ruby, s, samp, small, span, strong, sub, sup, table, tfoot, thead, tr, u, wbr } from '../DOM/HTMLElements/commonElementsWithAllRoles';
-import { data } from '../DOM/HTMLElements/data';
-import { ins, del } from '../DOM/HTMLElements/mod';
-import { details } from '../DOM/HTMLElements/details';
-import { embed } from '../DOM/HTMLElements/embed';
-import { fieldset } from '../DOM/HTMLElements/fieldset';
-import { form } from '../DOM/HTMLElements/form';
-import { html } from '../DOM/HTMLElements/html';
-import { iframe } from '../DOM/HTMLElements/iframe';
-import { img } from '../DOM/HTMLElements/img';
-import { input } from '../DOM/HTMLElements/input';
-import { q } from '../DOM/HTMLElements/q';
-import { dialog } from '../DOM/HTMLElements/dialog';
-import { dl } from '../DOM/HTMLElements/dl';
-import { dt } from '../DOM/HTMLElements/dt';
-import { figcaption, footer, header } from '../DOM/HTMLElements/figcaptionAndFooterAndHeader';
-import { headingElement } from '../DOM/HTMLElements/headingElement';
-import { hr } from '../DOM/HTMLElements/hr';
-import { label } from '../DOM/HTMLElements/label';
-import { li } from '../DOM/HTMLElements/li';
-import { link } from '../DOM/HTMLElements/link';
-import { map } from '../DOM/HTMLElements/map';
-import { meta } from '../DOM/HTMLElements/meta';
-import { meter } from '../DOM/HTMLElements/meter';
-import { _object } from '../DOM/HTMLElements/object';
-import { ol } from '../DOM/HTMLElements/ol';
-import { optgroup } from '../DOM/HTMLElements/optgroup';
-import { option } from '../DOM/HTMLElements/option';
-import { output } from '../DOM/HTMLElements/output';
-import { param } from '../DOM/HTMLElements/param';
-import { progress } from '../DOM/HTMLElements/progress';
-import { script } from '../DOM/HTMLElements/script';
-import { section } from '../DOM/HTMLElements/section';
-import { select } from '../DOM/HTMLElements/select';
-import { slot } from '../DOM/HTMLElements/slot';
-import { source } from '../DOM/HTMLElements/source';
-import { style } from '../DOM/HTMLElements/style';
-import { td } from '../DOM/HTMLElements/td';
-import { textarea } from '../DOM/HTMLElements/textarea';
-import { th } from '../DOM/HTMLElements/th';
-import { time } from '../DOM/HTMLElements/time';
-import { track } from '../DOM/HTMLElements/track';
-import { ul } from '../DOM/HTMLElements/ul';
-import { video } from '../DOM/HTMLElements/video';
+import {
+  a
+  , area
+  , article
+  , aside
+  , audio
+  , base
+  , blockquote
+  , body
+  , br
+  , button
+  , canvas
+  , caption
+  , datalist
+  , dd
+  , head
+  , legend
+  , main
+  , nav
+  , noscript
+  , summary
+  , tbody
+  , template
+  , title
+  , _var
+  , col
+  , colgroup
+  , abbr
+  , address
+  , b
+  , bdi
+  , bdo
+  , cite
+  , code
+  , dfn
+  , div
+  , em
+  , figure
+  , i
+  , kbd
+  , mark
+  , p
+  , picture
+  , pre
+  , rp
+  , rt
+  , ruby
+  , s
+  , samp
+  , small
+  , span
+  , strong
+  , sub
+  , sup
+  , table
+  , tfoot
+  , thead
+  , tr
+  , u
+  , wbr
+  , data
+  , ins
+  , del
+  , details
+  , embed
+  , fieldset
+  , form
+  , html
+  , iframe
+  , img
+  , input
+  , q
+  , dialog
+  , dl
+  , dt
+  , figcaption
+  , footer
+  , header
+  , headingElement
+  , hr
+  , label
+  , li
+  , link
+  , map
+  , meta
+  , meter
+  , _object
+  , ol
+  , optgroup
+  , option
+  , output
+  , param
+  , progress
+  , script
+  , section
+  , select
+  , slot
+  , source
+  , style
+  , td
+  , textarea
+  , th
+  , time
+  , track
+  , ul
+  , video
+} from '@lsegurado/htmltype/HTMLElements';
 import { LSTag } from './LSTag';
 
 export interface HTMLElements {

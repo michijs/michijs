@@ -1,61 +1,63 @@
-import { a } from '../DOM/SVGElements/a';
-import { animate } from '../DOM/SVGElements/animate';
-import { animateTransform } from '../DOM/SVGElements/animateTransform';
-import { circle } from '../DOM/SVGElements/circle';
-import { clipPath } from '../DOM/SVGElements/clipPath';
-import { defs } from '../DOM/SVGElements/defs';
-import { desc } from '../DOM/SVGElements/desc';
-import { ellipse } from '../DOM/SVGElements/ellipse';
-import { feBlend } from '../DOM/SVGElements/feBlend';
-import { feColorMatrix } from '../DOM/SVGElements/feColorMatrix';
-import { feComponentTransfer } from '../DOM/SVGElements/feComponentTransfer';
-import { feComposite } from '../DOM/SVGElements/feComposite';
-import { feConvolveMatrix } from '../DOM/SVGElements/feConvolveMatrix';
-import { feDiffuseLighting } from '../DOM/SVGElements/feDiffuseLighting';
-import { feDisplacementMap } from '../DOM/SVGElements/feDisplacementMap';
-import { feDistantLight } from '../DOM/SVGElements/feDistantLight';
-import { feFlood } from '../DOM/SVGElements/feFlood';
-import { feFuncA, feFuncB, feFuncG, feFuncR } from '../DOM/SVGElements/feFunc';
-import { feGaussianBlur } from '../DOM/SVGElements/feGaussianBlur';
-import { feImage } from '../DOM/SVGElements/feImage';
-import { feMerge } from '../DOM/SVGElements/feMerge';
-import { feMergeNode } from '../DOM/SVGElements/feMergeNode';
-import { feMorphology } from '../DOM/SVGElements/feMorphology';
-import { feOffset } from '../DOM/SVGElements/feOffset';
-import { fePointLight } from '../DOM/SVGElements/fePointLight';
-import { feSpecularLighting } from '../DOM/SVGElements/feSpecularLighting';
-import { feSpotLight } from '../DOM/SVGElements/feSpotLight';
-import { feTile } from '../DOM/SVGElements/feTile';
-import { feTurbulence } from '../DOM/SVGElements/feTurbulence';
-import { filter } from '../DOM/SVGElements/filter';
-import { foreignObject } from '../DOM/SVGElements/foreignObject';
-import { g } from '../DOM/SVGElements/g';
-import { image } from '../DOM/SVGElements/image';
-import { line } from '../DOM/SVGElements/line';
-import { linearGradient } from '../DOM/SVGElements/linearGradient';
-import { marker } from '../DOM/SVGElements/marker';
-import { mask } from '../DOM/SVGElements/mask';
-import { metadata } from '../DOM/SVGElements/metadata';
-import { mpath } from '../DOM/SVGElements/mpath';
-import { path } from '../DOM/SVGElements/path';
-import { pattern } from '../DOM/SVGElements/pattern';
-import { polygon } from '../DOM/SVGElements/polygon';
-import { polyline } from '../DOM/SVGElements/polyline';
-import { radialGradient } from '../DOM/SVGElements/radialGradient';
-import { rect } from '../DOM/SVGElements/rect';
-import { script } from '../DOM/SVGElements/script';
-import { set } from '../DOM/SVGElements/set';
-import { stop } from '../DOM/SVGElements/stop';
-import { style } from '../DOM/SVGElements/style';
-import { svg } from '../DOM/SVGElements/svg';
-import { _switch } from '../DOM/SVGElements/switch';
-import { _symbol } from '../DOM/SVGElements/symbol';
-import { text } from '../DOM/SVGElements/text';
-import { textPath } from '../DOM/SVGElements/textPath';
-import { title } from '../DOM/SVGElements/title';
-import { tspan } from '../DOM/SVGElements/tspan';
-import { use } from '../DOM/SVGElements/use';
-import { view } from '../DOM/SVGElements/view';
+import {
+  a
+  , animate
+  , animateTransform
+  , circle
+  , clipPath
+  , defs
+  , desc
+  , ellipse
+  , feBlend
+  , feColorMatrix
+  , feComponentTransfer
+  , feComposite
+  , feConvolveMatrix
+  , feDiffuseLighting
+  , feDisplacementMap
+  , feDistantLight
+  , feFlood
+  , feFuncA, feFuncB, feFuncG, feFuncR
+  , feGaussianBlur
+  , feImage
+  , feMerge
+  , feMergeNode
+  , feMorphology
+  , feOffset
+  , fePointLight
+  , feSpecularLighting
+  , feSpotLight
+  , feTile
+  , feTurbulence
+  , filter
+  , foreignObject
+  , g
+  , image
+  , line
+  , linearGradient
+  , marker
+  , mask
+  , metadata
+  , mpath
+  , path
+  , pattern
+  , polygon
+  , polyline
+  , radialGradient
+  , rect
+  , script
+  , set
+  , stop
+  , style
+  , svg
+  , _switch
+  , _symbol
+  , text
+  , textPath
+  , title
+  , tspan
+  , use
+  , view
+} from '@lsegurado/htmltype/SVGElements';
 import { LSTag } from './LSTag';
 
 export interface SVGElements {

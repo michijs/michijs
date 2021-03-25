@@ -53,7 +53,7 @@
     "extends": "@lsegurado/stylelint-config-ls-element"
   },
   "dependencies": {
-    "csstype": "^3.0.5"
+    "@lsegurado/htmltype": "0.0.2"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"

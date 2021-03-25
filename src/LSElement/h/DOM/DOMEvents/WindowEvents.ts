@@ -1,1 +1,0 @@
-export interface WindowEvents extends Omit<Partial<WindowEventHandlers>, 'addEventListener' | 'removeEventListener'> { }
