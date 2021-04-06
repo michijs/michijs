@@ -40,9 +40,9 @@ export type ElementMap = { tag: string, attrs: { [attribute: string]: any }, chi
 export type ElementMapChild = ElementMap | string;
 export type Store<T> = {
     getState?: () => T,
-    subscribe?: (listener: ChangeFunction) => any,
-    onFinishChanges?: (listener: () => void) => any,
-    setState?: (newState: Partial<T>) => void
+    subscribe?: (listener: ChangeFunction) => void,
+    onFinishChanges?: (listener: () => void) => void,
+    setState?: (key: string, newState: any) => void
 }
 export type WindowEventListener = (event: any) => void;
 
@@ -57,7 +57,7 @@ export type AdoptedStyleSheetList = {
 export type LsAttributesType = {
     alreadyRendered?: boolean,
     adoptedStyleSheets?: AdoptedStyleSheetList[],
-    stateStore?: Store<any>,
+    stateStore?: Store<Map<string,any>>,
     windowEventListeners?: WindowEventListener[],
 }
 
@@ -67,7 +67,7 @@ export type RootElement = LSCustomElement | ShadowRoot;
 
 export type RenderResult = ElementMap | ElementMap[] | undefined;
 
-export interface LSCustomElement extends Element {
+export interface LSCustomElement extends HTMLElement {
     _shadowRoot?: ShadowRoot;
     lsStatic?: LsStaticAttributesType,
     ls?: LsAttributesType,
@@ -84,7 +84,7 @@ export interface LSCustomElement extends Element {
 
 export type AdoptedStyleChild = string | CSSStyleSheet;
 
-export type ChangeFunction = (propertyKey?: string | number | symbol, newValue?: any, oldValue?: any) => any;
+export type ChangeFunction = (propertyKey?: string | number | symbol, newValue?: any, oldValue?: any) => void;
 
 export type StorageLocalChangeEventType = { key: string, newValue: any };
 

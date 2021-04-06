@@ -7,10 +7,10 @@ function getObservedProperties(self: LSCustomElement){
 }
 
 export function initStore(self: LSCustomElement) {
-  const initialState: any = {};
+  const initialState = new Map();
 
   getObservedProperties(self).forEach(propertyKey => {
-    initialState[propertyKey] = self[propertyKey];
+    initialState.set(propertyKey, self[propertyKey]);
   });
 
   self.ls.stateStore = useStore(initialState);

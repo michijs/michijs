@@ -1,7 +1,7 @@
 import { ChangeFunction, Store } from '../types';
 import { deepEqual } from '../utils/deepEqual';
 
-export function useStore<T extends object>(initialState: T): Store<T> {
+export function useStore(initialState: Map<string, any>): Store<Map<string, any>> {
   const listeners: Array<ChangeFunction> = [];
   const listenersOnFinishChanges: Array<() => any> = [];
   let pendingChanges = 0;
@@ -25,22 +25,19 @@ export function useStore<T extends object>(initialState: T): Store<T> {
     return state;
   }
 
-  function setState(newState: Partial<T>) {
-    Object.keys(newState).forEach(propertyKey => {
-      const oldValue = getState()[propertyKey];
-      state[propertyKey] = newState[propertyKey];
-      const newValue = newState[propertyKey];
-      if (!deepEqual(newValue, oldValue)) {
-        onChange(propertyKey, newValue, oldValue);
-      }
-    });
+  function setState(propertyKey: string, newValue: any) {
+    const oldValue = state.get(propertyKey);
+    state.set(propertyKey, newValue);
+    if (!deepEqual(newValue, oldValue)) {
+      onChange(propertyKey, newValue, oldValue);
+    }
   }
 
   function subscribe(listener: ChangeFunction) {
     listeners.push(listener);
   }
 
-  function onFinishChanges(listener: () => any) {
+  function onFinishChanges(listener: () => void) {
     listenersOnFinishChanges.push(listener);
   }
 

@@ -7,13 +7,13 @@ import { removeUnexistentChilds } from './removeUnexistentChilds';
 import { isAnElementMap } from '../../typeWards/isAnElementMap';
 import { insertChildAt } from './insertChildAt';
 import { insertNewChild } from './insertNewChild';
-import { updateAttributes } from './updateAttributes';
 import { createTextNodeContent } from '../createTextNodeContent';
 import { findElement } from './findElement';
 import { nodeIsHTMLElement } from './nodeIsHTMLElement';
 import { insertNewChildren } from '../insertNewChildren';
 import { getRootNode } from '../getRootNode';
 import { getMountPoint } from '../getMountPoint';
+import { setAttributes } from '../setAttributes';
 
 export function rerender(self: LSCustomElement) {
   updateComputedReflectedAttributes(self);
@@ -50,7 +50,7 @@ export function updateElement(self: LSCustomElement, rootElement: DocumentFragme
             parent.removeChild(oldChild);
             insertNewChild(self, parent, i, newChildMap);
           }
-          updateAttributes(oldChild, newChildMap);
+          setAttributes(self, oldChild, newChildMap, true);
           // You can't tell if the children have changed, it must be the children's responsibility
           updateChildren(self, rootElement, movedElements, oldChild, newChildMap.children);
         } else {//Node does not exist

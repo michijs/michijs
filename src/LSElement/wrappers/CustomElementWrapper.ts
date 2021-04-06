@@ -1,5 +1,5 @@
 import { h } from '../h';
-import { commonElement } from '../h/DOM/HTMLElements/commonElementsWithAllRoles';
+import { commonElement } from '@lsegurado/htmltype/HTMLElements/commonElementsWithAllRoles';
 import { LSTag } from '../h/tags/LSTag';
 import { RenderResult } from '../types';
 

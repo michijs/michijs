@@ -2,8 +2,7 @@ import { ElementMapChild, LSCustomElement, LSNode } from '../types';
 import { createTextNodeContent } from './createTextNodeContent';
 import { insertNewChildren } from './insertNewChildren';
 import { isAnElementMap } from '../typeWards/isAnElementMap';
-import { setAttribute } from './setAttribute';
-import { isAFunction } from '../typeWards/IsAFunction';
+import { setAttributes } from './setAttributes';
 
 export function createElement<T = LSNode>(self: LSCustomElement | null, elementMap: ElementMapChild, isSVGParam?: boolean): T {
   let element: LSNode;
@@ -22,20 +21,7 @@ export function createElement<T = LSNode>(self: LSCustomElement | null, elementM
       element = document.createElement(elementMap.tag);
     }
 
-    if (elementMap.attrs) {
-      Object.keys(elementMap.attrs).forEach(name => {
-        const value = elementMap.attrs[name];
-        if (isAFunction(value) && name.startsWith('on')) {
-          if (self) {
-            element.addEventListener(name.substr(2), (...args) => value.apply(self, [...args]));
-          } else {
-            element.addEventListener(name.substr(2), value);
-          }
-        } else {
-          setAttribute(element as LSCustomElement, name, value);
-        }
-      });
-    }
+    setAttributes(self, element as LSCustomElement, elementMap, false);
     if (elementMap.children.length > 0) {
       insertNewChildren(self, element as Element, elementMap.children, isSVG);
     }

@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "allowJs": true,
         "allowSyntheticDefaultImports": true,
         "allowUnreachableCode": false,
         "declaration": true,
@@ -24,6 +25,7 @@
         "src"
     ],
     "exclude": [
+        "*.spec.*",
         "node_modules"
     ]
 }

@@ -1,0 +1,140 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Performance tests clear rows: 1617716569478 1`] = `
+Map {
+  "create1000Rows" => 635.15,
+  "replaceAllRows" => 1568.21,
+  "partialUpdate" => 118.07,
+  "selectRow" => 83.72,
+  "swapRows" => 68.5,
+  "removeRow" => 58.29,
+  "createManyRows" => 6750.24,
+  "appendRowsToLargeTable" => 2270.05,
+  "clearRows" => 62.78,
+}
+`;
+
+exports[`Performance tests matches the snapshot on initial render 1`] = `
+HTMLCollection [
+  <div
+    class="container"
+    id="container"
+  >
+    <div
+      class="jumbotron"
+      id="jumbotron"
+    >
+      <div
+        class="row"
+        id="1"
+      >
+        <div
+          class="col-md-6"
+          id="2"
+        >
+          <h1
+            id="3"
+          >
+            LS-Element keyed
+          </h1>
+        </div>
+        <div
+          class="col-md-6"
+          id="4"
+        >
+          <div
+            class="row"
+            id="5"
+          >
+            <div
+              class="col-sm-6 smallpad"
+              id="6"
+            >
+              <button
+                class="btn btn-primary btn-block"
+                id="run"
+                type="button"
+              >
+                Create 1,000 rows
+              </button>
+            </div>
+            <div
+              class="col-sm-6 smallpad"
+              id="7"
+            >
+              <button
+                class="btn btn-primary btn-block"
+                id="runlots"
+                type="button"
+              >
+                Create 10,000 rows
+              </button>
+            </div>
+            <div
+              class="col-sm-6 smallpad"
+              id="8"
+            >
+              <button
+                class="btn btn-primary btn-block"
+                id="add"
+                type="button"
+              >
+                Append 1,000 rows
+              </button>
+            </div>
+            <div
+              class="col-sm-6 smallpad"
+              id="9"
+            >
+              <button
+                class="btn btn-primary btn-block"
+                id="update"
+                type="button"
+              >
+                Update every 10th row
+              </button>
+            </div>
+            <div
+              class="col-sm-6 smallpad"
+              id="10"
+            >
+              <button
+                class="btn btn-primary btn-block"
+                id="clear"
+                type="button"
+              >
+                Clear
+              </button>
+            </div>
+            <div
+              class="col-sm-6 smallpad"
+              id="11"
+            >
+              <button
+                class="btn btn-primary btn-block"
+                id="swaprows"
+                type="button"
+              >
+                Swap Rows
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <table
+      class="table table-hover table-striped test-data"
+      id="table"
+    >
+      <tbody
+        id="body"
+      />
+    </table>
+    <span
+      aria-hidden="true"
+      class="preloadicon glyphicon glyphicon-remove"
+      id="icon"
+    />
+  </div>,
+]
+`;
