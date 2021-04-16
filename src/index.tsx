@@ -6,6 +6,7 @@ export * from './LSElement/components';
 export type { LSCustomElement, CustomEventDispatcher } from './LSElement/types';
 import './LSElement/h/JSX';
 export { renderFunctionalComponent } from './LSElement/render/renderFunctionalComponent';
+export { render } from './LSElement/render/render';
 export { IdGenerator } from './LSElement/classes/IdGenerator';
 export { CustomElementWrapper } from './LSElement/wrappers/CustomElementWrapper';
 import './LSElement/h/global';

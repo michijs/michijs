@@ -1,18 +1,24 @@
-import { AdoptedStyleChild, LSCustomElement } from '../../types';
-import { h } from '../../h';
+import { AdoptedStyleChild, FC, LSCustomElement } from '../../types';
 import { supportsAdoptingStyleSheets } from './supportsAdoptingStyleSheets';
 import { addStyleSheetToContainer } from './addStyleSheetToContainer';
 import { convertChildToCSSText } from './convertersToCSSText/convertChildToCSSText';
 import { updateStyleSheet } from './updateStyleSheet';
 import { createStyleSheet } from './createStyleSheet';
 import { getShadowRoot } from '../../utils/getShadowRoot';
-import { HTMLElements } from 'src/LSElement/h/tags/HTMLElements';
+import { HTMLElements } from '../../h/tags/HTMLElements';
+import { getRootNode } from '../../render/getRootNode';
+import { h } from '../../h';
 
-export function AdoptedStyle({ parentRef, ...attrs }: { parentRef: LSCustomElement | Document } & HTMLElements['style'], children: (AdoptedStyleChild) | (AdoptedStyleChild)[]) {
+type Ref = LSCustomElement | Document;
+type AdoptedStyleProps = HTMLElements['style'] & { ref?: Ref };
+type AdoptedStyleChildren = (AdoptedStyleChild | AdoptedStyleChild[])[];
+
+export const AdoptedStyle: FC<AdoptedStyleProps, AdoptedStyleChildren, Ref> = ({ ref, ...attrs }, children, self) => {
   const childrenAsSingleArray: Array<AdoptedStyleChild> = Array.isArray(children[0]) ? children[0] : [children[0]];
+  const parentRef: LSCustomElement | Document = ref || self;
 
   // @ts-ignore
-  const container: StyleSheetContainer = parentRef === document ? document : getShadowRoot(parentRef);
+  const container: StyleSheetContainer = parentRef === document ? document : getShadowRoot(parentRef) || getRootNode(parentRef);//Without Shadow Root
   if (supportsAdoptingStyleSheets && container) {
     const castedParentRef = parentRef as LSCustomElement;
     childrenAsSingleArray.forEach((child, index) => {
@@ -34,4 +40,4 @@ export function AdoptedStyle({ parentRef, ...attrs }: { parentRef: LSCustomEleme
   } else {
     return <style {...attrs}>{convertChildToCSSText(childrenAsSingleArray.join(''))}</style>;
   }
-}
+};

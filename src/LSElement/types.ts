@@ -1,3 +1,5 @@
+import { commonElement } from '@lsegurado/htmltype/HTMLElements';
+
 export type AttributeOptionsType = {
     reflect?: boolean;
 }
@@ -36,8 +38,6 @@ export type LsStaticAttributesType = {
     extends: string;
 }
 
-export type ElementMap = { tag: string, attrs: { [attribute: string]: any }, children: ElementMapChild[] };
-export type ElementMapChild = ElementMap | string;
 export type Store<T> = {
     getState?: () => T,
     subscribe?: (listener: ChangeFunction) => void,
@@ -57,15 +57,9 @@ export type AdoptedStyleSheetList = {
 export type LsAttributesType = {
     alreadyRendered?: boolean,
     adoptedStyleSheets?: AdoptedStyleSheetList[],
-    stateStore?: Store<Map<string,any>>,
+    stateStore?: Store<Map<string, any>>,
     windowEventListeners?: WindowEventListener[],
 }
-
-export type LSNode = Node & { ls?: LsAttributesType }
-
-export type RootElement = LSCustomElement | ShadowRoot;
-
-export type RenderResult = ElementMap | ElementMap[] | undefined;
 
 export interface LSCustomElement extends HTMLElement {
     _shadowRoot?: ShadowRoot;
@@ -77,10 +71,20 @@ export interface LSCustomElement extends HTMLElement {
     componentWillUpdate?(): void,
     componentDidUpdate?(): void,
     componentWillReceiveAttribute?: (name: string, newValue, oldValue) => void;
-    computedReflectedAttributes?: () => { [attribute: string]: any; };
-    render(): RenderResult;
+    render(): JSX.Element;
     staticChildren?: boolean;
 }
+
+export type PrimitiveType = bigint | null | undefined | string | number | boolean;
+
+export type CommonJSXAttrs = { attrs: { [attribute: string]: any } | null, children: JSX.Element[] }
+export type FragmentJSXElement = { tag: undefined } & Omit<CommonJSXAttrs, 'attrs'>;
+export type ObjectJSXElement = { tag: string } & CommonJSXAttrs;
+export type FunctionJSXElement = { tag: FC<any> } & CommonJSXAttrs;
+export type SingleJSXElement = PrimitiveType | ObjectJSXElement | FunctionJSXElement | FragmentJSXElement;
+export type ArrayJSXElement = Array<SingleJSXElement>;
+
+export type FC<T = commonElement, C = CommonJSXAttrs['children'], S = LSCustomElement | DocumentFragment> = (attrs: T, children: C, self?: S) => JSX.Element;
 
 export type AdoptedStyleChild = string | CSSStyleSheet;
 

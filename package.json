@@ -54,7 +54,17 @@
   "eslintConfig": {
     "extends": "@lsegurado/eslint-config-ls-element",
     "rules": {
-      "jest/no-standalone-expect": "off"
+      "jest/no-standalone-expect": "off",
+      "jest/no-export": "off"
+    }
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom",
+    "automock": false,
+    "transform": {
+      "\\.(js|jsx|ts|tsx)$": "ts-jest",
+      "\\.(css)$": "./cssTransform.js"
     }
   },
   "stylelint": {

@@ -8,7 +8,7 @@ export class BuiltInButton extends HTMLButtonElement implements LSCustomElement 
 	render() {
 	  return (
 	    <>
-	      <AdoptedStyle parentRef={this} id="style">{style}</AdoptedStyle>
+	      <AdoptedStyle id="style">{style}</AdoptedStyle>
 	      {this.text}
 	    </>
 	  );

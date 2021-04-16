@@ -1,7 +1,7 @@
-import { ElementMapChild, LSCustomElement } from '../types';
-import { createElement } from './createElement';
+import { LSCustomElement } from '../types';
+import { ElementFactory } from './ElementFactory';
 
-export function insertNewChildren(self: LSCustomElement, parent: ParentNode, children: ElementMapChild[], isSvgParam: boolean = false) {
-  const createdElements = children.map(childElementMap => createElement(self, childElementMap, isSvgParam));
+export function insertNewChildren(self: LSCustomElement | DocumentFragment, parent: ParentNode, jsxElements: JSX.Element[], isSvgParam: boolean = false) {
+  const createdElements = jsxElements.map(jsxElement => ElementFactory.fromJSXElement(self, jsxElement, isSvgParam));
   parent.append(...createdElements);
 }

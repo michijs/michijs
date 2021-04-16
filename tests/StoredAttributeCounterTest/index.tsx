@@ -23,7 +23,7 @@ export class StoredAttributeCounter extends HTMLElement implements LSCustomEleme
   render() {
     return (
       <>
-        <AdoptedStyle parentRef={this} id="style">{css}</AdoptedStyle>
+        <AdoptedStyle id="style">{css}</AdoptedStyle>
         <button id="decrement-count" onpointerup={this.decrementCount}>-</button>
         <span id='count'>{this.count}</span>
         <button id="increment-count" onpointerup={this.incrementCount}>+</button>

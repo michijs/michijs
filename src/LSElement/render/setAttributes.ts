@@ -1,15 +1,15 @@
 import { CSSProperties } from '@lsegurado/htmltype/Attributes';
 import { AdoptedStyle } from '../components/AdoptedStyle';
 import { supportsAdoptingStyleSheets } from '../components/AdoptedStyle/supportsAdoptingStyleSheets';
-import { ElementMap, LSCustomElement } from '../types';
+import { LSCustomElement, ObjectJSXElement } from '../types';
 import { isAFunction } from '../typeWards/IsAFunction';
 import { deepEqual } from '../utils/deepEqual';
 import { getAttribute } from '../utils/getAttribute';
 import { setAttributeValue } from '../utils/setAttributeValue';
 import { addRule } from '../inlineCSS/addRule';
+import { isADocumentFragment } from '../typeWards/isADocumentFragment';
 
-export function setAttributes(self: LSCustomElement | null, currentElement: LSCustomElement, newElementMap: ElementMap, isUpdate: boolean) {
-  const { attrs } = newElementMap;
+export function setAttributes(self: LSCustomElement | DocumentFragment | null, currentElement: HTMLElement, attrs: ObjectJSXElement['attrs'], isUpdate: boolean) {
   if (attrs) {
     const attributesNames: string[] = isUpdate ? attrs._dynamicAttributes || Object.keys(attrs) : Object.keys(attrs);
     attributesNames.forEach(name => {
@@ -36,7 +36,7 @@ export function setAttributes(self: LSCustomElement | null, currentElement: LSCu
   }
 }
 
-function setAttribute(element: LSCustomElement, name: string, value: any) {
+function setAttribute(element: Element, name: string, value: any) {
   if (name.startsWith('_')) {
     const key = name.substr(1);
     element[key] = value;
@@ -45,11 +45,11 @@ function setAttribute(element: LSCustomElement, name: string, value: any) {
   }
 }
 
-function setStyle(self: LSCustomElement | null, element: LSCustomElement, styleValue: CSSProperties, id: string) {
-  if (self && supportsAdoptingStyleSheets) {
+function setStyle(self: LSCustomElement | DocumentFragment | null, element: HTMLElement, styleValue: CSSProperties, id: string) {
+  if (self && supportsAdoptingStyleSheets && !isADocumentFragment(self)) {
     const newStyleSheet = new CSSStyleSheet();
     addRule(newStyleSheet, `#${id}`, styleValue);
-    AdoptedStyle({ parentRef: self, id: self.id }, [newStyleSheet]);
+    AdoptedStyle({ id: self.id }, [newStyleSheet], self);
   } else {
     element.removeAttribute('style');
     if (styleValue) {
@@ -62,4 +62,3 @@ function setStyle(self: LSCustomElement | null, element: LSCustomElement, styleV
     }
   }
 }
-

@@ -3,7 +3,7 @@ import css from '../Shared/Counter.css';
 import { MyCounterAttributes } from '../Types';
 
 @AutonomousCustomElement()
-export class SimpleCounter extends HTMLElement implements LSCustomElement {
+export class SimpleCounterWithInlineCss extends HTMLElement implements LSCustomElement {
     @Attribute({ reflect: true }) count: number = 0;
     @EventDispatcher() countChanged: CustomEventDispatcher<number>;
 
@@ -32,4 +32,4 @@ export class SimpleCounter extends HTMLElement implements LSCustomElement {
     }
 }
 
-export default CustomElementWrapper<MyCounterAttributes>()(SimpleCounter);
+export default CustomElementWrapper<MyCounterAttributes>()(SimpleCounterWithInlineCss);

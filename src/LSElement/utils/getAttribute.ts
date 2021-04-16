@@ -1,6 +1,4 @@
-import { LSCustomElement } from '../types';
-
-export function getAttribute(element: LSCustomElement, name: string) {
+export function getAttribute(element: HTMLElement, name: string) {
   if (name.startsWith('_')) {
     const key = name.substr(1);
     return element[key];

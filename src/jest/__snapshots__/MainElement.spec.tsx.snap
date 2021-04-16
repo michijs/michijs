@@ -1,20 +1,34 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Performance tests clear rows: 1617716569478 1`] = `
+exports[`Performance tests - LS-Element clear rows: 1618606651929 1`] = `
 Map {
-  "create1000Rows" => 635.15,
-  "replaceAllRows" => 1568.21,
-  "partialUpdate" => 118.07,
-  "selectRow" => 83.72,
-  "swapRows" => 68.5,
-  "removeRow" => 58.29,
-  "createManyRows" => 6750.24,
-  "appendRowsToLargeTable" => 2270.05,
-  "clearRows" => 62.78,
+  "create1000Rows" => 560.07,
+  "replaceAllRows" => 628.44,
+  "partialUpdate" => 110.4,
+  "selectRow" => 74.41,
+  "swapRows" => 71.69,
+  "removeRow" => 65.7,
+  "createManyRows" => 6595.88,
+  "appendRowsToLargeTable" => 1873.66,
+  "clearRows" => 66.67,
 }
 `;
 
-exports[`Performance tests matches the snapshot on initial render 1`] = `
+exports[`Performance tests - LS-Element clear rows: LS-Element 1.2.6 1`] = `
+Map {
+  "create1000Rows" => 628.04,
+  "replaceAllRows" => 1338.53,
+  "partialUpdate" => 89.95,
+  "selectRow" => 61.77,
+  "swapRows" => 64.19,
+  "removeRow" => 56.07,
+  "createManyRows" => 7013.5,
+  "appendRowsToLargeTable" => 1579.74,
+  "clearRows" => 67.7,
+}
+`;
+
+exports[`Performance tests - LS-Element matches the snapshot on initial render 1`] = `
 HTMLCollection [
   <div
     class="container"
@@ -127,8 +141,123 @@ HTMLCollection [
       id="table"
     >
       <tbody
-        id="body"
-      />
+        id="tbody"
+      >
+        <tr
+          id="row-1"
+        >
+          <td
+            class="col-md-1"
+            id="row-1-1"
+          >
+            1
+          </td>
+          <td
+            class="col-md-4"
+            id="row-1-2"
+          >
+            <a
+              id="row-1-3"
+            >
+              big blue bbq
+            </a>
+          </td>
+          <td
+            class="col-md-1"
+            id="row-1-4"
+          >
+            <a
+              id="row-1-5"
+            >
+              <span
+                aria-hidden="true"
+                class="glyphicon glyphicon-remove"
+                id="row-1-6"
+              />
+            </a>
+          </td>
+          <td
+            class="col-md-6"
+            id="row-1-7"
+          />
+        </tr>
+        <tr
+          id="row-2"
+        >
+          <td
+            class="col-md-1"
+            id="row-2-1"
+          >
+            2
+          </td>
+          <td
+            class="col-md-4"
+            id="row-2-2"
+          >
+            <a
+              id="row-2-3"
+            >
+              long white chair
+            </a>
+          </td>
+          <td
+            class="col-md-1"
+            id="row-2-4"
+          >
+            <a
+              id="row-2-5"
+            >
+              <span
+                aria-hidden="true"
+                class="glyphicon glyphicon-remove"
+                id="row-2-6"
+              />
+            </a>
+          </td>
+          <td
+            class="col-md-6"
+            id="row-2-7"
+          />
+        </tr>
+        <tr
+          id="row-3"
+        >
+          <td
+            class="col-md-1"
+            id="row-3-1"
+          >
+            3
+          </td>
+          <td
+            class="col-md-4"
+            id="row-3-2"
+          >
+            <a
+              id="row-3-3"
+            >
+              clean white keyboard
+            </a>
+          </td>
+          <td
+            class="col-md-1"
+            id="row-3-4"
+          >
+            <a
+              id="row-3-5"
+            >
+              <span
+                aria-hidden="true"
+                class="glyphicon glyphicon-remove"
+                id="row-3-6"
+              />
+            </a>
+          </td>
+          <td
+            class="col-md-6"
+            id="row-3-7"
+          />
+        </tr>
+      </tbody>
     </table>
     <span
       aria-hidden="true"

@@ -1,9 +1,7 @@
-import { ElementMapChild } from '../../types';
-
-export function removeUnexistentChilds(parent: HTMLElement, newChildrenMap: ElementMapChild[]) {
+export function removeUnexistentChilds(parent: HTMLElement, newChildrenLength: number) {
   const childNodes = parent.childNodes;
-  if (newChildrenMap.length < childNodes.length) {
-    const childsToRemove = Array.from(childNodes).slice(newChildrenMap.length, childNodes.length);
+  if (newChildrenLength < childNodes.length) {
+    const childsToRemove = Array.from(childNodes).slice(newChildrenLength, childNodes.length);
     childsToRemove.forEach(childToRemove => parent.removeChild(childToRemove));
   }
 }

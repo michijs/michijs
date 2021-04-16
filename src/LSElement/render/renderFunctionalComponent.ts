@@ -1,6 +1,9 @@
-import { createElement } from './createElement';
-import { ElementMapChild } from '../types';
+import { insertNewChildren } from './insertNewChildren';
 
-export function renderFunctionalComponent(elementMap: ElementMapChild) {
-  return createElement(null, elementMap);
+export function renderFunctionalComponent(jsxElement: JSX.Element) {
+  const mountPoint = document.createDocumentFragment();
+  if (jsxElement) {
+    insertNewChildren(mountPoint, mountPoint, [jsxElement]);
+  }
+  return mountPoint;
 }

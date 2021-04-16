@@ -1,6 +1,4 @@
-import { LSCustomElement } from '../types';
-
-export function setAttributeValue(self: LSCustomElement | Element, key: string, newValue: any) {
+export function setAttributeValue(self: Element | Element, key: string, newValue: any) {
   switch (true) {
     case newValue === null:
     case newValue === undefined:
