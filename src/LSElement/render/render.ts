@@ -1,4 +1,4 @@
-import { renderFunctionalComponent } from '../..';
+import { renderFunctionalComponent } from './renderFunctionalComponent';
 
 export function render<T extends HTMLElement>(Component, placeToRender = document.body): T {
   placeToRender.innerHTML = '';
