@@ -1,13 +1,13 @@
 import { getShadowRoot } from '../../utils/getShadowRoot';
 import { LSCustomElement } from '../../types';
 import { isCustomElement } from '../../utils/isCustomElement';
-import { updateElement } from './index';
+import { ElementUpdater } from './index';
 
-export function updateChildren(self: LSCustomElement | DocumentFragment, parent: LSCustomElement, jsxElements: JSX.Element[], rootElement: DocumentFragment) {
-  const isACustomElement = isCustomElement(parent);
-  const hasShadowRoot = getShadowRoot(parent);
+export function updateChildren(self: LSCustomElement | DocumentFragment, elementToUpdate: LSCustomElement, jsxElements: JSX.Element[], rootNode: DocumentFragment) {
+  const isACustomElement = isCustomElement(elementToUpdate);
+  const hasShadowRoot = getShadowRoot(elementToUpdate);
 
-  if (!parent.staticChildren && (!isACustomElement || hasShadowRoot)) {
-    updateElement(self, parent, jsxElements, rootElement);
+  if (!elementToUpdate.staticChildren && (!isACustomElement || hasShadowRoot)) {
+    new ElementUpdater(self, elementToUpdate, rootNode).updateElement(jsxElements);
   }
 }

@@ -83,6 +83,7 @@ export type ObjectJSXElement = { tag: string } & CommonJSXAttrs;
 export type FunctionJSXElement = { tag: FC<any> } & CommonJSXAttrs;
 export type SingleJSXElement = PrimitiveType | ObjectJSXElement | FunctionJSXElement | FragmentJSXElement;
 export type ArrayJSXElement = Array<SingleJSXElement>;
+// export type PureObjectJSXElement = { tag: string } & Omit<CommonJSXAttrs,'children'> & {children: (PureObjectJSXElement | string)[]};
 
 export type FC<T = commonElement, C = CommonJSXAttrs['children'], S = LSCustomElement | DocumentFragment> = (attrs: T, children: C, self?: S) => JSX.Element;
 
