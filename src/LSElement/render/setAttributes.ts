@@ -7,21 +7,15 @@ import { deepEqual } from '../utils/deepEqual';
 import { getAttribute } from '../utils/getAttribute';
 import { setAttributeValue } from '../utils/setAttributeValue';
 import { addRule } from '../inlineCSS/addRule';
-import { isADocumentFragment } from '../typeWards/isADocumentFragment';
+import { isALSCustomElement } from '../typeWards/isALSCustomElement';
 
-export function setAttributes(self: LSCustomElement | DocumentFragment | null, currentElement: HTMLElement, attrs: ObjectJSXElement['attrs'], isUpdate: boolean) {
+export function setAttributes(self: LSCustomElement | DocumentFragment, currentElement: HTMLElement, attrs: ObjectJSXElement['attrs'], isUpdate: boolean) {
   if (attrs) {
     const attributesNames: string[] = isUpdate ? attrs._dynamicAttributes || Object.keys(attrs) : Object.keys(attrs);
     attributesNames.forEach(name => {
       const newValue = attrs[name];
       if (isAFunction(newValue) && name.startsWith('on')) {// Events don't change with jsx
-        if (!isUpdate) {
-          if (self) {
-            currentElement.addEventListener(name.substr(2), (...args) => newValue.apply(self, [...args]));
-          } else {
-            currentElement.addEventListener(name.substr(2), newValue);
-          }
-        }
+        setEventListener(self, currentElement, name, newValue, isUpdate);
       } else if (name === 'style') {
         setStyle(self, currentElement, newValue, attrs['id']);
       } else if (isUpdate) {
@@ -36,6 +30,22 @@ export function setAttributes(self: LSCustomElement | DocumentFragment | null, c
   }
 }
 
+function setEventListener(self: LSCustomElement | DocumentFragment, currentElement: HTMLElement, name: string, event: EventListener, isUpdate: boolean) {
+  const needsToBeBinded = isALSCustomElement(self) && !isArrowFunction(event);
+  const finalEvent = needsToBeBinded ? event.bind(self) : event;
+  if (isUpdate) {
+    if (!deepEqual(currentElement[name], finalEvent)) {
+      currentElement[name] = finalEvent;
+    }
+  } else {
+    currentElement[name] = finalEvent;
+  }
+}
+
+function isArrowFunction(arrowFunction: Function) {
+  return arrowFunction.toString().startsWith('(');
+}
+
 function setAttribute(element: Element, name: string, value: any) {
   if (name.startsWith('_')) {
     const key = name.substr(1);
@@ -45,8 +55,8 @@ function setAttribute(element: Element, name: string, value: any) {
   }
 }
 
-function setStyle(self: LSCustomElement | DocumentFragment | null, element: HTMLElement, styleValue: CSSProperties, id: string) {
-  if (self && supportsAdoptingStyleSheets && !isADocumentFragment(self)) {
+function setStyle(self: LSCustomElement | DocumentFragment, element: HTMLElement, styleValue: CSSProperties, id: string) {
+  if (supportsAdoptingStyleSheets && isALSCustomElement(self)) {
     const newStyleSheet = new CSSStyleSheet();
     addRule(newStyleSheet, `#${id}`, styleValue);
     AdoptedStyle({ id: self.id }, [newStyleSheet], self);

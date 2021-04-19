@@ -9,7 +9,7 @@ import { setAttributes } from '../setAttributes';
 import { getJSXElementType, JSXElementType } from '../../typeWards/getJSXElementType';
 import { getRootNode } from '../getRootNode';
 import { ElementFactory } from '../ElementFactory';
-import { tagsAreDifferent } from './tagsAreDifferent';
+import { tagsAreDifferent } from '../tagsAreDifferent';
 
 export function rerender(self: LSCustomElement) {
   self.componentWillUpdate?.();
@@ -32,16 +32,16 @@ export class ElementUpdater {
   }
 
   updateElement(jsxElements: JSX.Element[] = []) {
-    if (jsxElements.length === 0 && this.elementToUpdate.childNodes.length !== 0) {
+    if (jsxElements.length === 0 && this.elementToUpdate.hasChildNodes()) {
       this.elementToUpdate.textContent = '';
     }
-    if (this.elementToUpdate.childNodes.length === 0 && jsxElements.length !== 0) {
+    if (!this.elementToUpdate.hasChildNodes() && jsxElements.length !== 0) {
       insertNewChildren(this.self, this.elementToUpdate, jsxElements);
     } else {
       jsxElements.forEach(jsxElement => {
         this.elementsCounter = this.updateFromJSXElement(jsxElement) + this.insertPendingInsertions();
       });
-      this.removeUnexistentChilds();
+      this.removeLeftoverChildren();
     }
   }
   updateFromJSXElement(jsxElement: JSX.Element): number {
@@ -100,14 +100,14 @@ export class ElementUpdater {
     const [needsToBeMoved, foundAtMovedElements, oldChild] = this.findElement(objectJSXElement);
     if (oldChild) {//Element exists
       if (!tagsAreDifferent(objectJSXElement, oldChild)) {
-        setAttributes(this.self, oldChild, objectJSXElement['attrs'], true);
+        setAttributes(this.self, oldChild, objectJSXElement.attrs, true);
         // You can't tell if the children have changed, it must be the children's responsibility
         updateChildren(this.self, oldChild, objectJSXElement.children, this.rootNode);
         if (needsToBeMoved) {//is in another position
           if (!foundAtMovedElements) {
             this.movedElements.append(this.elementToUpdate.childNodes.item(this.elementsCounter));//Move element in position
           }
-          insertChildrenAt(this.elementToUpdate, oldChild, this.elementsCounter);
+          insertChildrenAt(this.elementToUpdate, [oldChild], this.elementsCounter);
         }
       } else {
         return undefined;
@@ -128,11 +128,12 @@ export class ElementUpdater {
     }
     return oldChild;
   }
-  removeUnexistentChilds() {
+  removeLeftoverChildren() {
     const childNodes = this.elementToUpdate.childNodes;
-    if (this.elementsCounter < childNodes.length) {
-      const childsToRemove = Array.from(childNodes).slice(this.elementsCounter, childNodes.length);
-      childsToRemove.forEach(childToRemove => this.elementToUpdate.removeChild(childToRemove));
+    let itemToRemove = childNodes.item(this.elementsCounter);
+    while(itemToRemove){
+      itemToRemove.remove();
+      itemToRemove = childNodes.item(this.elementsCounter);
     }
   }
   findElement(jsxElement: ObjectJSXElement): [boolean, boolean, LSCustomElement] {

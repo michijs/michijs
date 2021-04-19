@@ -1,5 +1,3 @@
-import { isAFunction } from '../typeWards/IsAFunction';
-
 export function deepEqual(object1, object2) {
   const type = typeof object1;
   const areDifferentTypes = type !== typeof object2;
@@ -8,8 +6,8 @@ export function deepEqual(object1, object2) {
   }
   switch (true) {
     case type === 'undefined': return true;
-    case isAFunction(type): {
-      return object1.toString() === object2.toString();
+    case type === 'function': {
+      return object1.name === object2.name && object1.toString() === object2.toString();
     }
     case type === 'object': {
       if (object1 !== null && object2 !== null) {

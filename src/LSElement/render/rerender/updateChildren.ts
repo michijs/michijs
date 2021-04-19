@@ -4,10 +4,7 @@ import { isCustomElement } from '../../utils/isCustomElement';
 import { ElementUpdater } from './index';
 
 export function updateChildren(self: LSCustomElement | DocumentFragment, elementToUpdate: LSCustomElement, jsxElements: JSX.Element[], rootNode: DocumentFragment) {
-  const isACustomElement = isCustomElement(elementToUpdate);
-  const hasShadowRoot = getShadowRoot(elementToUpdate);
-
-  if (!elementToUpdate.staticChildren && (!isACustomElement || hasShadowRoot)) {
+  if (!elementToUpdate.staticChildren && (!isCustomElement(elementToUpdate) || getShadowRoot(elementToUpdate))) {
     new ElementUpdater(self, elementToUpdate, rootNode).updateElement(jsxElements);
   }
 }
