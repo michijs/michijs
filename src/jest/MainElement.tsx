@@ -30,53 +30,53 @@ export class MainElement extends HTMLElement implements LSCustomElement {
 
   render() {
     return (
-      <div id="container" class="container" _dynamicAttributes={[]}>
-        <div id="jumbotron" class="jumbotron" _dynamicAttributes={[]} _staticChildren>
-          <div id="1" class="row">
-            <div id="2" class="col-md-6">
-              <h1 id="3">LS-Element keyed</h1>
+      <div id="container" _className="container" _dynamicAttributes={[]}>
+        <div id="jumbotron" _className="jumbotron" _dynamicAttributes={[]} _staticChildren>
+          <div id="1" _className="row">
+            <div id="2" _className="col-md-6">
+              <h1 id="3" _textContent="LS-Element keyed" />
             </div>
-            <div id="4" class="col-md-6">
-              <div id="5" class="row">
-                <div id="6" class="col-sm-6 smallpad">
-                  <button type="button" class="btn btn-primary btn-block" id="run" onclick={this.run}>Create 1,000 rows</button>
+            <div id="4" _className="col-md-6">
+              <div id="5" _className="row">
+                <div id="6" _className="col-sm-6 smallpad">
+                  <button _type="button" _className="btn btn-primary btn-block" id="run" onclick={this.run} _textContent="Create 1,000 rows" />
                 </div>
-                <div id="7" class="col-sm-6 smallpad">
-                  <button type="button" class="btn btn-primary btn-block" id="runlots" onclick={this.runLots}>Create 10,000 rows</button>
+                <div id="7" _className="col-sm-6 smallpad">
+                  <button _type="button" _className="btn btn-primary btn-block" id="runlots" onclick={this.runLots} _textContent="Create 10,000 rows" />
                 </div>
-                <div id="8" class="col-sm-6 smallpad">
-                  <button type="button" class="btn btn-primary btn-block" id="add" onclick={this.add}>Append 1,000 rows</button>
+                <div id="8" _className="col-sm-6 smallpad">
+                  <button _type="button" _className="btn btn-primary btn-block" id="add" onclick={this.add} _textContent="Append 1,000 rows" />
                 </div>
-                <div id="9" class="col-sm-6 smallpad">
-                  <button type="button" class="btn btn-primary btn-block" id="update" onclick={() => this.update()}>Update every 10th row</button>
+                <div id="9" _className="col-sm-6 smallpad">
+                  <button _type="button" _className="btn btn-primary btn-block" id="update" onclick={() => this.update()} _textContent="Update every 10th row" />
                 </div>
-                <div id="10" class="col-sm-6 smallpad">
-                  <button type="button" class="btn btn-primary btn-block" id="clear" onclick={this.clear}>Clear</button>
+                <div id="10" _className="col-sm-6 smallpad">
+                  <button _type="button" _className="btn btn-primary btn-block" id="clear" onclick={this.clear} _textContent="Clear" />
                 </div>
-                <div id="11" class="col-sm-6 smallpad">
-                  <button type="button" class="btn btn-primary btn-block" id="swaprows" onclick={this.swapRows}>Swap Rows</button>
+                <div id="11" _className="col-sm-6 smallpad">
+                  <button _type="button" _className="btn btn-primary btn-block" id="swaprows" onclick={this.swapRows} _textContent="Swap Rows" />
                 </div >
               </div >
             </div >
           </div >
         </div >
-        <table id="table" class="table table-hover table-striped test-data" _dynamicAttributes={[]}>
-          <tbody id="tbody" _dynamicAttributes={[]}>{this.rows.map(item => (
-            <tr id={`row-${item.id}`} class={item.id === this.selected ? 'danger' : undefined} _dynamicAttributes={['class']}>
-              <td id={`row-${item.id}-1`} class="col-md-1" _dynamicAttributes={[]} _staticChildren>{item.id}</td>
-              <td id={`row-${item.id}-2`} class="col-md-4" _dynamicAttributes={[]}>
-                <a id={`row-${item.id}-3`} onclick={() => this.select(item.id)} _dynamicAttributes={[]}>{item.label}</a>
+        <table id="table" _className="table table-hover table-striped test-data" _dynamicAttributes={[]}>
+          <tbody id="tbody" _dynamicAttributes={[]}>{this.rows.map(({ id, label }) => (
+            <tr id={`row-${id}`} class={id === this.selected ? 'danger' : undefined} _dynamicAttributes={['class']}>
+              <td id={`row-${id}-1`} _className="col-md-1" _dynamicAttributes={[]} _staticChildren _textContent={id} />
+              <td id={`row-${id}-2`} _className="col-md-4" _dynamicAttributes={[]}>
+                <a id={`row-${id}-3`} onclick={() => this.select(id)} _staticChildren _dynamicAttributes={['_textContent']} _textContent={label} />
               </td>
-              <td id={`row-${item.id}-4`} class="col-md-1" _dynamicAttributes={[]} _staticChildren>
-                <a id={`row-${item.id}-5`} onclick={() => this.delete(item.id)}>
-                  <span id={`row-${item.id}-6`} class="glyphicon glyphicon-remove" aria-hidden="true" />
+              <td id={`row-${id}-4`} _className="col-md-1" _dynamicAttributes={[]} _staticChildren>
+                <a id={`row-${id}-5`} onclick={() => this.delete(id)}>
+                  <span id={`row-${id}-6`} _className="glyphicon glyphicon-remove" aria-hidden="true" />
                 </a>
               </td>
-              <td id={`row-${item.id}-7`} class="col-md-6" _dynamicAttributes={[]} _staticChildren />
+              <td id={`row-${id}-7`} _className="col-md-6" _dynamicAttributes={[]} _staticChildren />
             </tr>))}
           </tbody>
         </table >
-        <span id="icon" class="preloadicon glyphicon glyphicon-remove" aria-hidden="true" _dynamicAttributes={[]} _staticChildren />
+        <span id="icon" _className="preloadicon glyphicon glyphicon-remove" aria-hidden="true" _dynamicAttributes={[]} _staticChildren />
       </div >
     );
   }
@@ -109,11 +109,10 @@ export class MainElement extends HTMLElement implements LSCustomElement {
   swapRows() {
     if (this.rows.length > 998) {
       const d1 = this.rows[1];
-      const d998 = this.rows[998];
 
       this.rows = this.rows.map((data, i) => {
         if (i === 1) {
-          return d998;
+          return this.rows[998];
         }
         else if (i === 998) {
           return d1;
