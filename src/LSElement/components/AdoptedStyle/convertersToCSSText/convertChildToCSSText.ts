@@ -1,4 +1,4 @@
-import { AdoptedStyleChild } from '../../../types';
+import type { AdoptedStyleChild } from '../../../types';
 import { convertStyleSheetToCSSText } from './convertStyleSheetToCSSText';
 
 export function convertChildToCSSText(child: AdoptedStyleChild){

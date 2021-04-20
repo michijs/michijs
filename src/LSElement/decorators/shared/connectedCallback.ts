@@ -1,6 +1,6 @@
-import { LSCustomElement } from '../../types';
+import type { LSCustomElement } from '../../types';
 import { addReflectedAttributes } from '../../properties/addReflectedAttributes';
-import { executeFirstRender } from '../../render/executeFirstRender';
+import { executeFirstRender } from '../../DOM/executeFirstRender';
 
 export function connectedCallback(self: LSCustomElement) {//Children and attributes should be managed after constructor
   addReflectedAttributes(self);

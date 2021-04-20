@@ -1,41 +1,38 @@
-import { ArrayJSXElement, FragmentJSXElement, FunctionJSXElement, LSCustomElement, ObjectJSXElement, PrimitiveType } from '../../types';
-import { updateChildren } from './updateChildren';
-import { insertChildrenAt } from './insertChildrenAt';
-import { createTextNodeContent } from '../createTextNodeContent';
-import { nodeIsHTMLElement } from '../../typeWards/nodeIsHTMLElement';
-import { insertNewChildren } from '../insertNewChildren';
-import { getMountPoint } from '../getMountPoint';
-import { setAttributes } from '../setAttributes';
-import { getJSXElementType, JSXElementType } from '../../typeWards/getJSXElementType';
-import { getRootNode } from '../getRootNode';
-import { ElementFactory } from '../ElementFactory';
-import { tagsAreDifferent } from '../tagsAreDifferent';
+import { ArrayJSXElement, FragmentJSXElement, FunctionJSXElement, LSCustomElement, ObjectJSXElement, PrimitiveType } from '../types';
+import { insertChildrenAt } from '../DOM/insertChildrenAt';
+import { createText } from '../DOM/createText';
+import { nodeIsHTMLElement } from '../typeWards/nodeIsHTMLElement';
+import { AttributeManager } from './AttributeManager';
+import { getJSXElementType, JSXElementType } from '../typeWards/getJSXElementType';
+import { getRootNode } from '../DOM/getRootNode';
+import { ElementFactory } from './ElementFactory';
+import { tagsAreDifferent } from '../DOM/tagsAreDifferent';
+import { isCustomElement } from '../utils/isCustomElement';
+import { getShadowRoot } from '../utils/getShadowRoot';
+import { insertNewChildren } from '../DOM/insertNewChildren';
 
-export function rerender(self: LSCustomElement) {
-  self.componentWillUpdate?.();
-  const newChildren = self.render();
-  new ElementUpdater(self, getMountPoint(self) as HTMLElement).updateElement([newChildren]);
-  self.componentDidUpdate?.();
-}
 export class ElementUpdater {
-  self: LSCustomElement | DocumentFragment;
-  rootNode: DocumentFragment;
-  pendingInsertions: (Node | string)[] = [];
-  movedElements = document.createDocumentFragment();
-  elementsCounter = 0;
-  elementToUpdate: HTMLElement;
+  private self: LSCustomElement | null;
+  private rootNode: DocumentFragment;
+  private pendingInsertions: (Node | string)[] = [];
+  private movedElements = document.createDocumentFragment();
+  private elementsCounter = 0;
+  private elementToUpdate: Element;
 
-  constructor(self: LSCustomElement | DocumentFragment, elementToUpdate: HTMLElement, rootNode: DocumentFragment = getRootNode(self)) {
+  constructor(self: LSCustomElement, elementToUpdate: Element, rootNode: DocumentFragment = getRootNode(self)) {
     this.self = self;
     this.rootNode = rootNode;
     this.elementToUpdate = elementToUpdate;
   }
 
   updateElement(jsxElements: JSX.Element[] = []) {
-    if (jsxElements.length === 0 && this.elementToUpdate.hasChildNodes()) {
-      this.elementToUpdate.textContent = '';
-    }
-    if (!this.elementToUpdate.hasChildNodes() && jsxElements.length !== 0) {
+    // if (jsxElements.length === 0) {
+    //   if (this.elementToUpdate.hasChildNodes()) {
+    //     console.log('pase')
+    //     this.elementToUpdate.textContent = '';
+    //   }
+    // } else {
+    if (!this.elementToUpdate.hasChildNodes()) {
       insertNewChildren(this.self, this.elementToUpdate, jsxElements);
     } else {
       jsxElements.forEach(jsxElement => {
@@ -43,6 +40,7 @@ export class ElementUpdater {
       });
       this.removeLeftoverChildren();
     }
+    // }
   }
   updateFromJSXElement(jsxElement: JSX.Element): number {
     const [type, jsxElementTyped] = getJSXElementType(jsxElement);
@@ -100,9 +98,9 @@ export class ElementUpdater {
     const [needsToBeMoved, foundAtMovedElements, oldChild] = this.findElement(objectJSXElement);
     if (oldChild) {//Element exists
       if (!tagsAreDifferent(objectJSXElement, oldChild)) {
-        setAttributes(this.self, oldChild, objectJSXElement.attrs, true);
+        AttributeManager.setAttributes(this.self, oldChild, objectJSXElement.attrs, true);
         // You can't tell if the children have changed, it must be the children's responsibility
-        updateChildren(this.self, oldChild, objectJSXElement.children, this.rootNode);
+        this.updateChildren(oldChild, objectJSXElement.children);
         if (needsToBeMoved) {//is in another position
           if (!foundAtMovedElements) {
             this.movedElements.append(this.elementToUpdate.childNodes.item(this.elementsCounter));//Move element in position
@@ -121,19 +119,28 @@ export class ElementUpdater {
     let oldChild = childNodes.item(this.elementsCounter);
     oldChild = nodeIsHTMLElement(oldChild) ? undefined : oldChild;
     if (oldChild) {//Old child is an text node - I replace his text if it is different
-      const newChildText = createTextNodeContent(jsxElement);
+      const newChildText = createText(jsxElement);
       if (childNodes[this.elementsCounter].textContent !== newChildText) {//Texts are different - Update text content
         childNodes[this.elementsCounter].textContent = newChildText;
       }
     }
     return oldChild;
   }
+  updateChildren(elementToUpdate: LSCustomElement, jsxElements: JSX.Element[]) {
+    if (!elementToUpdate.staticChildren && (!isCustomElement(elementToUpdate) || getShadowRoot(elementToUpdate))) {
+      new ElementUpdater(this.self, elementToUpdate, this.rootNode).updateElement(jsxElements);
+    }
+  }
   removeLeftoverChildren() {
-    const childNodes = this.elementToUpdate.childNodes;
-    let itemToRemove = childNodes.item(this.elementsCounter);
-    while(itemToRemove){
-      itemToRemove.remove();
-      itemToRemove = childNodes.item(this.elementsCounter);
+    if (this.elementsCounter === 0) {//Already validated if exists childNodes
+      this.elementToUpdate.textContent = '';
+    } else {
+      const childNodes = this.elementToUpdate.childNodes;
+      let itemToRemove = childNodes.item(this.elementsCounter);
+      while (itemToRemove) {
+        itemToRemove.remove();
+        itemToRemove = childNodes.item(this.elementsCounter);
+      }
     }
   }
   findElement(jsxElement: ObjectJSXElement): [boolean, boolean, LSCustomElement] {
@@ -148,47 +155,3 @@ export class ElementUpdater {
     return [true, false, this.rootNode ? this.rootNode.getElementById(jsxElement.attrs.id) as LSCustomElement : undefined];
   }
 }
-
-
-// function updateFromClone(self: LSCustomElement | DocumentFragment, parent: HTMLElement, movedElements: DocumentFragment, jsxArrayElement: JSX.Element, elementsCounter: number, templates: Node[], pendingInsertions: (Node | string)[], rootElement: DocumentFragment): number {
-//   const [type, jsxElementTyped] = getJSXElementType(jsxArrayElement);
-//   switch (type) {
-//     case JSXElementType.FUNCTION: {
-//       const { tag, attrs, children } = jsxElementTyped<FunctionJSXElement>();
-//       const result = tag(attrs, children, self);
-//       return updateFromClone(self, parent, movedElements, result, elementsCounter, templates, pendingInsertions, rootElement)
-//     }
-//     case JSXElementType.ARRAY: {
-//       jsxElementTyped<ArrayJSXElement>().forEach(jsxArrayElement => {
-//         elementsCounter = updateFromClone(self, parent, movedElements, jsxArrayElement, elementsCounter, templates, pendingInsertions, rootElement);
-//       })
-//       return elementsCounter;
-//     }
-//     case JSXElementType.FRAGMENT: {
-//       jsxElementTyped<FragmentJSXElement>().children.forEach(fragmentChild => {
-//         elementsCounter = updateFromClone(self, parent, movedElements, fragmentChild, elementsCounter, templates, pendingInsertions, rootElement);
-//       })
-//       return elementsCounter;
-//     }
-//     case JSXElementType.OBJECT: {
-//       const ObjectJSXElement = jsxElementTyped<ObjectJSXElement>();
-//       const oldChild = updateFromObjectJSXElement(self, parent, movedElements, ObjectJSXElement, elementsCounter, rootElement)//Go through the elements, if you find it, update him
-//       if (!oldChild) {//If you find a clone and clones set is != 0 insert them
-//         const clone = cloneNode(self, ObjectJSXElement, templates, false)
-//         pendingInsertions.push(clone);
-//         return elementsCounter;
-//       } else {
-//         const pendingInsertionsLength = pendingInsertions.length;
-//         if (pendingInsertionsLength > 0) {
-//           insertChildrenAt(parent, elementsCounter, pendingInsertions);
-//           pendingInsertions.splice(0, pendingInsertions.length);
-//         }
-//         return elementsCounter + 1 + pendingInsertionsLength;
-//       }
-//     }
-//     default: {
-//       updateFromPrimitiveJSXElement(self, parent, jsxElementTyped<PrimitiveType>(), elementsCounter)
-//       return elementsCounter + 1;
-//     }
-//   }
-// }

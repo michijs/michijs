@@ -1,6 +1,6 @@
 import { LSCustomElement } from '../types';
-import { useStore } from '../hooks/useStore';
-import { rerender } from '../render/rerender';
+import { rerender } from '../DOM/rerender';
+import { LSStore } from '../classes/LSStore';
 
 function getObservedProperties(self: LSCustomElement){
   return self.lsStatic.attributes.concat(self.lsStatic.reflectedAttributes).concat(self.lsStatic.stores.map(store => store.propertyKey));
@@ -13,7 +13,7 @@ export function initStore(self: LSCustomElement) {
     initialState.set(propertyKey, self[propertyKey]);
   });
 
-  self.ls.stateStore = useStore(initialState);
+  self.ls.stateStore = new LSStore(initialState);
 
   self.ls.stateStore.onFinishChanges(() => {
     if (self.ls.alreadyRendered) {

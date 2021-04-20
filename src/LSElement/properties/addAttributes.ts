@@ -1,5 +1,5 @@
 import { LSCustomElement } from '../types';
-import { setStandardAttribute } from '../utils/setStandardAttribute';
+import { AttributeManager } from '../classes/AttributeManager';
 import { definePropertyFromStore } from './definePropertyFromStore';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 
@@ -19,7 +19,7 @@ export function addAttributes(self: LSCustomElement) {
       if (self.ls.alreadyRendered) {
         reflectedAttributes.forEach(reflectedPropertyKey => {
           if (reflectedPropertyKey === propertyKey) {
-            setStandardAttribute(self, propertyKey, newValue);
+            AttributeManager.setStandardAttribute(self, propertyKey, newValue);
           }
         });
       }

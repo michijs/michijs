@@ -1,4 +1,4 @@
-import type { LSCustomElement, ShadowOption, OtherShadowOptions } from 'src/LSElement/types';
+import type { LSCustomElement, ShadowOption, OtherShadowOptions } from '../../types';
 import { addStores } from '../../properties/addStores';
 import { initStore } from '../../properties/initStore';
 import { addAttributes } from '../../properties/addAttributes';

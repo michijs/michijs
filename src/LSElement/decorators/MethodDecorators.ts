@@ -1,5 +1,5 @@
 import { initLsStatic } from '../properties/initLsStatic';
-import { LSCustomElement } from '../types';
+import type { LSCustomElement } from '../types';
 
 export function Observer(observedProperty: string) {
   return function (target: LSCustomElement, propertyKey: string) {

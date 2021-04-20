@@ -1,28 +1,28 @@
-import { ChangeFunction } from '../types';
-import { deepEqual } from '../utils/deepEqual';
+// import { ChangeFunction } from '../types';
+// import { deepEqual } from '../utils/deepEqual';
 
-export function useProxy<T extends object>(object: T, onChange: ChangeFunction): T {
-  return new Proxy<T>(object, {
-    defineProperty(target, propertyKey, descriptor) {
-      const oldValue = target[propertyKey];
-      const result = Reflect.defineProperty(target, propertyKey, descriptor);
-      const newValue = target[propertyKey];
-      if (!deepEqual(newValue, oldValue)) {
-        onChange(propertyKey, newValue, oldValue);
-      }
-      return result;
-    },
-    deleteProperty(target, propertyKey) {
-      const oldValue = target[propertyKey];
-      const result = Reflect.deleteProperty(target, propertyKey);
-      const newValue = target[propertyKey];
-      if (!deepEqual(newValue, oldValue)) {
-        onChange(propertyKey, newValue, oldValue);
-      }
-      return result;
-    }
-  });
-}
+// export function useProxy<T extends object>(object: T, onChange: ChangeFunction): T {
+//   return new Proxy<T>(object, {
+//     defineProperty(target, propertyKey, descriptor) {
+//       const oldValue = target[propertyKey];
+//       const result = Reflect.defineProperty(target, propertyKey, descriptor);
+//       const newValue = target[propertyKey];
+//       if (!deepEqual(newValue, oldValue)) {
+//         onChange(propertyKey, newValue, oldValue);
+//       }
+//       return result;
+//     },
+//     deleteProperty(target, propertyKey) {
+//       const oldValue = target[propertyKey];
+//       const result = Reflect.deleteProperty(target, propertyKey);
+//       const newValue = target[propertyKey];
+//       if (!deepEqual(newValue, oldValue)) {
+//         onChange(propertyKey, newValue, oldValue);
+//       }
+//       return result;
+//     }
+//   });
+// }
 
 // export function useProxy<T extends object>(object: T, onChange: ChangeFunction, rootPropertyKey?: string | number | symbol, rootTarget?: T): T {
 //     return new Proxy<T>(object, {

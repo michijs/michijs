@@ -1,4 +1,4 @@
-import { AdoptedStyleChild } from '../../../types';
+import type { AdoptedStyleChild } from '../../../types';
 import { createStyleSheetFromText } from './createStyleSheetFromText';
 
 export function createStyleSheet(child: AdoptedStyleChild) {

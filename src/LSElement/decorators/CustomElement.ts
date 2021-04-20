@@ -6,7 +6,7 @@ import { disconnectedCallback } from './shared/disconnectedCallback';
 import { attributeChangedCallback } from './shared/attributeChangedCallback';
 import { elementConstructor } from './shared/elementConstructor';
 import { validateTag } from './shared/validateTag';
-import { AutonomousCustomElementConfig, CustomElementConfig, CustomizedBuiltInElementConfig, LSCustomElement } from '../types';
+import type { AutonomousCustomElementConfig, CustomElementConfig, CustomizedBuiltInElementConfig, LSCustomElement } from '../types';
 
 function CustomElement(config?: CustomElementConfig) {
   return function (element: (new () => LSCustomElement) & CustomElementConstructor) {

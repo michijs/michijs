@@ -27,7 +27,6 @@ export class IdGenerator {
 	  const newId = this.generateId();
 	  this.ids.set(key, newId);
 	  return newId;
-		
 	}
 
 	public get(key: string) {

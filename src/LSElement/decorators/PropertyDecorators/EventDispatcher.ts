@@ -1,4 +1,4 @@
-import { LSCustomElement, EventDispatcherOptionsType } from '../../types';
+import type { LSCustomElement, EventDispatcherOptionsType } from '../../types';
 
 export function EventDispatcher(eventInitOptions: EventDispatcherOptionsType = {}): PropertyDecorator {
   return function (_target: LSCustomElement, propertyKey: string) {

@@ -77,7 +77,7 @@ export interface LSCustomElement extends HTMLElement {
 
 export type PrimitiveType = bigint | null | undefined | string | number | boolean;
 
-export type CommonJSXAttrs = { attrs: { [attribute: string]: any } | null, children: JSX.Element[] }
+export type CommonJSXAttrs = { attrs?: { [attribute: string]: any } | null, children: JSX.Element[] }
 export type FragmentJSXElement = { tag: undefined } & Omit<CommonJSXAttrs, 'attrs'>;
 export type ObjectJSXElement = { tag: string } & CommonJSXAttrs;
 export type FunctionJSXElement = { tag: FC<any> } & CommonJSXAttrs;
@@ -85,7 +85,7 @@ export type SingleJSXElement = PrimitiveType | ObjectJSXElement | FunctionJSXEle
 export type ArrayJSXElement = Array<SingleJSXElement>;
 // export type PureObjectJSXElement = { tag: string } & Omit<CommonJSXAttrs,'children'> & {children: (PureObjectJSXElement | string)[]};
 
-export type FC<T = commonElement, C = CommonJSXAttrs['children'], S = LSCustomElement | DocumentFragment> = (attrs: T, children: C, self?: S) => JSX.Element;
+export type FC<T = commonElement, C = CommonJSXAttrs['children'], S = LSCustomElement | null> = (attrs: T, children: C, self?: S) => JSX.Element;
 
 export type AdoptedStyleChild = string | CSSStyleSheet;
 

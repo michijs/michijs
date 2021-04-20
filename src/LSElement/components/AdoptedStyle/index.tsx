@@ -6,7 +6,7 @@ import { updateStyleSheet } from './updateStyleSheet';
 import { createStyleSheet } from './createStyleSheet';
 import { getShadowRoot } from '../../utils/getShadowRoot';
 import { HTMLElements } from '../../h/tags/HTMLElements';
-import { getRootNode } from '../../render/getRootNode';
+import { getRootNode } from '../../DOM/getRootNode';
 import { h } from '../../h';
 
 type Ref = LSCustomElement | Document;
