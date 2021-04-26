@@ -26,12 +26,6 @@ export class ElementUpdater {
   }
 
   updateElement(jsxElements: JSX.Element[] = []) {
-    // if (jsxElements.length === 0) {
-    //   if (this.elementToUpdate.hasChildNodes()) {
-    //     console.log('pase')
-    //     this.elementToUpdate.textContent = '';
-    //   }
-    // } else {
     if (!this.elementToUpdate.hasChildNodes()) {
       insertNewChildren(this.self, this.elementToUpdate, jsxElements);
     } else {
@@ -40,7 +34,6 @@ export class ElementUpdater {
       });
       this.removeLeftoverChildren();
     }
-    // }
   }
   updateFromJSXElement(jsxElement: JSX.Element): number {
     const [type, jsxElementTyped] = getJSXElementType(jsxElement);
@@ -69,7 +62,7 @@ export class ElementUpdater {
       case JSXElementType.OBJECT: {
         const oldChild = this.updateFromObjectJSXElement(jsxElementTyped<ObjectJSXElement>());
         if (!oldChild) {
-          this.pendingInsertions.push(ElementFactory.fromObjectJSXElement(this.self, jsxElementTyped<ObjectJSXElement>()));
+          this.pendingInsertions.push(ElementFactory.fromObjectJSXElement(jsxElementTyped<ObjectJSXElement>(), this.self));
           return this.elementsCounter;
         }
         return this.elementsCounter + 1 + this.insertPendingInsertions();
@@ -77,7 +70,7 @@ export class ElementUpdater {
       default: {
         const oldChild = this.updateFromPrimitiveJSXElement(jsxElementTyped<PrimitiveType>());
         if (!oldChild) {
-          this.pendingInsertions.push(ElementFactory.fromPrimitiveJSXElement(jsxElementTyped<PrimitiveType>()));
+          this.pendingInsertions.push(ElementFactory.fromObjectJSXElement(jsxElementTyped<ObjectJSXElement>(), this.self));
           return this.elementsCounter;
         }
         return this.elementsCounter + 1 + this.insertPendingInsertions();

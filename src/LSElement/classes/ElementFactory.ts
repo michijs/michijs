@@ -6,36 +6,37 @@ import { AttributeManager } from './AttributeManager';
 // import { findTemplate } from './findTemplate';
 
 export abstract class ElementFactory {
-  static fromJSXElement(self: LSCustomElement | null, jsxElement: JSX.Element, isSVGParam?: boolean): string | Node {
+  static fromJSXElement(jsxElement: JSX.Element, self: LSCustomElement | null, isSVGParam?: boolean, pendingInsertions?: Array<string | Node>) {
     const [type, jsxElementTyped] = getJSXElementType(jsxElement);
     switch (type) {
       case JSXElementType.FUNCTION: {
         const { tag, attrs, children } = jsxElementTyped<FunctionJSXElement>();
         const result = tag(attrs, children, self);
-        return this.fromJSXElement(self, result, isSVGParam);
+        this.fromJSXElement(result, self, isSVGParam, pendingInsertions);
+        break;
       }
       case JSXElementType.ARRAY: {
         // const templates = [];
         // const fragment = document.createDocumentFragment();
         // fragment.append(...jsxElementTyped<ArrayJSXElement>().map(jsxArrayElement => this.cloneJSXElement(self, jsxArrayElement, templates, isSVGParam)));
-        const fragment = document.createDocumentFragment();
-        fragment.append(...jsxElementTyped<ArrayJSXElement>().map(jsxArrayElement => this.fromJSXElement(self, jsxArrayElement, isSVGParam)));
-        return fragment;
+        jsxElementTyped<ArrayJSXElement>().forEach(jsxArrayElement => this.fromJSXElement(jsxArrayElement, self, isSVGParam, pendingInsertions));
+        break;
       }
       case JSXElementType.FRAGMENT: {
-        const fragment = document.createDocumentFragment();
-        fragment.append(...jsxElementTyped<FragmentJSXElement>().children.map(jsxArrayElement => this.fromJSXElement(self, jsxArrayElement, isSVGParam)));
-        return fragment;
+        jsxElementTyped<FragmentJSXElement>().children.forEach(jsxArrayElement => this.fromJSXElement(jsxArrayElement, self, isSVGParam, pendingInsertions));
+        break;
       }
       case JSXElementType.OBJECT: {
-        return this.fromObjectJSXElement(self, jsxElementTyped<ObjectJSXElement>(), isSVGParam);
+        pendingInsertions.push(this.fromObjectJSXElement(jsxElementTyped<ObjectJSXElement>(), self, isSVGParam));
+        break;
       }
       default: {
-        return this.fromPrimitiveJSXElement(jsxElementTyped<PrimitiveType>());
+        pendingInsertions.push(this.fromPrimitiveJSXElement(jsxElementTyped<PrimitiveType>()));
+        break;
       }
     }
   }
-  static fromObjectJSXElement(self: LSCustomElement | null, jsxElement: ObjectJSXElement, isSVGParam?: boolean) {
+  static fromObjectJSXElement(jsxElement: ObjectJSXElement, self: LSCustomElement | null, isSVGParam?: boolean) {
     let element: Element;
     const { tag, attrs, children } = jsxElement;
     const isSVG = isSVGParam || (tag && tag.toLowerCase() === 'svg');
@@ -53,7 +54,7 @@ export abstract class ElementFactory {
     }
     AttributeManager.setAttributes(self, element, attrs, false);
     if (children.length > 0) {
-      insertNewChildren(self, element as Element, children, isSVG);
+      insertNewChildren(self, element, children, isSVG);
     }
     return element;
   }

@@ -44,13 +44,13 @@ export abstract class AttributeManager {
       this.setAttribute(element, isUpdate, name, value);
     }
   }
-  static setAttribute(element: Element | HTMLElement, isUpdate: boolean, name: string, value: any) {
+  static setAttribute(element: Element | HTMLElement, isUpdate: boolean, name: string, newValue: any) {
     if (isUpdate) {
-      if (!deepEqual(value, this.getAttribute(element, name))) {
-        this.setAttributeValue(element, name, value);
+      if (!deepEqual(newValue, this.getAttribute(element, name))) {
+        this.setAttributeValue(element, name, newValue);
       }
     } else {
-      this.setAttributeValue(element, name, value);
+      this.setAttributeValue(element, name, newValue);
     }
   }
   static getAttribute(element: Element, name: string) {

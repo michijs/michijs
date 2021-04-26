@@ -1,16 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Performance tests - LS-Element clear rows: 1618924516421 1`] = `
+exports[`Performance tests - LS-Element clear rows: 1619103710853 1`] = `
 Map {
-  "create1000Rows" => 613.71,
-  "replaceAllRows" => 689.16,
-  "partialUpdate" => 94.46,
-  "selectRow" => 64.99,
-  "swapRows" => 45.91,
-  "removeRow" => 44.59,
-  "createManyRows" => 2952.01,
-  "appendRowsToLargeTable" => 1469.06,
-  "clearRows" => 25.4,
+  "create1000Rows" => 576.06,
+  "replaceAllRows" => 655.8,
+  "partialUpdate" => 92.24,
+  "selectRow" => 56.08,
+  "swapRows" => 48.8,
+  "removeRow" => 44.45,
+  "createManyRows" => 2718.44,
+  "appendRowsToLargeTable" => 1586.15,
+  "clearRows" => 24.66,
 }
 `;
 
@@ -159,7 +159,7 @@ HTMLCollection [
             <a
               id="row-1-3"
             >
-              angry green house
+              tall purple table
             </a>
           </td>
           <td
@@ -197,7 +197,7 @@ HTMLCollection [
             <a
               id="row-2-3"
             >
-              helpful brown keyboard
+              pretty brown pony
             </a>
           </td>
           <td
@@ -235,7 +235,7 @@ HTMLCollection [
             <a
               id="row-3-3"
             >
-              fancy white table
+              plain pink desk
             </a>
           </td>
           <td
