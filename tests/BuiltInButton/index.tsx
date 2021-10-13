@@ -1,22 +1,16 @@
-import { CustomizedBuiltInElement, Attribute, AdoptedStyle, h, LSCustomElement, CustomElementWrapper } from '../../src';
-import style from './style.css';
+import { h, AdoptedStyle, createCustomElement } from 'src';
+import { buttonStyle } from './buttonStyle';
 
-@CustomizedBuiltInElement({ extends: 'button' })
-export class BuiltInButton extends HTMLButtonElement implements LSCustomElement {
-	@Attribute({reflect: true }) text: string;
-
-	render() {
-	  return (
-	    <>
-	      <AdoptedStyle id="style">{style}</AdoptedStyle>
-	      {this.text}
-	    </>
-	  );
-	}
-}
-
-type BuiltInButtonAttributes = {
-	text: string;
-};
-
-export default CustomElementWrapper<BuiltInButtonAttributes>()(BuiltInButton);
+export const BuiltInButton = createCustomElement({ tag: 'built-in-button', extends: 'button', class: HTMLButtonElement }, {
+  reflectedAttributes: {
+    text: null
+  },
+  render() {
+    return (
+      <>
+        <AdoptedStyle id="style">{buttonStyle}</AdoptedStyle>
+        {this.text}
+      </>
+    );
+  }
+});

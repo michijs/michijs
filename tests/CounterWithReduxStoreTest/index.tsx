@@ -1,37 +1,33 @@
-import { Host, AutonomousCustomElement, h, AdoptedStyle, EventDispatcher, CustomEventDispatcher, LSCustomElement, CustomElementWrapper, Observer, Store } from '../../src';
-import css from '../Shared/Counter.css';
+import { h, AdoptedStyle, createCustomElement, Host, EventDispatcher } from 'src';
+import { counterStyle } from '../shared/counterStyle';
 import { decrement, increment } from '../shared/redux/CounterSlice';
-import { store, StoreType } from '../shared/redux/store';
-import { MyCounterAttributes } from '../Types';
+import { store } from '../shared/redux/store';
 
-@AutonomousCustomElement()
-export class CounterWithReduxStore extends HTMLElement implements LSCustomElement {
-  @EventDispatcher() countChanged: CustomEventDispatcher<number>;
-  @Store(store) reduxStore: StoreType;
-
-  @Observer('reduxStore')
-  onCountChanged(newValue: StoreType, _oldValue: StoreType) {
-    this.countChanged.dispatch(newValue.counterStore.count);
-  }
-
-  decrementCount() {
-    store.dispatch(decrement());
-  }
-
-  incrementCount() {
-    store.dispatch(increment());
-  }
-
+export const CounterWithReduxStore = createCustomElement('counter-with-redux-store', {
+  methods: {
+    count() { return store.getState().counterStore.count; },
+    decrementCount() { store.dispatch(decrement()); },
+    incrementCount() { store.dispatch(increment()); },
+  },
+  events: {
+    countChanged: new EventDispatcher<number>()
+  },
+  observe: {
+    store() {
+      this.countChanged(this.count());
+    }
+  },
+  subscribeTo: {
+    store
+  },
   render() {
     return (
-      <Host count={this.reduxStore.counterStore.count}>
-        <AdoptedStyle id="style">{css}</AdoptedStyle>
+      <Host count={this.count()}>
+        <AdoptedStyle id="style">{counterStyle}</AdoptedStyle>
         <button id="decrement-count" onpointerup={this.decrementCount}>-</button>
-        <span id='count'>{this.reduxStore.counterStore.count}</span>
+        <span id='count'>{this.count()}</span>
         <button id="increment-count" onpointerup={this.incrementCount}>+</button>
       </Host>
     );
   }
-}
-
-export default CustomElementWrapper<MyCounterAttributes>()(CounterWithReduxStore);
+});

@@ -1,39 +1,58 @@
-import { AutonomousCustomElement, h, IdGenerator, LSCustomElement, Observer } from '../src';
-import { StoredAttribute } from '../src/LSElement/decorators/PropertyDecorators';
-import SimpleCounter from './SimpleCounterTest';
-import CounterWithReduxStore from './CounterWithReduxStoreTest';
-import StoredAttributeCounter from './StoredAttributeCounterTest';
-import BuiltInButton from './BuiltInButton';
+import { createCustomElement, h } from 'src';
+import { Router } from './routes';
+// import sheet from './a.css' assert { type: 'css' };
+// console.log(sheet)
 
-@AutonomousCustomElement()
-export class LsRootTestElement extends HTMLElement implements LSCustomElement {
-    @StoredAttribute({ reflect: true, key: 'arrayTest', method: 'localStorage' }) arrayTest = [1, 2, 3, 4, 5]
-    @Observer('arrayTest')
-    test(newValue, oldValue) {
-      console.log(newValue, oldValue);
-    }
-    idGen = new IdGenerator();
+createCustomElement('ls-root-test-element', {
+  reflectedAttributes: {
+    arrayTest: [1, 2, 3, 4, 5]
+  },
+  shadow: false,
+  render() {
+    return (
+      <>
+        <Router id="route" />
+        {this.arrayTest.map(x => <div id={x.toString()} onclick={() => this.arrayTest.push(this.arrayTest.length + 1)}>{x}</div>)}
+      </>
+    );
+  }
+});
 
-    render() {
-      return (
-        <>
-          <h1 id="SimpleCounter">Simple counter</h1>
-          <SimpleCounter id="SimpleCounterTest" />
-          <SimpleCounter id="SimpleCounterTest2" />
-          <h1 id="CounterWithReduxStore">Counter with redux store</h1>
-          <CounterWithReduxStore id="CounterWithReduxStoreTest" />
-          <CounterWithReduxStore id="CounterWithReduxStoreTest2" />
-          <h1 id="StoredAttributeCounter">Stored attribute counter</h1>
-          <StoredAttributeCounter id="StoredAttributeCounterTest" />
-          <StoredAttributeCounter id="StoredAttributeCounterTest2" />
-          <h1 {...this.idGen.get('idGenTestTitle')}>Id Generator</h1>
-          <div {...this.idGen.get('idGenTest')}>{this.idGen.getId('idGenTest')}</div>
-          <div {...this.idGen.get('idGenTest2')}>{this.idGen.getId('idGenTest2')}</div>
-          <h1 {...this.idGen.get('builtIn')}>Built-in component</h1>
-          <BuiltInButton {...this.idGen.get('builtInButton')} text="Sample customized button" />
-          <h1 {...this.idGen.get('arrays')}>Arrays</h1>
-          {this.arrayTest.map(x => <div id={x.toString()} onclick={() => { this.arrayTest = [...this.arrayTest, this.arrayTest.length + 1]; }}>{x}</div>)}
-        </>
-      );
-    }
-}
+// documentTransition test
+// const titulo1 = document.createElement('h1');
+// titulo1.textContent = 'hola 1'
+// const titulo2 = document.createElement('h1');
+// titulo2.textContent = 'hola 2'
+
+// document.body.appendChild(titulo1)
+// setTimeout(async () => {
+//     if ('documentTransition' in document) {
+//         // @ts-ignore
+//         await document.documentTransition.prepare({
+//             rootTransition: 'cover-up',
+//             // sharedElements: [element1, element2, element3],
+//         });
+//         // This is a function within the web app:
+//         document.body.appendChild(titulo2)
+//         // Start the transition.
+//         // @ts-ignore
+//         await document.documentTransition.start({
+//             // sharedElements: [element1, element4, element5],
+//         });
+
+//     }
+// }, 300)
+
+// const unproxyfy = (object: unknown) => {
+//     if (typeof object === 'object') {
+//         const unproxyfiedObject = {};
+//         Object.entries(object).forEach(([key, value]) => {
+//             unproxyfiedObject[key] = unproxyfy(value)
+//         })
+
+//         return unproxyfiedObject;
+//     }else{
+//         return object;
+//     }
+// }
+// console.log(unproxyfy(a))

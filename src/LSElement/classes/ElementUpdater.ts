@@ -1,4 +1,4 @@
-import { ArrayJSXElement, FragmentJSXElement, FunctionJSXElement, LSCustomElement, ObjectJSXElement, PrimitiveType } from '../types';
+import { ArrayJSXElement, ClassJSXElement, FragmentJSXElement, FunctionJSXElement, LSCustomElement, LSElement, ObjectJSXElement, PrimitiveType } from '../types';
 import { insertChildrenAt } from '../DOM/insertChildrenAt';
 import { createText } from '../DOM/createText';
 import { nodeIsHTMLElement } from '../typeWards/nodeIsHTMLElement';
@@ -26,13 +26,13 @@ export class ElementUpdater {
   }
 
   updateElement(jsxElements: JSX.Element[] = []) {
-    if (!this.elementToUpdate.hasChildNodes()) {
-      insertNewChildren(this.self, this.elementToUpdate, jsxElements);
-    } else {
+    if (this.elementToUpdate.hasChildNodes()) {
       jsxElements.forEach(jsxElement => {
         this.elementsCounter = this.updateFromJSXElement(jsxElement) + this.insertPendingInsertions();
       });
       this.removeLeftoverChildren();
+    } else {
+      insertNewChildren(this.self, () => this.elementToUpdate, jsxElements);
     }
   }
   updateFromJSXElement(jsxElement: JSX.Element): number {
@@ -40,7 +40,8 @@ export class ElementUpdater {
     switch (type) {
       case JSXElementType.FUNCTION: {
         const { tag, attrs, children } = jsxElementTyped<FunctionJSXElement>();
-        const result = tag(attrs, children, this.self);
+        const flattenedChildren = children.flat();
+        const result = tag(attrs, flattenedChildren.length === 1 ? flattenedChildren[0] : flattenedChildren, this.self);
         return this.updateFromJSXElement(result);
       }
       case JSXElementType.ARRAY: {
@@ -52,6 +53,14 @@ export class ElementUpdater {
         // insertChildrenAt(parent, elementsCounter, pendingInsertions);
         // elementsCounter = pendingInsertions.length + elementsCounter
         return this.elementsCounter;
+      }
+      case JSXElementType.CLASS: {
+        const oldChild = this.updateFromClassJSXElement(jsxElementTyped<ClassJSXElement>());
+        if (!oldChild) {
+          this.pendingInsertions.push(ElementFactory.fromClassJSXElement(jsxElementTyped<ClassJSXElement>(), this.self));
+          return this.elementsCounter;
+        }
+        return this.elementsCounter + 1 + this.insertPendingInsertions();
       }
       case JSXElementType.FRAGMENT: {
         jsxElementTyped<FragmentJSXElement>().children.forEach(jsxArrayElement => {
@@ -87,10 +96,13 @@ export class ElementUpdater {
     return pendingInsertionsLength;
   }
 
-  updateFromObjectJSXElement(objectJSXElement: ObjectJSXElement) {
+  updateFromClassJSXElement(classJSXElement: ClassJSXElement) {
+    return this.updateFromObjectJSXElement(classJSXElement as unknown as ObjectJSXElement, classJSXElement.tag.extends || classJSXElement.tag.tag);
+  }
+  updateFromObjectJSXElement(objectJSXElement: | ObjectJSXElement, tag: string = objectJSXElement.tag) {
     const [needsToBeMoved, foundAtMovedElements, oldChild] = this.findElement(objectJSXElement);
     if (oldChild) {//Element exists
-      if (!tagsAreDifferent(objectJSXElement, oldChild)) {
+      if (!tagsAreDifferent(tag, oldChild)) {
         AttributeManager.setAttributes(this.self, oldChild, objectJSXElement.attrs, true);
         // You can't tell if the children have changed, it must be the children's responsibility
         this.updateChildren(oldChild, objectJSXElement.children);
@@ -119,7 +131,7 @@ export class ElementUpdater {
     }
     return oldChild;
   }
-  updateChildren(elementToUpdate: LSCustomElement, jsxElements: JSX.Element[]) {
+  updateChildren(elementToUpdate: LSElement, jsxElements: JSX.Element[]) {
     if (!elementToUpdate.staticChildren && (!isCustomElement(elementToUpdate) || getShadowRoot(elementToUpdate))) {
       new ElementUpdater(this.self, elementToUpdate, this.rootNode).updateElement(jsxElements);
     }
@@ -136,15 +148,20 @@ export class ElementUpdater {
       }
     }
   }
-  findElement(jsxElement: ObjectJSXElement): [boolean, boolean, LSCustomElement] {
+  findElement(jsxElement: ObjectJSXElement | ClassJSXElement): [boolean, boolean, LSElement] {
     const childNodeAtIndex = this.elementToUpdate.childNodes.item(this.elementsCounter);
-    if (nodeIsHTMLElement(childNodeAtIndex) && childNodeAtIndex.id === jsxElement.attrs.id) {
-      return [false, false, childNodeAtIndex];
+    try {
+      if (nodeIsHTMLElement(childNodeAtIndex) && childNodeAtIndex.id === jsxElement.attrs.id) {
+        return [false, false, childNodeAtIndex];
+      }
+    } catch {
+      console.error(`Element ${jsxElement} does not have an id. Please add an id to this element`);
+      return [false, false, childNodeAtIndex as LSCustomElement];
     }
     const movedElement = this.movedElements.getElementById(jsxElement.attrs.id);
     if (movedElement)
-      return [true, true, movedElement as LSCustomElement];
+      return [true, true, movedElement as LSElement];
 
-    return [true, false, this.rootNode ? this.rootNode.getElementById(jsxElement.attrs.id) as LSCustomElement : undefined];
+    return [true, false, this.rootNode ? this.rootNode.getElementById(jsxElement.attrs.id) as LSElement : undefined];
   }
 }

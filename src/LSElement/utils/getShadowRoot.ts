@@ -1,7 +1,6 @@
-import { LSCustomElement } from 'src';
-import { StyleSheetContainer } from '../types';
+import { LSElement, StyleSheetContainer } from '../types';
 
-export function getShadowRoot(self: LSCustomElement): ShadowRoot & StyleSheetContainer {
+export function getShadowRoot(self: LSElement): ShadowRoot & StyleSheetContainer {
   //@ts-ignore
-  return self.shadowRoot || self._shadowRoot;
+  return self.shadowRoot || self.ls.shadowRoot;
 }

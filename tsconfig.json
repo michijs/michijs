@@ -5,6 +5,7 @@
         "allowUnreachableCode": false,
         "declaration": true,
         "experimentalDecorators": true,
+        "noErrorTruncation": true,
         "lib": [
             "dom",
             "es2020"
@@ -14,8 +15,9 @@
         "module": "es2020",
         "target": "es2019",
         "baseUrl": "./",
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "noImplicitThis": true,
         "jsx": "react",
         "jsxFactory": "h.createElement",
         "jsxFragmentFactory": "h.Fragment"

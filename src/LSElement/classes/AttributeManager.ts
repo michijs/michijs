@@ -1,16 +1,15 @@
 import type { CSSProperties } from '@lsegurado/htmltype/Attributes';
 import { AdoptedStyle } from '../components/AdoptedStyle';
-import { supportsAdoptingStyleSheets } from '../components/AdoptedStyle/supportsAdoptingStyleSheets';
-import type { LSCustomElement, ObjectJSXElement } from '../types';
+import { supportsAdoptingStyleSheets } from '../css/supportsAdoptingStyleSheets';
+import type { LSCustomElement, LSElement, ObjectJSXElement } from '../types';
 import { isAFunction } from '../typeWards/IsAFunction';
 import { deepEqual } from '../utils/deepEqual';
-import { addRule } from '../inlineCSS/addRule';
-import { formatToKebabCase } from '../utils/formatToKebabCase';
 import { elementIsHTMLElement } from '../typeWards/elementIsHTMLElement';
 import { isArrowFunction } from '../utils/isArrowFunction';
+import { createStyleSheet } from '../css/createStyleSheet';
 
 export abstract class AttributeManager {
-  static setAttributes(self: LSCustomElement | null, element: Element, attrs: ObjectJSXElement['attrs'], isUpdate: boolean) {
+  static setAttributes(self: LSCustomElement | null, element: LSElement, attrs: ObjectJSXElement['attrs'], isUpdate: boolean) {
     if (attrs) {
       const attributesNames: string[] = isUpdate ? attrs._dynamicAttributes || Object.keys(attrs) : Object.keys(attrs);
       attributesNames.forEach(name => {
@@ -25,16 +24,37 @@ export abstract class AttributeManager {
       });
     }
   }
-  static setEventListener(self: LSCustomElement | null, name: string, event: EventListener, element: Element, isUpdate: boolean) {
-    const needsToBeBinded = self && !isArrowFunction(event);
-    const finalEvent = needsToBeBinded ? event.bind(self) : event;
-    if (isUpdate) {
-      if (!deepEqual(element[name], finalEvent)) {
-        element[name] = finalEvent;
+  static setEventListener(self: LSCustomElement | null, name: string, event: EventListener, element: LSElement, isUpdate: boolean) {
+    const finalEvent = this.bindFunction(self, event);
+    const finalEventName = name.slice(2);
+    if (element.ls?.eventListeners) {
+      const oldEventIndex = element.ls.eventListeners.findIndex(x => x.addedBy === self && x.eventName === finalEventName);
+      if (isUpdate && oldEventIndex >= 0) {
+        const oldEvent = element.ls.eventListeners[oldEventIndex]?.event;
+        if (!deepEqual(oldEvent, finalEvent)) {
+          element.removeEventListener(finalEventName, oldEvent);
+          element.ls.eventListeners.splice(oldEventIndex, 1);
+          element.addEventListener(finalEventName, finalEvent);
+          element.ls.eventListeners.push({ addedBy: self, eventName: finalEventName, event: finalEvent });
+        }
+      } else {
+        element.addEventListener(finalEventName, finalEvent);
+        element.ls.eventListeners.push({ addedBy: self, eventName: finalEventName, event: finalEvent });
       }
     } else {
-      element[name] = finalEvent;
+      element.ls = {
+        ...element.ls,
+        eventListeners: [{ addedBy: self, eventName: finalEventName, event: finalEvent }]
+      };
+      element.addEventListener(finalEventName, finalEvent);
     }
+  }
+  static bindFunction(self: LSCustomElement | null, event?: Function) {
+    if (event) {
+      const needsToBeBinded = self && !isArrowFunction(event);
+      return needsToBeBinded ? event.bind(self) : event;
+    }
+    return event;
   }
   static setAttributeOrProperty(element: Element | HTMLElement, name: string, isUpdate: boolean, value: any) {
     if (name.startsWith('_')) {
@@ -65,26 +85,20 @@ export abstract class AttributeManager {
       element[name] = newValue;
     }
   }
-  static setStyle(self: LSCustomElement | null, element: Element | HTMLElement, styleValue: CSSProperties, id: string) {
+  static setStyle(self: LSCustomElement | null, element: Element | HTMLElement, cssObject: CSSProperties, id: string) {
     if (supportsAdoptingStyleSheets && self) {
-      const newStyleSheet = new CSSStyleSheet();
-      addRule(newStyleSheet, `#${id}`, styleValue);
-      AdoptedStyle({ id: self.id }, [newStyleSheet], self);
+      AdoptedStyle({ id: self.id }, [createStyleSheet(cssObject, [`#${id}`])], self);
     } else {
       element.removeAttribute('style');
-      if (styleValue && elementIsHTMLElement(element)) {
-        Object.entries(styleValue).forEach(([key, value]) => {
+      if (cssObject && elementIsHTMLElement(element)) {
+        Object.entries(cssObject).forEach(([key, value]) => {
           // Manual Update is faster than Object.assign	
           (element as HTMLElement).style[key] = value;
         });
       } else {
-        this.setAttributeValue(element, 'style', styleValue);
+        this.setAttributeValue(element, 'style', cssObject);
       }
     }
-  }
-  static setStandardAttribute(element: Element | HTMLElement, key: string, newValue: any) {
-    const formattedKey = formatToKebabCase(key);
-    this.setAttributeValue(element, formattedKey, newValue);
   }
   static setAttributeValue(element: Element | HTMLElement, key: string, newValue: any) {
     switch (true) {
@@ -109,6 +123,7 @@ export abstract class AttributeManager {
   }
   static getAttributeValue(value) {
     try {
+      // TODO: Complex objects?
       return JSON.parse(value);
     } catch {
       switch (true) {

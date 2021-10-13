@@ -1,35 +1,32 @@
-import { AutonomousCustomElement, h, AdoptedStyle, EventDispatcher, CustomEventDispatcher, LSCustomElement, CustomElementWrapper, Observer, StoredAttribute } from '../../src';
-import css from '../Shared/Counter.css';
-import { MyCounterAttributes } from '../Types';
+import { h, AdoptedStyle, createCustomElement, Host, storedAttribute, EventDispatcher } from 'src';
+import { counterStyle } from '../shared/counterStyle';
 
-@AutonomousCustomElement()
-export class StoredAttributeCounter extends HTMLElement implements LSCustomElement {
-  @StoredAttribute({ reflect: true, key: 'count', method: 'localStorage' }) count = 0;
-  @EventDispatcher() countChanged: CustomEventDispatcher<number>;
+const storedCount = storedAttribute('count', 0);
 
-  @Observer('count')
-  onCountChanged(newValue: number, _oldValue: number) {
-    this.countChanged.dispatch(newValue);
-  }
-
-  decrementCount() {
-    this.count--;
-  }
-
-  incrementCount() {
-    this.count++;
-  }
-
+export const StoredAttributeCounter = createCustomElement('stored-attribute-counter', {
+  methods: {
+    decrementCount() { storedCount.value--; },
+    incrementCount() { storedCount.value++; },
+  },
+  events: {
+    countChanged: new EventDispatcher<number>()
+  },
+  observe: {
+    storedCount() {
+      this.countChanged(storedCount.value);
+    }
+  },
+  subscribeTo: {
+    storedCount
+  },
   render() {
     return (
-      <>
-        <AdoptedStyle id="style">{css}</AdoptedStyle>
+      <Host count={storedCount.value}>
+        <AdoptedStyle id="style">{counterStyle}</AdoptedStyle>
         <button id="decrement-count" onpointerup={this.decrementCount}>-</button>
-        <span id='count'>{this.count}</span>
+        <span id='count'>{storedCount.value}</span>
         <button id="increment-count" onpointerup={this.incrementCount}>+</button>
-      </>
+      </Host>
     );
   }
-}
-
-export default CustomElementWrapper<MyCounterAttributes>()(StoredAttributeCounter);
+});
