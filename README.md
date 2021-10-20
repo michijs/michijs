@@ -230,6 +230,32 @@ A store consists of the following properties:
 LSStores use proxies to listen for changes in their state, in addition, they are observable.
 Each component has an LSStore to listen for changes in its state.
 
+
+## CSS
+To use css we provide functions to create Constructable Stylesheets.
+### createStyleSheet
+Allows to create a Constructable Stylesheet with a CSSObject
+```js
+export const counterStyle = createStyleSheet({
+  ':host': {
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  span: {
+    minWidth: '60px',
+    textAlign: 'center'
+  }
+});
+```
+### css
+Allows to create a Constructable Stylesheet with a Template String.
+[Recomended extension for VSCode](https://marketplace.visualstudio.com/items?itemName=paulmolluzzo.convert-css-in-js): 
+### CSS module scripts
+We do not provide support for this functionality yet as ESBuild does not support it yet. You can read how it works [here](https://web.dev/css-module-scripts/)
+<!-- ```js
+import sheet from './styles.css' assert { type: 'css' };
+``` -->
+
 ## Components
 ### Constructable Stylesheets
 If you are not familiar with Constructable Stylesheets please check [this link](https://developers.google.com/web/updates/2019/02/constructable-stylesheets).
@@ -330,10 +356,4 @@ This could be just the beginning of a amazing era. With your support we could ma
 ### url generation 
 ### parent routes 
 
-## CSS
-### createStyleSheet
-### css
-### CSS module scripts
-import sheet from './styles.css' assert { type: 'css' };
-https://web.dev/css-module-scripts/
 -->

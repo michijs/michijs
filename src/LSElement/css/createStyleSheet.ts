@@ -16,12 +16,12 @@ const compatibleStyleSheet = () => {
       getStyleSheet() {
         return styleSheet;
       },
-      replaceSync(rule: string){
+      replaceSync(rule: string) {
         // @ts-ignore
         styleSheet.replaceSync(rule);
       }
     };
-  } 
+  }
   const rules = [];
   return {
     insertRule(rule: string) {
@@ -30,13 +30,14 @@ const compatibleStyleSheet = () => {
     getStyleSheet() {
       return rules.join('');
     },
-    replaceSync(rule: string){
+    replaceSync(rule: string) {
       rules.push(rule);
     }
   };
-    
+
 };
 
+/**Allows to create a Constructable Stylesheet with a CSSObject */
 export const createStyleSheet = (cssObject: CSSObject | string, selectors: string[] = [], styleSheet = compatibleStyleSheet()): CompatibleStyleSheet => {
   let rule: string;
   if (typeof cssObject === 'object') {
@@ -61,12 +62,17 @@ export const createStyleSheet = (cssObject: CSSObject | string, selectors: strin
   return styleSheet.getStyleSheet();
 };
 
+/**
+ * Allows to create a Constructable Stylesheet with a Template String.
+ * Recomended extension for VSCode: 
+ * @link https://marketplace.visualstudio.com/items?itemName=paulmolluzzo.convert-css-in-js
+ */
 export const css = (cssObject: TemplateStringsArray, ...props: (string | number)[]) => {
   return createStyleSheet(cssObject.raw.map((value, i) => {
     if (props[i]) {
       return value + props[i];
-    } 
+    }
     return value;
-        
+
   }).join(''));
 };
