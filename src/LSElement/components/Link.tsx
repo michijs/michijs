@@ -2,7 +2,7 @@ import type { FC } from '../types';
 import { h } from '../h';
 import { HTMLElements } from '../h/tags/HTMLElements';
 import { SVGElements } from '../h/tags/SVGElements';
-import { WINDOW_URL_CHANGE_EVENTS } from '../constants';
+import { goTo } from '../routing';
 
 type LinkProps = Omit<HTMLElements['a'] & SVGElements['a'], 'href'> & {
   state?: any,
@@ -15,8 +15,7 @@ export const Link: FC<LinkProps> = ({ state = {}, title = document.title, url, .
     href={typeof url === 'string' ? url : url.href}
     onclick={(e) => {
       e.preventDefault();
-      window.history.pushState(state, title, url);
-      window.dispatchEvent(new Event(WINDOW_URL_CHANGE_EVENTS.PUSH_STATE));
+      goTo(url);
       attrs.onclick?.apply(self, [e]);
     }}>
     {children}
