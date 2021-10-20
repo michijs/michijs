@@ -76,7 +76,7 @@ export function createCustomElement<
         constructor() {
           super();
           if ((typeof el === 'string' && elementProperties.shadow !== false) || (typeof el !== 'string' && elementProperties.shadow)) {
-            const { mode, ...otherShadowOptions } = elementProperties.shadow || { mode: 'open' };
+            const { mode, ...otherShadowOptions } = elementProperties.shadow ?? { mode: 'open' };
             const attachedShadow = this.attachShadow({ mode, ...otherShadowOptions });
             if (mode === 'closed') {
               this.ls.shadowRoot = attachedShadow;

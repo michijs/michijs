@@ -116,8 +116,11 @@ export interface LSCustomElement extends LSElement, Lifecycle<any> {
         idGen?: ReturnType<typeof idGenerator>['getId']
     } & LSElement['ls'],
     render?(): DefaultChildren,
+    /**Allows to get a child element from the host with the id */
     child<T = HTMLElement>(id: string): T,
+    /**Forces the element to re-render */
     rerender(): void,
+    /**Create unique IDs with a discernible key */
     idGen: ReturnType<typeof idGenerator>['getId']
 }
 
@@ -147,6 +150,7 @@ export type Metadata<RA> = {
 
 export type PropertyKey = string | number | symbol;
 export type ChangeFunction = (propertyThatChanged?: PropertyKey) => void;
+export type ValidatePropertyChangeFunction = (propertyThatChanged?: PropertyKey) => boolean;
 
 export type CSSProperty = CSSObject | Properties | string;
 export type CSSObject = { [key: string]: CSSProperty }
@@ -170,6 +174,12 @@ export type SubscribeToType = Record<string, ObservableLike>;
 
 export type EmptyObject = Record<never, never>;
 
+export type LsStoreProps<T, Y> = {
+    /**Allows to define the store state. */
+    state: T,
+    /**Transactions are functions that notify changes at the end of the transaction. */
+    transactions: Y
+};
 
 export type Self<M extends MethodsType,
     T extends MethodsType,
@@ -179,11 +189,17 @@ export type Self<M extends MethodsType,
     EL extends Element> = EL & A & RA & M & T & { [k in keyof E]: E[k] extends EventDispatcher<infer T> ? (detail: T) => boolean : any } & LSCustomElement;
 
 type Lifecycle<FRA> = {
+    /**This method is called right before a component mounts.*/
     willMount?(): void,
+    /**This method is called after the component has mounted. */
     didMount?(): void,
+    /**This method is called after a component is removed from the DOM. */
     didUnmount?(): void,
+    /**This method is called before re-rendering occurs. */
     willUpdate?(): void,
+    /**This method is called after re-rendering occurs. */
     didUpdate?(): void,
+    /**This method is called before a component does anything with an attribute. */
     willReceiveAttribute?<WRAN extends keyof FRA>(name: WRAN, newValue: FRA[WRAN], oldValue: FRA[WRAN]): void
 };
 
@@ -198,16 +214,42 @@ export type LSElementProperties<
     RA extends AttributesType,
     FRA extends Object
     > = {
+        /**Allows to define attributes.*/
         attributes?: A,
+        /**
+         * Allows to define reflected attributes and follows the Kebab case.
+         * @link https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr
+         */
         reflectedAttributes?: RA,
+        /**Transactions are functions that notify changes at the end of the transaction.*/
         transactions?: T,
+        /**Methods are functions that notify changes at the time of making the change.*/
         methods?: M,
+        /**Function that renders the component.*/
         render?: Function;
-        observe?: ReplaceObjectValue<RA, () => void> & ReplaceObjectValue<A, () => void> & ReplaceObjectValue<S, () => void>,
+        /**
+         * Contains methods with a name of an attribute / reflected attribute / observable like. Those methods are executed when a change has been made to their corresponding property.
+         */
+        observe?: ReplaceObjectValue<RA, () => void>
+        & ReplaceObjectValue<A, () => void>
+        & ReplaceObjectValue<S, () => void>,
         // observers?: ArrayWithOneOrMoreElements<[callback: (propertiesThatChanged: O[]) => void, target: ArrayWithOneOrMoreElements<O>]>,
+        /**Contains all lifecycle methods.*/
         lifecycle?: Lifecycle<FRA>,
+        /**
+         * Allows you to define an event to his parent and triggering it easily. It will be defined using Lower case. For example countChanged will be registered as countchanged.
+         * @link https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
+         */
         events?: E,
+        /**
+         * Allows you to subscribe to an observable like (like a store). When the store emit an event, the custom element will be re-rendered.
+         * @link https://github.com/sindresorhus/type-fest/blob/main/source/observable-like.d.ts
+         */
         subscribeTo?: S,
+        /**
+         * Allows you to add a Shadow DOM. By default, it uses open mode on Autonomous Custom elements and does not use Shadow DOM on Customized built-in elements. Only the following elements are allowed to use Shadow DOM.
+         * @link https://dom.spec.whatwg.org/#dom-element-attachshadow
+         */
         shadow?: false | Partial<ShadowRootInit>
     }
 

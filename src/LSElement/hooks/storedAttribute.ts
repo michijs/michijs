@@ -40,10 +40,14 @@ export function storedAttribute<T>(key: string, defaultValue: T, storage: Storag
     return defaultValue;
   };
 
-  const proxiedObject = observe({ ...observableProps, value: get() || defaultValue }, () => {
-    const newValue = proxiedObject.value;
-    storage.setItem(key, newValue);
-    window.dispatchEvent(new CustomEvent<StorageLocalChangeEventType>(STORAGE_LOCAL_CHANGE, { detail: { key, newValue } }));
+  const proxiedObject = observe({
+    item: { ...observableProps, value: get() ?? defaultValue },
+    onChange: () => {
+      const newValue = proxiedObject.value;
+      storage.setItem(key, newValue);
+      window.dispatchEvent(new CustomEvent<StorageLocalChangeEventType>(STORAGE_LOCAL_CHANGE, { detail: { key, newValue } }));
+    },
+    shouldValidatePropertyChange: () => true
   });
 
   return proxiedObject;

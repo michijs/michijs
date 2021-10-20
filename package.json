@@ -2,7 +2,7 @@
   "name": "@lsegurado/ls-element",
   "author": "Lucas M. Segurado",
   "license": "MIT",
-  "version": "1.2.6",
+  "version": "2.0.0",
   "files": [
     "dist/"
   ],
@@ -30,8 +30,8 @@
     "start-benchmark-ls-element": "ls-server --start --env=TESTING",
     "start-benchmark-vanilla": "ls-server --start --env=TESTING_VANILLA",
     "benchmark-ls-element": "set NODE_ENV=TESTING && npm run usnap src/jest/LSElement.spec.tsx",
-    "benchmark-vanilla": "set NODE_ENV=TESTING && npm run usnap src/jest/Vanilla.spec.tsx",
-    "test": "jest",
+    "benchmark-vanilla": "set NODE_ENV=TESTING_VANILLA && npm run usnap src/jest/Vanilla.spec.tsx",
+    "test": "jest src/LSElement",
     "usnap": "jest --updateSnapshot --unhandled-rejections=strict"
   },
   "keywords": [
@@ -41,8 +41,8 @@
     "Autonomous custom elements"
   ],
   "devDependencies": {
-    "@lsegurado/eslint-config-ls-element": "0.0.6",
-    "@lsegurado/ls-server": "0.0.19",
+    "@lsegurado/eslint-config-ls-element": "0.0.7",
+    "@lsegurado/ls-server": "0.0.20",
     "@lsegurado/stylelint-config-ls-element": "^0.0.2",
     "@reduxjs/toolkit": "^1.5.0",
     "@types/expect-puppeteer": "^4.4.5",
@@ -64,11 +64,7 @@
     "@lsegurado/htmltype": "0.0.2"
   },
   "eslintConfig": {
-    "extends": "@lsegurado/eslint-config-ls-element",
-    "rules": {
-      "jest/no-standalone-expect": "off",
-      "jest/no-export": "off"
-    }
+    "extends": "@lsegurado/eslint-config-ls-element"
   },
   "jest": {
     "preset": "jest-puppeteer",

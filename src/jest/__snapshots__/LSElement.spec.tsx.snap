@@ -1,16 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Performance tests - LS-Element clear rows: 1625778393550 1`] = `
+exports[`Performance tests - LS-Element clear rows: 1634312261727 1`] = `
 Map {
-  "create1000Rows" => 233.06,
-  "replaceAllRows" => 244.17,
-  "partialUpdate" => 83.86,
-  "selectRow" => 64.31,
-  "swapRows" => 78.78,
-  "removeRow" => 99.25,
-  "createManyRows" => 1825.84,
-  "appendRowsToLargeTable" => 502.39,
-  "clearRows" => 37.95,
+  "create1000Rows" => 269.94,
+  "replaceAllRows" => 264.26,
+  "partialUpdate" => 91.94,
+  "selectRow" => 67.85,
+  "swapRows" => 78.81,
+  "removeRow" => 80.18,
+  "createManyRows" => 1782.93,
+  "appendRowsToLargeTable" => 412.64,
+  "clearRows" => 114.61,
 }
 `;
 

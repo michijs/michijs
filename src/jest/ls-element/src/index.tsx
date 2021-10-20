@@ -12,7 +12,7 @@ type Row = { label: string, id: number };
 function buildData(count = 1000) {
   const data = new Array<Row>();
   for (let i = 0; i < count; i++)
-    data.push({ id: state.nextId++, label: `${adjectives[_random(adjectives.length)]  } ${  colours[_random(colours.length)]  } ${  nouns[_random(nouns.length)]}` });
+    data.push({ id: state.nextId++, label: `${adjectives[_random(adjectives.length)]} ${colours[_random(colours.length)]} ${nouns[_random(nouns.length)]}` });
   return data;
 }
 
@@ -30,7 +30,10 @@ const { state, transactions, ...store } = lsStore({
       }
     },
     delete(id: number) {
-      state.data = state.data.filter(x => x.id !== id);
+      // state.data = state.data.filter(x => x.id !== id);
+      const index = state.data.findIndex(x => x.id === id);
+      state.data.splice(index, 1);
+
       // const idx = this.data.findIndex(d => d.id == id);
       // this.data = this.data.filter((_e, i) => i != idx);
       // return this;
@@ -40,7 +43,8 @@ const { state, transactions, ...store } = lsStore({
       state.selected = null;
     },
     add() {
-      state.data = state.data.concat(buildData());
+      // state.data = state.data.concat(buildData());
+      state.data.push(...buildData());
       state.selected = null;
     },
     update() {

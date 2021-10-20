@@ -2,14 +2,14 @@
 
 exports[`Performance tests - vanilla-js clear rows: Vanilla JS 1`] = `
 Map {
-  "create1000Rows" => 237.1,
-  "replaceAllRows" => 207.77,
-  "partialUpdate" => 100.45,
-  "selectRow" => 78.5,
-  "swapRows" => 79.67,
-  "removeRow" => 92.13,
-  "createManyRows" => 1775.87,
-  "appendRowsToLargeTable" => 510.55,
-  "clearRows" => 83.01,
+  "create1000Rows" => 157.92,
+  "replaceAllRows" => 167.2,
+  "partialUpdate" => 69.45,
+  "selectRow" => 38.8,
+  "swapRows" => 44.47,
+  "removeRow" => 21.75,
+  "createManyRows" => 1200.53,
+  "appendRowsToLargeTable" => 215.77,
+  "clearRows" => 36.44,
 }
 `;

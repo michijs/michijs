@@ -1,21 +1,23 @@
 import { observe } from './observe';
-import { EmptyObject, ObjectOf, PropertyKey } from '../types';
+import { EmptyObject, LsStoreProps, ObjectOf, PropertyKey } from '../types';
 import { observable } from './observable';
 
-export type lsStoreProps<T,Y> = { state: T, transactions: Y };
-
-export function lsStore<T extends object = EmptyObject, Y extends ObjectOf<Function> = EmptyObject>({ state = {} as T, transactions = {} as Y }: lsStoreProps<T,Y>) {
+export function lsStore<T extends object = EmptyObject, Y extends ObjectOf<Function> = EmptyObject>({ state = {} as T, transactions = {} as Y }: LsStoreProps<T, Y>) {
   const { notify, ...observableProps } = observable<Set<PropertyKey>>();
-  const proxiedState = observe<T>(state || {} as T, (propertyThatChanged) => propertyChangedCallback(propertyThatChanged));
+  const proxiedState = observe<T>({
+    item: state as T,
+    onChange: (propertyThatChanged) => propertyChangedCallback(propertyThatChanged),
+    shouldValidatePropertyChange: (propertyThatChanged) => !propertiesThatChanged.has(propertyThatChanged)
+  });
   let dispatchInProgressCount = 0;
   const propertiesThatChanged = new Set<PropertyKey>();
   // @ts-ignore
   const self = this;
-  const proxiedTransactions = new Proxy(transactions || {}, {
-    get (target, property) {
+  const proxiedTransactions = new Proxy(transactions, {
+    get(target, property) {
       return (...args) => {
         dispatchInProgressCount++;
-        const result = transactions[property as string].apply(self || target, args);
+        const result = transactions[property as string].apply(self ?? target, args);
         decrementDispatchInProgressCount();
         return result;
       };

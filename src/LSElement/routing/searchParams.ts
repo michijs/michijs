@@ -16,12 +16,16 @@ export const getInitialSearchParamsValue = () => {
 };
 
 let isUpdating = false;
-export const searchParams = observe(getInitialSearchParamsValue(), (key) => {
-  if (!isUpdating) {
-    const newUrl = new URL(location.href);
-    setSearchParam(newUrl, key.toString(), searchParams[key]);
-    goTo(newUrl);
-  }
+export const searchParams = observe({
+  item: getInitialSearchParamsValue(),
+  onChange: (key) => {
+    if (!isUpdating) {
+      const newUrl = new URL(location.href);
+      setSearchParam(newUrl, key.toString(), searchParams[key]);
+      goTo(newUrl);
+    }
+  },
+  shouldValidatePropertyChange: () => true
 });
 const updateSearchParams = () => {
   isUpdating = true;

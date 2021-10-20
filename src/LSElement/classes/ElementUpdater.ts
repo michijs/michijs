@@ -97,7 +97,7 @@ export class ElementUpdater {
   }
 
   updateFromClassJSXElement(classJSXElement: ClassJSXElement) {
-    return this.updateFromObjectJSXElement(classJSXElement as unknown as ObjectJSXElement, classJSXElement.tag.extends || classJSXElement.tag.tag);
+    return this.updateFromObjectJSXElement(classJSXElement as unknown as ObjectJSXElement, classJSXElement.tag.extends ?? classJSXElement.tag.tag);
   }
   updateFromObjectJSXElement(objectJSXElement: | ObjectJSXElement, tag: string = objectJSXElement.tag) {
     const [needsToBeMoved, foundAtMovedElements, oldChild] = this.findElement(objectJSXElement);

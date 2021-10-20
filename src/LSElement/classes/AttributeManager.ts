@@ -11,7 +11,7 @@ import { createStyleSheet } from '../css/createStyleSheet';
 export abstract class AttributeManager {
   static setAttributes(self: LSCustomElement | null, element: LSElement, attrs: ObjectJSXElement['attrs'], isUpdate: boolean) {
     if (attrs) {
-      const attributesNames: string[] = isUpdate ? attrs._dynamicAttributes || Object.keys(attrs) : Object.keys(attrs);
+      const attributesNames: string[] = isUpdate ? attrs._dynamicAttributes ?? Object.keys(attrs) : Object.keys(attrs);
       attributesNames.forEach(name => {
         const newValue = attrs[name];
         if (isAFunction(newValue) && name.startsWith('on')) {// Events don't change with jsx

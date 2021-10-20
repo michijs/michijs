@@ -9,12 +9,17 @@ const AsyncComponentStyleSheet = createStyleSheet({
   }
 });
 
+/**Create a component whose content will load after the promise ends. In the meantime you can choose to show a load component or not show anything. */
 export const AsyncComponent = createCustomElement('ls-async-component', {
   attributes: {
+    /** For internal use only - The component currently showing */
     currentComponent: undefined as Function,
+    /** The promise to wait */
     promise: undefined as () => Promise<{ [key: string]: JSX.Element }>,
+    /** The component key (by default is default)*/
+    key: 'default',
+    /**The component to display while the promise is loading */
     loadingComponent: undefined as JSX.Element,
-    key: undefined as string,
   },
   lifecycle: {
     willMount() {
@@ -29,10 +34,15 @@ export const AsyncComponent = createCustomElement('ls-async-component', {
     getCurrentComponent() {
       if (this.loadingComponent && !this.currentComponent)
         return this.loadingComponent;
-            
+
       const Component = this.currentComponent;
       return <Component />;
-            
+
+    }
+  },
+  observe: {
+    promise() {
+      this.promiseChangeCallback();
     }
   },
   render() {

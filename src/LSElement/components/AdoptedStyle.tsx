@@ -16,12 +16,16 @@ function addStyle(container: StyleSheetContainer, child: CompatibleStyleSheet, a
   adoptedStyleSheetList.items[index] = newStyleSheet;
 }
 
+/**
+ * Allows to use Constructable Stylesheets.  
+ * @link https://developers.google.com/web/updates/2019/02/constructable-stylesheets
+*/
 export const AdoptedStyle: FC<AdoptedStyleProps, CompatibleStyleSheet | CompatibleStyleSheet[], Ref> = ({ ref, ...attrs }, children, self) => {
   const childrenAsArray = Array.isArray(children) ? children : [children];
-  const parentRef: LSCustomElement | Document = ref || self;
+  const parentRef: LSCustomElement | Document = ref ?? self;
   const castedParentRef = parentRef as LSCustomElement;
 
-  const container = (parentRef === document ? document : getShadowRoot(castedParentRef) || getRootNode(castedParentRef)) as unknown as StyleSheetContainer;//Without Shadow Root
+  const container = (parentRef === document ? document : getShadowRoot(castedParentRef) ?? getRootNode(castedParentRef)) as unknown as StyleSheetContainer;//Without Shadow Root
   if (supportsAdoptingStyleSheets && container) {
     childrenAsArray.forEach((child, index) => {
       let adoptedStyleSheetList = castedParentRef.ls.adoptedStyleSheets.find(x => x.id === attrs.id);
