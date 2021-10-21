@@ -268,6 +268,9 @@ Allows to set attributes and event listeners to the host element itself.
 ### AsyncComponent
 Create a component whose content will load after the promise ends. In the meantime you can choose to show a load component or not show anything.
 
+### Link
+Provides the ability to move around the web page without reloading the page. It uses the same attributes as an anchor tag but also allows the use of URL objects. Uses the goTo method.
+
 ## Custom element methods
 ### child
 Allows to get a child element from the host with the id
@@ -307,8 +310,66 @@ el.className = 'test';
 // Using attributes
 el.setAttribute('class', 'test')
 ```
-In this way the jsx syntax of LS-Element is more similar to html
+In this way the jsx syntax of LS-Element is more similar to html.
 
+## Routing
+The intention of using a custom routing tool is to avoid the use of strings to represent the urls and to use modern apis that allow the use of the URL object itself. It also allows to separate the components of the routes which allows a cleaner code.
+
+**Note: This is still a work in progress and may change in the future.**
+```js
+const Redirect = () => {
+  goTo(urls.syncRoute())
+  // Will generate and go to this url: /sync-route
+  return <></>
+}
+
+//Parent routes
+export const { urls, Router, components } = registerRoutes({
+  syncRoute: createRoute({
+    /**The component to display */
+    component: <div id="test3">Hello World</div>,
+    title: 'Sync title'
+  }),
+  //Redirect route
+  '/': createRoute({
+    component: <Redirect />
+  }),
+});
+
+//Child routes
+export const { urls: urlsChild, Router: RouterChild } = registerRoutes({
+  // Async route
+  asyncChildRoute: createAsyncRoute<{ searchParam1: string, searchParam2: number }, '#hash1' | '#hash2'>()({
+    /** The promise to wait */
+    promise: () => import('./AsyncChildExample'),
+    /** The component key (by default is default)*/
+    key: 'AsyncChildExample',
+    /**The title of the page */
+    title: 'Async Page title'
+    /**The component to display while the promise is loading */
+    loadingComponent: <span>Loading...</span>
+  }),
+  //The parent route
+}, urls.syncRoute);
+
+urlsChild.childRoute({ searchParams: { searchParam1: 'param 1', searchParam2: 2}, hash: '#hash1' })
+// Will generate this url: /sync-route/async-child-route?searchParam1=param+1&searchParam2=2#hash1
+```
+Router and RouterChild are components that represent the mount points of each registered route.
+
+The "components" function is a utility to create asynchronous components that includes the search params and component hashes with the types that were defined when the route was registered
+```js
+export const AsyncChildExample = components.childRoute(({ searchParams, hash }) => {
+  return (
+    <>
+      {/* Will show the value of searchParam1 */}
+      <div id="example">{searchParams.searchParam1}</div>
+      {/* Will show true if the hash is #hash1 */}
+      <div id="example2">{hash['#hash1']}</div>
+    </>
+  );
+});
+```
 ## Performance optimizations
 If you want to help the library to make some optimizations you can use the following attributes:
 -  _dynamicAttributes: An array with the names of the attributes that can change. 
@@ -345,15 +406,3 @@ This could be just the beginning of a amazing era. With your support we could ma
 [version]: https://img.shields.io/npm/v/@lsegurado/ls-element
 [github-license]: https://img.shields.io/github/license/lsegurado/ls-element
 [github-license-url]: https://github.com/lsegurado/ls-element/blob/master/LICENSE.md
-
-
-<!-- TODO: -->
-<!-- ### Link  -->
-
-<!-- ## Routing
-### createAsyncRoute
-### createRoute 
-### url generation 
-### parent routes 
-
--->

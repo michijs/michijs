@@ -4,10 +4,9 @@ import { observable } from '../hooks';
 import { FunctionJSXElement } from '../types';
 import { getJSXElementType, JSXElementType } from '../typeWards/getJSXElementType';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
-import { goTo } from './goTo';
 import { hash } from './hash';
 import { searchParams } from './searchParams';
-import { AsyncRoute, ComponentFunction, RedirectRoute, registerRoutesReturnType, Routes, SyncRoute, UrlFunction } from './types';
+import { AsyncRoute, ComponentFunction, registerRoutesReturnType, Routes, SyncRoute, UrlFunction } from './types';
 import { setSearchParam } from './utils/setSearchParam';
 import { sharedUrlObservable } from './utils/sharedUrlObservable';
 
@@ -26,7 +25,7 @@ const getMatchedRoute = (routes: Routes, urls: registerRoutesReturnType<any>['ur
 
 export function registerRoutes<T extends Routes = Routes>(routes: T, parentRoute?: UrlFunction<any, any>): registerRoutesReturnType<T> {
   const urls = new Proxy({}, {
-    get (_, property: string) {
+    get(_, property: string) {
       const urlFn: UrlFunction<any, any> = ({ searchParams, hash } = {}) => {
         const parentRouteURL = parentRoute?.();
         const baseURL = parentRouteURL ? `${parentRouteURL.origin}${parentRouteURL.pathname}` : location.origin;
@@ -43,7 +42,7 @@ export function registerRoutes<T extends Routes = Routes>(routes: T, parentRoute
     }
   }) as registerRoutesReturnType<T>['urls'];
   const components = new Proxy({}, {
-    get (_, _property) {
+    get(_, _property) {
       const componentFn = (fn: ComponentFunction<any, any>) => {
         return fn;
       };
@@ -55,48 +54,48 @@ export function registerRoutes<T extends Routes = Routes>(routes: T, parentRoute
   const notifyNewCurrentComponent = async () => {
     const matchedRoute = getMatchedRoute(routes, urls);
     if (matchedRoute) {
-      const { title, redirectTo, component, promise, loadingComponent, key } = matchedRoute as SyncRoute & RedirectRoute & AsyncRoute;
+      const { title, component, promise, loadingComponent, key = 'default' } = matchedRoute as SyncRoute & AsyncRoute;//& RedirectRoute
 
-      if (redirectTo) {
-        goTo(redirectTo);
-      } else {
-        if (title) {
-          document.title = title;
-        }
-        const newLocationHref = location.href;
-
-        const processComponent = (component: JSX.Element) => {
-          const [type, jsxElementTyped] = getJSXElementType(component);
-          const result = jsxElementTyped<FunctionJSXElement>();
-          if (type === JSXElementType.FUNCTION) {
-            result.attrs = {
-              ...result.attrs,
-              searchParams,
-              hash
-            };
-          }
-          return result;
-        };
-        const notify = (component: JSX.Element) => {
-          const currentLocationHref = location.href;
-          //Avoids bugs with route changes
-          if (currentLocationHref === newLocationHref) {
-            routeObservable.notify(processComponent(component));
-          }
-        };
-
-        if (component) {
-          notify(component);
-        } else {
-          if (loadingComponent) {
-            notify(loadingComponent);
-          }
-          promise().then((result: { [key: string]: ComponentFunction<any, any> }) => {
-            const Component = result[key];
-            notify(<Component />);
-          });
-        }
+      // if (redirectTo) {
+      //   goTo(redirectTo());
+      // } else {
+      if (title) {
+        document.title = title;
       }
+      const newLocationHref = location.href;
+
+      const processComponent = (component: JSX.Element) => {
+        const [type, jsxElementTyped] = getJSXElementType(component);
+        const result = jsxElementTyped<FunctionJSXElement>();
+        if (type === JSXElementType.FUNCTION) {
+          result.attrs = {
+            ...result.attrs,
+            searchParams,
+            hash
+          };
+        }
+        return result;
+      };
+      const notify = (component: JSX.Element) => {
+        const currentLocationHref = location.href;
+        //Avoids bugs with route changes
+        if (currentLocationHref === newLocationHref) {
+          routeObservable.notify(processComponent(component));
+        }
+      };
+
+      if (component) {
+        notify(component);
+      } else {
+        if (loadingComponent) {
+          notify(loadingComponent);
+        }
+        promise().then((result: { [key: string]: ComponentFunction<any, any> }) => {
+          const Component = result[key];
+          notify(<Component />);
+        });
+      }
+      // }
     } else {
       routeObservable.notify(<></>);
     }
