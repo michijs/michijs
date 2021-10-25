@@ -394,7 +394,20 @@ If you REALLY need polyfills i recommend you to read this topics:
 - https://custom-elements-everywhere.com
 
 ## Supporting LS Element
-This could be just the beginning of a amazing era. With your support we could make big things, which help us to improve our community and the way that we work. Let's go to revolutionize the IT Industry. You can support us with [this link](https://www.paypal.com/paypalme/lsegurado)
+### Sponsors
+Support us with a donation and help us continue our activities [here](https://www.paypal.com/paypalme/lsegurado).
+### Contributors
+
+<a href="https://github.com/@lsegurado/ls-element/graphs/contributors"><img src="https://opencollective.com/ls-element/contributors.svg?width=890&amp;button=false" style="max-width:100%;"></a>
+
+
+<!-- ### Open Collective
+
+Support us with a donation and help us continue our activities. [[Contribute](https://opencollective.com/ls-element)]
+
+### Sponsors
+
+Become a sponsor and get your logo on our README on GitHub with a link to your site. [[Become a sponsor](https://opencollective.com/ls-element#sponsor)] -->
 
 ## License
  - [MIT](https://github.com/lsegurado/ls-element/blob/master/LICENSE.md)
