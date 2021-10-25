@@ -1,4 +1,4 @@
-import { EventDispatcher } from 'src/LSElement/classes';
+import { EventDispatcher } from '../../classes';
 import { LSCustomElement } from '../../types';
 
 export function defineEvent(self: LSCustomElement, propertyKey: string, eventDispatcher: EventDispatcher<any>) {

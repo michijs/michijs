@@ -2,7 +2,7 @@ import { STORED_ATTRIBUTES_EVENTS } from '../constants';
 import { StorageLocalChangeEventType } from '../types';
 import { observable } from './observable';
 import { observe } from './observe';
-import { deepEqual } from 'src/LSElement/utils/deepEqual';
+import { deepEqual } from '../utils/deepEqual';
 
 const { STORAGE, STORAGE_LOCAL_CHANGE } = STORED_ATTRIBUTES_EVENTS;
 

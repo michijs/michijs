@@ -4,8 +4,8 @@ import { getShadowRoot } from '../utils/getShadowRoot';
 import { HTMLElements } from '../h/tags/HTMLElements';
 import { getRootNode } from '../DOM/getRootNode';
 import { h } from '../h';
-import { SVGElements } from 'src/LSElement/h/tags/SVGElements';
-import { createStyleSheet } from 'src/LSElement/css/createStyleSheet';
+import { SVGElements } from '../h/tags/SVGElements';
+import { createStyleSheet } from '../css/createStyleSheet';
 
 type Ref = LSCustomElement | Document;
 type AdoptedStyleProps = (HTMLElements['style'] & SVGElements['style']) & { ref?: Ref };
