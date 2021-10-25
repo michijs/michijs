@@ -19,7 +19,7 @@ export function getJSXElementType(value: JSX.Element): [JSXElementType, ReturnTy
   if (value) {
     if (Array.isArray(value)) {
       return [JSXElementType.ARRAY, getValue(value)];
-    } else if (typeof value === 'object') {
+    } else if (typeof value === 'object' && 'tag' in value) {//Fix for non-jsx objects
       if (value.tag === undefined) {
         return [JSXElementType.FRAGMENT, getValue(value)];
       } else if (typeof value.tag === 'function') {

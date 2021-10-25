@@ -124,7 +124,7 @@ export interface LSCustomElement extends LSElement, Lifecycle<any> {
     idGen: ReturnType<typeof idGenerator>['getId']
 }
 
-export type PrimitiveType = bigint | null | undefined | string | number | boolean;
+export type PrimitiveType = bigint | null | undefined | string | number | boolean | AnyObject;
 
 export type CommonJSXAttrs = { attrs?: { [attribute: string]: any } | null, children: JSX.Element[] }
 export type FragmentJSXElement = { tag: undefined } & Omit<CommonJSXAttrs, 'attrs'>;

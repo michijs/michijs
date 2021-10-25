@@ -34,9 +34,7 @@ export type CreateRouteResult<S extends { [key: string]: any } = undefined, H ex
     urlFn: UrlFunction<S, H>
 }
 
-export type Routes = {
-    [routeName: string]: CreateRouteResult
-}
+export type Routes = Record<string, CreateRouteResult>
 
 export type registerRoutesReturnType<T extends Routes> = {
     urls: {
