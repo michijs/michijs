@@ -79,7 +79,7 @@ export class ElementUpdater {
       default: {
         const oldChild = this.updateFromPrimitiveJSXElement(jsxElementTyped<PrimitiveType>());
         if (!oldChild) {
-          this.pendingInsertions.push(ElementFactory.fromObjectJSXElement(jsxElementTyped<ObjectJSXElement>(), this.self));
+          this.pendingInsertions.push(ElementFactory.fromPrimitiveJSXElement(jsxElementTyped<PrimitiveType>()));
           return this.elementsCounter;
         }
         return this.elementsCounter + 1 + this.insertPendingInsertions();

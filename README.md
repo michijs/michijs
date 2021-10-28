@@ -249,7 +249,21 @@ export const counterStyle = createStyleSheet({
 ```
 ### css
 Allows to create a Constructable Stylesheet with a Template String.
-[Recomended extension for VSCode](https://marketplace.visualstudio.com/items?itemName=paulmolluzzo.convert-css-in-js): 
+[Recomended extension for VSCode](https://marketplace.visualstudio.com/items?itemName=paulmolluzzo.convert-css-in-js).
+
+```js
+export const counterStyle = css`
+  :host {
+      display: flex;
+      flex-direction: row;
+  }
+
+  span {
+      min-width: 60px;
+      text-align: center;
+  }
+```
+
 ### CSS module scripts
 We do not provide support for this functionality yet as ESBuild does not support it yet. You can read how it works [here](https://web.dev/css-module-scripts/)
 <!-- ```js

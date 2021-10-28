@@ -69,43 +69,6 @@ describe('Observe tests', () => {
   });
   describe('When observing Arrays', () => {
     objectTests(() => []);
-    // TODO: methods
-    // describe('array tests', () => {
-    //     let array;
-    //     beforeEach(() => {
-    //         mockCallback.mockClear();
-    //         array = undefined;
-    //         array = observe([], mockCallback);
-    //     })
-    //     it('Setting a value must call its callback', async () => {
-    //         object[0] = exampleValue;
-    //         expect(mockCallback).toBeCalledTimes(1);
-    //     });
-    //     it('Setting the same value must call its callback just one time', async () => {
-    //         object[0] = exampleValue;
-    //         object[0] = exampleValue;
-    //         expect(mockCallback).toBeCalledTimes(1);
-    //     });
-    //     it('Setting another value must call its callback two times', async () => {
-    //         object[0] = exampleValue;
-    //         object[0] = exampleValue2;
-    //         expect(mockCallback).toBeCalledTimes(2);
-    //     });
-    //     it('Setting the same value on another index must call its callback two times', async () => {
-    //         object[0] = exampleValue;
-    //         object[1] = exampleValue;
-    //         expect(mockCallback).toBeCalledTimes(2);
-    //     });
-    //     it('Setting a value on an index and deleting it must call its callback', async () => {
-    //         object[0] = exampleValue;
-    //         delete object[0];
-    //         expect(mockCallback).toBeCalledTimes(2);
-    //     });
-    //     it('Deleting a non-existent index should not call the callback', async () => {
-    //         delete object[0];
-    //         expect(mockCallback).toBeCalledTimes(0);
-    //     });
-    // })
   });
   describe('When observing Maps', () => {
     let nonProxiedMap: Map<any, any>;

@@ -127,10 +127,10 @@ export interface LSCustomElement extends LSElement, Lifecycle<any> {
 export type PrimitiveType = bigint | null | undefined | string | number | boolean | AnyObject;
 
 export type CommonJSXAttrs = { attrs?: { [attribute: string]: any } | null, children: JSX.Element[] }
-export type FragmentJSXElement = { tag: undefined } & Omit<CommonJSXAttrs, 'attrs'>;
+export type FragmentJSXElement = { tag: undefined, attrs: null } & Omit<CommonJSXAttrs, 'attrs'>;
 export type ObjectJSXElement = { tag: string } & CommonJSXAttrs;
 export type FunctionJSXElement = { tag: FC<any> } & CommonJSXAttrs;
-export type ClassJSXElement = { tag: (new () => {}) & { tag: string, extends?: string } } & CommonJSXAttrs & Element;
+export type ClassJSXElement = { tag: (new () => {}) & { tag: string, extends?: string } } & CommonJSXAttrs;
 export type SingleJSXElement = PrimitiveType | ObjectJSXElement | FunctionJSXElement | FragmentJSXElement | ClassJSXElement;
 export type ArrayJSXElement = Array<SingleJSXElement>;
 // export type PureObjectJSXElement = { tag: string } & Omit<CommonJSXAttrs,'children'> & {children: (PureObjectJSXElement | string)[]};
@@ -260,15 +260,17 @@ export type CreateCustomElementResult<
     M extends MethodsType,
     T extends MethodsType,
     E extends EventsType,
-    EL extends Element> = new () => {
-        props: LSTag<
-            Partial<
-                FRA
-                & { [k in StringKeyOf<E> as `on${Lowercase<k>}`]: E[k] extends EventDispatcher<infer D> ? (ev: CustomEvent<D>) => any : never }
-                & commonElement
-            >, Self<M, T, E, A, RA, EL>
-        >
-        // & JSX.IntrinsicElements[EX]
-    } & Self<M, T, E, A, RA, EL> & { tag: string, extends?: string }
+    EL extends Element> = (
+        new () => {
+            props: LSTag<
+                Partial<
+                    FRA
+                    & { [k in StringKeyOf<E> as `on${Lowercase<k>}`]: E[k] extends EventDispatcher<infer D> ? (ev: CustomEvent<D>) => any : never }
+                    & commonElement
+                >, Self<M, T, E, A, RA, EL>
+            >
+            // & JSX.IntrinsicElements[EX]
+        } & Self<M, T, E, A, RA, EL>
+    ) & { tag: string, extends?: string }
 
 export type GetElementProps<El extends any> = El extends (new () => { props: any }) ? InstanceType<El>['props'] : El extends FC ? Parameters<El>[0] : never
