@@ -4,11 +4,16 @@
   "license": "MIT",
   "version": "2.0.1",
   "files": [
-    "dist/"
+    "dist/",
+    "jsx-runtime/"
   ],
   "main": "dist/index.js",
   "module": "dist/index.js",
   "exports": {
+    "./jsx-runtime": {
+      "import": "./jsx-runtime/index.js",
+      "require": "./jsx-runtime/index.js"
+    },
     ".": {
       "import": "./dist/index.js",
       "require": "./dist/index.js"
