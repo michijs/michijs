@@ -2,7 +2,7 @@
   "name": "@lsegurado/ls-element",
   "author": "Lucas M. Segurado",
   "license": "MIT",
-  "version": "1.2.6",
+  "version": "2.0.0",
   "files": [
     "dist/"
   ],
@@ -24,11 +24,16 @@
     "start": "ls-server --start",
     "dist": "ls-server --dist",
     "build": "ls-server --build",
-    "link": "tsc && npm link --force && tsc -w",
+    "link": "ls-server --dist && npm link --force && ls-server --dist -w",
     "publish-patch-version": "npm version patch && npm run publish-npm",
     "publish-npm": "npm run dist && npm publish --access public",
-    "lint": "eslint --fix src/**/*{.ts,.tsx}",
-    "stylelint": "npx stylelint --fix **/*.css"
+    "start-benchmark-ls-element": "ls-server --start --env=TESTING",
+    "start-benchmark-vanilla": "ls-server --start --env=TESTING_VANILLA",
+    "benchmark-ls-element": "set NODE_ENV=TESTING && npm run usnap src/jest/LSElement.spec.tsx",
+    "benchmark-vanilla": "set NODE_ENV=TESTING_VANILLA && npm run usnap src/jest/Vanilla.spec.tsx",
+    "test": "jest --env=jsdom",
+    "test-src": "jest src/LSElement --env=jsdom",
+    "usnap": "jest --updateSnapshot --unhandled-rejections=strict"
   },
   "keywords": [
     "web-components",
@@ -37,28 +42,46 @@
     "Autonomous custom elements"
   ],
   "devDependencies": {
-    "@lsegurado/eslint-config-ls-element": "0.0.3",
-    "@lsegurado/ls-server": "^0.0.15",
+    "@lsegurado/eslint-config-ls-element": "0.0.7",
+    "@lsegurado/ls-server": "0.0.23",
     "@lsegurado/stylelint-config-ls-element": "^0.0.2",
     "@reduxjs/toolkit": "^1.5.0",
+    "@types/expect-puppeteer": "^4.4.7",
+    "@types/jest": "^27.0.2",
+    "@types/jest-environment-puppeteer": "^4.4.1",
+    "@types/puppeteer": "^5.4.4",
     "eslint": "^7.19.0",
-    "husky": "^5.0.9",
+    "jest": "^27.3.1",
+    "jest-puppeteer": "^6.0.0",
+    "lint-staged": "^10.5.4",
+    "puppeteer": "^10.4.0",
     "redux": "^4.0.5",
+    "simple-git-hooks": "^2.2.0",
     "stylelint": "^13.8.0",
-    "typescript": "^4.1.3"
+    "ts-jest": "^27.0.7",
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "@lsegurado/htmltype": "0.0.2"
   },
   "eslintConfig": {
     "extends": "@lsegurado/eslint-config-ls-element"
   },
+  "jest": {
+    "preset": "jest-puppeteer",
+    "automock": false,
+    "transform": {
+      "\\.(js|jsx|ts|tsx)$": "ts-jest"
+    }
+  },
   "stylelint": {
     "extends": "@lsegurado/stylelint-config-ls-element"
   },
-  "dependencies": {
-    "csstype": "^3.0.5"
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint && npm run stylelint"
-    }
+  "lint-staged": {
+    "*.{ts,tsx}": "eslint --cache --fix",
+    "*.css": "stylelint --fix"
   }
 }

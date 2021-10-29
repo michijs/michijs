@@ -1,8 +1,0 @@
-button[is="built-in-button"] {
-  display: block;
-  background-color: orange;
-  width: fit-content;
-  height: fit-content;
-  min-width: 40px;
-  min-height: 40px;
-}

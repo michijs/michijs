@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Performance tests - vanilla-js clear rows: Vanilla JS 1`] = `
+Map {
+  "create1000Rows" => 157.92,
+  "replaceAllRows" => 167.2,
+  "partialUpdate" => 69.45,
+  "selectRow" => 38.8,
+  "swapRows" => 44.47,
+  "removeRow" => 21.75,
+  "createManyRows" => 1200.53,
+  "appendRowsToLargeTable" => 215.77,
+  "clearRows" => 36.44,
+}
+`;
