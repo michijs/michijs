@@ -389,6 +389,15 @@ If you want to help the library to make some optimizations you can use the follo
 -  _dynamicAttributes: An array with the names of the attributes that can change. 
 -  _staticChildren: It indicates that children never change. If you use static Children, there is no need to use _staticChildren or _dynamicAttributes on your children.
 
+## Limitations
+### Observable objects
+Because some objects are not proxy compatible we limit the observable objects to:
+- Arrays
+- Dates
+- Maps
+- Sets
+- Any object whose prototype is Object
+
 ## Polyfills
 If you REALLY need polyfills i recommend you to read this topics:
 

@@ -30,10 +30,9 @@ export function observe<T extends object>(props: ObserveProps<T>): T {
       return observeMap(props as ObserveProps<Map<any,any>>) as T;
     } else if (item instanceof Set) {
       return observeSet(props as ObserveProps<Set<any>>) as T;
-    } else if (item instanceof Error || item instanceof WeakMap || item instanceof WeakSet || ArrayBuffer.isView(item) || item instanceof RegExp || item instanceof Promise) {
-      return item;
+    } else if (Object.getPrototypeOf(item) === Object.prototype) {
+      return observeCommonObject(props) as T;
     }
-    return observeCommonObject(props) as T;
   }
   return item;
 }
