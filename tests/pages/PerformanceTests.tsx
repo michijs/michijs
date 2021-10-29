@@ -1,5 +1,5 @@
 import { h } from 'src';
-import { TableManager, Tbody } from 'src/jest/ls-element/src';
+import { TableManager, Tbody } from '../benchmark/ls-element/src/index';
 
 export const PerformanceTests = () => (
   <>

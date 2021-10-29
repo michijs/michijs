@@ -14,21 +14,21 @@ export const config: LsServerConfig = (environment) => {
     case 'TESTING':
     case 'TESTING_VANILLA':{
       defaultConfig.openBrowser = false;
-      defaultConfig.public.path = './src/jest/ls-element/public';
+      defaultConfig.public.path = './tests/jest/ls-element/public';
       defaultConfig.esbuildOptions = {
         ...defaultConfig.esbuildOptions,
-        entryPoints: ['./src/jest/ls-element/src/index.tsx'],
+        entryPoints: ['./tests/jest/ls-element/src/index.tsx'],
         splitting: false,
         format: undefined,
         target: undefined
       };
     }
     case 'TESTING': {
-      defaultConfig.esbuildOptions.entryPoints = ['./src/jest/ls-element/src/index.tsx'];
+      defaultConfig.esbuildOptions.entryPoints = ['./tests/jest/ls-element/src/index.tsx'];
       break;
     }
     case 'TESTING_VANILLA': {
-      defaultConfig.esbuildOptions.entryPoints = ['./src/jest/vanillajs/src/index.js'];
+      defaultConfig.esbuildOptions.entryPoints = ['./tests/jest/vanillajs/src/index.js'];
       break;
     }
   }
