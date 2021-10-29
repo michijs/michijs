@@ -1,30 +1,40 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Performance tests - LS-Element clear rows: 1634312261727 1`] = `
+exports[`Performance tests - LS-Element clear rows: LS-Element Benchmarks 1`] = `
 Map {
-  "create1000Rows" => 269.94,
-  "replaceAllRows" => 264.26,
-  "partialUpdate" => 91.94,
-  "selectRow" => 67.85,
-  "swapRows" => 78.81,
-  "removeRow" => 80.18,
-  "createManyRows" => 1782.93,
-  "appendRowsToLargeTable" => 412.64,
-  "clearRows" => 114.61,
-}
-`;
-
-exports[`Performance tests - LS-Element clear rows: LS-Element 1.2.6 1`] = `
-Map {
-  "create1000Rows" => 628.04,
-  "replaceAllRows" => 1338.53,
-  "partialUpdate" => 89.95,
-  "selectRow" => 61.77,
-  "swapRows" => 64.19,
-  "removeRow" => 56.07,
-  "createManyRows" => 7013.5,
-  "appendRowsToLargeTable" => 1579.74,
-  "clearRows" => 67.7,
+  "1635515205891" => Map {
+    "create1000Rows" => 240.97,
+    "replaceAllRows" => 244.19,
+    "partialUpdate" => 98.76,
+    "selectRow" => 93.96,
+    "swapRows" => 70.19,
+    "removeRow" => 91.46,
+    "createManyRows" => 1860.64,
+    "appendRowsToLargeTable" => 465.26,
+    "clearRows" => 130.54,
+  },
+  "2.0.0" => Map {
+    "create1000Rows" => 251.1,
+    "replaceAllRows" => 249.82,
+    "partialUpdate" => 84.96,
+    "selectRow" => 67.85,
+    "swapRows" => 78.81,
+    "removeRow" => 80.18,
+    "createManyRows" => 1782.93,
+    "appendRowsToLargeTable" => 412.64,
+    "clearRows" => 114.61,
+  },
+  "1.2.6" => Map {
+    "create1000Rows" => 628.04,
+    "replaceAllRows" => 1338.53,
+    "partialUpdate" => 89.95,
+    "selectRow" => 61.77,
+    "swapRows" => 64.19,
+    "removeRow" => 56.07,
+    "createManyRows" => 7013.5,
+    "appendRowsToLargeTable" => 1579.74,
+    "clearRows" => 67.7,
+  },
 }
 `;
 
