@@ -3,7 +3,7 @@ export * from './LSElement/components';
 export * from './LSElement/classes';
 export * from './LSElement/hooks';
 export * from './LSElement/routing';
-export type { LSCustomElement, FC, ObservableLike } from './LSElement/types';
+export * from './LSElement/types';
 import './LSElement/h/JSX';
 export { renderFunctionalComponent } from './LSElement/DOM/renderFunctionalComponent';
 export { render } from './LSElement/DOM/render';
