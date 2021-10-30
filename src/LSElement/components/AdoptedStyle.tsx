@@ -25,6 +25,10 @@ export const AdoptedStyle: FC<AdoptedStyleProps, CompatibleStyleSheet | Compatib
   const parentRef: LSCustomElement | Document = ref ?? self;
   const castedParentRef = parentRef as LSCustomElement;
 
+  if (!castedParentRef.ls)//For document
+    // @ts-ignore
+    castedParentRef.ls = { adoptedStyleSheets: [] };
+
   const container = (parentRef === document ? document : getShadowRoot(castedParentRef) ?? getRootNode(castedParentRef)) as unknown as StyleSheetContainer;//Without Shadow Root
   if (supportsAdoptingStyleSheets && container) {
     childrenAsArray.forEach((child, index) => {
@@ -52,9 +56,9 @@ export const AdoptedStyle: FC<AdoptedStyleProps, CompatibleStyleSheet | Compatib
     return <style {...attrs}>{childrenAsArray.map(x => {
       if (typeof x === 'string') {
         return x;
-      } 
+      }
       return Array.from(x.rules).map(rule => rule.cssText).join('');
-      
+
     }).join('')}</style>;
   }
 };
