@@ -1,4 +1,4 @@
-import { h, AdoptedStyle, createCustomElement, Host, storedAttribute, EventDispatcher } from 'src';
+import { h, AdoptedStyle, createCustomElement, Host, storedAttribute, EventDispatcher } from '../../src';
 import { counterStyle } from '../shared/counterStyle';
 
 const storedCount = storedAttribute('count', 0);

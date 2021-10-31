@@ -1,4 +1,4 @@
-import { createStyleSheet } from 'src';
+import { createStyleSheet } from '../../src';
 
 export const buttonStyle = createStyleSheet({
   'button[is="built-in-button"]': {

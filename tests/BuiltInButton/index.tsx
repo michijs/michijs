@@ -1,4 +1,4 @@
-import { h, AdoptedStyle, createCustomElement } from 'src';
+import { h, AdoptedStyle, createCustomElement } from '../../src';
 import { buttonStyle } from './buttonStyle';
 
 export const BuiltInButton = createCustomElement({ tag: 'built-in-button', extends: 'button', class: HTMLButtonElement }, {

@@ -1,4 +1,4 @@
-import { createStyleSheet } from 'src';
+import { createStyleSheet } from '../../src';
 
 export const counterStyle = createStyleSheet({
   ':host': {

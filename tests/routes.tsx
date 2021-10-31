@@ -1,4 +1,4 @@
-import { h, createRoute, registerRoutes, wait, createAsyncRoute } from 'src';
+import { h, createRoute, registerRoutes, wait, createAsyncRoute } from '../src';
 import { Main } from './pages/Main';
 
 export const { urls, Router, components } = registerRoutes({

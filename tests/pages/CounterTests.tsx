@@ -1,8 +1,8 @@
-import { h, idGenerator } from 'src';
-import { BuiltInButton } from 'tests/BuiltInButton';
-import { CounterWithReduxStore } from 'tests/CounterWithReduxStoreTest';
-import { SimpleCounter } from 'tests/SimpleCounterTest';
-import { StoredAttributeCounter } from 'tests/StoredAttributeCounterTest';
+import { h, idGenerator } from '../../src';
+import { BuiltInButton } from '../BuiltInButton';
+import { CounterWithReduxStore } from '../CounterWithReduxStoreTest';
+import { SimpleCounter } from '../SimpleCounterTest';
+import { StoredAttributeCounter } from '../StoredAttributeCounterTest';
 
 export const CounterTests = () => {
   const idGen = idGenerator();

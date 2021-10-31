@@ -1,4 +1,4 @@
-import { createCustomElement, h } from 'src';
+import { createCustomElement, h } from '../src';
 import { Router } from './routes';
 // import sheet from './a.css' assert { type: 'css' };
 // console.log(sheet)

@@ -1,5 +1,5 @@
-import { h } from 'src';
-import { SimpleCounter } from 'tests/SimpleCounterTest';
+import { h } from '../../src';
+import { SimpleCounter } from '../SimpleCounterTest';
 import { components } from '../routes';
 
 export const SearchParamsAndHash = components.searchParamsAndHash(({ searchParams, hash }) => {
