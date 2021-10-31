@@ -22,12 +22,5 @@
         "jsxFactory": "h.createElement",
         "jsxFragmentFactory": "h.Fragment"
     },
-    "include": [
-        "tests",
-        "src"
-    ],
-    "exclude": [
-        "*.spec.*",
-        "node_modules"
-    ]
+    "files": ["src/index.tsx"]
 }
