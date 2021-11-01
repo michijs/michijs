@@ -67,7 +67,7 @@
     "typescript": "^4.4.4"
   },
   "dependencies": {
-    "@lsegurado/htmltype": "0.0.2"
+    "@lsegurado/htmltype": "0.0.3"
   },
   "eslintConfig": {
     "extends": "@lsegurado/eslint-config-ls-element"
