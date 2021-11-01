@@ -7,6 +7,7 @@ export const config: LsServerConfig = (environment) => {
     },
     esbuildOptions: {
       entryPoints: ['./tests/index.tsx'],
+      tsconfig: environment === 'DISTRIBUTION' ? 'dist.tsconfig.json': 'tsconfig.json'
     }
   };
   switch (environment) {

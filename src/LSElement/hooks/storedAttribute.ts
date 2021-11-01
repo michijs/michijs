@@ -35,16 +35,16 @@ export function storedAttribute<T>(key: string, defaultValue: T, storage: Storag
   const get = () => {
     const localStorageValue = storage.getItem(key);
     if (localStorageValue) {
-      return JSON.parse(localStorageValue);
+      return JSON.parse(localStorageValue) as T;
     }
-    return defaultValue;
+    return defaultValue as T;
   };
 
   const proxiedObject = observe({
     item: { ...observableProps, value: get() ?? defaultValue },
     onChange: () => {
       const newValue = proxiedObject.value;
-      storage.setItem(key, newValue);
+      storage.setItem(key, JSON.stringify(newValue));
       window.dispatchEvent(new CustomEvent<StorageLocalChangeEventType>(STORAGE_LOCAL_CHANGE, { detail: { key, newValue } }));
     },
     shouldValidatePropertyChange: () => true

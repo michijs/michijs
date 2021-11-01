@@ -3,7 +3,7 @@ import { buttonStyle } from './buttonStyle';
 
 export const BuiltInButton = createCustomElement({ tag: 'built-in-button', extends: 'button', class: HTMLButtonElement }, {
   reflectedAttributes: {
-    text: null
+    text: null as string
   },
   render() {
     return (
