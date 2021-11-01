@@ -36,7 +36,7 @@
 
 ## Getting Started
 
-You can use [this template](https://github.com/lsegurado/ls-element-template) or you can see on [Code Sandbox](https://codesandbox.io/s/github/lsegurado/ls-element-template/tree/master/?file=/src/components/RootComponent/index.tsx).
+You can use [this template](https://github.com/lsegurado/ls-element-template) or you can see on [Code Sandbox](https://githubbox.com/lsegurado/ls-element-storybook-template/tree/master).
   
 ## Creating components
 
