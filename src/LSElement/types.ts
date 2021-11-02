@@ -273,4 +273,4 @@ export type CreateCustomElementResult<
         } & Self<M, T, E, A, RA, EL>
     ) & { tag: string, extends?: string }
 
-export type GetElementProps<El extends any> = El extends (new () => { props: any }) ? InstanceType<El>['props'] : El extends (...args: any) => any ? Parameters<El>[0]: never
+export type GetElementProps<El extends any> = El extends (new () => { props: any }) ? InstanceType<El>['props'] : (El extends (...args: any) => any ? Parameters<El>[0]: never)
