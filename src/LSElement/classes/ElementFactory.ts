@@ -12,8 +12,7 @@ export const ElementFactory = {
     switch (type) {
       case JSXElementType.FUNCTION: {
         const { tag, attrs, children } = jsxElementTyped<FunctionJSXElement>();
-        const flattenedChildren = children.flat();
-        const result = tag(attrs, flattenedChildren.length === 1 ? flattenedChildren[0] : flattenedChildren, self);
+        const result = tag(attrs, children, self);
         this.fromJSXElement(result, self, isSVGParam, pendingInsertions);
         break;
       }

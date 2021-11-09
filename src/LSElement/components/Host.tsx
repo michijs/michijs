@@ -1,14 +1,15 @@
 import type { commonElement } from '@lsegurado/htmltype/HTMLElements';
 import { AttributeManager } from '../classes/AttributeManager';
-import type { FC } from '../types';
+import type { FC, ObjectJSXElement } from '../types';
 import { h } from '../h';
+import { Fragment } from '.';
 
 type HostProps = commonElement & { [propertyName: string]: any };
 
 /**Allows to set attributes and event listeners to the host element itself. */
-export const Host: FC<HostProps> = (attrs, children, self) => {
+export const Host: FC<HostProps> = ({children, ...attrs}, self) => {
   if (attrs && self) {
-    AttributeManager.setAttributes(self, self, attrs, self.ls.alreadyRendered);
+    AttributeManager.setAttributes(self, self, attrs as ObjectJSXElement['attrs'], self.ls.alreadyRendered);
   }
-  return <>{children}</>;
+  return <Fragment children={children} />;
 };

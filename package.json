@@ -37,6 +37,7 @@
     "benchmark-ls-element": "set NODE_ENV=TESTING && npm run usnap tests/benchmark/LSElement.spec.tsx",
     "benchmark-vanilla": "set NODE_ENV=TESTING_VANILLA && npm run usnap tests/benchmark/Vanilla.spec.tsx",
     "test": "jest --no-cache --env=jsdom",
+    "test-w": "jest --watch --no-cache --coverage --collectCoverageFrom=src/LSElement/experiments/LSNode/* --env=jsdom src/LSElement/experiments/LSNode/LSNode.spec.tsx",
     "test-src": "jest src/LSElement --env=jsdom",
     "usnap": "jest --updateSnapshot --unhandled-rejections=strict"
   },

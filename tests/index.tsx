@@ -1,8 +1,7 @@
 import { createCustomElement, h } from '../src';
 import { Router } from './routes';
-// import sheet from './a.css' assert { type: 'css' };
-// console.log(sheet)
-
+// // // import sheet from './a.css' assert { type: 'css' };
+// // // console.log(sheet)
 createCustomElement('ls-root-test-element', {
   reflectedAttributes: {
     arrayTest: [1, 2, 3, 4, 5]
@@ -11,8 +10,8 @@ createCustomElement('ls-root-test-element', {
   render() {
     return (
       <>
-        <Router id="route" />
-        {this.arrayTest.map(x => <div id={x.toString()} onclick={() => this.arrayTest.push(this.arrayTest.length + 1)}>{x}</div>)}
+        <Router />
+        {this.arrayTest.map(x => <div key={x} onclick={() => this.arrayTest.push(this.arrayTest.length + 1)}>{x}</div>)}
       </>
     );
   }

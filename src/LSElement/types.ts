@@ -4,6 +4,7 @@ import { idGenerator } from './hooks';
 import { lsStore } from './hooks/lsStore';
 import { Properties } from 'csstype';
 import { LSTag } from './h/tags/LSTag';
+import { LSNodeType } from './experiments/LSNode/LSNode';
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 type IfEquals<X, Y, A = X, B = never> =
@@ -113,9 +114,10 @@ export interface LSCustomElement extends LSElement, Lifecycle<any> {
         rerenderCallback(propertiesThatChanged: Set<PropertyKey> | PropertyKey): void,
         pendingTasks: number,
         unSubscribeFromStore: Array<() => void>,
-        idGen?: ReturnType<typeof idGenerator>['getId']
+        idGen?: ReturnType<typeof idGenerator>['getId'],
+        node?: LSNodeType
     } & LSElement['ls'],
-    render?(): DefaultChildren,
+    render?(): JSX.Element,
     /**Allows to get a child element from the host with the id */
     child<T = HTMLElement>(id: string): T,
     /**Forces the element to re-render */
@@ -124,18 +126,24 @@ export interface LSCustomElement extends LSElement, Lifecycle<any> {
     idGen: ReturnType<typeof idGenerator>['getId']
 }
 
-export type PrimitiveType = bigint | null | undefined | string | number | boolean | AnyObject;
+export type IterableAttrs = {
+    /**When iterating nodes its higly recomended to use keys */
+    key?: number | string
+}
 
-export type CommonJSXAttrs = { attrs?: Record<string, any> | null, children: JSX.Element[] }
-export type FragmentJSXElement = { tag: undefined, attrs: null } & Omit<CommonJSXAttrs, 'attrs'>;
+export type EmptyType = null | undefined | false;
+export type PrimitiveType = bigint | string | number | true | AnyObject;
+
+export type CommonJSXAttrs = { attrs?: (Record<string, any> & { children: JSX.Element[] }) } & IterableAttrs
+export type FragmentJSXElement = { tag: undefined } & CommonJSXAttrs;
 export type ObjectJSXElement = { tag: string } & CommonJSXAttrs;
 export type FunctionJSXElement = { tag: FC<any> } & CommonJSXAttrs;
 export type ClassJSXElement = { tag: (new () => {}) & { tag: string, extends?: string } } & CommonJSXAttrs;
-export type SingleJSXElement = PrimitiveType | ObjectJSXElement | FunctionJSXElement | FragmentJSXElement | ClassJSXElement;
+export type SingleJSXElement = EmptyType | PrimitiveType | ObjectJSXElement | FunctionJSXElement | FragmentJSXElement | ClassJSXElement;
 export type ArrayJSXElement = Array<SingleJSXElement>;
 // export type PureObjectJSXElement = { tag: string } & Omit<CommonJSXAttrs,'children'> & {children: (PureObjectJSXElement | string)[]};
 
-export type FC<T = commonElement, C = DefaultChildren, S = LSCustomElement> = (attrs: Omit<T, 'children'> & { children?: C }, children: C, self?: S | null) => JSX.Element;
+export type FC<T = commonElement, C = DefaultChildren, S = LSCustomElement> = (attrs: Omit<T, 'children'> & { children?: C }, self?: S | null) => JSX.Element;
 
 export type CompatibleStyleSheet = string | CSSStyleSheet;
 
@@ -273,4 +281,4 @@ export type CreateCustomElementResult<
         } & Self<M, T, E, A, RA, EL>
     ) & { tag: string, extends?: string }
 
-export type GetElementProps<El extends any> = El extends (new () => { props: any }) ? InstanceType<El>['props'] : (El extends (...args: any) => any ? Parameters<El>[0]: never)
+export type GetElementProps<El extends any> = El extends (new () => { props: any }) ? InstanceType<El>['props'] : (El extends (...args: any) => any ? Parameters<El>[0] : never)

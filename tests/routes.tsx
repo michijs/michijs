@@ -34,13 +34,13 @@ export const { urls: asyncTestsUrls, Router: AsyncTestsRouter } = registerRoutes
       return await import('./SimpleCounterTest');
     },
     key: 'SimpleCounter',
-    loadingComponent: <h1 id="loading">loading...</h1>,
+    loadingComponent: <h1>loading...</h1>,
   }),
   test2: createAsyncRoute()({
     promise: () => import('./SimpleCounterTest'),
     key: 'SimpleCounter'
   }),
   test3: createRoute({
-    component: <div id="test3">test</div>,
+    component: <div>test</div>,
   }),
 }, urls.asyncTests);

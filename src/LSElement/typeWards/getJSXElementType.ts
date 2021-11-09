@@ -1,4 +1,4 @@
-import { ClassJSXElement } from '../types';
+import { ClassJSXElement, FragmentJSXElement } from '../types';
 
 export enum JSXElementType {
   ARRAY,
@@ -6,7 +6,8 @@ export enum JSXElementType {
   PRIMITIVE,
   FUNCTION,
   FRAGMENT,
-  CLASS
+  CLASS,
+  EMPTY
 }
 
 function getValue(value) {
@@ -21,6 +22,8 @@ export function getJSXElementType(value: JSX.Element): [JSXElementType, ReturnTy
       return [JSXElementType.ARRAY, getValue(value)];
     } else if (typeof value === 'object' && 'tag' in value) {//Fix for non-jsx objects
       if (value.tag === undefined) {
+        if ((value as FragmentJSXElement).attrs.children.length === 0)
+          return [JSXElementType.EMPTY, getValue(value)];
         return [JSXElementType.FRAGMENT, getValue(value)];
       } else if (typeof value.tag === 'function') {
         if ((value.tag as unknown as ClassJSXElement).tag)
@@ -29,7 +32,10 @@ export function getJSXElementType(value: JSX.Element): [JSXElementType, ReturnTy
       }
       return [JSXElementType.OBJECT, getValue(value)];
     }
+    return [JSXElementType.PRIMITIVE, getValue(value)];
   }
-  return [JSXElementType.PRIMITIVE, getValue(value)];
-
+  if(value === 0){
+    return [JSXElementType.PRIMITIVE, getValue(value)];
+  }
+  return [JSXElementType.EMPTY, getValue(value)];
 }

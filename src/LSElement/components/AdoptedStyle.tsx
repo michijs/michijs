@@ -6,7 +6,7 @@ import { h } from '../h';
 import { SVGElements } from '../h/tags/SVGElements';
 import { createStyleSheet } from '../css/createStyleSheet';
 
-type AdoptedStyleProps = HTMLElements['style'] & SVGElements['style'];
+type AdoptedStyleProps = HTMLElements['style'] & SVGElements['style'] & Required<Pick<HTMLElements['style'] & SVGElements['style'], 'id'>>;
 
 function addStyle(container: StyleSheetContainer, child: CompatibleStyleSheet, adoptedStyleSheetList: AdoptedStyleSheetList, index: number) {
   const newStyleSheet = typeof child === 'string' ? createStyleSheet(child) as CSSStyleSheet : child;
@@ -19,7 +19,7 @@ function addStyle(container: StyleSheetContainer, child: CompatibleStyleSheet, a
  * If there is no shadow root it will use the style tag
  * @link https://developers.google.com/web/updates/2019/02/constructable-stylesheets
 */
-export const AdoptedStyle: FC<AdoptedStyleProps, CompatibleStyleSheet | CompatibleStyleSheet[]> = (attrs, children, targetElement) => {
+export const AdoptedStyle: FC<AdoptedStyleProps, CompatibleStyleSheet | CompatibleStyleSheet[]> = ({children, ...attrs}, targetElement) => {
   const childrenAsArray = Array.isArray(children) ? children : [children];
 
   // const rootNode = getRootNode(target);

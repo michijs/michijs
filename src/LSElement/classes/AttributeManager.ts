@@ -87,7 +87,7 @@ export abstract class AttributeManager {
   }
   static setStyle(self: LSCustomElement | null, element: Element | HTMLElement, cssObject: CSSProperties, id: string) {
     if (supportsAdoptingStyleSheets && self) {
-      AdoptedStyle({ id: self.id }, [createStyleSheet(cssObject, [`#${id}`])], self);
+      AdoptedStyle({ id: self.id, children: createStyleSheet(cssObject, [`#${id}`]) }, self);
     } else {
       element.removeAttribute('style');
       if (cssObject && elementIsHTMLElement(element)) {
