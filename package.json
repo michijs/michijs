@@ -34,9 +34,9 @@
     "publish-npm": "npm run dist && npm publish --access public",
     "start-benchmark-ls-element": "ls-server --start --env=TESTING",
     "start-benchmark-vanilla": "ls-server --start --env=TESTING_VANILLA",
-    "benchmark-ls-element": "set NODE_ENV=TESTING && npm run usnap tests/jest/LSElement.spec.tsx",
-    "benchmark-vanilla": "set NODE_ENV=TESTING_VANILLA && npm run usnap tests/jest/Vanilla.spec.tsx",
-    "test": "jest --env=jsdom",
+    "benchmark-ls-element": "set NODE_ENV=TESTING && npm run usnap tests/benchmark/LSElement.spec.tsx",
+    "benchmark-vanilla": "set NODE_ENV=TESTING_VANILLA && npm run usnap tests/benchmark/Vanilla.spec.tsx",
+    "test": "jest --no-cache --env=jsdom",
     "test-src": "jest src/LSElement --env=jsdom",
     "usnap": "jest --updateSnapshot --unhandled-rejections=strict"
   },

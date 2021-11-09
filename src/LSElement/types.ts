@@ -126,7 +126,7 @@ export interface LSCustomElement extends LSElement, Lifecycle<any> {
 
 export type PrimitiveType = bigint | null | undefined | string | number | boolean | AnyObject;
 
-export type CommonJSXAttrs = { attrs?: { [attribute: string]: any } | null, children: JSX.Element[] }
+export type CommonJSXAttrs = { attrs?: Record<string, any> | null, children: JSX.Element[] }
 export type FragmentJSXElement = { tag: undefined, attrs: null } & Omit<CommonJSXAttrs, 'attrs'>;
 export type ObjectJSXElement = { tag: string } & CommonJSXAttrs;
 export type FunctionJSXElement = { tag: FC<any> } & CommonJSXAttrs;

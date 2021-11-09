@@ -72,6 +72,33 @@ const { state, transactions, ...store } = lsStore({
   }
 });
 
+export const Trow = createCustomElement(
+  {
+    tag: 'ls-table-row',
+    extends: 'tr',
+    class: HTMLTableRowElement
+  },
+  {
+    attributes: {
+      label: undefined,
+    },
+    render() {
+      return <>
+        <td id={`row-${this.id}-1`} _className="col-md-1" _dynamicAttributes={[]} _staticChildren _textContent={this.id} />
+        <td id={`row-${this.id}-2`} _className="col-md-4" _dynamicAttributes={[]}>
+          <a id={`row-${this.id}-3`} onclick={() => transactions.select(Number(this.id))} _staticChildren _dynamicAttributes={['_textContent']} _textContent={this.label} />
+        </td>
+        <td id={`row-${this.id}-4`} _className="col-md-1" _dynamicAttributes={[]} _staticChildren>
+          <a id={`row-${this.id}-5`} onclick={() => transactions.delete(Number(this.id))}>
+            <span id={`row-${this.id}-6`} _className="glyphicon glyphicon-remove" aria-hidden="true" />
+          </a>
+        </td>
+        <td id={`row-${this.id}-7`} _className="col-md-6" _dynamicAttributes={[]} _staticChildren />
+      </>;
+    }
+  }
+);
+
 export const Tbody = createCustomElement(
   {
     tag: 'ls-table-body',
@@ -83,20 +110,7 @@ export const Tbody = createCustomElement(
       store
     },
     render() {
-      return state.data.map(({ id, label }) => (
-        <tr id={`row-${id}`} class={id === state.selected ? 'danger' : undefined} _dynamicAttributes={['class']}>
-          <td id={`row-${id}-1`} _className="col-md-1" _dynamicAttributes={[]} _staticChildren _textContent={id.toString()} />
-          <td id={`row-${id}-2`} _className="col-md-4" _dynamicAttributes={[]}>
-            <a id={`row-${id}-3`} onclick={() => transactions.select(id)} _staticChildren _dynamicAttributes={['_textContent']} _textContent={label} />
-          </td>
-          <td id={`row-${id}-4`} _className="col-md-1" _dynamicAttributes={[]} _staticChildren>
-            <a id={`row-${id}-5`} onclick={() => transactions.delete(id)}>
-              <span id={`row-${id}-6`} _className="glyphicon glyphicon-remove" aria-hidden="true" />
-            </a>
-          </td>
-          <td id={`row-${id}-7`} _className="col-md-6" _dynamicAttributes={[]} _staticChildren />
-        </tr>)
-      );
+      return state.data.map(({ id, label }) => <Trow id={id.toString()} _label={label} class={id === state.selected ? 'danger' : undefined} _dynamicAttributes={['class', '_label']} />);
     }
   }
 );
