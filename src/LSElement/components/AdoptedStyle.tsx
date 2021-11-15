@@ -19,7 +19,7 @@ function addStyle(container: StyleSheetContainer, child: CompatibleStyleSheet, a
  * If there is no shadow root it will use the style tag
  * @link https://developers.google.com/web/updates/2019/02/constructable-stylesheets
 */
-export const AdoptedStyle: FC<AdoptedStyleProps, CompatibleStyleSheet | CompatibleStyleSheet[]> = ({children, ...attrs}, targetElement) => {
+export const AdoptedStyle: FC<AdoptedStyleProps, CompatibleStyleSheet | CompatibleStyleSheet[]> = ({children, id, ...attrs}, targetElement) => {
   const childrenAsArray = Array.isArray(children) ? children : [children];
 
   // const rootNode = getRootNode(target);
@@ -39,11 +39,11 @@ export const AdoptedStyle: FC<AdoptedStyleProps, CompatibleStyleSheet | Compatib
   
   if (supportsAdoptingStyleSheets && targetStyleSheetContainer) {
 
-    let adoptedStyleSheetList = targetElement.ls.adoptedStyleSheets.find(x => x.id === attrs.id);
+    let adoptedStyleSheetList = targetElement.ls.adoptedStyleSheets.find(x => x.id === id);
 
     // If the style list does not exist I create it
     if (!adoptedStyleSheetList) {
-      adoptedStyleSheetList = { id: attrs.id, items: [] };
+      adoptedStyleSheetList = { id, items: [] };
       targetElement.ls.adoptedStyleSheets.push(adoptedStyleSheetList);
     }
     childrenAsArray.forEach((child, index) => {

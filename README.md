@@ -15,7 +15,6 @@
 ## Why "LS-Element?"
 |  | LS-Element  |  React  |  StencilJS  | VanillaJS |
 |--|--|--|--|--|
-| Avoids Virtual Dom | ✅ | ❌ | ❌ | ✅ |
 | Templates with [JSX](https://es.reactjs.org/docs/introducing-jsx.html) | ✅ | ✅ | ✅ | ❌ |
 | [Differentiation between attributes and properties in jsx](#attributes-vs-properties-in-jsx) | ✅ | ❌ | ❌ | ❌ |
 | Standard Web Components | ✅ |  ⭕ | ✅ | ✅ |
@@ -68,9 +67,9 @@ export const MyCounter = createCustomElement('my-counter', {
     return (
       <>
         <AdoptedStyle id="style">{counterStyle}</AdoptedStyle>
-        <button id="decrement-count" onpointerup={this.decrementCount}>-</button>
-        <span id='count'>{this.count}</span>
-        <button id="increment-count" onpointerup={this.incrementCount}>+</button>
+        <button onpointerup={this.decrementCount}>-</button>
+        <span>{this.count}</span>
+        <button onpointerup={this.incrementCount}>+</button>
       </>
     )
   }
@@ -84,20 +83,18 @@ To use this component, just use it like any other HTML element:
 ```tsx
 import '../Counter';
 
-<my-counter id="my-counter" oncountchanged={(ev) => console.log(`New count value: ${ev.detail}`)} />
+<my-counter oncountchanged={(ev) => console.log(`New count value: ${ev.detail}`)} />
 ```
 
 Or if you are using jsx
 ```tsx
 import Counter from '../Counter';
 
-<Counter id="my-counter" oncountchanged={(ev) => console.log(`New count value: ${ev.detail}`)} />
+<Counter oncountchanged={(ev) => console.log(`New count value: ${ev.detail}`)} />
 ```
-  
-Please note that all elements included in the components in this library require an ID to work properly. This allows avoiding the use of the virtual DOM.
-
+<!-- 
 ## How this works? 
-When you update an item, the library looks for your changes and only updates the attributes / children / etc that really changed (similar to how the virtual DOM works). By forcing the use of IDs it is easy to find changes and update them without replacing nodes in the DOM and without using the virtual DOM.
+When you update an item, the library looks for your changes and only updates the attributes / children / etc that really changed.
 
 ### But... Wait, DOM elements shouldn't be unique?
   
@@ -125,7 +122,7 @@ The result will be like this:
 ```html
 <style id="093dc6b7-315d-43c1-86ef-fcd49130ea32"></style>
 <button id="c8d61264-45ee-42ce-9f74-1d76402d1f48">-</button>
-```
+``` -->
 
 ## Component structure
 A component consists of the following properties:
@@ -341,7 +338,7 @@ const Redirect = () => {
 export const { urls, Router, components } = registerRoutes({
   syncRoute: createRoute({
     /**The component to display */
-    component: <div id="test3">Hello World</div>,
+    component: <div>Hello World</div>,
     title: 'Sync title'
   }),
   //Redirect route
@@ -377,9 +374,9 @@ export const AsyncChildExample = components.childRoute(({ searchParams, hash }) 
   return (
     <>
       {/* Will show the value of searchParam1 */}
-      <div id="example">{searchParams.searchParam1}</div>
+      <div>{searchParams.searchParam1}</div>
       {/* Will show true if the hash is #hash1 */}
-      <div id="example2">{hash['#hash1']}</div>
+      <div>{hash['#hash1']}</div>
     </>
   );
 });
