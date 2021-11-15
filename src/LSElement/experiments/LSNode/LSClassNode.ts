@@ -1,10 +1,8 @@
-import { ClassJSXElement, h, LSCustomElement, ObjectJSXElement } from '../../..';
+import { ClassJSXElement, LSCustomElement, ObjectJSXElement } from '../../..';
 import { getJSXElementType, JSXElementType } from '../../typeWards/getJSXElementType';
-import { LSNodeType } from './LSNode';
-import { LSObjectNode } from './LSObjectNode';
-import { replaceNodeWith } from './replaceNodeWith';
+import { LSNode } from './LSNode';
 
-const toObjectJSXElement = ({tag, attrs}: ClassJSXElement): ObjectJSXElement => {
+const toObjectJSXElement = ({ tag, attrs, key }: ClassJSXElement): ObjectJSXElement => {
   if (tag.extends)
     return {
       tag: tag.extends,
@@ -12,37 +10,29 @@ const toObjectJSXElement = ({tag, attrs}: ClassJSXElement): ObjectJSXElement => 
         ...attrs,
         is: tag.tag
       },
+      key
     };
   return {
     tag: tag.tag,
-    attrs
+    attrs,
+    key
   };
 };
 
 export const LSClassNode = (jsxElement: ClassJSXElement, isSVGParam: boolean, self: LSCustomElement) => {
-  const objectJSXElement = toObjectJSXElement(jsxElement);
-  const lsNodeResult = LSObjectNode(objectJSXElement, isSVGParam, self);
-    
-  const node: LSNodeType = {
-    el: lsNodeResult.el,
-    children: lsNodeResult.children,
-    updateElement: (newJSXElement: JSX.Element) => {
-      const [type, typedNewJSXElement] = getJSXElementType(newJSXElement);
-      if (type === JSXElementType.CLASS && typedNewJSXElement<ClassJSXElement>().tag.tag === jsxElement.tag.tag && typedNewJSXElement<ClassJSXElement>().tag.extends === jsxElement.tag.extends) {
-        const objectJSXElementResult = toObjectJSXElement(typedNewJSXElement<ClassJSXElement>());
-        jsxElement.attrs = typedNewJSXElement<ClassJSXElement>().attrs;
-        const result = lsNodeResult.updateElement(objectJSXElementResult);
-        node.el = result.el;
-        node.children = result.children;
-        node.replaceWith = (...nodes) => result.replaceWith(...nodes);
-        node.remove = (...nodes) => result.remove(...nodes);
-        return node;
-      }
-      // intentional isSVGParam
-      return replaceNodeWith(node, newJSXElement, isSVGParam, self);
-    },
-    replaceWith: (...nodes) => lsNodeResult.replaceWith(...nodes),
-    remove: () => lsNodeResult.remove(),
+  const objectResult = toObjectJSXElement(jsxElement);
+
+  const node = LSNode(objectResult, isSVGParam, self);
+
+  const originalNodeUpdateElementFn = node.updateElement.bind(node);
+
+  node.updateElement = (newJSXElement: JSX.Element) => {
+    const [type, typedNewJSXElement] = getJSXElementType(newJSXElement);
+    if (type === JSXElementType.CLASS && typedNewJSXElement<ClassJSXElement>().tag.tag === jsxElement.tag.tag && typedNewJSXElement<ClassJSXElement>().tag.extends === jsxElement.tag.extends)
+      return originalNodeUpdateElementFn(toObjectJSXElement(typedNewJSXElement<ClassJSXElement>()));
+    // intentional isSVGParam
+    return node.replaceWith(newJSXElement);
   };
+
   return node;
 };

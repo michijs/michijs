@@ -4,7 +4,7 @@ import { idGenerator } from './hooks';
 import { lsStore } from './hooks/lsStore';
 import { Properties } from 'csstype';
 import { LSTag } from './h/tags/LSTag';
-import { LSNodeType } from './experiments/LSNode/LSNode';
+import { LSChildNode } from './experiments/LSNode/LSChildNode';
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 type IfEquals<X, Y, A = X, B = never> =
@@ -115,7 +115,7 @@ export interface LSCustomElement extends LSElement, Lifecycle<any> {
         pendingTasks: number,
         unSubscribeFromStore: Array<() => void>,
         idGen?: ReturnType<typeof idGenerator>['getId'],
-        node?: LSNodeType
+        node?: LSChildNode<JSX.Element>
     } & LSElement['ls'],
     render?(): JSX.Element,
     /**Allows to get a child element from the host with the id */
@@ -135,7 +135,7 @@ export type EmptyType = null | undefined | false;
 export type PrimitiveType = bigint | string | number | true | AnyObject;
 
 export type CommonJSXAttrs = { attrs?: (Record<string, any> & { children: JSX.Element[] }) } & IterableAttrs
-export type FragmentJSXElement = { tag: undefined } & CommonJSXAttrs;
+export type FragmentJSXElement = { tag: undefined } & { attrs: { children: JSX.Element[] } };
 export type ObjectJSXElement = { tag: string } & CommonJSXAttrs;
 export type FunctionJSXElement = { tag: FC<any> } & CommonJSXAttrs;
 export type ClassJSXElement = { tag: (new () => {}) & { tag: string, extends?: string } } & CommonJSXAttrs;
