@@ -44,12 +44,12 @@ export class LSArrayNode extends LSVirtualFragmentNode<ArrayJSXElement> {
               else {// Different node - probably moved
                 const movedNodeIndex = movedNodes.findIndex(x => x.jsx.key === newChild.key);
                 if (movedNodeIndex === -1) {
+                  movedNodes.push({ node: this.childrenNodes[i], jsx: oldChild });
+                  this.removeItem(i);
                   const movedNodeIndex = this.childrenNodes.slice(i).findIndex(x =>
                     typeof x.jsxElement === 'object' && 'key' in x.jsxElement && x.jsxElement.key === newChild.key
                   );
                   if (movedNodeIndex !== -1) {
-                    movedNodes.push({ node: this.childrenNodes[i], jsx: oldChild });
-                    this.removeItem(i);
                     const finalMovedNodeIndex = movedNodeIndex + i;
                     if (finalMovedNodeIndex === i) {
                       this.childrenNodes[i] = this.childrenNodes[finalMovedNodeIndex].updateElement(newChild);
