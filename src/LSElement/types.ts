@@ -110,6 +110,7 @@ export interface LSCustomElement extends LSElement, Lifecycle<any> {
         store: ReturnType<typeof lsStore>,
         alreadyRendered: boolean,
         shadowRoot?: ShadowRoot,
+        renderInProgress: Array<() => void>,
         adoptedStyleSheets: AdoptedStyleSheetList[],
         rerenderCallback(propertiesThatChanged: Set<PropertyKey> | PropertyKey): void,
         pendingTasks: number,
