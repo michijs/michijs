@@ -34,7 +34,6 @@ export class LSArrayNode extends LSVirtualFragmentNode<ArrayJSXElement> {
       else if (this.childrenNodes.length === 0)//Only new elements
         this.childrenNodes.push(...this.after(typedNewJSXElement<ArrayJSXElement>()));
       else { //Both have new / changed elements
-        const auxiliar = [...this.childrenNodes];
         for (let i = 0; i < this.childrenNodes.length && i < typedNewJSXElement<ArrayJSXElement>().length; i++) {
           const newChild = typedNewJSXElement<ArrayJSXElement>()[i];
           const oldChild = this.childrenNodes[i].jsxElement;
@@ -43,26 +42,31 @@ export class LSArrayNode extends LSVirtualFragmentNode<ArrayJSXElement> {
               if (newChild.key === oldChild.key)// Same node
                 this.childrenNodes[i] = this.childrenNodes[i].updateElement(newChild);
               else {// Different node - probably moved
-                let movedNode: LSChildNode<JSX.Element>;
                 const movedNodeIndex = movedNodes.findIndex(x => x.jsx.key === newChild.key);
                 if (movedNodeIndex === -1) {
-                  const movedNodeIndex = auxiliar.splice(i).findIndex(x =>
+                  const movedNodeIndex = this.childrenNodes.slice(i).findIndex(x =>
                     typeof x.jsxElement === 'object' && 'key' in x.jsxElement && x.jsxElement.key === newChild.key
                   );
                   if (movedNodeIndex !== -1) {
+                    movedNodes.push({ node: this.childrenNodes[i], jsx: oldChild });
+                    this.removeItem(i);
                     const finalMovedNodeIndex = movedNodeIndex + i;
-                    this.removeItem(finalMovedNodeIndex);
-                    movedNode = auxiliar[finalMovedNodeIndex];
+                    if (finalMovedNodeIndex === i) {
+                      this.childrenNodes[i] = this.childrenNodes[finalMovedNodeIndex].updateElement(newChild);
+                    } else {
+                      const movedNode = this.childrenNodes[finalMovedNodeIndex];
+                      this.removeItem(finalMovedNodeIndex);
+                      this.insertItem(i, movedNode).updateElement(newChild);
+                    }
+                  } else {
+                    this.insertItem(i, LSNode(newChild, this.isSVG, this.self));
+                    // this.childrenNodes[i] = this.childrenNodes[i].replaceWith(newChild);
                   }
                 } else {
-                  movedNode = movedNodes[movedNodeIndex].node;
+                  const movedNode = movedNodes[movedNodeIndex].node;
                   movedNodes.splice(movedNodeIndex, 1);
-                }
-                movedNodes.push({ node: this.childrenNodes[i], jsx: oldChild });
-                if (movedNode)
                   this.insertItem(i, movedNode).updateElement(newChild);
-                else
-                  this.childrenNodes[i] = this.childrenNodes[i].replaceWith(newChild);
+                }
               }
             }
           } else if (typeof oldChild === 'object' && 'key' in oldChild) { // Different node - probably moved / replaced with a node without key
