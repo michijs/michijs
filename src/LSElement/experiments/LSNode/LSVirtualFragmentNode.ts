@@ -34,10 +34,6 @@ export abstract class LSVirtualFragmentNode<T extends JSX.Element> implements LS
       this.childrenNodes.forEach(x => x.remove());
       this.childrenNodes = [];
     }
-    removeItem(i: number): void {
-      this.childrenNodes[i].remove();
-      this.childrenNodes.splice(i, 1);
-    }
     remove(): void {
       this.pivotNode.remove();
       this.childrenNodes.forEach(x => x.remove());

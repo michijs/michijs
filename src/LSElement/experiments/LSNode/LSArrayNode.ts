@@ -11,6 +11,10 @@ export class LSArrayNode extends LSVirtualFragmentNode<ArrayJSXElement> {
   createAndAppend(children: JSX.Element[]) {
     this.childrenNodes = children.map(x => LSNode(x, this.isSVG, this.self));
   }
+  removeItem(i: number): void {
+    this.childrenNodes[i].remove();
+    this.childrenNodes.splice(i, 1);
+  }
   insertItem(i: number, node: LSChildNode<JSX.Element>) {
     if (this.childrenNodes.length > i) {
       if (i !== 0) {
