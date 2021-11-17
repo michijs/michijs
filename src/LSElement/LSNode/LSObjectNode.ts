@@ -1,8 +1,8 @@
-import { LSCustomElement, ObjectJSXElement } from '../../..';
-import { getJSXElementType, JSXElementType } from '../../typeWards/getJSXElementType';
-import { setAttributes } from '../../DOM/attributes/setAttributes';
+import { LSCustomElement, ObjectJSXElement } from '../..';
+import { getJSXElementType, JSXElementType } from '../typeWards/getJSXElementType';
+import { setAttributes } from '../DOM/attributes/setAttributes';
 import { LSParentNode } from './LSParentNode';
-import { LSNodeEvents } from '../../types';
+import { LSNodeEvents } from '../types';
 
 export class LSObjectNode extends LSParentNode<ObjectJSXElement> {
   events: LSNodeEvents = {};

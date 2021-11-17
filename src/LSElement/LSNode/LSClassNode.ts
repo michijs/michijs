@@ -1,5 +1,5 @@
-import { ClassJSXElement, LSCustomElement, ObjectJSXElement } from '../../..';
-import { getJSXElementType, JSXElementType } from '../../typeWards/getJSXElementType';
+import { ClassJSXElement, LSCustomElement, ObjectJSXElement } from '../..';
+import { getJSXElementType, JSXElementType } from '../typeWards/getJSXElementType';
 import { LSNode } from './LSNode';
 
 const toObjectJSXElement = ({ tag, attrs, key }: ClassJSXElement): ObjectJSXElement => {

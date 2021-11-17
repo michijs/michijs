@@ -1,6 +1,6 @@
-import { ClassJSXElement, FunctionJSXElement, LSCustomElement, ObjectJSXElement, PrimitiveType } from '../../..';
-import { ArrayJSXElement, EmptyType, FragmentJSXElement } from '../../types';
-import { getJSXElementType, JSXElementType } from '../../typeWards/getJSXElementType';
+import { ClassJSXElement, FunctionJSXElement, LSCustomElement, ObjectJSXElement, PrimitiveType } from '../..';
+import { ArrayJSXElement, EmptyType, FragmentJSXElement } from '../types';
+import { getJSXElementType, JSXElementType } from '../typeWards/getJSXElementType';
 import { LSArrayNode } from './LSArrayNode';
 import { LSChildNode } from './LSChildNode';
 import { LSClassNode } from './LSClassNode';

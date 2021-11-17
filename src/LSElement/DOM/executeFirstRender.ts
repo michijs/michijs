@@ -1,5 +1,5 @@
 import type { LSCustomElement } from '../types';
-import { LSNode } from '../experiments/LSNode/LSNode';
+import { LSNode } from '../LSNode/LSNode';
 import { getMountPoint } from './getMountPoint';
 
 export function executeFirstRender(self: LSCustomElement) {
@@ -7,8 +7,4 @@ export function executeFirstRender(self: LSCustomElement) {
 
   self.ls.node = LSNode(renderResult as JSX.Element, false, self);
   getMountPoint(self).append(self.ls.node.valueOf());
-
-  // if (renderResult) {
-  //   insertNewChildren(self as LSCustomElement, () => getMountPoint(self as LSCustomElement), Array.isArray(renderResult) ? renderResult : [renderResult]);
-  // }
 }

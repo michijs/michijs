@@ -1,6 +1,6 @@
-import { LSCustomElement } from '../../..';
-import { PrimitiveType } from '../../types';
-import { getJSXElementType, JSXElementType } from '../../typeWards/getJSXElementType';
+import { LSCustomElement } from '../..';
+import { PrimitiveType } from '../types';
+import { getJSXElementType, JSXElementType } from '../typeWards/getJSXElementType';
 import { LSChildNode } from './LSChildNode';
 
 export class LSPrimitiveNode extends LSChildNode<PrimitiveType> {

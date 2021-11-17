@@ -1,5 +1,5 @@
-import { AnyObject, ArrayJSXElement, ClassJSXElement, FunctionJSXElement, LSCustomElement, ObjectJSXElement } from '../../..';
-import { getJSXElementType, JSXElementType } from '../../typeWards/getJSXElementType';
+import { AnyObject, ArrayJSXElement, ClassJSXElement, FunctionJSXElement, LSCustomElement, ObjectJSXElement } from '../..';
+import { getJSXElementType, JSXElementType } from '../typeWards/getJSXElementType';
 import { LSChildNode } from './LSChildNode';
 import { LSNode } from './LSNode';
 import { LSVirtualFragmentNode } from './LSVirtualFragmentNode';

@@ -1,5 +1,5 @@
-import { FragmentJSXElement, LSCustomElement, ObjectJSXElement } from '../../..';
-import { getJSXElementType, JSXElementType } from '../../typeWards/getJSXElementType';
+import { FragmentJSXElement, LSCustomElement, ObjectJSXElement } from '../..';
+import { getJSXElementType, JSXElementType } from '../typeWards/getJSXElementType';
 import { LSNode } from './LSNode';
 import { LSVirtualFragmentNode } from './LSVirtualFragmentNode';
 export class LSFragmentNode extends LSVirtualFragmentNode<FragmentJSXElement> {

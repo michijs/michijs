@@ -1,4 +1,4 @@
-import { LSCustomElement } from '../../types';
+import { LSCustomElement } from '../types';
 import { LSChildNode } from './LSChildNode';
 import { LSNode } from './LSNode';
 

@@ -1,5 +1,5 @@
-import { FunctionJSXElement, LSCustomElement } from '../../..';
-import { getJSXElementType, JSXElementType } from '../../typeWards/getJSXElementType';
+import { FunctionJSXElement, LSCustomElement } from '../..';
+import { getJSXElementType, JSXElementType } from '../typeWards/getJSXElementType';
 import { LSNode } from './LSNode';
 
 const toNonFunctionJSXElement = (jsxElement: FunctionJSXElement, self: LSCustomElement) => {

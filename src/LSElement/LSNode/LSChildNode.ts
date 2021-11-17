@@ -1,4 +1,4 @@
-import { LSCustomElement } from '../../types';
+import { LSCustomElement } from '../types';
 import { LSNode } from './LSNode';
 
 export abstract class LSChildNode<T extends JSX.Element> {

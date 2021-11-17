@@ -1,6 +1,6 @@
-import { LSCustomElement } from '../../..';
-import { EmptyType } from '../../types';
-import { getJSXElementType, JSXElementType } from '../../typeWards/getJSXElementType';
+import { LSCustomElement } from '../..';
+import { EmptyType } from '../types';
+import { getJSXElementType, JSXElementType } from '../typeWards/getJSXElementType';
 import { LSChildNode } from './LSChildNode';
 
 export class LSEmptyNode extends LSChildNode<EmptyType> {

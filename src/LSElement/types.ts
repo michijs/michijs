@@ -4,7 +4,7 @@ import { idGenerator } from './hooks';
 import { lsStore } from './hooks/lsStore';
 import { Properties } from 'csstype';
 import { LSTag } from './h/tags/LSTag';
-import { LSChildNode } from './experiments/LSNode/LSChildNode';
+import { LSChildNode } from './LSNode/LSChildNode';
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 type IfEquals<X, Y, A = X, B = never> =

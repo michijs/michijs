@@ -1,20 +1,19 @@
-import { h, ObjectJSXElement, PrimitiveType } from '../../..';
-import { createText } from '../../DOM/createText';
+import { h, ObjectJSXElement } from '../..';
 import { LSNode } from './LSNode';
 
 describe('LSNode', () => {
   describe('When is a primitive type', () => {
-    let target: PrimitiveType;
+    let target: string;
     beforeEach(() => {
       target = 'test';
     });
     it('Should return the expected node', () => {
-      const result = document.createTextNode(createText(target));
+      const result = document.createTextNode(target);
       expect(LSNode(target).el).toEqual(result);
     });
     it('When updating with a primitive type should return an updatedNode', () => {
       const newText = 'test2';
-      const result = document.createTextNode(createText(newText));
+      const result = document.createTextNode(newText);
       const node = LSNode(target);
       expect(node.updateElement(newText).valueOf()).toEqual(result);
     });
@@ -52,7 +51,7 @@ describe('LSNode', () => {
     });
     it('When updating with a primitive type should return an updatedNode', () => {
       const newText = 'test2';
-      const result = document.createTextNode(createText(newText));
+      const result = document.createTextNode(newText);
       const node = LSNode(target(true));
       
 
