@@ -48,12 +48,12 @@ export class LSArrayNode extends LSVirtualFragmentNode<ArrayJSXElement> {
               else {// Different node - probably moved
                 const movedNodeIndex = movedNodes.findIndex(x => x.jsx.key === newChild.key);
                 if (movedNodeIndex === -1) {
-                  movedNodes.push({ node: this.childrenNodes[i], jsx: oldChild });
-                  this.removeItem(i);
                   const movedNodeIndex = this.childrenNodes.slice(i).findIndex(x =>
                     typeof x.jsxElement === 'object' && 'key' in x.jsxElement && x.jsxElement.key === newChild.key
                   );
                   if (movedNodeIndex !== -1) {
+                    movedNodes.push({ node: this.childrenNodes[i], jsx: oldChild });
+                    this.removeItem(i);
                     const finalMovedNodeIndex = movedNodeIndex + i;
                     if (finalMovedNodeIndex === i) {
                       this.childrenNodes[i] = this.childrenNodes[finalMovedNodeIndex].updateElement(newChild);
@@ -64,7 +64,6 @@ export class LSArrayNode extends LSVirtualFragmentNode<ArrayJSXElement> {
                     }
                   } else {
                     this.insertItem(i, LSNode(newChild, this.isSVG, this.self));
-                    // this.childrenNodes[i] = this.childrenNodes[i].replaceWith(newChild);
                   }
                 } else {
                   const movedNode = movedNodes[movedNodeIndex].node;
@@ -91,7 +90,7 @@ export class LSArrayNode extends LSVirtualFragmentNode<ArrayJSXElement> {
           });
           this.childrenNodes.push(...this.afterNodes(nodes));
         } else
-          this.childrenNodes.push(...this.after(typedNewJSXElement<ArrayJSXElement>().slice(this.jsxElement.length)));
+          this.childrenNodes.push(...this.after(typedNewJSXElement<ArrayJSXElement>().slice(this.childrenNodes.length)));
 
         // Removing lefover nodes
         this.childrenNodes.splice(typedNewJSXElement<ArrayJSXElement>().length).forEach(x => x.remove());
