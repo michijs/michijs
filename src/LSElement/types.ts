@@ -103,7 +103,7 @@ export interface LSElement extends Element {
     staticChildren?: boolean,
 }
 
-export type DefaultChildren = JSX.Element | JSX.Element[];
+export type LSNodeEvents = Record<string, EventListenerOrEventListenerObject>
 
 export interface LSCustomElement extends LSElement, Lifecycle<any> {
     ls: {
@@ -116,7 +116,9 @@ export interface LSCustomElement extends LSElement, Lifecycle<any> {
         pendingTasks: number,
         unSubscribeFromStore: Array<() => void>,
         idGen?: ReturnType<typeof idGenerator>['getId'],
-        node?: LSChildNode<JSX.Element>
+        node?: LSChildNode<JSX.Element>,
+        hostAttrs?: AnyObject,
+        events: LSNodeEvents
     } & LSElement['ls'],
     render?(): JSX.Element,
     /**Allows to get a child element from the host with the id */
@@ -140,11 +142,11 @@ export type FragmentJSXElement = { tag: undefined } & { attrs: { children: JSX.E
 export type ObjectJSXElement = { tag: string } & CommonJSXAttrs;
 export type FunctionJSXElement = { tag: FC<any> } & CommonJSXAttrs;
 export type ClassJSXElement = { tag: (new () => {}) & { tag: string, extends?: string } } & CommonJSXAttrs;
-export type SingleJSXElement = EmptyType | PrimitiveType | ObjectJSXElement | FunctionJSXElement | FragmentJSXElement | ClassJSXElement;
+export type SingleJSXElement = EmptyType | PrimitiveType | ObjectJSXElement | FunctionJSXElement | FragmentJSXElement | ClassJSXElement | ArrayJSXElement;
 export type ArrayJSXElement = Array<SingleJSXElement>;
 // export type PureObjectJSXElement = { tag: string } & Omit<CommonJSXAttrs,'children'> & {children: (PureObjectJSXElement | string)[]};
 
-export type FC<T = commonElement, C = DefaultChildren, S = LSCustomElement> = (attrs: Omit<T, 'children'> & { children?: C }, self?: S | null) => JSX.Element;
+export type FC<T = commonElement, C = JSX.Element, S = LSCustomElement> = (attrs: Omit<T,'children'> & { children?: C }, self?: S | null) => JSX.Element;
 
 export type CompatibleStyleSheet = string | CSSStyleSheet;
 

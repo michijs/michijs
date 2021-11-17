@@ -1,5 +1,5 @@
-import { LSCustomElement } from '../../../..';
-import { isArrowFunction } from '../../../utils/isArrowFunction';
+import { LSCustomElement } from '../..';
+import { isArrowFunction } from './isArrowFunction';
 
 export function bindFunction(self: LSCustomElement | null, event?: Function) {
   if (event) {

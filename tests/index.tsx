@@ -1,4 +1,4 @@
-import { createCustomElement, h } from '../src';
+import { createCustomElement, h, Host } from '../src';
 import { Router } from './routes';
 // // // import sheet from './a.css' assert { type: 'css' };
 // // // console.log(sheet)
@@ -7,12 +7,17 @@ createCustomElement('ls-root-test-element', {
     arrayTest: [1, 2, 3, 4, 5]
   },
   shadow: false,
+  transactions: {
+    onClickArray() {
+      this.arrayTest.push(this.arrayTest.length + 1);
+    }
+  },
   render() {
     return (
-      <>
+      <Host>
         <Router />
-        {this.arrayTest.map(x => <div key={x} onclick={() => this.arrayTest.push(this.arrayTest.length + 1)}>{x}</div>)}
-      </>
+        {this.arrayTest.map(x => <div key={x} onclick={this.onClickArray}>{x}</div>)}
+      </Host>
     );
   }
 });

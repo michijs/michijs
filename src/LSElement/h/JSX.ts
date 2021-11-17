@@ -1,4 +1,4 @@
-import { ArrayJSXElement, SingleJSXElement } from '../types';
+import { ArrayJSXElement, SingleJSXElement} from '../types';
 import { HTMLElements } from './tags/HTMLElements';
 import { SVGElements } from './tags/SVGElements';
 
@@ -12,6 +12,7 @@ declare global {
         interface ElementAttributesProperty {
             props; // specify the property name to use
         }
+        // Will show an error because of dist folder
         type Element = SingleJSXElement | ArrayJSXElement;
         interface ElementChildrenAttribute {
             children: JSX.Element; // specify children name to use

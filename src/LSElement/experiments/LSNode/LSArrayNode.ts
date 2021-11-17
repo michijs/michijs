@@ -62,7 +62,7 @@ export class LSArrayNode extends LSVirtualFragmentNode<ArrayJSXElement> {
                       // Could be further forward between nodes - I move it to movedNodes
                       movedNodes.push(this.childrenNodes[i] as LSChildNode<ObjectJSXElement>);
                       this.removeItem(i);
-                      const finalMovedNodeIndex = movedNodeIndex + i;
+                      const finalMovedNodeIndex = movedNodeIndex + i - 1;
                       if (finalMovedNodeIndex === i) {
                         this.insertItemsAt(i, pendingInsertions);
                         i = index;

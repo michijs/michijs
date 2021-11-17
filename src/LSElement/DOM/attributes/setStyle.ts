@@ -1,5 +1,5 @@
 import { CSSProperties } from '@lsegurado/htmltype/Attributes';
-import { elementIsHTMLElement } from '../../../typeWards/elementIsHTMLElement';
+import { elementIsHTMLElement } from '../../typeWards/elementIsHTMLElement';
 import { setAttribute } from './setAttribute';
 
 export function setStyle(element: Element | HTMLElement, cssObject: CSSProperties) {

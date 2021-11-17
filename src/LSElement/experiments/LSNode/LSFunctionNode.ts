@@ -4,7 +4,7 @@ import { LSNode } from './LSNode';
 
 const toNonFunctionJSXElement = (jsxElement: FunctionJSXElement, self: LSCustomElement) => {
   const { tag, attrs } = jsxElement;
-  const functionResult = tag(attrs, self);
+  const functionResult = tag(attrs as unknown, self);
   const [type, typedNewJSXElement] = getJSXElementType(functionResult);
 
   if (type === JSXElementType.FUNCTION)

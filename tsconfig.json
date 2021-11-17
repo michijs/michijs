@@ -21,5 +21,6 @@
         "jsxFactory": "h.createElement",
         "jsxFragmentFactory": "h.Fragment"
     },
-    "include": ["src", "tests"]
+    "include": ["src", "tests"],
+    "exclude": ["dist", "build"]
 }

@@ -19,21 +19,3 @@ export function setAttribute(element: Element | HTMLElement, key: string, newVal
     }
   }
 }
-export function getAttributeValue(value) {
-  try {
-    // TODO: Complex objects?
-    return JSON.parse(value);
-  } catch {
-    switch (true) {
-      case value === '' || value === 'true': {
-        return true;
-      }
-      case value === null: {
-        return false;
-      }
-      default: {
-        return value;
-      }
-    }
-  }
-}
