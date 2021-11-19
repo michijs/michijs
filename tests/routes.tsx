@@ -22,6 +22,11 @@ export const { urls, Router, components } = registerRoutes({
     key: 'CounterTests',
     title: 'Counter tests Page'
   }),
+  i18nTests: createAsyncRoute()({
+    promise: () => import('./pages/i18nTests'),
+    key: 'I18nTests',
+    title: 'I18n tests Page'
+  }),
   '/': createRoute({
     component: <Main />,
     title: 'Main Page',
