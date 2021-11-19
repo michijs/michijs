@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "resolveJsonModule": true,
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
         "allowUnreachableCode": false,
@@ -21,5 +22,6 @@
         "jsxFactory": "h.createElement",
         "jsxFragmentFactory": "h.Fragment"
     },
-    "include": ["src", "tests"]
+    "include": ["src", "tests"],
+    "exclude": ["dist", "build"]
 }

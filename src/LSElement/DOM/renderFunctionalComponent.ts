@@ -1,10 +1,5 @@
-import { insertNewChildren } from './insertNewChildren';
+import { LSNode } from '../LSNode/LSNode';
 
 export function renderFunctionalComponent(jsxElement: JSX.Element) {
-  const fragment = document.createDocumentFragment();
-  const mountPoint = () => fragment;
-  if (jsxElement) {
-    insertNewChildren(null, mountPoint, [jsxElement]);
-  }
-  return fragment;
+  return LSNode(jsxElement).valueOf();
 }

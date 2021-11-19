@@ -66,6 +66,12 @@ import type {
   , fieldset
   , form
   , html
+  , h6
+  , h5
+  , h4
+  , h3
+  , h2
+  , h1
   , iframe
   , img
   , input
@@ -76,7 +82,6 @@ import type {
   , figcaption
   , footer
   , header
-  , headingElement
   , hr
   , label
   , li
@@ -304,32 +309,32 @@ export interface HTMLElements {
      * The HTML `<h1>`–`<h6>` elements represent six levels of section headings. `<h1>` is the highest section level and `<h6>` is the lowest.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Heading_Elements
      */
-    h1: LSTag<headingElement, HTMLElementTagNameMap['h1']>;
+    h1: LSTag<h1, HTMLElementTagNameMap['h1']>;
     /**
      * The HTML `<h1>`–`<h6>` elements represent six levels of section headings. `<h1>` is the highest section level and `<h6>` is the lowest.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Heading_Elements
      */
-    h2: LSTag<headingElement, HTMLElementTagNameMap['h2']>;
+    h2: LSTag<h2, HTMLElementTagNameMap['h2']>;
     /**
      * The HTML `<h1>`–`<h6>` elements represent six levels of section headings. `<h1>` is the highest section level and `<h6>` is the lowest.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Heading_Elements
      */
-    h3: LSTag<headingElement, HTMLElementTagNameMap['h3']>;
+    h3: LSTag<h3, HTMLElementTagNameMap['h3']>;
     /**
      * The HTML `<h1>`–`<h6>` elements represent six levels of section headings. `<h1>` is the highest section level and `<h6>` is the lowest.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Heading_Elements
      */
-    h4: LSTag<headingElement, HTMLElementTagNameMap['h4']>;
+    h4: LSTag<h4, HTMLElementTagNameMap['h4']>;
     /**
      * The HTML `<h1>`–`<h6>` elements represent six levels of section headings. `<h1>` is the highest section level and `<h6>` is the lowest.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Heading_Elements
      */
-    h5: LSTag<headingElement, HTMLElementTagNameMap['h5']>;
+    h5: LSTag<h5, HTMLElementTagNameMap['h5']>;
     /**
      * The HTML `<h1>`–`<h6>` elements represent six levels of section headings. `<h1>` is the highest section level and `<h6>` is the lowest.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Heading_Elements
      */
-    h6: LSTag<headingElement, HTMLElementTagNameMap['h6']>;
+    h6: LSTag<h6, HTMLElementTagNameMap['h6']>;
     /**
      * The HTML `<head>` element contains machine-readable information (metadata) about the document, like its title, scripts, and style sheets.
      * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/head

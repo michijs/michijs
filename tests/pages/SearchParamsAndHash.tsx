@@ -5,9 +5,9 @@ import { components } from '../routes';
 export const SearchParamsAndHash = components.searchParamsAndHash(({ searchParams, hash }) => {
   return (
     <>
-      <button id="hash-test" onclick={() => { hash['#hashTest'] = !hash['#hashTest']; }}>{`hash test is ${hash['#hashTest']}`}</button>
-      <SimpleCounter id="counter-test" count={searchParams.counterParam} oncountchanged={(newValue) => { searchParams.counterParam = newValue.detail; }} />
-      <div id="text-test">{searchParams.textParam}</div>
+      <button onclick={() => { hash['#hashTest'] = !hash['#hashTest']; }}>{`hash test is ${hash['#hashTest']}`}</button>
+      <SimpleCounter count={searchParams.counterParam} oncountchanged={(newValue) => { searchParams.counterParam = newValue.detail; }} />
+      <div>{searchParams.textParam}</div>
     </>
   );
 });

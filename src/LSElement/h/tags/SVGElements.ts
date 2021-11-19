@@ -70,17 +70,17 @@ export interface SVGElements {
     * The SVG `<animate>` element provides a way to animate an attribute of an element over time.
     * @link https://developer.mozilla.org/en-US/docs/Web/SVG/Element/animate
     */
-    animate: LSTag<animate, SVGAnimateElement>;//TODO: replace with SVGElementTagNameMap when available
+    animate: LSTag<animate, SVGElementTagNameMap['animate']>;
     /**
      * The SVG `<animateMotion>` element let define how an element moves along a motion path.
      * @link https://developer.mozilla.org/en-US/docs/Web/SVG/Element/animateMotion
      */
-    animateMotion: LSTag<animate, SVGAnimateMotionElement>;//TODO: replace with SVGElementTagNameMap when available
+    animateMotion: LSTag<animate, SVGElementTagNameMap['animateMotion']>;
     /**
      * The animateTransform element animates a transformation attribute on its target element, thereby allowing animations to control translation, scaling, rotation, and/or skewing.
      * @link https://developer.mozilla.org/en-US/docs/Web/SVG/Element/animateTransform
      */
-    animateTransform: LSTag<animateTransform, SVGAnimateTransformElement>;//TODO: replace with SVGElementTagNameMap when available
+    animateTransform: LSTag<animateTransform, SVGElementTagNameMap['animateTransform']>;
     /**
      * The `<circle>` SVG element is an SVG basic shape, used to draw circles based on a center point and a radius.
      * @link https://developer.mozilla.org/en-US/docs/Web/SVG/Element/circle
@@ -275,7 +275,7 @@ export interface SVGElements {
      * The `<mpath>` sub-element for the `<animateMotion>` element provides the ability to reference an external `<path>` element as the definition of a motion path.
      * @link https://developer.mozilla.org/en-US/docs/Web/SVG/Element/mpath
      */
-    mpath: LSTag<mpath, SVGElement>;//TODO: should be SVGMPathElement
+    mpath: LSTag<mpath, SVGElementTagNameMap['mpath']>;
     /**
      * The `<path>` SVG element is the generic element to define a shape. All the basic shapes can be created with a path element.
      * @link https://developer.mozilla.org/en-US/docs/Web/SVG/Element/path
@@ -315,7 +315,7 @@ export interface SVGElements {
      * The SVG `<set>` element provides a simple means of just setting the value of an attribute for a specified duration.
      * @link https://developer.mozilla.org/en-US/docs/Web/SVG/Element/set
      */
-    set: LSTag<set, SVGElement>;//TODO: missing interface
+    set: LSTag<set, SVGElementTagNameMap['set']>;
     /**
      * The SVG `<stop>` element defines a color and its position to use on a gradient. This element is always a child of a `<linearGradient>` or `<radialGradient>` element.
      * @link https://developer.mozilla.org/en-US/docs/Web/SVG/Element/stop

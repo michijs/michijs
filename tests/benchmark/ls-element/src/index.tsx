@@ -80,20 +80,21 @@ export const Trow = createCustomElement(
   },
   {
     attributes: {
+      labelId: undefined as number,
       label: undefined,
     },
     render() {
       return <>
-        <td id={`row-${this.id}-1`} _className="col-md-1" _dynamicAttributes={[]} _staticChildren _textContent={this.id} />
-        <td id={`row-${this.id}-2`} _className="col-md-4" _dynamicAttributes={[]}>
-          <a id={`row-${this.id}-3`} onclick={() => transactions.select(Number(this.id))} _staticChildren _dynamicAttributes={['_textContent']} _textContent={this.label} />
+        <td _className="col-md-1" _textContent={this.labelId.toString()} />
+        <td _className="col-md-4">
+          <a onclick={() => transactions.select(this.labelId)} _textContent={this.label} />
         </td>
-        <td id={`row-${this.id}-4`} _className="col-md-1" _dynamicAttributes={[]} _staticChildren>
-          <a id={`row-${this.id}-5`} onclick={() => transactions.delete(Number(this.id))}>
-            <span id={`row-${this.id}-6`} _className="glyphicon glyphicon-remove" aria-hidden="true" />
+        <td _className="col-md-1">
+          <a onclick={() => transactions.delete(this.labelId)}>
+            <span _className="glyphicon glyphicon-remove" aria-hidden="true" />
           </a>
         </td>
-        <td id={`row-${this.id}-7`} _className="col-md-6" _dynamicAttributes={[]} _staticChildren />
+        <td _className="col-md-6" />
       </>;
     }
   }
@@ -110,7 +111,7 @@ export const Tbody = createCustomElement(
       store
     },
     render() {
-      return state.data.map(({ id, label }) => <Trow id={id.toString()} _label={label} class={id === state.selected ? 'danger' : undefined} _dynamicAttributes={['class', '_label']} />);
+      return state.data.map(({ id, label }) => <Trow key={id} _labelId={id} _label={label} class={id === state.selected ? 'danger' : undefined} />);
     }
   }
 );
@@ -125,22 +126,22 @@ export const TableManager = createCustomElement(
     render() {
       return (
         <>
-          <div id="6" _className="col-sm-6 smallpad">
+          <div _className="col-sm-6 smallpad">
             <button _type="button" _className="btn btn-primary btn-block" id="run" onclick={transactions.run} _textContent="Create 1,000 rows" />
           </div>
-          <div id="7" _className="col-sm-6 smallpad">
+          <div _className="col-sm-6 smallpad">
             <button _type="button" _className="btn btn-primary btn-block" id="runlots" onclick={transactions.runLots} _textContent="Create 10,000 rows" />
           </div>
-          <div id="8" _className="col-sm-6 smallpad">
+          <div _className="col-sm-6 smallpad">
             <button _type="button" _className="btn btn-primary btn-block" id="add" onclick={transactions.add} _textContent="Append 1,000 rows" />
           </div>
-          <div id="9" _className="col-sm-6 smallpad">
+          <div _className="col-sm-6 smallpad">
             <button _type="button" _className="btn btn-primary btn-block" id="update" onclick={transactions.update} _textContent="Update every 10th row" />
           </div>
-          <div id="10" _className="col-sm-6 smallpad">
+          <div _className="col-sm-6 smallpad">
             <button _type="button" _className="btn btn-primary btn-block" id="clear" onclick={transactions.clear} _textContent="Clear" />
           </div>
-          <div id="11" _className="col-sm-6 smallpad">
+          <div _className="col-sm-6 smallpad">
             <button _type="button" _className="btn btn-primary btn-block" id="swaprows" onclick={transactions.swapRows} _textContent="Swap Rows" />
           </div>
         </>

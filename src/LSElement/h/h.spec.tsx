@@ -2,28 +2,29 @@ import { createCustomElement } from '../..';
 import { h } from '.';
 import { ClassJSXElement, FC, FragmentJSXElement, FunctionJSXElement, ObjectJSXElement } from '../types';
 import { HTMLElements } from './tags/HTMLElements';
+import { Fragment } from '../components/Fragment';
 
+const testChild = 'child';
 const testAttrs = {
   id: 'testID',
-  _className: 'textClassName'
+  _className: 'textClassName',
+  children: [testChild]
 };
-const testChild = 'child';
 const fragmentResult: FragmentJSXElement = {
   tag: undefined,
-  attrs: null,
-  children: []
+  attrs: {
+    children: []
+  }
 };
 const objectJSXResult: ObjectJSXElement = {
   tag: 'div',
-  attrs: testAttrs,
-  children: [testChild],
+  attrs: testAttrs
 };
 
-const DivProxy: FC<HTMLElements['div']> = (attrs, children) => <div {...attrs}>{children}</div>;
+const DivProxy: FC<HTMLElements['div']> = (attrs) => <div {...attrs} />;
 const FunctionJSXResult: FunctionJSXElement = {
   tag: DivProxy,
   attrs: testAttrs,
-  children: [testChild],
 };
 
 const TestCustomElement = createCustomElement('ls-test');
@@ -31,12 +32,12 @@ const TestCustomElement = createCustomElement('ls-test');
 const ClassJSXResult: ClassJSXElement = {
   tag: TestCustomElement,
   attrs: testAttrs,
-  children: [testChild],
 };
 
 describe('h tests', () => {
   it('Fragment result', () => {
-    expect(<></>).toEqual(fragmentResult);
+    const fragment = <Fragment /> as FunctionJSXElement;
+    expect(fragment.tag(fragment.attrs)).toEqual(fragmentResult);
   });
   it('Object JSX result', () => {
     expect(<div {...testAttrs}>{testChild}</div>).toEqual(objectJSXResult);

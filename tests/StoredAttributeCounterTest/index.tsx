@@ -23,9 +23,9 @@ export const StoredAttributeCounter = createCustomElement('stored-attribute-coun
     return (
       <Host count={storedCount.value}>
         <AdoptedStyle id="style">{counterStyle}</AdoptedStyle>
-        <button id="decrement-count" onpointerup={this.decrementCount}>-</button>
-        <span id='count'>{storedCount.value}</span>
-        <button id="increment-count" onpointerup={this.incrementCount}>+</button>
+        <button onpointerup={this.decrementCount}>-</button>
+        <span>{storedCount.value}</span>
+        <button onpointerup={this.incrementCount}>+</button>
       </Host>
     );
   }

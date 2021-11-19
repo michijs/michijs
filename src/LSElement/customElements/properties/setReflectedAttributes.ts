@@ -1,8 +1,8 @@
 import { LSCustomElement } from '../../types';
-import { AttributeManager } from '../../classes/AttributeManager';
+import { setAttribute } from '../../DOM/attributes/setAttribute';
 
 export function setReflectedAttributes(self: LSCustomElement, observedAttributes: string[]) {
   observedAttributes.forEach(formattedPropertyKey => {
-    AttributeManager.setAttributeValue(self, formattedPropertyKey, self[formattedPropertyKey]);
+    setAttribute(self, formattedPropertyKey, self[formattedPropertyKey]);
   });
 }

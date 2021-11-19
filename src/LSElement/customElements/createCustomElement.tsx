@@ -1,6 +1,5 @@
 import { idGenerator, lsStore } from '../hooks';
 import { AttributesType, CreateCustomElementResult, EmptyObject, EventsType, KebabCase, LSCustomElement, LSElementConfig, LSElementProperties, MethodsType, Self, SubscribeToType } from '../types';
-import { AttributeManager } from '../classes/AttributeManager';
 import { executeFirstRender } from '../DOM/executeFirstRender';
 import { rerender } from '../DOM/rerender';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
@@ -11,6 +10,8 @@ import { setReflectedAttributes } from './properties/setReflectedAttributes';
 import { defineMethod } from './properties/defineMethod';
 import { deepEqual } from '../utils/deepEqual';
 import { getRootNode } from '../DOM/getRootNode';
+import { getAttributeValue } from '../DOM/attributes/getAttributeValue';
+import { setAttributes } from '../DOM/attributes/setAttributes';
 
 export function createCustomElement<
   A extends AttributesType = EmptyObject,
@@ -35,7 +36,9 @@ export function createCustomElement<
       store: lsStore.apply(this, [{ state: { ...attributes, ...reflectedAttributes }, transactions }]) as ReturnType<typeof lsStore>,
       alreadyRendered: false,
       adoptedStyleSheets: [],
+      renderInProgress: [],
       pendingTasks: 0,
+      events: {},
       rerenderCallback: (propertyThatChanged: Set<PropertyKey> | PropertyKey) => {
         if (observe)
           Object.entries<() => void>(observe).forEach(([key, observer]) => {
@@ -99,7 +102,15 @@ export function createCustomElement<
           }
           this.ls.store.subscribe((propertiesThatChanged) => {
             if (propertiesThatChanged.has(key)) {
-              AttributeManager.setAttribute(this, true, standarizedAttributeName, this.ls.store.state[key]);
+              const newAttributes = { [standarizedAttributeName]: this.ls.store.state[key] };
+              const oldAttributes = { [standarizedAttributeName]: getAttributeValue(this.getAttribute(standarizedAttributeName)) };
+              setAttributes({
+                target: this,
+                newAttributes,
+                oldAttributes,
+                self: this,
+                events: this.ls.events
+              });
             }
           });
         });
@@ -114,7 +125,7 @@ export function createCustomElement<
 
     attributeChangedCallback(this: any, name: keyof FRA, oldValue, newValue) {
       if (newValue != oldValue) {
-        const parsedNewValue = AttributeManager.getAttributeValue(newValue);
+        const parsedNewValue = getAttributeValue(newValue);
         this.willReceiveAttribute?.(name, parsedNewValue, this[name]);
         let oldValueCopy;
         try {

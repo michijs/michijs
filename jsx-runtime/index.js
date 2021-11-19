@@ -1,5 +1,5 @@
-export function newH(tag, { children, ...attrs }) {
-	return { tag, attrs, children: Array.isArray(children) ? children : [children] };
+export function newH(tag, { children, ...attrs }, key) {
+	return { tag, attrs: { children: Array.isArray(children) ? children : [children], ...attrs }, key };
 }
 
 const Fragment = undefined;
