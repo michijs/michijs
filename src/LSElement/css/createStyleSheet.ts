@@ -70,7 +70,7 @@ export const createStyleSheet = (cssObject: CSSObject | string, selectors: strin
 export const css = (cssObject: TemplateStringsArray, ...props: (string | number)[]) => {
   return createStyleSheet(cssObject.raw.map((value, i) => {
     if (props[i]) {
-      return value + props[i];
+      return value + props[i].toString();
     }
     return value;
 
