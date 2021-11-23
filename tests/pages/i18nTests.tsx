@@ -1,4 +1,4 @@
-import { TypedEvent } from '@lsegurado/htmltype/Events';
+import { Events } from '@lsegurado/htmltype';
 import { createCustomElement, h, I18n } from '../../src';
 import en from './i18nTests/en.json';
 
@@ -17,7 +17,7 @@ export const I18nTests = createCustomElement('ls-i18n-tests', {
     i18nObservable
   },
   methods: {
-    onChangeLanguage(ev: TypedEvent<HTMLSelectElement>) {
+    onChangeLanguage(ev: Events.TypedEvent<HTMLSelectElement>) {
       I18n.setLanguage(ev.target.value);
     }
   },

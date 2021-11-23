@@ -1,8 +1,8 @@
-import { CSSProperties } from '@lsegurado/htmltype/Attributes';
+import { Attributes } from '@lsegurado/htmltype';
 import { elementIsHTMLElement } from '../../typeWards/elementIsHTMLElement';
 import { setAttribute } from './setAttribute';
 
-export function setStyle(element: Element | HTMLElement, cssObject: CSSProperties) {
+export function setStyle(element: Element | HTMLElement, cssObject: Attributes.CSSProperties) {
   // if (supportsAdoptingStyleSheets && self) {
   //   AdoptedStyle({ id: self.id }, [createStyleSheet(cssObject, [`#${id}`])], self);
   // } else {

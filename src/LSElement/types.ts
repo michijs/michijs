@@ -1,4 +1,4 @@
-import { commonElement } from '@lsegurado/htmltype/HTMLElements';
+import { HTMLElements } from '@lsegurado/htmltype';
 import { EventDispatcher } from './classes';
 import { idGenerator } from './hooks';
 import { lsStore } from './hooks/lsStore';
@@ -146,7 +146,7 @@ export type SingleJSXElement = EmptyType | PrimitiveType | ObjectJSXElement | Fu
 export type ArrayJSXElement = Array<SingleJSXElement>;
 // export type PureObjectJSXElement = { tag: string } & Omit<CommonJSXAttrs,'children'> & {children: (PureObjectJSXElement | string)[]};
 
-export type FC<T = commonElement, C = JSX.Element, S = LSCustomElement> = (attrs: Omit<T,'children'> & { children?: C }, self?: S | null) => JSX.Element;
+export type FC<T = HTMLElements.commonElement, C = JSX.Element, S = LSCustomElement> = (attrs: Omit<T,'children'> & { children?: C }, self?: S | null) => JSX.Element;
 
 export type CompatibleStyleSheet = string | CSSStyleSheet;
 
@@ -277,7 +277,7 @@ export type CreateCustomElementResult<
                 Partial<
                     FRA
                     & { [k in StringKeyOf<E> as `on${Lowercase<k>}`]: E[k] extends EventDispatcher<infer D> ? (ev: CustomEvent<D>) => any : never }
-                    & commonElement
+                    & HTMLElements.commonElement
                 >, Self<M, T, E, A, RA, EL>
             >
             // & JSX.IntrinsicElements[EX]

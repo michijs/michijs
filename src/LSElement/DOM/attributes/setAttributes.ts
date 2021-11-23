@@ -1,4 +1,4 @@
-import { CSSProperties } from '@lsegurado/htmltype/Attributes';
+import { Attributes } from '@lsegurado/htmltype';
 import { LSCustomElement, AnyObject, LSNodeEvents } from '../../types';
 import { isAFunction } from '../../typeWards/IsAFunction';
 import { deepEqual } from '../../utils/deepEqual';
@@ -35,7 +35,7 @@ export const setAttributes = ({ target, newAttributes, oldAttributes, events, se
             if (name.startsWith('on') && isAFunction(newValue))
               addEventListener(name.slice(2), newValue);
             else if (name === 'style')
-              setStyle(target, newValue as CSSProperties);
+              setStyle(target, newValue as Attributes.CSSProperties);
             else if (name !== 'children')
               setAttributeOrProperty(target, name, newValue);
           }
@@ -51,7 +51,7 @@ export const setAttributes = ({ target, newAttributes, oldAttributes, events, se
         if (isAFunction(newValue) && name.startsWith('on'))// Events don't change with jsx
           addEventListener(name.slice(2), newValue);
         else if (name === 'style')
-          setStyle(target, newValue as CSSProperties);
+          setStyle(target, newValue as Attributes.CSSProperties);
         else if (name !== 'children')
           setAttributeOrProperty(target, name, newValue);
       });
