@@ -141,7 +141,8 @@ A component consists of the following properties:
     </tr>
     <tr>
       <td>reflectedAttributes</td>
-      <td colspan="2">Allows to define <a href="https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr">reflected attributes</a> and follows the Kebab case.</td>
+      <td colspan="2">Allows to define <a href="https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr">reflected attributes</a> and follows the Kebab case. A reflected attribute cannot be initialized with a true value
+      </td>
     </tr>
     <tr>
       <td>transactions</td>

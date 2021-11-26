@@ -146,18 +146,11 @@ export type SingleJSXElement = EmptyType | PrimitiveType | ObjectJSXElement | Fu
 export type ArrayJSXElement = Array<SingleJSXElement>;
 // export type PureObjectJSXElement = { tag: string } & Omit<CommonJSXAttrs,'children'> & {children: (PureObjectJSXElement | string)[]};
 
-export type FC<T = HTMLElements.commonElement, C = JSX.Element, S = LSCustomElement> = (attrs: Omit<T,'children'> & { children?: C }, self?: S | null) => JSX.Element;
+export type FC<T = HTMLElements.commonElement, C = JSX.Element, S = LSCustomElement> = (attrs: Omit<T, 'children'> & { children?: C }, self?: S | null) => JSX.Element;
 
 export type CompatibleStyleSheet = string | CSSStyleSheet;
 
 export type StorageLocalChangeEventType = { key: string, newValue: any };
-
-export type Metadata<RA> = {
-    tag: `${string}-${string}`,
-} & Partial<{
-    extends: keyof JSX.IntrinsicElements;
-    reflectedAttributes: RA,
-}>
 
 export type PropertyKey = string | number | symbol;
 export type ChangeFunction = (propertyThatChanged?: PropertyKey) => void;
@@ -173,7 +166,7 @@ export type LSElementConfig<EX extends keyof JSX.IntrinsicElements, EL extends E
     class: new () => EL
 }
 
-export type AnyObject = Record<string | number | symbol, unknown>;
+export type AnyObject = Record<PropertyKey, any>;
 
 export type AttributesType = AnyObject;
 
@@ -229,6 +222,7 @@ export type LSElementProperties<
         attributes?: A,
         /**
          * Allows to define reflected attributes and follows the Kebab case.
+         * A reflected attribute cannot be initialized with a true value
          * @link https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr
          */
         reflectedAttributes?: RA,
