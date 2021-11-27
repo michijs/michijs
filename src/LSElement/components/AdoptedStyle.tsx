@@ -20,7 +20,7 @@ function addStyle(container: StyleSheetContainer, child: CompatibleStyleSheet, a
  * @link https://developers.google.com/web/updates/2019/02/constructable-stylesheets
 */
 export const AdoptedStyle: FC<AdoptedStyleProps, CompatibleStyleSheet | CompatibleStyleSheet[]> = ({children, id, ...attrs}, targetElement) => {
-  const childrenAsArray = Array.isArray(children) ? children : [children];
+  const childrenAsArray = Array.isArray(children) ? children.flat(1) : [children];
 
   // const rootNode = getRootNode(target);
   // The target element is the document or the closest shadow root element
