@@ -2,7 +2,7 @@ import { observable } from '../hooks';
 import { isAFunction } from '../typeWards/IsAFunction';
 
 type StringObject = {
-    [key: string]: string// | StringObject
+    [key: string]: string | StringObject
 } | string[]
 
 export type Translation<T extends StringObject> = {
@@ -13,7 +13,7 @@ type TransactionItem = { translation: Translation<StringObject>, selectedTransla
 export class I18n {
     private static translations = new Array<TransactionItem>()
     static observer = observable();
-    private static currentLanguage = navigator.language;
+    static currentLanguage = navigator.language;
 
     static createTranslation<T extends StringObject>(translation: Translation<T>): { t: T, i18nObservable: ReturnType<typeof observable>, lang: { value: keyof Translation<T>} } {
       const selectedTranslation = {} as T;
