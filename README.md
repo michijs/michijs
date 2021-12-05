@@ -260,6 +260,7 @@ export const counterStyle = css`
       min-width: 60px;
       text-align: center;
   }
+`
 ```
 
 ### CSS module scripts
