@@ -100,7 +100,6 @@ export interface LSElement extends Element {
     ls?: {
         eventListeners?: { addedBy?: LSCustomElement, eventName: string, event: EventListenerOrEventListenerObject }[];
     },
-    staticChildren?: boolean,
 }
 
 export type LSNodeEvents = Record<string, EventListenerOrEventListenerObject>
