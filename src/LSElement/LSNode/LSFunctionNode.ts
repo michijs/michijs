@@ -48,7 +48,6 @@ export class LSFunctionNode implements LSChildNode<FunctionJSXElement> {
     if (type === JSXElementType.FUNCTION && typedNewJSXElement<FunctionJSXElement>().tag === this.jsxElement.tag) {
       const newFunctionResult = toNonFunctionJSXElement(typedNewJSXElement<FunctionJSXElement>(), this.self);
       this.node = this.node.updateElement(newFunctionResult);
-      this.jsxElement.attrs = typedNewJSXElement<FunctionJSXElement>().attrs;
       return this;
     }
     return this.node.replaceWith(newJSXElement, this.isSVG);
