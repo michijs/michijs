@@ -14,7 +14,7 @@ export const LSNode = (jsxElement: JSX.Element, isSVGParam?: boolean, self?: LSC
   const [type, jsxElementTyped] = getJSXElementType(jsxElement);
   switch (type) {
     case JSXElementType.FUNCTION: {
-      return LSFunctionNode(jsxElementTyped<FunctionJSXElement>(), isSVGParam, self);
+      return new LSFunctionNode(jsxElementTyped<FunctionJSXElement>(), isSVGParam, self);
     }
     case JSXElementType.ARRAY: {
       return new LSArrayNode(jsxElementTyped<ArrayJSXElement>(), isSVGParam, self);

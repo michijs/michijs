@@ -3,7 +3,7 @@ import { isAFunction } from '../typeWards/IsAFunction';
 
 type StringObject = {
     [key: string]: string | StringObject
-} | string[]
+} | string[] | StringObject[]
 
 export type Translation<T extends StringObject> = {
     [key: string]: T | (() => Promise<{ default: T }>)

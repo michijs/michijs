@@ -1,4 +1,4 @@
-import { AnyObject, ArrayJSXElement, ClassJSXElement, FunctionJSXElement, LSCustomElement, ObjectJSXElement } from '../..';
+import { ArrayJSXElement, IterableJSX, LSCustomElement, ObjectJSXElement } from '../..';
 import { getJSXElementType, JSXElementType } from '../typeWards/getJSXElementType';
 import { LSChildNode } from './LSChildNode';
 import { LSNode } from './LSNode';
@@ -32,7 +32,7 @@ export class LSArrayNode extends LSVirtualFragmentNode<ArrayJSXElement> {
   updateElement(newJSXElement: JSX.Element) {
     const [type, typedNewJSXElement] = getJSXElementType(newJSXElement);
     if (type === JSXElementType.ARRAY) {
-      const movedNodes = new Array<LSChildNode<AnyObject | ObjectJSXElement | FunctionJSXElement | ClassJSXElement>>();
+      const movedNodes = new Array<LSChildNode<IterableJSX>>();
       if (typedNewJSXElement<ArrayJSXElement>().length === 0)//No new elements - should remove every element
         this.clear();
       else if (this.childrenNodes.length === 0)//Only new elements
@@ -43,46 +43,46 @@ export class LSArrayNode extends LSVirtualFragmentNode<ArrayJSXElement> {
           let i = index - pendingInsertions.length;
           if (i < this.childrenNodes.length) {
             const oldChild = this.childrenNodes[i].jsxElement;
-            if (typeof newChild === 'object' && 'key' in newChild) {
-              if (typeof oldChild === 'object' && 'key' in oldChild) {
-                if (newChild.key === oldChild.key) {// Same node - I must update it
-                  this.insertItemsAt(i, pendingInsertions);
-                  i = index;
-                  pendingInsertions = [];
-                  this.childrenNodes[i] = this.childrenNodes[i].updateElement(newChild);
-                } else { // Different node - probably moved
-                  const movedNodeIndex = movedNodes.findIndex(x => x.jsxElement.key === newChild.key);
-                  if (movedNodeIndex === -1) {// If it is not between the moved nodes - Is it located in another part of the node?
-                    const movedNodeIndex = this.childrenNodes.slice(i).findIndex(x =>
-                      typeof x.jsxElement === 'object' && 'key' in x.jsxElement && x.jsxElement.key === newChild.key
-                    );
-                    if (movedNodeIndex === -1) { // Node does not exist - I must create it
-                      pendingInsertions.push(LSNode(newChild, this.isSVG, this.self));
-                    } else { // The node exists - I must move it to the right place
-                      // Could be further forward between nodes - I move it to movedNodes
+            if (typeof newChild === 'object' && 'key' in newChild && newChild.key) {
+              const oldChildHasKey = typeof oldChild === 'object' && 'key' in oldChild && oldChild.key;
+              if (oldChildHasKey && newChild.key === oldChild.key) {// Same node - I must update it
+                this.insertItemsAt(i, pendingInsertions);
+                i = index;
+                pendingInsertions = [];
+                this.childrenNodes[i] = this.childrenNodes[i].updateElement(newChild);
+              } else {// Different node - probably moved / replaced with a node with key
+                const movedNodeIndex = movedNodes.findIndex(x => x.jsxElement.key === newChild.key);
+                if (movedNodeIndex === -1) {// If it is not between the moved nodes - Is it located in another part of the node?
+                  const movedNodeIndex = this.childrenNodes.slice(i).findIndex(x =>
+                    typeof x.jsxElement === 'object' && 'key' in x.jsxElement && x.jsxElement.key === newChild.key
+                  );
+                  if (movedNodeIndex === -1) { // Node does not exist - I must create it
+                    pendingInsertions.push(LSNode(newChild, this.isSVG, this.self));
+                  } else { // The node exists - I must move it to the right place
+                    // Could be further forward between nodes - I move it to movedNodes
+                    if (oldChildHasKey)
                       movedNodes.push(this.childrenNodes[i] as LSChildNode<ObjectJSXElement>);
-                      this.removeItem(i);
-                      const finalMovedNodeIndex = movedNodeIndex + i - 1;
-                      if (finalMovedNodeIndex === i) {
-                        this.insertItemsAt(i, pendingInsertions);
-                        i = index;
-                        pendingInsertions = [];
-                        this.childrenNodes[i] = this.childrenNodes[finalMovedNodeIndex].updateElement(newChild);
-                      } else {// It is not located elsewhere in the node - I must create it
-                        const movedNode = this.childrenNodes[finalMovedNodeIndex];
-                        this.removeItem(finalMovedNodeIndex);
-                        pendingInsertions.push(movedNode.updateElement(newChild));
-                      }
+                    this.removeItem(i);
+                    const finalMovedNodeIndex = movedNodeIndex + i - 1;
+                    if (finalMovedNodeIndex === i) {
+                      this.insertItemsAt(i, pendingInsertions);
+                      i = index;
+                      pendingInsertions = [];
+                      this.childrenNodes[i] = this.childrenNodes[finalMovedNodeIndex].updateElement(newChild);
+                    } else {// It is not located elsewhere in the node - I must create it
+                      const movedNode = this.childrenNodes[finalMovedNodeIndex];
+                      this.removeItem(finalMovedNodeIndex);
+                      pendingInsertions.push(movedNode.updateElement(newChild));
                     }
-                  } else { // If it is between the moved nodes - I must move it to the right place
-                    const movedNode = movedNodes[movedNodeIndex];
-                    movedNodes.splice(movedNodeIndex, 1);
-                    pendingInsertions.push(movedNode.updateElement(newChild));
                   }
+                } else { // If it is between the moved nodes - I must move it to the right place
+                  const movedNode = movedNodes[movedNodeIndex];
+                  movedNodes.splice(movedNodeIndex, 1);
+                  pendingInsertions.push(movedNode.updateElement(newChild));
                 }
               }
               // Different node - probably moved / replaced with a node without key
-            } else if (typeof oldChild === 'object' && 'key' in oldChild) {
+            } else if (typeof oldChild === 'object' && 'key' in oldChild && oldChild.key) {
               this.insertItemsAt(i, pendingInsertions);
               i = index;
               pendingInsertions = [];

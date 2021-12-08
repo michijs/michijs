@@ -1,9 +1,10 @@
 import { Fragment } from '../components/Fragment';
 
 export const h = {
-  createElement(tag, attrs, ...children): JSX.Element {
+  createElement(tag, attrs, ...childrenProps): JSX.Element {
     const { children: attrsChildren, key, ...finalAttrs } = attrs ?? {};
-    return { tag, attrs: { ...finalAttrs, children: attrsChildren ?? children }, key};
+
+    return { tag, attrs: { ...finalAttrs, children: childrenProps.length > 0 || !attrsChildren ? childrenProps : attrsChildren }, key};
   },
   Fragment
 };

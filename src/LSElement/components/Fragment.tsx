@@ -1,5 +1,5 @@
-import { FC, IterableAttrs } from '../types';
+import { FC } from '../types';
 
-export const Fragment: FC<IterableAttrs> = (attrs) => {
+export const Fragment: FC = (attrs) => {
   return { tag: undefined, attrs };
 };

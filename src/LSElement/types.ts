@@ -136,6 +136,7 @@ export type IterableAttrs = {
 export type EmptyType = null | undefined | false;
 export type PrimitiveType = bigint | string | number | true | AnyObject;
 
+export type IterableJSX = AnyObject | ObjectJSXElement | FunctionJSXElement | ClassJSXElement;
 export type CommonJSXAttrs = { attrs?: (Record<string, any> & { children: JSX.Element[] }) } & IterableAttrs
 export type FragmentJSXElement = { tag: undefined } & { attrs: { children: JSX.Element[] } };
 export type ObjectJSXElement = { tag: string } & CommonJSXAttrs;
@@ -145,7 +146,7 @@ export type SingleJSXElement = EmptyType | PrimitiveType | ObjectJSXElement | Fu
 export type ArrayJSXElement = Array<SingleJSXElement>;
 // export type PureObjectJSXElement = { tag: string } & Omit<CommonJSXAttrs,'children'> & {children: (PureObjectJSXElement | string)[]};
 
-export type FC<T = HTMLElements.commonElement, C = JSX.Element, S = LSCustomElement> = (attrs: Omit<T, 'children'> & { children?: C }, self?: S | null) => JSX.Element;
+export type FC<T = {}, C = JSX.Element, S = LSCustomElement> = (attrs: Omit<T, 'children'> & IterableAttrs & { children?: C }, self?: S | null) => JSX.Element;
 
 export type CompatibleStyleSheet = string | CSSStyleSheet;
 
