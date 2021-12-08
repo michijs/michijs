@@ -29,7 +29,7 @@
     "start": "ls-server --start",
     "dist": "ls-server --dist",
     "build": "ls-server --build",
-    "link": "ls-server --dist && npm link --force && tsc -w -p tsconfig.dist.json",
+    "link": "ls-server --dist && npm link --force && tsc -w -p dist.tsconfig.json",
     "publish-patch-version": "npm version patch && npm run publish-npm",
     "publish-npm": "npm run dist && npm publish --access public",
     "start-benchmark-ls-element": "ls-server --start --env=TESTING",
