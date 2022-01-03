@@ -13,7 +13,7 @@
         ],
         "outDir": "dist",
         "moduleResolution": "node",
-        "module": "es2020",
+        "module": "esnext",
         "target": "es2019",
         "noUnusedLocals": false,
         "noUnusedParameters": false,

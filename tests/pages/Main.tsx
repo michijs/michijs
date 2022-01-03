@@ -8,5 +8,6 @@ export const Main = () => (
     <Link url={urls.performanceTests()}>Performance tests</Link>
     <Link url={urls.i18nTests()}>I18n tests</Link>
     <Link url={urls.searchParamsAndHash({searchParams: { counterParam: 0, textParam: 'initial text', complexObjectParam: { simpleObject: { test: 1234 } } }, hash: '#hashTest'})}>Search params and hash tests</Link>
+    <Link url={'https://www.google.com'}>External link</Link>
   </>
 );

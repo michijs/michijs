@@ -12,11 +12,17 @@ type LinkProps = Omit<HTMLElements['a'] & SVGElements['a'], 'href'> & {
 
 /**Provides the ability to move around the web page without reloading the page. It uses the same attributes as an anchor tag but also allows the use of URL objects. Uses the goTo method. */
 export const Link: FC<LinkProps> = ({ state = {}, title = document.title, url, ...attrs }, self) => {
+  const href = typeof url === 'string' ? url : url.href;
   return <a {...attrs}
-    href={typeof url === 'string' ? url : url.href}
+    href={href}
     onclick={(e) => {
-      e.preventDefault();
-      goTo(url);
-      attrs.onclick?.apply(self, [e]);
-    }} />;
+      try {
+        e.preventDefault();
+        goTo(url);
+        attrs.onclick?.apply(self, [e]);
+      } catch {
+        window.location.href = href;
+      }
+    }}
+  />;
 };
