@@ -16,15 +16,12 @@ export function deepEqual(object1, object2) {
             return false;
 
           return !object1.find((value, index) => !deepEqual(value, object2[index]));
-        } 
-        const keys1 = Object.keys(object1);
-        const keys2 = Object.keys(object2);
-
-        if (keys1.length !== keys2.length)
-          return false;
-
-        return !keys1.find(key => !deepEqual(object1[key], object2[key]));
-        
+        }
+        for (const key in object1) {
+          if (!deepEqual(object1[key], object2[key]))
+            return false;
+        }
+        return true;
       }
       default: return object1 === object2;
     }

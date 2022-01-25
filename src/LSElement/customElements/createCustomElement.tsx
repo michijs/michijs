@@ -62,8 +62,8 @@ export function createCustomElement<
     didMount
     didUnmount
     render = render as LSCustomElement['render'];
-    child<T = HTMLElement>(id: string) {
-      return getRootNode(this).getElementById(id) as unknown as T;
+    child<T extends (new () => any) | HTMLElement = HTMLElement>(id: string) {
+      return getRootNode(this).getElementById(id) as unknown as T extends (new () => any) ? InstanceType<T> : T;
     }
     rerender() {
       rerender(this);
