@@ -6,14 +6,14 @@ import { deepEqual } from '../utils/deepEqual';
 
 const { STORAGE, STORAGE_LOCAL_CHANGE } = STORED_ATTRIBUTES_EVENTS;
 
-export function storedAttribute<T>(key: string, defaultValue: T, storage: Storage = localStorage) {
+export function storedObservable<T extends object>(obj: T, storage: Storage = localStorage) {
   const listener = (storageEvent: StorageEvent | CustomEvent<StorageLocalChangeEventType>) => {
     //@ts-ignore
     const event: StorageLocalChangeEventType = storageEvent.detail ? storageEvent.detail : storageEvent;
-    if (event.key === key) {
+    if (Object.keys(obj).includes(event.key)) {
       const newValue = get();
-      if (!deepEqual(proxiedObject.value, newValue)) {
-        proxiedObject.value = newValue;
+      if (!deepEqual(proxiedObject[event.key], newValue[event.key])) {
+        proxiedObject[event.key] = newValue[event.key];
       }
       notify(event.newValue);
     }
@@ -33,17 +33,24 @@ export function storedAttribute<T>(key: string, defaultValue: T, storage: Storag
   );
 
   const get = () => {
-    const localStorageValue = storage.getItem(key);
-    if (localStorageValue) {
-      return JSON.parse(localStorageValue) as T;
-    }
-    return defaultValue as T;
+    const res = {} as T;
+    Object.keys(obj).forEach(key => {
+      const localStorageValue = storage.getItem(key);
+      if (localStorageValue) {
+        try {
+          res[key] = JSON.parse(localStorageValue);
+        }catch{
+          res[key] = obj[key];
+        }
+      }
+    });
+    return res;
   };
 
   const proxiedObject = observe({
-    item: { ...observableProps, value: get() ?? defaultValue },
-    onChange: () => {
-      const newValue = proxiedObject.value;
+    item: { ...observableProps, ...obj, ...get() },
+    onChange: (key: string) => {
+      const newValue = proxiedObject[key];
       storage.setItem(key, JSON.stringify(newValue));
       window.dispatchEvent(new CustomEvent<StorageLocalChangeEventType>(STORAGE_LOCAL_CHANGE, { detail: { key, newValue } }));
     },

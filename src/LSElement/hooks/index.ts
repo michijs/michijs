@@ -1,4 +1,4 @@
-export { storedAttribute } from './storedAttribute';
+export { storedObservable } from './storedObservable';
 export { observable } from './observable';
 export { observe } from './observe';
 export { observableValue } from './observableValue';

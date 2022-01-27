@@ -2,7 +2,7 @@ import { h } from '../../src';
 import { BuiltInButton } from '../BuiltInButton';
 import { CounterWithReduxStore } from '../CounterWithReduxStoreTest';
 import { SimpleCounter } from '../SimpleCounterTest';
-import { StoredAttributeCounter } from '../StoredAttributeCounterTest';
+import { StoredObservableCounter } from '../StoredAttributeCounterTest';
 
 export const CounterTests = () => {
   return (
@@ -14,8 +14,8 @@ export const CounterTests = () => {
       <CounterWithReduxStore />
       <CounterWithReduxStore />
       <h1>Stored attribute counter</h1>
-      <StoredAttributeCounter />
-      <StoredAttributeCounter />
+      <StoredObservableCounter />
+      <StoredObservableCounter />
       <h1>Built-in component</h1>
       <BuiltInButton text="Sample customized button" />
     </>
