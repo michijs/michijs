@@ -19,7 +19,7 @@ function addStyle(container: StyleSheetContainer, child: CompatibleStyleSheet, a
  * If there is no shadow root it will use the style tag
  * @link https://developers.google.com/web/updates/2019/02/constructable-stylesheets
 */
-export const AdoptedStyle: FC<AdoptedStyleProps, CompatibleStyleSheet | CompatibleStyleSheet[]> = ({children, id, ...attrs}, targetElement) => {
+export const AdoptedStyle: FC<AdoptedStyleProps, CompatibleStyleSheet | CompatibleStyleSheet[]> = ({ children, id, ...attrs }, targetElement) => {
   const childrenAsArray = Array.isArray(children) ? children.flat(1) : [children];
 
   // const rootNode = getRootNode(target);
@@ -35,8 +35,8 @@ export const AdoptedStyle: FC<AdoptedStyleProps, CompatibleStyleSheet | Compatib
   /**Does not work without a shadow root - It can cause problems when routing /
    *  disconnecting an element because the styles could still be in the root of the parent document / shadowRoot */
 
-  const targetStyleSheetContainer = targetElement ? getShadowRoot(targetElement): null;
-  
+  const targetStyleSheetContainer = targetElement ? getShadowRoot(targetElement) : null;
+
   if (supportsAdoptingStyleSheets && targetStyleSheetContainer) {
 
     let adoptedStyleSheetList = targetElement.ls.adoptedStyleSheets.find(x => x.id === id);
@@ -64,9 +64,10 @@ export const AdoptedStyle: FC<AdoptedStyleProps, CompatibleStyleSheet | Compatib
     });
   } else {
     return <style {...attrs}>{childrenAsArray.map(x => {
-      if (typeof x === 'string') {
+      if (!x)
+        return '';
+      if (typeof x === 'string')
         return x;
-      }
       return Array.from(x.cssRules).map(rule => rule.cssText).join('');
     }).join('')}</style>;
   }
