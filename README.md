@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="200px" src="https://raw.githubusercontent.com/lsegurado/ls-element-logo/master/logo-with-background.svg"></img>
+  <img width="200px" src="https://raw.githubusercontent.com/lsegurado/ls-element-logo/master/logo-with-background.png"></img>
 
   ### A Vainilla Library for Web Components
 
