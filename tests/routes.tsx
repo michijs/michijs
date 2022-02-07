@@ -23,9 +23,14 @@ export const { urls, Router, components } = registerRoutes({
     title: 'Counter tests Page'
   }),
   i18nTests: createAsyncRoute()({
-    promise: () => import('./pages/i18nTests'),
+    promise: () => import('./pages/I18nTests'),
     key: 'I18nTests',
     title: 'I18n tests Page'
+  }),
+  a11yTests: createAsyncRoute<{ disableFieldset: boolean }>()({
+    promise: () => import('./pages/A11YTests'),
+    key: 'A11yTests',
+    title: 'A11Y tests Page'
   }),
   '/': createRoute({
     component: <Main />,

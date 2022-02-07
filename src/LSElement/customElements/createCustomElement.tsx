@@ -1,5 +1,5 @@
 import { idGenerator, lsStore } from '../hooks';
-import { AttributesType, CreateCustomElementResult, EmptyObject, EventsType, KebabCase, LSCustomElement, LSElementConfig, LSElementProperties, MethodsType, Self, SubscribeToType } from '../types';
+import { AttributesType, CreateCustomElementResult, EmptyObject, EventsType, KebabCase, LSCustomElement, LSElementConfig, LSElementInternals, LSElementProperties, MethodsType, Self, SubscribeToType } from '../types';
 import { executeFirstRender } from '../DOM/executeFirstRender';
 import { rerender } from '../DOM/rerender';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
@@ -22,11 +22,22 @@ export function createCustomElement<
   E extends EventsType = EmptyObject,
   S extends SubscribeToType = EmptyObject,
   EX extends keyof JSX.IntrinsicElements = 'div',
-  EL extends Element = HTMLElement
->(el: LSElementConfig<EX, EL>, elementProperties: LSElementProperties<M, T, E, S, A, RA, FRA> & ThisType<Self<M, T, E, A, RA, EL>> = {}): CreateCustomElementResult<A, FRA, RA, M, T, E, EL> {
+  EL extends Element = HTMLElement,
+  >(el: LSElementConfig<EX, EL>, elementProperties: LSElementProperties<M, T, E, S, A, RA, FRA> & ThisType<Self<M, T, E, A, RA, EL>> = {}): CreateCustomElementResult<A, FRA, RA, M, T, E, EL> {
 
-  const { extends: extendsTag, tag, class: classToExtend } = typeof el === 'string' ? { class: HTMLElement, tag: el, extends: undefined } : el;
-  const { events, attributes, reflectedAttributes, transactions, observe, lifecycle, render, subscribeTo, shadow, methods } = elementProperties;
+  const { extends: extendsTag = undefined, tag, class: classToExtend = HTMLElement } = typeof el === 'string' ? { tag: el } : el;
+  const { events,
+    attributes,
+    reflectedAttributes,
+    transactions,
+    observe,
+    lifecycle,
+    render,
+    subscribeTo,
+    shadow = extendsTag ? false : { mode: 'open' },
+    methods, 
+    formAssociated = false
+  } = elementProperties;
 
   if (events)
     Object.entries(events).forEach(([key, value]) => value.init(key));
@@ -56,11 +67,17 @@ export function createCustomElement<
         }
       },
       unSubscribeFromStore: new Array<() => void>(),
-      idGen: undefined
+      idGen: undefined,
+      internals: undefined
     }
     willMount
     didMount
+    willReceiveAttribute
     didUnmount
+    associatedCallback
+    disabledCallback
+    resetCallback
+    stateRestoreCallback
     render = render as LSCustomElement['render'];
     child<T extends (new () => any) | HTMLElement = HTMLElement>(id: string) {
       return getRootNode(this).getElementById(id) as unknown as T extends (new () => any) ? InstanceType<T> : T;
@@ -76,17 +93,14 @@ export function createCustomElement<
     }
     constructor() {
       super();
-      if ((typeof el === 'string' && shadow !== false) || (typeof el !== 'string' && shadow)) {
-        const { mode, ...otherShadowOptions } = shadow ?? { mode: 'open' };
-        const attachedShadow = this.attachShadow({ mode, ...otherShadowOptions });
-        if (mode === 'closed') {
+      if (shadow) {
+        const attachedShadow = this.attachShadow(shadow);
+        if (shadow.mode === 'closed') {
           this.ls.shadowRoot = attachedShadow;
         }
       }
       if (lifecycle)
-        Object.entries(lifecycle).forEach(([key, value]) => {
-          this[key] = value;
-        });
+        Object.entries(lifecycle).forEach(([key, value]) => this[key] = value);
 
       if (methods)
         Object.entries(methods).forEach(([key, value]) => defineMethod(this, key, value));
@@ -121,9 +135,12 @@ export function createCustomElement<
           if (value.unsubscribe)
             this.ls.unSubscribeFromStore.push(() => value.unsubscribe(subscribeFunction));
         });
+
+      if (formAssociated)
+        this.ls.internals = this.attachInternals() as LSElementInternals;
     }
 
-    attributeChangedCallback(this: any, name: keyof FRA, oldValue, newValue) {
+    attributeChangedCallback(name: string, oldValue, newValue) {
       if (newValue != oldValue) {
         const parsedNewValue = getAttributeValue(newValue);
         this.willReceiveAttribute?.(name, parsedNewValue, this[name]);
@@ -158,6 +175,40 @@ export function createCustomElement<
         this.ls.unSubscribeFromStore.forEach((fn) => fn());
         this.didUnmount?.();
       }
+    }
+
+    // A11Y
+    // Identify the element as a form-associated custom element
+    static formAssociated = formAssociated;
+
+    // Lifecycle
+    formAssociatedCallback(form) {
+      this.formAssociatedCallback?.(form);
+    }
+    formDisabledCallback(disabled) {
+      this.formDisabledCallback?.(disabled);
+    }
+    formResetCallback() {
+      this.formResetCallback?.();
+    }
+    formStateRestoreCallback(state, mode) {
+      this.formStateRestoreCallback(state, mode);
+    }
+    // The following properties and methods aren't strictly required,
+    // but browser-level form controls provide them. Providing them helps
+    // ensure consistency with browser-provided controls.
+    get form() { return this.ls.internals?.form; }
+    get name() { return this.getAttribute('name'); }
+    get type() { return this.localName; }
+    get validity() { return this.ls.internals?.validity; }
+    get validationMessage() { return this.ls.internals?.validationMessage; }
+    get willValidate() { return this.ls.internals?.willValidate; }
+
+    checkValidity() {
+      return this.ls.internals?.checkValidity();
+    }
+    reportValidity() {
+      return this.ls.internals?.reportValidity();
     }
   }
 

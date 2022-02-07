@@ -131,73 +131,111 @@ A component consists of the following properties:
   <thead>
     <tr>
       <th>Property</th>
-      <th colspan="2">Description</th>
+      <th colspan="3">Description</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>attributes</td>
-      <td colspan="2">Allows to define attributes.</td>
+      <td colspan="3">Allows to define attributes.</td>
     </tr>
     <tr>
       <td>reflectedAttributes</td>
-      <td colspan="2">Allows to define <a href="https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr">reflected attributes</a> and follows the Kebab case. A reflected attribute cannot be initialized with a true value
+      <td colspan="3">Allows to define <a href="https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr">reflected attributes</a> and follows the Kebab case. A reflected attribute cannot be initialized with a true value
       </td>
     </tr>
     <tr>
       <td>transactions</td>
-      <td colspan="2">Transactions are functions that notify changes at the end of the transaction.</td>
+      <td colspan="3">Transactions are functions that notify changes at the end of the transaction.</td>
     </tr>
     <tr>
       <td>methods</td>
-      <td colspan="2">Methods are functions that notify changes at the time of making the change.</td>
+      <td colspan="3">Methods are functions that notify changes at the time of making the change.</td>
     </tr>
     <tr>
       <td>render</td>
-      <td colspan="2">Function that renders the component.</td>
+      <td colspan="3">Function that renders the component.</td>
     </tr>
     <tr>
       <td>observe</td>
-      <td colspan="2">Contains methods with a name of an attribute / reflected attribute / observable like. Those methods are executed when a change has been made to their corresponding property.</td>
+      <td colspan="3">Contains methods with a name of an attribute / reflected attribute / observable like. Those methods are executed when a change has been made to their corresponding property.</td>
     </tr>
     <tr>
-      <td rowspan="7">lifecycle</td>
+      <td rowspan="13">lifecycle</td>
       <tr>
-        <td>willMount</td>
-        <td>This method is called right before a component mounts.</td>
+        <td rowspan="7">Custom Element related</td>
+        <tr>
+          <td>willMount</td>
+          <td>This method is called right before a component mounts.</td>
+        </tr>
+        <tr>
+          <td>didMount</td>
+          <td>This method is called after the component has mounted.</td>
+        </tr>
+        <tr>
+          <td>didUnmount</td>
+          <td>This method is called after a component is removed from the DOM.</td>
+        </tr>
+        <tr>
+          <td>willUpdate</td>
+          <td>This method is called before re-rendering occurs.</td>
+        </tr>
+        <tr>
+          <td>didUpdate</td>
+          <td>This method is called after re-rendering occurs.</td>
+        </tr>
+        <tr>
+          <td>willReceiveAttribute</td>
+          <td>This method is called before a component does anything with an attribute.</td>
+        </tr>
       </tr>
       <tr>
-        <td>didMount</td>
-        <td>This method is called after the component has mounted.</td>
-      </tr>
-      <tr>
-        <td>didUnmount</td>
-        <td>This method is called after a component is removed from the DOM.</td>
-      </tr>
-      <tr>
-        <td>willUpdate</td>
-        <td>This method is called before re-rendering occurs.</td>
-      </tr>
-      <tr>
-        <td>didUpdate</td>
-        <td>This method is called after re-rendering occurs.</td>
-      </tr>
-      <tr>
-        <td>willReceiveAttribute</td>
-        <td>This method is called before a component does anything with an attribute.</td>
+        <td rowspan="5">Form-associated Custom Element related</td>
+        <tr>
+          <td>formAssociatedCallback</td>
+          <td>Called when the browser associates the element with a form element, or disassociates the element from a form element.</td>
+        </tr>
+        <tr>
+          <td>formDisabledCallback</td>
+          <td>Called after the disabled state of the element changes, either because the disabled attribute of this element was added or removed; 
+      or because the disabled state changed on a fieldset that's an ancestor of this element. The disabled parameter represents the new disabled state of the element. The element may, for example, disable elements in its shadow DOM when it is disabled.</td>
+        </tr>
+        <tr>
+          <td>formResetCallback</td>
+          <td>Called after the form is reset. The element should reset itself to some kind of default state. For input elements, this usually involves setting the value property to match the value attribute set in markup (or in the case of a checkbox, setting the checked property to match the checked attribute.</td>
+        </tr>
+        <tr>
+          <td>formStateRestoreCallback</td>
+          <td>
+          Called in one of two circumstances:
+            <ul>
+              <li>
+              When the browser restores the state of the element (for example,after a navigation, or when the browser restarts). The mode argument is "restore" in this case.
+              </li>
+              <li>
+              When the browser's input-assist features such as form autofilling sets a value. The mode argument is "autocomplete" in this case.
+              </li>
+            </ul>
+            The type of the first argument depends on how the setFormValue() method was called. 
+          </td>
+        </tr>
       </tr>
     </tr>
     <tr>
       <td>events</td>
-      <td colspan="2">Allows you to define an <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events">event</a> to his parent and triggering it easily. It will be defined using Lower case. For example countChanged will be registered as countchanged.</td>
+      <td colspan="3">Allows you to define an <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events">event</a> to his parent and triggering it easily. It will be defined using Lower case. For example countChanged will be registered as countchanged.</td>
     </tr>
     <tr>
       <td>subscribeTo</td>
-      <td colspan="2">Allows you to subscribe to an <a href="https://github.com/sindresorhus/type-fest/blob/main/source/observable-like.d.ts">observable like</a> (like a store). When the store emit an event, the custom element will be re-rendered.</td>
+      <td colspan="3">Allows you to subscribe to an <a href="https://github.com/sindresorhus/type-fest/blob/main/source/observable-like.d.ts">observable like</a> (like a store). When the store emit an event, the custom element will be re-rendered.</td>
     </tr>
     <tr>
       <td>shadow</td>
-      <td colspan="2">Allows you to add a Shadow DOM. By default, it uses open mode on Autonomous Custom elements and does not use Shadow DOM on Customized built-in elements. Only <a href="https://dom.spec.whatwg.org/#dom-element-attachshadow">this elements</a> are allowed to use Shadow DOM.</td>
+      <td colspan="3">Allows you to add a Shadow DOM. By default, it uses open mode on Autonomous Custom elements and does not use Shadow DOM on Customized built-in elements. Only <a href="https://dom.spec.whatwg.org/#dom-element-attachshadow">this elements</a> are allowed to use Shadow DOM.</td>
+    </tr>
+    <tr>
+      <td>formAssociated</td>
+      <td colspan="3">This tells the browser to treat the element like a <a href="https://web.dev/more-capable-form-controls/">form control</a>.</td>
     </tr>
   </tbody>
 </table>
@@ -278,11 +316,20 @@ Remember that you need to use Shadow DOM to be able to use Constructable Stylesh
 ### Host
 Allows to set attributes and event listeners to the host element itself.
 
+### ElementInternals
+*(Only available if formAssociated is true)*
+
+It allows to:
+- Make the element accessible to the browser
+- Access element internals 
+- Validate and assign values to forms
+
 ### AsyncComponent
 Create a component whose content will load after the promise ends. In the meantime you can choose to show a load component or not show anything.
 
 ### Link
 Provides the ability to move around the web page without reloading the page. It uses the same attributes as an anchor tag but also allows the use of URL objects. Uses the goTo method.
+
 
 ## Custom element methods
 ### child
@@ -410,6 +457,9 @@ If you REALLY need polyfills i recommend you to read this topics:
 
 ### Compatibility with frameworks
 - https://custom-elements-everywhere.com
+
+### Element internals
+- https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/attachInternals
 
 ## Supporting LS Element
 ### Sponsors

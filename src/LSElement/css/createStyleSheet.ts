@@ -45,15 +45,14 @@ export const createStyleSheet = (cssObject: CSSObject | string, selectors: strin
       if (valueIsCSSObject(value)) {
         createStyleSheet(value, selectors.concat(key), styleSheet);
       } else {
-        if (!rule) {
-          rule = selectors.sort(selector => selector.startsWith('@') ? -1 : 1).join('{');
-          rule += '{';
-        }
+        if (!rule)
+          rule = `${selectors.sort(selector => selector.startsWith('@') ? -1 : 1).map(selector => selector.startsWith('@') ? `${selector}{` : selector).join('')}{`;
         rule += `${formatToKebabCase(key)}: ${value};`;
       }
     });
     if (rule) {
-      selectors.forEach(() => rule += '}');
+      selectors.forEach((selector) => { if (selector.startsWith('@')) rule += '}'; });
+      rule += '}';
       styleSheet.insertRule(rule);
     }
   } else {

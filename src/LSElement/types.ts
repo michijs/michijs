@@ -1,10 +1,11 @@
-import { HTMLElements } from '@lsegurado/htmltype';
+import { Attributes, HTMLElements } from '@lsegurado/htmltype';
 import { EventDispatcher } from './classes';
 import { idGenerator } from './hooks';
 import { lsStore } from './hooks/lsStore';
 import { Properties } from 'csstype';
 import { LSTag } from './h/tags/LSTag';
 import { LSChildNode } from './LSNode/LSChildNode';
+import { GetAttributes } from '@lsegurado/htmltype/dist/Attributes';
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 type IfEquals<X, Y, A = X, B = never> =
@@ -102,9 +103,19 @@ export interface LSElement extends Element {
     },
 }
 
-export type LSNodeEvents = Record<string, EventListenerOrEventListenerObject>
+export type LSNodeEvents = Record<string, EventListenerOrEventListenerObject>;
 
-export interface LSCustomElement extends LSElement, Lifecycle<any> {
+export type MissingElementInternalsProperties = Pick<HTMLButtonElement, 'checkValidity' | 'reportValidity' | 'form' | 'validity' | 'validationMessage' | 'willValidate'>
+
+export type FormValue = string | File | FormData;
+
+export type LSElementInternals = ElementInternals & MissingElementInternalsProperties
+    & {
+        setValidity?(props: { customError?: boolean }, message?: string): void,
+        setFormValue?(value: FormValue): void
+    };
+
+export interface LSCustomElement extends LSElement, Lifecycle<any>, LifecycleInternals, MissingElementInternalsProperties {
     ls: {
         store: ReturnType<typeof lsStore>,
         alreadyRendered: boolean,
@@ -117,15 +128,18 @@ export interface LSCustomElement extends LSElement, Lifecycle<any> {
         idGen?: ReturnType<typeof idGenerator>['getId'],
         node?: LSChildNode<JSX.Element>,
         hostAttrs?: AnyObject,
-        events: LSNodeEvents
+        events: LSNodeEvents,
+        internals?: LSElementInternals
     } & LSElement['ls'],
     render?(): JSX.Element,
     /**Allows to get a child element from the host with the id */
-    child<T = HTMLElement>(id: string): T,
+    child<T extends (new () => HTMLElement) | HTMLElement = HTMLElement>(id: string): T extends new () => HTMLElement ? InstanceType<T> : T,
     /**Forces the element to re-render */
     rerender(): void,
     /**Create unique IDs with a discernible key */
-    idGen: ReturnType<typeof idGenerator>['getId']
+    idGen: ReturnType<typeof idGenerator>['getId'],
+    name: string;
+    type: string;
 }
 
 export type IterableAttrs = {
@@ -204,10 +218,34 @@ type Lifecycle<FRA> = {
     /**This method is called after re-rendering occurs. */
     didUpdate?(): void,
     /**This method is called before a component does anything with an attribute. */
-    willReceiveAttribute?<WRAN extends keyof FRA>(name: WRAN, newValue: FRA[WRAN], oldValue: FRA[WRAN]): void
+    willReceiveAttribute?<WRAN extends keyof FRA>(name: WRAN, newValue: FRA[WRAN], oldValue: FRA[WRAN]): void,
 };
+export type LifecycleInternals = {
+    /**Called when the browser associates the element with a form element, or disassociates the element from a form element. */
+    formAssociatedCallback?(form: HTMLFormElement): void,
+    /**Called after the disabled state of the element changes, either because the disabled attribute of this element was added or removed; 
+     * or because the disabled state changed on a `<fieldset>` that's an ancestor of this element. The disabled parameter represents the new 
+     * disabled state of the element. The element may, for example, disable elements in its shadow DOM when it is disabled. */
+    formDisabledCallback?(disabled: boolean): void,
+    /**
+     * Called after the form is reset. The element should reset itself to some kind of default state. 
+     * For `<input>` elements, this usually involves setting the value property to match the value attribute set in markup (or in the case of a checkbox, 
+     * setting the checked property to match the checked attribute.
+     */
+    formResetCallback?(): void,
+    /**
+     * Called in one of two circumstances:
+     * * When the browser restores the state of the element (for example, after a navigation, or when the browser restarts). The mode argument is "restore" in this case.
+     * * When the browser's input-assist features such as form autofilling sets a value. The mode argument is "autocomplete" in this case.
+     * 
+     * The type of the first argument depends on how the setFormValue() method was called. 
+     */
+    formStateRestoreCallback?(state: string, mode: FormStateRestoreCallbackMode): void
+}
 
 type ReplaceObjectValue<O, V> = O extends EmptyObject ? { [k in keyof O]?: V } : EmptyObject;
+
+type FormStateRestoreCallbackMode = 'restore' | 'autocomplete'
 
 export type LSElementProperties<
     M extends MethodsType,
@@ -238,9 +276,14 @@ export type LSElementProperties<
         observe?: ReplaceObjectValue<RA, () => void>
         & ReplaceObjectValue<A, () => void>
         & ReplaceObjectValue<S, () => void>,
-        // observers?: ArrayWithOneOrMoreElements<[callback: (propertiesThatChanged: O[]) => void, target: ArrayWithOneOrMoreElements<O>]>,
+        // observers?: ArrayWithOneOrMoreElements<[callback: (propertiesThatChanged: O[]) => void, target: ArrayWithOneOrMoreElements<O>]>,,
+        /**
+         * This tells the browser to treat the element like a form control.
+         * @link https://web.dev/more-capable-form-controls/
+         */
+        formAssociated?: boolean
         /**Contains all lifecycle methods.*/
-        lifecycle?: Lifecycle<FRA>,
+        lifecycle?: Lifecycle<FRA> & LifecycleInternals,
         /**
          * Allows you to define an event to his parent and triggering it easily. It will be defined using Lower case. For example countChanged will be registered as countchanged.
          * @link https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
@@ -255,7 +298,7 @@ export type LSElementProperties<
          * Allows you to add a Shadow DOM. By default, it uses open mode on Autonomous Custom elements and does not use Shadow DOM on Customized built-in elements. Only the following elements are allowed to use Shadow DOM.
          * @link https://dom.spec.whatwg.org/#dom-element-attachshadow
          */
-        shadow?: false | Partial<ShadowRootInit>
+        shadow?: false | ShadowRootInit
     }
 
 export type CreateCustomElementResult<
@@ -272,6 +315,7 @@ export type CreateCustomElementResult<
                     FRA
                     & { [k in StringKeyOf<E> as `on${Lowercase<k>}`]: E[k] extends EventDispatcher<infer D> ? (ev: CustomEvent<D>) => any : never }
                     & HTMLElements.commonElement
+                    & GetAttributes<'name'>
                 >, Self<M, T, E, A, RA, EL>
             >
             // & JSX.IntrinsicElements[EX]
