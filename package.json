@@ -24,7 +24,7 @@
     "type": "git",
     "url": "https://github.com/lsegurado/ls-element.git"
   },
-  "description": "Typescript library to build web components with decorators",
+  "description": "Typescript library to build web components",
   "scripts": {
     "start": "ls-server --start",
     "dist": "ls-server --dist",

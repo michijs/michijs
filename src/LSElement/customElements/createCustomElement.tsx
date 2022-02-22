@@ -50,10 +50,10 @@ export function createCustomElement<
       renderInProgress: [],
       pendingTasks: 0,
       events: {},
-      rerenderCallback: (propertyThatChanged: Set<PropertyKey> | PropertyKey) => {
+      rerenderCallback: (propertyThatChanged) => {
         if (observe)
           Object.entries<() => void>(observe).forEach(([key, observer]) => {
-            const matches = typeof propertyThatChanged === 'object' ? propertyThatChanged.has(key) : propertyThatChanged === key;
+            const matches = typeof propertyThatChanged === 'object' ? propertyThatChanged.find(x => x.startsWith(key)) : propertyThatChanged === key;
 
             if (matches) {
               this.ls.pendingTasks++;
@@ -115,7 +115,7 @@ export function createCustomElement<
             definePropertyFromStore(this, standarizedAttributeName, key);
           }
           this.ls.store.subscribe((propertiesThatChanged) => {
-            if (propertiesThatChanged.has(key)) {
+            if (propertiesThatChanged.find(x => x.startsWith(key))) {
               const newAttributes = { [standarizedAttributeName]: this.ls.store.state[key] };
               const oldAttributes = { [standarizedAttributeName]: getAttributeValue(this.getAttribute(standarizedAttributeName)) };
               setAttributes({

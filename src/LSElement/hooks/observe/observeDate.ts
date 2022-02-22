@@ -1,6 +1,6 @@
 import { ObserveProps } from '../observe';
 
-export const observeDate = ({ item, rootPropertyName, onChange }: ObserveProps<Date>) => {
+export const observeDate = ({ item, propertyPath, onChange }: ObserveProps<Date>) => {
   return new Proxy<Date>(new Date(item), {
     get(target, property) {
       const targetProperty = Reflect.get(target, property);
@@ -10,7 +10,7 @@ export const observeDate = ({ item, rootPropertyName, onChange }: ObserveProps<D
           const result = targetProperty.apply(target, args);
           const newValue = target.getTime();
           if (newValue !== oldValue)
-            onChange(rootPropertyName ?? property);
+            onChange(`${propertyPath}.${property}`);
 
           return result;
         };

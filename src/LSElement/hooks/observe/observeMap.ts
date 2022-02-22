@@ -5,8 +5,9 @@ import { customObjectDelete, customObjectSet } from './observeCommonObject';
 
 export const observeMap = (props: ObserveProps<Map<any, any>>) => {
   const proxiedMap = new Map();
+  
   props.item.forEach((value, key) => {
-    proxiedMap[key] = observe({ ...props, item: value, rootPropertyName: props.rootPropertyName ?? key });
+    proxiedMap[key] = observe({ ...props, item: value, propertyPath: `${props.propertyPath}.${key}` });
   });
   return new Proxy<Map<any, any>>(proxiedMap, {
     set: (target, property: keyof Map<any, any>, newValue, receiver) => customObjectSet(props, property !== 'size')(target, property, newValue, receiver),
@@ -19,11 +20,11 @@ export const observeMap = (props: ObserveProps<Map<any, any>>) => {
         }
         case 'set': {
           return function (key, newValue) {
-            const propertyName = props.rootPropertyName ?? key;
-            const notifyChange = props.shouldValidatePropertyChange(propertyName) && !deepEqual(newValue, (target as Map<any, any>).get(key));
-            const result = bindedTargetProperty(key, observe({ ...props, item: newValue, rootPropertyName: propertyName }));
+            const newPropertyPath = `${props.propertyPath}.${key}`;
+            const notifyChange = props.shouldValidatePropertyChange(newPropertyPath) && !deepEqual(newValue, (target as Map<any, any>).get(key));
+            const result = bindedTargetProperty(key, observe({ ...props, item: newValue, propertyPath: newPropertyPath }));
             if (notifyChange)
-              props.onChange(propertyName);
+              props.onChange(newPropertyPath);
             return result;
           };
         }

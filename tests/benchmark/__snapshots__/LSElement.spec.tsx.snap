@@ -2,16 +2,16 @@
 
 exports[`Performance tests - LS-Element clear rows: LS-Element Benchmarks 1`] = `
 Map {
-  "1637192456822" => Map {
-    "create1000Rows" => 353.14,
-    "replaceAllRows" => 327.94,
-    "partialUpdate" => 90.53,
-    "selectRow" => 66.81,
-    "swapRows" => 43.48,
-    "removeRow" => 69.95,
-    "createManyRows" => 2427.97,
-    "appendRowsToLargeTable" => 426.99,
-    "clearRows" => 54.44,
+  "1645562312053" => Map {
+    "create1000Rows" => 297.67,
+    "replaceAllRows" => 289.15,
+    "partialUpdate" => 78.36,
+    "selectRow" => 61.16,
+    "swapRows" => 55.32,
+    "removeRow" => 32.86,
+    "createManyRows" => 2239.26,
+    "appendRowsToLargeTable" => 405.52,
+    "clearRows" => 53.17,
   },
   "2.0.0" => Map {
     "create1000Rows" => 251.1,

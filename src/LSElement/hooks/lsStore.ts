@@ -1,16 +1,17 @@
 import { observe } from './observe';
-import { EmptyObject, LsStoreProps, ObjectOf, PropertyKey } from '../types';
+import { EmptyObject, LsStoreProps, ObjectOf } from '../types';
 import { observable } from './observable';
 
 export function lsStore<T extends object = EmptyObject, Y extends ObjectOf<Function> = EmptyObject>({ state = {} as T, transactions = {} as Y }: LsStoreProps<T, Y>) {
-  const { notify, ...observableProps } = observable<Set<PropertyKey>>();
+  const { notify, ...observableProps } = observable<string[]>();
   const proxiedState = observe<T>({
     item: state as T,
-    onChange: (propertyThatChanged) => propertyChangedCallback(propertyThatChanged),
-    shouldValidatePropertyChange: (propertyThatChanged) => !propertiesThatChanged.has(propertyThatChanged)
+    onChange: (propertyPath) => propertyChangedCallback(propertyPath),
+    shouldValidatePropertyChange: (propertyPath) => !propertiesThatChanged.find(x => x === propertyPath),
+    propertyPath: ''
   });
   let dispatchInProgressCount = 0;
-  const propertiesThatChanged = new Set<PropertyKey>();
+  let propertiesThatChanged = new Array<string>();
   // @ts-ignore
   const self = this;
   const proxiedTransactions = new Proxy(transactions, {
@@ -24,16 +25,16 @@ export function lsStore<T extends object = EmptyObject, Y extends ObjectOf<Funct
     }
   }) as Y;
 
-  const propertyChangedCallback = (propertyThatChanged: PropertyKey) => {
-    propertiesThatChanged.add(propertyThatChanged);
+  const propertyChangedCallback = (propertyThatChanged: string) => {
+    propertiesThatChanged.push(propertyThatChanged);
     tryToNotify();
   };
 
   const tryToNotify = () => {
-    if (dispatchInProgressCount === 0 && propertiesThatChanged.size > 0) {
-      const clonedSet = new Set(propertiesThatChanged);
-      propertiesThatChanged.clear();
-      notify(clonedSet);
+    if (dispatchInProgressCount === 0 && propertiesThatChanged.length > 0) {
+      const clonedArray = propertiesThatChanged.map(x => x.slice(1));
+      propertiesThatChanged = [];
+      notify(clonedArray);
     }
   };
 

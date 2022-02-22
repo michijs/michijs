@@ -2,7 +2,7 @@ import { observe, ObserveProps } from '../observe';
 import { customObjectDelete, customObjectSet } from './observeCommonObject';
 
 export const observeArray = ({item, ...props}: ObserveProps<Array<any>>) => {
-  const proxiedArray = item.map((value, key) => observe({ ...props, item: value, rootPropertyName: props.rootPropertyName ?? key.toString() }));
+  const proxiedArray = item.map((value, key) => observe({ ...props, item: value, propertyPath: `${props.propertyPath}.${key}` }));
   return new Proxy(proxiedArray, {
     set: (target, property, newValue, receiver) => customObjectSet(props, property !== 'length')(target, property, newValue, receiver),
     deleteProperty: customObjectDelete(props)

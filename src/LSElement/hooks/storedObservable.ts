@@ -49,12 +49,14 @@ export function storedObservable<T extends object>(obj: T, storage: Storage = lo
 
   const proxiedObject = observe({
     item: { ...observableProps, ...obj, ...get() },
-    onChange: (key: string) => {
-      const newValue = proxiedObject[key];
-      storage.setItem(key, JSON.stringify(newValue));
-      window.dispatchEvent(new CustomEvent<StorageLocalChangeEventType>(STORAGE_LOCAL_CHANGE, { detail: { key, newValue } }));
+    onChange: key => {
+      const stringKey = key.split('.')[1];
+      const newValue = proxiedObject[stringKey];
+      storage.setItem(stringKey, JSON.stringify(newValue));
+      window.dispatchEvent(new CustomEvent<StorageLocalChangeEventType>(STORAGE_LOCAL_CHANGE, { detail: { key: stringKey, newValue } }));
     },
-    shouldValidatePropertyChange: () => true
+    shouldValidatePropertyChange: () => true,
+    propertyPath: ''
   });
 
   return proxiedObject;

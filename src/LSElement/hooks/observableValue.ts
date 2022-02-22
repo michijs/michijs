@@ -8,7 +8,8 @@ export function observableValue<T = unknown>(initialValue: T) {
     onChange: () => {
       notify(state.value);
     },
-    shouldValidatePropertyChange: () => true
+    shouldValidatePropertyChange: () => true,
+    propertyPath: ''
   });
   return state;
 }

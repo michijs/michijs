@@ -18,14 +18,16 @@ export const getInitialSearchParamsValue = () => {
 let isUpdating = false;
 export const searchParams = observe({
   item: getInitialSearchParamsValue(),
-  onChange: (key) => {
+  onChange: key => {
     if (!isUpdating) {
       const newUrl = new URL(location.href);
-      setSearchParam(newUrl, key.toString(), searchParams[key]);
+      const splittedKey = key.split('.')[1];
+      setSearchParam(newUrl, splittedKey, searchParams[splittedKey]);
       goTo(newUrl);
     }
   },
-  shouldValidatePropertyChange: () => true
+  shouldValidatePropertyChange: () => true,
+  propertyPath: ''
 });
 const updateSearchParams = () => {
   isUpdating = true;

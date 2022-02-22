@@ -122,7 +122,7 @@ export interface LSCustomElement extends LSElement, Lifecycle<any>, LifecycleInt
         shadowRoot?: ShadowRoot,
         renderInProgress: Array<() => void>,
         adoptedStyleSheets: AdoptedStyleSheetList[],
-        rerenderCallback(propertiesThatChanged: Set<PropertyKey> | PropertyKey): void,
+        rerenderCallback(propertiesThatChanged: Array<string> | PropertyKey): void,
         pendingTasks: number,
         unSubscribeFromStore: Array<() => void>,
         idGen?: ReturnType<typeof idGenerator>['getId'],
@@ -167,8 +167,8 @@ export type CompatibleStyleSheet = string | CSSStyleSheet;
 export type StorageLocalChangeEventType = { key: string, newValue: any };
 
 export type PropertyKey = string | number | symbol;
-export type ChangeFunction = (propertyThatChanged?: PropertyKey) => void;
-export type ValidatePropertyChangeFunction = (propertyThatChanged?: PropertyKey) => boolean;
+export type ChangeFunction = (propertyPath?: string) => void;
+export type ValidatePropertyChangeFunction = (propertyPath?: string) => boolean;
 
 export type CSSProperty = CSSObject | Properties | string;
 export type CSSObject = { [key: string]: CSSProperty }
@@ -182,7 +182,8 @@ export type LSElementConfig<EX extends keyof JSX.IntrinsicElements, EL extends E
 
 export type AnyObject = Record<PropertyKey, any>;
 
-export type AttributesType = AnyObject;
+// I need to use object to avoid infinite loop in KeysAndKeysOf
+export type AttributesType = object;
 
 export type MethodsType = Record<string, Function>
 
@@ -243,9 +244,20 @@ export type LifecycleInternals = {
     formStateRestoreCallback?(state: string, mode: FormStateRestoreCallbackMode): void
 }
 
-type ReplaceObjectValue<O, V> = O extends EmptyObject ? { [k in keyof O]?: V } : EmptyObject;
+export type KeysAndKeysOf<O, P extends string = undefined> =
+    O extends object ? (
+        // TODO: Set map etc
+        O extends Array<unknown> ? (
+            (P extends undefined ? number : `${P}.${number}`)
+        ) : (
+            (P extends undefined ? keyof O : `${P}.${StringKeyOf<O>}`)
+            | keyof { [k in StringKeyOf<O> as (
+                O[k] extends Object ? KeysAndKeysOf<O[k], P extends undefined ? k : `${P}.${k}`> : ''
+            )]: any }
+        )
+    ) : '';
 
-type FormStateRestoreCallbackMode = 'restore' | 'autocomplete'
+type FormStateRestoreCallbackMode = 'restore' | 'autocomplete';
 
 export type LSElementProperties<
     M extends MethodsType,
@@ -273,9 +285,9 @@ export type LSElementProperties<
         /**
          * Contains methods with a name of an attribute / reflected attribute / observable like. Those methods are executed when a change has been made to their corresponding property.
          */
-        observe?: ReplaceObjectValue<RA, () => void>
-        & ReplaceObjectValue<A, () => void>
-        & ReplaceObjectValue<S, () => void>,
+        observe?: { [k in KeysAndKeysOf<RA>]?: () => void }
+        & { [k in KeysAndKeysOf<A>]?: () => void }
+        & (S extends EmptyObject ? { [k in keyof S]?: () => void }: EmptyObject)
         // observers?: ArrayWithOneOrMoreElements<[callback: (propertiesThatChanged: O[]) => void, target: ArrayWithOneOrMoreElements<O>]>,,
         /**
          * This tells the browser to treat the element like a form control.

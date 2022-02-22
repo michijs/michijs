@@ -12,6 +12,11 @@ createCustomElement('ls-root-test-element', {
       this.arrayTest.push(this.arrayTest.length + 1);
     }
   },
+  observe: {
+    'arrayTest.6'() {
+      console.log('6 Added');
+    }
+  },
   render() {
     return (
       <Host>

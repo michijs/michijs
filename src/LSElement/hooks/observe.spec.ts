@@ -13,7 +13,7 @@ const objectTests = (initialValue: () => AnyObject | Array<unknown>) => {
       nonProxiedObject = undefined;
       nonProxiedObject = initialValue();
       object = undefined;
-      object = observe({ item: initialValue(), onChange: mockCallback, shouldValidatePropertyChange: () => true });
+      object = observe({ item: initialValue(), onChange: mockCallback, shouldValidatePropertyChange: () => true, propertyPath: '' });
     });
     it('Setting the same value two times must call its callback just one time', () => {
       object[0] = exampleValue;
@@ -77,7 +77,7 @@ describe('Observe tests', () => {
       nonProxiedMap = undefined;
       nonProxiedMap = new Map();
       map = undefined;
-      map = observe({ item: new Map(), onChange: mockCallback, shouldValidatePropertyChange: () => true });
+      map = observe({ item: new Map(), onChange: mockCallback, shouldValidatePropertyChange: () => true, propertyPath: '' });
     });
     it('Setting the same value two times must call its callback just one time', () => {
       map[0] = exampleValue;
@@ -126,7 +126,7 @@ describe('Observe tests', () => {
       nonProxiedSet = undefined;
       nonProxiedSet = new Set();
       set = undefined;
-      set = observe({ item: new Set(), onChange: mockCallback, shouldValidatePropertyChange: () => true });
+      set = observe({ item: new Set(), onChange: mockCallback, shouldValidatePropertyChange: () => true, propertyPath: '' });
     });
     it('Setting the same value two times must call its callback just one time', () => {
       set[0] = exampleValue;
@@ -175,7 +175,7 @@ describe('Observe tests', () => {
       nonProxiedDate = undefined;
       nonProxiedDate = new Date();
       date = undefined;
-      date = observe({ item: new Date(), onChange: mockCallback, shouldValidatePropertyChange: () => true });
+      date = observe({ item: new Date(), onChange: mockCallback, shouldValidatePropertyChange: () => true, propertyPath: '' });
     });
     it('Setting the same value two times must call its callback just one time', () => {
       date.setDate(exampleValue);

@@ -8,7 +8,7 @@ import { observeSet } from './observe/observeSet';
 export type ObserveHandlerProps = {
   onChange: ChangeFunction,
   shouldValidatePropertyChange: ValidatePropertyChangeFunction,
-  rootPropertyName?: string | symbol
+  propertyPath: string
 }
 
 export type ObserveProps<T extends object> = {
