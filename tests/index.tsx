@@ -1,4 +1,7 @@
 import { createCustomElement, h, Host } from '../src';
+import { getAttributeOrProperty } from '../src/LSElement/DOM/attributes/getAttributeOrProperty';
+import { setAttributeOrProperty } from '../src/LSElement/DOM/attributes/setAttributeOrProperty';
+import { HTMLElements } from '../src/LSElement/h/tags/HTMLElements';
 import { Router } from './routes';
 // // // import sheet from './a.css' assert { type: 'css' };
 // // // console.log(sheet)
@@ -26,6 +29,64 @@ createCustomElement('ls-root-test-element', {
     );
   }
 });
+
+type TAttrs<k extends keyof HTMLElements> = Omit<HTMLElements[k], 'children'> & {
+  children?: T[]
+};
+
+type TFunction<k extends keyof HTMLElements> = (attributes?: TAttrs<k>) => (
+  TAttrs<k>
+  & {
+    setAttributes(attributes: HTMLElements[k]),
+    element: T
+  }
+)
+
+type T = { [k in keyof HTMLElements]: TFunction<k> }
+
+const t = new Proxy<T>({} as T, {
+  get(_1, p: keyof T) {
+    const el = document.createElement(p);
+    const tFunction: TFunction<typeof p> = ({ children, ...attributes }) => {
+      Object.entries(attributes).forEach(([key, value]) => {
+        setAttributeOrProperty(el, key, value);
+      });
+      return new Proxy<ReturnType<TFunction<typeof p>>>({} as ReturnType<TFunction<typeof p>>, {
+        get(_2, propertyName: keyof ReturnType<TFunction<typeof p>>) {
+          switch (propertyName) {
+            case 'element':
+              return el;
+            case 'setAttributes':
+              return (attributes) => {
+                Object.entries(attributes).forEach(([key, value]) => {
+                  setAttributeOrProperty(el, key, value);
+                });
+              };
+            default: {
+              // TODO: what if its an object?
+              return getAttributeOrProperty(el, propertyName);
+            }
+          }
+        },
+        set(_2, p: string, value: any) {
+          setAttributeOrProperty(el, p, value);
+          return true;
+        }
+      });
+    };
+    return tFunction;
+  }
+});
+
+const div = t.div({
+  class: 'xd'
+});
+
+div.setAttributes({
+  style: { backgroundColor: 'red', color: 'blue' }
+});
+div.class='asdf';
+console.log(div.element);
 
 // documentTransition test
 // const titulo1 = document.createElement('h1');
