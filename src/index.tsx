@@ -1,3 +1,4 @@
+import './LSElement/utils/getEventListeners';
 export { h } from './LSElement/h';
 export * from './LSElement/components';
 export * from './LSElement/classes';
@@ -5,6 +6,7 @@ export * from './LSElement/hooks';
 export * from './LSElement/routing';
 export * from './LSElement/types';
 export * from './LSElement/DOM';
+export * from './LSElement/DOMDiff';
 export * from './LSElement/i18n';
 export * from '@lsegurado/htmltype';
 import './LSElement/h/JSX';

@@ -1,10 +1,8 @@
 import type { LSCustomElement } from '../types';
-import { LSNode } from '../LSNode/LSNode';
 import { getMountPoint } from './getMountPoint';
+import { ObjectFactory } from '../DOMDiff/ObjectFactory';
 
 export function executeFirstRender(self: LSCustomElement) {
-  const renderResult = self.render?.();
-
-  self.ls.node = LSNode(renderResult as JSX.Element, false, self);
-  getMountPoint(self).append(self.ls.node.valueOf());
+  const newChildren = self.render?.();
+  ObjectFactory.updateChildren(getMountPoint(self), Array.isArray(newChildren) ? newChildren: [newChildren], false, self);
 }

@@ -4,11 +4,19 @@ import { observable } from './observable';
 
 export function lsStore<T extends object = EmptyObject, Y extends ObjectOf<Function> = EmptyObject>({ state = {} as T, transactions = {} as Y }: LsStoreProps<T, Y>) {
   const { notify, ...observableProps } = observable<string[]>();
-  const proxiedState = observe<T>({
+  const proxiedState = observe<T, string[]>({
     item: state as T,
     onChange: (propertyPath) => propertyChangedCallback(propertyPath),
     shouldValidatePropertyChange: (propertyPath) => !propertiesThatChanged.find(x => x === propertyPath),
-    propertyPath: ''
+    propertyPath: '',
+    subscribeCallback: (path, observer) => {
+      const cuttedPath = path.slice(1);
+      observableProps.subscribe((value) => {
+        const valuesFound = value.filter(x => x.startsWith(cuttedPath)).map(x => x.slice(cuttedPath.length));
+        if (valuesFound.length > 0)
+          observer(valuesFound);
+      });
+    }
   });
   let dispatchInProgressCount = 0;
   let propertiesThatChanged = new Array<string>();

@@ -3,11 +3,10 @@ export function setAttribute(element: Element | HTMLElement, key: string, newVal
     case newValue === null:
     case newValue === undefined:
     case typeof newValue === 'boolean': {
-      if (newValue) {
+      if (newValue)
         element.setAttribute(key, '');
-      } else {
+      else
         element.removeAttribute(key);
-      }
       break;
     }
     case typeof newValue === 'object': {

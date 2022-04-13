@@ -10,7 +10,7 @@ export class EventDispatcher<T>{
       this.name = name.toLowerCase();
     }
 
-    public dispatch(targetElement: Element, detail: T) {
+    public dispatch(targetElement: Element, detail?: T) {
       const event = new CustomEvent<T>(this.name, { ...this.eventInit, detail });
       return targetElement.dispatchEvent(event);
     }

@@ -1,32 +1,56 @@
-import { createCustomElement, h, Host } from '../src';
+import { createCustomElement, h, Host, ElementList } from '../src';
 import { Router } from './routes';
 // // // import sheet from './a.css' assert { type: 'css' };
 // // // console.log(sheet)
+
+// import { h } from "../src";
+// import { update } from "./update";
+
 createCustomElement('ls-root-test-element', {
   reflectedAttributes: {
-    arrayTest: [1, 2, 3, 4, 5]
+    // arrayTest: new ElementList([0, 1, 2, 3, 4, 5, 6])
+    arrayTest: [0, 1, 2, 3, 4, 5, 6]
   },
   shadow: false,
   transactions: {
     onClickArray() {
-      this.arrayTest.push(this.arrayTest.length + 1);
+      // this.arrayTest.push(this.arrayTest.getData().length);
+      this.arrayTest.push(this.arrayTest.length);
+      // this.arrayTest.splice(1,1, 25);
     }
   },
-  observe: {
-    'arrayTest.6'() {
-      console.log('6 Added');
-    }
-  },
+  // observe: {
+  //   'arrayTest.6'() {
+  //     console.log('6 Added');
+  //   }
+  // },
   render() {
     return (
       <Host>
         <Router />
-        {this.arrayTest.map(x => <div key={x} onclick={this.onClickArray}>{x}</div>)}
+        {this.arrayTest.map(item => <div key={item} onclick={this.onClickArray}>{item}</div>)}
+        {/* <this.arrayTest.target>
+          {(item) => <div onclick={this.onClickArray}>{item}</div>}
+        </this.arrayTest.target> */}
       </Host>
     );
   }
 });
+// function cuantosLatinoamericanos(lugaresTuristicos) {
+//   let cuenta = 0;
+//   for (let lugar of lugaresTuristicos) {
+//     if (quedaEnLatinoamerica(lugar))
+//       cuenta++;
+//   }
+//   return cuenta;
+// }
+// a.target = document.createDocumentFragment();
+// a.push(0, 1, 2, 3, 4, 5, 6);
+// a.splice(-3, 10);
+// console.log(a.target);
 
+// unlinked attributes ex: <div {bla ? ...obj1: ...obj2}/>
+// and obj2 has an attribute that obj1 does not that attribute will be unlinked...
 // documentTransition test
 // const titulo1 = document.createElement('h1');
 // titulo1.textContent = 'hola 1'

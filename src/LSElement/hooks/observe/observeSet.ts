@@ -2,15 +2,15 @@ import { observe, ObserveProps } from '../observe';
 import { customMapAndSetClear, customMapAndSetDelete } from './mapAndSetCommonHandlers';
 import { customObjectDelete, customObjectSet } from './observeCommonObject';
 
-export const observeSet = (props: ObserveProps<any>) => {
+export const observeSet = <Y>(props: ObserveProps<Set<any>, Y>) => {
   const proxiedSet = new Set();
   props.item.forEach((value, key) => {
     const newPropertyPath = `${props.propertyPath}.${key}`;
     proxiedSet.add(observe({...props, item: value, propertyPath: newPropertyPath}));
   });
   return new Proxy<Set<any>>(proxiedSet, {
-    set: (target, property: keyof Map<any, any>, newValue, receiver) => customObjectSet(props, property !== 'size')(target, property, newValue, receiver),
-    get: (target, property: keyof Set<any>) => {
+    set: (target, property: keyof Set<any>, newValue, receiver) => customObjectSet(props)(target, property, newValue, receiver),
+    get: (target, property: keyof Set<any> & 'subscribe') => {
       const targetProperty = Reflect.get(target, property);
       const bindedTargetProperty = typeof targetProperty === 'function' ? targetProperty.bind(target) : targetProperty;
       switch (property) {
@@ -29,6 +29,9 @@ export const observeSet = (props: ObserveProps<any>) => {
         }
         case 'delete': {
           return customMapAndSetDelete(props, target, bindedTargetProperty);
+        }
+        case 'subscribe': {
+          return (callback) => props.subscribeCallback?.(props.propertyPath, callback);
         }
         default: {
           return bindedTargetProperty;

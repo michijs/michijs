@@ -7,16 +7,8 @@ import { setAttributes } from '../DOM/attributes/setAttributes';
 type HostProps = HTMLElements.commonElement & AnyObject;
 
 /**Allows to set attributes and event listeners to the host element itself. */
-export const Host: FC<HostProps> = ({children, ...attrs}, self) => {
-  if (attrs && self) {
-    setAttributes({
-      target: self,
-      newAttributes: attrs,
-      oldAttributes: self.ls.hostAttrs,
-      self,
-      events: self.ls.events
-    });
-    self.ls.hostAttrs = attrs;
-  }
+export const Host: FC<HostProps> = ({ children, ...attrs }, self) => {
+  if (attrs && self)
+    setAttributes(self, attrs, self);
   return <Fragment children={children} />;
 };

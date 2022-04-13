@@ -2,7 +2,7 @@ export function newH(tag, { children, ...attrs }, key) {
 	return { tag, attrs: { children: Array.isArray(children) ? children : [children], ...attrs }, key };
 }
 
-const Fragment = undefined;
+const Fragment = (attrs) => ({ tag: 'fragment', attrs });
 
 export {
 	newH as jsx,

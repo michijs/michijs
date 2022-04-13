@@ -1,4 +1,4 @@
-import { h, lsStore, createCustomElement } from '../../../../src';
+import { h, createCustomElement, ElementList } from '../../../../src';
 
 function _random(max) {
   return Math.round(Math.random() * 1000) % max;
@@ -8,110 +8,78 @@ const adjectives = ['pretty', 'large', 'big', 'small', 'tall', 'short', 'long', 
 const colours = ['red', 'yellow', 'blue', 'green', 'pink', 'brown', 'purple', 'brown', 'white', 'black', 'orange'];
 const nouns = ['table', 'chair', 'house', 'bbq', 'desk', 'car', 'pony', 'cookie', 'sandwich', 'burger', 'pizza', 'mouse', 'keyboard'];
 
-type Row = { label: string, id: number };
+type Row = { label: string, id: number, selected?: boolean };
+let nextId = 1;
 function buildData(count = 1000) {
   const data = new Array<Row>();
   for (let i = 0; i < count; i++)
-    data.push({ id: state.nextId++, label: `${adjectives[_random(adjectives.length)]} ${colours[_random(colours.length)]} ${nouns[_random(nouns.length)]}` });
+    data.push({ id: nextId++, label: `${adjectives[_random(adjectives.length)]} ${colours[_random(colours.length)]} ${nouns[_random(nouns.length)]}` });
   return data;
 }
 
-const { state, transactions, ...store } = lsStore({
-  state: {
-    data: new Array<Row>(),
-    selected: null as number,
-    nextId: 1
-  },
-  transactions: {
-    updateData(mod = 10) {
-      for (let i = 0; i < state.data.length; i += mod) {
-        state.data[i].label += ' !!!';
-        // this.data[i] = Object.assign({}, this.data[i], {label: this.data[i].label +' !!!'});
-      }
-    },
-    delete(id: number) {
-      // state.data = state.data.filter(x => x.id !== id);
-      const index = state.data.findIndex(x => x.id === id);
-      state.data.splice(index, 1);
+const list = new ElementList<Row>();
 
-      // const idx = this.data.findIndex(d => d.id == id);
-      // this.data = this.data.filter((_e, i) => i != idx);
-      // return this;
-    },
-    run() {
-      state.data = buildData();
-      state.selected = null;
-    },
-    add() {
-      // state.data = state.data.concat(buildData());
-      state.data.push(...buildData());
-      state.selected = null;
-    },
-    update() {
-      transactions.updateData();
-      state.selected = null;
-    },
-    select(id: number) {
-      state.selected = id;
-    },
-    runLots() {
-      state.data = buildData(10000);
-      state.selected = null;
-    },
-    clear() {
-      state.data = [];
-      state.selected = null;
-    },
-    swapRows() {
-      if (state.data.length > 998) {
-        const a = state.data[1];
-        state.data[1] = state.data[998];
-        state.data[998] = a;
-      }
-    }
+const run = () => list.replace(...buildData());
+const runLots = () => list.replace(...buildData(10000));
+const add = () => list.push(...buildData());
+const update = () => {
+  for (let i = 0; i < list.getData().length; i += 10) {
+    list.update(i, (value) => {
+      value.label += ' !!!';
+      return value;
+    });
   }
-});
+};
+const clear = () => list.clear();
+const select = (i) => {
+  const selectedIndex = list.getData().findIndex(x => x.selected);
+  if (i !== selectedIndex) {
+    if (selectedIndex >= 0)
+      list.update(selectedIndex, (value) => {
+        value.selected = undefined;
+        return value;
+      });
 
-export const Trow = createCustomElement(
-  {
-    tag: 'ls-table-row',
-    extends: 'tr',
-    class: HTMLTableRowElement
-  },
-  {
-    attributes: {
-      labelId: undefined as number,
-      label: undefined,
-    },
-    render() {
-      return <>
-        <td _className="col-md-1" _textContent={this.labelId.toString()} />
-        <td _className="col-md-4">
-          <a onclick={() => transactions.select(this.labelId)} _textContent={this.label} />
-        </td>
-        <td _className="col-md-1">
-          <a onclick={() => transactions.delete(this.labelId)}>
-            <span _className="glyphicon glyphicon-remove" aria-hidden="true" />
-          </a>
-        </td>
-        <td _className="col-md-6" />
-      </>;
-    }
+    list.update(i, (value) => {
+      value.selected = true;
+      return value;
+    });
   }
-);
+};
+const deleteItem = (i) => list.remove(i);
+const swapRows = () => list.swap(1, 998);
 
 export const Tbody = createCustomElement(
   {
-    tag: 'ls-table-body',
-    extends: 'tbody',
-    class: HTMLTableSectionElement
+    tag: 'ls-table',
+    extends: 'table',
+    class: HTMLTableElement
   },
   {
-    subscribeTo: {
-      store
-    },
     render() {
-      return state.data.map(({ id, label }) => <Trow key={id} _labelId={id} _label={label} class={id === state.selected ? 'danger' : undefined} />);
+      return (
+        <list.target as="tbody" _id="tbody">
+          {({ id, label, selected }, index) => (
+            <tr class={selected ? 'danger' : undefined}>
+              <td _className="col-md-1">
+                {id.toString()}
+              </td>
+              <td _className="col-md-4">
+                {/* TODO: _onclick vs onclick */}
+                <a onclick={() => select(index)}>
+                  {label}
+                </a>
+              </td>
+              <td _className="col-md-1">
+                <a onclick={() => deleteItem(index)}>
+                  <span _className="glyphicon glyphicon-remove" _ariaHidden="true" />
+                </a>
+              </td>
+              <td _className="col-md-6" />
+            </tr>
+          )}
+        </list.target>
+      );
     }
   }
 );
@@ -127,22 +95,34 @@ export const TableManager = createCustomElement(
       return (
         <>
           <div _className="col-sm-6 smallpad">
-            <button _type="button" _className="btn btn-primary btn-block" id="run" onclick={transactions.run} _textContent="Create 1,000 rows" />
+            <button _type="button" _className="btn btn-primary btn-block" id="run" onclick={run}>
+              Create 1,000 rows
+            </button>
           </div>
           <div _className="col-sm-6 smallpad">
-            <button _type="button" _className="btn btn-primary btn-block" id="runlots" onclick={transactions.runLots} _textContent="Create 10,000 rows" />
+            <button _type="button" _className="btn btn-primary btn-block" id="runlots" onclick={runLots}>
+              Create 10,000 rows
+            </button>
           </div>
           <div _className="col-sm-6 smallpad">
-            <button _type="button" _className="btn btn-primary btn-block" id="add" onclick={transactions.add} _textContent="Append 1,000 rows" />
+            <button _type="button" _className="btn btn-primary btn-block" id="add" onclick={add}>
+              Append 1,000 rows
+            </button>
           </div>
           <div _className="col-sm-6 smallpad">
-            <button _type="button" _className="btn btn-primary btn-block" id="update" onclick={transactions.update} _textContent="Update every 10th row" />
+            <button _type="button" _className="btn btn-primary btn-block" id="update" onclick={update}>
+              Update every 10th row
+            </button>
           </div>
           <div _className="col-sm-6 smallpad">
-            <button _type="button" _className="btn btn-primary btn-block" id="clear" onclick={transactions.clear} _textContent="Clear" />
+            <button _type="button" _className="btn btn-primary btn-block" id="clear" onclick={clear}>
+              Clear
+            </button>
           </div>
           <div _className="col-sm-6 smallpad">
-            <button _type="button" _className="btn btn-primary btn-block" id="swaprows" onclick={transactions.swapRows} _textContent="Swap Rows" />
+            <button _type="button" _className="btn btn-primary btn-block" id="swaprows" onclick={swapRows}>
+              Swap Rows
+            </button>
           </div>
         </>
       );

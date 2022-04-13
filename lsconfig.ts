@@ -7,30 +7,24 @@ export const config: LsServerConfig = (environment) => {
     },
     esbuildOptions: {
       entryPoints: ['./tests/index.tsx'],
-      tsconfig: environment === 'DISTRIBUTION' ? 'dist.tsconfig.json': 'tsconfig.json',
+      tsconfig: environment === 'DISTRIBUTION' ? 'dist.tsconfig.json' : 'tsconfig.json',
       splitting: true,
     }
   };
-  switch (environment) {
-    case 'TESTING':
-    case 'TESTING_VANILLA':{
-      defaultConfig.openBrowser = false;
+  if (environment === 'TESTING' || environment === 'TESTING_VANILLA') {
+    defaultConfig.openBrowser = false;
+    defaultConfig.esbuildOptions = {
+      ...defaultConfig.esbuildOptions,
+      splitting: false,
+      format: undefined,
+      target: undefined
+    };
+    if (environment === 'TESTING') {
       defaultConfig.public.path = './tests/benchmark/ls-element/public';
-      defaultConfig.esbuildOptions = {
-        ...defaultConfig.esbuildOptions,
-        entryPoints: ['./tests/benchmark/ls-element/src/index.tsx'],
-        splitting: false,
-        format: undefined,
-        target: undefined
-      };
-    }
-    case 'TESTING': {
       defaultConfig.esbuildOptions.entryPoints = ['./tests/benchmark/ls-element/src/index.tsx'];
-      break;
-    }
-    case 'TESTING_VANILLA': {
+    } else {
+      defaultConfig.public.path = './tests/benchmark/vanillajs/public';
       defaultConfig.esbuildOptions.entryPoints = ['./tests/benchmark/vanillajs/src/index.js'];
-      break;
     }
   }
   return defaultConfig;

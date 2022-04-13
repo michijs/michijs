@@ -1,9 +1,12 @@
+import { ObjectFactory } from '../DOMDiff/ObjectFactory';
 import type { LSCustomElement } from '../types';
+import { getMountPoint } from './getMountPoint';
 
 function rerenderFn(self: LSCustomElement) {
   self.willUpdate?.();
   const newChildren = self.render?.();
-  self.ls.node = self.ls.node.updateElement(newChildren);
+  ObjectFactory.updateChildren(getMountPoint(self), Array.isArray(newChildren) ? newChildren: [newChildren], false, self);
+  // self.ls.node = self.ls.node.updateElement(newChildren);
   self.didUpdate?.();
 }
 

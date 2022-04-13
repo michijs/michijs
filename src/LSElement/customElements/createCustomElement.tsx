@@ -35,7 +35,7 @@ export function createCustomElement<
     render,
     subscribeTo,
     shadow = extendsTag ? false : { mode: 'open' },
-    methods, 
+    methods,
     formAssociated = false
   } = elementProperties;
 
@@ -49,7 +49,6 @@ export function createCustomElement<
       adoptedStyleSheets: [],
       renderInProgress: [],
       pendingTasks: 0,
-      events: {},
       rerenderCallback: (propertyThatChanged) => {
         if (observe)
           Object.entries<() => void>(observe).forEach(([key, observer]) => {
@@ -117,20 +116,18 @@ export function createCustomElement<
           this.ls.store.subscribe((propertiesThatChanged) => {
             if (propertiesThatChanged.find(x => x.startsWith(key))) {
               const newAttributes = { [standarizedAttributeName]: this.ls.store.state[key] };
-              const oldAttributes = { [standarizedAttributeName]: getAttributeValue(this.getAttribute(standarizedAttributeName)) };
-              setAttributes({
-                target: this,
-                newAttributes,
-                oldAttributes,
-                self: this,
-                events: this.ls.events
-              });
+              setAttributes(this, newAttributes, this);
             }
           });
         });
       if (subscribeTo)
         Object.entries(subscribeTo).forEach(([key, value]) => {
-          const subscribeFunction = () => this.ls.rerenderCallback(key);
+          const subscribeFunction = (propertyThatChanged?: string[] | unknown) => {
+            if (propertyThatChanged && Array.isArray(propertyThatChanged))
+              this.ls.rerenderCallback(propertyThatChanged.map(x => `${key}.${propertyThatChanged}`));
+            else
+              this.ls.rerenderCallback(key);
+          };
           value.subscribe(subscribeFunction);
           if (value.unsubscribe)
             this.ls.unSubscribeFromStore.push(() => value.unsubscribe(subscribeFunction));

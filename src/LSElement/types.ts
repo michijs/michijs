@@ -1,10 +1,9 @@
-import { Attributes, HTMLElements } from '@lsegurado/htmltype';
+import { HTMLElements } from '@lsegurado/htmltype';
 import { EventDispatcher } from './classes';
 import { idGenerator } from './hooks';
 import { lsStore } from './hooks/lsStore';
 import { Properties } from 'csstype';
 import { LSTag } from './h/tags/LSTag';
-import { LSChildNode } from './LSNode/LSChildNode';
 import { GetAttributes } from '@lsegurado/htmltype/dist/Attributes';
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
@@ -97,13 +96,6 @@ export type ObservableLike<T = any> = {
     subscribe(observer: ObserverCallback<T>): void,
     unsubscribe?(observer: ObserverCallback<T>): void,
 }
-export interface LSElement extends Element {
-    ls?: {
-        eventListeners?: { addedBy?: LSCustomElement, eventName: string, event: EventListenerOrEventListenerObject }[];
-    },
-}
-
-export type LSNodeEvents = Record<string, EventListenerOrEventListenerObject>;
 
 export type MissingElementInternalsProperties = Pick<HTMLButtonElement, 'checkValidity' | 'reportValidity' | 'form' | 'validity' | 'validationMessage' | 'willValidate'>
 
@@ -115,7 +107,7 @@ export type LSElementInternals = ElementInternals & MissingElementInternalsPrope
         setFormValue?(value: FormValue): void
     };
 
-export interface LSCustomElement extends LSElement, Lifecycle<any>, LifecycleInternals, MissingElementInternalsProperties {
+export interface LSCustomElement extends Element, Lifecycle<any>, LifecycleInternals, MissingElementInternalsProperties {
     ls: {
         store: ReturnType<typeof lsStore>,
         alreadyRendered: boolean,
@@ -126,11 +118,8 @@ export interface LSCustomElement extends LSElement, Lifecycle<any>, LifecycleInt
         pendingTasks: number,
         unSubscribeFromStore: Array<() => void>,
         idGen?: ReturnType<typeof idGenerator>['getId'],
-        node?: LSChildNode<JSX.Element>,
-        hostAttrs?: AnyObject,
-        events: LSNodeEvents,
         internals?: LSElementInternals
-    } & LSElement['ls'],
+    },
     render?(): JSX.Element,
     /**Allows to get a child element from the host with the id */
     child<T extends (new () => HTMLElement) | HTMLElement = HTMLElement>(id: string): T extends new () => HTMLElement ? InstanceType<T> : T,
@@ -142,17 +131,28 @@ export interface LSCustomElement extends LSElement, Lifecycle<any>, LifecycleInt
     type: string;
 }
 
+export type EmptyType = null | undefined | false;
+export type PrimitiveType = bigint | string | number | true | AnyObject;
+
+interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> { }
+
+type DeepReadonlyObject<T> = {
+    readonly [P in keyof T]: DeepReadonly<T[P]>;
+};
+export type DeepReadonly<T> =
+    T extends (infer R)[] ? DeepReadonlyArray<R> :
+    T extends Function ? T :
+    T extends object ? DeepReadonlyObject<T> :
+    T;
+
 export type IterableAttrs = {
     /**When iterating nodes its higly recomended to use keys */
     key?: number | string
 }
 
-export type EmptyType = null | undefined | false;
-export type PrimitiveType = bigint | string | number | true | AnyObject;
-
 export type IterableJSX = AnyObject | ObjectJSXElement | FunctionJSXElement | ClassJSXElement;
 export type CommonJSXAttrs = { attrs?: (Record<string, any> & { children: JSX.Element[] }) } & IterableAttrs
-export type FragmentJSXElement = { tag: undefined } & { attrs: { children: JSX.Element[] } };
+export type FragmentJSXElement = { tag: 'fragment' } & CommonJSXAttrs;
 export type ObjectJSXElement = { tag: string } & CommonJSXAttrs;
 export type FunctionJSXElement = { tag: FC<any> } & CommonJSXAttrs;
 export type ClassJSXElement = { tag: (new () => {}) & { tag: string, extends?: string } } & CommonJSXAttrs;
@@ -160,11 +160,9 @@ export type SingleJSXElement = EmptyType | PrimitiveType | ObjectJSXElement | Fu
 export type ArrayJSXElement = Array<SingleJSXElement>;
 // export type PureObjectJSXElement = { tag: string } & Omit<CommonJSXAttrs,'children'> & {children: (PureObjectJSXElement | string)[]};
 
-export type FC<T = {}, C = JSX.Element, S = LSCustomElement> = (attrs: Omit<T, 'children'> & IterableAttrs & { children?: C }, self?: S | null) => JSX.Element;
+export type FC<T = {}, C = JSX.Element, S = LSCustomElement> = (attrs: Omit<T, 'children'> & { children?: C }, self?: S | null) => JSX.Element;
 
 export type CompatibleStyleSheet = string | CSSStyleSheet;
-
-export type StorageLocalChangeEventType = { key: string, newValue: any };
 
 export type PropertyKey = string | number | symbol;
 export type ChangeFunction = (propertyPath?: string) => void;
@@ -187,7 +185,7 @@ export type AttributesType = object;
 
 export type MethodsType = Record<string, Function>
 
-export type EventsType = Record<string, EventDispatcher<any>>
+export type EventsType = Record<string, EventDispatcher<unknown>>
 
 export type SubscribeToType = Record<string, ObservableLike>;
 
@@ -205,7 +203,7 @@ export type Self<M extends MethodsType,
     E extends EventsType,
     A extends AttributesType,
     RA extends AttributesType,
-    EL extends Element> = EL & A & RA & M & T & { [k in keyof E]: E[k] extends EventDispatcher<infer T> ? (detail: T) => boolean : any } & LSCustomElement;
+    EL extends Element> = EL & A & RA & M & T & { [k in keyof E]: E[k] extends EventDispatcher<infer T> ? (detail?: T) => boolean : any } & LSCustomElement;
 
 type Lifecycle<FRA> = {
     /**This method is called right before a component mounts.*/
@@ -242,6 +240,13 @@ export type LifecycleInternals = {
      * The type of the first argument depends on how the setFormValue() method was called. 
      */
     formStateRestoreCallback?(state: string, mode: FormStateRestoreCallbackMode): void
+}
+
+export interface ElementFactory {
+    jsx: SingleJSXElement;
+    compare(el: Node): boolean;
+    create(isSVG?: boolean, self?: Element): ChildNode | ParentNode;
+    update?(el: Node, isSVG?: boolean, self?: Element): void
 }
 
 export type KeysAndKeysOf<O, P extends string = undefined> =
@@ -287,7 +292,7 @@ export type LSElementProperties<
          */
         observe?: { [k in KeysAndKeysOf<RA>]?: () => void }
         & { [k in KeysAndKeysOf<A>]?: () => void }
-        & (S extends EmptyObject ? { [k in keyof S]?: () => void }: EmptyObject)
+        & (S extends EmptyObject ? { [k in keyof S]?: () => void } : EmptyObject)
         // observers?: ArrayWithOneOrMoreElements<[callback: (propertiesThatChanged: O[]) => void, target: ArrayWithOneOrMoreElements<O>]>,,
         /**
          * This tells the browser to treat the element like a form control.
@@ -335,3 +340,13 @@ export type CreateCustomElementResult<
     ) & { tag: string, extends?: string }
 
 export type GetElementProps<El extends any> = El extends (new () => { props: any }) ? InstanceType<El>['props'] : (El extends (...args: any) => any ? Parameters<El>[0] : never)
+
+export type EventListenerMap = Map<string, EventListener>;
+declare global {
+
+    interface Element {
+        setEventListeners(this: Element, src: Element, ev: EventListenerMap): void;
+        eventListenerList?: Map<Element, EventListenerMap>;
+        key?: string;
+    }
+}

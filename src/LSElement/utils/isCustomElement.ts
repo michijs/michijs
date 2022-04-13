@@ -1,3 +1,3 @@
-export function isCustomElement(self: Element){
-  return window.customElements.get(self.getAttribute('is') || self.tagName.toLowerCase()) !== undefined;
+export function isCustomElement(tag: string, is?: string){
+  return is || tag.indexOf('-') !== -1;
 }

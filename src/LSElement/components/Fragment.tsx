@@ -1,5 +1,3 @@
 import { FC } from '../types';
 
-export const Fragment: FC = (attrs) => {
-  return { tag: undefined, attrs };
-};
+export const Fragment: FC = (attrs) => ({ tag: 'fragment', attrs });

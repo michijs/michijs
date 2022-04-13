@@ -1,4 +1,5 @@
-import { ChangeFunction, ValidatePropertyChangeFunction } from '../types';
+import { ChangeFunction, ObservableLike, ObserverCallback, ValidatePropertyChangeFunction } from '../types';
+import { isAnObject } from '../typeWards/isAnObject';
 import { observeArray } from './observe/observeArray';
 import { observeCommonObject } from './observe/observeCommonObject';
 import { observeDate } from './observe/observeDate';
@@ -11,28 +12,31 @@ export type ObserveHandlerProps = {
   propertyPath: string
 }
 
-export type ObserveProps<T extends object> = {
-  item: T
-} & ObserveHandlerProps
+export type ObserveProps<T, Y> = {
+  item: T,
+  subscribeCallback?: (path: string, observer: ObserverCallback<Y>) => void
+} & ObserveHandlerProps;
 
-export function observe<T extends object>(props: ObserveProps<T>): T {
-  const { item } = props;
-  if (item && typeof item === 'object') {
-    if (Array.isArray(item)) {
-      return observeArray(props as ObserveProps<Array<T>>) as T;
-      // Many built-in objects, for example Map, Set, Date, Promise and others make use of so-called internal slots.
-      // These are like properties but reserved for internal, specification-only purposes. 
-      // For instance, Map stores items in the internal slot [[MapData]]. 
-      // Built-in methods access them directly, not via [[Get]]/[[Set]] internal methods. So Proxy can’t intercept that.
-    } else if (item instanceof Date) {
-      return observeDate(props as ObserveProps<Date>) as T;
-    } else if (item instanceof Map) {
-      return observeMap(props as ObserveProps<Map<any,any>>) as T;
-    } else if (item instanceof Set) {
-      return observeSet(props as ObserveProps<Set<any>>) as T;
-    } else if (Object.getPrototypeOf(item) === Object.prototype) {
-      return observeCommonObject(props) as T;
-    }
+export type ObservableObject<T, Y = string[]> = T extends Function ? T : (T extends object ? {
+  [k in keyof T]: ObservableObject<T[k], Y>
+} & Partial<ObservableLike<Y>> : T)
+
+export function observe<T, Y>(props: ObserveProps<T, Y>): ObservableObject<T, Y> {
+  if (isAnObject(props.item)) {
+    if (Array.isArray(props.item))
+      return observeArray(props as unknown as ObserveProps<unknown[], Y>) as unknown as ObservableObject<T, Y>;
+    // Many built-in objects, for example Map, Set, Date, Promise and others make use of so-called internal slots.
+    // These are like properties but reserved for internal, specification-only purposes. 
+    // For instance, Map stores items in the internal slot [[MapData]]. 
+    // Built-in methods access them directly, not via [[Get]]/[[Set]] internal methods. So Proxy can’t intercept that.
+    else if (props.item instanceof Date)
+      return observeDate(props as unknown as ObserveProps<Date, Y>) as unknown as ObservableObject<T, Y>;
+    else if (props.item instanceof Map)
+      return observeMap(props as unknown as ObserveProps<Map<any, any>, Y>) as unknown as ObservableObject<T, Y>;
+    else if (props.item instanceof Set)
+      return observeSet(props as unknown as ObserveProps<Set<any>, Y>) as unknown as ObservableObject<T, Y>;
+    else if (Object.getPrototypeOf(props.item) === Object.prototype)
+      return observeCommonObject(props as unknown as ObserveProps<object, Y>) as unknown as ObservableObject<T, Y>;
   }
-  return item;
+  return props.item as ObservableObject<T, Y>;
 }
