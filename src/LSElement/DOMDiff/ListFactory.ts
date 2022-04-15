@@ -79,9 +79,8 @@ export class ListFactory implements ElementFactory {
                 if (needsToBeMoved)
                   target.insertChildNodesAt(i, nodeFound);
                 update(nodeFound, newChildJSX, isSVG, self);
-              } else {
+              } else
                 target.insertChildNodesAt(i, target.renderSingleItem(newChildJSX, i));
-              }
             } else
               target.insertChildNodesAt(i, target.renderSingleItem(newChildJSX, i));
 

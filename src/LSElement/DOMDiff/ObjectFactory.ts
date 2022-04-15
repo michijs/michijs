@@ -4,7 +4,6 @@ import { isCustomElement } from '../utils/isCustomElement';
 import { setAttributes } from '../DOM/attributes/setAttributes';
 import { getElementFactory, update } from './update';
 
-
 export class ObjectFactory implements ElementFactory {
     jsx: ObjectJSXElement;
     constructor(jsx: ObjectJSXElement) {

@@ -5,6 +5,7 @@ import { lsStore } from './hooks/lsStore';
 import { Properties } from 'csstype';
 import { LSTag } from './h/tags/LSTag';
 import { GetAttributes } from '@lsegurado/htmltype/dist/Attributes';
+import { FragmentTag } from './constants';
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 type IfEquals<X, Y, A = X, B = never> =
@@ -152,7 +153,7 @@ export type IterableAttrs = {
 
 export type IterableJSX = AnyObject | ObjectJSXElement | FunctionJSXElement | ClassJSXElement;
 export type CommonJSXAttrs = { attrs?: (Record<string, any> & { children: JSX.Element[] }) } & IterableAttrs
-export type FragmentJSXElement = { tag: 'fragment' } & CommonJSXAttrs;
+export type FragmentJSXElement = { tag: typeof FragmentTag } & CommonJSXAttrs;
 export type ObjectJSXElement = { tag: string } & CommonJSXAttrs;
 export type FunctionJSXElement = { tag: FC<any> } & CommonJSXAttrs;
 export type ClassJSXElement = { tag: (new () => {}) & { tag: string, extends?: string } } & CommonJSXAttrs;

@@ -49,7 +49,7 @@ const select = (i) => {
 const deleteItem = (i) => list.remove(i);
 const swapRows = () => list.swap(1, 998);
 
-export const Tbody = createCustomElement(
+export const Table = createCustomElement(
   {
     tag: 'ls-table',
     extends: 'table',
