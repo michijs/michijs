@@ -2,10 +2,11 @@ import { h } from '../h';
 import { update } from './update';
 
 const buttonLabel = 'test button';
+const buttonLabel2 = 'test button 2';
 const className = 'test classname';
 const id = 'test id';
 
-describe('Object factory', () => {
+describe('Single JSX Element Update', () => {
 
   const testElement = document.createElement('div');
   let testElementChild;
@@ -113,6 +114,22 @@ describe('Object factory', () => {
     });
     it('must not create another button instance', () => {
       expect(testElementChild).toBe(testElement.childNodes.item(0));
+    });
+  });
+  describe('Updating a label', () => {
+    beforeAll(() => {
+      update(testElement, (
+        <div _id={undefined} class={undefined}>
+          <button hidden={false}>
+            {buttonLabel2}
+          </button>
+          <span />
+        </div>
+      ));
+      testResultChild.textContent = buttonLabel2;
+    });
+    it('must match jsx', () => {
+      expect(testElement).toEqual(testResult);
     });
   });
   describe('Removing a single child', () => {
