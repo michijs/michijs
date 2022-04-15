@@ -59,11 +59,10 @@ export class ObjectFactory implements ElementFactory {
       const newChildren = new Array<ChildNode | ParentNode>();
       children.forEach((x, i) => {
         const item = el.childNodes.item(i);
-        if (item) {
+        if (item) 
           update(item, x, isSVG, self);
-        } else {
+        else 
           newChildren.push(getElementFactory(x, self).create(isSVG, self));
-        }
       });
 
       el.append(...newChildren);
