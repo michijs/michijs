@@ -13,30 +13,36 @@ export class Target<T> {
       this.context = context;
     }
 
-    getTemplate(items: T[]) {
+    getTemplate(item: T) {
       // TODO: is svg?
       if (!this.template)
-        this.template = getElementFactory(this.renderItem(items[0], 0), this.context).create(false, this.context);
+        this.template = getElementFactory(this.renderItem(item, 0), this.context).create(false, this.context);
       return this.template;
     }
 
     render(items: T[]) {
-      const template = this.getTemplate(items);
-      return items.map((item, index) => {
-        const el = template.cloneNode(true) as ChildNode;
-        update(el, this.renderItem(item, index));
-        return el;
-      });
+      const template = this.getTemplate(items[0]);
+      return items.map((item, index) => this.renderSingleItem(item, index, template));
+    }
+
+    renderSingleItem(item: T, index: number, template = this.getTemplate(item)){
+      const el = template.cloneNode(true) as ChildNode;
+      update(el, this.renderItem(item, index));
+      return el;
     }
 
     insertItemsAt(i: number, ...items: T[]) {
       const renderResult = this.render(items);
-      if (i === 0)
-        this.element.prepend(...renderResult);
-      else if (i > items.length)
-        this.element.append(...renderResult);
 
+      this.insertChildNodesAt(i, ...renderResult);
+    }
+
+    insertChildNodesAt(i: number, ...childNodes: ChildNode[]){
+      if (i === 0)
+        this.element.prepend(...childNodes);
+      else if (i > childNodes.length)
+        this.element.append(...childNodes);
       else
-        this.element.childNodes.item(i).after(...renderResult);
+        this.element.childNodes.item(i).after(...childNodes);
     }
 }

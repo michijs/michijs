@@ -36,6 +36,7 @@ createCustomElement('ls-root-test-element', {
     );
   }
 });
+
 // function cuantosLatinoamericanos(lugaresTuristicos) {
 //   let cuenta = 0;
 //   for (let lugar of lugaresTuristicos) {

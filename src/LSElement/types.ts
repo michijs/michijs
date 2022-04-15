@@ -347,6 +347,8 @@ declare global {
     interface Element {
         setEventListeners(this: Element, src: Element, ev: EventListenerMap): void;
         eventListenerList?: Map<Element, EventListenerMap>;
+    }
+    interface ChildNode {
         key?: string;
     }
 }
