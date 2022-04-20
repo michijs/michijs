@@ -1,5 +1,4 @@
-import { ElementFactory, LSCustomElement } from '../..';
-import { nodeIsElement } from '../typeWards/nodeIsElement';
+import { ElementFactory, IterableJSX, LSCustomElement } from '../..';
 import { Target } from '../classes/Target';
 import { update } from './update';
 
@@ -34,60 +33,59 @@ export class ListFactory implements ElementFactory {
   }
   update(el: Element, isSVG?: boolean, self?: LSCustomElement) {
     if (this.jsx.length === 0) {
-      if (el.hasChildNodes())
-        el.textContent = '';
+      el.textContent = '';
     } else if (el.hasChildNodes()) {
-      const removedElements = new Array<Element>();
+      const pendingInsertions = new Array<{ index: number, jsx: IterableJSX }>();
+      const removedItems = new Array<ChildNode>();
       const target = this.createTarget(el, self);
+      let i = 0;
 
-      this.jsx.forEach((newChildJSX, i) => {
-        const currentNode = el.childNodes.item(i);
-        if (currentNode) {
-          if (nodeNodeIsSameElement(currentNode, newChildJSX)) {
-            update(currentNode, newChildJSX, isSVG, self);
-          } else {
-            currentNode.remove();
-            if (typeof newChildJSX === 'object' && 'key' in newChildJSX) {// Find the node 
-              // Find the node in removed elements
-              const removedElementIndex = removedElements.findIndex(x => x.key === newChildJSX.key);
-              let nodeFound: ChildNode;
-              let needsToBeMoved = true;
-              if (removedElementIndex === -1) {
-                // Find the node thought the children
-                const elementCount = el.childElementCount;
-                for (let j = i; j < elementCount; j++) {
-                  const node = el.childNodes.item(j);
-                  if (node.key === newChildJSX.key) {
-                    nodeFound = node;
-                    needsToBeMoved = j !== i;
-                    break;
-                  }
-                }
-              } else
-                nodeFound = removedElements.splice(removedElementIndex, 1)[0];
+      for (; i - removedItems.length < el.childElementCount; i++) {
+        const currentNode = el.childNodes.item(i - removedItems.length);
+        const newChildJSX = this.jsx[i];
+        if (nodeNodeIsSameElement(currentNode, newChildJSX))
+          update(currentNode, newChildJSX, isSVG, self);
+        else {
+          currentNode.remove();
+          removedItems.push(currentNode);
+          if (typeof newChildJSX === 'object' && 'key' in newChildJSX)
+            pendingInsertions.push({ index: i, jsx: newChildJSX });
+          else
+            target.insertChildNodesAt(i, target.createSingleItem(newChildJSX, i));
 
-              if (nodeFound) {
-                if (needsToBeMoved)
-                  target.insertChildNodesAt(i, nodeFound);
-                update(nodeFound, newChildJSX, isSVG, self);
-              } else
-                target.insertChildNodesAt(i, target.createSingleItem(newChildJSX, i));
-            } else
-              target.insertChildNodesAt(i, target.createSingleItem(newChildJSX, i));
+        }
+      }
+      pendingInsertions.forEach(({ index, jsx }) => {
+        const itemFoundIndex = removedItems.findIndex(x => x.key === jsx.key);
+        let el: ChildNode;
+        if (itemFoundIndex === -1)
+          el = target.createSingleItem(jsx, index);
+        else {
+          el = removedItems[itemFoundIndex];
+          update(el, jsx, isSVG, self);
+          removedItems.splice(itemFoundIndex, 1);
+        }
 
-            if (nodeIsElement(currentNode) && currentNode.key)
-              removedElements.push(currentNode);
+        target.insertChildNodesAt(index, el);
+      });
+      for (let index = i; index < this.jsx.length; index++) {
+        const jsx = this.jsx[index];
+        let el: ChildNode;
+        if (typeof jsx === 'object' && 'key' in jsx) {
+          const itemFoundIndex = removedItems.findIndex(x => x.key === jsx.key);
+          if (itemFoundIndex === -1)
+            el = target.createSingleItem(jsx, index);
+          else {
+            el = removedItems[itemFoundIndex];
+            update(el, jsx, isSVG, self);
+            removedItems.splice(itemFoundIndex, 1);
           }
         } else
-          target.insertChildNodesAt(i, target.createSingleItem(newChildJSX, i));
+          el = target.createSingleItem(jsx, index);
 
-      });
-      let leftoverChild = el.childNodes.item(this.jsx.length);
-      // Remove leftover children
-      while (leftoverChild) {
-        leftoverChild.remove();
-        leftoverChild = el.childNodes.item(this.jsx.length);
+        target.insertChildNodesAt(index, el);
       }
+
     } else
       el.append(...this.createTarget(el, self).create(this.jsx));
   }
