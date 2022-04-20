@@ -4,8 +4,8 @@ import { RenderFunction } from './ElementList';
 export class Target<T> {
   element: ParentNode;
   renderItem: RenderFunction<T>;
-  template: ChildNode | ParentNode;
-  context: Element;
+  private template: ChildNode | ParentNode;
+  private context: Element;
 
   constructor(element: ParentNode, renderItem: (item: T) => JSX.Element, context?: Element) {
     this.element = element;
@@ -20,19 +20,19 @@ export class Target<T> {
     return this.template;
   }
 
-  render(items: T[]) {
+  create(items: T[]) {
     const template = this.getTemplate(items[0]);
-    return items.map((item, index) => this.renderSingleItem(item, index, template));
+    return items.map((item, index) => this.createSingleItem(item, index, template));
   }
 
-  renderSingleItem(item: T, index: number, template = this.getTemplate(item)) {
+  createSingleItem(item: T, index: number, template = this.getTemplate(item)) {
     const el = template.cloneNode(true) as ChildNode;
     update(el, this.renderItem(item, index));
     return el;
   }
 
   insertItemsAt(i: number, ...items: T[]) {
-    const renderResult = this.render(items);
+    const renderResult = this.create(items);
 
     this.insertChildNodesAt(i, ...renderResult);
   }

@@ -26,7 +26,7 @@ export class ElementList<T> implements ElementListInterface<T> {
             const target = new Target<T>(el, children[0]);
             this.targets.push(target);
             if (this.data.length > 0)
-              target.element.append(...target.render(this.data));
+              target.element.append(...target.create(this.data));
           }
         }
       } as ObjectJSXElement;
@@ -44,7 +44,7 @@ export class ElementList<T> implements ElementListInterface<T> {
     replace(...items: T[]) {
       this.targets.forEach((target) => {
         target.element.textContent = '';
-        target.element.append(...target.render(items));
+        target.element.append(...target.create(items));
       });
       this.data = items;
     }
@@ -82,7 +82,7 @@ export class ElementList<T> implements ElementListInterface<T> {
       return this.data.pop();
     }
     push(...items: T[]): number {
-      this.targets.forEach((target) => target.element.append(...target.render(items)));
+      this.targets.forEach((target) => target.element.append(...target.create(items)));
       return this.data.push(...items);
     }
     reverse(): T[] {
@@ -120,7 +120,7 @@ export class ElementList<T> implements ElementListInterface<T> {
         }
     }
     unshift(...items: T[]): number {
-      this.targets.forEach((target) => target.element.prepend(...target.render(items)));
+      this.targets.forEach((target) => target.element.prepend(...target.create(items)));
       return this.data.unshift(...items);
     }
     getData(): DeepReadonly<T[]> {
