@@ -16,7 +16,6 @@ function buildData(count = 1000) {
     data.push({ id: nextId++, label: `${adjectives[_random(adjectives.length)]} ${colours[_random(colours.length)]} ${nouns[_random(nouns.length)]}` });
   return data;
 }
-
 const list = new ElementList<Row>();
 
 const run = () => list.replace(...buildData());
@@ -24,27 +23,24 @@ const runLots = () => list.replace(...buildData(10000));
 const add = () => list.push(...buildData());
 const update = () => {
   for (let i = 0; i < list.getData().length; i += 10) {
-    list.update(i, (value) => {
+    list.update(i, value => {
       value.label += ' !!!';
       return value;
     });
   }
 };
 const clear = () => list.clear();
-const select = (i) => {
+const select = i => {
+  list.update(i, value => {
+    value.selected = true;
+    return value;
+  });
   const selectedIndex = list.getData().findIndex(x => x.selected);
-  if (i !== selectedIndex) {
-    if (selectedIndex >= 0)
-      list.update(selectedIndex, (value) => {
-        value.selected = undefined;
-        return value;
-      });
-
-    list.update(i, (value) => {
-      value.selected = true;
+  if (selectedIndex >= 0 && i !== selectedIndex)
+    list.update(selectedIndex, value => {
+      value.selected = undefined;
       return value;
     });
-  }
 };
 const deleteItem = (i) => list.remove(i);
 const swapRows = () => list.swap(1, 998);

@@ -11,7 +11,7 @@ export const config: LsServerConfig = (environment) => {
       splitting: true,
     }
   };
-  if (environment === 'TESTING' || environment === 'TESTING_VANILLA') {
+  if (environment.startsWith('TESTING')) {
     defaultConfig.openBrowser = false;
     defaultConfig.esbuildOptions = {
       ...defaultConfig.esbuildOptions,
@@ -22,6 +22,9 @@ export const config: LsServerConfig = (environment) => {
     if (environment === 'TESTING') {
       defaultConfig.public.path = './tests/benchmark/ls-element/public';
       defaultConfig.esbuildOptions.entryPoints = ['./tests/benchmark/ls-element/src/index.tsx'];
+    } if (environment === 'TESTING_MAP') {
+      defaultConfig.public.path = './tests/benchmark/ls-element-map/public';
+      defaultConfig.esbuildOptions.entryPoints = ['./tests/benchmark/ls-element-map/src/index.tsx'];
     } else {
       defaultConfig.public.path = './tests/benchmark/vanillajs/public';
       defaultConfig.esbuildOptions.entryPoints = ['./tests/benchmark/vanillajs/src/index.js'];

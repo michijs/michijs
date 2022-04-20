@@ -28,13 +28,7 @@ export class ListFactory implements ElementFactory {
     }, context);
   }
   create(isSVG?: boolean, self?: Element) {
-    let el: Element;
-    if (isSVG) {
-      el = document.createElementNS('http://www.w3.org/2000/svg', 'ls-list');
-    } else {
-      el = document.createElement('ls-list');
-    }
-
+    const el: Element = isSVG ? document.createElementNS('http://www.w3.org/2000/svg', 'ls-list') : document.createElement('ls-list');
     el.append(...this.createTarget(el, self).render(this.jsx));
     return el;
   }
@@ -42,7 +36,7 @@ export class ListFactory implements ElementFactory {
     if (this.jsx.length === 0) {
       if (el.hasChildNodes())
         el.textContent = '';
-    } else {
+    } else if (el.hasChildNodes()) {
       const removedElements = new Array<Element>();
       const target = this.createTarget(el, self);
 
@@ -72,9 +66,6 @@ export class ListFactory implements ElementFactory {
               } else
                 nodeFound = removedElements.splice(removedElementIndex, 1)[0];
 
-              if (nodeIsElement(currentNode) && currentNode.key)
-                removedElements.push(currentNode);
-
               if (nodeFound) {
                 if (needsToBeMoved)
                   target.insertChildNodesAt(i, nodeFound);
@@ -84,7 +75,7 @@ export class ListFactory implements ElementFactory {
             } else
               target.insertChildNodesAt(i, target.renderSingleItem(newChildJSX, i));
 
-            if (nodeIsElement(currentNode))
+            if (nodeIsElement(currentNode) && currentNode.key)
               removedElements.push(currentNode);
           }
         } else
@@ -97,6 +88,7 @@ export class ListFactory implements ElementFactory {
         leftoverChild.remove();
         leftoverChild = el.childNodes.item(this.jsx.length);
       }
-    }
+    } else
+      el.append(...this.createTarget(el, self).render(this.jsx));
   }
 }

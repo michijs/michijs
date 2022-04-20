@@ -33,7 +33,9 @@
     "publish-patch-version": "npm version patch && npm run publish-npm",
     "publish-npm": "npm run dist && npm publish --access public",
     "start-benchmark-ls-element": "ls-server --start --env=TESTING",
+    "start-benchmark-ls-element-map": "ls-server --start --env=TESTING_MAP",
     "start-benchmark-vanilla": "ls-server --start --env=TESTING_VANILLA",
+    "benchmark-ls-element-map": "set NODE_ENV=TESTING_MAP && npm run usnap tests/benchmark/LSElement-map.spec.tsx",
     "benchmark-ls-element": "set NODE_ENV=TESTING && npm run usnap tests/benchmark/LSElement.spec.tsx",
     "benchmark-vanilla": "set NODE_ENV=TESTING_VANILLA && npm run usnap tests/benchmark/Vanilla.spec.tsx",
     "test": "jest --no-cache --env=jsdom",
@@ -65,7 +67,7 @@
     "simple-git-hooks": "^2.2.0",
     "stylelint": "^13.8.0",
     "ts-jest": "^27.0.7",
-    "typescript": "^4.6.2"
+    "typescript": "^4.6.3"
   },
   "dependencies": {
     "@lsegurado/htmltype": "0.1.2"

@@ -1,7 +1,5 @@
 import { idGenerator, lsStore } from '../hooks';
 import { AttributesType, CreateCustomElementResult, EmptyObject, EventsType, KebabCase, LSCustomElement, LSElementConfig, LSElementInternals, LSElementProperties, MethodsType, Self, SubscribeToType } from '../types';
-import { executeFirstRender } from '../DOM/executeFirstRender';
-import { rerender } from '../DOM/rerender';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 import { defineTransactionFromStore } from './properties/defineTransactionFromStore';
 import { defineEvent } from './properties/defineEvent';
@@ -12,6 +10,9 @@ import { deepEqual } from '../utils/deepEqual';
 import { getRootNode } from '../DOM/getRootNode';
 import { getAttributeValue } from '../DOM/attributes/getAttributeValue';
 import { setAttributes } from '../DOM/attributes/setAttributes';
+import { ListFactory } from '../DOMDiff/ListFactory';
+import { ObjectFactory } from '../DOMDiff/ObjectFactory';
+import { getMountPoint } from '../DOM/getMountPoint';
 
 export function createCustomElement<
   A extends AttributesType = EmptyObject,
@@ -61,16 +62,17 @@ export function createCustomElement<
             }
           });
 
-        if (this.ls.alreadyRendered && this.ls.pendingTasks === 0) {
-          rerender(this);
-        }
+        if (this.ls.alreadyRendered && this.ls.pendingTasks === 0)
+          this.rerender();
       },
       unSubscribeFromStore: new Array<() => void>(),
       idGen: undefined,
       internals: undefined
     }
     willMount
+    willUpdate
     didMount
+    didUpdate
     willReceiveAttribute
     didUnmount
     associatedCallback
@@ -81,8 +83,18 @@ export function createCustomElement<
     child<T extends (new () => any) | HTMLElement = HTMLElement>(id: string) {
       return getRootNode(this).getElementById(id) as unknown as T extends (new () => any) ? InstanceType<T> : T;
     }
+    renderCallback() {
+      const newChildren = this.render?.();
+      const mountPoint = getMountPoint(this);
+      if (Array.isArray(newChildren))
+        new ListFactory(newChildren).update(mountPoint, false, this);
+      else
+        ObjectFactory.updateChildren(mountPoint, [newChildren], false, this);
+    }
     rerender() {
-      rerender(this);
+      this.willUpdate?.();
+      this.renderCallback();
+      this.didUpdate?.();
     }
     get idGen() {
       if (!this.ls.idGen) {
@@ -160,7 +172,7 @@ export function createCustomElement<
       setReflectedAttributes(this, LSCustomElementResult.observedAttributes);
       if (!this.ls.alreadyRendered) {
         this.willMount?.();
-        executeFirstRender(this);
+        this.renderCallback();
         this.ls.alreadyRendered = true;
         this.ls.store.subscribe(this.ls.rerenderCallback);
         this.didMount?.();
