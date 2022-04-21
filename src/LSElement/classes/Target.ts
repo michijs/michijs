@@ -15,9 +15,7 @@ export class Target<T> {
 
   getTemplate(item: T) {
     // TODO: is svg?
-    if (!this.template)
-      this.template = getElementFactory(this.renderItem(item, 0), this.context).create(false, this.context);
-    return this.template;
+    return this.template ?? getElementFactory(this.renderItem(item, 0), this.context).create(false, this.context);
   }
 
   create(items: T[]) {
@@ -27,7 +25,8 @@ export class Target<T> {
 
   createSingleItem(item: T, index: number, template = this.getTemplate(item)) {
     const el = template.cloneNode(true) as ChildNode;
-    update(el, this.renderItem(item, index));
+    // TODO: is svg?
+    update(el, this.renderItem(item, index), false, this.context);
     return el;
   }
 
@@ -40,7 +39,7 @@ export class Target<T> {
   insertChildNodesAt(i: number, ...childNodes: ChildNode[]) {
     if (i === 0)
       this.element.prepend(...childNodes);
-    else 
+    else
       this.element.childNodes.item(i - 1).after(...childNodes);
   }
 }

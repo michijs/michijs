@@ -54,10 +54,14 @@ export class ElementList<T> implements ElementListInterface<T> {
     swap(indexA: number, indexB: number) {
       if (indexA < this.data.length && indexB < this.data.length) {
         [this.data[indexA], this.data[indexB]] = [this.data[indexB], this.data[indexA]];
-        const [greatestValue, lowerValue] = indexA > indexB ? [indexA, indexB] : [indexB, indexA];
+        const [greatestValue, lowestValue] = indexA > indexB ? [indexA, indexB] : [indexB, indexA];
         this.targets.forEach((target) => {
-          target.element.insertBefore(target.element.childNodes.item(greatestValue), target.element.childNodes.item(lowerValue + 1));
-          target.element.insertBefore(target.element.childNodes.item(lowerValue), target.element.childNodes.item(greatestValue + 1));
+          const greatestValueNode = target.element.childNodes.item(greatestValue);
+          const lowestValueNode = target.element.childNodes.item(lowestValue);
+          const greatestValueNextNode = greatestValueNode.nextSibling;
+          const lowestValueNextNode = lowestValueNode.nextSibling;
+          target.element.insertBefore(greatestValueNode, lowestValueNextNode);
+          target.element.insertBefore(lowestValueNode, greatestValueNextNode);
         });
       }
     }
@@ -109,8 +113,9 @@ export class ElementList<T> implements ElementListInterface<T> {
             let item = target.element.childNodes.item(start),
               count = 0;
             while (item && count < deleteCount) {
+              const nextSibling = item.nextSibling;
               item.remove();
-              item = target.element.childNodes.item(start);
+              item = nextSibling;
               count++;
             }
             if (items.length > 0)

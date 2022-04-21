@@ -1,4 +1,4 @@
-import { createCustomElement, h, Host, ElementList } from '../src';
+import { createCustomElement, h, Host } from '../src';
 import { Router } from './routes';
 // // // import sheet from './a.css' assert { type: 'css' };
 // // // console.log(sheet)
@@ -36,19 +36,6 @@ createCustomElement('ls-root-test-element', {
     );
   }
 });
-
-// function cuantosLatinoamericanos(lugaresTuristicos) {
-//   let cuenta = 0;
-//   for (let lugar of lugaresTuristicos) {
-//     if (quedaEnLatinoamerica(lugar))
-//       cuenta++;
-//   }
-//   return cuenta;
-// }
-// a.target = document.createDocumentFragment();
-// a.push(0, 1, 2, 3, 4, 5, 6);
-// a.splice(-3, 10);
-// console.log(a.target);
 
 // unlinked attributes ex: <div {bla ? ...obj1: ...obj2}/>
 // and obj2 has an attribute that obj1 does not that attribute will be unlinked...

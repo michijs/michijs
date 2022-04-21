@@ -7,8 +7,8 @@ else if (env === 'TESTING_MAP')
     command = 'npm run start-benchmark-ls-element-map';
 else if (env === 'TESTING_VANILLA')
     command = 'npm run start-benchmark-vanilla'
-else 
-    command = 'ls';
+else
+    command = 'npm --version'
 
 module.exports = {
     server: {
