@@ -70,7 +70,7 @@ export class ElementList<T> implements ElementListInterface<T> {
      */
     remove(index: number) {
       this.targets.forEach((target) => target.element.childNodes.item(index).remove());
-      return this.data.splice(index, 1)[0];
+      this.data = this.data.filter((_x,i) => i !== index);
     }
     /**
      * Updates an item
