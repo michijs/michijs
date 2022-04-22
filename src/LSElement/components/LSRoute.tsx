@@ -2,8 +2,6 @@ import { createCustomElement } from '../customElements/createCustomElement';
 import { h } from '../h';
 import { sharedUrlObservable } from '../routing/utils/sharedUrlObservable';
 import { AsyncRoute, ComponentFunction, Routes, SyncRoute, UrlFunction } from '../routing/types';
-import { getJSXElementType, JSXElementType } from '../typeWards/getJSXElementType';
-import { FunctionJSXElement } from '../types';
 import { hash, searchParams } from '../routing';
 import { urlFn } from '../routing/registerRoutes';
 
@@ -31,19 +29,17 @@ export const LSRoute = createCustomElement('ls-route', {
       return this.routes[Object.keys(this.routes).find(key => this.matches(urlFn(key, this.parentRoute)().pathname, true))];
     },
     processComponent(component: JSX.Element) {
-      const [type, jsxElementTyped] = getJSXElementType(component);
-      let result = jsxElementTyped<FunctionJSXElement>();
-      if (type === JSXElementType.FUNCTION) {
-        result = {
-          ...result,
+      if (typeof component === 'object' && 'tag' in component && typeof component.tag === 'function') {
+        return {
+          ...component,
           attrs: {
-            ...result.attrs,
+            ...component.attrs,
             searchParams,
             hash
           }
         };
       }
-      return result;
+      return component;
     },
     onChangeURL() {
       const matchedRoute = this.getMatchedRoute();

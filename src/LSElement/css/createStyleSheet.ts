@@ -1,10 +1,7 @@
 import { supportsAdoptingStyleSheets } from './supportsAdoptingStyleSheets';
-import { CompatibleStyleSheet, CSSObject, CSSProperty } from '../types';
+import { CompatibleStyleSheet, CSSObject } from '../types';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
-
-function valueIsCSSObject(value: CSSProperty): value is CSSObject {
-  return typeof value === 'object';
-}
+import { valueIsCSSObject } from '../typeWards/valueIsCSSObject';
 
 const compatibleStyleSheet = () => {
   if (supportsAdoptingStyleSheets) {
@@ -17,7 +14,6 @@ const compatibleStyleSheet = () => {
         return styleSheet;
       },
       replaceSync(rule: string) {
-        // @ts-ignore
         styleSheet.replaceSync(rule);
       }
     };

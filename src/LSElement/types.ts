@@ -72,20 +72,9 @@ export type RequiredKeys<T> = {
 
 export type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>;
 
-export type AttributeOptionsType = {
-    reflect?: boolean;
-}
-
-export type AsString<T extends PropertyKey> = Extract<T, string>;
-
 export type ObjectOf<T> = { [propertyName: string]: T }
 
 // End Auxiliar Types
-
-export type StyleSheetContainer = {
-    adoptedStyleSheets: CSSStyleSheet[]
-}
-
 export type AdoptedStyleSheetList = {
     id: string,
     items: CSSStyleSheet[]
@@ -151,9 +140,9 @@ export type IterableAttrs = {
     key?: number | string
 }
 
-export type IterableJSX = AnyObject | ObjectJSXElement | FunctionJSXElement | ClassJSXElement;
 export type CommonJSXAttrs = { attrs?: (Record<string, any> & { children: JSX.Element[] }) } & IterableAttrs
 export type FragmentJSXElement = { tag: typeof FragmentTag } & CommonJSXAttrs;
+export type IterableJSX = AnyObject | ObjectJSXElement | FunctionJSXElement | ClassJSXElement | FragmentJSXElement;
 export type ObjectJSXElement = { tag: string } & CommonJSXAttrs;
 export type FunctionJSXElement = { tag: FC<any> } & CommonJSXAttrs;
 export type ClassJSXElement = { tag: (new () => {}) & { tag: string, extends?: string } } & CommonJSXAttrs;
@@ -352,4 +341,18 @@ declare global {
     interface ChildNode {
         key?: string;
     }
+    interface Document {
+        adoptedStyleSheets?: Readonly<CSSStyleSheet[]>;
+    }
+    interface ShadowRoot {
+        adoptedStyleSheets?: Readonly<CSSStyleSheet[]>;
+    }
+    interface CSSStyleSheet {
+        replaceSync(css: string); void;
+    }
+
+    interface Window {
+        msCrypto?: Crypto
+    }
+
 }

@@ -1,8 +1,9 @@
-import { ClassJSXElement, ElementFactory, ObjectJSXElement, SingleJSXElement } from '../..';
+import { ClassJSXElement, CommonJSXAttrs, ElementFactory, ObjectJSXElement, SingleJSXElement } from '../..';
 import { ObjectFactory } from './ObjectFactory';
 import { PrimitiveFactory } from './PrimitiveFactory';
 import { CommentFactory } from './CommentFactory';
 import { ListFactory } from './ListFactory';
+import { isClassJSXElement } from '../typeWards/isClassJSXElement';
 
 export const classJSXToObjectJSXElement = ({ tag, attrs, key }: ClassJSXElement): ObjectJSXElement => {
   if (tag.extends)
@@ -20,10 +21,6 @@ export const classJSXToObjectJSXElement = ({ tag, attrs, key }: ClassJSXElement)
     key
   };
 };
-
-export function isClassJSXElement(param): param is ClassJSXElement {
-  return param.tag.tag;
-}
 
 export function getElementFactory(jsx: SingleJSXElement, self?: Element): ElementFactory {
   if (jsx) {

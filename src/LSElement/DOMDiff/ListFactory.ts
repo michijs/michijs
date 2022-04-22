@@ -18,7 +18,7 @@ export class ListFactory implements ElementFactory {
   compare(el: Element): boolean {
     return el.localName === 'ls-list';
   }
-  createTarget(el: Element, context: Element) {
+  createTarget(el: ParentNode, context: Element) {
     // TODO: is svg?
     return new Target<JSX.Element>(el, (item) => {
       if (typeof item === 'object' && 'key' in item)
@@ -31,7 +31,7 @@ export class ListFactory implements ElementFactory {
     el.append(...this.createTarget(el, self).create(this.jsx));
     return el;
   }
-  update(el: Element, isSVG?: boolean, self?: LSCustomElement) {
+  update(el: ParentNode, isSVG?: boolean, self?: LSCustomElement) {
     if (this.jsx.length === 0)
       el.textContent = '';
     else {
@@ -84,8 +84,9 @@ export class ListFactory implements ElementFactory {
                 if (itemFoundIndex === -1)
                   childrenNodesToAppend.push(target.createSingleItem(jsx, i));
                 else {
-                  childrenNodesToAppend.push(removedItems[itemFoundIndex]);
-                  update(el, jsx, isSVG, self);
+                  const itemFOund = removedItems[itemFoundIndex];
+                  childrenNodesToAppend.push(itemFOund);
+                  update(itemFOund, jsx, isSVG, self);
                   removedItems.splice(itemFoundIndex, 1);
                 }
               } else

@@ -1,4 +1,4 @@
-import { deepEqual } from './deepEqual';
+import { deepEqual } from '../utils/deepEqual';
 
 Element.prototype.setEventListeners = function (this: Element, src, events) {
   // New events

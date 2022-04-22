@@ -1,4 +1,4 @@
-import './LSElement/utils/getEventListeners';
+import './LSElement/prototypeAddons';
 export { h } from './LSElement/h';
 export * from './LSElement/components';
 export * from './LSElement/classes';

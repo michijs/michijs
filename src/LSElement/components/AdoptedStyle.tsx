@@ -1,4 +1,4 @@
-import { CompatibleStyleSheet, AdoptedStyleSheetList, FC, StyleSheetContainer } from '../types';
+import { CompatibleStyleSheet, AdoptedStyleSheetList, FC } from '../types';
 import { supportsAdoptingStyleSheets } from '../css/supportsAdoptingStyleSheets';
 import { getShadowRoot } from '../utils/getShadowRoot';
 import { HTMLElements } from '../h/tags/HTMLElements';
@@ -8,7 +8,7 @@ import { createStyleSheet } from '../css/createStyleSheet';
 
 type AdoptedStyleProps = HTMLElements['style'] & SVGElements['style'] & Required<Pick<HTMLElements['style'] & SVGElements['style'], 'id'>>;
 
-function addStyle(container: StyleSheetContainer, child: CompatibleStyleSheet, adoptedStyleSheetList: AdoptedStyleSheetList, index: number) {
+function addStyle(container: ShadowRoot, child: CompatibleStyleSheet, adoptedStyleSheetList: AdoptedStyleSheetList, index: number) {
   const newStyleSheet = typeof child === 'string' ? createStyleSheet(child) as CSSStyleSheet : child;
   container.adoptedStyleSheets = container.adoptedStyleSheets.concat(newStyleSheet);
   adoptedStyleSheetList.items[index] = newStyleSheet;

@@ -36,7 +36,18 @@ createCustomElement('ls-root-test-element', {
     );
   }
 });
-
+// TODO:
+// Make static class factories
+// create updateChildren function
+// Fix types
+// Create ls-fragment and ls-list elements?
+// update readme
+// Unit tests arrays
+// Unit tests some functions from element list
+// const a = new CSSStyleSheet();
+// a.replaceSync('fragment, ls-list, *:slotted(fragment) { display: contents }')
+// document.adoptedStyleSheets = [a, ...document.adoptedStyleSheets];
+// console.log()
 // unlinked attributes ex: <div {bla ? ...obj1: ...obj2}/>
 // and obj2 has an attribute that obj1 does not that attribute will be unlinked...
 // documentTransition test

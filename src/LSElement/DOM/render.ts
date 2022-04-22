@@ -1,23 +1,23 @@
-import { ObjectJSXElement } from '../types';
-import { renderFunctionalComponent } from './renderFunctionalComponent';
+import { ListFactory } from '../DOMDiff/ListFactory';
+import { ObjectFactory } from '../DOMDiff/ObjectFactory';
 
-function renderSync<T extends HTMLElement>(Component: JSX.Element, placeToRender: Element = document.body) {
-  placeToRender.textContent = '';
-  const result = renderFunctionalComponent(Component);
-  placeToRender.appendChild(result);
-  return document.getElementById((Component as ObjectJSXElement).attrs['id']) as T;
+export function renderSync(Component: JSX.Element, mountPoint: ParentNode = document.body) {
+  mountPoint.textContent = '';
+  if (Array.isArray(Component))
+    new ListFactory(Component).update(mountPoint, false);
+  else
+    ObjectFactory.updateChildren(mountPoint, [Component], false);
+  return mountPoint;
 }
 
-export async function render<T extends HTMLElement>(Component: JSX.Element, placeToRender?: Element): Promise<T> {
+export async function render(Component: JSX.Element, mountPoint: ParentNode): Promise<ParentNode> {
   return new Promise((resolve) => {
-    if (document.readyState !== 'complete') {
+    if (document.readyState !== 'complete')
       document.addEventListener('readystatechange', () => {
-        if (document.readyState === 'complete') {
-          resolve(renderSync<T>(Component, placeToRender));
-        }
+        if (document.readyState === 'complete')
+          resolve(renderSync(Component, mountPoint));
       });
-    } else {
-      resolve(renderSync<T>(Component, placeToRender));
-    }
+    else
+      resolve(renderSync(Component, mountPoint));
   });
 }

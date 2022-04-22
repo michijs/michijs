@@ -2,7 +2,6 @@ export const idGenerator = () => {
   const ids = new Map<string, string>();
 
   const generateId = () => {//TODO: Check a way to standardize this method
-    // @ts-ignore
     const cryptoObj: Crypto = window.crypto ?? window.msCrypto; // for IE 11 https://developer.mozilla.org/en-US/docs/Web/API/Window/crypto
     // let bytes = cryptoObj.getRandomValues(new Uint8Array(32));
     // const randomBytes = () => (bytes = bytes.slice(1)) && bytes[0];

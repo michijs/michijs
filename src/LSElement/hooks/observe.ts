@@ -1,5 +1,4 @@
 import { ChangeFunction, ObservableLike, ObserverCallback, ValidatePropertyChangeFunction } from '../types';
-import { isAnObject } from '../typeWards/isAnObject';
 import { observeArray } from './observe/observeArray';
 import { observeCommonObject } from './observe/observeCommonObject';
 import { observeDate } from './observe/observeDate';
@@ -22,7 +21,7 @@ export type ObservableObject<T, Y = string[]> = T extends Function ? T : (T exte
 } & Partial<ObservableLike<Y>> : T)
 
 export function observe<T, Y>(props: ObserveProps<T, Y>): ObservableObject<T, Y> {
-  if (isAnObject(props.item)) {
+  if (props.item && typeof props.item === 'object') {
     if (Array.isArray(props.item))
       return observeArray(props as unknown as ObserveProps<unknown[], Y>) as unknown as ObservableObject<T, Y>;
     // Many built-in objects, for example Map, Set, Date, Promise and others make use of so-called internal slots.
