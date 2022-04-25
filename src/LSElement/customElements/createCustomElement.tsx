@@ -180,7 +180,9 @@ export function createCustomElement<
     }
 
     disconnectedCallback() {
-      if (this.parentNode === null) {//TODO: search a better way to validate if element does not exists anymore
+      if (this.parentNode === null) {
+        //TODO: search a better way to validate if element does not exists anymore
+        // TODO: what happens if element is moved?
         this.ls.unSubscribeFromStore.forEach((fn) => fn());
         this.didUnmount?.();
       }
