@@ -7,7 +7,7 @@ import { urlFn } from '../routing/registerRoutes';
 
 export const LSRoute = createCustomElement('ls-route', {
   attributes: {
-    currentComponent: <></> as JSX.Element,
+    currentComponent: null as JSX.Element,
     routes: undefined as Routes,
     parentRoute: undefined as UrlFunction<any, any>,
   },
