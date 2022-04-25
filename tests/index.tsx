@@ -1,10 +1,7 @@
-import { createCustomElement, h, Host } from '../src';
+import { createCustomElement, h, Host, render } from '../src';
 import { Router } from './routes';
-// // // import sheet from './a.css' assert { type: 'css' };
-// // // console.log(sheet)
-
-// import { h } from "../src";
-// import { update } from "./update";
+// // import sheet from './a.css' assert { type: 'css' };
+// // console.log(sheet)
 
 createCustomElement('ls-root-test-element', {
   reflectedAttributes: {
@@ -37,8 +34,7 @@ createCustomElement('ls-root-test-element', {
   }
 });
 // TODO:
-// Make static class factories
-// create updateChildren function
+// Add a list element with as attribute
 // Fix type
 // update readme
 // Unit tests arrays

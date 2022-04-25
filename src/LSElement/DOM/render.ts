@@ -1,12 +1,9 @@
-import { ListFactory } from '../DOMDiff/ListFactory';
-import { ObjectFactory } from '../DOMDiff/ObjectFactory';
+import { updateChildren } from '../DOMDiff';
+import { SingleJSXElement } from '../types';
 
 export function renderSync(Component: JSX.Element, mountPoint: ParentNode = document.body) {
   mountPoint.textContent = '';
-  if (Array.isArray(Component))
-    new ListFactory(Component).update(mountPoint, false);
-  else
-    ObjectFactory.updateChildren(mountPoint, [Component], false);
+  updateChildren(mountPoint, Array.isArray(Component) ? Component: [Component], false);
   return mountPoint;
 }
 

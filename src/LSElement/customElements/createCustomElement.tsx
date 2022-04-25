@@ -11,8 +11,8 @@ import { getRootNode } from '../DOM/getRootNode';
 import { getAttributeValue } from '../DOM/attributes/getAttributeValue';
 import { setAttributes } from '../DOM/attributes/setAttributes';
 import { ListFactory } from '../DOMDiff/ListFactory';
-import { ObjectFactory } from '../DOMDiff/ObjectFactory';
 import { getMountPoint } from '../DOM/getMountPoint';
+import { updateChildren } from '../DOMDiff';
 
 export function createCustomElement<
   A extends AttributesType = EmptyObject,
@@ -87,9 +87,9 @@ export function createCustomElement<
       const newChildren = this.render?.();
       const mountPoint = getMountPoint(this);
       if (Array.isArray(newChildren))
-        new ListFactory(newChildren).update(mountPoint, false, this);
+        ListFactory.update(newChildren, mountPoint, false, this);
       else
-        ObjectFactory.updateChildren(mountPoint, [newChildren], false, this);
+        updateChildren(mountPoint, [newChildren], false, this);
     }
     rerender() {
       this.willUpdate?.();

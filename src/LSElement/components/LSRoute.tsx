@@ -28,8 +28,8 @@ export const LSRoute = createCustomElement('ls-route', {
     getMatchedRoute() {
       return this.routes[Object.keys(this.routes).find(key => this.matches(urlFn(key, this.parentRoute)().pathname, true))];
     },
-    processComponent(component: JSX.Element) {
-      if (typeof component === 'object' && 'tag' in component && typeof component.tag === 'function') {
+    processComponent(component?: JSX.Element) {
+      if (component && typeof component === 'object' && 'tag' in component && typeof component.tag === 'function') {
         return {
           ...component,
           attrs: {

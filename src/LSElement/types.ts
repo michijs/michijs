@@ -233,10 +233,9 @@ export type LifecycleInternals = {
 }
 
 export interface ElementFactory {
-    jsx: SingleJSXElement;
-    compare(el: Node): boolean;
-    create(isSVG?: boolean, self?: Element): ChildNode | ParentNode;
-    update?(el: Node, isSVG?: boolean, self?: Element): void
+    compare(el: Node, jsx: JSX.Element): boolean;
+    create(jsx: JSX.Element, isSVG: boolean, self: Element): ChildNode | ParentNode;
+    update?(jsx: JSX.Element, el: Node, isSVG: boolean, self: Element): void
 }
 
 export type KeysAndKeysOf<O, P extends string = undefined> =

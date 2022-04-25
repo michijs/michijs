@@ -1,4 +1,5 @@
-import { getElementFactory, update } from '../DOMDiff/update';
+import { create } from '../DOMDiff';
+import { update } from '../DOMDiff/update';
 import { RenderFunction } from './ElementList';
 
 export class Target<T> {
@@ -15,7 +16,7 @@ export class Target<T> {
 
   getTemplate(item: T) {
     // TODO: is svg?
-    return this.template ?? getElementFactory(this.renderItem(item, 0), this.context).create(false, this.context);
+    return this.template ?? create(this.renderItem(item, 0), false, this.context);
   }
 
   create(items: T[]) {
