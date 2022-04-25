@@ -21,7 +21,7 @@ export class ElementList<T> implements ElementListInterface<T> {
         attrs: {
           ...attrs,
           children: [],
-          staticChildren: true,
+          doNotTouchChildren: true,
           oncreated: (el: Element) => {
             const target = new Target<T>(el, children[0]);
             this.targets.push(target);

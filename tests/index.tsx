@@ -39,8 +39,7 @@ createCustomElement('ls-root-test-element', {
 // TODO:
 // Make static class factories
 // create updateChildren function
-// Fix types
-// Create ls-fragment and ls-list elements?
+// Fix type
 // update readme
 // Unit tests arrays
 // Unit tests some functions from element list

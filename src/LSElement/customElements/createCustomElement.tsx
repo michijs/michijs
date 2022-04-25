@@ -106,10 +106,10 @@ export function createCustomElement<
       super();
       if (shadow) {
         const attachedShadow = this.attachShadow(shadow);
-        if (shadow.mode === 'closed') {
+        if (shadow.mode === 'closed')
           this.ls.shadowRoot = attachedShadow;
-        }
-      }
+      } else
+        this.doNotTouchChildren = true;
       if (lifecycle)
         Object.entries(lifecycle).forEach(([key, value]) => this[key] = value);
 

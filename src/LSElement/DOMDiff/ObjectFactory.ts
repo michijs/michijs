@@ -15,7 +15,7 @@ export class ObjectFactory implements ElementFactory {
   create(isSVGParam?: boolean, self?: Element) {
     const isSVG = isSVGParam || this.jsx.tag === 'svg';
     let el: Element;
-    const { children, staticChildren, oncreated, ...attrs } = this.jsx.attrs;
+    const { children, staticChildren, oncreated, doNotTouchChildren, ...attrs } = this.jsx.attrs;
     if (isSVG) {
       if (this.jsx.attrs?.is) {
         el = document.createElementNS('http://www.w3.org/2000/svg', this.jsx.tag, this.jsx.attrs.is);
@@ -30,7 +30,7 @@ export class ObjectFactory implements ElementFactory {
     }
     oncreated?.(el);
 
-    if (!isCustomElement(this.jsx.tag, this.jsx.attrs.is) || getShadowRoot(el))
+    if (!el.doNotTouchChildren && !doNotTouchChildren)
       el.append(...children.map(x => getElementFactory(x, self).create(isSVG, self)));
 
     setAttributes(
@@ -43,8 +43,8 @@ export class ObjectFactory implements ElementFactory {
   }
   update(el: Element, isSVGParam?: boolean, self?: LSCustomElement) {
     const isSVG = isSVGParam || this.jsx.tag === 'svg';
-    const { children, staticChildren, oncreated, ...attrs } = this.jsx.attrs;
-    if (!staticChildren && !isCustomElement(this.jsx.tag, this.jsx.attrs.is) || getShadowRoot(el))
+    const { children, staticChildren, oncreated, doNotTouchChildren, ...attrs } = this.jsx.attrs;
+    if (!el.doNotTouchChildren && !doNotTouchChildren && !staticChildren )
       ObjectFactory.updateChildren(el, children, isSVG, self);
 
     setAttributes(

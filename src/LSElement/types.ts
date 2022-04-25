@@ -337,6 +337,10 @@ declare global {
     interface Element {
         setEventListeners(this: Element, src: Element, ev: EventListenerMap): void;
         eventListenerList?: Map<Element, EventListenerMap>;
+        /**
+         * Children are not created or updated. Element creation/update is delegated
+         */
+        doNotTouchChildren?: boolean;
     }
     interface ChildNode {
         key?: string;

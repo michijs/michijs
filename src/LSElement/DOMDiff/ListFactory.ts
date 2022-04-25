@@ -1,5 +1,6 @@
 import { ElementFactory, IterableJSX, LSCustomElement } from '../..';
 import { Target } from '../classes/Target';
+import { ListTag } from '../constants';
 import { update } from './update';
 
 function nodeNodeIsSameElement(node: ChildNode, jsx: JSX.Element) {
@@ -27,7 +28,8 @@ export class ListFactory implements ElementFactory {
     }, context);
   }
   create(isSVG?: boolean, self?: Element) {
-    const el: Element = isSVG ? document.createElementNS('http://www.w3.org/2000/svg', 'ls-list') : document.createElement('ls-list');
+    const el: HTMLElement | SVGElement = isSVG ? document.createElementNS('http://www.w3.org/2000/svg', ListTag) : document.createElement(ListTag);
+    import('../utils/addFragmentAndListStyle').then(x => x.addFragmentAndListStyle(el, self));
     el.append(...this.createTarget(el, self).create(this.jsx));
     return el;
   }
