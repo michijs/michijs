@@ -11,7 +11,7 @@ function nodeNodeIsSameElement(node: ChildNode, jsx: JSX.Element) {
   return !jsxKeyed;
 }
 
-function createTarget(el: ParentNode, context: Element) {
+export function createTarget(el: ParentNode, context: Element) {
   // TODO: is svg?
   return new Target<JSX.Element>(el, (item) => {
     if (typeof item === 'object' && 'key' in item)

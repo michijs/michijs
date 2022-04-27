@@ -1,5 +1,5 @@
 import { Events } from '@lsegurado/htmltype';
-import { createCustomElement, h, I18n } from '../../src';
+import { createCustomElement, h, I18n, List } from '../../src';
 import en from './i18nTests/en.json';
 
 const supportedLanguages = [
@@ -25,9 +25,12 @@ export const I18nTests = createCustomElement('ls-i18n-tests', {
     return (
       <>
         <span>{t.language}</span>
-        <select onchange={this.onChangeLanguage}>
-          {supportedLanguages.map(({ key, label }) => <option key={key} selected={key === lang.value} value={key}>{label}</option>)}
-        </select>
+        <List
+          as='select'
+          onchange={this.onChangeLanguage}
+          data={supportedLanguages}
+          renderItem={({ key, label }) => <option key={key} selected={key === lang.value} value={key}>{label}</option>}
+        />
         <span>{t.dogBit}</span>
       </>
     );

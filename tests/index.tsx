@@ -1,4 +1,4 @@
-import { createCustomElement, h, Host, render } from '../src';
+import { createCustomElement, h, Host, List, render } from '../src';
 import { Router } from './routes';
 // // import sheet from './a.css' assert { type: 'css' };
 // // console.log(sheet)
@@ -25,6 +25,11 @@ createCustomElement('ls-root-test-element', {
     return (
       <Host>
         <Router />
+        <List
+          as='div'
+          data={this.arrayTest}
+          renderItem={item => <div key={item} onclick={this.onClickArray}>{item}</div>}
+        />
         {this.arrayTest.map(item => <div key={item} onclick={this.onClickArray}>{item}</div>)}
         {/* <this.arrayTest.target>
           {(item) => <div onclick={this.onClickArray}>{item}</div>}
@@ -34,7 +39,6 @@ createCustomElement('ls-root-test-element', {
   }
 });
 // TODO:
-// Add a list element with as attribute
 // Fix type
 // update readme
 // Unit tests arrays

@@ -89,7 +89,7 @@ export const TableManager = createCustomElement(
   {
     render() {
       return (
-        <>
+        <div _className="row">
           <div _className="col-sm-6 smallpad">
             <button _type="button" _className="btn btn-primary btn-block" id="run" onclick={run}>
               Create 1,000 rows
@@ -120,7 +120,7 @@ export const TableManager = createCustomElement(
               Swap Rows
             </button>
           </div>
-        </>
+        </div>
       );
     }
   }
