@@ -1,8 +1,8 @@
 import { observe } from './observe';
-import { EmptyObject, LsStoreProps, ObjectOf } from '../types';
+import { EmptyObject, LsStoreProps } from '../types';
 import { observable } from './observable';
 
-export function lsStore<T extends object = EmptyObject, Y extends ObjectOf<Function> = EmptyObject>({ state = {} as T, transactions = {} as Y }: LsStoreProps<T, Y>) {
+export function lsStore<T extends object = EmptyObject, Y extends Record<string, Function> = EmptyObject>({ state = {} as T, transactions = {} as Y }: LsStoreProps<T, Y>) {
   const { notify, ...observableProps } = observable<string[]>();
   const proxiedState = observe<T, string[]>({
     item: state as T,

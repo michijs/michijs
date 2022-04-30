@@ -72,8 +72,6 @@ export type RequiredKeys<T> = {
 
 export type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>;
 
-export type ObjectOf<T> = { [propertyName: string]: T }
-
 // End Auxiliar Types
 export type AdoptedStyleSheetList = {
     id: string,
@@ -87,28 +85,17 @@ export type ObservableLike<T = any> = {
     unsubscribe?(observer: ObserverCallback<T>): void,
 }
 
-export type MissingElementInternalsProperties = Pick<HTMLButtonElement, 'checkValidity' | 'reportValidity' | 'form' | 'validity' | 'validationMessage' | 'willValidate'>
-
-export type FormValue = string | File | FormData;
-
-export type LSElementInternals = ElementInternals & MissingElementInternalsProperties
-    & {
-        setValidity?(props: { customError?: boolean }, message?: string): void,
-        setFormValue?(value: FormValue): void
-    };
-
-export interface LSCustomElement extends Element, Lifecycle<any>, LifecycleInternals, MissingElementInternalsProperties {
+export interface LSCustomElement extends Element, Lifecycle<any>, LifecycleInternals, Pick<ElementInternals, 'checkValidity' | 'reportValidity' | 'form' | 'validity' | 'validationMessage' | 'willValidate'> {
     ls: {
         store: ReturnType<typeof lsStore>,
         alreadyRendered: boolean,
         shadowRoot?: ShadowRoot,
-        renderInProgress: Array<() => void>,
         adoptedStyleSheets: AdoptedStyleSheetList[],
         rerenderCallback(propertiesThatChanged: Array<string> | PropertyKey): void,
         pendingTasks: number,
         unSubscribeFromStore: Array<() => void>,
         idGen?: ReturnType<typeof idGenerator>['getId'],
-        internals?: LSElementInternals
+        internals?: ElementInternals
     },
     render?(): JSX.Element,
     /**Allows to get a child element from the host with the id */
@@ -238,18 +225,16 @@ export interface ElementFactory {
     update?(jsx: JSX.Element, el: Node, isSVG: boolean, self: Element): void
 }
 
-export type KeysAndKeysOf<O, P extends string = undefined> =
-    O extends object ? (
-        // TODO: Set map etc
-        O extends Array<unknown> ? (
-            (P extends undefined ? number : `${P}.${number}`)
-        ) : (
-            (P extends undefined ? keyof O : `${P}.${StringKeyOf<O>}`)
-            | keyof { [k in StringKeyOf<O> as (
-                O[k] extends Object ? KeysAndKeysOf<O[k], P extends undefined ? k : `${P}.${k}`> : ''
-            )]: any }
-        )
-    ) : '';
+export type KeysAndKeysOf<O, P extends string = undefined, Order extends number | null = 1> =
+    Order extends null ? '' : (
+        O extends Array<any>
+        ? (P extends undefined ? number : `${P}.${number}`)
+        : (
+            O extends Record<PropertyKey, any>
+            ? (P extends undefined ? keyof O : `${P}.${StringKeyOf<O>}`)
+            | keyof { [k in StringKeyOf<O> as (KeysAndKeysOf<O[k], P extends undefined ? k : `${P}.${k}`, Order extends 1 ? 2 : Order extends 2 ? 3 : null>)] }
+            : ''
+        ));
 
 type FormStateRestoreCallbackMode = 'restore' | 'autocomplete';
 
@@ -319,7 +304,9 @@ export type CreateCustomElementResult<
             props: LSTag<
                 Partial<
                     FRA
-                    & { [k in StringKeyOf<E> as `on${Lowercase<k>}`]: E[k] extends EventDispatcher<infer D> ? (ev: CustomEvent<D>) => any : never }
+                    & {
+                        [k in StringKeyOf<E> as `on${Lowercase<k>}`]: E[k] extends EventDispatcher<infer D> ? (ev: CustomEvent<D>) => any : never
+                    }
                     & HTMLElements.commonElement
                     & GetAttributes<'name'>
                 >, Self<M, T, E, A, RA, EL>
@@ -356,6 +343,12 @@ declare global {
 
     interface Window {
         msCrypto?: Crypto
+    }
+
+    type FormValue = string | File | FormData;
+    interface ElementInternals extends Pick<HTMLButtonElement, 'checkValidity' | 'reportValidity' | 'form' | 'validity' | 'validationMessage' | 'willValidate'> {
+        setValidity?(props: { customError?: boolean }, message?: string): void,
+        setFormValue?(value: FormValue): void
     }
 
 }

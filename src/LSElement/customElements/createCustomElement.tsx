@@ -1,5 +1,5 @@
 import { idGenerator, lsStore } from '../hooks';
-import { AttributesType, CreateCustomElementResult, EmptyObject, EventsType, KebabCase, LSCustomElement, LSElementConfig, LSElementInternals, LSElementProperties, MethodsType, Self, SubscribeToType } from '../types';
+import { AttributesType, CreateCustomElementResult, EmptyObject, EventsType, KebabCase, LSCustomElement, LSElementConfig, LSElementProperties, MethodsType, Self, SubscribeToType } from '../types';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 import { defineTransactionFromStore } from './properties/defineTransactionFromStore';
 import { defineEvent } from './properties/defineEvent';
@@ -17,7 +17,9 @@ import { updateChildren } from '../DOMDiff';
 export function createCustomElement<
   A extends AttributesType = EmptyObject,
   RA extends AttributesType = EmptyObject,
-  FRA = RA extends object ? { [k in keyof RA as KebabCase<k>]: RA[k] } : EmptyObject,
+  FRA = RA extends object ? { 
+    [k in keyof RA as KebabCase<k>]: RA[k] 
+  } : EmptyObject,
   M extends MethodsType = EmptyObject,
   T extends MethodsType = EmptyObject,
   E extends EventsType = EmptyObject,
@@ -48,7 +50,6 @@ export function createCustomElement<
       store: lsStore.apply(this, [{ state: { ...attributes, ...reflectedAttributes }, transactions }]) as ReturnType<typeof lsStore>,
       alreadyRendered: false,
       adoptedStyleSheets: [],
-      renderInProgress: [],
       pendingTasks: 0,
       rerenderCallback: (propertyThatChanged) => {
         if (observe)
@@ -146,7 +147,7 @@ export function createCustomElement<
         });
 
       if (formAssociated)
-        this.ls.internals = this.attachInternals() as LSElementInternals;
+        this.ls.internals = this.attachInternals();
     }
 
     attributeChangedCallback(name: string, oldValue, newValue) {
