@@ -8,7 +8,7 @@ else if (env === 'TESTING_MAP')
 else if (env === 'TESTING_VANILLA')
     command = 'npm run start-benchmark-vanilla'
 else
-    command = 'npm --version'
+    command = 'npm run start-benchmark-vanilla'
 
 module.exports = {
     server: {

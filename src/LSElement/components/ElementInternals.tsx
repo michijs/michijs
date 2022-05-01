@@ -1,5 +1,5 @@
 import type { Attributes } from '@lsegurado/htmltype';
-import type { FC, FormValue } from '../types';
+import type { FC } from '../types';
 import { h } from '../h';
 import { Fragment } from '.';
 import { setAttribute } from '../DOM/attributes/setAttribute';

@@ -40,11 +40,11 @@ export const ListFactory: ElementFactory = {
         const pendingInsertions = new Array<{ index: number, newChildJSX: IterableJSX }>();
         const removedItems = new Array<ChildNode>();
         let i = 0;
+        let newChildJSX = jsx[i];
 
         // Remove non-matching items and update matching items
         do {
           const nextSibling = currentNode.nextSibling;
-          const newChildJSX = jsx[i];
           if (nodeNodeIsSameElement(currentNode, newChildJSX))
             update(currentNode, newChildJSX, isSVG, self);
           else {
@@ -56,8 +56,9 @@ export const ListFactory: ElementFactory = {
             removedItems.push(currentNode);
           }
           i++;
+          newChildJSX = jsx[i];
           currentNode = nextSibling;
-        } while (currentNode);
+        } while (currentNode && newChildJSX);
         // inserting elements in already explored places
         pendingInsertions.forEach(({ index, newChildJSX }) => {
           const itemFoundIndex = removedItems.findIndex(x => x.key === newChildJSX.key);
