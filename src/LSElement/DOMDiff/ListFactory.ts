@@ -1,14 +1,18 @@
-import { ElementFactory, IterableJSX, LSCustomElement } from '../..';
+import { ElementFactory, IterableAttrs, LSCustomElement } from '../..';
 import { Target } from '../classes/Target';
 import { ListTag } from '../constants';
 import { update } from './update';
 
 function nodeNodeIsSameElement(node: ChildNode, jsx: JSX.Element) {
-  const jsxKeyed = typeof jsx === 'object' && 'key' in jsx;
+  const isIterable = jsxIsIterable(jsx);
   if ('key' in node)
     // Node keyed - jsx must be keyed and same key
-    return jsxKeyed && jsx.key === node.key;
-  return !jsxKeyed;
+    return isIterable && jsx.key === node.key;
+  return !isIterable;
+}
+
+function jsxIsIterable(jsx: JSX.Element): jsx is IterableAttrs {
+  return typeof jsx === 'object' && 'key' in jsx;
 }
 
 export function createTarget(el: ParentNode, context: Element) {
@@ -37,66 +41,77 @@ export const ListFactory: ElementFactory = {
       const target = createTarget(el, self);
       let currentNode = el.firstChild;
       if (currentNode) {
-        const pendingInsertions = new Array<{ index: number, newChildJSX: IterableJSX }>();
-        const removedItems = new Array<ChildNode>();
-        let i = 0;
-        let newChildJSX = jsx[i];
-
-        // Remove non-matching items and update matching items
-        do {
-          const nextSibling = currentNode.nextSibling;
-          if (nodeNodeIsSameElement(currentNode, newChildJSX))
-            update(currentNode, newChildJSX, isSVG, self);
-          else {
-            if (typeof newChildJSX === 'object' && 'key' in newChildJSX)
-              pendingInsertions.push({ index: i, newChildJSX });
-            else
-              currentNode.after(target.createSingleItem(newChildJSX, i));
-            currentNode.remove();
-            removedItems.push(currentNode);
-          }
-          i++;
-          newChildJSX = jsx[i];
-          currentNode = nextSibling;
-        } while (currentNode && newChildJSX);
-        // inserting elements in already explored places
-        pendingInsertions.forEach(({ index, newChildJSX }) => {
-          const itemFoundIndex = removedItems.findIndex(x => x.key === newChildJSX.key);
-          let childNodeToInsert: ChildNode;
-          if (itemFoundIndex === -1)
-            childNodeToInsert = target.createSingleItem(newChildJSX, index);
-          else {
-            childNodeToInsert = removedItems[itemFoundIndex];
-            update(childNodeToInsert, newChildJSX, isSVG, self);
-            removedItems.splice(itemFoundIndex, 1);
-          }
-
-          // TODO: Find a way to get a relative child to insert after this one
-          target.insertChildNodesAt(index, childNodeToInsert);
+        const missingItems = new Map<number, JSX.Element>();
+        const missingKeyedItems = new Map<string | number, { index: number, newChildJSX: JSX.Element }>();
+        const itemsToDelete = new Map<number, ChildNode>();
+        jsx.forEach((newChildJSX, i) => {
+          if (currentNode) {
+            if (nodeNodeIsSameElement(currentNode, newChildJSX))
+              update(currentNode, newChildJSX, isSVG, self);
+            else {
+              itemsToDelete.set(i, currentNode);
+              if (jsxIsIterable(newChildJSX))
+                missingKeyedItems.set(newChildJSX.key, { index: i, newChildJSX });
+              else
+                missingItems.set(i, newChildJSX);
+            }
+            currentNode = currentNode.nextSibling;
+          } else if (jsxIsIterable(newChildJSX))
+            missingKeyedItems.set(newChildJSX.key, { index: i, newChildJSX });
+          else
+            missingItems.set(i, newChildJSX);
         });
-        if (i < jsx.length) {
-          if (removedItems.length > 0) {//Insert elements verifying first that they are not among the deleted ones
-            const childrenNodesToAppend = new Array<ChildNode>();
+
+        // If there is any tentative item to remove
+        if (itemsToDelete.size > 0 || currentNode) {
+          const deleteCallback = (node, nodeIndex) => {
+            // I identify moved items, if they were not moved, I delete them
+            const itemFound = missingKeyedItems.get(node.key);
+            if (itemFound) {
+              missingKeyedItems.delete(node.key);
+              update(node, itemFound.newChildJSX, isSVG, self);
+              if (nodeIndex !== itemFound.index) {
+                target.insertChildNodesAt(itemFound.index, node);
+                return true;
+              }
+            } else {
+              node.remove();
+              return false;
+            }
+          };
+
+          let removedNodes = 0;
+          // Previously walked elements
+          itemsToDelete.forEach((node, i) => {
+            if (!deleteCallback(node, i - removedNodes))
+              removedNodes++;
+          });
+
+          // Previously unwalked elements
+          // Ex. [0, 1, 2, 3, 6]
+          if (currentNode) {
+            let processedElements = jsx.length - removedNodes;
             do {
-              const newChildJSX = jsx[i];
-              if (typeof newChildJSX === 'object' && 'key' in newChildJSX) {
-                const itemFoundIndex = removedItems.findIndex(x => x.key === newChildJSX.key);
-                if (itemFoundIndex === -1)
-                  childrenNodesToAppend.push(target.createSingleItem(newChildJSX, i));
-                else {
-                  const itemFOund = removedItems[itemFoundIndex];
-                  childrenNodesToAppend.push(itemFOund);
-                  update(itemFOund, newChildJSX, isSVG, self);
-                  removedItems.splice(itemFoundIndex, 1);
-                }
-              } else
-                childrenNodesToAppend.push(target.createSingleItem(newChildJSX, i));
-              i++;
-            } while (removedItems.length > 0 && i < jsx.length);
-            el.append(...childrenNodesToAppend, ...target.create(jsx.slice(i)));
-          } else //Then Insert new elements
-            el.append(...target.create(jsx.slice(i)));
-        }
+              const nextNode = currentNode?.nextSibling;
+              if (deleteCallback(currentNode, processedElements))
+                processedElements++;
+              currentNode = nextNode;
+            } while (currentNode);
+          }
+
+          if (jsx.length === missingItems.size - missingKeyedItems.size) //All elements were replaced
+            el.append(...target.create(jsx));
+          else { // There is a mix between new and old elements
+            missingItems.forEach((newChildJSX, index) => {
+              target.insertItemsAt(index, newChildJSX);
+            });
+            missingKeyedItems.forEach(({ newChildJSX, index }) => {
+              target.insertItemsAt(index, newChildJSX);
+            });
+          }
+        } else //There are no items to remove - it follows that they are all new items
+          el.append(...target.create(jsx.slice(jsx.length - missingItems.size - missingKeyedItems.size)));
+
       } else
         el.append(...target.create(jsx));
     }

@@ -3,6 +3,7 @@ import { h } from '.';
 import { ClassJSXElement, FC, FragmentJSXElement, FunctionJSXElement, ObjectJSXElement } from '../types';
 import { HTMLElements } from './tags/HTMLElements';
 import { Fragment } from '../components/Fragment';
+import { FragmentTag } from '../constants';
 
 const testChild = 'child';
 const testAttrs = {
@@ -11,9 +12,9 @@ const testAttrs = {
   children: [testChild]
 };
 const fragmentResult: FragmentJSXElement = {
-  tag: undefined,
+  tag: FragmentTag,
   attrs: {
-    children: []
+    children: [],
   }
 };
 const objectJSXResult: ObjectJSXElement = {
@@ -37,7 +38,8 @@ const ClassJSXResult: ClassJSXElement = {
 describe('h tests', () => {
   it('Fragment result', () => {
     const fragment = <Fragment /> as FunctionJSXElement;
-    expect(fragment.tag(fragment.attrs)).toEqual(fragmentResult);
+    expect((fragment.tag(fragment.attrs) as FragmentJSXElement).tag).toEqual(fragmentResult.tag);
+    expect((fragment.tag(fragment.attrs) as FragmentJSXElement).attrs.children).toEqual(fragmentResult.attrs.children);
   });
   it('Object JSX result', () => {
     expect(<div {...testAttrs}>{testChild}</div>).toEqual(objectJSXResult);

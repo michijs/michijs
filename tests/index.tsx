@@ -11,9 +11,10 @@ createCustomElement('ls-root-test-element', {
   shadow: false,
   transactions: {
     onClickArray() {
-      // this.arrayTest.push(this.arrayTest.getData().length);
+      // this.arrayTest = [0, 1, 2, 3, 6]
       this.arrayTest.push(this.arrayTest.length);
-      // this.arrayTest.splice(1,1, 25);
+      // this.arrayTest.pop();
+      // this.arrayTest.shift();
     }
   },
   // observe: {
@@ -24,12 +25,12 @@ createCustomElement('ls-root-test-element', {
   render() {
     return (
       <Host>
-        <Router />
+        {/* <Router />
         <List
           as='div'
           data={this.arrayTest}
           renderItem={item => <div key={item} onclick={this.onClickArray}>{item}</div>}
-        />
+        /> */}
         {this.arrayTest.map(item => <div key={item} onclick={this.onClickArray}>{item}</div>)}
         {/* <this.arrayTest.target>
           {(item) => <div onclick={this.onClickArray}>{item}</div>}
@@ -39,7 +40,6 @@ createCustomElement('ls-root-test-element', {
   }
 });
 // TODO:
-// Fix type
 // update readme
 // Unit tests arrays
 // Unit tests some functions from element list

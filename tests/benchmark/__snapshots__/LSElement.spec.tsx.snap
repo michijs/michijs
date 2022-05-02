@@ -2,16 +2,16 @@
 
 exports[`Performance tests - LS-Element clear rows: LS-Element Benchmarks 1`] = `
 Map {
-  "1650927708644" => Map {
-    "create1000Rows" => 203.42,
-    "replaceAllRows" => 192.98,
-    "partialUpdate" => 51.94,
-    "selectRow" => 30.32,
-    "swapRows" => 30.75,
-    "removeRow" => 49.25,
-    "createManyRows" => 1570.75,
-    "appendRowsToLargeTable" => 261.03,
-    "clearRows" => 46.6,
+  "1651515180728" => Map {
+    "create1000Rows" => 212.02,
+    "replaceAllRows" => 192.01,
+    "partialUpdate" => 67.99,
+    "selectRow" => 34.37,
+    "swapRows" => 37.49,
+    "removeRow" => 48.38,
+    "createManyRows" => 1591.69,
+    "appendRowsToLargeTable" => 256.51,
+    "clearRows" => 46.68,
   },
   "2.0.0" => Map {
     "create1000Rows" => 251.1,
@@ -47,9 +47,7 @@ exports[`Performance tests - LS-Element matches the snapshot on initial render 1
                     <div class=\\"col-md-6\\">
                         <h1>LS-Element keyed</h1>
                     </div>
-                    <div class=\\"col-md-6\\">
-                        <div is=\\"ls-table-manager\\" class=\\"row\\"><ls-fragment style=\\"display: contents;\\"><div class=\\"col-sm-6 smallpad\\"><button type=\\"button\\" class=\\"btn btn-primary btn-block\\" id=\\"run\\">Create 1,000 rows</button></div><div class=\\"col-sm-6 smallpad\\"><button type=\\"button\\" class=\\"btn btn-primary btn-block\\" id=\\"runlots\\">Create 10,000 rows</button></div><div class=\\"col-sm-6 smallpad\\"><button type=\\"button\\" class=\\"btn btn-primary btn-block\\" id=\\"add\\">Append 1,000 rows</button></div><div class=\\"col-sm-6 smallpad\\"><button type=\\"button\\" class=\\"btn btn-primary btn-block\\" id=\\"update\\">Update every 10th row</button></div><div class=\\"col-sm-6 smallpad\\"><button type=\\"button\\" class=\\"btn btn-primary btn-block\\" id=\\"clear\\">Clear</button></div><div class=\\"col-sm-6 smallpad\\"><button type=\\"button\\" class=\\"btn btn-primary btn-block\\" id=\\"swaprows\\">Swap Rows</button></div></ls-fragment></div>
-                    </div>
+                    <div is=\\"ls-table-manager\\" class=\\"col-md-6\\"><div class=\\"row\\"><div class=\\"col-sm-6 smallpad\\"><button type=\\"button\\" class=\\"btn btn-primary btn-block\\" id=\\"run\\">Create 1,000 rows</button></div><div class=\\"col-sm-6 smallpad\\"><button type=\\"button\\" class=\\"btn btn-primary btn-block\\" id=\\"runlots\\">Create 10,000 rows</button></div><div class=\\"col-sm-6 smallpad\\"><button type=\\"button\\" class=\\"btn btn-primary btn-block\\" id=\\"add\\">Append 1,000 rows</button></div><div class=\\"col-sm-6 smallpad\\"><button type=\\"button\\" class=\\"btn btn-primary btn-block\\" id=\\"update\\">Update every 10th row</button></div><div class=\\"col-sm-6 smallpad\\"><button type=\\"button\\" class=\\"btn btn-primary btn-block\\" id=\\"clear\\">Clear</button></div><div class=\\"col-sm-6 smallpad\\"><button type=\\"button\\" class=\\"btn btn-primary btn-block\\" id=\\"swaprows\\">Swap Rows</button></div></div></div>
                 </div>
             </div>
             <table is=\\"ls-table\\" class=\\"table table-hover table-striped test-data\\"><tbody id=\\"tbody\\"></tbody></table>

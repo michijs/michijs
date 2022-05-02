@@ -329,7 +329,7 @@ declare global {
         doNotTouchChildren?: boolean;
     }
     interface ChildNode {
-        key?: string;
+        key?: string | number;
     }
     interface Document {
         adoptedStyleSheets?: Readonly<CSSStyleSheet[]>;

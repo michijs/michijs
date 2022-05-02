@@ -35,13 +35,14 @@
     "start-benchmark-ls-element": "ls-server --start --env=TESTING",
     "start-benchmark-ls-element-map": "ls-server --start --env=TESTING_MAP",
     "start-benchmark-vanilla": "ls-server --start --env=TESTING_VANILLA",
-    "benchmark-ls-element-map": "set NODE_ENV=TESTING_MAP && npm run usnap tests/benchmark/LSElement-map.spec.tsx",
-    "benchmark-ls-element": "set NODE_ENV=TESTING && npm run usnap tests/benchmark/LSElement.spec.tsx",
-    "benchmark-vanilla": "set NODE_ENV=TESTING_VANILLA && npm run usnap tests/benchmark/Vanilla.spec.tsx",
-    "test": "jest --no-cache --env=jsdom",
-    "test-w": "jest --watch --no-cache --env=jsdom",
-    "test-src": "jest src/LSElement --env=jsdom",
-    "usnap": "jest --updateSnapshot --unhandled-rejections=strict"
+    "benchmark-ls-element-map": "set NODE_ENV=TESTING_MAP && jest --updateSnapshot --unhandled-rejections=strict --selectProjects=benchmark-ls-element-map",
+    "benchmark-ls-element": "set NODE_ENV=TESTING && jest --updateSnapshot --unhandled-rejections=strict --selectProjects=benchmark-ls-element",
+    "benchmark-vanilla": "set NODE_ENV=TESTING_VANILLA && jest --updateSnapshot --unhandled-rejections=strict --selectProjects=benchmark-vanilla",
+    "coverage": "jest --no-cache --collect-coverage --selectProjects=library-tests",
+    "test": "jest --no-cache --selectProjects=library-tests",
+    "test-w": "jest --watch --no-cache --selectProjects=library-tests",
+    "usnap": "jest --updateSnapshot --unhandled-rejections=strict --selectProjects=library-tests",
+    "run-all-tests": "npm run test && npm run benchmark-ls-element-map && npm run benchmark-ls-element && npm run benchmark-vanilla"
   },
   "keywords": [
     "web-components",
@@ -66,7 +67,7 @@
     "redux": "^4.0.5",
     "simple-git-hooks": "^2.2.0",
     "stylelint": "^13.8.0",
-    "ts-jest": "^27.0.7",
+    "ts-jest": "^27.1.4",
     "typescript": "^4.6.3"
   },
   "dependencies": {
@@ -76,11 +77,45 @@
     "extends": "@lsegurado/eslint-config-ls-element"
   },
   "jest": {
-    "preset": "jest-puppeteer",
-    "automock": false,
-    "transform": {
-      "\\.(js|jsx|ts|tsx)$": "ts-jest"
-    }
+    "projects": [
+      {
+        "displayName": "library-tests",
+        "preset": "ts-jest/presets/js-with-ts-esm",
+        "automock": false,
+        "testEnvironment": "jsdom",
+        "testRegex": "src/.*spec.*",
+        "transform": {
+          "\\.(js|jsx|ts|tsx)$": "ts-jest"
+        }
+      },
+      {
+        "displayName": "benchmark-vanilla",
+        "preset": "jest-puppeteer",
+        "testRegex": "tests/benchmark/Vanilla.spec.tsx",
+        "automock": false,
+        "transform": {
+          "\\.(js|jsx|ts|tsx)$": "ts-jest"
+        }
+      },
+      {
+        "displayName": "benchmark-ls-element-map",
+        "preset": "jest-puppeteer",
+        "testRegex": "tests/benchmark/LSElement-map.spec.tsx",
+        "automock": false,
+        "transform": {
+          "\\.(js|jsx|ts|tsx)$": "ts-jest"
+        }
+      },
+      {
+        "displayName": "benchmark-ls-element",
+        "preset": "jest-puppeteer",
+        "testRegex": "tests/benchmark/LSElement.spec.tsx",
+        "automock": false,
+        "transform": {
+          "\\.(js|jsx|ts|tsx)$": "ts-jest"
+        }
+      }
+    ]
   },
   "stylelint": {
     "extends": "@lsegurado/stylelint-config-ls-element"

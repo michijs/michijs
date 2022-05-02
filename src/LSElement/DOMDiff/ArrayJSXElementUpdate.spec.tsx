@@ -64,8 +64,8 @@ describe('Array JSX Element Update', () => {
     it('must clone 0 times', () => {
       expect(spyCloneNode).toBeCalledTimes(0);
     });
-    it('must remove 4 nodes', () => {
-      expect(spyRemoveNode).toBeCalledTimes(4);
+    it('must remove 0 nodes', () => {
+      expect(spyRemoveNode).toBeCalledTimes(0);
     });
     it('must match jsx', () => {
       expect(testElement).toEqual(testResult);
@@ -88,8 +88,8 @@ describe('Array JSX Element Update', () => {
     it('must clone 0 times', () => {
       expect(spyCloneNode).toBeCalledTimes(0);
     });
-    it('must remove 2 nodes', () => {
-      expect(spyRemoveNode).toBeCalledTimes(2);
+    it('must remove 0 nodes', () => {
+      expect(spyRemoveNode).toBeCalledTimes(0);
     });
     it('must match jsx', () => {
       expect(testElement).toEqual(testResult);
