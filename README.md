@@ -2,7 +2,6 @@
   <img width="200px" src="https://raw.githubusercontent.com/lsegurado/ls-element-logo/master/logo-with-background.png"></img>
 
   ### A Vainilla Library for Web Components
-
   [![Open in Visual Studio Code][open-in-vscode]][open-in-vscode-url] 
   ![npm][version] 
   [![license][github-license]][github-license-url] 
@@ -607,7 +606,8 @@ Become a sponsor and get your logo on our README on GitHub with a link to your s
  - [MIT](https://github.com/lsegurado/ls-element/blob/master/LICENSE.md)
 
 [open-in-vscode]: https://img.shields.io/static/v1?label=Open%20in&logo=Visual%20Studio%20Code&message=Visual%20Studio%20Code&logoColor=007ACC&color=007ACC
-[open-in-vscode-url]: vscode://github.remotehub/open?url=https://github.com/lsegurado/ls-element
+[open-in-vscode-url]: https://github1s.com/lsegurado/ls-element/blob/remove-virtual-dom/src/index.tsx
+<!-- [open-in-vscode-url]: vscode://github.remotehub/open?url=https://github.com/lsegurado/ls-element -->
 [repo-size]: https://img.shields.io/github/repo-size/lsegurado/ls-element
 [npm-downloads]: https://img.shields.io/npm/dt/@lsegurado/ls-element
 [version]: https://img.shields.io/npm/v/@lsegurado/ls-element
