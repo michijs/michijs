@@ -38,7 +38,9 @@ export class ElementList<V> implements ElementListInterface<V> {
     this.data = initialData;
   }
   /**
-   * Creates a new target
+   * Is a proxy that allows you to avoid using dom diff algorithms to render lists. 
+   * This allows it to have a performance close to vanilla js. 
+   * An operation on the data implies an operation on the associated elements.
    */
   List = <E extends string = 'ls-list'>({ as, renderItem, ...attrs }: Omit<ListAttrs<V, E>, 'data' | 'renderItem'> & { renderItem: RenderFunction<V> }) => {
     return {

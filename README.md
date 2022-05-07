@@ -16,7 +16,7 @@
 |  | LS-Element  |  React  |  StencilJS  | SvelteJS | VanillaJS |
 |--|--|--|--|--|--|
 | Prefer real DOM over virtual DOM | ✅ | ❌ | ❌ | ✅ | ✅ |
-| Prefer Javascript templates over compiled plain text | ✅ | ❌ | ❌ | ❌ | ✅ |
+| Prefer Javascript templates over compiled plain text | ✅ | ✅ | ✅ | ❌ | ✅ |
 | Templates with [JSX](https://es.reactjs.org/docs/introducing-jsx.html) | ✅ | ✅ | ✅ | ❌ | ❌ |
 | [Element internals](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals) support | ✅ | ❌ | ❌ | ❌ | ✅ |
 | Does not require extensions to be identified by the IDE | ✅ | ✅ | ✅ | ❌ | ✅ |
@@ -28,7 +28,7 @@
 | Reactive | ✅ | ✅ | ✅ | ✅ | ❌ |
 | Styling / Constructable Stylesheets support | ✅ | ❌ | ✅ | ❌ | ✅ |
 | Automatic component type generation | ✅ | ❌ | ✅ | ❌ | ❌ |
-| Without polyfills | ✅ | ✅ | ❌ | ✅ | ✅ |
+| Without polyfills | ✅ | ✅ | ❌ | ❌ | ✅ |
 | Attributes / Native events support | ✅ | ❌ | ⭕ | ✅ | ✅ |
 | Supports [Shadow DOM](https://developers.google.com/web/fundamentals/web-components/shadowdom) | ✅ | ❌ | ✅ | ✅ | ✅ |
 | Supports Custom Built-in elements | ✅ | ❌ | ❌ | ✅ | ✅ |
@@ -606,7 +606,7 @@ Become a sponsor and get your logo on our README on GitHub with a link to your s
 ## License
  - [MIT](https://github.com/lsegurado/ls-element/blob/master/LICENSE.md)
 
-[open-in-vscode]: https://open.vscode.dev/badges/open-in-vscode.svg
+[open-in-vscode]: https://img.shields.io/static/v1?label=Open%20in&logo=Visual%20Studio%20Code&message=Visual%20Studio%20Code&logoColor=007ACC&color=007ACC
 [open-in-vscode-url]: vscode://github.remotehub/open?url=https://github.com/lsegurado/ls-element
 [repo-size]: https://img.shields.io/github/repo-size/lsegurado/ls-element
 [npm-downloads]: https://img.shields.io/npm/dt/@lsegurado/ls-element
