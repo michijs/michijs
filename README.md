@@ -13,22 +13,26 @@
 
 
 ## Why "LS-Element?"
-|  | LS-Element  |  React  |  StencilJS  | VanillaJS |
-|--|--|--|--|--|
-| Templates with [JSX](https://es.reactjs.org/docs/introducing-jsx.html) | ✅ | ✅ | ✅ | ❌ |
-| [Differentiation between attributes and properties in jsx](#attributes-vs-properties-in-jsx) | ✅ | ❌ | ❌ | ❌ |
-| Standard Web Components | ✅ |  ⭕ | ✅ | ✅ |
-| Observables / stores support | ✅ | ⭕ | ⭕ | ❌ |
-| [Esbuild](https://esbuild.github.io/)  as default bundler | ✅ | ❌ | ❌ | ❌ |
-| [TypeScript](https://www.typescriptlang.org) support | ✅ | ✅ | ✅ | ⭕ |
-| Reactive | ✅ | ✅ | ✅ | ❌ |
-| Styling / Constructable Stylesheets support | ✅ | ❌ | ✅ | ✅ |
-| Automatic type generation | ✅ | ❌ | ✅ | ❌ |
-| Without polyfills | ✅ | ✅ | ❌ | ✅ |
-| Attributes / Native events support | ✅ | ❌ | ⭕ | ✅ |
-| Supports [Shadow DOM](https://developers.google.com/web/fundamentals/web-components/shadowdom) | ✅ | ❌ | ✅ | ✅ |
-| Supports Custom Built-in elements | ✅ | ❌ | ❌ | ✅ |
-| Can be used with different frameworks right out of the box | ✅ | ❌ | ✅ | ✅ |
+|  | LS-Element  |  React  |  StencilJS  | SvelteJS | VanillaJS |
+|--|--|--|--|--|--|
+| Prefer real DOM over virtual DOM | ✅ | ❌ | ❌ | ✅ | ✅ |
+| Prefer Javascript templates over compiled plain text | ✅ | ❌ | ❌ | ❌ | ✅ |
+| Templates with [JSX](https://es.reactjs.org/docs/introducing-jsx.html) | ✅ | ✅ | ✅ | ❌ | ❌ |
+| [Element internals](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals) support | ✅ | ❌ | ❌ | ❌ | ✅ |
+| Does not require extensions to be identified by the IDE | ✅ | ✅ | ✅ | ❌ | ✅ |
+| [Differentiation between attributes and properties in jsx / templates](#attributes-vs-properties-in-jsx) | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Standard Web Components | ✅ |  ⭕ | ✅ | ⭕ | ✅ |
+| Observables / stores support | ✅ | ⭕ | ⭕ | ⭕ | ❌ |
+| [Esbuild](https://esbuild.github.io/)  as default bundler | ✅ | ❌ | ❌ | ❌ |❌ |
+| [TypeScript](https://www.typescriptlang.org) support | ✅ | ✅ | ✅ | ✅ | ⭕ |
+| Reactive | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Styling / Constructable Stylesheets support | ✅ | ❌ | ✅ | ❌ | ✅ |
+| Automatic component type generation | ✅ | ❌ | ✅ | ❌ | ❌ |
+| Without polyfills | ✅ | ✅ | ❌ | ✅ | ✅ |
+| Attributes / Native events support | ✅ | ❌ | ⭕ | ✅ | ✅ |
+| Supports [Shadow DOM](https://developers.google.com/web/fundamentals/web-components/shadowdom) | ✅ | ❌ | ✅ | ✅ | ✅ |
+| Supports Custom Built-in elements | ✅ | ❌ | ❌ | ✅ | ✅ |
+| Can be used with different frameworks right out of the box | ✅ | ❌ | ✅ | ⭕ | ✅ |
 | ✅ = implemented
 ⭕ = partially implemented
 ❌ = not implemented
@@ -316,6 +320,12 @@ Remember that you need to use Shadow DOM to be able to use Constructable Stylesh
 ### Host
 Allows to set attributes and event listeners to the host element itself.
 
+### List
+Creates a container component without styles with the tag "ls-list"
+
+### Fragment
+Creates a container component without styles with the tag "ls-fragment"
+
 ### ElementInternals
 *(Only available if formAssociated is true)*
 
@@ -330,10 +340,9 @@ Create a component whose content will load after the promise ends. In the meanti
 ### Link
 Provides the ability to move around the web page without reloading the page. It uses the same attributes as an anchor tag but also allows the use of URL objects. Uses the goTo method.
 
-
 ## Custom element methods
 ### child
-Allows to get a child element from the host with the id
+Allows to get a child element from the host with the selector
 
 ### rerender
 Forces the element to re-render
@@ -371,6 +380,121 @@ el.className = 'test';
 el.setAttribute('class', 'test')
 ```
 In this way the jsx syntax of LS-Element is more similar to html.
+
+## Special attributes
+
+### $staticChildren
+Indicates that their children are created but not updated
+### $doNotTouchChildren
+Indicates that their Children are not created or updated. Element creation/update is delegated
+### $oncreated
+Callback that is called when the element is created
+### $onupdate
+Callback that is called when the element is updated
+
+## Lists
+There are 3 ways to create a list
+### Using map
+It's the usual way to create lists in jsx.
+```jsx
+const arrayTest = [0, 1, 2];
+
+arrayTest.map(item => <div key={item}>{item}</div>)
+```
+This will generate an element like:
+
+```html
+<ls-list>
+  <div>0</div>
+  <div>1</div>
+  <div>2</div>
+</ls-list>
+```
+Why create the ls-list element? This is the way to avoid using Virtual DOM. Because the algorithm is dumb, it needs a way to remember that element is a list.
+
+### Using List component
+It's similar to using maps. But it allows to use different container than ls-list.
+```jsx
+const arrayTest = [0, 1, 2];
+
+<List 
+  as="span"
+  data={arrayTest}
+  renderItem={item => <div key={item}>{item}</div>}
+/>
+```
+This will generate an element like:
+
+```html
+<span>
+  <div>0</div>
+  <div>1</div>
+  <div>2</div>
+</span>
+```
+### Using ElementList
+Is a proxy that allows you to avoid using dom diff algorithms to render lists. This allows it to have a performance close to vanilla js. An operation on the data implies an operation on the associated elements.
+```jsx
+const arrayTest = new ElementList(0, 1, 2);
+
+<arrayTest.List 
+  as="span"
+  renderItem={item => <div>{item}</div>}
+/>
+```
+This will generate an element like:
+
+```html
+<span>
+  <div>0</div>
+  <div>1</div>
+  <div>2</div>
+</span>
+```
+
+### Comparison
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Map</th>
+      <th>List component</th>
+      <th>ElementList</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Performance</td>
+      <td>Diff algorithm order</td>
+      <td>Diff algorithm order</td>
+      <td>Close to vanilla</td>
+    </tr>
+    <tr>
+      <td>Container</td>
+      <td>ls-list</td>
+      <td>ls-list or any other element</td>
+      <td>ls-list or any other element</td>
+    </tr>
+    <tr>
+      <td>Keys</td>
+      <td>Required</td>
+      <td>Required</td>
+      <td>Not required</td>
+    </tr>
+    <tr>
+      <td>Index</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Transactions allowed</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Routing
 The intention of using a custom routing tool is to avoid the use of strings to represent the urls and to use modern apis that allow the use of the URL object itself. It also allows to separate the components of the routes which allows a cleaner code.
@@ -466,7 +590,9 @@ If you REALLY need polyfills i recommend you to read this topics:
 Support us with a donation and help us continue our activities [here](https://www.paypal.com/paypalme/lsegurado).
 ### Contributors
 
-<a href="https://github.com/@lsegurado/ls-element/graphs/contributors"><img src="https://opencollective.com/ls-element/contributors.svg?width=890&amp;button=false" style="max-width:100%;"></a>
+<a href="https://github.com/@lsegurado/ls-element/graphs/contributors">
+  <img src="https://opencollective.com/ls-element/contributors.svg?width=890&amp;button=false" style="max-width:100%;">
+</a>
 
 
 <!-- ### Open Collective

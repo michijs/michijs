@@ -1,13 +1,12 @@
 import { ElementFactory, IterableAttrs, LSCustomElement } from '../..';
 import { Target } from '../classes/Target';
 import { ListTag } from '../constants';
-import { update } from './update';
 
 function nodeNodeIsSameElement(node: ChildNode, jsx: JSX.Element) {
   const isIterable = jsxIsIterable(jsx);
-  if ('key' in node)
+  if ('$key' in node)
     // Node keyed - jsx must be keyed and same key
-    return isIterable && jsx.key === node.key;
+    return isIterable && jsx.key === node.$key;
   return !isIterable;
 }
 
@@ -15,13 +14,13 @@ function jsxIsIterable(jsx: JSX.Element): jsx is IterableAttrs {
   return typeof jsx === 'object' && 'key' in jsx;
 }
 
-export function createTarget(el: ParentNode, context: Element) {
-  // TODO: is svg?
+export function createTarget(el: ParentNode, isSVG: boolean, context: Element) {
   return new Target<JSX.Element>(el, (item) => {
+    // TODO: should be a oncreate callback?
     if (typeof item === 'object' && 'key' in item)
-      item['attrs']['_key'] = item.key;
+      item['attrs']['_$key'] = item.key;
     return item;
-  }, context);
+  }, isSVG, context);
 }
 
 export const ListFactory: ElementFactory = {
@@ -31,14 +30,14 @@ export const ListFactory: ElementFactory = {
   create(jsx: JSX.Element[], isSVG?: boolean, self?: Element) {
     const el: HTMLElement | SVGElement = isSVG ? document.createElementNS('http://www.w3.org/2000/svg', ListTag) : document.createElement(ListTag);
     import('../utils/addFragmentAndListStyle').then(x => x.addFragmentAndListStyle(el, self));
-    el.append(...createTarget(el, self).create(jsx));
+    createTarget(el, isSVG, self).appendItems(...jsx);
     return el;
   },
   update(jsx: JSX.Element[], el: ParentNode, isSVG?: boolean, self?: LSCustomElement) {
     if (jsx.length === 0)
       el.textContent = '';
     else {
-      const target = createTarget(el, self);
+      const target = createTarget(el, isSVG, self);
       let currentNode = el.firstChild;
       if (currentNode) {
         const missingItems = new Map<number, JSX.Element>();
@@ -47,7 +46,7 @@ export const ListFactory: ElementFactory = {
         jsx.forEach((newChildJSX, i) => {
           if (currentNode) {
             if (nodeNodeIsSameElement(currentNode, newChildJSX))
-              update(currentNode, newChildJSX, isSVG, self);
+              target.updateNode(currentNode, newChildJSX);
             else {
               itemsToDelete.set(i, currentNode);
               if (jsxIsIterable(newChildJSX))
@@ -64,12 +63,12 @@ export const ListFactory: ElementFactory = {
 
         // If there is any tentative item to remove
         if (itemsToDelete.size > 0 || currentNode) {
-          const deleteCallback = (node, nodeIndex) => {
+          const deleteCallback = (node: ChildNode, nodeIndex: number) => {
             // I identify moved items, if they were not moved, I delete them
-            const itemFound = missingKeyedItems.get(node.key);
+            const itemFound = missingKeyedItems.get(node.$key);
             if (itemFound) {
-              missingKeyedItems.delete(node.key);
-              update(node, itemFound.newChildJSX, isSVG, self);
+              missingKeyedItems.delete(node.$key);
+              target.updateNode(node, itemFound.newChildJSX);
               if (nodeIndex !== itemFound.index) {
                 target.insertChildNodesAt(itemFound.index, node);
                 return true;
@@ -100,7 +99,7 @@ export const ListFactory: ElementFactory = {
           }
 
           if (jsx.length === missingItems.size - missingKeyedItems.size) //All elements were replaced
-            el.append(...target.create(jsx));
+            target.appendItems(...jsx);
           else { // There is a mix between new and old elements
             missingItems.forEach((newChildJSX, index) => {
               target.insertItemsAt(index, newChildJSX);
@@ -110,10 +109,10 @@ export const ListFactory: ElementFactory = {
             });
           }
         } else //There are no items to remove - it follows that they are all new items
-          el.append(...target.create(jsx.slice(jsx.length - missingItems.size - missingKeyedItems.size)));
+          target.appendItems(...jsx.slice(jsx.length - missingItems.size - missingKeyedItems.size));
 
       } else
-        el.append(...target.create(jsx));
+        target.appendItems(...jsx);
     }
   }
 };

@@ -98,8 +98,8 @@ export interface LSCustomElement extends Element, Lifecycle<any>, LifecycleInter
         internals?: ElementInternals
     },
     render?(): JSX.Element,
-    /**Allows to get a child element from the host with the id */
-    child<T extends (new () => HTMLElement) | HTMLElement = HTMLElement>(id: string): T extends new () => HTMLElement ? InstanceType<T> : T,
+    /**Allows to get a child element from the host with the selector */
+    child<T extends (new () => HTMLElement) | HTMLElement = HTMLElement>(selector: string): T extends new () => HTMLElement ? InstanceType<T> : T,
     /**Forces the element to re-render */
     rerender(): void,
     /**Create unique IDs with a discernible key */
@@ -317,19 +317,31 @@ export type CreateCustomElementResult<
 
 export type GetElementProps<El extends any> = El extends (new () => { props: any }) ? InstanceType<El>['props'] : (El extends (...args: any) => any ? Parameters<El>[0] : never)
 
-export type EventListenerMap = Map<string, EventListener>;
+export type SetEventListenerMap = Map<string, EventListener>;
+export type EventListenerMap = Map<string, { originalEvent: EventListener, bindedEvent: EventListener }>;
 declare global {
 
     interface Element {
-        setEventListeners(this: Element, src: Element, ev: EventListenerMap): void;
-        eventListenerList?: Map<Element, EventListenerMap>;
+        /**
+         * Add/remove a list of events and bind them to their creator
+         * @param src Who adds the event
+         * @param ev A map containing the event and its callback
+         */
+        $setEventListeners(this: Element, src: Element, ev: SetEventListenerMap): void;
+        /**
+         * The list of events and who created them through the setEventListeners method
+         */
+        $eventListenerList?: Map<Element, EventListenerMap>;
         /**
          * Children are not created or updated. Element creation/update is delegated
          */
-        doNotTouchChildren?: boolean;
+        $doNotTouchChildren?: boolean;
     }
     interface ChildNode {
-        key?: string | number;
+        /**
+         * An identifier of an item within a list
+         */
+        $key?: string | number;
     }
     interface Document {
         adoptedStyleSheets?: Readonly<CSSStyleSheet[]>;

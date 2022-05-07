@@ -16,11 +16,11 @@ export function List<Y, T extends string = 'ls-list'>({ as, data, renderItem, ..
   const childrenRenderResult = data.map((x, i) => renderItem(x, i));
   return h.createElement(as ?? 'ls-list', {
     ...attrs,
-    doNotTouchChildren: true,
-    oncreated: (el) => {
-      el.append(...createTarget(el, self).create(childrenRenderResult));
+    $doNotTouchChildren: true,
+    $oncreated: (el, isSVG) => {
+      createTarget(el, isSVG, self).appendItems(...childrenRenderResult);
     },
-    onupdate: (_jsx, el: Element, isSVG?: boolean, context?: LSCustomElement) => {
+    $onupdate: (_jsx, el: Element, isSVG?: boolean, context?: LSCustomElement) => {
       ListFactory.update(childrenRenderResult, el, isSVG, context);
     }
   }, []);

@@ -1,13 +1,12 @@
 import { Attributes } from '@lsegurado/htmltype';
-import { AnyObject, EventListenerMap } from '../../types';
+import { AnyObject, SetEventListenerMap } from '../../types';
 import { deepEqual } from '../../utils/deepEqual';
-import { bindFunction } from '../../utils/bindFunction';
 import { setStyle } from './setStyle';
 import { setAttribute } from './setAttribute';
 import { compareAttributes } from './compareAttributes';
 
 export function setAttributes(el: Element, attributes: AnyObject, self?: Element) {
-  let events: EventListenerMap;
+  let events: SetEventListenerMap;
   Object.entries(attributes).forEach(([name, newValue]) => {
     // priority to properties and events
     if (name.startsWith('_')) {
@@ -18,7 +17,7 @@ export function setAttributes(el: Element, attributes: AnyObject, self?: Element
       const eventName = name.slice(2) as keyof ElementEventMap;
       if (!events)
         events = new Map();
-      events.set(eventName, bindFunction(self, newValue));
+      events.set(eventName, newValue);
     } else if (name === 'style') {
       setStyle(el, newValue as Attributes.CSSProperties);
     } else if (!compareAttributes(el, name, newValue)) {
@@ -26,5 +25,5 @@ export function setAttributes(el: Element, attributes: AnyObject, self?: Element
     }
   });
   if (events)
-    el.setEventListeners(self, events);
+    el.$setEventListeners(self, events);
 }

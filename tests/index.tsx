@@ -1,18 +1,19 @@
-import { createCustomElement, h, Host, List, render } from '../src';
+import { createCustomElement, ElementList, h, Host, } from '../src';
 import { Router } from './routes';
 // // import sheet from './a.css' assert { type: 'css' };
 // // console.log(sheet)
 
 createCustomElement('ls-root-test-element', {
   reflectedAttributes: {
-    // arrayTest: new ElementList([0, 1, 2, 3, 4, 5, 6])
-    arrayTest: [0, 1, 2, 3, 4, 5, 6]
+    arrayTest: new ElementList(0, 1, 2, 3, 4, 5, 6),
+    // arrayTest: [0, 1, 2, 3, 4, 5, 6]
   },
   shadow: false,
   transactions: {
     onClickArray() {
       // this.arrayTest = [0, 1, 2, 3, 6]
-      this.arrayTest.push(this.arrayTest.length);
+      this.arrayTest.reverse();
+      console.log(this.child('#xd'));
       // this.arrayTest.pop();
       // this.arrayTest.shift();
     }
@@ -25,28 +26,23 @@ createCustomElement('ls-root-test-element', {
   render() {
     return (
       <Host>
-        {/* <Router />
-        <List
+        <Router />
+        {/* <List
           as='div'
           data={this.arrayTest}
           renderItem={item => <div key={item} onclick={this.onClickArray}>{item}</div>}
         /> */}
-        {this.arrayTest.map(item => <div key={item} onclick={this.onClickArray}>{item}</div>)}
-        {/* <this.arrayTest.target>
-          {(item) => <div onclick={this.onClickArray}>{item}</div>}
-        </this.arrayTest.target> */}
+        {/* {this.arrayTest.map(item => <div key={item} onclick={this.onClickArray}>{item}</div>)} */}
+        <this.arrayTest.List
+          renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}
+        />
       </Host>
     );
   }
 });
 // TODO:
 // update readme
-// Unit tests arrays
 // Unit tests some functions from element list
-// const a = new CSSStyleSheet();
-// a.replaceSync('fragment, ls-list, *:slotted(fragment) { display: contents }')
-// document.adoptedStyleSheets = [a, ...document.adoptedStyleSheets];
-// console.log()
 // unlinked attributes ex: <div {bla ? ...obj1: ...obj2}/>
 // and obj2 has an attribute that obj1 does not that attribute will be unlinked...
 // documentTransition test

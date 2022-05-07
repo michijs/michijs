@@ -81,8 +81,8 @@ export function createCustomElement<
     resetCallback
     stateRestoreCallback
     render = render as LSCustomElement['render'];
-    child<T extends (new () => any) | HTMLElement = HTMLElement>(id: string) {
-      return getRootNode(this).getElementById(id) as unknown as T extends (new () => any) ? InstanceType<T> : T;
+    child<T extends (new () => any) | HTMLElement = HTMLElement>(selector: string) {
+      return getRootNode(this).querySelector(selector) as unknown as T extends (new () => any) ? InstanceType<T> : T;
     }
     renderCallback() {
       const newChildren = this.render?.();
@@ -110,7 +110,7 @@ export function createCustomElement<
         if (shadow.mode === 'closed')
           this.ls.shadowRoot = attachedShadow;
       } else
-        this.doNotTouchChildren = true;
+        this.$doNotTouchChildren = true;
       if (lifecycle)
         Object.entries(lifecycle).forEach(([key, value]) => this[key] = value);
 

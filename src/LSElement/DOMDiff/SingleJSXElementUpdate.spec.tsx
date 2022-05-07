@@ -33,7 +33,7 @@ describe('Single JSX Element Update', () => {
     beforeAll(() => {
       update(testElement, (
         <div _id={id} class={className}>
-          <button hidden oncreated={util.onCreatedCallback}>
+          <button hidden $oncreated={util.onCreatedCallback}>
             {buttonLabel}
           </button>
           <span />
@@ -58,7 +58,7 @@ describe('Single JSX Element Update', () => {
     beforeAll(() => {
       update(testElement, (
         <div _id={id} class={className}>
-          <button hidden oncreated={util.onCreatedCallback}>
+          <button hidden $oncreated={util.onCreatedCallback}>
             {buttonLabel}
           </button>
           <span />

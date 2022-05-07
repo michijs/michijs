@@ -87,10 +87,10 @@ export const Tbody = createCustomElement(
         <tr key={id} class={id === state.selected ? 'danger' : undefined}>
           <td _className="col-md-1">{id}</td>
           <td _className="col-md-4">
-            <a onclick={() => transactions.select(id)}>{label}</a>
+            <a _onclick={() => transactions.select(id)}>{label}</a>
           </td>
           <td _className="col-md-1">
-            <a onclick={() => transactions.delete(id)}>
+            <a _onclick={() => transactions.delete(id)}>
               <span _className="glyphicon glyphicon-remove" aria-hidden="true" />
             </a>
           </td>

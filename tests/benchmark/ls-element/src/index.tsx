@@ -10,40 +10,44 @@ const nouns = ['table', 'chair', 'house', 'bbq', 'desk', 'car', 'pony', 'cookie'
 
 type Row = { label: string, id: number, selected?: boolean };
 let nextId = 1;
+let selectedId = null;
 function buildData(count = 1000) {
   const data = new Array<Row>();
   for (let i = 0; i < count; i++)
     data.push({ id: nextId++, label: `${adjectives[_random(adjectives.length)]} ${colours[_random(colours.length)]} ${nouns[_random(nouns.length)]}` });
   return data;
 }
-const list = new ElementList<Row>();
-
-const run = () => list.replace(...buildData());
-const runLots = () => list.replace(...buildData(10000));
-const add = () => list.push(...buildData());
+const rows = new ElementList<Row>();
+const run = () => rows.replace(...buildData());
+const runLots = () => rows.replace(...buildData(10000));
+const add = () => rows.push(...buildData());
 const update = () => {
-  for (let i = 0; i < list.getData().length; i += 10) {
-    list.update(i, value => {
+  for (let i = 0; i < rows.getData().length; i += 10) {
+    rows.update(i, value => {
       value.label += ' !!!';
       return value;
     });
   }
 };
-const clear = () => list.clear();
-const select = i => {
-  list.update(i, value => {
+const clear = () => rows.clear();
+const select = (id: number) => {
+  const index = rows.getData().findIndex(x => x.id === id);
+  rows.update(index, value => {
+    if (selectedId) {
+      const selectedIndex = rows.getData().findIndex(x => x.selected);
+      if (selectedIndex >= 0)
+        rows.update(selectedIndex, value => {
+          value.selected = undefined;
+          return value;
+        });
+    }
     value.selected = true;
+    selectedId = value.id;
     return value;
   });
-  const selectedIndex = list.getData().findIndex(x => x.selected);
-  if (selectedIndex >= 0 && i !== selectedIndex)
-    list.update(selectedIndex, value => {
-      value.selected = undefined;
-      return value;
-    });
 };
-const deleteItem = (i) => list.remove(i);
-const swapRows = () => list.swap(1, 998);
+const deleteItem = (id: number) => rows.remove(rows.getData().findIndex(x => x.id === id));
+const swapRows = () => rows.swap(1, 998);
 
 export const Table = createCustomElement(
   {
@@ -54,27 +58,20 @@ export const Table = createCustomElement(
   {
     render() {
       return (
-        <list.target as="tbody" _id="tbody">
-          {({ id, label, selected }, index) => (
-            <tr class={selected ? 'danger' : undefined}>
-              <td _className="col-md-1">
-                {id.toString()}
-              </td>
-              <td _className="col-md-4">
-                {/* TODO: _onclick vs onclick */}
-                <a onclick={() => select(index)}>
-                  {label}
-                </a>
-              </td>
-              <td _className="col-md-1">
-                <a onclick={() => deleteItem(index)}>
-                  <span _className="glyphicon glyphicon-remove" _ariaHidden="true" />
-                </a>
-              </td>
-              <td _className="col-md-6" />
-            </tr>
-          )}
-        </list.target>
+        <rows.List as="tbody" _id="tbody" renderItem={({ label, id, selected }) => (
+          <tr class={selected ? 'danger' : undefined}>
+            <td _className="col-md-1">{id}</td>
+            <td _className="col-md-4">
+              <a _onclick={() => select(id)}>{label}</a>
+            </td>
+            <td _className="col-md-1" >
+              <a onclick={() => deleteItem(id)}>
+                <span _className="glyphicon glyphicon-remove" _ariaHidden="true" />
+              </a>
+            </td>
+            <td _className="col-md-6" />
+          </tr>
+        )} />
       );
     }
   }
@@ -91,32 +88,32 @@ export const TableManager = createCustomElement(
       return (
         <div _className="row">
           <div _className="col-sm-6 smallpad">
-            <button _type="button" _className="btn btn-primary btn-block" id="run" onclick={run}>
+            <button _type="button" _className="btn btn-primary btn-block" id="run" _onclick={run}>
               Create 1,000 rows
             </button>
           </div>
           <div _className="col-sm-6 smallpad">
-            <button _type="button" _className="btn btn-primary btn-block" id="runlots" onclick={runLots}>
+            <button _type="button" _className="btn btn-primary btn-block" _id="runlots" _onclick={runLots}>
               Create 10,000 rows
             </button>
           </div>
           <div _className="col-sm-6 smallpad">
-            <button _type="button" _className="btn btn-primary btn-block" id="add" onclick={add}>
+            <button _type="button" _className="btn btn-primary btn-block" _id="add" _onclick={add}>
               Append 1,000 rows
             </button>
           </div>
           <div _className="col-sm-6 smallpad">
-            <button _type="button" _className="btn btn-primary btn-block" id="update" onclick={update}>
+            <button _type="button" _className="btn btn-primary btn-block" _id="update" _onclick={update}>
               Update every 10th row
             </button>
           </div>
           <div _className="col-sm-6 smallpad">
-            <button _type="button" _className="btn btn-primary btn-block" id="clear" onclick={clear}>
+            <button _type="button" _className="btn btn-primary btn-block" _id="clear" _onclick={clear}>
               Clear
             </button>
           </div>
           <div _className="col-sm-6 smallpad">
-            <button _type="button" _className="btn btn-primary btn-block" id="swaprows" onclick={swapRows}>
+            <button _type="button" _className="btn btn-primary btn-block" _id="swaprows" _onclick={swapRows}>
               Swap Rows
             </button>
           </div>
