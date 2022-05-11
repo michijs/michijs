@@ -7,7 +7,8 @@ import { getShadowRoot } from './getShadowRoot';
 
 const style = createStyleSheet({
   [`${ListTag}, ${FragmentTag}`]: {
-    display: 'contents'
+    display: 'contents',
+    borderRadius: 'inherit'
   }
 });
 
@@ -15,6 +16,8 @@ const style = createStyleSheet({
 export function addFragmentAndListStyle(el: ElementCSSInlineStyle, self?: Element) {
   if (el && getShadowRoot(self) && supportsAdoptingStyleSheets)
     AdoptedStyle({ id: 'ls-list-style', children: [style] }, self as LSCustomElement);
-  else
+  else {
     el.style.display = 'contents';
+    el.style.borderRadius = 'inherit';
+  }
 }
