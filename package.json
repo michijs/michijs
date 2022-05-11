@@ -2,7 +2,7 @@
   "name": "@lsegurado/ls-element",
   "author": "Lucas M. Segurado",
   "license": "MIT",
-  "version": "2.1.14",
+  "version": "2.2.0-rc",
   "files": [
     "dist/",
     "jsx-runtime/"

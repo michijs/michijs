@@ -317,8 +317,7 @@ export type CreateCustomElementResult<
 
 export type GetElementProps<El extends any> = El extends (new () => { props: any }) ? InstanceType<El>['props'] : (El extends (...args: any) => any ? Parameters<El>[0] : never)
 
-export type SetEventListenerMap = Map<string, EventListener>;
-export type EventListenerMap = Map<string, { originalEvent: EventListener, bindedEvent: EventListener }>;
+export type EventListenerMap = Map<string, EventListener>;
 declare global {
 
     interface Element {
@@ -327,7 +326,7 @@ declare global {
          * @param src Who adds the event
          * @param ev A map containing the event and its callback
          */
-        $setEventListeners(this: Element, src: Element, ev: SetEventListenerMap): void;
+        $setEventListeners(this: Element, src: Element, ev: EventListenerMap): void;
         /**
          * The list of events and who created them through the setEventListeners method
          */

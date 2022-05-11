@@ -5,14 +5,18 @@ import { Fragment } from '.';
 import { setAttribute } from '../DOM/attributes/setAttribute';
 import { GetRoles } from '@lsegurado/htmltype/dist/Attributes';
 
-export type ElementInternalsProps = {
+export type ElementInternalsProps = Partial<
+  {
     /**Form controls usually expose a "value" property */
-    formValue?: FormValue;
+    formValue: FormValue;
     /**A validation message to show */
-    errorMessage?: string | null;
+    errorMessage: string | null;
     /** */
-    tabIndex?: number
-} & Partial<ARIAMixin> & Partial<GetRoles<Attributes.AllRoles>>
+    tabIndex: number
+  }
+  & ARIAMixin
+  & GetRoles<Attributes.AllRoles>
+>
 
 /**
  * It allows to:

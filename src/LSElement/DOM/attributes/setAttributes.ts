@@ -1,12 +1,12 @@
 import { Attributes } from '@lsegurado/htmltype';
-import { AnyObject, SetEventListenerMap } from '../../types';
+import { AnyObject, EventListenerMap } from '../../types';
 import { deepEqual } from '../../utils/deepEqual';
 import { setStyle } from './setStyle';
 import { setAttribute } from './setAttribute';
 import { compareAttributes } from './compareAttributes';
 
 export function setAttributes(el: Element, attributes: AnyObject, self?: Element) {
-  let events: SetEventListenerMap;
+  let events: EventListenerMap;
   Object.entries(attributes).forEach(([name, newValue]) => {
     // priority to properties and events
     if (name.startsWith('_')) {

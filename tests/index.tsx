@@ -1,19 +1,19 @@
-import { createCustomElement, ElementList, h, Host, } from '../src';
+import { createCustomElement, h, Host, } from '../src';
 import { Router } from './routes';
 // // import sheet from './a.css' assert { type: 'css' };
 // // console.log(sheet)
 
 createCustomElement('ls-root-test-element', {
   reflectedAttributes: {
-    arrayTest: new ElementList(0, 1, 2, 3, 4, 5, 6),
-    // arrayTest: [0, 1, 2, 3, 4, 5, 6]
+    // arrayTest: new ElementList(0, 1, 2, 3, 4, 5, 6),
+    arrayTest: [0, 1, 2, 3, 4, 5, 6]
   },
   shadow: false,
   transactions: {
     onClickArray() {
+      console.log(this);
       // this.arrayTest = [0, 1, 2, 3, 6]
       this.arrayTest.reverse();
-      console.log(this.child('#xd'));
       // this.arrayTest.pop();
       // this.arrayTest.shift();
     }
@@ -32,10 +32,10 @@ createCustomElement('ls-root-test-element', {
           data={this.arrayTest}
           renderItem={item => <div key={item} onclick={this.onClickArray}>{item}</div>}
         /> */}
-        {/* {this.arrayTest.map(item => <div key={item} onclick={this.onClickArray}>{item}</div>)} */}
-        <this.arrayTest.List
+        {this.arrayTest.map(item => <div key={item} onclick={this.onClickArray}>{item}</div>)}
+        {/* <this.arrayTest.List
           renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}
-        />
+        /> */}
       </Host>
     );
   }

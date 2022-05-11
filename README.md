@@ -492,6 +492,12 @@ This will generate an element like:
       <td>Yes</td>
       <td>No</td>
     </tr>
+    <tr>
+      <td>Updates</td>
+      <td>The entire component</td>
+      <td>The entire component</td>
+      <td>Just the list itself</td>
+    </tr>
   </tbody>
 </table>
 
