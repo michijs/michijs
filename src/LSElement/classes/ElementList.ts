@@ -75,8 +75,8 @@ export class ElementList<V> implements ElementListInterface<V> {
   }
 
   update(index: number, callback: (oldValue: V) => V) {
-    const oldValue = this.data[index];
-    if (oldValue) {
+    if (index < this.data.length) {
+      const oldValue = this.data[index];
       const newValue = callback(oldValue);
       this.data[index] = newValue;
       this.targets.forEach(target => target.update(index, newValue));
