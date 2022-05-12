@@ -16,7 +16,8 @@ export function deepEqual(object1, object2) {
 
         return !object1.find((value, index) => !deepEqual(value, object2[index]));
       }
-      for (const key in object1) {
+      // null can't have keys, so I use the non-null value
+      for (const key in (object1 ?? object2)) {
         if (!deepEqual(object1?.[key], object2?.[key]))
           return false;
       }

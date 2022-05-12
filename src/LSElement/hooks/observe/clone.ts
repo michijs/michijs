@@ -5,6 +5,9 @@ export const clone = <T>(item: T) => {
     return structuredClone(item);
   } catch {
     if (typeof item === 'object') {
+      if (item instanceof Node)
+        return item.cloneNode();
+      
       // @ts-ignore
       const itemCopy = new item.constructor();
       for (const k in item) {
@@ -17,6 +20,7 @@ export const clone = <T>(item: T) => {
         }
       }
       return itemCopy;
+      
     } return item;
   }
 };

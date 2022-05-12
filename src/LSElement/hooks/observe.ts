@@ -37,9 +37,9 @@ export function observe<T, Y>(props: ObserveProps<T, Y>): ObservableObject<T, Y>
       return observeSet(props as unknown as ObserveProps<Set<any>, Y>) as unknown as ObservableObject<T, Y>;
     else if (Object.getPrototypeOf(props.item) === Object.prototype)
       return observeCommonObject(props as unknown as ObserveProps<object, Y>) as unknown as ObservableObject<T, Y>;
-    
+    else if (props.item instanceof Node)
+      return props.item as unknown as ObservableObject<T, Y>;
     return clone(props.item) as unknown as ObservableObject<T, Y>;
-    
   }
   return props.item as ObservableObject<T, Y>;
 }
