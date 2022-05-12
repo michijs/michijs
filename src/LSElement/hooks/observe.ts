@@ -4,6 +4,7 @@ import { observeCommonObject } from './observe/observeCommonObject';
 import { observeDate } from './observe/observeDate';
 import { observeMap } from './observe/observeMap';
 import { observeSet } from './observe/observeSet';
+import { clone } from './observe/clone';
 
 export type ObserveHandlerProps = {
   onChange: ChangeFunction,
@@ -36,6 +37,9 @@ export function observe<T, Y>(props: ObserveProps<T, Y>): ObservableObject<T, Y>
       return observeSet(props as unknown as ObserveProps<Set<any>, Y>) as unknown as ObservableObject<T, Y>;
     else if (Object.getPrototypeOf(props.item) === Object.prototype)
       return observeCommonObject(props as unknown as ObserveProps<object, Y>) as unknown as ObservableObject<T, Y>;
+    
+    return clone(props.item) as unknown as ObservableObject<T, Y>;
+    
   }
   return props.item as ObservableObject<T, Y>;
 }

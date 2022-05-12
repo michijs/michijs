@@ -361,5 +361,4 @@ declare global {
         setValidity?(props: { customError?: boolean }, message?: string): void,
         setFormValue?(value: FormValue): void
     }
-
 }

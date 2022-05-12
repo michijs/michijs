@@ -27,8 +27,8 @@ export const customObjectDelete = ({ shouldValidatePropertyChange, propertyPath,
 };
 
 export const observeCommonObject = <Y>({ item, ...props }: ObserveProps<object,Y>) => {
-  const itemCopy = { ...item };
-  Object.entries(itemCopy).forEach(([key, value]) => {
+  const itemCopy = {};
+  Object.entries(item).forEach(([key, value]) => {
     itemCopy[key] = observe({ ...props, item: value as object, propertyPath: `${props.propertyPath}.${key}` });
   });
   return new Proxy(itemCopy, {

@@ -3,18 +3,14 @@ import { update } from '../DOMDiff/update';
 import { RenderFunction } from './ElementList';
 
 export class Target<V> {
-  private element: ParentNode;
-  private renderItem: RenderFunction<V>;
   private template: ChildNode | ParentNode;
-  private context: Element;
-  private isSVG: boolean;
 
-  constructor(element: ParentNode, renderItem: (item: V) => JSX.Element, isSVG?: boolean, context?: Element) {
-    this.element = element;
-    this.renderItem = renderItem;
-    this.isSVG = isSVG;
-    this.context = context;
-  }
+  constructor(
+    private element: ParentNode,
+    private renderItem: RenderFunction<V>,
+    private isSVG?: boolean,
+    private context?: Element
+  ) { }
 
   private getTemplate(value: V) {
     return this.template ?? create(this.renderItem(value), this.isSVG, this.context);

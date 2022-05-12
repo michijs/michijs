@@ -1,10 +1,7 @@
 export class EventDispatcher<T>{
     private name: string;
-    private eventInit: EventInit;
 
-    constructor(eventInit?: EventInit) {
-      this.eventInit = eventInit;
-    }
+    constructor(private eventInit?: EventInit) {}
 
     public init(name: string) {
       this.name = name.toLowerCase();

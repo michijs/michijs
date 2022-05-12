@@ -17,8 +17,8 @@ import { updateChildren } from '../DOMDiff';
 export function createCustomElement<
   A extends AttributesType = EmptyObject,
   RA extends AttributesType = EmptyObject,
-  FRA = RA extends object ? { 
-    [k in keyof RA as KebabCase<k>]: RA[k] 
+  FRA = RA extends object ? {
+    [k in keyof RA as KebabCase<k>]: RA[k]
   } : EmptyObject,
   M extends MethodsType = EmptyObject,
   T extends MethodsType = EmptyObject,
@@ -116,28 +116,33 @@ export function createCustomElement<
 
       if (methods)
         Object.entries(methods).forEach(([key, value]) => defineMethod(this, key, value));
-      Object.keys(this.ls.store.transactions).forEach(key => defineTransactionFromStore(this, key));
-      Object.keys(this.ls.store.state).forEach(key => definePropertyFromStore(this, key));
+
+      for (const key in this.ls.store.transactions) {
+        defineTransactionFromStore(this, key);
+      }
+      for (const key in this.ls.store.state) {
+        definePropertyFromStore(this, key);
+      }
       if (events)
         Object.entries(events).forEach(([key, value]) => defineEvent(this, key, value));
       if (reflectedAttributes)
-        Object.keys(reflectedAttributes).forEach(key => {
+        for (const key in reflectedAttributes) {
           const standarizedAttributeName = formatToKebabCase(key);
           if (key !== standarizedAttributeName) {
             definePropertyFromStore(this, standarizedAttributeName, key);
           }
           this.ls.store.subscribe((propertiesThatChanged) => {
             if (propertiesThatChanged.find(x => x.startsWith(key))) {
-              const newAttributes = { [standarizedAttributeName]: this.ls.store.state[key] };
+              const newAttributes = { [standarizedAttributeName]: this.ls.store.state[key as string] };
               setAttributes(this, newAttributes, this);
             }
           });
-        });
+        }
       if (subscribeTo)
         Object.entries(subscribeTo).forEach(([key, value]) => {
           const subscribeFunction = (propertyThatChanged?: string[] | unknown) => {
             if (propertyThatChanged && Array.isArray(propertyThatChanged))
-              this.ls.rerenderCallback(propertyThatChanged.map(x => `${key}.${propertyThatChanged}`));
+              this.ls.rerenderCallback(propertyThatChanged.map(x => `${key}.${propertyThatChanged}`));//TODO: ?
             else
               this.ls.rerenderCallback(key);
           };
