@@ -42,6 +42,7 @@ createCustomElement('ls-root-test-element', {
 });
 // TODO:
 // update readme
+// Fix no such file or directory, stat 'build'
 // Unit tests some functions from element list
 // unlinked attributes ex: <div {bla ? ...obj1: ...obj2}/>
 // and obj2 has an attribute that obj1 does not that attribute will be unlinked...
