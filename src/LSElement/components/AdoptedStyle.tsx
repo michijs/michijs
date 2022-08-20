@@ -1,4 +1,4 @@
-import { CompatibleStyleSheet, AdoptedStyleSheetList, FC } from '../types';
+import { CompatibleStyleSheet, FC } from '../types';
 import { supportsAdoptingStyleSheets } from '../css/supportsAdoptingStyleSheets';
 import { getShadowRoot } from '../utils/getShadowRoot';
 import { h } from '../h';
@@ -6,10 +6,10 @@ import { createStyleSheet } from '../css/createStyleSheet';
 
 type AdoptedStyleProps = JSX.IntrinsicElements['style'] & Required<Pick<JSX.IntrinsicElements['style'], 'id'>>;
 
-function addStyle(container: ShadowRoot, child: CompatibleStyleSheet, adoptedStyleSheetList: AdoptedStyleSheetList, index: number) {
+function addStyle(container: ShadowRoot, child: CompatibleStyleSheet, adoptedStyleSheetList: CSSStyleSheet[], index: number) {
   const newStyleSheet = typeof child === 'string' ? createStyleSheet(child) as CSSStyleSheet : child;
   container.adoptedStyleSheets = container.adoptedStyleSheets.concat(newStyleSheet);
-  adoptedStyleSheetList.items[index] = newStyleSheet;
+  adoptedStyleSheetList[index] = newStyleSheet;
 }
 
 /**
@@ -37,28 +37,25 @@ export const AdoptedStyle: FC<AdoptedStyleProps, CompatibleStyleSheet | Compatib
 
   if (supportsAdoptingStyleSheets && targetStyleSheetContainer) {
 
-    let adoptedStyleSheetList = targetElement.ls.adoptedStyleSheets.find(x => x.id === id);
+    const adoptedStyleSheetListFound = targetElement.ls.adoptedStyleSheets.get(id);
+    const adoptedStyleSheetList = adoptedStyleSheetListFound ?? [];
 
-    // If the style list does not exist I create it
-    if (!adoptedStyleSheetList) {
-      adoptedStyleSheetList = { id, items: [] };
-      targetElement.ls.adoptedStyleSheets.push(adoptedStyleSheetList);
-    }
+    // If the style list does not exist I add it to the map
+    if (!adoptedStyleSheetListFound)
+      targetElement.ls.adoptedStyleSheets.set(id, adoptedStyleSheetList);
     childrenAsArray.forEach((child, index) => {
-      const oldStyleSheet = adoptedStyleSheetList.items[index];
+      const oldStyleSheet = adoptedStyleSheetList[index];
       if (oldStyleSheet) {
         if (child !== oldStyleSheet) {
           // Removes oldStyleSheet from the adoptedStyleSheets list
           targetStyleSheetContainer.adoptedStyleSheets = targetStyleSheetContainer.adoptedStyleSheets.filter(x => x !== oldStyleSheet);
-          if (child) {
+          if (child)
             addStyle(targetStyleSheetContainer, child, adoptedStyleSheetList, index);
-          } else {
-            adoptedStyleSheetList.items.splice(index, 1);
-          }
+          else
+            adoptedStyleSheetList.splice(index, 1);
         }
-      } else if (child) {
+      } else if (child)
         addStyle(targetStyleSheetContainer, child, adoptedStyleSheetList, index);
-      }
     });
   } else {
     return <style {...attrs}>{childrenAsArray.map(x => {

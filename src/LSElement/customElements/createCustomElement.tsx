@@ -53,7 +53,7 @@ export function createCustomElement<
     ls: LSCustomElement['ls'] = {
       store: lsStore.apply(this, [{ state: { ...attributes, ...reflectedAttributes }, transactions }]) as ReturnType<typeof lsStore>,
       alreadyRendered: false,
-      adoptedStyleSheets: [],
+      adoptedStyleSheets: new Map(),
       pendingTasks: 0,
       rerenderCallback: (propertyThatChanged) => {
         if (observe)

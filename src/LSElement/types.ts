@@ -73,11 +73,6 @@ export type RequiredKeys<T> = {
 export type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>;
 
 // End Auxiliar Types
-export interface AdoptedStyleSheetList {
-    id: string,
-    items: CSSStyleSheet[]
-}
-
 export interface ObserverCallback<T> {
     (value?: T): void
 }
@@ -92,7 +87,7 @@ export interface LSCustomElement extends Element, Lifecycle<any>, LifecycleInter
         store: ReturnType<typeof lsStore>,
         alreadyRendered: boolean,
         shadowRoot?: ShadowRoot,
-        adoptedStyleSheets: AdoptedStyleSheetList[],
+        adoptedStyleSheets: Map<string, CSSStyleSheet[]>,
         rerenderCallback(propertiesThatChanged: Array<string> | PropertyKey): void,
         pendingTasks: number,
         unSubscribeFromStore: Array<() => void>,
