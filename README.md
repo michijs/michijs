@@ -143,6 +143,11 @@ A component consists of the following properties:
       <td colspan="3">Allows to define attributes.</td>
     </tr>
     <tr>
+      <td>nonObservedAttributes</td>
+      <td colspan="3">Allows to define non observed attributes. This is useful for 
+      <a href="#observable-objects">complex objects that cannot be observed</a>.</td>
+    </tr>
+    <tr>
       <td>reflectedAttributes</td>
       <td colspan="3">Allows to define <a href="https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr">reflected attributes</a> and follows the Kebab case. A reflected attribute cannot be initialized with a true value
       </td>

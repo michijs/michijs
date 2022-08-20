@@ -73,14 +73,16 @@ export type RequiredKeys<T> = {
 export type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>;
 
 // End Auxiliar Types
-export type AdoptedStyleSheetList = {
+export interface AdoptedStyleSheetList {
     id: string,
     items: CSSStyleSheet[]
 }
 
-export type ObserverCallback<T> = (value?: T) => void;
+export interface ObserverCallback<T> {
+    (value?: T): void
+}
 
-export type ObservableLike<T = any> = {
+export interface ObservableLike<T = any> {
     subscribe(observer: ObserverCallback<T>): void,
     unsubscribe?(observer: ObserverCallback<T>): void,
 }
@@ -122,38 +124,47 @@ export type DeepReadonly<T> =
     T extends object ? DeepReadonlyObject<T> :
     T;
 
-export type IterableAttrs = {
+export interface IterableAttrs {
     /**When iterating nodes its higly recomended to use keys */
     key?: number | string
 }
 
-export type CommonJSXAttrs = { attrs?: (Record<string, any> & { children: JSX.Element[] }) } & IterableAttrs
-export type FragmentJSXElement = { tag: typeof FragmentTag } & CommonJSXAttrs;
+export interface CommonJSXAttrs extends IterableAttrs { attrs?: (Record<string, any> & { children: JSX.Element[] }) }
+export interface FragmentJSXElement extends CommonJSXAttrs { tag: typeof FragmentTag }
 export type IterableJSX = AnyObject | ObjectJSXElement | FunctionJSXElement | ClassJSXElement | FragmentJSXElement;
-export type ObjectJSXElement = { tag: string } & CommonJSXAttrs;
-export type FunctionJSXElement = { tag: FC<any> } & CommonJSXAttrs;
-export type ClassJSXElement = { tag: (new () => {}) & { tag: string, extends?: string } } & CommonJSXAttrs;
+export interface ObjectJSXElement extends CommonJSXAttrs { tag: string }
+export interface FunctionJSXElement extends CommonJSXAttrs { tag: FC<any> }
+export interface ClassJSXElement extends CommonJSXAttrs { tag: (new () => {}) & { tag: string, extends?: string } }
 export type SingleJSXElement = EmptyType | PrimitiveType | ObjectJSXElement | FunctionJSXElement | FragmentJSXElement | ClassJSXElement | ArrayJSXElement;
 export type ArrayJSXElement = Array<SingleJSXElement>;
 // export type PureObjectJSXElement = { tag: string } & Omit<CommonJSXAttrs,'children'> & {children: (PureObjectJSXElement | string)[]};
 
-export type FC<T = {}, C = JSX.Element, S = LSCustomElement> = (attrs: Omit<T, 'children'> & { children?: C }, self?: S | null) => JSX.Element;
+export interface FC<T = {}, C = JSX.Element, S = LSCustomElement> {
+    (attrs: Omit<T, 'children'> & { children?: C }, self?: S | null): JSX.Element
+}
 
 export type CompatibleStyleSheet = string | CSSStyleSheet;
 
 export type PropertyKey = string | number | symbol;
-export type ChangeFunction = (propertyPath?: string) => void;
-export type ValidatePropertyChangeFunction = (propertyPath?: string) => boolean;
+export interface ChangeFunction {
+    (propertyPath?: string): void
+}
+export interface ValidatePropertyChangeFunction {
+    (propertyPath?: string): boolean
+}
 
 export type CSSProperty = CSSObject | Properties | string;
-export type CSSObject = { [key: string]: CSSProperty }
+export interface CSSObject {
+    [key: string]: CSSProperty
+}
 
 export type Tag = `${string}-${string}`;
-export type LSElementConfig<EX extends keyof JSX.IntrinsicElements, EL extends Element> = Tag | {
+export interface ExtendedTag<EL extends Element> {
     tag: Tag,
-    extends: EX,
+    extends: keyof JSX.IntrinsicElements,
     class: new () => EL
 }
+export type LSElementConfig<EL extends Element> = Tag | ExtendedTag<EL>
 
 export type AnyObject = Record<PropertyKey, any>;
 
@@ -168,21 +179,22 @@ export type SubscribeToType = Record<string, ObservableLike>;
 
 export type EmptyObject = Record<never, never>;
 
-export type LsStoreProps<T, Y> = {
+export interface LsStoreProps<T, Y> {
     /**Allows to define the store state. */
     state: T,
     /**Transactions are functions that notify changes at the end of the transaction. */
     transactions: Y
-};
+}
 
 export type Self<M extends MethodsType,
     T extends MethodsType,
     E extends EventsType,
     A extends AttributesType,
     RA extends AttributesType,
-    EL extends Element> = EL & A & RA & M & T & { [k in keyof E]: E[k] extends EventDispatcher<infer T> ? (detail?: T) => boolean : any } & LSCustomElement;
+    NOA extends AttributesType,
+    EL extends Element> = EL & A & RA & M & NOA & T & { [k in keyof E]: E[k] extends EventDispatcher<infer T> ? (detail?: T) => boolean : any } & LSCustomElement;
 
-type Lifecycle<FRA> = {
+interface Lifecycle<FRA> {
     /**This method is called right before a component mounts.*/
     willMount?(): void,
     /**This method is called after the component has mounted. */
@@ -195,8 +207,8 @@ type Lifecycle<FRA> = {
     didUpdate?(): void,
     /**This method is called before a component does anything with an attribute. */
     willReceiveAttribute?<WRAN extends keyof FRA>(name: WRAN, newValue: FRA[WRAN], oldValue: FRA[WRAN]): void,
-};
-export type LifecycleInternals = {
+}
+export interface LifecycleInternals {
     /**Called when the browser associates the element with a form element, or disassociates the element from a form element. */
     formAssociatedCallback?(form: HTMLFormElement): void,
     /**Called after the disabled state of the element changes, either because the disabled attribute of this element was added or removed; 
@@ -238,67 +250,79 @@ export type KeysAndKeysOf<O, P extends string = undefined, Order extends number 
 
 type FormStateRestoreCallbackMode = 'restore' | 'autocomplete';
 
-export type LSElementProperties<
+export interface LSElementProperties<
     M extends MethodsType,
     T extends MethodsType,
     E extends EventsType,
     S extends SubscribeToType,
     A extends AttributesType,
     RA extends AttributesType,
-    FRA extends Object
-    > = {
-        /**Allows to define attributes.*/
-        attributes?: A,
-        /**
-         * Allows to define reflected attributes and follows the Kebab case.
-         * A reflected attribute cannot be initialized with a true value
-         * @link https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr
-         */
-        reflectedAttributes?: RA,
-        /**Transactions are functions that notify changes at the end of the transaction.*/
-        transactions?: T,
-        /**Methods are functions that notify changes at the time of making the change.*/
-        methods?: M,
-        /**Function that renders the component.*/
-        render?: Function;
-        /**
-         * Contains methods with a name of an attribute / reflected attribute / observable like. Those methods are executed when a change has been made to their corresponding property.
-         */
-        observe?: { [k in KeysAndKeysOf<RA>]?: () => void }
-        & { [k in KeysAndKeysOf<A>]?: () => void }
-        & (S extends EmptyObject ? { [k in keyof S]?: () => void } : EmptyObject)
-        // observers?: ArrayWithOneOrMoreElements<[callback: (propertiesThatChanged: O[]) => void, target: ArrayWithOneOrMoreElements<O>]>,,
-        /**
-         * This tells the browser to treat the element like a form control.
-         * @link https://web.dev/more-capable-form-controls/
-         */
-        formAssociated?: boolean
-        /**Contains all lifecycle methods.*/
-        lifecycle?: Lifecycle<FRA> & LifecycleInternals,
-        /**
-         * Allows you to define an event to his parent and triggering it easily. It will be defined using Lower case. For example countChanged will be registered as countchanged.
-         * @link https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
-         */
-        events?: E,
-        /**
-         * Allows you to subscribe to an observable like (like a store). When the store emit an event, the custom element will be re-rendered.
-         * @link https://github.com/sindresorhus/type-fest/blob/main/source/observable-like.d.ts
-         */
-        subscribeTo?: S,
-        /**
-         * Allows you to add a Shadow DOM. By default, it uses open mode on Autonomous Custom elements and does not use Shadow DOM on Customized built-in elements. Only the following elements are allowed to use Shadow DOM.
-         * @link https://dom.spec.whatwg.org/#dom-element-attachshadow
-         */
-        shadow?: false | ShadowRootInit
-    }
+    NOA extends AttributesType,
+    FRA extends Object,
+    FOA extends boolean
+    > {
+    /**Allows to define attributes.*/
+    attributes?: A,
+    /**Allows to define non observed attributes. This is useful for complex objects that cannot be observed.*/
+    nonObservedAttributes?(): NOA,
+    /**
+     * Allows to define reflected attributes and follows the Kebab case.
+     * A reflected attribute cannot be initialized with a true value
+     * @link https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr
+     */
+    reflectedAttributes?: RA,
+    /**Transactions are functions that notify changes at the end of the transaction.*/
+    transactions?: T,
+    /**Methods are functions that notify changes at the time of making the change.*/
+    methods?: M,
+    /**Function that renders the component.*/
+    render?: Function;
+    /**
+     * Contains methods with a name of an attribute / reflected attribute / observable like. Those methods are executed when a change has been made to their corresponding property.
+     */
+    observe?: { [k in KeysAndKeysOf<RA>]?: () => void }
+    & { [k in KeysAndKeysOf<A>]?: () => void }
+    & (S extends EmptyObject ? { [k in keyof S]?: () => void } : EmptyObject)
+    // observers?: ArrayWithOneOrMoreElements<[callback: (propertiesThatChanged: O[]) => void, target: ArrayWithOneOrMoreElements<O>]>,,
+    /**
+     * This tells the browser to treat the element like a form control.
+     * @link https://web.dev/more-capable-form-controls/
+     */
+    formAssociated?: FOA,
+    /**Contains all lifecycle methods.*/
+    lifecycle?: Lifecycle<FRA> & LifecycleInternals,
+    /**
+     * Allows you to define an event to his parent and triggering it easily. It will be defined using Lower case. For example countChanged will be registered as countchanged.
+     * @link https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
+     */
+    events?: E,
+    /**
+     * Allows you to subscribe to an observable like (like a store). When the store emit an event, the custom element will be re-rendered.
+     * @link https://github.com/sindresorhus/type-fest/blob/main/source/observable-like.d.ts
+     */
+    subscribeTo?: S,
+    /**
+     * Allows you to add a Shadow DOM. By default, it uses open mode on Autonomous Custom elements and does not use Shadow DOM on Customized built-in elements. Only the following elements are allowed to use Shadow DOM.
+     * @link https://dom.spec.whatwg.org/#dom-element-attachshadow
+     */
+    shadow?: false | ShadowRootInit
+}
 
-export type CreateCustomElementResult<
+export interface CreateCustomElementStaticResult<FRA extends Object, EL extends Element, CO extends LSElementConfig<EL>, FOA extends boolean> {
+    readonly tag: CO extends ExtendedTag<EL> ? CO['tag'] : CO,
+    readonly extends?: CO extends ExtendedTag<EL> ? CO['extends'] : undefined,
+    readonly observedAttributes: Readonly<Array<keyof FRA>>
+    formAssociated: FOA,
+}
+
+export type CreateCustomElementInstanceResult<
     A extends AttributesType,
     FRA extends Object,
     RA extends AttributesType,
     M extends MethodsType,
     T extends MethodsType,
     E extends EventsType,
+    NOA extends AttributesType,
     EL extends Element> = (
         new () => {
             props: LSTag<
@@ -309,11 +333,10 @@ export type CreateCustomElementResult<
                     }
                     & HTMLElements.commonElement
                     & GetAttributes<'name'>
-                >, Self<M, T, E, A, RA, EL>
+                >, Self<M, T, E, A, RA, NOA, EL>
             >
-            // & JSX.IntrinsicElements[EX]
-        } & Self<M, T, E, A, RA, EL>
-    ) & { tag: string, extends?: string }
+        } & Self<M, T, E, A, RA, NOA, EL>
+    )
 
 export type GetElementProps<El extends any> = El extends (new () => { props: any }) ? InstanceType<El>['props'] : (El extends (...args: any) => any ? Parameters<El>[0] : never)
 
@@ -355,10 +378,7 @@ declare global {
     interface Window {
         msCrypto?: Crypto
     }
-
-    type FormValue = string | File | FormData;
-    interface ElementInternals extends Pick<HTMLButtonElement, 'checkValidity' | 'reportValidity' | 'form' | 'validity' | 'validationMessage' | 'willValidate'> {
+    interface ElementInternals extends Pick<HTMLButtonElement, 'checkValidity' | 'reportValidity' | 'form' | 'validity' | 'validationMessage'> {
         setValidity?(props: { customError?: boolean }, message?: string): void,
-        setFormValue?(value: FormValue): void
     }
 }

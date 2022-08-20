@@ -1,11 +1,11 @@
-import { h, AdoptedStyle, createCustomElement, Host, storedObservable, EventDispatcher } from '../../src';
+import { h, AdoptedStyle, Host, storedObservable, EventDispatcher, customElement } from '../../src';
 import { counterStyle } from '../shared/counterStyle';
 
 const storedCount = storedObservable({
   count: 0,
 });
 
-export const StoredObservableCounter = createCustomElement('stored-observable-counter', {
+export const StoredObservableCounter = customElement`stored-observable-counter`({
   methods: {
     decrementCount() { storedCount.count--; },
     incrementCount() { storedCount.count++; },

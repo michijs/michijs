@@ -4,7 +4,6 @@ import { observeCommonObject } from './observe/observeCommonObject';
 import { observeDate } from './observe/observeDate';
 import { observeMap } from './observe/observeMap';
 import { observeSet } from './observe/observeSet';
-import { clone } from './observe/clone';
 
 export type ObserveHandlerProps = {
   onChange: ChangeFunction,
@@ -17,9 +16,11 @@ export type ObserveProps<T, Y> = {
   subscribeCallback?: (path: string, observer: ObserverCallback<Y>) => void
 } & ObserveHandlerProps;
 
-export type ObservableObject<T, Y = string[]> = T extends Function ? T : (T extends object ? {
-  [k in keyof T]: ObservableObject<T[k], Y>
-} & Partial<ObservableLike<Y>> : T)
+export type ObservableObject<T, Y = string[]> = T extends Function ? T : (T extends object ?
+  {
+    [k in keyof T]: ObservableObject<T[k], Y>
+  } 
+  & Partial<ObservableLike<Y>> : T)
 
 export function observe<T, Y>(props: ObserveProps<T, Y>): ObservableObject<T, Y> {
   if (props.item && typeof props.item === 'object') {
@@ -37,9 +38,7 @@ export function observe<T, Y>(props: ObserveProps<T, Y>): ObservableObject<T, Y>
       return observeSet(props as unknown as ObserveProps<Set<any>, Y>) as unknown as ObservableObject<T, Y>;
     else if (Object.getPrototypeOf(props.item) === Object.prototype)
       return observeCommonObject(props as unknown as ObserveProps<object, Y>) as unknown as ObservableObject<T, Y>;
-    else if (props.item instanceof Node)
-      return props.item as unknown as ObservableObject<T, Y>;
-    return clone(props.item) as unknown as ObservableObject<T, Y>;
+    throw `The object with path "${props.propertyPath}" cannot be observed ${props.item}`;
   }
   return props.item as ObservableObject<T, Y>;
 }

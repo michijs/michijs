@@ -13,4 +13,6 @@ export * from './LSElement/i18n';
 export type { Attributes, Events, HTMLElements, SVGElements } from '@lsegurado/htmltype';
 import './LSElement/h/JSX';
 export { createCustomElement } from './LSElement/customElements/createCustomElement';
+export { customElement } from './LSElement/customElements/customElement';
 export { createStyleSheet, css } from './LSElement/css/createStyleSheet';
+export { getFormData } from './LSElement/utils/getFormData';

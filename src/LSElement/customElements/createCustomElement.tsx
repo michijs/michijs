@@ -1,5 +1,5 @@
 import { idGenerator, lsStore } from '../hooks';
-import { AttributesType, CreateCustomElementResult, EmptyObject, EventsType, KebabCase, LSCustomElement, LSElementConfig, LSElementProperties, MethodsType, Self, SubscribeToType } from '../types';
+import { AttributesType, CreateCustomElementInstanceResult, CreateCustomElementStaticResult, EmptyObject, EventsType, KebabCase, LSCustomElement, LSElementConfig, LSElementProperties, MethodsType, Self, SubscribeToType } from '../types';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 import { defineTransactionFromStore } from './properties/defineTransactionFromStore';
 import { defineEvent } from './properties/defineEvent';
@@ -17,6 +17,7 @@ import { updateChildren } from '../DOMDiff';
 export function createCustomElement<
   A extends AttributesType = EmptyObject,
   RA extends AttributesType = EmptyObject,
+  NOA extends AttributesType = EmptyObject,
   FRA = RA extends object ? {
     [k in keyof RA as KebabCase<k>]: RA[k]
   } : EmptyObject,
@@ -24,13 +25,16 @@ export function createCustomElement<
   T extends MethodsType = EmptyObject,
   E extends EventsType = EmptyObject,
   S extends SubscribeToType = EmptyObject,
-  EX extends keyof JSX.IntrinsicElements = 'div',
   EL extends Element = HTMLElement,
-  >(el: LSElementConfig<EX, EL>, elementProperties: LSElementProperties<M, T, E, S, A, RA, FRA> & ThisType<Self<M, T, E, A, RA, EL>> = {}): CreateCustomElementResult<A, FRA, RA, M, T, E, EL> {
+  FOA extends boolean = false,
+  CO extends LSElementConfig<EL> = LSElementConfig<EL>
+>(el: CO, elementProperties: LSElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA> & ThisType<Self<M, T, E, A, RA, NOA, EL>> = {}): CreateCustomElementInstanceResult<A, FRA, RA, M, T, E, NOA, EL> & CreateCustomElementStaticResult<FRA, EL, CO, FOA> {
 
   const { extends: extendsTag = undefined, tag, class: classToExtend = HTMLElement } = typeof el === 'string' ? { tag: el } : el;
-  const { events,
+  const {
+    events,
     attributes,
+    nonObservedAttributes: getNonObservedAttributes,
     reflectedAttributes,
     transactions,
     observe,
@@ -138,6 +142,12 @@ export function createCustomElement<
             }
           });
         }
+      if (getNonObservedAttributes) {
+        const nonObservedAttributes = getNonObservedAttributes.apply(this);
+        for (const key in nonObservedAttributes) {
+          this[key] = nonObservedAttributes[key];
+        }
+      }
       if (subscribeTo)
         Object.entries(subscribeTo).forEach(([key, value]) => {
           const subscribeFunction = (propertyThatChanged?: string[] | unknown) => {
@@ -235,5 +245,5 @@ export function createCustomElement<
     window.customElements.define(tag, LSCustomElementResult);
   }
 
-  return LSCustomElementResult as unknown as CreateCustomElementResult<A, FRA, RA, M, T, E, EL>;
+  return LSCustomElementResult as any;
 }

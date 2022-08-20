@@ -1,12 +1,10 @@
 import { CompatibleStyleSheet, AdoptedStyleSheetList, FC } from '../types';
 import { supportsAdoptingStyleSheets } from '../css/supportsAdoptingStyleSheets';
 import { getShadowRoot } from '../utils/getShadowRoot';
-import { HTMLElements } from '../h/tags/HTMLElements';
 import { h } from '../h';
-import { SVGElements } from '../h/tags/SVGElements';
 import { createStyleSheet } from '../css/createStyleSheet';
 
-type AdoptedStyleProps = HTMLElements['style'] & SVGElements['style'] & Required<Pick<HTMLElements['style'] & SVGElements['style'], 'id'>>;
+type AdoptedStyleProps = JSX.IntrinsicElements['style'] & Required<Pick<JSX.IntrinsicElements['style'], 'id'>>;
 
 function addStyle(container: ShadowRoot, child: CompatibleStyleSheet, adoptedStyleSheetList: AdoptedStyleSheetList, index: number) {
   const newStyleSheet = typeof child === 'string' ? createStyleSheet(child) as CSSStyleSheet : child;
