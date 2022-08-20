@@ -14,4 +14,4 @@ export type { Attributes, Events, HTMLElements, SVGElements } from '@lsegurado/h
 import './LSElement/h/JSX';
 export * from './LSElement/customElements';
 export { createStyleSheet, css } from './LSElement/css/createStyleSheet';
-export { getFormData } from './LSElement/utils/getFormData';
+export * from './LSElement/utils/getFormData';
