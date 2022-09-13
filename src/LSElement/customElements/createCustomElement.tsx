@@ -1,5 +1,5 @@
 import { idGenerator, lsStore } from '../hooks';
-import { AttributesType, CreateCustomElementInstanceResult, CreateCustomElementStaticResult, EmptyObject, EventsType, KebabCase, LSCustomElement, LSElementConfig, LSElementProperties, MethodsType, Self, SubscribeToType } from '../types';
+import { AttributesType, CreateCustomElementInstanceResult, CreateCustomElementStaticResult, EmptyObject, EventsType, KebabCase, LSCustomElement, LSElementProperties, MethodsType, Self, SubscribeToType, Tag } from '../types';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 import { defineTransactionFromStore } from './properties/defineTransactionFromStore';
 import { defineEvent } from './properties/defineEvent';
@@ -27,8 +27,9 @@ export function createCustomElement<
   S extends SubscribeToType = EmptyObject,
   EL extends Element = HTMLElement,
   FOA extends boolean = false,
-  CO extends LSElementConfig<EL> = LSElementConfig<EL>
->(el: CO, elementProperties: LSElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA> & ThisType<Self<M, T, E, A, RA, NOA, EL>> = {}): CreateCustomElementInstanceResult<A, FRA, RA, M, T, E, NOA, EL> & CreateCustomElementStaticResult<FRA, EL, CO, FOA> {
+  EXTA extends keyof JSX.IntrinsicElements = undefined,
+  TA extends Tag = Tag
+>(el: TA, elementProperties: LSElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA, EL, EXTA> & ThisType<Self<M, T, E, A, RA, NOA, EL>> = {}): CreateCustomElementInstanceResult<A, FRA, RA, M, T, E, NOA, EL> & CreateCustomElementStaticResult<FRA, FOA, TA, EXTA> {
 
   const { extends: extendsTag = undefined, tag, class: classToExtend = HTMLElement } = typeof el === 'string' ? { tag: el } : el;
   const {

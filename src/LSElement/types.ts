@@ -154,12 +154,6 @@ export interface CSSObject {
 }
 
 export type Tag = `${string}-${string}`;
-export interface ExtendedTag<EL extends Element> {
-    tag: Tag,
-    extends: keyof JSX.IntrinsicElements,
-    class: new () => EL
-}
-export type LSElementConfig<EL extends Element> = Tag | ExtendedTag<EL>
 
 export type AnyObject = Record<PropertyKey, any>;
 
@@ -254,8 +248,10 @@ export interface LSElementProperties<
     RA extends AttributesType,
     NOA extends AttributesType,
     FRA extends Object,
-    FOA extends boolean
-    > {
+    FOA extends boolean,
+    EL extends Element,
+    EXTA extends keyof JSX.IntrinsicElements,
+> {
     /**Allows to define attributes.*/
     attributes?: A,
     /**Allows to define non observed attributes. This is useful for complex objects that cannot be observed.*/
@@ -300,12 +296,16 @@ export interface LSElementProperties<
      * Allows you to add a Shadow DOM. By default, it uses open mode on Autonomous Custom elements and does not use Shadow DOM on Customized built-in elements. Only the following elements are allowed to use Shadow DOM.
      * @link https://dom.spec.whatwg.org/#dom-element-attachshadow
      */
-    shadow?: false | ShadowRootInit
+    shadow?: false | ShadowRootInit,
+    extends?: {
+        tag: EXTA,
+        class: new () => EL
+    },
 }
 
-export interface CreateCustomElementStaticResult<FRA extends Object, EL extends Element, CO extends LSElementConfig<EL>, FOA extends boolean> {
-    readonly tag: CO extends ExtendedTag<EL> ? CO['tag'] : CO,
-    readonly extends?: CO extends ExtendedTag<EL> ? CO['extends'] : undefined,
+export interface CreateCustomElementStaticResult<FRA extends Object, FOA extends boolean, TA extends Tag, EXTA extends string> {
+    readonly tag: TA,
+    readonly extends?: EXTA,
     readonly observedAttributes: Readonly<Array<keyof FRA>>
     formAssociated: FOA,
 }
@@ -360,20 +360,8 @@ declare global {
          */
         $key?: string | number;
     }
-    interface Document {
-        adoptedStyleSheets?: Readonly<CSSStyleSheet[]>;
-    }
-    interface ShadowRoot {
-        adoptedStyleSheets?: Readonly<CSSStyleSheet[]>;
-    }
-    interface CSSStyleSheet {
-        replaceSync(css: string); void;
-    }
 
     interface Window {
         msCrypto?: Crypto
-    }
-    interface ElementInternals extends Pick<HTMLButtonElement, 'checkValidity' | 'reportValidity' | 'form' | 'validity' | 'validationMessage'> {
-        setValidity?(props: { customError?: boolean }, message?: string): void,
     }
 }

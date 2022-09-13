@@ -42,7 +42,7 @@ export const createStyleSheet = (cssObject: CSSObject | string, selectors: strin
         createStyleSheet(value, selectors.concat(key), styleSheet);
       } else {
         if (!rule)
-          rule = `${selectors.sort(selector => selector.startsWith('@') ? -1 : 1).map(selector => selector.startsWith('@') ? `${selector}{` : selector).join('')}{`;
+          rule = `${selectors.sort(selector => selector.startsWith('@') ? -1 : 0).map(selector => selector.startsWith('@') ? `${selector}{` : selector).join('')}{`;
         rule += `${formatToKebabCase(key)}: ${value};`;
       }
     });
