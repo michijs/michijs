@@ -1,5 +1,5 @@
 import type { Attributes } from '@lsegurado/htmltype';
-import type { FC } from '../types';
+import type { FC, LSCustomElement } from '../types';
 import { h } from '../h';
 import { Fragment } from '.';
 import { setAttribute } from '../DOM/attributes/setAttribute';
@@ -8,10 +8,10 @@ import { GetRoles } from '@lsegurado/htmltype/dist/Attributes';
 export type ElementInternalsProps = Partial<
   {
     /**Form controls usually expose a "value" property */
-    formValue: FormValue;
+    formValue: Parameters<ElementInternals['setFormValue']>[0];
     /**A validation message to show */
-    errorMessage: string | null;
-    /** */
+    errorMessage?: Parameters<ElementInternals['setValidity']>[1];
+    validityStateFlags?: ValidityStateFlags;
     tabIndex: number
   }
   & ARIAMixin
@@ -24,10 +24,10 @@ export type ElementInternalsProps = Partial<
  * - Access element internals 
  * - Validate and assign values to forms
  */
-export const ElementInternals: FC<ElementInternalsProps> = ({ children, errorMessage, formValue, tabIndex = 0, ...aria }, self) => {
+export const ElementInternals: FC<ElementInternalsProps> = ({ children, errorMessage, formValue, tabIndex = 0, validityStateFlags = { customError: true }, ...aria }, self: LSCustomElement) => {
   if (self && self.ls.internals) {
     if (errorMessage)
-      self.ls.internals.setValidity?.({ customError: true }, errorMessage);
+      self.ls.internals.setValidity?.(validityStateFlags, errorMessage);
     else
       self.ls.internals.setValidity?.({});
     self.ls.internals.setFormValue?.(formValue);

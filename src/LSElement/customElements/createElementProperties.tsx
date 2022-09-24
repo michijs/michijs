@@ -1,8 +1,8 @@
-import { AttributesType, EmptyObject, EventsType, KebabCase, MethodsType, LSElementProperties, Self, SubscribeToType } from '../types';
+import { AttributesType, EmptyObject, EventsType, KebabCase, MethodsType, LSElementProperties, Self, SubscribeToType, CssVariablesType, ReflectedAttributesType, ReflectedCssVariablesType, ComputedCssVariablesType } from '../types';
 
 export function createElementProperties<
     A extends AttributesType = EmptyObject,
-    RA extends AttributesType = EmptyObject,
+    RA extends ReflectedAttributesType = EmptyObject,
     NOA extends AttributesType = EmptyObject,
     FRA = RA extends object ? {
         [k in keyof RA as KebabCase<k>]: RA[k]
@@ -13,6 +13,12 @@ export function createElementProperties<
     S extends SubscribeToType = EmptyObject,
     EL extends Element = HTMLElement,
     FOA extends boolean = false,
-    >(elementProperties: LSElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA> & ThisType<Self<M, T, E, A, RA, NOA, EL>> = {}) {
+    C extends CssVariablesType = EmptyObject,
+    RC extends ReflectedCssVariablesType = EmptyObject,
+    CC extends ComputedCssVariablesType = EmptyObject,
+    FRC extends CssVariablesType = RC extends object ? {
+      [k in keyof RC as KebabCase<k>]: RC[k]
+    } : EmptyObject
+    >(elementProperties: LSElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA, EL, never, C, RC, FRC, CC> & ThisType<Self<CC, RC, C, M, T, E, A, RA, NOA, EL>> = {}) {
   return elementProperties;
 }

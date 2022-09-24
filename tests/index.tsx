@@ -1,4 +1,5 @@
 import { createCustomElement, h, Host, } from '../src';
+import { ColorSelector } from './ColorSelector';
 import { Router } from './routes';
 // // import sheet from './a.css' assert { type: 'css' };
 // // console.log(sheet)
@@ -32,6 +33,7 @@ createCustomElement('ls-root-test-element', {
           data={this.arrayTest}
           renderItem={item => <div key={item} onclick={this.onClickArray}>{item}</div>}
         /> */}
+        <ColorSelector />
         {this.arrayTest.map(item => <div key={item} onclick={this.onClickArray}>{item}</div>)}
         {/* <this.arrayTest.List
           renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}
@@ -43,6 +45,7 @@ createCustomElement('ls-root-test-element', {
 
 // TODO:
 // update readme
+// observe css variables?
 // Fix no such file or directory, stat 'build'
 // Unit tests some functions from element list
 // unlinked attributes ex: <div {bla ? ...obj1: ...obj2}/>

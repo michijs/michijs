@@ -1,5 +1,5 @@
 import { idGenerator, lsStore } from '../hooks';
-import { AttributesType, CreateCustomElementInstanceResult, CreateCustomElementStaticResult, EmptyObject, EventsType, KebabCase, LSCustomElement, LSElementProperties, MethodsType, Self, SubscribeToType, Tag } from '../types';
+import { AttributesType, ComputedCssVariablesType, CreateCustomElementInstanceResult, CreateCustomElementStaticResult, CssVariablesType, EmptyObject, EventsType, KebabCase, LSCustomElement, LSElementProperties, MethodsType, ReflectedAttributesType, ReflectedCssVariablesType, Self, SubscribeToType, Tag } from '../types';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 import { defineTransactionFromStore } from './properties/defineTransactionFromStore';
 import { defineEvent } from './properties/defineEvent';
@@ -9,14 +9,16 @@ import { defineMethod } from './properties/defineMethod';
 import { deepEqual } from '../utils/deepEqual';
 import { getRootNode } from '../DOM/getRootNode';
 import { getAttributeValue } from '../DOM/attributes/getAttributeValue';
-import { setAttributes } from '../DOM/attributes/setAttributes';
 import { ListFactory } from '../DOMDiff/ListFactory';
 import { getMountPoint } from '../DOM/getMountPoint';
 import { updateChildren } from '../DOMDiff';
+import { getCssVariableRule } from './properties/getCssVariableRule';
+import { getShadowRoot } from '../utils/getShadowRoot';
+import { defineReflectedAttributes } from './properties/defineReflectedAttributes';
 
 export function createCustomElement<
   A extends AttributesType = EmptyObject,
-  RA extends AttributesType = EmptyObject,
+  RA extends ReflectedAttributesType = EmptyObject,
   NOA extends AttributesType = EmptyObject,
   FRA = RA extends object ? {
     [k in keyof RA as KebabCase<k>]: RA[k]
@@ -28,10 +30,15 @@ export function createCustomElement<
   EL extends Element = HTMLElement,
   FOA extends boolean = false,
   EXTA extends keyof JSX.IntrinsicElements = undefined,
+  C extends CssVariablesType = EmptyObject,
+  RC extends ReflectedCssVariablesType = EmptyObject,
+  FRC extends CssVariablesType = RC extends object ? {
+    [k in keyof RC as KebabCase<k>]: RC[k]
+  } : EmptyObject,
+  CC extends ComputedCssVariablesType = EmptyObject,
   TA extends Tag = Tag
->(el: TA, elementProperties: LSElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA, EL, EXTA> & ThisType<Self<M, T, E, A, RA, NOA, EL>> = {}): CreateCustomElementInstanceResult<A, FRA, RA, M, T, E, NOA, EL> & CreateCustomElementStaticResult<FRA, FOA, TA, EXTA> {
+>(tag: TA, elementProperties: LSElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA, EL, EXTA, C, RC, FRC, CC> & ThisType<Self<CC, RC, C, M, T, E, A, RA, NOA, EL>> = {}): CreateCustomElementInstanceResult<CC, RC, C, A, FRA, RA, M, T, E, NOA, EL> & CreateCustomElementStaticResult<FRC, FRA, FOA, TA, EXTA> {
 
-  const { extends: extendsTag = undefined, tag, class: classToExtend = HTMLElement } = typeof el === 'string' ? { tag: el } : el;
   const {
     events,
     attributes,
@@ -42,10 +49,15 @@ export function createCustomElement<
     lifecycle,
     render,
     subscribeTo,
-    shadow = extendsTag ? false : { mode: 'open' },
+    extends: extendsObject,
+    shadow = extendsObject ? false : { mode: 'open' },
+    computedCssVariables,
+    cssVariables,
+    reflectedCssVariables,
     methods,
     formAssociated = false
   } = elementProperties;
+  const { class: classToExtend = HTMLElement, tag: extendsTag } = extendsObject ?? {};
 
   if (events)
     Object.entries(events).forEach(([key, value]) => value.init(key));
@@ -53,6 +65,7 @@ export function createCustomElement<
   class LSCustomElementResult extends (classToExtend as CustomElementConstructor) implements LSCustomElement {
     ls: LSCustomElement['ls'] = {
       store: lsStore.apply(this, [{ state: { ...attributes, ...reflectedAttributes }, transactions }]) as ReturnType<typeof lsStore>,
+      cssStore: lsStore.apply(this, [{ state: { ...cssVariables, ...reflectedCssVariables } }]) as ReturnType<typeof lsStore>,
       alreadyRendered: false,
       adoptedStyleSheets: new Map(),
       pendingTasks: 0,
@@ -126,40 +139,59 @@ export function createCustomElement<
         defineTransactionFromStore(this, key);
       }
       for (const key in this.ls.store.state) {
-        definePropertyFromStore(this, key);
+        definePropertyFromStore(this, key, this.ls.store);
       }
+      defineReflectedAttributes(this, reflectedAttributes, this.ls.store);
       if (events)
         Object.entries(events).forEach(([key, value]) => defineEvent(this, key, value));
-      if (reflectedAttributes)
-        for (const key in reflectedAttributes) {
-          const standarizedAttributeName = formatToKebabCase(key);
-          if (key !== standarizedAttributeName) {
-            definePropertyFromStore(this, standarizedAttributeName, key);
-          }
-          this.ls.store.subscribe((propertiesThatChanged) => {
-            if (propertiesThatChanged.find(x => x.startsWith(key))) {
-              const newAttributes = { [standarizedAttributeName]: this.ls.store.state[key as string] };
-              setAttributes(this, newAttributes, this);
-            }
-          });
-        }
       if (getNonObservedAttributes) {
         const nonObservedAttributes = getNonObservedAttributes.apply(this);
-        for (const key in nonObservedAttributes) {
-          this[key] = nonObservedAttributes[key];
-        }
+        Object.entries(nonObservedAttributes).forEach(([key, value]) => this[key] = value);
       }
       if (subscribeTo)
         Object.entries(subscribeTo).forEach(([key, value]) => {
-          const subscribeFunction = (propertyThatChanged?: string[] | unknown) => {
-            if (propertyThatChanged && Array.isArray(propertyThatChanged))
-              this.ls.rerenderCallback(propertyThatChanged.map(x => `${key}.${propertyThatChanged}`));//TODO: ?
+          const subscribeFunction = (propertiesThatChanged?: string[] | unknown) => {
+            if (propertiesThatChanged && Array.isArray(propertiesThatChanged))
+              this.ls.rerenderCallback(propertiesThatChanged.map(x => `${key}.${x}`));//TODO: ?
             else
               this.ls.rerenderCallback(key);
           };
           value.subscribe(subscribeFunction);
           if (value.unsubscribe)
             this.ls.unSubscribeFromStore.push(() => value.unsubscribe(subscribeFunction));
+        });
+      for (const key in this.ls.cssStore.state) {
+        definePropertyFromStore(this, key, this.ls.cssStore);
+        const styleSheet = new CSSStyleSheet();
+        const standarizedAttributeName = formatToKebabCase(key);
+
+        styleSheet.insertRule(getCssVariableRule(standarizedAttributeName, this[key], this.cssSelector));
+        getShadowRoot(this).adoptedStyleSheets.push(styleSheet);
+        this.ls.cssStore.subscribe((propertiesThatChanged) => {
+          if (propertiesThatChanged.find(x => x.startsWith(key)))
+            styleSheet.replaceSync(getCssVariableRule(standarizedAttributeName, this[key], this.cssSelector));
+        });
+      }
+      defineReflectedAttributes(this, reflectedCssVariables, this.ls.cssStore);
+      if (computedCssVariables)
+        Object.entries(computedCssVariables).forEach(([key, value]) => {
+          defineMethod(this, key, value);
+          const styleSheet = new CSSStyleSheet();
+          const standarizedAttributeName = formatToKebabCase(key);
+          let styleSheetValue = this[key]();
+          styleSheet.insertRule(getCssVariableRule(standarizedAttributeName, styleSheetValue, this.cssSelector));
+          getShadowRoot(this).adoptedStyleSheets.push(styleSheet);
+          const updateStylesheetCallback = () => {
+            const newStyleSheetValue = this[key]();
+            if (styleSheetValue !== newStyleSheetValue) {
+              styleSheetValue = newStyleSheetValue;
+              styleSheet.replaceSync(getCssVariableRule(standarizedAttributeName, styleSheetValue, this.cssSelector));
+            }
+          };
+          this.ls.cssStore.subscribe(updateStylesheetCallback);
+          this.ls.store.subscribe(updateStylesheetCallback);
+          if (subscribeTo)
+            Object.values(subscribeTo).forEach((store) => store.subscribe(updateStylesheetCallback));
         });
 
       if (formAssociated)
@@ -183,7 +215,9 @@ export function createCustomElement<
 
     static get extends() { return extendsTag; }
     static get tag() { return tag; }
-    static get observedAttributes() { return reflectedAttributes ? Object.keys(reflectedAttributes).map(key => formatToKebabCase(key)) : []; }
+    static get observedAttributes() {
+      return Object.keys({ ...reflectedAttributes, ...reflectedCssVariables }).map(key => formatToKebabCase(key));
+    }
 
     connectedCallback() {
       setReflectedAttributes(this, LSCustomElementResult.observedAttributes);
@@ -221,6 +255,10 @@ export function createCustomElement<
     }
     formStateRestoreCallback(state, mode) {
       this.formStateRestoreCallback(state, mode);
+    }
+
+    get cssSelector() {
+      return shadow ? ':host' : this.localName;
     }
     // The following properties and methods aren't strictly required,
     // but browser-level form controls provide them. Providing them helps

@@ -1,12 +1,13 @@
+import { lsStore } from '../../hooks';
 import { LSCustomElement } from '../../types';
 
-export function definePropertyFromStore(self: LSCustomElement, propertyKey: string, storeKey: string = propertyKey) {
+export function definePropertyFromStore(self: LSCustomElement, propertyKey: string, store: ReturnType<typeof lsStore>, storeKey: string = propertyKey) {
   Object.defineProperty(self, propertyKey, {
     get() {
-      return self.ls.store.state[storeKey];
+      return store.state[storeKey];
     },
     set(newValue) {
-      self.ls.store.state[storeKey] = newValue;
+      store.state[storeKey] = newValue;
     }
   });
 }

@@ -83,8 +83,9 @@ export interface ObservableLike<T = any> {
 }
 
 export interface LSCustomElement extends Element, Lifecycle<any>, LifecycleInternals, Pick<ElementInternals, 'checkValidity' | 'reportValidity' | 'form' | 'validity' | 'validationMessage' | 'willValidate'> {
-    ls: {
+    readonly ls: {
         store: ReturnType<typeof lsStore>,
+        cssStore: ReturnType<typeof lsStore>,
         alreadyRendered: boolean,
         shadowRoot?: ShadowRoot,
         adoptedStyleSheets: Map<string, CSSStyleSheet[]>,
@@ -100,13 +101,13 @@ export interface LSCustomElement extends Element, Lifecycle<any>, LifecycleInter
     /**Forces the element to re-render */
     rerender(): void,
     /**Create unique IDs with a discernible key */
-    idGen: ReturnType<typeof idGenerator>['getId'],
-    name: string;
-    type: string;
+    readonly idGen: ReturnType<typeof idGenerator>['getId'],
+    readonly name: string;
+    readonly type: string;
+    readonly cssSelector: string;
 }
 
-export type EmptyType = null | undefined | false;
-export type PrimitiveType = bigint | string | number | true | AnyObject;
+export type PrimitiveType = bigint | string | number | null | undefined | boolean;
 
 interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> { }
 
@@ -130,11 +131,11 @@ export type IterableJSX = AnyObject | ObjectJSXElement | FunctionJSXElement | Cl
 export interface ObjectJSXElement extends CommonJSXAttrs { tag: string }
 export interface FunctionJSXElement extends CommonJSXAttrs { tag: FC<any> }
 export interface ClassJSXElement extends CommonJSXAttrs { tag: (new () => {}) & { tag: string, extends?: string } }
-export type SingleJSXElement = EmptyType | PrimitiveType | ObjectJSXElement | FunctionJSXElement | FragmentJSXElement | ClassJSXElement | ArrayJSXElement;
+export type SingleJSXElement = PrimitiveType | ObjectJSXElement | FunctionJSXElement | FragmentJSXElement | ClassJSXElement | ArrayJSXElement;
 export type ArrayJSXElement = Array<SingleJSXElement>;
 // export type PureObjectJSXElement = { tag: string } & Omit<CommonJSXAttrs,'children'> & {children: (PureObjectJSXElement | string)[]};
 
-export interface FC<T = {}, C = JSX.Element, S = LSCustomElement> {
+export interface FC<T = {}, C = JSX.Element, S = Element> {
     (attrs: Omit<T, 'children'> & { children?: C }, self?: S | null): JSX.Element
 }
 
@@ -158,7 +159,12 @@ export type Tag = `${string}-${string}`;
 export type AnyObject = Record<PropertyKey, any>;
 
 // I need to use object to avoid infinite loop in KeysAndKeysOf
-export type AttributesType = object;
+export type AttributesType = Record<PropertyKey, PrimitiveType | AnyObject>;
+export type ReflectedAttributesType = Record<PropertyKey, Exclude<PrimitiveType, true> | AnyObject>;
+
+export type CssVariablesType = Record<string, PrimitiveType>;
+export type ComputedCssVariablesType = Record<string, Function>;
+export type ReflectedCssVariablesType = Record<string, Exclude<PrimitiveType, true>>;
 
 export type MethodsType = Record<string, Function>
 
@@ -175,13 +181,18 @@ export interface LsStoreProps<T, Y> {
     transactions: Y
 }
 
-export type Self<M extends MethodsType,
+export type Self<
+    CC extends ComputedCssVariablesType,
+    RC extends ReflectedCssVariablesType,
+    C extends CssVariablesType,
+    M extends MethodsType,
     T extends MethodsType,
     E extends EventsType,
     A extends AttributesType,
-    RA extends AttributesType,
+    RA extends ReflectedAttributesType,
     NOA extends AttributesType,
-    EL extends Element> = EL & A & RA & M & NOA & T & { [k in keyof E]: E[k] extends EventDispatcher<infer T> ? (detail?: T) => boolean : any } & LSCustomElement;
+    // TODO: Readonly LSCustomElement?
+    EL extends Element> = RC & C & EL & A & RA & NOA & Readonly<CC & M & T & { [k in keyof E]: E[k] extends EventDispatcher<infer T> ? (detail?: T) => boolean : any }> & LSCustomElement;
 
 interface Lifecycle<FRA> {
     /**This method is called right before a component mounts.*/
@@ -251,11 +262,27 @@ export interface LSElementProperties<
     FOA extends boolean,
     EL extends Element,
     EXTA extends keyof JSX.IntrinsicElements,
+    C extends CssVariablesType,
+    RC extends ReflectedCssVariablesType,
+    FRC extends Object,
+    CC extends ComputedCssVariablesType,
 > {
     /**Allows to define attributes.*/
     attributes?: A,
+    /**Allows to define CSS variables. CSS variables changes does not trigger a rerender*/
+    cssVariables?: C,
     /**Allows to define non observed attributes. This is useful for complex objects that cannot be observed.*/
     nonObservedAttributes?(): NOA,
+    /**
+     * Allows to define reflected CSS variables and follows the Kebab case. CSS variables changes does not trigger a rerender
+     * A reflected CSS variable cannot be initialized with a true value
+     * @link https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr
+     */
+    reflectedCssVariables?: RC,
+    /**
+     * Allows you to define CSS variables that depend on the state of the component.
+     */
+    computedCssVariables?: CC,
     /**
      * Allows to define reflected attributes and follows the Kebab case.
      * A reflected attribute cannot be initialized with a true value
@@ -281,7 +308,7 @@ export interface LSElementProperties<
      */
     formAssociated?: FOA,
     /**Contains all lifecycle methods.*/
-    lifecycle?: Lifecycle<FRA> & LifecycleInternals,
+    lifecycle?: Lifecycle<FRA & FRC> & LifecycleInternals,
     /**
      * Allows you to define an event to his parent and triggering it easily. It will be defined using Lower case. For example countChanged will be registered as countchanged.
      * @link https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
@@ -303,17 +330,20 @@ export interface LSElementProperties<
     },
 }
 
-export interface CreateCustomElementStaticResult<FRA extends Object, FOA extends boolean, TA extends Tag, EXTA extends string> {
+export interface CreateCustomElementStaticResult<FRC extends Object, FRA extends Object, FOA extends boolean, TA extends Tag, EXTA extends string> {
     readonly tag: TA,
     readonly extends?: EXTA,
-    readonly observedAttributes: Readonly<Array<keyof FRA>>
+    readonly observedAttributes: Readonly<Array<keyof FRA & keyof FRC>>
     formAssociated: FOA,
 }
 
 export type CreateCustomElementInstanceResult<
+    CC extends ComputedCssVariablesType,
+    RC extends ReflectedCssVariablesType,
+    C extends CssVariablesType,
     A extends AttributesType,
     FRA extends Object,
-    RA extends AttributesType,
+    RA extends ReflectedAttributesType,
     M extends MethodsType,
     T extends MethodsType,
     E extends EventsType,
@@ -328,9 +358,9 @@ export type CreateCustomElementInstanceResult<
                     }
                     & HTMLElements.commonElement
                     & GetAttributes<'name'>
-                >, Self<M, T, E, A, RA, NOA, EL>
+                >, Self<CC, RC, C, M, T, E, A, RA, NOA, EL>
             >
-        } & Self<M, T, E, A, RA, NOA, EL>
+        } & Self<CC, RC, C, M, T, E, A, RA, NOA, EL>
     )
 
 export type GetElementProps<El extends any> = El extends (new () => { props: any }) ? InstanceType<El>['props'] : (El extends (...args: any) => any ? Parameters<El>[0] : never)
