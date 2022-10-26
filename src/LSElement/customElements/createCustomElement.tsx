@@ -1,5 +1,5 @@
 import { idGenerator, lsStore } from '../hooks';
-import { AttributesType, ComputedCssVariablesType, CreateCustomElementInstanceResult, CreateCustomElementStaticResult, CssVariablesType, EmptyObject, EventsType, KebabCase, LSCustomElement, LSElementProperties, MethodsType, ReflectedAttributesType, ReflectedCssVariablesType, Self, SubscribeToType, Tag } from '../types';
+import { AttributesType, ComputedCssVariablesType, CreateCustomElementStaticResult, CssVariablesType, EmptyObject, EventsType, KebabCase, LSCustomElement, LSElementProperties, MethodsType, ReflectedAttributesType, ReflectedCssVariablesType, Self, SubscribeToType, Tag } from '../types';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 import { defineTransactionFromStore } from './properties/defineTransactionFromStore';
 import { defineEvent } from './properties/defineEvent';
@@ -9,12 +9,12 @@ import { defineMethod } from './properties/defineMethod';
 import { deepEqual } from '../utils/deepEqual';
 import { getRootNode } from '../DOM/getRootNode';
 import { getAttributeValue } from '../DOM/attributes/getAttributeValue';
-import { ListFactory } from '../DOMDiff/ListFactory';
 import { getMountPoint } from '../DOM/getMountPoint';
 import { updateChildren } from '../DOMDiff';
 import { getCssVariableRule } from './properties/getCssVariableRule';
-import { getShadowRoot } from '../utils/getShadowRoot';
 import { defineReflectedAttributes } from './properties/defineReflectedAttributes';
+import { addStylesheetsToCustomElement } from '../utils/addStylesheetsToCustomElement';
+import { h } from '../h';
 
 export function createCustomElement<
   A extends AttributesType = EmptyObject,
@@ -37,7 +37,7 @@ export function createCustomElement<
   } : EmptyObject,
   CC extends ComputedCssVariablesType = EmptyObject,
   TA extends Tag = Tag
->(tag: TA, elementProperties: LSElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA, EL, EXTA, C, RC, FRC, CC> & ThisType<Self<CC, RC, C, M, T, E, A, RA, NOA, EL>> = {}): CreateCustomElementInstanceResult<CC, RC, C, A, FRA, RA, M, T, E, NOA, EL> & CreateCustomElementStaticResult<FRC, FRA, FOA, TA, EXTA> {
+>(tag: TA, elementProperties: LSElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA, EL, EXTA, C, RC, FRC, CC> & ThisType<Self<CC, RC, C, M, T, E, A, RA, NOA, EL, FRA>> = {}): Self<CC, RC, C, M, T, E, A, RA, NOA, EL, FRA> & CreateCustomElementStaticResult<FRC, FRA, FOA, TA, EXTA> {
 
   const {
     events,
@@ -49,6 +49,7 @@ export function createCustomElement<
     lifecycle,
     render,
     subscribeTo,
+    adoptedStyleSheets,
     extends: extendsObject,
     shadow = extendsObject ? false : { mode: 'open' },
     computedCssVariables,
@@ -67,7 +68,6 @@ export function createCustomElement<
       store: lsStore.apply(this, [{ state: { ...attributes, ...reflectedAttributes }, transactions }]) as ReturnType<typeof lsStore>,
       cssStore: lsStore.apply(this, [{ state: { ...cssVariables, ...reflectedCssVariables } }]) as ReturnType<typeof lsStore>,
       alreadyRendered: false,
-      adoptedStyleSheets: new Map(),
       pendingTasks: 0,
       rerenderCallback: (propertyThatChanged) => {
         if (observe)
@@ -84,6 +84,7 @@ export function createCustomElement<
         if (this.ls.alreadyRendered && this.ls.pendingTasks === 0)
           this.rerender();
       },
+      styles: [],
       unSubscribeFromStore: new Array<() => void>(),
       idGen: undefined,
       internals: undefined
@@ -104,11 +105,7 @@ export function createCustomElement<
     }
     renderCallback() {
       const newChildren = this.render?.();
-      const mountPoint = getMountPoint(this);
-      if (Array.isArray(newChildren))
-        ListFactory.update(newChildren, mountPoint, false, this);
-      else
-        updateChildren(mountPoint, [newChildren], false, this);
+      updateChildren(getMountPoint(this), [...this.ls.styles.map(x => h.createElement(x, { $staticChildren: true })), newChildren], false, this);
     }
     rerender() {
       this.willUpdate?.();
@@ -166,10 +163,17 @@ export function createCustomElement<
         const standarizedAttributeName = formatToKebabCase(key);
 
         styleSheet.insertRule(getCssVariableRule(standarizedAttributeName, this[key], this.cssSelector));
-        getShadowRoot(this).adoptedStyleSheets.push(styleSheet);
+        addStylesheetsToCustomElement(this, false, styleSheet);
         this.ls.cssStore.subscribe((propertiesThatChanged) => {
           if (propertiesThatChanged.find(x => x.startsWith(key)))
             styleSheet.replaceSync(getCssVariableRule(standarizedAttributeName, this[key], this.cssSelector));
+
+          if (observe)
+            Object.entries<() => void>(observe).forEach(([key, observer]) => {
+              const matches = propertiesThatChanged.find(x => x.startsWith(key));
+              if (matches)
+                observer.call(this);
+            });
         });
       }
       defineReflectedAttributes(this, reflectedCssVariables, this.ls.cssStore);
@@ -180,7 +184,7 @@ export function createCustomElement<
           const standarizedAttributeName = formatToKebabCase(key);
           let styleSheetValue = this[key]();
           styleSheet.insertRule(getCssVariableRule(standarizedAttributeName, styleSheetValue, this.cssSelector));
-          getShadowRoot(this).adoptedStyleSheets.push(styleSheet);
+          addStylesheetsToCustomElement(this, false, styleSheet);
           const updateStylesheetCallback = () => {
             const newStyleSheetValue = this[key]();
             if (styleSheetValue !== newStyleSheetValue) {
@@ -193,6 +197,8 @@ export function createCustomElement<
           if (subscribeTo)
             Object.values(subscribeTo).forEach((store) => store.subscribe(updateStylesheetCallback));
         });
+      if (adoptedStyleSheets)
+        addStylesheetsToCustomElement(this, true, ...adoptedStyleSheets);
 
       if (formAssociated)
         this.ls.internals = this.attachInternals();
@@ -231,8 +237,7 @@ export function createCustomElement<
     }
 
     disconnectedCallback() {
-      if (this.parentNode === null) {
-        //TODO: search a better way to validate if element does not exists anymore
+      if (!document.contains(this)) {
         // TODO: what happens if element is moved?
         this.ls.unSubscribeFromStore.forEach((fn) => fn());
         this.didUnmount?.();

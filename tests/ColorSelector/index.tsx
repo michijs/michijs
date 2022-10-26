@@ -1,4 +1,4 @@
-import { AdoptedStyle, createCustomElement, css, h } from '../../src';
+import { createCustomElement, css, h } from '../../src';
 
 const style = css`
     div {
@@ -20,10 +20,10 @@ export const ColorSelector = createCustomElement('color-selector', {
       return this.color === '#ff0000' ? '"red"': '"not red"';
     }
   },
+  adoptedStyleSheets: [style],
   render() {
     return (
       <span>
-        <AdoptedStyle id="style">{style}</AdoptedStyle>
         <input type="color" value={this.color} oninput={(ev) => {
           this.color = ev.target.value as `#${string}`;
         }} />

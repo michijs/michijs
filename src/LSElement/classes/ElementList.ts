@@ -1,4 +1,5 @@
 import { DeepReadonly, ObjectJSXElement } from '../..';
+import { ListElement } from '../components/FragmentAndList';
 import { ListAttrs } from '../components/List';
 import { Target } from './Target';
 
@@ -42,9 +43,9 @@ export class ElementList<V> implements ElementListInterface<V> {
    * This allows it to have a performance close to vanilla js. 
    * An operation on the data implies an operation on the associated elements.
    */
-  List = <E extends string = 'ls-list'>({ as, renderItem, ...attrs }: Omit<ListAttrs<V, E>, 'data' | 'renderItem'> & { renderItem: RenderFunction<V> }) => {
+  List = <E extends string = typeof ListElement.tag>({ as, renderItem, ...attrs }: Omit<ListAttrs<V, E>, 'data' | 'renderItem'> & { renderItem: RenderFunction<V> }) => {
     return {
-      tag: as ?? 'ls-list',
+      tag: as ?? ListElement.tag,
       attrs: {
         ...attrs,
         children: [],

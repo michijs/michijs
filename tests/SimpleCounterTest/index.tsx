@@ -1,4 +1,4 @@
-import { AdoptedStyle, createCustomElement, EventDispatcher, h } from '../../src';
+import { createCustomElement, EventDispatcher, h } from '../../src';
 import { counterStyle } from '../shared/counterStyle';
 
 export const SimpleCounter = createCustomElement('simple-counter', {
@@ -17,10 +17,10 @@ export const SimpleCounter = createCustomElement('simple-counter', {
       this.countChanged(this.count);
     }
   },
+  adoptedStyleSheets: [counterStyle],
   render() {
     return (
       <>
-        <AdoptedStyle id="style">{counterStyle}</AdoptedStyle>
         <button onpointerup={this.decrementCount}>-</button>
         <span>{this.count}</span>
         <button onpointerup={this.incrementCount}>+</button>

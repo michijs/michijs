@@ -5,7 +5,7 @@ import { lsStore } from './hooks/lsStore';
 import { Properties } from 'csstype';
 import { LSTag } from './h/tags/LSTag';
 import { GetAttributes } from '@lsegurado/htmltype/dist/Attributes';
-import { FragmentTag } from './constants';
+import { Fragment } from './components';
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 type IfEquals<X, Y, A = X, B = never> =
@@ -88,7 +88,7 @@ export interface LSCustomElement extends Element, Lifecycle<any>, LifecycleInter
         cssStore: ReturnType<typeof lsStore>,
         alreadyRendered: boolean,
         shadowRoot?: ShadowRoot,
-        adoptedStyleSheets: Map<string, CSSStyleSheet[]>,
+        styles: HTMLStyleElement[],
         rerenderCallback(propertiesThatChanged: Array<string> | PropertyKey): void,
         pendingTasks: number,
         unSubscribeFromStore: Array<() => void>,
@@ -120,26 +120,26 @@ export type DeepReadonly<T> =
     T extends object ? DeepReadonlyObject<T> :
     T;
 
-export interface IterableAttrs {
+export interface IterableAttrs<T> {
     /**When iterating nodes its higly recomended to use keys */
-    key?: number | string
+    key?: number | string,
+    tag?: T
 }
 
-export interface CommonJSXAttrs extends IterableAttrs { attrs?: (Record<string, any> & { children: JSX.Element[] }) }
-export interface FragmentJSXElement extends CommonJSXAttrs { tag: typeof FragmentTag }
+export interface CommonJSXAttrs<T> extends IterableAttrs<T> { attrs?: (Record<string, any> & { children: JSX.Element[] }) }
+export type FragmentJSXElement = CommonJSXAttrs<typeof Fragment.tag>
 export type IterableJSX = AnyObject | ObjectJSXElement | FunctionJSXElement | ClassJSXElement | FragmentJSXElement;
-export interface ObjectJSXElement extends CommonJSXAttrs { tag: string }
-export interface FunctionJSXElement extends CommonJSXAttrs { tag: FC<any> }
-export interface ClassJSXElement extends CommonJSXAttrs { tag: (new () => {}) & { tag: string, extends?: string } }
-export type SingleJSXElement = PrimitiveType | ObjectJSXElement | FunctionJSXElement | FragmentJSXElement | ClassJSXElement | ArrayJSXElement;
+export type ObjectJSXElement = CommonJSXAttrs<string>
+export type DOMElementJSXElement = CommonJSXAttrs<Element>
+export type FunctionJSXElement = CommonJSXAttrs<FC<any>>
+export type ClassJSXElement = CommonJSXAttrs<(new () => {}) & { tag: string, extends?: string }>
+export type SingleJSXElement = PrimitiveType | ObjectJSXElement | FunctionJSXElement | FragmentJSXElement | ClassJSXElement | ArrayJSXElement | DOMElementJSXElement;
 export type ArrayJSXElement = Array<SingleJSXElement>;
 // export type PureObjectJSXElement = { tag: string } & Omit<CommonJSXAttrs,'children'> & {children: (PureObjectJSXElement | string)[]};
 
 export interface FC<T = {}, C = JSX.Element, S = Element> {
     (attrs: Omit<T, 'children'> & { children?: C }, self?: S | null): JSX.Element
 }
-
-export type CompatibleStyleSheet = string | CSSStyleSheet;
 
 export type PropertyKey = string | number | symbol;
 export interface ChangeFunction {
@@ -191,8 +191,24 @@ export type Self<
     A extends AttributesType,
     RA extends ReflectedAttributesType,
     NOA extends AttributesType,
+    EL extends Element,
+    FRA extends Object, 
     // TODO: Readonly LSCustomElement?
-    EL extends Element> = RC & C & EL & A & RA & NOA & Readonly<CC & M & T & { [k in keyof E]: E[k] extends EventDispatcher<infer T> ? (detail?: T) => boolean : any }> & LSCustomElement;
+    S = RC & C & EL & A & RA & NOA & Readonly<CC & M & T & { [k in keyof E]: E[k] extends EventDispatcher<infer T> ? (detail?: T) => boolean : any }> & LSCustomElement
+> = (
+        (new () => {
+            props: LSTag<
+                Partial<
+                    FRA
+                    & {
+                        [k in StringKeyOf<E> as `on${Lowercase<k>}`]: E[k] extends EventDispatcher<infer D> ? (ev: CustomEvent<D>) => any : never
+                    }
+                    & HTMLElements.commonElement
+                    & GetAttributes<'name'>
+                >, S
+            >
+        }) & S
+    );
 
 interface Lifecycle<FRA> {
     /**This method is called right before a component mounts.*/
@@ -300,6 +316,8 @@ export interface LSElementProperties<
      */
     observe?: { [k in KeysAndKeysOf<RA>]?: () => void }
     & { [k in KeysAndKeysOf<A>]?: () => void }
+    & { [k in KeysAndKeysOf<C>]?: () => void }
+    & { [k in KeysAndKeysOf<RC>]?: () => void }
     & (S extends EmptyObject ? { [k in keyof S]?: () => void } : EmptyObject)
     // observers?: ArrayWithOneOrMoreElements<[callback: (propertiesThatChanged: O[]) => void, target: ArrayWithOneOrMoreElements<O>]>,,
     /**
@@ -307,8 +325,14 @@ export interface LSElementProperties<
      * @link https://web.dev/more-capable-form-controls/
      */
     formAssociated?: FOA,
+    /**
+     * Allows to use Constructable Stylesheets.  
+     * Remember that you need to use Shadow DOM to be able to use Constructable Stylesheets. In case your component doesn't support this feature, it will return a style tag.
+     * @link https://developers.google.com/web/updates/2019/02/constructable-stylesheets
+    */
+    adoptedStyleSheets?: CSSStyleSheet[],
     /**Contains all lifecycle methods.*/
-    lifecycle?: Lifecycle<FRA & FRC> & LifecycleInternals,
+    lifecycle?: Lifecycle<FRA & FRC> & (FOA extends true ? LifecycleInternals: {}),
     /**
      * Allows you to define an event to his parent and triggering it easily. It will be defined using Lower case. For example countChanged will be registered as countchanged.
      * @link https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
@@ -337,32 +361,6 @@ export interface CreateCustomElementStaticResult<FRC extends Object, FRA extends
     formAssociated: FOA,
 }
 
-export type CreateCustomElementInstanceResult<
-    CC extends ComputedCssVariablesType,
-    RC extends ReflectedCssVariablesType,
-    C extends CssVariablesType,
-    A extends AttributesType,
-    FRA extends Object,
-    RA extends ReflectedAttributesType,
-    M extends MethodsType,
-    T extends MethodsType,
-    E extends EventsType,
-    NOA extends AttributesType,
-    EL extends Element> = (
-        new () => {
-            props: LSTag<
-                Partial<
-                    FRA
-                    & {
-                        [k in StringKeyOf<E> as `on${Lowercase<k>}`]: E[k] extends EventDispatcher<infer D> ? (ev: CustomEvent<D>) => any : never
-                    }
-                    & HTMLElements.commonElement
-                    & GetAttributes<'name'>
-                >, Self<CC, RC, C, M, T, E, A, RA, NOA, EL>
-            >
-        } & Self<CC, RC, C, M, T, E, A, RA, NOA, EL>
-    )
-
 export type GetElementProps<El extends any> = El extends (new () => { props: any }) ? InstanceType<El>['props'] : (El extends (...args: any) => any ? Parameters<El>[0] : never)
 
 export type EventListenerMap = Map<string, EventListener>;
@@ -384,6 +382,7 @@ declare global {
          */
         $doNotTouchChildren?: boolean;
     }
+
     interface ChildNode {
         /**
          * An identifier of an item within a list

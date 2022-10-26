@@ -47,7 +47,7 @@ LS-Element custom elements are plain objects.
 New components can be created using the `jsx/tsx` extension, such as `MyCounter.tsx`.
 
 ```tsx
-import { AdoptedStyle, createCustomElement, EventDispatcher, h } from "@lsegurado/ls-element";
+import { createCustomElement, EventDispatcher, h } from "@lsegurado/ls-element";
 import { counterStyle } from "./counterStyle";
 
 export const MyCounter = createCustomElement('my-counter', {
@@ -61,6 +61,7 @@ export const MyCounter = createCustomElement('my-counter', {
   events: {
     countChanged: new EventDispatcher<number>()
   },
+  adoptedStyleSheets: [counterStyle],
   observe: {
     count() {
       this.countChanged(this.count)
@@ -69,7 +70,6 @@ export const MyCounter = createCustomElement('my-counter', {
   render() {
     return (
       <>
-        <AdoptedStyle id="style">{counterStyle}</AdoptedStyle>
         <button onpointerup={this.decrementCount}>-</button>
         <span>{this.count}</span>
         <button onpointerup={this.incrementCount}>+</button>
@@ -161,12 +161,28 @@ A component consists of the following properties:
       <td colspan="3">Methods are functions that notify changes at the time of making the change.</td>
     </tr>
     <tr>
+      <td>adoptedStyleSheets</td>
+      <td colspan="3">Allows to use <a href="https://developers.google.com/web/updates/2019/02/constructable-stylesheets">Constructable Stylesheets.</a> Remember that you need to use Shadow DOM to be able to use Constructable Stylesheets. In case your component doesn't support this feature, it will return a style tag.</td>
+    </tr>
+    <tr>
+      <td>cssVariables</td>
+      <td colspan="3">Allows to define CSS variables. CSS variables changes does not trigger a rerender.</td>
+    </tr>
+    <tr>
+      <td>reflectedCssVariables</td>
+      <td colspan="3">Allows to define reflected CSS variables and follows the Kebab case. CSS variables changes does not trigger a rerender. A reflected CSS variable cannot be initialized with a true value</td>
+    </tr>
+    <tr>
+      <td>computedCssVariables</td>
+      <td colspan="3">Allows you to define CSS variables that depend on the state of the component.</td>
+    </tr>
+    <tr>
       <td>render</td>
       <td colspan="3">Function that renders the component.</td>
     </tr>
     <tr>
       <td>observe</td>
-      <td colspan="3">Contains methods with a name of an attribute / reflected attribute / observable like. Those methods are executed when a change has been made to their corresponding property.</td>
+      <td colspan="3">Contains methods with a name of an attribute / reflected attribute / css variables / observable like. Those methods are executed when a change has been made to their corresponding property.</td>
     </tr>
     <tr>
       <td rowspan="13">lifecycle</td>
@@ -245,10 +261,22 @@ A component consists of the following properties:
       <td>formAssociated</td>
       <td colspan="3">This tells the browser to treat the element like a <a href="https://web.dev/more-capable-form-controls/">form control</a>.</td>
     </tr>
+    <tr>
+      <td rowspan="3">extends</td>
+      <td rowspan="3">Allows to create a <a href ="https://developers.google.com/web/fundamentals/web-components/customelements#extendhtml">Customized built-in element</a></td>
+      <tr>
+        <td>tag</td>
+        <td colspan="3">The tag to extend</td>
+      </tr>
+      <tr>
+        <td>class</td>
+        <td colspan="3">The class you want to extend</td>
+      </tr>
+    </tr>
   </tbody>
 </table>
 
-Also, you have to create an [Autonomous custom element](https://developers.google.com/web/fundamentals/web-components/customelements#shadowdom) with a tag or in case you want to create an [Customized built-in element](https://developers.google.com/web/fundamentals/web-components/customelements#extendhtml) you have to declare the tag, the class you want to extend and the tag to extend.
+If the extends field is not provided an [Autonomous custom element](https://developers.google.com/web/fundamentals/web-components/customelements#shadowdom) will be created.
 
 ## LSStore structure
 A store consists of the following properties:
@@ -316,11 +344,6 @@ import sheet from './styles.css' assert { type: 'css' };
 ``` -->
 
 ## Components
-### Constructable Stylesheets
-If you are not familiar with Constructable Stylesheets please check [this link](https://developers.google.com/web/updates/2019/02/constructable-stylesheets).
-To use Constructable Stylesheets simply import AdoptedStyle and use it like an style tag (see [example](https://github.com/lsegurado/ls-element#creating-components)). In case your browser doesn't support this feature, it will return a style tag.
-Remember that you need to use Shadow DOM to be able to use Constructable Stylesheets. 
-
 ### Host
 Allows to set attributes and event listeners to the host element itself.
 

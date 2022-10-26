@@ -72,13 +72,12 @@ const { state, transactions, ...store } = lsStore({
   }
 });
 
-export const Tbody = createCustomElement(
+export const Tbody = createCustomElement('ls-table-body',
   {
-    tag: 'ls-table-body',
-    extends: 'tbody',
-    class: HTMLTableSectionElement
-  },
-  {
+    extends: {
+      tag: 'tbody',
+      class: HTMLTableSectionElement
+    },
     subscribeTo: {
       store
     },
@@ -101,13 +100,12 @@ export const Tbody = createCustomElement(
   }
 );
 
-export const TableManager = createCustomElement(
+export const TableManager = createCustomElement('ls-table-manager',
   {
-    tag: 'ls-table-manager',
-    extends: 'div',
-    class: HTMLDivElement
-  },
-  {
+    extends: {
+      tag: 'div',
+      class: HTMLDivElement
+    },
     render() {
       return (
         <div _className="row">

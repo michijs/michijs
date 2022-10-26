@@ -1,6 +1,6 @@
 import { ElementFactory, IterableAttrs, LSCustomElement } from '../..';
 import { Target } from '../classes/Target';
-import { ListTag } from '../constants';
+import { ListElement } from '../components/FragmentAndList';
 
 function nodeNodeIsSameElement(node: ChildNode, jsx: JSX.Element) {
   const isIterable = jsxIsIterable(jsx);
@@ -10,7 +10,7 @@ function nodeNodeIsSameElement(node: ChildNode, jsx: JSX.Element) {
   return !isIterable;
 }
 
-function jsxIsIterable(jsx: JSX.Element): jsx is IterableAttrs {
+function jsxIsIterable(jsx: JSX.Element): jsx is IterableAttrs<any> {
   return typeof jsx === 'object' && 'key' in jsx;
 }
 
@@ -25,11 +25,10 @@ export function createTarget(el: ParentNode, isSVG: boolean, context: Element) {
 
 export const ListFactory: ElementFactory = {
   compare(el: Element): boolean {
-    return el.localName === 'ls-list';
+    return el.localName === ListElement.tag;
   },
   create(jsx: JSX.Element[], isSVG?: boolean, self?: Element) {
-    const el: HTMLElement | SVGElement = isSVG ? document.createElementNS('http://www.w3.org/2000/svg', ListTag) : document.createElement(ListTag);
-    import('../utils/addFragmentAndListStyle').then(x => x.addFragmentAndListStyle(el, self));
+    const el: HTMLElement | SVGElement = isSVG ? document.createElementNS('http://www.w3.org/2000/svg', ListElement.tag) : document.createElement(ListElement.tag);
     createTarget(el, isSVG, self).appendItems(...jsx);
     return el;
   },

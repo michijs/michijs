@@ -62,9 +62,9 @@ export const LSRoute = createCustomElement('ls-route', {
           }
         };
 
-        if (component) {
+        if (component) 
           updateCurrentComponent(component);
-        } else {
+        else {
           if (loadingComponent) {
             updateCurrentComponent(loadingComponent);
           }
@@ -74,9 +74,8 @@ export const LSRoute = createCustomElement('ls-route', {
           });
         }
         // }
-      } else {
-        this.currentComponent = <></>;
-      }
+      } else
+        this.currentComponent = null;
     }
   },
   observe: {

@@ -18,11 +18,11 @@ export const ObjectFactory: ElementFactory = {
         el = document.createElementNS('http://www.w3.org/2000/svg', jsx.tag);
       }
     }
-    else if (jsx.attrs?.is) {
+    else if (jsx.attrs?.is)
       el = document.createElement(jsx.tag, jsx.attrs.is);
-    } else {
+    else 
       el = document.createElement(jsx.tag);
-    }
+    
     $oncreated?.(el, isSVG, self);
 
     if (!el.$doNotTouchChildren && !$doNotTouchChildren)

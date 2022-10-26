@@ -20,4 +20,4 @@ export type LSAttributes<E = HTMLElement> = {
      * Callback that is called when the element is updated
      */
     $onupdate?: (jsx: JSX.Element, el: E, isSVG?: boolean, context?: LSCustomElement) => void
-} & Partial<DomInterface<PickWritable<E>>> & IterableAttrs;
+} & Partial<DomInterface<PickWritable<E>>> & IterableAttrs<string>;

@@ -12,7 +12,6 @@ createCustomElement('ls-root-test-element', {
   shadow: false,
   transactions: {
     onClickArray() {
-      console.log(this);
       // this.arrayTest = [0, 1, 2, 3, 6]
       this.arrayTest.reverse();
       // this.arrayTest.pop();
@@ -45,8 +44,7 @@ createCustomElement('ls-root-test-element', {
 
 // TODO:
 // update readme
-// observe css variables?
-// Fix no such file or directory, stat 'build'
+// Remove param from htmlElements since is deprecated
 // Unit tests some functions from element list
 // unlinked attributes ex: <div {bla ? ...obj1: ...obj2}/>
 // and obj2 has an attribute that obj1 does not that attribute will be unlinked...

@@ -1,5 +1,4 @@
 import { createStyleSheet } from '../css/createStyleSheet';
-import { AdoptedStyle } from './AdoptedStyle';
 import { createCustomElement } from '../customElements/createCustomElement';
 import { h } from '../h';
 
@@ -40,6 +39,7 @@ export const AsyncComponent = createCustomElement('ls-async-component', {
 
     }
   },
+  adoptedStyleSheets: [AsyncComponentStyleSheet],
   observe: {
     promise() {
       this.promiseChangeCallback();
@@ -47,10 +47,7 @@ export const AsyncComponent = createCustomElement('ls-async-component', {
   },
   render() {
     return (
-      <>
-        <AdoptedStyle id="async-component-style">{AsyncComponentStyleSheet}</AdoptedStyle>
-        {this.getCurrentComponent()}
-      </>
+      this.getCurrentComponent()
     );
   }
 });

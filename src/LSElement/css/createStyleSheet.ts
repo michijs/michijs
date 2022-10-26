@@ -1,60 +1,32 @@
-import { supportsAdoptingStyleSheets } from './supportsAdoptingStyleSheets';
-import { CompatibleStyleSheet, CSSObject } from '../types';
+import { CSSObject } from '../types';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 import { valueIsCSSObject } from '../typeWards/valueIsCSSObject';
 
-const compatibleStyleSheet = () => {
-  if (supportsAdoptingStyleSheets) {
-    const styleSheet = new CSSStyleSheet();
-    return {
-      insertRule(rule: string) {
-        styleSheet.insertRule(rule);
-      },
-      getStyleSheet() {
-        return styleSheet;
-      },
-      replaceSync(rule: string) {
-        styleSheet.replaceSync(rule);
-      }
-    };
-  }
-  const rules = [];
-  return {
-    insertRule(rule: string) {
-      rules.push(rule);
-    },
-    getStyleSheet() {
-      return rules.join('');
-    },
-    replaceSync(rule: string) {
-      rules.push(rule);
-    }
-  };
-
-};
-
 /**Allows to create a Constructable Stylesheet with a CSSObject */
-export const createStyleSheet = (cssObject: CSSObject | string, selectors: string[] = [], styleSheet = compatibleStyleSheet()): CompatibleStyleSheet => {
-  let rule: string;
-  if (typeof cssObject === 'object') {
-    Object.entries(cssObject).forEach(([key, value]) => {
-      if (valueIsCSSObject(value)) {
-        createStyleSheet(value, selectors.concat(key), styleSheet);
-      } else {
-        if (!rule)
-          rule = `${selectors.sort(selector => selector.startsWith('@') ? -1 : 0).map(selector => selector.startsWith('@') ? `${selector}{` : selector).join('')}{`;
-        rule += `${formatToKebabCase(key)}: ${value};`;
-      }
-    });
-    if (rule) {
-      selectors.forEach((selector) => { if (selector.startsWith('@')) rule += '}'; });
-      rule += '}';
-      styleSheet.insertRule(rule);
+export const createStyleSheet = (cssObject: CSSObject, selectors: string[] = [], styleSheet = new CSSStyleSheet()) => {
+  const ruleDeclarations = Object.entries(cssObject).reduce((previousValue, [key, value]) => {
+    if (valueIsCSSObject(value)) {
+      createStyleSheet(value, selectors.concat(key), styleSheet);
+      return previousValue;
+    } return `${previousValue}${formatToKebabCase(key)}: ${value};`;
+  }, '');
+
+  // If rule is not empty
+  if (ruleDeclarations) {
+    const indexMedia = selectors.findIndex(x => x.startsWith('@'));
+    let endOfTheRule = '}';
+    if (indexMedia !== -1) {
+      const mediaSelector = selectors.splice(indexMedia, 1);
+      selectors.unshift(`${mediaSelector}{`);
+      endOfTheRule += '}';
     }
-  } else {
-    styleSheet.replaceSync(cssObject);
+    // Selectors of the rule
+    const ruleSelectors = selectors.join('');
+    // Rules with @ should be behind other rules
+    const rule = `${ruleSelectors}{${ruleDeclarations}${endOfTheRule}`;
+    styleSheet.insertRule(rule);
   }
-  return styleSheet.getStyleSheet();
+  return styleSheet;
 };
 
 /**
@@ -63,12 +35,12 @@ export const createStyleSheet = (cssObject: CSSObject | string, selectors: strin
  * @link https://marketplace.visualstudio.com/items?itemName=paulmolluzzo.convert-css-in-js
  */
 export const css = (cssObject: TemplateStringsArray, ...props: (string | number)[]) => {
-  return createStyleSheet(cssObject.raw.map((value, i) => {
+  const styleSheet = new CSSStyleSheet();
+  styleSheet.replaceSync(cssObject.raw.reduce((previousValue, currentValue, i) => {
     const type = typeof props[i];
-    if (type === 'string' || type === 'number') {
-      return value + props[i].toString();
-    }
-    return value;
-
-  }).join(''));
+    if (type === 'string' || type === 'number')
+      return `${previousValue}${currentValue}${props[i]}`;
+    return `${previousValue}${currentValue}`;
+  }));
+  return styleSheet;
 };

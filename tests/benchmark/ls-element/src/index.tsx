@@ -49,13 +49,12 @@ const select = (id: number) => {
 const deleteItem = (id: number) => rows.remove(rows.getData().findIndex(x => x.id === id));
 const swapRows = () => rows.swap(1, 998);
 
-export const Table = createCustomElement(
+export const Table = createCustomElement('ls-table',
   {
-    tag: 'ls-table',
-    extends: 'table',
-    class: HTMLTableElement
-  },
-  {
+    extends: {
+      tag: 'table',
+      class: HTMLTableElement
+    },
     render() {
       return (
         <rows.List as="tbody" _id="tbody" renderItem={({ label, id, selected }) => (
@@ -77,13 +76,12 @@ export const Table = createCustomElement(
   }
 );
 
-export const TableManager = createCustomElement(
+export const TableManager = createCustomElement('ls-table-manager',
   {
-    tag: 'ls-table-manager',
-    extends: 'div',
-    class: HTMLDivElement
-  },
-  {
+    extends: {
+      tag: 'div',
+      class: HTMLDivElement
+    },
     render() {
       return (
         <div _className="row">

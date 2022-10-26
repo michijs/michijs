@@ -1,6 +1,7 @@
 import { createTarget, ListFactory } from '../DOMDiff/ListFactory';
 import { h } from '../h';
 import { FC, LSCustomElement } from '../types';
+import { ListElement } from './FragmentAndList';
 
 export type ListAttrs<Y, T extends string> = Parameters<
     FC<{
@@ -12,9 +13,9 @@ export type ListAttrs<Y, T extends string> = Parameters<
     & (T extends keyof JSX.IntrinsicElements ? JSX.IntrinsicElements[T] : JSX.IntrinsicElements['div'])
     & { children?: never };
 
-export function List<Y, T extends string = 'ls-list'>({ as, data, renderItem, ...attrs }: ListAttrs<Y, T>, self?: LSCustomElement) {
+export function List<Y, T extends string = typeof ListElement.tag>({ as, data, renderItem, ...attrs }: ListAttrs<Y, T>, self?: LSCustomElement) {
   const childrenRenderResult = data.map((x, i) => renderItem(x, i));
-  return h.createElement(as ?? 'ls-list', {
+  return h.createElement(as ?? ListElement.tag, {
     ...attrs,
     $doNotTouchChildren: true,
     $oncreated: (el, isSVG) => {
