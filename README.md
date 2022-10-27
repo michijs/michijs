@@ -1,8 +1,7 @@
 <div align="center">
-  <img width="200px" src="https://raw.githubusercontent.com/lsegurado/ls-element-logo/master/logo-with-background.png"></img>
+  <img width="200px" src="https://raw.githubusercontent.com/michijs/art/master/logo-with-background.svg"></img>
 
   ### A Vainilla Library for Web Components
-
   [![Open in Visual Studio Code][open-in-vscode]][open-in-vscode-url] 
   ![npm][version] 
   [![license][github-license]][github-license-url] 
@@ -12,39 +11,43 @@
 </div>
 
 
-## Why "LS-Element?"
-|  | LS-Element  |  React  |  StencilJS  | VanillaJS |
-|--|--|--|--|--|
-| Templates with [JSX](https://es.reactjs.org/docs/introducing-jsx.html) | ✅ | ✅ | ✅ | ❌ |
-| [Differentiation between attributes and properties in jsx](#attributes-vs-properties-in-jsx) | ✅ | ❌ | ❌ | ❌ |
-| Standard Web Components | ✅ |  ⭕ | ✅ | ✅ |
-| Observables / stores support | ✅ | ⭕ | ⭕ | ❌ |
-| [Esbuild](https://esbuild.github.io/)  as default bundler | ✅ | ❌ | ❌ | ❌ |
-| [TypeScript](https://www.typescriptlang.org) support | ✅ | ✅ | ✅ | ⭕ |
-| Reactive | ✅ | ✅ | ✅ | ❌ |
-| Styling / Constructable Stylesheets support | ✅ | ❌ | ✅ | ✅ |
-| Automatic type generation | ✅ | ❌ | ✅ | ❌ |
-| Without polyfills | ✅ | ✅ | ❌ | ✅ |
-| Attributes / Native events support | ✅ | ❌ | ⭕ | ✅ |
-| Supports [Shadow DOM](https://developers.google.com/web/fundamentals/web-components/shadowdom) | ✅ | ❌ | ✅ | ✅ |
-| Supports Custom Built-in elements | ✅ | ❌ | ❌ | ✅ |
-| Can be used with different frameworks right out of the box | ✅ | ❌ | ✅ | ✅ |
+## Why "MichiJS?"
+|  | MichiJS  |  React  |  StencilJS  | SvelteJS | VanillaJS |
+|--|--|--|--|--|--|
+| Prefer real DOM over virtual DOM | ✅ | ❌ | ❌ | ✅ | ✅ |
+| Prefer Javascript templates over compiled plain text | ✅ | ✅ | ✅ | ❌ | ✅ |
+| Templates with [JSX](https://es.reactjs.org/docs/introducing-jsx.html) | ✅ | ✅ | ✅ | ❌ | ❌ |
+| [Element internals](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals) support | ✅ | ❌ | ❌ | ❌ | ✅ |
+| Does not require extensions to be identified by the IDE | ✅ | ✅ | ✅ | ❌ | ✅ |
+| [Differentiation between attributes and properties in jsx / templates](#attributes-vs-properties-in-jsx) | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Standard Web Components | ✅ |  ⭕ | ✅ | ⭕ | ✅ |
+| Observables / stores support | ✅ | ⭕ | ⭕ | ⭕ | ❌ |
+| [Esbuild](https://esbuild.github.io/)  as default bundler | ✅ | ❌ | ❌ | ❌ |❌ |
+| [TypeScript](https://www.typescriptlang.org) support | ✅ | ✅ | ✅ | ✅ | ⭕ |
+| Reactive | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Styling / Constructable Stylesheets support | ✅ | ❌ | ✅ | ❌ | ✅ |
+| Automatic component type generation | ✅ | ❌ | ✅ | ❌ | ❌ |
+| Without polyfills | ✅ | ✅ | ❌ | ❌ | ✅ |
+| Attributes / Native events support | ✅ | ❌ | ⭕ | ✅ | ✅ |
+| Supports [Shadow DOM](https://developers.google.com/web/fundamentals/web-components/shadowdom) | ✅ | ❌ | ✅ | ✅ | ✅ |
+| Supports Custom Built-in elements | ✅ | ❌ | ❌ | ✅ | ✅ |
+| Can be used with different frameworks right out of the box | ✅ | ❌ | ✅ | ⭕ | ✅ |
 | ✅ = implemented
 ⭕ = partially implemented
 ❌ = not implemented
 
 ## Getting Started
 
-You can use [this template](https://github.com/lsegurado/ls-element-template) or you can see on [Code Sandbox](https://githubbox.com/lsegurado/ls-element-storybook-template/tree/master).
+You can use [this template](https://github.com/michijs/michijs-template) or you can see on [Code Sandbox](https://githubbox.com/michijs/michijs-storybook-template/tree/master).
   
 ## Creating components
 
-LS-Element custom elements are plain objects.
+MichiJS custom elements are plain objects.
 
 New components can be created using the `jsx/tsx` extension, such as `MyCounter.tsx`.
 
 ```tsx
-import { AdoptedStyle, createCustomElement, EventDispatcher, h } from "@lsegurado/ls-element";
+import { createCustomElement, EventDispatcher, h } from "@michijs/michijs";
 import { counterStyle } from "./counterStyle";
 
 export const MyCounter = createCustomElement('my-counter', {
@@ -58,6 +61,7 @@ export const MyCounter = createCustomElement('my-counter', {
   events: {
     countChanged: new EventDispatcher<number>()
   },
+  adoptedStyleSheets: [counterStyle],
   observe: {
     count() {
       this.countChanged(this.count)
@@ -66,7 +70,6 @@ export const MyCounter = createCustomElement('my-counter', {
   render() {
     return (
       <>
-        <AdoptedStyle id="style">{counterStyle}</AdoptedStyle>
         <button onpointerup={this.decrementCount}>-</button>
         <span>{this.count}</span>
         <button onpointerup={this.incrementCount}>+</button>
@@ -140,6 +143,11 @@ A component consists of the following properties:
       <td colspan="3">Allows to define attributes.</td>
     </tr>
     <tr>
+      <td>nonObservedAttributes</td>
+      <td colspan="3">Allows to define non observed attributes. This is useful for 
+      <a href="#observable-objects">complex objects that cannot be observed</a>.</td>
+    </tr>
+    <tr>
       <td>reflectedAttributes</td>
       <td colspan="3">Allows to define <a href="https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr">reflected attributes</a> and follows the Kebab case. A reflected attribute cannot be initialized with a true value
       </td>
@@ -153,12 +161,28 @@ A component consists of the following properties:
       <td colspan="3">Methods are functions that notify changes at the time of making the change.</td>
     </tr>
     <tr>
+      <td>adoptedStyleSheets</td>
+      <td colspan="3">Allows to use <a href="https://developers.google.com/web/updates/2019/02/constructable-stylesheets">Constructable Stylesheets.</a> Remember that you need to use Shadow DOM to be able to use Constructable Stylesheets. In case your component doesn't support this feature, it will return a style tag.</td>
+    </tr>
+    <tr>
+      <td>cssVariables</td>
+      <td colspan="3">Allows to define CSS variables. CSS variables changes does not trigger a rerender.</td>
+    </tr>
+    <tr>
+      <td>reflectedCssVariables</td>
+      <td colspan="3">Allows to define reflected CSS variables and follows the Kebab case. CSS variables changes does not trigger a rerender. A reflected CSS variable cannot be initialized with a true value</td>
+    </tr>
+    <tr>
+      <td>computedCssVariables</td>
+      <td colspan="3">Allows you to define CSS variables that depend on the state of the component.</td>
+    </tr>
+    <tr>
       <td>render</td>
       <td colspan="3">Function that renders the component.</td>
     </tr>
     <tr>
       <td>observe</td>
-      <td colspan="3">Contains methods with a name of an attribute / reflected attribute / observable like. Those methods are executed when a change has been made to their corresponding property.</td>
+      <td colspan="3">Contains methods with a name of an attribute / reflected attribute / css variables / observable like. Those methods are executed when a change has been made to their corresponding property.</td>
     </tr>
     <tr>
       <td rowspan="13">lifecycle</td>
@@ -237,12 +261,24 @@ A component consists of the following properties:
       <td>formAssociated</td>
       <td colspan="3">This tells the browser to treat the element like a <a href="https://web.dev/more-capable-form-controls/">form control</a>.</td>
     </tr>
+    <tr>
+      <td rowspan="3">extends</td>
+      <td rowspan="3">Allows to create a <a href ="https://developers.google.com/web/fundamentals/web-components/customelements#extendhtml">Customized built-in element</a></td>
+      <tr>
+        <td>tag</td>
+        <td colspan="3">The tag to extend</td>
+      </tr>
+      <tr>
+        <td>class</td>
+        <td colspan="3">The class you want to extend</td>
+      </tr>
+    </tr>
   </tbody>
 </table>
 
-Also, you have to create an [Autonomous custom element](https://developers.google.com/web/fundamentals/web-components/customelements#shadowdom) with a tag or in case you want to create an [Customized built-in element](https://developers.google.com/web/fundamentals/web-components/customelements#extendhtml) you have to declare the tag, the class you want to extend and the tag to extend.
+If the extends field is not provided an [Autonomous custom element](https://developers.google.com/web/fundamentals/web-components/customelements#shadowdom) will be created.
 
-## LSStore structure
+## store structure
 A store consists of the following properties:
 <table>
   <thead>
@@ -263,8 +299,8 @@ A store consists of the following properties:
   </tbody>
 </table>
 
-LSStores use proxies to listen for changes in their state, in addition, they are observable.
-Each component has an LSStore to listen for changes in its state.
+stores use proxies to listen for changes in their state, in addition, they are observable.
+Each component has an store to listen for changes in its state.
 
 
 ## CSS
@@ -308,13 +344,14 @@ import sheet from './styles.css' assert { type: 'css' };
 ``` -->
 
 ## Components
-### Constructable Stylesheets
-If you are not familiar with Constructable Stylesheets please check [this link](https://developers.google.com/web/updates/2019/02/constructable-stylesheets).
-To use Constructable Stylesheets simply import AdoptedStyle and use it like an style tag (see [example](https://github.com/lsegurado/ls-element#creating-components)). In case your browser doesn't support this feature, it will return a style tag.
-Remember that you need to use Shadow DOM to be able to use Constructable Stylesheets. 
-
 ### Host
 Allows to set attributes and event listeners to the host element itself.
+
+### List
+Creates a container component without styles with the tag "michi-list"
+
+### Fragment
+Creates a container component without styles with the tag "michi-fragment"
 
 ### ElementInternals
 *(Only available if formAssociated is true)*
@@ -330,10 +367,9 @@ Create a component whose content will load after the promise ends. In the meanti
 ### Link
 Provides the ability to move around the web page without reloading the page. It uses the same attributes as an anchor tag but also allows the use of URL objects. Uses the goTo method.
 
-
 ## Custom element methods
 ### child
-Allows to get a child element from the host with the id
+Allows to get a child element from the host with the selector
 
 ### rerender
 Forces the element to re-render
@@ -355,7 +391,7 @@ And eventually code like this would be executed:
 const el = document.createElement('div');
 el.className = 'test';
 ```
-In LS-Element you have the freedom to use both attributes and properties and the result will be the same:
+In MichiJS you have the freedom to use both attributes and properties and the result will be the same:
 ```jsx
 // Using properties
 () => <div _className='test'></div>
@@ -370,7 +406,128 @@ el.className = 'test';
 // Using attributes
 el.setAttribute('class', 'test')
 ```
-In this way the jsx syntax of LS-Element is more similar to html.
+In this way the jsx syntax of MichiJS is more similar to html.
+
+## Special attributes
+
+### $staticChildren
+Indicates that their children are created but not updated
+### $doNotTouchChildren
+Indicates that their Children are not created or updated. Element creation/update is delegated
+### $oncreated
+Callback that is called when the element is created
+### $onupdate
+Callback that is called when the element is updated
+
+## Lists
+There are 3 ways to create a list
+### Using map
+It's the usual way to create lists in jsx.
+```jsx
+const arrayTest = [0, 1, 2];
+
+arrayTest.map(item => <div key={item}>{item}</div>)
+```
+This will generate an element like:
+
+```html
+<michi-list>
+  <div>0</div>
+  <div>1</div>
+  <div>2</div>
+</michi-list>
+```
+Why create the michi-list element? This is the way to avoid using Virtual DOM. Because the algorithm is dumb, it needs a way to remember that element is a list.
+
+### Using List component
+It's similar to using maps. But it allows to use different container than michi-list.
+```jsx
+const arrayTest = [0, 1, 2];
+
+<List 
+  as="span"
+  data={arrayTest}
+  renderItem={item => <div key={item}>{item}</div>}
+/>
+```
+This will generate an element like:
+
+```html
+<span>
+  <div>0</div>
+  <div>1</div>
+  <div>2</div>
+</span>
+```
+### Using ElementList
+Is a proxy that allows you to avoid using dom diff algorithms to render lists. This allows it to have a performance close to vanilla js. An operation on the data implies an operation on the associated elements.
+```jsx
+const arrayTest = new ElementList(0, 1, 2);
+
+<arrayTest.List 
+  as="span"
+  renderItem={item => <div>{item}</div>}
+/>
+```
+This will generate an element like:
+
+```html
+<span>
+  <div>0</div>
+  <div>1</div>
+  <div>2</div>
+</span>
+```
+
+### Comparison
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Map</th>
+      <th>List component</th>
+      <th>ElementList</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Performance</td>
+      <td>Diff algorithm order</td>
+      <td>Diff algorithm order</td>
+      <td>Close to vanilla</td>
+    </tr>
+    <tr>
+      <td>Container</td>
+      <td>michi-list</td>
+      <td>michi-list or any other element</td>
+      <td>michi-list or any other element</td>
+    </tr>
+    <tr>
+      <td>Keys</td>
+      <td>Required</td>
+      <td>Required</td>
+      <td>Not required</td>
+    </tr>
+    <tr>
+      <td>Index</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Transactions allowed</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Updates</td>
+      <td>The entire component</td>
+      <td>The entire component</td>
+      <td>Just the list itself</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Routing
 The intention of using a custom routing tool is to avoid the use of strings to represent the urls and to use modern apis that allow the use of the URL object itself. It also allows to separate the components of the routes which allows a cleaner code.
@@ -461,12 +618,14 @@ If you REALLY need polyfills i recommend you to read this topics:
 ### Element internals
 - https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/attachInternals
 
-## Supporting LS Element
+## Supporting MichiJS
 ### Sponsors
 Support us with a donation and help us continue our activities [here](https://www.paypal.com/paypalme/lsegurado).
-### Contributors
-
-<a href="https://github.com/@lsegurado/ls-element/graphs/contributors"><img src="https://opencollective.com/ls-element/contributors.svg?width=890&amp;button=false" style="max-width:100%;"></a>
+<!-- ### Contributors
+TODO:
+<a href="https://github.com/@lsegurado/ls-element/graphs/contributors">
+  <img src="https://opencollective.com/ls-element/contributors.svg?width=890&amp;button=false" style="max-width:100%;">
+</a> -->
 
 
 <!-- ### Open Collective
@@ -478,12 +637,13 @@ Support us with a donation and help us continue our activities. [[Contribute](ht
 Become a sponsor and get your logo on our README on GitHub with a link to your site. [[Become a sponsor](https://opencollective.com/ls-element#sponsor)] -->
 
 ## License
- - [MIT](https://github.com/lsegurado/ls-element/blob/master/LICENSE.md)
+ - [MIT](https://github.com/michijs/michijs/blob/master/LICENSE.md)
 
-[open-in-vscode]: https://open.vscode.dev/badges/open-in-vscode.svg
-[open-in-vscode-url]: vscode://github.remotehub/open?url=https://github.com/lsegurado/ls-element
-[repo-size]: https://img.shields.io/github/repo-size/lsegurado/ls-element
-[npm-downloads]: https://img.shields.io/npm/dt/@lsegurado/ls-element
-[version]: https://img.shields.io/npm/v/@lsegurado/ls-element
-[github-license]: https://img.shields.io/github/license/lsegurado/ls-element
-[github-license-url]: https://github.com/lsegurado/ls-element/blob/master/LICENSE.md
+[open-in-vscode]: https://img.shields.io/static/v1?label=Open%20in&logo=Visual%20Studio%20Code&message=Visual%20Studio%20Code&logoColor=007ACC&color=007ACC
+[open-in-vscode-url]: https://github1s.com/michijs/michijs/blob/remove-virtual-dom/src/index.tsx
+<!-- [open-in-vscode-url]: vscode://github.remotehub/open?url=https://github.com/lsegurado/ls-element -->
+[repo-size]: https://img.shields.io/github/repo-size/michijs/michijs
+[npm-downloads]: https://img.shields.io/npm/dt/@michijs/michijs
+[version]: https://img.shields.io/npm/v/@michijs/michijs
+[github-license]: https://img.shields.io/github/license/michijs/michijs
+[github-license-url]: https://github.com/michijs/michijs/blob/master/LICENSE.md
