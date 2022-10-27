@@ -20,10 +20,10 @@ export const CounterWithReduxStore = createCustomElement('counter-with-redux-sto
   subscribeTo: {
     store
   },
+  adoptedStyleSheets: [counterStyle],
   render() {
     return (
       <Host count={this.count()}>
-        <AdoptedStyle id="style">{counterStyle}</AdoptedStyle>
         <button onpointerup={this.decrementCount}>-</button>
         <span>{this.count()}</span>
         <button onpointerup={this.incrementCount}>+</button>
