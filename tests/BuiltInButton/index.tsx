@@ -1,4 +1,4 @@
-import { h, createCustomElement } from '../../src';
+import { createCustomElement } from '../../src';
 import { buttonStyle } from './buttonStyle';
 
 export const BuiltInButton = createCustomElement('built-in-button', {

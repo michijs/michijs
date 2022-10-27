@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="200px" src="https://raw.githubusercontent.com/lsegurado/ls-element-logo/master/logo-with-background.png"></img>
+  <img width="200px" src="https://raw.githubusercontent.com/michijs/art/master/logo-with-background.svg"></img>
 
   ### A Vainilla Library for Web Components
   [![Open in Visual Studio Code][open-in-vscode]][open-in-vscode-url] 
@@ -11,8 +11,8 @@
 </div>
 
 
-## Why "LS-Element?"
-|  | LS-Element  |  React  |  StencilJS  | SvelteJS | VanillaJS |
+## Why "MichiJS?"
+|  | MichiJS  |  React  |  StencilJS  | SvelteJS | VanillaJS |
 |--|--|--|--|--|--|
 | Prefer real DOM over virtual DOM | ✅ | ❌ | ❌ | ✅ | ✅ |
 | Prefer Javascript templates over compiled plain text | ✅ | ✅ | ✅ | ❌ | ✅ |
@@ -38,16 +38,16 @@
 
 ## Getting Started
 
-You can use [this template](https://github.com/lsegurado/ls-element-template) or you can see on [Code Sandbox](https://githubbox.com/lsegurado/ls-element-storybook-template/tree/master).
+You can use [this template](https://github.com/michijs/michijs-template) or you can see on [Code Sandbox](https://githubbox.com/michijs/michijs-storybook-template/tree/master).
   
 ## Creating components
 
-LS-Element custom elements are plain objects.
+MichiJS custom elements are plain objects.
 
 New components can be created using the `jsx/tsx` extension, such as `MyCounter.tsx`.
 
 ```tsx
-import { createCustomElement, EventDispatcher, h } from "@lsegurado/ls-element";
+import { createCustomElement, EventDispatcher, h } from "@michijs/michijs";
 import { counterStyle } from "./counterStyle";
 
 export const MyCounter = createCustomElement('my-counter', {
@@ -278,7 +278,7 @@ A component consists of the following properties:
 
 If the extends field is not provided an [Autonomous custom element](https://developers.google.com/web/fundamentals/web-components/customelements#shadowdom) will be created.
 
-## LSStore structure
+## store structure
 A store consists of the following properties:
 <table>
   <thead>
@@ -299,8 +299,8 @@ A store consists of the following properties:
   </tbody>
 </table>
 
-LSStores use proxies to listen for changes in their state, in addition, they are observable.
-Each component has an LSStore to listen for changes in its state.
+stores use proxies to listen for changes in their state, in addition, they are observable.
+Each component has an store to listen for changes in its state.
 
 
 ## CSS
@@ -348,10 +348,10 @@ import sheet from './styles.css' assert { type: 'css' };
 Allows to set attributes and event listeners to the host element itself.
 
 ### List
-Creates a container component without styles with the tag "ls-list"
+Creates a container component without styles with the tag "michi-list"
 
 ### Fragment
-Creates a container component without styles with the tag "ls-fragment"
+Creates a container component without styles with the tag "michi-fragment"
 
 ### ElementInternals
 *(Only available if formAssociated is true)*
@@ -391,7 +391,7 @@ And eventually code like this would be executed:
 const el = document.createElement('div');
 el.className = 'test';
 ```
-In LS-Element you have the freedom to use both attributes and properties and the result will be the same:
+In MichiJS you have the freedom to use both attributes and properties and the result will be the same:
 ```jsx
 // Using properties
 () => <div _className='test'></div>
@@ -406,7 +406,7 @@ el.className = 'test';
 // Using attributes
 el.setAttribute('class', 'test')
 ```
-In this way the jsx syntax of LS-Element is more similar to html.
+In this way the jsx syntax of MichiJS is more similar to html.
 
 ## Special attributes
 
@@ -431,16 +431,16 @@ arrayTest.map(item => <div key={item}>{item}</div>)
 This will generate an element like:
 
 ```html
-<ls-list>
+<michi-list>
   <div>0</div>
   <div>1</div>
   <div>2</div>
-</ls-list>
+</michi-list>
 ```
-Why create the ls-list element? This is the way to avoid using Virtual DOM. Because the algorithm is dumb, it needs a way to remember that element is a list.
+Why create the michi-list element? This is the way to avoid using Virtual DOM. Because the algorithm is dumb, it needs a way to remember that element is a list.
 
 ### Using List component
-It's similar to using maps. But it allows to use different container than ls-list.
+It's similar to using maps. But it allows to use different container than michi-list.
 ```jsx
 const arrayTest = [0, 1, 2];
 
@@ -498,9 +498,9 @@ This will generate an element like:
     </tr>
     <tr>
       <td>Container</td>
-      <td>ls-list</td>
-      <td>ls-list or any other element</td>
-      <td>ls-list or any other element</td>
+      <td>michi-list</td>
+      <td>michi-list or any other element</td>
+      <td>michi-list or any other element</td>
     </tr>
     <tr>
       <td>Keys</td>
@@ -618,14 +618,14 @@ If you REALLY need polyfills i recommend you to read this topics:
 ### Element internals
 - https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/attachInternals
 
-## Supporting LS Element
+## Supporting MichiJS
 ### Sponsors
 Support us with a donation and help us continue our activities [here](https://www.paypal.com/paypalme/lsegurado).
-### Contributors
-
+<!-- ### Contributors
+TODO:
 <a href="https://github.com/@lsegurado/ls-element/graphs/contributors">
   <img src="https://opencollective.com/ls-element/contributors.svg?width=890&amp;button=false" style="max-width:100%;">
-</a>
+</a> -->
 
 
 <!-- ### Open Collective
@@ -637,13 +637,13 @@ Support us with a donation and help us continue our activities. [[Contribute](ht
 Become a sponsor and get your logo on our README on GitHub with a link to your site. [[Become a sponsor](https://opencollective.com/ls-element#sponsor)] -->
 
 ## License
- - [MIT](https://github.com/lsegurado/ls-element/blob/master/LICENSE.md)
+ - [MIT](https://github.com/michijs/michijs/blob/master/LICENSE.md)
 
 [open-in-vscode]: https://img.shields.io/static/v1?label=Open%20in&logo=Visual%20Studio%20Code&message=Visual%20Studio%20Code&logoColor=007ACC&color=007ACC
-[open-in-vscode-url]: https://github1s.com/lsegurado/ls-element/blob/remove-virtual-dom/src/index.tsx
+[open-in-vscode-url]: https://github1s.com/michijs/michijs/blob/remove-virtual-dom/src/index.tsx
 <!-- [open-in-vscode-url]: vscode://github.remotehub/open?url=https://github.com/lsegurado/ls-element -->
-[repo-size]: https://img.shields.io/github/repo-size/lsegurado/ls-element
-[npm-downloads]: https://img.shields.io/npm/dt/@lsegurado/ls-element
-[version]: https://img.shields.io/npm/v/@lsegurado/ls-element
-[github-license]: https://img.shields.io/github/license/lsegurado/ls-element
-[github-license-url]: https://github.com/lsegurado/ls-element/blob/master/LICENSE.md
+[repo-size]: https://img.shields.io/github/repo-size/michijs/michijs
+[npm-downloads]: https://img.shields.io/npm/dt/@michijs/michijs
+[version]: https://img.shields.io/npm/v/@michijs/michijs
+[github-license]: https://img.shields.io/github/license/michijs/michijs
+[github-license-url]: https://github.com/michijs/michijs/blob/master/LICENSE.md

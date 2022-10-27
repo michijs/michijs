@@ -4,7 +4,7 @@ import { Router } from './routes';
 // // import sheet from './a.css' assert { type: 'css' };
 // // console.log(sheet)
 
-createCustomElement('ls-root-test-element', {
+createCustomElement('root-test-element', {
   reflectedAttributes: {
     // arrayTest: new ElementList(0, 1, 2, 3, 4, 5, 6),
     arrayTest: [0, 1, 2, 3, 4, 5, 6]

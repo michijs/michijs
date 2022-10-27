@@ -1,4 +1,4 @@
-import { AdoptedStyle, createCustomElement, EventDispatcher, h, ElementInternals } from '../../src';
+import { createCustomElement, EventDispatcher, h, ElementInternals } from '../../src';
 import { counterStyle } from '../shared/counterStyle';
 
 export const A11YCounterTest = createCustomElement('a11y-counter', {

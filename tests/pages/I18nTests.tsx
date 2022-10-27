@@ -12,7 +12,7 @@ const { t, i18nObservable, lang } = I18n.createTranslation({
   en
 });
 
-export const I18nTests = createCustomElement('ls-i18n-tests', {
+export const I18nTests = createCustomElement('i18n-tests', {
   subscribeTo: {
     i18nObservable
   },

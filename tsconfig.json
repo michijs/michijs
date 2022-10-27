@@ -23,5 +23,5 @@
         "jsxFragmentFactory": "h.Fragment"
     },
     "include": ["src", "tests"],
-    "exclude": ["dist", "build", "**/*.spec.tsx", "**/*.spec.ts"]
+    "exclude": ["dist", "build"]
 }

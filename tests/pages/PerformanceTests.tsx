@@ -1,5 +1,5 @@
 import { h } from '../../src';
-import { TableManager, Table } from '../benchmark/ls-element/src/index';
+import { TableManager, Table } from '../benchmark/michijs/src/index';
 
 export const PerformanceTests = () => (
   <>
