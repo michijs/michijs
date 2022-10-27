@@ -1,2 +1,2 @@
-export { render } from './render';
+export { render, renderSync } from './render';
 export { createElement } from './createElement';

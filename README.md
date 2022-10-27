@@ -47,7 +47,7 @@ MichiJS custom elements are plain objects.
 New components can be created using the `jsx/tsx` extension, such as `MyCounter.tsx`.
 
 ```tsx
-import { createCustomElement, EventDispatcher, h } from "@michijs/michijs";
+import { createCustomElement, EventDispatcher } from "@michijs/michijs";
 import { counterStyle } from "./counterStyle";
 
 export const MyCounter = createCustomElement('my-counter', {
