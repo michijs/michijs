@@ -4,7 +4,7 @@ import { ListAttrs } from '../components/List';
 import { Target } from './Target';
 
 export type ElementListInterface<V> = Pick<
-  Array<V>,
+  V[],
   'push'
   | 'pop'
   | 'reverse'
@@ -34,7 +34,7 @@ export type RenderFunction<V> = (item: V) => JSX.Element;
 
 export class ElementList<V> implements ElementListInterface<V> {
   private targets = new Array<Target<V>>();
-  private data?: Array<V>;
+  private data?: V[];
   constructor(...initialData: V[]) {
     this.data = initialData;
   }

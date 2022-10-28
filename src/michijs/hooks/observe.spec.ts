@@ -5,7 +5,7 @@ const exampleValue = 1;
 const exampleValue2 = 2;
 const mockCallback = jest.fn(x => x);
 
-const objectTests = (initialValue: () => AnyObject | Array<unknown>) => {
+const objectTests = (initialValue: () => AnyObject | unknown[]) => {
   describe('object tests', () => {
     let nonProxiedObject;
     let object;

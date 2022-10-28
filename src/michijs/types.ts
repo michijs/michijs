@@ -90,7 +90,7 @@ export interface MichiCustomElement extends Element, Lifecycle<any>, LifecycleIn
         alreadyRendered: boolean,
         shadowRoot?: ShadowRoot,
         styles: HTMLStyleElement[],
-        rerenderCallback(propertiesThatChanged: Array<string> | PropertyKey): void,
+        rerenderCallback(propertiesThatChanged: string[] | PropertyKey): void,
         pendingTasks: number,
         unSubscribeFromStore: Array<() => void>,
         idGen?: ReturnType<typeof idGenerator>['getId'],
@@ -135,7 +135,7 @@ export type DOMElementJSXElement = CommonJSXAttrs<Element>
 export type FunctionJSXElement = CommonJSXAttrs<FC<any>>
 export type ClassJSXElement = CommonJSXAttrs<(new () => {}) & { tag: string, extends?: string }>
 export type SingleJSXElement = PrimitiveType | ObjectJSXElement | FunctionJSXElement | FragmentJSXElement | ClassJSXElement | ArrayJSXElement | DOMElementJSXElement;
-export type ArrayJSXElement = Array<SingleJSXElement>;
+export type ArrayJSXElement = SingleJSXElement[];
 // export type PureObjectJSXElement = { tag: string } & Omit<CommonJSXAttrs,'children'> & {children: (PureObjectJSXElement | string)[]};
 
 export interface FC<T = {}, S = Element> {
@@ -261,7 +261,7 @@ export interface ElementFactory {
 
 export type KeysAndKeysOf<O, P extends string = undefined, Order extends number | null = 1> =
     Order extends null ? '' : (
-        O extends Array<any>
+        O extends any[]
         ? (P extends undefined ? number : `${P}.${number}`)
         : (
             O extends Record<PropertyKey, any>

@@ -1,7 +1,7 @@
 import { observe, ObserveProps, ObservableObject } from '../observe';
 import { customObjectDelete, customObjectSet } from './observeCommonObject';
 
-export function observeArray<Y, A = unknown>({ item, ...props }: ObserveProps<Array<A>, Y>): ObservableObject<Array<A>, Y> {
+export function observeArray<Y, A = unknown>({ item, ...props }: ObserveProps<A[], Y>): ObservableObject<A[], Y> {
   const proxiedArray = item.map((value, key) => observe({ ...props, item: value, propertyPath: `${props.propertyPath}.${key}` }));
   return new Proxy(proxiedArray, {
     set: (target, property, newValue, receiver) => customObjectSet(props)(target, property, newValue, receiver),
@@ -49,5 +49,5 @@ export function observeArray<Y, A = unknown>({ item, ...props }: ObserveProps<Ar
     // }
     // }
     // },
-  }) as ObservableObject<Array<A>, Y>;
+  }) as ObservableObject<A[], Y>;
 }

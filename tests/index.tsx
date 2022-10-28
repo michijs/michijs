@@ -43,7 +43,9 @@ createCustomElement('root-test-element', {
 });
 
 // TODO:
-// update readme
+// Update readme
+// check blank space in template
+// Deploy live demo
 // Remove param from htmlElements since is deprecated
 // Unit tests some functions from element list
 // unlinked attributes ex: <div {bla ? ...obj1: ...obj2}/>
