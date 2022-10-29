@@ -41,13 +41,13 @@ export const { urls: asyncTestsUrls, Router: AsyncTestsRouter } = registerRoutes
   test1: createAsyncRoute()({
     promise: async () => {
       await wait(5000);
-      return await import('./SimpleCounterTest');
+      return await import('./SimpleCounter');
     },
     key: 'SimpleCounter',
     loadingComponent: <h1>loading...</h1>,
   }),
   test2: createAsyncRoute()({
-    promise: () => import('./SimpleCounterTest'),
+    promise: () => import('./SimpleCounter'),
     key: 'SimpleCounter'
   }),
   test3: createRoute({

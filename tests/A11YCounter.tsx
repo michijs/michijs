@@ -1,7 +1,7 @@
-import { createCustomElement, EventDispatcher, h, ElementInternals } from '../../src';
-import { counterStyle } from '../shared/counterStyle';
+import { createCustomElement, EventDispatcher, h, ElementInternals } from '../src';
+import { counterStyle } from './shared/counterStyle';
 
-export const A11YCounterTest = createCustomElement('a11y-counter', {
+export const A11YCounter = createCustomElement('a11y-counter', {
   formAssociated: true,
   attributes: {
     value: 0,

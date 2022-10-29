@@ -1,5 +1,5 @@
-import { h, Host, storedObservable, EventDispatcher, customElement } from '../../src';
-import { counterStyle } from '../shared/counterStyle';
+import { h, Host, storedObservable, EventDispatcher, customElement } from '../src';
+import { counterStyle } from './shared/counterStyle';
 
 const storedCount = storedObservable({
   count: 0,
