@@ -1,7 +1,7 @@
 import { h } from '../../src';
 import { BuiltInButton } from '../BuiltInButton';
-import { CounterWithReduxStore } from '../CounterWithReduxStoreTest';
-import { SimpleCounter } from '../SimpleCounterTest';
+import { CounterWithReduxStore } from '../CounterWithReduxStore';
+import { SimpleCounter } from '../SimpleCounter';
 import { StoredObservableCounter } from '../StoredObservableCounter';
 
 export const CounterTests = () => (

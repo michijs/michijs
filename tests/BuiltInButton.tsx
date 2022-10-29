@@ -1,5 +1,5 @@
-import { createCustomElement } from '../../src';
-import { buttonStyle } from './buttonStyle';
+import { createCustomElement } from '../src';
+import { buttonStyle } from './BuiltInButton.css';
 
 export const BuiltInButton = createCustomElement('built-in-button', {
   extends: {

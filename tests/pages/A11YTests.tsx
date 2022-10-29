@@ -1,5 +1,5 @@
 import { getFormData, h } from '../../src';
-import { A11YCounterTest } from '../A11YCounterTest';
+import { A11YCounter } from '../A11YCounter';
 import { components } from '../routes';
 
 interface CustomForm {
@@ -13,7 +13,7 @@ export const A11yTests = components.a11yTests(({ searchParams }) => (
     console.log(`Value sent is ${formData.counter}`);
   }}>
     <fieldset disabled={searchParams.disableFieldset}>
-      <A11YCounterTest name="counter" />
+      <A11YCounter name="counter" />
     </fieldset>
     <button type="button" onpointerup={() => { searchParams.disableFieldset = !searchParams.disableFieldset; }}>Toggle fieldset</button>
     <button type="submit">Submit</button>

@@ -1,4 +1,4 @@
-import { createCustomElement, css, h } from '../../src';
+import { createCustomElement, css, h } from '../src';
 
 const style = css`
     div {
