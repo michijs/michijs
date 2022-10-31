@@ -1,7 +1,6 @@
 import { HTMLElements } from '@lsegurado/htmltype';
 import { EventDispatcher } from './classes';
 import { idGenerator } from './hooks';
-import { store } from './hooks/store';
 import { Properties } from 'csstype';
 import { Tag } from './h/Tag';
 import { GetAttributes } from '@lsegurado/htmltype/dist/Attributes';
@@ -161,11 +160,14 @@ export type AnyObject = Record<PropertyKey, any>;
 
 // I need to use object to avoid infinite loop in KeysAndKeysOf
 export type AttributesType = Record<PropertyKey, PrimitiveType | AnyObject>;
-export type ReflectedAttributesType = Record<PropertyKey, Exclude<PrimitiveType, true> | AnyObject>;
+// Removed because overcomplicates types on definition of components
+// export type ReflectedAttributesType = Record<PropertyKey, Exclude<PrimitiveType, true> | AnyObject>;
+export type ReflectedAttributesType = Record<PropertyKey, PrimitiveType | AnyObject>;
 
 export type CssVariablesType = Record<string, PrimitiveType>;
 export type ComputedCssVariablesType = Record<string, Function>;
-export type ReflectedCssVariablesType = Record<string, Exclude<PrimitiveType, true>>;
+// export type ReflectedCssVariablesType = Record<string, Exclude<PrimitiveType, true>>;
+export type ReflectedCssVariablesType = Record<string, PrimitiveType>;
 
 export type MethodsType = Record<string, Function>
 
