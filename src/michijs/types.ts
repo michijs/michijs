@@ -287,8 +287,7 @@ export interface MichiElementProperties<
     EXTA extends keyof JSX.IntrinsicElements,
     C extends CssVariablesType,
     RC extends ReflectedCssVariablesType,
-    FRC extends Object,
-    CC extends CSSObject,
+    FRC extends Object
 > {
     /**Allows to define attributes.*/
     attributes?: A,
@@ -305,7 +304,7 @@ export interface MichiElementProperties<
     /**
      * Allows you to define CSS that depend on the state of the component.
      */
-    computedCss?(): CC,
+    computedCss?(): CSSObject,
     /**
      * Allows to define reflected attributes and follows the Kebab case.
      * A reflected attribute cannot be initialized with a true value
