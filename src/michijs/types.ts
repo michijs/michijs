@@ -196,11 +196,12 @@ export type Self<
     NOA extends AttributesType,
     EL extends Element,
     FRA extends Object,
+    EXTA extends keyof JSX.IntrinsicElements,
     // TODO: Readonly MichiCustomElement?
     S = RC & C & EL & A & RA & NOA & Readonly<CC & M & T & { [k in keyof E]: E[k] extends EventDispatcher<infer T> ? (detail?: T) => boolean : any }> & MichiCustomElement
 > = (
         (new () => {
-            props: Tag<
+            props: ((Tag<
                 Partial<
                     FRA
                     & {
@@ -209,7 +210,7 @@ export type Self<
                     & HTMLElements.commonElement
                     & GetAttributes<'name'>
                 >, S
-            >
+            >) & (EXTA extends undefined ? {}: JSX.IntrinsicElements[EXTA]))
         }) & S
     );
 

@@ -22,7 +22,7 @@ export function customElement(tag: TemplateStringsArray) {
       [k in keyof RC as KebabCase<k>]: RC[k]
     } : EmptyObject,
     CC extends ComputedCssVariablesType = EmptyObject
-  >(elementProperties: MichiElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA, EL, EXTA, C, RC, FRC, CC> & ThisType<Self<CC, RC, C, M, T, E, A, RA, NOA, EL, FRA>> = {}) {
+  >(elementProperties: MichiElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA, EL, EXTA, C, RC, FRC, CC> & ThisType<Self<CC, RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA>> = {}) {
     return createCustomElement<A, RA, NOA, FRA, M, T, E, S, EL, FOA, EXTA, C, RC, FRC, CC, CustomElementTag>(tag[0] as CustomElementTag, elementProperties);
   };
 }
