@@ -2,7 +2,7 @@
   "name": "@michijs/michijs",
   "author": "Lucas M. Segurado",
   "license": "MIT",
-  "version": "1.0.0-rc-5",
+  "version": "1.0.0-rc-6",
   "files": [
     "dist/",
     "jsx-runtime/"
@@ -52,7 +52,7 @@
     "Autonomous custom elements"
   ],
   "devDependencies": {
-    "@michijs/server": "0.0.31",
+    "@michijs/server": "0.0.34",
     "@reduxjs/toolkit": "^1.5.0",
     "@types/expect-puppeteer": "^4.4.7",
     "@types/jest": "^29.2.0",

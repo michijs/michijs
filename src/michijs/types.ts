@@ -373,6 +373,7 @@ export interface CreateCustomElementStaticResult<FRC extends Object, FRA extends
 export type GetElementProps<El extends any> = El extends (new () => { props: any }) ? InstanceType<El>['props'] : (El extends (...args: any) => any ? Parameters<El>[0] : never)
 
 export type EventListenerMap = Map<string, EventListener>;
+
 declare global {
 
     interface Element {
