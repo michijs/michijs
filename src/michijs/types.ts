@@ -165,7 +165,6 @@ export type AttributesType = Record<PropertyKey, PrimitiveType | AnyObject>;
 export type ReflectedAttributesType = Record<PropertyKey, PrimitiveType | AnyObject>;
 
 export type CssVariablesType = Record<string, PrimitiveType>;
-export type ComputedCssVariablesType = Record<string, Function>;
 // export type ReflectedCssVariablesType = Record<string, Exclude<PrimitiveType, true>>;
 export type ReflectedCssVariablesType = Record<string, PrimitiveType>;
 
@@ -185,7 +184,6 @@ export interface StoreProps<T, Y> {
 }
 
 export type Self<
-    CC extends ComputedCssVariablesType,
     RC extends ReflectedCssVariablesType,
     C extends CssVariablesType,
     M extends MethodsType,
@@ -198,7 +196,7 @@ export type Self<
     FRA extends Object,
     EXTA extends keyof JSX.IntrinsicElements,
     // TODO: Readonly MichiCustomElement?
-    S = RC & C & EL & A & RA & NOA & Readonly<CC & M & T & { [k in keyof E]: E[k] extends EventDispatcher<infer T> ? (detail?: T) => boolean : any }> & MichiCustomElement
+    S = RC & C & EL & A & RA & NOA & Readonly<M & T & { [k in keyof E]: E[k] extends EventDispatcher<infer T> ? (detail?: T) => boolean : any }> & MichiCustomElement
 > = (
         (new () => {
             props: ((Tag<
@@ -290,7 +288,7 @@ export interface MichiElementProperties<
     C extends CssVariablesType,
     RC extends ReflectedCssVariablesType,
     FRC extends Object,
-    CC extends ComputedCssVariablesType,
+    CC extends CSSObject,
 > {
     /**Allows to define attributes.*/
     attributes?: A,
@@ -305,9 +303,9 @@ export interface MichiElementProperties<
      */
     reflectedCssVariables?: RC,
     /**
-     * Allows you to define CSS variables that depend on the state of the component.
+     * Allows you to define CSS that depend on the state of the component.
      */
-    computedCssVariables?: CC,
+    computedCss?(): CC,
     /**
      * Allows to define reflected attributes and follows the Kebab case.
      * A reflected attribute cannot be initialized with a true value
