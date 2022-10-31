@@ -37,7 +37,7 @@ export function createCustomElement<
   } : EmptyObject,
   CC extends ComputedCssVariablesType = EmptyObject,
   TA extends CustomElementTag = CustomElementTag
->(tag: TA, elementProperties: MichiElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA, EL, EXTA, C, RC, FRC, CC> & ThisType<Self<CC, RC, C, M, T, E, A, RA, NOA, EL, FRA>> = {}): Self<CC, RC, C, M, T, E, A, RA, NOA, EL, FRA> & CreateCustomElementStaticResult<FRC, FRA, FOA, TA, EXTA> {
+>(tag: TA, elementProperties: MichiElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA, EL, EXTA, C, RC, FRC, CC> & ThisType<Self<CC, RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA>> = {}): Self<CC, RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA> & CreateCustomElementStaticResult<FRC, FRA, FOA, TA, EXTA> {
 
   const {
     events,

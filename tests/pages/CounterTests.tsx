@@ -16,6 +16,6 @@ export const CounterTests = () => (
     <StoredObservableCounter />
     <StoredObservableCounter />
     <h1>Built-in component</h1>
-    <BuiltInButton text="Sample customized button" />
+    <BuiltInButton text="Sample customized button"/>
   </>
 );
