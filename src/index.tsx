@@ -13,5 +13,5 @@ export * from './michijs/i18n';
 export type { Attributes, Events, HTMLElements, SVGElements } from '@lsegurado/htmltype';
 import './michijs/h/JSX';
 export * from './michijs/customElements';
-export { createStyleSheet, css } from './michijs/css/createStyleSheet';
+export * from './michijs/css';
 export * from './michijs/utils/getFormData';

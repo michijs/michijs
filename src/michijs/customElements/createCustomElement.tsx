@@ -15,6 +15,7 @@ import { getCssVariableRule } from './properties/getCssVariableRule';
 import { defineReflectedAttributes } from './properties/defineReflectedAttributes';
 import { addStylesheetsToCustomElement } from '../utils/addStylesheetsToCustomElement';
 import { h } from '../h';
+import { getShadowRoot } from '../utils/getShadowRoot';
 
 export function createCustomElement<
   A extends AttributesType = EmptyObject,
@@ -164,7 +165,7 @@ export function createCustomElement<
         const standarizedAttributeName = formatToKebabCase(key);
 
         styleSheet.insertRule(getCssVariableRule(standarizedAttributeName, this[key], this.cssSelector));
-        addStylesheetsToCustomElement(this, false, styleSheet);
+        addStylesheetsToCustomElement(this, styleSheet);
         this.$michi.cssStore.subscribe((propertiesThatChanged) => {
           if (propertiesThatChanged.find(x => x.startsWith(key)))
             styleSheet.replaceSync(getCssVariableRule(standarizedAttributeName, this[key], this.cssSelector));
@@ -185,7 +186,7 @@ export function createCustomElement<
           const standarizedAttributeName = formatToKebabCase(key);
           let styleSheetValue = this[key]();
           styleSheet.insertRule(getCssVariableRule(standarizedAttributeName, styleSheetValue, this.cssSelector));
-          addStylesheetsToCustomElement(this, false, styleSheet);
+          addStylesheetsToCustomElement(this, styleSheet);
           const updateStylesheetCallback = () => {
             const newStyleSheetValue = this[key]();
             if (styleSheetValue !== newStyleSheetValue) {
@@ -199,7 +200,7 @@ export function createCustomElement<
             Object.values(subscribeTo).forEach((store) => store.subscribe(updateStylesheetCallback));
         });
       if (adoptedStyleSheets)
-        addStylesheetsToCustomElement(this, true, ...adoptedStyleSheets);
+        addStylesheetsToCustomElement(this, ...adoptedStyleSheets);
 
       if (formAssociated)
         this.$michi.internals = this.attachInternals();
