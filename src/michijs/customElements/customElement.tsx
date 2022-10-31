@@ -20,9 +20,8 @@ export function customElement(tag: TemplateStringsArray) {
     RC extends ReflectedCssVariablesType = EmptyObject,
     FRC extends CssVariablesType = RC extends object ? {
       [k in keyof RC as KebabCase<k>]: RC[k]
-    } : EmptyObject,
-    CC extends CSSObject = EmptyObject
-  >(elementProperties: MichiElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA, EL, EXTA, C, RC, FRC, CC> & ThisType<Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA>> = {}) {
-    return createCustomElement<A, RA, NOA, FRA, M, T, E, S, EL, FOA, EXTA, C, RC, FRC, CC, CustomElementTag>(tag[0] as CustomElementTag, elementProperties);
+    } : EmptyObject
+  >(elementProperties: MichiElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA, EL, EXTA, C, RC, FRC> & ThisType<Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA>> = {}) {
+    return createCustomElement<A, RA, NOA, FRA, M, T, E, S, EL, FOA, EXTA, C, RC, FRC, CustomElementTag>(tag[0] as CustomElementTag, elementProperties);
   };
 }

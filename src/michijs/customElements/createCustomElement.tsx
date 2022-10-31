@@ -36,9 +36,8 @@ export function createCustomElement<
   FRC extends CssVariablesType = RC extends object ? {
     [k in keyof RC as KebabCase<k>]: RC[k]
   } : EmptyObject,
-  CC extends CSSObject = EmptyObject,
   TA extends CustomElementTag = CustomElementTag
->(tag: TA, elementProperties: MichiElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA, EL, EXTA, C, RC, FRC, CC> & ThisType<Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA>> = {}): Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA> & CreateCustomElementStaticResult<FRC, FRA, FOA, TA, EXTA> {
+>(tag: TA, elementProperties: MichiElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA, EL, EXTA, C, RC, FRC> & ThisType<Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA>> = {}): Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA> & CreateCustomElementStaticResult<FRC, FRA, FOA, TA, EXTA> {
 
   const {
     events,
