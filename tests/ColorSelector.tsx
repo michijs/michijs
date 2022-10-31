@@ -15,9 +15,11 @@ export const ColorSelector = createCustomElement('color-selector', {
   reflectedCssVariables: {
     color: '#ff0000' as `#${string}`
   },
-  computedCssVariables: {
-    example() {
-      return this.color === '#ff0000' ? '"red"': '"not red"';
+  computedCss() {
+    return {
+      ':host': {
+        '--example': this.color === '#ff0000' ? '"red"' : '"not red"'
+      }
     }
   },
   adoptedStyleSheets: [style],
@@ -28,7 +30,7 @@ export const ColorSelector = createCustomElement('color-selector', {
           this.color = ev.target.value as `#${string}`;
         }} />
         <div />
-      </span>
+      </span >
     );
   }
 });

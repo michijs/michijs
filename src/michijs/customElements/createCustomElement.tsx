@@ -1,5 +1,5 @@
 import { idGenerator, store } from '../hooks';
-import { Store, AttributesType, ComputedCssVariablesType, CreateCustomElementStaticResult, CssVariablesType, EmptyObject, EventsType, KebabCase, MichiCustomElement, MichiElementProperties, MethodsType, ReflectedAttributesType, ReflectedCssVariablesType, Self, SubscribeToType, CustomElementTag } from '../types';
+import { Store, AttributesType, CSSObject, CreateCustomElementStaticResult, CssVariablesType, EmptyObject, EventsType, KebabCase, MichiCustomElement, MichiElementProperties, MethodsType, ReflectedAttributesType, ReflectedCssVariablesType, Self, SubscribeToType, CustomElementTag } from '../types';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 import { defineTransactionFromStore } from './properties/defineTransactionFromStore';
 import { defineEvent } from './properties/defineEvent';
@@ -15,7 +15,7 @@ import { getCssVariableRule } from './properties/getCssVariableRule';
 import { defineReflectedAttributes } from './properties/defineReflectedAttributes';
 import { addStylesheetsToCustomElement } from '../utils/addStylesheetsToCustomElement';
 import { h } from '../h';
-import { getShadowRoot } from '../utils/getShadowRoot';
+import { createStyleSheet, updateStyleSheet } from '../css';
 
 export function createCustomElement<
   A extends AttributesType = EmptyObject,
@@ -36,9 +36,9 @@ export function createCustomElement<
   FRC extends CssVariablesType = RC extends object ? {
     [k in keyof RC as KebabCase<k>]: RC[k]
   } : EmptyObject,
-  CC extends ComputedCssVariablesType = EmptyObject,
+  CC extends CSSObject = EmptyObject,
   TA extends CustomElementTag = CustomElementTag
->(tag: TA, elementProperties: MichiElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA, EL, EXTA, C, RC, FRC, CC> & ThisType<Self<CC, RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA>> = {}): Self<CC, RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA> & CreateCustomElementStaticResult<FRC, FRA, FOA, TA, EXTA> {
+>(tag: TA, elementProperties: MichiElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA, EL, EXTA, C, RC, FRC, CC> & ThisType<Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA>> = {}): Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA> & CreateCustomElementStaticResult<FRC, FRA, FOA, TA, EXTA> {
 
   const {
     events,
@@ -53,7 +53,7 @@ export function createCustomElement<
     adoptedStyleSheets,
     extends: extendsObject,
     shadow = extendsObject ? false : { mode: 'open' },
-    computedCssVariables,
+    computedCss: getComputedCss,
     cssVariables,
     reflectedCssVariables,
     methods,
@@ -121,7 +121,7 @@ export function createCustomElement<
     }
     constructor() {
       super();
-      
+
       if (shadow) {
         const attachedShadow = this.attachShadow(shadow);
         if (shadow.mode === 'closed')
@@ -179,26 +179,16 @@ export function createCustomElement<
         });
       }
       defineReflectedAttributes(this, reflectedCssVariables, this.$michi.cssStore);
-      if (computedCssVariables)
-        Object.entries(computedCssVariables).forEach(([key, value]) => {
-          defineMethod(this, key, value);
-          const styleSheet = new CSSStyleSheet();
-          const standarizedAttributeName = formatToKebabCase(key);
-          let styleSheetValue = this[key]();
-          styleSheet.insertRule(getCssVariableRule(standarizedAttributeName, styleSheetValue, this.cssSelector));
-          addStylesheetsToCustomElement(this, styleSheet);
-          const updateStylesheetCallback = () => {
-            const newStyleSheetValue = this[key]();
-            if (styleSheetValue !== newStyleSheetValue) {
-              styleSheetValue = newStyleSheetValue;
-              styleSheet.replaceSync(getCssVariableRule(standarizedAttributeName, styleSheetValue, this.cssSelector));
-            }
-          };
-          this.$michi.cssStore.subscribe(updateStylesheetCallback);
-          this.$michi.store.subscribe(updateStylesheetCallback);
-          if (subscribeTo)
-            Object.values(subscribeTo).forEach((store) => store.subscribe(updateStylesheetCallback));
-        });
+      if (getComputedCss) {
+        const bindedGetComputedCss = getComputedCss.bind(this);
+        const styleSheet = createStyleSheet(bindedGetComputedCss());
+        addStylesheetsToCustomElement(this, styleSheet);
+        const updateStylesheetCallback = () => updateStyleSheet(styleSheet, bindedGetComputedCss());
+        this.$michi.cssStore.subscribe(updateStylesheetCallback);
+        this.$michi.store.subscribe(updateStylesheetCallback);
+        if (subscribeTo)
+          Object.values(subscribeTo).forEach((store) => store.subscribe(updateStylesheetCallback));
+      };
       if (adoptedStyleSheets)
         addStylesheetsToCustomElement(this, ...adoptedStyleSheets);
 
