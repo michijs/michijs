@@ -5,8 +5,10 @@ import { h } from '../h';
 const FragmentAndListStyle = createStyleSheet({
   ':host': {
     display: 'contents',
-    borderRadius: 'inherit'
-  }
+    ',slot': {
+      borderRadius: 'inherit'
+    }
+  },
 });
 
 export const Fragment = createCustomElement('michi-fragment', {
