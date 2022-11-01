@@ -254,7 +254,7 @@ export function createCustomElement<
     }
 
     get cssSelector() {
-      return shadow ? ':host' : this.localName;
+      return shadow ? ':host' : `${this.localName}[is="${tag}"]`;
     }
     // The following properties and methods aren't strictly required,
     // but browser-level form controls provide them. Providing them helps
