@@ -18,5 +18,7 @@ export async function updateChildren(el: ParentNode, children: JSX.Element[], is
   }
   try {
     el.append(...children.slice(i).map(x => create(x, isSVG, self)));
-  }catch{}
+  } catch (e) {
+    console.error(e)
+  }
 }
