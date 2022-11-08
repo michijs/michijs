@@ -163,7 +163,6 @@ export function createCustomElement<
         const styleSheet = new CSSStyleSheet();
         const standarizedAttributeName = formatToKebabCase(key);
 
-        console.log(this.cssSelector)
         styleSheet.insertRule(getCssVariableRule(standarizedAttributeName, this[key], this.cssSelector));
         addStylesheetsToCustomElement(this, styleSheet);
         this.$michi.cssStore.subscribe((propertiesThatChanged) => {
