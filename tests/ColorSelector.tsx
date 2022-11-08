@@ -1,4 +1,4 @@
-import { ComputedStyleSheets, createCustomElement, css, h } from '../src';
+import { createCustomElement, createComputedStyleSheet, css, h } from '../src';
 
 const style = css`
     :host {
@@ -12,17 +12,21 @@ const style = css`
     }
 `;
 
-const dinamicStyle: ComputedStyleSheets<{color: string}> = (component) => ({
+const computedStyleSheet = createComputedStyleSheet<{ color: string }>((component) => ({
   [component.cssSelector]: {
     '--example': component.color === '#ff0000' ? '"red"' : '"not red"'
   }
-})
+}))
 
 export const ColorSelector = createCustomElement('color-selector', {
   reflectedCssVariables: {
     color: '#ff0000' as `#${string}`
   },
-  computedStyleSheets: [dinamicStyle],
+  computedStyleSheets() {
+    return [
+      computedStyleSheet(this)
+    ]
+  },
   adoptedStyleSheets: [style],
   render() {
     return (
