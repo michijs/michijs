@@ -306,19 +306,8 @@ export interface MichiElementProperties<
     /**
      * Allows you to define Constructable Stylesheets that depend on the state of the component.
      */
-    computedStyleSheets?: ComputedStyleSheets<Self<
-        RC,
-        C,
-        M,
-        T,
-        E,
-        A,
-        RA,
-        NOA,
-        EL,
-        FRA,
-        EXTA>
-    >[],
+    computedStyleSheets?: ComputedStyleSheets<unknown>[],
+    // Unknown because Self was too complicated for typescript to represent
     /**
      * Allows to define reflected attributes and follows the Kebab case.
      * A reflected attribute cannot be initialized with a true value
