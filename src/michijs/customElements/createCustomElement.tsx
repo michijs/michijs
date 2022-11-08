@@ -179,18 +179,24 @@ export function createCustomElement<
         });
       }
       defineReflectedAttributes(this, reflectedCssVariables, this.$michi.cssStore);
-      if (computedStyleSheets)
-        computedStyleSheets.forEach(computedStyleSheet => {
-          const bindedGetComputedCss = computedStyleSheet.bind(this);
-          const styleSheet = createStyleSheet(bindedGetComputedCss(this));
+      if (computedStyleSheets) {
+        const callback: (() => CSSObject[]) = computedStyleSheets.bind(this);
+        const styleSheets = []
+
+        callback().forEach(computedStyleSheet => {
+          const styleSheet = createStyleSheet(computedStyleSheet);
+          styleSheets.push(styleSheet)
           addStylesheetsToCustomElement(this, styleSheet);
-          const updateStylesheetCallback = () => updateStyleSheet(styleSheet, bindedGetComputedCss(this));
-          this.$michi.cssStore.subscribe(updateStylesheetCallback);
-          this.$michi.store.subscribe(updateStylesheetCallback);
-          if (subscribeTo)
-            Object.values(subscribeTo).forEach((store) => store.subscribe(updateStylesheetCallback));
         })
 
+        const updateStylesheetCallback = () => { 
+          callback().forEach((computedStyleSheet, i) => updateStyleSheet(styleSheets[i], computedStyleSheet))
+        };
+        this.$michi.cssStore.subscribe(updateStylesheetCallback);
+        this.$michi.store.subscribe(updateStylesheetCallback);
+        if (subscribeTo)
+          Object.values(subscribeTo).forEach((store) => store.subscribe(updateStylesheetCallback));
+      }
       if (adoptedStyleSheets)
         addStylesheetsToCustomElement(this, ...adoptedStyleSheets);
 
