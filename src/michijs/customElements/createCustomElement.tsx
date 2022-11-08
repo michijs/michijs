@@ -52,7 +52,7 @@ export function createCustomElement<
     adoptedStyleSheets,
     extends: extendsObject,
     shadow = extendsObject ? false : { mode: 'open' },
-    computedCss: getComputedCss,
+    computedStyleSheets,
     cssVariables,
     reflectedCssVariables,
     methods,
@@ -63,7 +63,7 @@ export function createCustomElement<
   if (events)
     Object.entries(events).forEach(([key, value]) => value.init(key));
 
-  class LSCustomElementResult extends (classToExtend as CustomElementConstructor) implements MichiCustomElement {
+  class MichiCustomElementResult extends (classToExtend as CustomElementConstructor) implements MichiCustomElement {
     $michi: MichiCustomElement['$michi'] = {
       store: store.apply(this, [{ state: { ...attributes, ...reflectedAttributes }, transactions }]) as Store,
       cssStore: store.apply(this, [{ state: { ...cssVariables, ...reflectedCssVariables } }]) as Store,
@@ -163,6 +163,7 @@ export function createCustomElement<
         const styleSheet = new CSSStyleSheet();
         const standarizedAttributeName = formatToKebabCase(key);
 
+        console.log(this.cssSelector)
         styleSheet.insertRule(getCssVariableRule(standarizedAttributeName, this[key], this.cssSelector));
         addStylesheetsToCustomElement(this, styleSheet);
         this.$michi.cssStore.subscribe((propertiesThatChanged) => {
@@ -178,16 +179,18 @@ export function createCustomElement<
         });
       }
       defineReflectedAttributes(this, reflectedCssVariables, this.$michi.cssStore);
-      if (getComputedCss) {
-        const bindedGetComputedCss = getComputedCss.bind(this);
-        const styleSheet = createStyleSheet(bindedGetComputedCss());
-        addStylesheetsToCustomElement(this, styleSheet);
-        const updateStylesheetCallback = () => updateStyleSheet(styleSheet, bindedGetComputedCss());
-        this.$michi.cssStore.subscribe(updateStylesheetCallback);
-        this.$michi.store.subscribe(updateStylesheetCallback);
-        if (subscribeTo)
-          Object.values(subscribeTo).forEach((store) => store.subscribe(updateStylesheetCallback));
-      };
+      if (computedStyleSheets)
+        computedStyleSheets.forEach(computedStyleSheet => {
+          const bindedGetComputedCss = computedStyleSheet.bind(this);
+          const styleSheet = createStyleSheet(bindedGetComputedCss(this));
+          addStylesheetsToCustomElement(this, styleSheet);
+          const updateStylesheetCallback = () => updateStyleSheet(styleSheet, bindedGetComputedCss(this));
+          this.$michi.cssStore.subscribe(updateStylesheetCallback);
+          this.$michi.store.subscribe(updateStylesheetCallback);
+          if (subscribeTo)
+            Object.values(subscribeTo).forEach((store) => store.subscribe(updateStylesheetCallback));
+        })
+
       if (adoptedStyleSheets)
         addStylesheetsToCustomElement(this, ...adoptedStyleSheets);
 
@@ -217,7 +220,7 @@ export function createCustomElement<
     }
 
     connectedCallback() {
-      setReflectedAttributes(this, LSCustomElementResult.observedAttributes);
+      setReflectedAttributes(this, MichiCustomElementResult.observedAttributes);
       if (!this.$michi.alreadyRendered) {
         this.willMount?.();
         this.renderCallback();
@@ -254,7 +257,10 @@ export function createCustomElement<
     }
 
     get cssSelector() {
-      return shadow ? ':host' : `${this.localName}[is="${tag}"]`;
+      return MichiCustomElementResult.cssSelector;
+    }
+    static get cssSelector() {
+      return shadow ? ':host' : (extendsTag ? `${extendsTag}[is="${tag}"]` : tag);
     }
     // The following properties and methods aren't strictly required,
     // but browser-level form controls provide them. Providing them helps
@@ -275,10 +281,10 @@ export function createCustomElement<
   }
 
   if (extendsTag) {
-    window.customElements.define(tag, LSCustomElementResult, { extends: extendsTag });
+    window.customElements.define(tag, MichiCustomElementResult, { extends: extendsTag });
   } else {
-    window.customElements.define(tag, LSCustomElementResult);
+    window.customElements.define(tag, MichiCustomElementResult);
   }
 
-  return LSCustomElementResult as any;
+  return MichiCustomElementResult as any;
 }

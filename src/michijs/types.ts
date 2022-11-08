@@ -208,7 +208,7 @@ export type Self<
                     & HTMLElements.commonElement
                     & GetAttributes<'name'>
                 >, S
-            >) & (EXTA extends undefined ? {}: JSX.IntrinsicElements[EXTA]))
+            >) & (EXTA extends undefined ? {} : JSX.IntrinsicElements[EXTA]))
         }) & S
     );
 
@@ -273,6 +273,8 @@ export type KeysAndKeysOf<O, P extends string = undefined, Order extends number 
 
 type FormStateRestoreCallbackMode = 'restore' | 'autocomplete';
 
+export type ComputedStyleSheets<p extends EmptyObject = EmptyObject> = (props: p & MichiCustomElement) => CSSObject
+
 export interface MichiElementProperties<
     M extends MethodsType,
     T extends MethodsType,
@@ -302,9 +304,21 @@ export interface MichiElementProperties<
      */
     reflectedCssVariables?: RC,
     /**
-     * Allows you to define CSS that depend on the state of the component.
+     * Allows you to define Constructable Stylesheets that depend on the state of the component.
      */
-    computedCss?(): CSSObject,
+    computedStyleSheets?: ComputedStyleSheets<Self<
+        RC,
+        C,
+        M,
+        T,
+        E,
+        A,
+        RA,
+        NOA,
+        EL,
+        FRA,
+        EXTA>
+    >[],
     /**
      * Allows to define reflected attributes and follows the Kebab case.
      * A reflected attribute cannot be initialized with a true value
@@ -363,7 +377,8 @@ export interface MichiElementProperties<
 export interface CreateCustomElementStaticResult<FRC extends Object, FRA extends Object, FOA extends boolean, TA extends CustomElementTag, EXTA extends string> {
     readonly tag: TA,
     readonly extends?: EXTA,
-    readonly observedAttributes: Readonly<Array<keyof FRA & keyof FRC>>
+    readonly cssSelector: string;
+    readonly observedAttributes: Readonly<Array<keyof FRA & keyof FRC>>,
     formAssociated: FOA,
 }
 
