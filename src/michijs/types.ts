@@ -273,7 +273,7 @@ export type KeysAndKeysOf<O, P extends string = undefined, Order extends number 
 
 type FormStateRestoreCallbackMode = 'restore' | 'autocomplete';
 
-export type ComputedStyleSheets<p extends EmptyObject = EmptyObject> = (props: p & MichiCustomElement) => CSSObject
+export type ComputedStyleSheet<p extends EmptyObject = EmptyObject> = (props: p & MichiCustomElement) => CSSObject
 
 export interface MichiElementProperties<
     M extends MethodsType,
@@ -306,7 +306,7 @@ export interface MichiElementProperties<
     /**
      * Allows you to define Constructable Stylesheets that depend on the state of the component.
      */
-    computedStyleSheets?: ComputedStyleSheets<unknown>[],
+    computedStyleSheets?: ComputedStyleSheet<unknown>[],
     // Unknown because Self was too complicated for typescript to represent
     /**
      * Allows to define reflected attributes and follows the Kebab case.
