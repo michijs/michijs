@@ -1,27 +1,28 @@
-import { createCustomElement, css, h } from '../src';
+import { ComputedStyleSheets, createCustomElement, css, h } from '../src';
 
 const style = css`
-    div {
+    :host {
         background: var(--color);
         width: 50px;
         height: 50px;
+        display: flex;
     }
-    div::before {
+    :host::before {
         content: var(--example)
     }
 `;
+
+const dinamicStyle: ComputedStyleSheets<{color: string}> = (component) => ({
+  [component.cssSelector]: {
+    '--example': component.color === '#ff0000' ? '"red"' : '"not red"'
+  }
+})
 
 export const ColorSelector = createCustomElement('color-selector', {
   reflectedCssVariables: {
     color: '#ff0000' as `#${string}`
   },
-  computedCss() {
-    return {
-      ':host': {
-        '--example': this.color === '#ff0000' ? '"red"' : '"not red"'
-      }
-    }
-  },
+  computedStyleSheets: [dinamicStyle],
   adoptedStyleSheets: [style],
   render() {
     return (
@@ -29,7 +30,6 @@ export const ColorSelector = createCustomElement('color-selector', {
         <input type="color" value={this.color} oninput={(ev) => {
           this.color = ev.target.value as `#${string}`;
         }} />
-        <div />
       </span >
     );
   }
