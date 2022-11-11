@@ -1,6 +1,7 @@
-import { ElementFactory, IterableAttrs, MichiCustomElement } from '../..';
+import { ElementFactory, IterableAttrs, MichiCustomElement, update } from '../..';
 import { Target } from '../classes/Target';
 import { ListElement } from '../components/FragmentAndList';
+import { forEachChildren } from './forEachChildren';
 
 function nodeNodeIsSameElement(node: ChildNode, jsx: JSX.Element) {
   const isIterable = jsxIsIterable(jsx);
@@ -23,6 +24,14 @@ export function createTarget(el: ParentNode, isSVG: boolean, context: Element) {
   }, isSVG, context);
 }
 
+export function mapFind<K, V>(map: Map<K, V>, callback: (value: V) => boolean): [K, V] | undefined {
+  for (const [key, value] of map) {
+    if (callback(value))
+      return [key, value];
+  }
+  return undefined;
+}
+
 export const ListFactory: ElementFactory = {
   compare(el: Element): boolean {
     return el.localName === ListElement.tag;
@@ -32,86 +41,73 @@ export const ListFactory: ElementFactory = {
     createTarget(el, isSVG, self).appendItems(...jsx);
     return el;
   },
-  update(jsx: JSX.Element[], el: ParentNode, isSVG?: boolean, self?: MichiCustomElement) {
+  update(jsx: JSX.Element[], el: ParentNode, isSVG?: boolean, contextElement?: MichiCustomElement) {
     if (jsx.length === 0)
       el.textContent = '';
     else {
-      const target = createTarget(el, isSVG, self);
-      let currentNode = el.firstChild;
-      if (currentNode) {
-        const missingItems = new Map<number, JSX.Element>();
-        const missingKeyedItems = new Map<string | number, { index: number, newChildJSX: JSX.Element }>();
-        const itemsToDelete = new Map<number, ChildNode>();
-        jsx.forEach((newChildJSX, i) => {
-          if (currentNode) {
-            if (nodeNodeIsSameElement(currentNode, newChildJSX))
-              target.updateNode(currentNode, newChildJSX);
-            else {
-              itemsToDelete.set(i, currentNode);
-              if (jsxIsIterable(newChildJSX))
-                missingKeyedItems.set(newChildJSX.key, { index: i, newChildJSX });
-              else
-                missingItems.set(i, newChildJSX);
-            }
-            currentNode = currentNode.nextSibling;
-          } else if (jsxIsIterable(newChildJSX))
-            missingKeyedItems.set(newChildJSX.key, { index: i, newChildJSX });
-          else
-            missingItems.set(i, newChildJSX);
-        });
+      const pendingToInsertKeyedItems: { index: number, newChildJSX: JSX.Element, key: string | number }[] = [];
+      const pendingToRemoveKeyedItems = new Map<number, { key: string | number, child: ChildNode }>();
+      const RemovedKeyedItems = new Map<string | number, ChildNode>();
+      const target = createTarget(el, isSVG, contextElement);
 
-        // If there is any tentative item to remove
-        if (itemsToDelete.size > 0 || currentNode) {
-          const deleteCallback = (node: ChildNode, nodeIndex: number) => {
-            // I identify moved items, if they were not moved, I delete them
-            const itemFound = missingKeyedItems.get(node.$key);
-            if (itemFound) {
-              missingKeyedItems.delete(node.$key);
-              target.updateNode(node, itemFound.newChildJSX);
-              if (nodeIndex !== itemFound.index) {
-                target.insertChildNodesAt(itemFound.index, node);
-                return true;
-              }
-            } else {
-              node.remove();
-              return false;
-            }
-          };
-
-          let removedNodes = 0;
-          // Previously walked elements
-          itemsToDelete.forEach((node, i) => {
-            if (!deleteCallback(node, i - removedNodes))
-              removedNodes++;
-          });
-
-          // Previously unwalked elements
-          // Ex. [0, 1, 2, 3, 6]
-          if (currentNode) {
-            let processedElements = jsx.length - removedNodes;
-            do {
-              const nextNode = currentNode?.nextSibling;
-              if (deleteCallback(currentNode, processedElements))
-                processedElements++;
-              currentNode = nextNode;
-            } while (currentNode);
+      // Walk thought the current children and
+      const nextIndex = forEachChildren(el.firstChild, (currentNode, i) => {
+        const newChildJSX = jsx[i];
+        if (nodeNodeIsSameElement(currentNode, newChildJSX))
+          target.updateNode(currentNode, newChildJSX)
+        else {
+          if (jsxIsIterable(newChildJSX)) {
+            pendingToRemoveKeyedItems.set(i, { key: currentNode.$key, child: currentNode })
+            pendingToInsertKeyedItems.push({ index: i, key: newChildJSX.key, newChildJSX });
+          } else {
+            if (currentNode.$key)
+              RemovedKeyedItems.set(currentNode.$key, currentNode);
+            target.replaceNode(currentNode, newChildJSX);
           }
+        }
+      })
 
-          if (jsx.length === missingItems.size - missingKeyedItems.size) //All elements were replaced
-            target.appendItems(...jsx);
-          else { // There is a mix between new and old elements
-            missingItems.forEach((newChildJSX, index) => {
-              target.insertItemsAt(index, newChildJSX);
-            });
-            missingKeyedItems.forEach(({ newChildJSX, index }) => {
-              target.insertItemsAt(index, newChildJSX);
-            });
+      // moved nodes on previously walked elements
+      pendingToInsertKeyedItems.forEach(({ index, newChildJSX, key }) => {
+        const nodeInThePlace = pendingToRemoveKeyedItems.get(index);
+
+        let itemFound = RemovedKeyedItems.get(key);
+        if (itemFound) {
+          RemovedKeyedItems.delete(key);
+        } else {
+          const itemFoundInPendingToRemoveKeyedItems = mapFind(pendingToRemoveKeyedItems, (value) => value.key === key);
+          if (itemFoundInPendingToRemoveKeyedItems) {
+            const result = itemFoundInPendingToRemoveKeyedItems;
+            itemFound = result[1].child;
+
+            const tempChild = document.createComment('');
+            result[1].child.replaceWith(tempChild);
+            result[1].child = tempChild;
           }
-        } else //There are no items to remove - it follows that they are all new items
-          target.appendItems(...jsx.slice(jsx.length - missingItems.size - missingKeyedItems.size));
+        }
+        pendingToRemoveKeyedItems.delete(index);
+        RemovedKeyedItems.set(nodeInThePlace.key, nodeInThePlace.child);
+        if (itemFound) {
+          update(itemFound, newChildJSX, isSVG, contextElement);
+          nodeInThePlace.child.replaceWith(itemFound);
+        } else {
+          target.replaceNode(nodeInThePlace.child, newChildJSX);
+        }
+      })
 
-      } else
-        target.appendItems(...jsx);
+      // new nodes
+      const pendingChildren = jsx.slice(nextIndex);
+      if (RemovedKeyedItems.size > 0)
+        target.insertChildNodesAt(nextIndex, ...pendingChildren.map(newChildJSX => {
+          if (jsxIsIterable(newChildJSX)) {
+            const itemFound = RemovedKeyedItems.get(newChildJSX.key);
+            if (itemFound)
+              return itemFound
+          }
+          return target.createSingleItem(newChildJSX)
+        }))
+      else
+        target.insertItemsAt(nextIndex, ...pendingChildren)
     }
   }
 };

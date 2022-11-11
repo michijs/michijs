@@ -40,6 +40,11 @@ export class Target<V> {
     this.appendItems(...items);
   }
 
+  replaceNode(el: ChildNode, value: V) {
+    const newNode = this.createSingleItem(value);
+    el.replaceWith(newNode)
+  }
+
   update(index: number, value: V) {
     update(this.element.childNodes.item(index), this.renderItem(value), this.isSVG, this.context);
   }

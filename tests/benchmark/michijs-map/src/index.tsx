@@ -81,6 +81,7 @@ export const Tbody = createCustomElement('michi-table-body',
     subscribeTo: {
       storeSubscribable
     },
+    fakeRoot: false,
     render() {
       return state.data.map(({ id, label }) => (
         <tr key={id} class={id === state.selected ? 'danger' : undefined}>
@@ -106,6 +107,7 @@ export const TableManager = createCustomElement('michi-table-manager',
       tag: 'div',
       class: HTMLDivElement
     },
+    fakeRoot: false,
     render() {
       return (
         <div _className="row">

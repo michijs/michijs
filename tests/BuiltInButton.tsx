@@ -1,4 +1,4 @@
-import { createCustomElement } from '../src';
+import { createCustomElement, h, Host } from '../src';
 import { buttonStyle } from './BuiltInButton.css';
 
 export const BuiltInButton = createCustomElement('built-in-button', {
@@ -7,10 +7,12 @@ export const BuiltInButton = createCustomElement('built-in-button', {
     class: HTMLButtonElement
   },
   reflectedAttributes: {
-    text: null as string
+    counter: 0
   },
   adoptedStyleSheets: [buttonStyle],
   render() {
-    return this.text;
+    return <Host onpointerup={() => this.counter++}>
+      {this.counter}
+    </Host>
   }
 });

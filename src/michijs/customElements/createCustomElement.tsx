@@ -56,6 +56,7 @@ export function createCustomElement<
     cssVariables,
     reflectedCssVariables,
     methods,
+    fakeRoot = !shadow,
     formAssociated = false
   } = elementProperties;
   const { class: classToExtend = HTMLElement, tag: extendsTag } = extendsObject ?? {};
@@ -87,7 +88,7 @@ export function createCustomElement<
       styles: [],
       unSubscribeFromStore: new Array<() => void>(),
       idGen: undefined,
-      internals: undefined
+      internals: undefined,
     }
     willMount
     willUpdate
@@ -105,6 +106,7 @@ export function createCustomElement<
     }
     renderCallback() {
       const newChildren = this.render?.();
+      console.log({ newChildren, mountPoint: getMountPoint(this) })
       updateChildren(getMountPoint(this), [...this.$michi.styles.map(x => h.createElement(x, { $staticChildren: true })), newChildren], false, this);
     }
     rerender() {
@@ -125,7 +127,13 @@ export function createCustomElement<
         const attachedShadow = this.attachShadow(shadow);
         if (shadow.mode === 'closed')
           this.$michi.shadowRoot = attachedShadow;
-      } else
+      }
+      if (fakeRoot) {
+        const mountPoint = getMountPoint(this);
+        this.$michi.fakeRoot = document.createElement('michi-fragment');
+        this.$michi.fakeRoot.$ignore = true;
+        mountPoint.prepend(this.$michi.fakeRoot);
+      } else if (!shadow)
         this.$doNotTouchChildren = true;
       if (lifecycle)
         Object.entries(lifecycle).forEach(([key, value]) => this[key] = value);
@@ -188,7 +196,7 @@ export function createCustomElement<
           addStylesheetsToCustomElement(this, styleSheet);
         })
 
-        const updateStylesheetCallback = () => { 
+        const updateStylesheetCallback = () => {
           callback().forEach((computedStyleSheet, i) => updateStyleSheet(styleSheets[i], computedStyleSheet))
         };
         this.$michi.cssStore.subscribe(updateStylesheetCallback);

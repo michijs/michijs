@@ -2,16 +2,16 @@
 
 exports[`Performance tests - MichiJS clear rows: MichiJS Benchmarks 1`] = `
 Map {
-  "1651615039904" => Map {
-    "create1000Rows" => 211.81,
-    "replaceAllRows" => 283.34,
-    "partialUpdate" => 97.07,
-    "selectRow" => 71.73,
-    "swapRows" => 77.85,
-    "removeRow" => 90.83,
-    "createManyRows" => 1605.63,
-    "appendRowsToLargeTable" => 609.8,
-    "clearRows" => 50.77,
+  "1668190293478" => Map {
+    "create1000Rows" => 263.3,
+    "replaceAllRows" => 300.31,
+    "partialUpdate" => 92.64,
+    "selectRow" => 98.8,
+    "swapRows" => 180.45,
+    "removeRow" => 122.85,
+    "createManyRows" => 1919.04,
+    "appendRowsToLargeTable" => 595.43,
+    "clearRows" => 41.66,
   },
   "2.0.0" => Map {
     "create1000Rows" => 251.1,
@@ -40,23 +40,23 @@ Map {
 
 exports[`Performance tests - MichiJS matches the snapshot on initial render 1`] = `
 "
-    <div id=\\"main\\">
-        <div class=\\"container\\">
-            <div class=\\"jumbotron\\">
-                <div class=\\"row\\">
-                    <div class=\\"col-md-6\\">
+    <div id="main">
+        <div class="container">
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-md-6">
                         <h1>MichiJS-Map keyed</h1>
                     </div>
-                    <div is=\\"michi-table-manager\\" class=\\"col-md-6\\"><div class=\\"row\\"><div class=\\"col-sm-6 smallpad\\"><button type=\\"button\\" class=\\"btn btn-primary btn-block\\" id=\\"run\\">Create 1,000 rows</button></div><div class=\\"col-sm-6 smallpad\\"><button type=\\"button\\" class=\\"btn btn-primary btn-block\\" id=\\"runlots\\">Create 10,000 rows</button></div><div class=\\"col-sm-6 smallpad\\"><button type=\\"button\\" class=\\"btn btn-primary btn-block\\" id=\\"add\\">Append 1,000 rows</button></div><div class=\\"col-sm-6 smallpad\\"><button type=\\"button\\" class=\\"btn btn-primary btn-block\\" id=\\"update\\">Update every 10th row</button></div><div class=\\"col-sm-6 smallpad\\"><button type=\\"button\\" class=\\"btn btn-primary btn-block\\" id=\\"clear\\">Clear</button></div><div class=\\"col-sm-6 smallpad\\"><button type=\\"button\\" class=\\"btn btn-primary btn-block\\" id=\\"swaprows\\">Swap Rows</button></div></div></div>
+                    <div is="michi-table-manager" class="col-md-6"><div class="row"><div class="col-sm-6 smallpad"><button type="button" class="btn btn-primary btn-block" id="run">Create 1,000 rows</button></div><div class="col-sm-6 smallpad"><button type="button" class="btn btn-primary btn-block" id="runlots">Create 10,000 rows</button></div><div class="col-sm-6 smallpad"><button type="button" class="btn btn-primary btn-block" id="add">Append 1,000 rows</button></div><div class="col-sm-6 smallpad"><button type="button" class="btn btn-primary btn-block" id="update">Update every 10th row</button></div><div class="col-sm-6 smallpad"><button type="button" class="btn btn-primary btn-block" id="clear">Clear</button></div><div class="col-sm-6 smallpad"><button type="button" class="btn btn-primary btn-block" id="swaprows">Swap Rows</button></div></div></div>
                 </div>
             </div>
-            <table class=\\"table table-hover table-striped test-data\\">
-                <tbody is=\\"michi-table-body\\" id=\\"tbody\\"></tbody>
+            <table class="table table-hover table-striped test-data">
+                <tbody is="michi-table-body" id="tbody"><michi-list></michi-list></tbody>
             </table>
-            <span class=\\"preloadicon glyphicon glyphicon-remove\\" aria-hidden=\\"true\\"></span>
+            <span class="preloadicon glyphicon glyphicon-remove" aria-hidden="true"></span>
         </div>
     </div>
-    <script src=\\"./index.js\\"></script>
+    <script src="./index.js"></script>
 
 
 "
