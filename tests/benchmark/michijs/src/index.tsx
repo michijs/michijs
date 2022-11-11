@@ -55,6 +55,7 @@ export const Table = createCustomElement('michi-table',
       tag: 'table',
       class: HTMLTableElement
     },
+    fakeRoot: false,
     render() {
       return (
         <rows.List as="tbody" _id="tbody" renderItem={({ label, id, selected }) => (
@@ -82,6 +83,7 @@ export const TableManager = createCustomElement('michi-table-manager',
       tag: 'div',
       class: HTMLDivElement
     },
+    fakeRoot: false,
     render() {
       return (
         <div _className="row">

@@ -262,6 +262,10 @@ A component consists of the following properties:
       <td colspan="3">This tells the browser to treat the element like a <a href="https://web.dev/more-capable-form-controls/">form control</a>.</td>
     </tr>
     <tr>
+      <td>fakeRoot</td>
+      <td colspan="3">Allows to create a fake root on the element. This is especially useful if you don't have shadow root. Since it allows you to add children from a parent node.</td>
+    </tr>
+    <tr>
       <td rowspan="3">extends</td>
       <td rowspan="3">Allows to create a <a href ="https://developers.google.com/web/fundamentals/web-components/customelements#extendhtml">Customized built-in element</a></td>
       <tr>

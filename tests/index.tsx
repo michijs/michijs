@@ -12,12 +12,16 @@ createCustomElement('root-test-element', {
   shadow: false,
   transactions: {
     onClickArray() {
+      // this.arrayTest.push(7,8)
       // this.arrayTest = [0, 1, 2, 3, 6]
       this.arrayTest.reverse();
       // this.arrayTest.pop();
       // this.arrayTest.shift();
+      // Scenario
+      // this.arrayTest = [6, 3, 2, 1, 0]
     }
   },
+  fakeRoot: false,
   // observe: {
   //   'arrayTest.6'() {
   //     console.log('6 Added');

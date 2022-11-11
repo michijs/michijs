@@ -7,6 +7,8 @@ import { isClassJSXElement } from '../typeWards/isClassJSXElement';
 import { classJSXToObjectJSXElement } from '../utils/classJSXToObjectJSXElement';
 import { DOMElementFactory } from './DOMElementFactory';
 
+export interface getElementFactoryResult { jsx: SingleJSXElement; factory: ElementFactory; }
+
 export function getElementFactory(jsx: SingleJSXElement, self: Element): { jsx: SingleJSXElement; factory: ElementFactory; } {
   if (jsx) {
     if (Array.isArray(jsx))
