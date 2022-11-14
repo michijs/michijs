@@ -1,6 +1,5 @@
 import { CSSObject } from "../types";
 import { valueIsCSSObject } from "../typeWards/valueIsCSSObject";
-import { formatToKebabCase } from "../utils";
 
 export const cssVariablesFromCssObject = (cssObject: CSSObject, selectors: string[] = []): Record<string, string> => {
   let obj = {};
@@ -8,7 +7,7 @@ export const cssVariablesFromCssObject = (cssObject: CSSObject, selectors: strin
     if (valueIsCSSObject(value)) {
       obj = {...obj, ...cssVariablesFromCssObject(value, selectors.concat(key))}
     } else{
-      obj[`--${selectors.join('-')}-${formatToKebabCase(key)}`] = value;
+      obj[`--${selectors.join('-')}-${key}`] = value;
     }
   });
 
