@@ -272,7 +272,7 @@ export function createCustomElement<
       return MichiCustomElementResult.cssSelector;
     }
     static get cssSelector() {
-      return shadow ? ':host' : (extendsTag ? `${extendsTag}[is="${tag}"]` : tag);
+      return shadow ? ':host' : (extendsTag ? `[is="${tag}"]` : tag);
     }
     // The following properties and methods aren't strictly required,
     // but browser-level form controls provide them. Providing them helps

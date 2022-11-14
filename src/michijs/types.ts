@@ -8,6 +8,7 @@ import { Fragment } from './components';
 import { ObservableObject } from './hooks/observe';
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
+export type StringObjectOf<T extends object | unknown> = T extends object ? { [k in keyof T]: StringObjectOf<T[k]> } : string;
 type IfEquals<X, Y, A = X, B = never> =
   (<T>() => T extends X ? 1 : 2) extends
   (<T>() => T extends Y ? 1 : 2) ? A : B;
@@ -150,7 +151,7 @@ export interface ValidatePropertyChangeFunction {
   (propertyPath?: string): boolean
 }
 
-export type CSSProperty = CSSObject | Properties | string;
+export type CSSProperty = CSSObject | Properties | string | number;
 export interface CSSObject {
   [key: string]: CSSProperty
 }
