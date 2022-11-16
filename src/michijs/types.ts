@@ -158,17 +158,17 @@ export interface CSSObject {
 
 export type CustomElementTag = `${string}-${string}`;
 
-export type AnyObject = Record<PropertyKey, any>;
+export type AnyObject = Record<string, any>;
 
 // I need to use object to avoid infinite loop in KeysAndKeysOf
-export type AttributesType = Record<PropertyKey, PrimitiveType | AnyObject>;
+export type AttributesType = Record<string, PrimitiveType | AnyObject>;
 // Removed because overcomplicates types on definition of components
 // export type ReflectedAttributesType = Record<PropertyKey, Exclude<PrimitiveType, true> | AnyObject>;
-export type ReflectedAttributesType = Record<PropertyKey, PrimitiveType | AnyObject>;
+export type ReflectedAttributesType = Record<string, PrimitiveType | AnyObject>;
 
-export type CssVariablesType = Record<string, PrimitiveType>;
+export type CssVariablesType = CSSObject;
 // export type ReflectedCssVariablesType = Record<string, Exclude<PrimitiveType, true>>;
-export type ReflectedCssVariablesType = Record<string, PrimitiveType>;
+export type ReflectedCssVariablesType = CSSObject;
 
 export type MethodsType = Record<string, Function>
 

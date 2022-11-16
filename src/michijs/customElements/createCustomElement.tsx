@@ -11,11 +11,11 @@ import { getRootNode } from '../DOM/getRootNode';
 import { getAttributeValue } from '../DOM/attributes/getAttributeValue';
 import { getMountPoint } from '../DOM/getMountPoint';
 import { updateChildren } from '../DOMDiff';
-import { getCssVariableRule } from './properties/getCssVariableRule';
 import { defineReflectedAttributes } from './properties/defineReflectedAttributes';
 import { addStylesheetsToCustomElement } from '../utils/addStylesheetsToCustomElement';
 import { h } from '../h';
-import { createStyleSheet, updateStyleSheet } from '../css';
+import { createStyleSheet, declareCssVariables, updateStyleSheet } from '../css';
+import { cssVariablesFromCssObject } from '../css/cssVariablesFromCssObject';
 
 export function createCustomElement<
   A extends AttributesType = EmptyObject,
@@ -160,14 +160,15 @@ export function createCustomElement<
         });
       for (const key in this.$michi.cssStore.state) {
         definePropertyFromStore(this, key, this.$michi.cssStore);
-        const styleSheet = new CSSStyleSheet();
-        const standarizedAttributeName = formatToKebabCase(key);
+      }
+      if(cssVariables || reflectedCssVariables){
+        const styleSheet = declareCssVariables(this.cssSelector, this.$michi.cssStore.state as CSSObject)
 
-        styleSheet.insertRule(getCssVariableRule(standarizedAttributeName, this[key], this.cssSelector));
         addStylesheetsToCustomElement(this, styleSheet);
         this.$michi.cssStore.subscribe((propertiesThatChanged) => {
-          if (propertiesThatChanged.find(x => x.startsWith(key)))
-            styleSheet.replaceSync(getCssVariableRule(standarizedAttributeName, this[key], this.cssSelector));
+          updateStyleSheet(styleSheet, {
+            [this.cssSelector]: cssVariablesFromCssObject(this.$michi.cssStore.state as CSSObject)
+          })
 
           if (observe)
             Object.entries<() => void>(observe).forEach(([key, observer]) => {
