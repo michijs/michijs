@@ -1,7 +1,7 @@
 import { CSSObject, StringObjectOf } from "../types";
 import { formatToKebabCase } from "../utils";
 
-export function declareCssVariablesRef<T extends CSSObject>(parent = '-') {
+export function declareCssVariablesRef<T extends CSSObject>(parent = '-'): StringObjectOf<T> {
   return new Proxy({}, {
     get(_, p) {
       if (Symbol.toPrimitive === p)
