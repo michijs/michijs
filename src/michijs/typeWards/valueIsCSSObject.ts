@@ -1,5 +1,5 @@
 import { CSSObject, CSSProperty } from '../types';
 
 export function valueIsCSSObject(value: CSSProperty): value is CSSObject {
-  return typeof value === 'object' && !value[Symbol.toPrimitive];
+  return value && typeof value === 'object' && !value[Symbol.toPrimitive];
 }
