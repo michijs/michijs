@@ -383,7 +383,6 @@ export interface MichiElementProperties<
 export interface CreateCustomElementStaticResult<FRC extends Object, FRA extends Object, FOA extends boolean, TA extends CustomElementTag, EXTA extends string> {
   readonly tag: TA,
   readonly extends?: EXTA,
-  readonly cssSelector: string;
   readonly observedAttributes: Readonly<Array<keyof FRA & keyof FRC>>,
   formAssociated: FOA,
 }

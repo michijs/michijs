@@ -161,7 +161,7 @@ export function createCustomElement<
       for (const key in this.$michi.cssStore.state) {
         definePropertyFromStore(this, key, this.$michi.cssStore);
       }
-      if(cssVariables || reflectedCssVariables){
+      if (cssVariables || reflectedCssVariables) {
         const styleSheet = declareCssVariables(this.cssSelector, this.$michi.cssStore.state as CSSObject)
 
         addStylesheetsToCustomElement(this, styleSheet);
@@ -270,10 +270,7 @@ export function createCustomElement<
     }
 
     get cssSelector() {
-      return MichiCustomElementResult.cssSelector;
-    }
-    static get cssSelector() {
-      return shadow ? ':host' : (extendsTag ? `[is="${tag}"]` : tag);
+      return shadow ? ':host' : Array.from(this.attributes).reduce((previousValue, attr) => `${previousValue}[${attr.nodeName}${attr.value ? `="${attr.value}"` : ""}]`, extendsTag ? `${extendsTag}[is="${tag}"]` : tag);
     }
     // The following properties and methods aren't strictly required,
     // but browser-level form controls provide them. Providing them helps
