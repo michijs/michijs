@@ -6,8 +6,12 @@ export function declareCssVariablesRef<T extends CSSObject>(parent = '-'): Strin
     get(_, p) {
       if (Symbol.toPrimitive === p)
         return () => `var(${parent})`;
-
-      else
+      else if (parent[p]) {
+        if (typeof parent[p] === 'function')
+          return (...a) => parent[p](...a);
+        else
+          return parent[p]
+      } else
         return declareCssVariablesRef(`${parent}-${formatToKebabCase(p.toString())}`);
     }
   }) as StringObjectOf<T>;
