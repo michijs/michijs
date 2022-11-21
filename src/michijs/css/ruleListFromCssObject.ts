@@ -8,7 +8,7 @@ import { formatToKebabCase } from "../utils";
 export const ruleListFromCssObject = (cssObject: CSSObject, selectors: string[] = []) => {
   const ruleList: string[] = [];
   const ruleDeclarations = Object.entries(cssObject).reduce((previousValue, [key, value]) => {
-    if (value) {
+    if (value !== undefined && value !== null) {
       if (valueIsCSSObject(value)) {
         ruleList.push(...ruleListFromCssObject(value, selectors.concat(key)));
         return previousValue;
