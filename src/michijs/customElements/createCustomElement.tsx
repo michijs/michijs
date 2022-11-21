@@ -92,6 +92,7 @@ export function createCustomElement<
     }
     willMount
     willUpdate
+    didConstruct
     didMount
     didUpdate
     willReceiveAttribute
@@ -202,6 +203,8 @@ export function createCustomElement<
 
       if (formAssociated)
         this.$michi.internals = this.attachInternals();
+
+      this.didConstruct?.()
     }
 
     attributeChangedCallback(name: string, oldValue, newValue) {

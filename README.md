@@ -189,6 +189,10 @@ A component consists of the following properties:
       <tr>
         <td rowspan="7">Custom Element related</td>
         <tr>
+          <td>didConstruct</td>
+          <td>This method is called at the end of constructor.</td>
+        </tr>
+        <tr>
           <td>willMount</td>
           <td>This method is called right before a component mounts.</td>
         </tr>
