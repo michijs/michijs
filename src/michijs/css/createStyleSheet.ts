@@ -5,6 +5,15 @@ import { ruleListFromCssObject } from './ruleListFromCssObject';
 export const createStyleSheet = (cssObject: CSSObject) => {
   const styleSheet = new CSSStyleSheet();
   const rules = ruleListFromCssObject(cssObject);
-  rules.forEach(x => styleSheet.insertRule(x));
+
+  rules.forEach(x => {
+    try {
+      styleSheet.insertRule(x)
+    } catch (ex) {
+      console.error(`Error trying to insert rule: 
+${x}`)
+      console.error(ex);
+    }
+  });
   return styleSheet
 };
