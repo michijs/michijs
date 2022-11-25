@@ -92,6 +92,7 @@ export function createCustomElement<
     }
     willMount
     willUpdate
+    willConstruct
     didConstruct
     didMount
     didUpdate
@@ -130,6 +131,8 @@ export function createCustomElement<
       }
       if (lifecycle)
         Object.entries(lifecycle).forEach(([key, value]) => this[key] = value);
+
+      this.willConstruct?.()
 
       if (methods)
         Object.entries(methods).forEach(([key, value]) => defineMethod(this, key, value));
