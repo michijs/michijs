@@ -214,7 +214,7 @@ export type Self<
     (new () => {
       props: Tag<
         Omit<HTMLElements[EXTA], keyof Attrs> & Partial<Attrs>,
-        EL
+        S
       >
     }) & S
   );
