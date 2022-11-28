@@ -6,6 +6,7 @@ import { Tag } from './h/Tag';
 import { GetAttributes } from '@lsegurado/htmltype/dist/Attributes';
 import { Fragment } from './components';
 import { ObservableObject } from './hooks/observe';
+import { GlobalEvents } from '@lsegurado/htmltype/dist/Events';
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 export type StringObjectOf<T extends object | unknown> = T extends object ? { [k in keyof T]: StringObjectOf<T[k]> } : string;
@@ -83,7 +84,7 @@ export interface ObservableLike<T = any> {
   unsubscribe?(observer: ObserverCallback<T>): void,
 }
 
-export interface MichiCustomElement extends Element, Lifecycle<any>, LifecycleInternals, Pick<ElementInternals, 'checkValidity' | 'reportValidity' | 'form' | 'validity' | 'validationMessage' | 'willValidate'> {
+export interface MichiProperties extends Lifecycle<any>, LifecycleInternals, Pick<ElementInternals, 'checkValidity' | 'reportValidity' | 'form' | 'validity' | 'validationMessage' | 'willValidate'> {
   readonly $michi: {
     store: Store,
     cssStore: Store,
@@ -107,6 +108,9 @@ export interface MichiCustomElement extends Element, Lifecycle<any>, LifecycleIn
   readonly name: string;
   readonly type: string;
   readonly cssSelector: string;
+}
+
+export interface MichiCustomElement extends Element, MichiProperties {
 }
 
 export type PrimitiveType = bigint | string | number | null | undefined | boolean;
@@ -185,6 +189,8 @@ export interface StoreProps<T, Y> {
   transactions: Y
 }
 
+export type ExtendableElements = keyof HTMLElements & keyof HTMLElementTagNameMap;
+
 export type Self<
   RC extends ReflectedCssVariablesType,
   C extends CssVariablesType,
@@ -196,21 +202,20 @@ export type Self<
   NOA extends AttributesType,
   EL extends Element,
   FRA extends Object,
-  EXTA extends keyof JSX.IntrinsicElements,
+  EXTA extends ExtendableElements,
   // TODO: Readonly MichiCustomElement?
-  S = RC & C & EL & A & RA & NOA & Readonly<M & T & { [k in keyof E]: E[k] extends EventDispatcher<infer T> ? (detail?: T) => boolean : any }> & MichiCustomElement
+  S extends Element = RC & C & A & RA & NOA & Readonly<M & T & { [k in keyof E]: E[k] extends EventDispatcher<infer T> ? (detail?: T) => boolean : any }> & MichiProperties & EL,
+  Attrs = FRA & {
+    [k in StringKeyOf<E> as `on${Lowercase<k>}`]: E[k] extends EventDispatcher<infer D> ? (ev: CustomEvent<D>) => any : never
+  } 
+  & GlobalEvents<S>
+  & GetAttributes<'name'>
 > = (
     (new () => {
-      props: ((Tag<
-        Partial<
-          FRA
-          & {
-            [k in StringKeyOf<E> as `on${Lowercase<k>}`]: E[k] extends EventDispatcher<infer D> ? (ev: CustomEvent<D>) => any : never
-          }
-          & HTMLElements.commonElement
-          & GetAttributes<'name'>
-        >, S
-      >) & (EXTA extends undefined ? {} : JSX.IntrinsicElements[EXTA]))
+      props: Tag<
+        Omit<HTMLElements[EXTA], keyof Attrs> & Partial<Attrs>,
+        EL
+      >
     }) & S
   );
 

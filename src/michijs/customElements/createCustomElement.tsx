@@ -1,5 +1,5 @@
 import { idGenerator, store } from '../hooks';
-import { Store, AttributesType, CSSObject, CreateCustomElementStaticResult, CssVariablesType, EmptyObject, EventsType, KebabCase, MichiCustomElement, MichiElementProperties, MethodsType, ReflectedAttributesType, ReflectedCssVariablesType, Self, SubscribeToType, CustomElementTag } from '../types';
+import { Store, AttributesType, CSSObject, CreateCustomElementStaticResult, CssVariablesType, EmptyObject, EventsType, KebabCase, MichiCustomElement, MichiElementProperties, MethodsType, ReflectedAttributesType, ReflectedCssVariablesType, Self, SubscribeToType, CustomElementTag, ExtendableElements } from '../types';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 import { defineTransactionFromStore } from './properties/defineTransactionFromStore';
 import { defineEvent } from './properties/defineEvent';
@@ -30,7 +30,7 @@ export function createCustomElement<
   S extends SubscribeToType = EmptyObject,
   EL extends Element = HTMLElement,
   FOA extends boolean = false,
-  EXTA extends keyof JSX.IntrinsicElements = undefined,
+  EXTA extends ExtendableElements = undefined,
   C extends CssVariablesType = EmptyObject,
   RC extends ReflectedCssVariablesType = EmptyObject,
   FRC extends CssVariablesType = RC extends object ? {

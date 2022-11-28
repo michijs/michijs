@@ -1,4 +1,4 @@
-import { AttributesType, EmptyObject, EventsType, KebabCase, MichiElementProperties, MethodsType, Self, SubscribeToType, CustomElementTag, ReflectedAttributesType, CssVariablesType, ReflectedCssVariablesType, CSSObject } from '../types';
+import { AttributesType, EmptyObject, EventsType, KebabCase, MichiElementProperties, MethodsType, Self, SubscribeToType, CustomElementTag, ReflectedAttributesType, CssVariablesType, ReflectedCssVariablesType, CSSObject, ExtendableElements } from '../types';
 import { createCustomElement } from './createCustomElement';
 
 export function customElement(tag: TemplateStringsArray) {
@@ -15,7 +15,7 @@ export function customElement(tag: TemplateStringsArray) {
     S extends SubscribeToType = EmptyObject,
     EL extends Element = HTMLElement,
     FOA extends boolean = false,
-    EXTA extends keyof JSX.IntrinsicElements = undefined,
+    EXTA extends ExtendableElements = undefined,
     C extends CssVariablesType = EmptyObject,
     RC extends ReflectedCssVariablesType = EmptyObject,
     FRC extends CssVariablesType = RC extends object ? {

@@ -2,7 +2,7 @@
   "name": "@michijs/michijs",
   "author": "Lucas M. Segurado",
   "license": "MIT",
-  "version": "1.0.0-rc-31",
+  "version": "1.0.0-rc-32",
   "files": [
     "dist/",
     "jsx-runtime/"
@@ -70,7 +70,7 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "@lsegurado/htmltype": "0.1.5"
+    "@lsegurado/htmltype": "0.1.6"
   },
   "jest": {
     "projects": [
