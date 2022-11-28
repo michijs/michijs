@@ -213,7 +213,7 @@ export type Self<
 > = (
     (new () => {
       props: Tag<
-        Omit<HTMLElements[EXTA], keyof Attrs> & Partial<Attrs>,
+        Omit<HTMLElements[EXTA extends undefined ? 'div': EXTA], keyof Attrs> & Partial<Attrs>,
         S
       >
     }) & S
@@ -271,7 +271,7 @@ export interface ElementFactory {
   update?(jsx: JSX.Element, el: Node, isSVG: boolean, self: Element): void
 }
 
-export type KeysAndKeysOf<O, P extends string = undefined, Order extends number | null = 1> =
+export type KeysAndKeysOf<O, P extends string | undefined = undefined, Order extends number | null = 1> =
   Order extends null ? '' : (
     O extends any[]
     ? (P extends undefined ? number : `${P}.${number}`)

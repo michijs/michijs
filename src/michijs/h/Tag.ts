@@ -2,7 +2,7 @@ import { IterableAttrs, MichiCustomElement, PickWritable, StringKeyOf } from '..
 
 export type DomInterface<E extends object> = { [K in StringKeyOf<E> as `_${K}`]: E[K] }
 
-export type Tag<T extends { id?: string }, E> = T &
+export type Tag<T, E> = T &
 {
     /**
      * Children are created but not updated

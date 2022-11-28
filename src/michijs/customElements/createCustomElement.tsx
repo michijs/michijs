@@ -21,7 +21,7 @@ export function createCustomElement<
   A extends AttributesType = EmptyObject,
   RA extends ReflectedAttributesType = EmptyObject,
   NOA extends AttributesType = EmptyObject,
-  FRA = RA extends object ? {
+  FRA extends Object = RA extends object ? {
     [k in keyof RA as KebabCase<k>]: RA[k]
   } : EmptyObject,
   M extends MethodsType = EmptyObject,
