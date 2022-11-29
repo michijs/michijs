@@ -203,20 +203,22 @@ export type Self<
   EL extends Element,
   FRA extends Object,
   EXTA extends ExtendableElements,
+  FRC extends CssVariablesType,
   // TODO: Readonly MichiCustomElement?
   S extends Element = RC & C & A & RA & NOA & Readonly<M & T & { [k in keyof E]: E[k] extends EventDispatcher<infer T> ? (detail?: T) => boolean : any }> & MichiProperties & EL,
-  Attrs = FRA & {
+  Attrs = FRA & FRC & {
     [k in StringKeyOf<E> as `on${Lowercase<k>}`]: E[k] extends EventDispatcher<infer D> ? (ev: CustomEvent<D>) => any : never
-  } 
+  }
   & GlobalEvents<S>
   & GetAttributes<'name'>
 > = (
-    (new () => {
-      props: Tag<
-        Omit<HTMLElements[EXTA extends undefined ? 'div': EXTA], keyof Attrs> & Partial<Attrs>,
-        S
-      >
-    }) & S
+    {
+      new(
+        props?: Tag<
+          Omit<HTMLElements[EXTA extends undefined ? 'div' : EXTA], keyof Attrs> & Partial<Attrs>,
+          S
+        >): S;
+    }
   );
 
 interface Lifecycle<FRA> {
@@ -396,7 +398,7 @@ export interface CreateCustomElementStaticResult<FRC extends Object, FRA extends
   formAssociated: FOA,
 }
 
-export type GetElementProps<El extends any> = El extends (new () => { props: any }) ? InstanceType<El>['props'] : (El extends (...args: any) => any ? Parameters<El>[0] : never)
+export type GetElementProps<El extends any> = El extends ({ new(arg: infer T): any }) ? T : (El extends (...args: any) => any ? Parameters<El>[0] : never)
 
 export type EventListenerMap = Map<string, EventListener>;
 

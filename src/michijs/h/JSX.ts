@@ -9,9 +9,9 @@ declare global {
         // interface ElementClass {
         //     render: () => JSX.Element;
         // }
-        interface ElementAttributesProperty {
-            props; // specify the property name to use
-        }
+        // interface ElementAttributesProperty {
+        //     props; // specify the property name to use
+        // }
         // Will show an error because of dist folder
         type Element = SingleJSXElement;
         interface ElementChildrenAttribute {

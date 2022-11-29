@@ -37,7 +37,7 @@ export function createCustomElement<
     [k in keyof RC as KebabCase<k>]: RC[k]
   } : EmptyObject,
   TA extends CustomElementTag = CustomElementTag
->(tag: TA, elementProperties: MichiElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA, EL, EXTA, C, RC, FRC> & ThisType<Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA>> = {}): Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA> & CreateCustomElementStaticResult<FRC, FRA, FOA, TA, EXTA> {
+>(tag: TA, elementProperties: MichiElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA, EL, EXTA, C, RC, FRC> & ThisType<InstanceType<Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA, FRC>>> = {}): Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA, FRC> & CreateCustomElementStaticResult<FRC, FRA, FOA, TA, EXTA> {
 
   const {
     events,
