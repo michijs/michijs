@@ -1,4 +1,4 @@
-import { createCustomElement, createComputedStyleSheet, css, h } from '../src';
+import { createCustomElement, createComputedStyleSheet, css, h, GetElementProps } from '../src';
 
 const style = css`
     :host {

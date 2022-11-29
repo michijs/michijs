@@ -1,20 +1,17 @@
 import { setAttributes } from './attributes/setAttributes';
 
-export function createElement<t extends keyof JSX.IntrinsicElements>(tagName: t, attributes?: JSX.IntrinsicElements[t], options?: ElementCreationOptions) {
+export function createElement<T extends keyof JSX.IntrinsicElements, E extends (T extends keyof HTMLElementTagNameMap
+  ? HTMLElementTagNameMap[T]
+  : (
+    T extends keyof SVGElementTagNameMap
+    ? SVGElementTagNameMap[T]
+    : HTMLElement
+  ))>(tagName: T, attributes?: JSX.IntrinsicElements[T], options?: ElementCreationOptions) {
   const el = document.createElement(tagName, options);
   if (attributes)
     setAttributes(el, attributes);
 
-  return el as unknown as (t extends keyof HTMLElementTagNameMap
-        ? HTMLElementTagNameMap[t]
-        : (
-            t extends keyof SVGElementTagNameMap
-            ? SVGElementTagNameMap[t]
-            : HTMLElement
-        ))
-    & (
-        new () => {
-            props?: JSX.IntrinsicElements[t]
-        }
+  return el as unknown as E & (
+      new (props?: JSX.IntrinsicElements[T]) => E
     );
 }
