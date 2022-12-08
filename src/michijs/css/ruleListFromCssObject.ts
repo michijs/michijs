@@ -13,7 +13,7 @@ export const ruleListFromCssObject = (cssObject: CSSObject, selectors: string[] 
         ruleList.push(...ruleListFromCssObject(value, selectors.concat(key)));
         return previousValue;
       } return `${previousValue}${formatToKebabCase(key)}: ${value};`;
-    } else 
+    } else
       return previousValue;
   }, '');
 
@@ -21,9 +21,15 @@ export const ruleListFromCssObject = (cssObject: CSSObject, selectors: string[] 
   if (ruleDeclarations) {
     const indexMedia = selectors.findIndex(x => x.startsWith('@'));
     let endOfTheRule = '}';
-    if (indexMedia !== -1) {
-      const mediaSelector = selectors.splice(indexMedia, 1);
-      selectors.unshift(`${mediaSelector}{`);
+    if (indexMedia !== -1 && selectors.length > 1) {
+      const selector = selectors[indexMedia];
+      const selectorWithBrackets = `${selector}{`;
+      if (selector.startsWith('@media')) {
+        selectors.splice(indexMedia, 1);
+        selectors.unshift(selectorWithBrackets);
+      } else {
+        selectors.splice(indexMedia, 1, selectorWithBrackets);
+      }
       endOfTheRule += '}';
     }
     // Selectors of the rule

@@ -12,10 +12,11 @@ import { getAttributeValue } from '../DOM/attributes/getAttributeValue';
 import { getMountPoint } from '../DOM/getMountPoint';
 import { updateChildren } from '../DOMDiff';
 import { defineReflectedAttributes } from './properties/defineReflectedAttributes';
-import { addStylesheetsToCustomElement } from '../utils/addStylesheetsToCustomElement';
+import { addStylesheetsToDocumentOrShadowRoot } from '../utils/addStylesheetsToDocumentOrShadowRoot';
 import { h } from '../h';
 import { createStyleSheet, declareCssVariables, updateStyleSheet } from '../css';
 import { cssVariablesFromCssObject } from '../css/cssVariablesFromCssObject';
+import { CSSProperties } from '@lsegurado/htmltype/dist/Attributes';
 
 export function createCustomElement<
   A extends AttributesType = EmptyObject,
@@ -52,7 +53,7 @@ export function createCustomElement<
     adoptedStyleSheets,
     extends: extendsObject,
     shadow = extendsObject ? false : { mode: 'open' },
-    computedStyleSheets,
+    computedStyleSheet,
     cssVariables,
     reflectedCssVariables,
     methods,
@@ -124,10 +125,46 @@ export function createCustomElement<
     constructor() {
       super();
 
+      for (const key in this.$michi.cssStore.state) {
+        definePropertyFromStore(this, key, this.$michi.cssStore);
+      }
+      defineReflectedAttributes(this, reflectedCssVariables, this.$michi.cssStore);
       if (shadow) {
         const attachedShadow = this.attachShadow(shadow);
-        if (shadow.mode === 'closed')
-          this.$michi.shadowRoot = attachedShadow;
+        this.$michi.shadowRoot = attachedShadow;
+
+        if (cssVariables || reflectedCssVariables) {
+          const styleSheet = declareCssVariables(':host', this.$michi.cssStore.state as CSSObject)
+
+          addStylesheetsToDocumentOrShadowRoot(attachedShadow, styleSheet);
+          this.$michi.cssStore.subscribe((propertiesThatChanged) => {
+            updateStyleSheet(styleSheet, {
+              [':host']: cssVariablesFromCssObject(this.$michi.cssStore.state as CSSObject)
+            })
+
+            if (observe)
+              Object.entries<() => void>(observe).forEach(([key, observer]) => {
+                const matches = propertiesThatChanged.find(x => x.startsWith(key));
+                if (matches)
+                  observer.call(this);
+              });
+          });
+        }
+        if (computedStyleSheet) {
+          const callback: (() => CSSProperties) = computedStyleSheet.bind(this);
+          const styleSheet = createStyleSheet(callback(), [':host']);
+          addStylesheetsToDocumentOrShadowRoot(attachedShadow, styleSheet);
+
+          const updateStylesheetCallback = () => {
+            updateStyleSheet(styleSheet, callback(), [':host'])
+          };
+          this.$michi.cssStore.subscribe(updateStylesheetCallback);
+          this.$michi.store.subscribe(updateStylesheetCallback);
+          if (subscribeTo)
+            Object.values(subscribeTo).forEach((store) => store.subscribe(updateStylesheetCallback));
+        }
+        if (adoptedStyleSheets)
+          addStylesheetsToDocumentOrShadowRoot(attachedShadow, ...adoptedStyleSheets);
       }
       if (lifecycle)
         Object.entries(lifecycle).forEach(([key, value]) => this[key] = value);
@@ -162,47 +199,6 @@ export function createCustomElement<
           if (value.unsubscribe)
             this.$michi.unSubscribeFromStore.push(() => value.unsubscribe(subscribeFunction));
         });
-      for (const key in this.$michi.cssStore.state) {
-        definePropertyFromStore(this, key, this.$michi.cssStore);
-      }
-      if (cssVariables || reflectedCssVariables) {
-        const styleSheet = declareCssVariables(this.cssSelector, this.$michi.cssStore.state as CSSObject)
-
-        addStylesheetsToCustomElement(this, styleSheet);
-        this.$michi.cssStore.subscribe((propertiesThatChanged) => {
-          updateStyleSheet(styleSheet, {
-            [this.cssSelector]: cssVariablesFromCssObject(this.$michi.cssStore.state as CSSObject)
-          })
-
-          if (observe)
-            Object.entries<() => void>(observe).forEach(([key, observer]) => {
-              const matches = propertiesThatChanged.find(x => x.startsWith(key));
-              if (matches)
-                observer.call(this);
-            });
-        });
-      }
-      defineReflectedAttributes(this, reflectedCssVariables, this.$michi.cssStore);
-      if (computedStyleSheets) {
-        const callback: (() => CSSObject[]) = computedStyleSheets.bind(this);
-        const styleSheets = []
-
-        callback().forEach(computedStyleSheet => {
-          const styleSheet = createStyleSheet(computedStyleSheet);
-          styleSheets.push(styleSheet)
-          addStylesheetsToCustomElement(this, styleSheet);
-        })
-
-        const updateStylesheetCallback = () => {
-          callback().forEach((computedStyleSheet, i) => updateStyleSheet(styleSheets[i], computedStyleSheet))
-        };
-        this.$michi.cssStore.subscribe(updateStylesheetCallback);
-        this.$michi.store.subscribe(updateStylesheetCallback);
-        if (subscribeTo)
-          Object.values(subscribeTo).forEach((store) => store.subscribe(updateStylesheetCallback));
-      }
-      if (adoptedStyleSheets)
-        addStylesheetsToCustomElement(this, ...adoptedStyleSheets);
 
       if (formAssociated)
         this.$michi.internals = this.attachInternals();
@@ -232,6 +228,44 @@ export function createCustomElement<
     }
 
     connectedCallback() {
+      if (!this.$michi.shadowRoot) {
+        if (cssVariables || reflectedCssVariables) {
+          Object.entries(this.$michi.cssStore.state).forEach(([key, value]) => {
+            // Manual Update is faster than Object.assign	
+            this.style.setProperty(`--${key}`, value.toString())
+          });
+
+          this.$michi.cssStore.subscribe((propertiesThatChanged) => {
+            propertiesThatChanged.forEach(key => {
+              this.style.setProperty(`--${key}`, this.$michi.cssStore.state[key].toString())
+            })
+
+            if (observe)
+              Object.entries<() => void>(observe).forEach(([key, observer]) => {
+                const matches = propertiesThatChanged.find(x => x.startsWith(key));
+                if (matches)
+                  observer.call(this);
+              });
+          });
+        }
+        if (computedStyleSheet) {
+          const callback: (() => CSSProperties) = computedStyleSheet.bind(this);
+
+          const updateStylesheetCallback = () => {
+            Object.entries(callback()).forEach(([key, value]) => {
+              // Manual Update is faster than Object.assign	
+              this.style.setProperty(key, value.toString())
+            });
+          };
+          updateStylesheetCallback();
+          this.$michi.cssStore.subscribe(updateStylesheetCallback);
+          this.$michi.store.subscribe(updateStylesheetCallback);
+          if (subscribeTo)
+            Object.values(subscribeTo).forEach((store) => store.subscribe(updateStylesheetCallback));
+        }
+        if (adoptedStyleSheets)
+          addStylesheetsToDocumentOrShadowRoot(this.getRootNode() as unknown as DocumentOrShadowRoot, ...adoptedStyleSheets);
+      }
       setReflectedAttributes(this, MichiCustomElementResult.observedAttributes);
       if (!this.$michi.alreadyRendered) {
         if (fakeRoot) {
@@ -275,9 +309,6 @@ export function createCustomElement<
       this.formStateRestoreCallback(state, mode);
     }
 
-    get cssSelector() {
-      return shadow ? ':host' : Array.from(this.attributes).reduce((previousValue, attr) => `${previousValue}[${attr.nodeName}${attr.value ? `="${attr.value}"` : ""}]`, extendsTag ? `${extendsTag}[is="${tag}"]` : tag);
-    }
     // The following properties and methods aren't strictly required,
     // but browser-level form controls provide them. Providing them helps
     // ensure consistency with browser-provided controls.
