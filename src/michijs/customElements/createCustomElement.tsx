@@ -91,6 +91,7 @@ export function createCustomElement<
       idGen: undefined,
       internals: undefined,
     }
+    connected
     willMount
     willUpdate
     willConstruct
@@ -266,6 +267,7 @@ export function createCustomElement<
         if (adoptedStyleSheets)
           addStylesheetsToDocumentOrShadowRoot(this.getRootNode() as unknown as DocumentOrShadowRoot, ...adoptedStyleSheets);
       }
+      this.connected?.();
       setReflectedAttributes(this, MichiCustomElementResult.observedAttributes);
       if (!this.$michi.alreadyRendered) {
         if (fakeRoot) {

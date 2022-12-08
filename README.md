@@ -185,12 +185,20 @@ A component consists of the following properties:
       <td colspan="3">Contains methods with a name of an attribute / reflected attribute / css variables / observable like. Those methods are executed when a change has been made to their corresponding property.</td>
     </tr>
     <tr>
-      <td rowspan="13">lifecycle</td>
+      <td rowspan="16">lifecycle</td>
       <tr>
-        <td rowspan="7">Custom Element related</td>
+        <td rowspan="10">Custom Element related</td>
+        <tr>
+          <td>willConstruct</td>
+          <td>This method is called at the start of constructor.</td>
+        </tr>
         <tr>
           <td>didConstruct</td>
           <td>This method is called at the end of constructor.</td>
+        </tr>
+        <tr>
+          <td>connected</td>
+          <td>This method is called when a component is connected to the DOM.</td>
         </tr>
         <tr>
           <td>willMount</td>
@@ -199,10 +207,6 @@ A component consists of the following properties:
         <tr>
           <td>didMount</td>
           <td>This method is called after the component has mounted.</td>
-        </tr>
-        <tr>
-          <td>didUnmount</td>
-          <td>This method is called after a component is removed from the DOM.</td>
         </tr>
         <tr>
           <td>willUpdate</td>
@@ -215,6 +219,10 @@ A component consists of the following properties:
         <tr>
           <td>willReceiveAttribute</td>
           <td>This method is called before a component does anything with an attribute.</td>
+        </tr>
+        <tr>
+          <td>didUnmount</td>
+          <td>This method is called after a component is removed from the DOM.</td>
         </tr>
       </tr>
       <tr>
