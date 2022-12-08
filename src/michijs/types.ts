@@ -224,6 +224,8 @@ interface Lifecycle<FRA> {
   willConstruct?(): void,
   /**This method is called at the end of constructor.*/
   didConstruct?(): void,
+  /**This method is called when a component is connected to the DOM.*/
+  connected?(): void,
   /**This method is called right before a component mounts.*/
   willMount?(): void,
   /**This method is called after the component has mounted. */
