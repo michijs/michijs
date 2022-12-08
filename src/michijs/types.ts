@@ -1,9 +1,8 @@
 import { HTMLElements } from '@lsegurado/htmltype';
 import { EventDispatcher } from './classes';
 import { idGenerator } from './hooks';
-import { Properties } from 'csstype';
 import { Tag } from './h/Tag';
-import { GetAttributes } from '@lsegurado/htmltype/dist/Attributes';
+import { CSSProperties, GetAttributes } from '@lsegurado/htmltype/dist/Attributes';
 import { Fragment } from './components';
 import { ObservableObject } from './hooks/observe';
 import { GlobalEvents } from '@lsegurado/htmltype/dist/Events';
@@ -107,7 +106,6 @@ export interface MichiProperties extends Lifecycle<any>, LifecycleInternals, Pic
   readonly idGen: ReturnType<typeof idGenerator>['getId'],
   readonly name: string;
   readonly type: string;
-  readonly cssSelector: string;
 }
 
 export interface MichiCustomElement extends Element, MichiProperties {
@@ -155,7 +153,7 @@ export interface ValidatePropertyChangeFunction {
   (propertyPath?: string): boolean
 }
 
-export type CSSProperty = CSSObject | Properties | string | number;
+export type CSSProperty = CSSObject | CSSProperties | string | number;
 export interface CSSObject {
   [key: string]: CSSProperty
 }
@@ -215,7 +213,7 @@ export type Self<
     {
       new(
         props?: Tag<
-          Omit<HTMLElements[EXTA extends undefined ? 'div' : EXTA], keyof Attrs> & Partial<Attrs>,
+          Exclude<HTMLElements[EXTA extends undefined ? 'div' : EXTA], keyof Attrs> & Partial<Attrs>,
           S
         >): S;
     }
@@ -286,8 +284,6 @@ export type KeysAndKeysOf<O, P extends string | undefined = undefined, Order ext
 
 type FormStateRestoreCallbackMode = 'restore' | 'autocomplete';
 
-export type ComputedStyleSheet<p extends EmptyObject = EmptyObject> = (props: p & MichiCustomElement) => CSSObject
-
 export interface MichiElementProperties<
   M extends MethodsType,
   T extends MethodsType,
@@ -317,9 +313,9 @@ export interface MichiElementProperties<
    */
   reflectedCssVariables?: RC,
   /**
-   * Allows you to define Constructable Stylesheets that depend on the state of the component.
+   * Allows you to define a Constructable Stylesheet that depend on the state of the component. When there is no shadow root the style will be reflected in the style attribute.
    */
-  computedStyleSheets?(): CSSObject[],
+  computedStyleSheet?(): CSSProperties,
   // Unknown because Self was too complicated for typescript to represent
   /**
    * Allows to define reflected attributes and follows the Kebab case.

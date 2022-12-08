@@ -1,31 +1,26 @@
-import { createCustomElement, createComputedStyleSheet, css, h, GetElementProps } from '../src';
+import { createCustomElement, css, h } from '../src';
 
 const style = css`
-    :host {
+    span {
         background: var(--color);
         width: 50px;
         height: 50px;
         display: flex;
     }
-    :host::before {
+    span::before {
         content: var(--example)
     }
 `;
-
-const computedStyleSheet = createComputedStyleSheet<{ color: string }>((component) => ({
-  [component.cssSelector]: {
-    '--example': component.color === '#ff0000' ? '"red"' : '"not red"'
-  }
-}))
 
 export const ColorSelector = createCustomElement('color-selector', {
   reflectedCssVariables: {
     color: '#ff0000' as `#${string}`
   },
-  computedStyleSheets() {
-    return [
-      computedStyleSheet(this)
-    ]
+  computedStyleSheet() {
+    return {
+      color: 'white',
+      '--example': this.color === '#ff0000' ? '"red"' : '"not red"'
+    }
   },
   adoptedStyleSheets: [style],
   render() {

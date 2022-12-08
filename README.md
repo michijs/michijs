@@ -173,8 +173,8 @@ A component consists of the following properties:
       <td colspan="3">Allows to define reflected CSS variables and follows the Kebab case. CSS variables changes does not trigger a rerender. A reflected CSS variable cannot be initialized with a true value</td>
     </tr>
     <tr>
-      <td>computedStyleSheets</td>
-      <td colspan="3">Allows you to define Constructable Stylesheets that depend on the state of the component.</td>
+      <td>computedStyleSheet</td>
+      <td colspan="3">Allows you to define a Constructable Stylesheet that depend on the state of the component. When there is no shadow root the style will be reflected in the style attribute.</td>
     </tr>
     <tr>
       <td>render</td>

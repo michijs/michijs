@@ -2,9 +2,9 @@ import { CSSObject } from '../types';
 import { ruleListFromCssObject } from './ruleListFromCssObject';
 
 /**Allows to create a Constructable Stylesheet with a CSSObject */
-export const createStyleSheet = (cssObject: CSSObject) => {
+export const createStyleSheet = (cssObject: CSSObject, selectors?: string[]) => {
   const styleSheet = new CSSStyleSheet();
-  const rules = ruleListFromCssObject(cssObject);
+  const rules = ruleListFromCssObject(cssObject, selectors);
 
   rules.forEach(x => {
     try {
