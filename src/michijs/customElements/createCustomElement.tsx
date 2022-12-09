@@ -14,9 +14,10 @@ import { updateChildren } from '../DOMDiff';
 import { defineReflectedAttributes } from './properties/defineReflectedAttributes';
 import { addStylesheetsToDocumentOrShadowRoot } from '../utils/addStylesheetsToDocumentOrShadowRoot';
 import { h } from '../h';
-import { createStyleSheet, declareCssVariables, updateStyleSheet } from '../css';
+import { createStyleSheet, createCssVariables, updateStyleSheet } from '../css';
 import { cssVariablesFromCssObject } from '../css/cssVariablesFromCssObject';
 import { CSSProperties } from '@lsegurado/htmltype/dist/Attributes';
+import { setStyleProperty } from '../DOM/attributes/setStyleProperty';
 
 export function createCustomElement<
   A extends AttributesType = EmptyObject,
@@ -135,7 +136,7 @@ export function createCustomElement<
         this.$michi.shadowRoot = attachedShadow;
 
         if (cssVariables || reflectedCssVariables) {
-          const styleSheet = declareCssVariables(':host', this.$michi.cssStore.state as CSSObject)
+          const styleSheet = createCssVariables(':host', this.$michi.cssStore.state as CSSObject)
 
           addStylesheetsToDocumentOrShadowRoot(attachedShadow, styleSheet);
           this.$michi.cssStore.subscribe((propertiesThatChanged) => {
@@ -232,13 +233,12 @@ export function createCustomElement<
       if (!this.$michi.shadowRoot) {
         if (cssVariables || reflectedCssVariables) {
           Object.entries(this.$michi.cssStore.state).forEach(([key, value]) => {
-            // Manual Update is faster than Object.assign	
-            this.style[`--${formatToKebabCase(key)}`] = value.toString()
+            setStyleProperty(this, `--${key}`, value);
           });
 
           this.$michi.cssStore.subscribe((propertiesThatChanged) => {
             propertiesThatChanged.forEach(key => {
-              this.style[`--${formatToKebabCase(key)}`] = this.$michi.cssStore.state[key].toString()
+              setStyleProperty(this, `--${key}`, this.$michi.cssStore.state[key]);
             })
 
             if (observe)
@@ -254,8 +254,7 @@ export function createCustomElement<
 
           const updateStylesheetCallback = () => {
             Object.entries(callback()).forEach(([key, value]) => {
-              // Manual Update is faster than Object.assign	
-              this.style[formatToKebabCase(key)] = value.toString()
+              setStyleProperty(this, key, value);
             });
           };
           updateStylesheetCallback();

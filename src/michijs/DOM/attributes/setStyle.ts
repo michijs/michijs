@@ -1,5 +1,6 @@
 import { Attributes } from '@lsegurado/htmltype';
 import { setAttribute } from './setAttribute';
+import { setStyleProperty } from './setStyleProperty';
 
 export function setStyle(element: Element | HTMLElement, cssObject: Attributes.CSSProperties) {
   // if (supportsAdoptingStyleSheets && self) {
@@ -9,7 +10,7 @@ export function setStyle(element: Element | HTMLElement, cssObject: Attributes.C
   if (cssObject && 'style' in element) {
     Object.entries(cssObject).forEach(([key, value]) => {
       // Manual Update is faster than Object.assign	
-      element.style[key] = value
+      setStyleProperty(element, key, value);
     });
   } else {
     setAttribute(element, 'style', cssObject);
