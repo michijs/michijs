@@ -8,7 +8,10 @@ import { ObservableObject } from './hooks/observe';
 import { GlobalEvents } from '@lsegurado/htmltype/dist/Events';
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
-export type StringObjectOf<T extends object | unknown> = T extends object ? { [k in keyof T]: StringObjectOf<T[k]> } : string;
+export type CSSVar<T extends string> = KebabCase<T> & {
+  var<V extends undefined | string | number = undefined>(defaultValue?: V): `var(${KebabCase<T>}${V extends undefined? '': `,${V}`})`
+}
+export type CssDeclaration<T extends object | unknown, PK extends string = '-'> = T extends object ? { [k in StringKeyOf<T>]: CssDeclaration<T[k], `${PK}-${k}`> } : CSSVar<PK>;
 type IfEquals<X, Y, A = X, B = never> =
   (<T>() => T extends X ? 1 : 2) extends
   (<T>() => T extends Y ? 1 : 2) ? A : B;
