@@ -9,7 +9,7 @@ export function setStyle(element: Element | HTMLElement, cssObject: Attributes.C
   if (cssObject && 'style' in element) {
     Object.entries(cssObject).forEach(([key, value]) => {
       // Manual Update is faster than Object.assign	
-      element.style.setProperty(key, value);
+      element.style[key] = value
     });
   } else {
     setAttribute(element, 'style', cssObject);

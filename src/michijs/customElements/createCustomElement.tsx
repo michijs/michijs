@@ -233,12 +233,12 @@ export function createCustomElement<
         if (cssVariables || reflectedCssVariables) {
           Object.entries(this.$michi.cssStore.state).forEach(([key, value]) => {
             // Manual Update is faster than Object.assign	
-            this.style.setProperty(`--${key}`, value.toString())
+            this.style[`--${formatToKebabCase(key)}`] = value.toString()
           });
 
           this.$michi.cssStore.subscribe((propertiesThatChanged) => {
             propertiesThatChanged.forEach(key => {
-              this.style.setProperty(`--${key}`, this.$michi.cssStore.state[key].toString())
+              this.style[`--${formatToKebabCase(key)}`] = this.$michi.cssStore.state[key].toString()
             })
 
             if (observe)
@@ -255,7 +255,7 @@ export function createCustomElement<
           const updateStylesheetCallback = () => {
             Object.entries(callback()).forEach(([key, value]) => {
               // Manual Update is faster than Object.assign	
-              this.style.setProperty(key, value.toString())
+              this.style[formatToKebabCase(key)] = value.toString()
             });
           };
           updateStylesheetCallback();
