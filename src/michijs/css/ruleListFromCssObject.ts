@@ -19,23 +19,28 @@ export const ruleListFromCssObject = (cssObject: CSSObject, selectors: string[] 
 
   // If rule is not empty
   if (ruleDeclarations) {
-    const indexMedia = selectors.findIndex(x => x.startsWith('@'));
-    let endOfTheRule = '}';
-    if (indexMedia !== -1 && selectors.length > 1) {
-      const selector = selectors[indexMedia];
-      const selectorWithBrackets = `${selector}{`;
-      if (selector.startsWith('@media')) {
-        selectors.splice(indexMedia, 1);
-        selectors.unshift(selectorWithBrackets);
-      } else {
-        selectors.splice(indexMedia, 1, selectorWithBrackets);
-      }
-      endOfTheRule += '}';
+    const [atRules, previousNotAtRules] = selectors.reduce(([previousAtRules, previousNotAtRules], rule) => {
+      if (rule.startsWith('@'))
+        previousAtRules.push(rule);
+      else
+        previousNotAtRules.push(rule);
+      return [previousAtRules, previousNotAtRules]
+    }, [new Array<string>(), new Array<string>()]);
+
+    let ruleStart = '';
+    let ruleEnd = '';
+
+    if(previousNotAtRules.length > 0){
+      ruleStart += `${previousNotAtRules.join('')}{`
+      ruleEnd += '}'
     }
-    // Selectors of the rule
-    const ruleSelectors = selectors.join('');
+    if(atRules.length > 0){
+      ruleStart = `${atRules.join('{')}{${ruleStart}`
+      ruleEnd += '}'.repeat(atRules.length)
+    }
+
     // Rules with @ should be behind other rules
-    ruleList.push(`${ruleSelectors}{${ruleDeclarations}${endOfTheRule}`);
+    ruleList.push(`${ruleStart}${ruleDeclarations}${ruleEnd}`);
   }
   return ruleList;
 }

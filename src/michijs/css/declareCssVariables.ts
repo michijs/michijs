@@ -8,11 +8,12 @@ export function declareCssVariables<T extends AnyObject>(parent = '-'): CssDecla
         return () => parent;
       else if(p === 'var') {
         return (defaultValue) => `var(${parent}${defaultValue !== undefined ? `,${defaultValue}`: ''})`
-      } else if (parent[p]) {
-        if (typeof parent[p] === 'function')
-          return (...a) => parent[p](...a);
-        else
-          return parent[p]
+        // When having a variable called like a function its broken
+      // } else if (parent[p]) {
+      //   if (typeof parent[p] === 'function')
+      //     return (...a) => parent[p](...a);
+      //   else
+      //     return parent[p]
       } else
         return declareCssVariables(`${parent}-${formatToKebabCase(p.toString())}`);
     }
