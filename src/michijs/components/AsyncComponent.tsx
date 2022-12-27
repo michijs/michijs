@@ -1,6 +1,5 @@
 import { createStyleSheet } from '../css/createStyleSheet';
 import { createCustomElement } from '../customElements/createCustomElement';
-import { h } from '../h';
 
 const AsyncComponentStyleSheet = createStyleSheet({
   ':host': {
@@ -12,7 +11,7 @@ const AsyncComponentStyleSheet = createStyleSheet({
 export const AsyncComponent = createCustomElement('michi-async-component', {
   attributes: {
     /** For internal use only - The component currently showing */
-    currentComponent: undefined as Function,
+    currentComponent: null as Function,
     /** The promise to wait */
     promise: undefined as () => Promise<{ [key: string]: JSX.Element }>,
     /** The component key (by default is default)*/
@@ -34,8 +33,7 @@ export const AsyncComponent = createCustomElement('michi-async-component', {
       if (this.loadingComponent && !this.currentComponent)
         return this.loadingComponent;
 
-      const Component = this.currentComponent;
-      return <Component />;
+      return this.currentComponent;
 
     }
   },

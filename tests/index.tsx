@@ -1,4 +1,4 @@
-import { createCustomElement, h, Host, } from '../src';
+import { createCustomElement, h, Host, indexeddbObservable, wait } from '../src';
 import { ColorSelector } from './ColorSelector';
 import { Router } from './routes';
 // // import sheet from './a.css' assert { type: 'css' };
@@ -46,6 +46,26 @@ createCustomElement('root-test-element', {
   }
 });
 
+// const a = indexeddbObservable<
+//   {
+//     logs: {
+//       test: string
+//     }
+//   }
+// >('testdb', {
+//   logs: {
+//     keyPath: 'test'
+//   }
+// })
+
+// await wait(2000);
+// a.logs.add({
+//   test: 'xd2'
+// })
+// a.logs.add({
+//   test: 'xd3'
+// })
+// console.log(a.logs.getAll().result)
 // TODO:
 // Update readme
 // check blank space in template

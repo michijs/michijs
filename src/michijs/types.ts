@@ -187,7 +187,7 @@ export interface StoreProps<T, Y> {
   /**Allows to define the store state. */
   state: T,
   /**Transactions are functions that notify changes at the end of the transaction. */
-  transactions: Y
+  transactions?: Y
 }
 
 export type ExtendableElements = keyof HTMLElements & keyof HTMLElementTagNameMap;
