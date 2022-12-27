@@ -1,27 +1,34 @@
 {
-    "compilerOptions": {
-        "resolveJsonModule": true,
-        "allowJs": true,
-        "allowSyntheticDefaultImports": true,
-        "allowUnreachableCode": false,
-        "declaration": true,
-        "experimentalDecorators": true,
-        "noErrorTruncation": true,
-        "lib": [
-            "dom",
-            "es2020"
-        ],
-        "outDir": "dist",
-        "moduleResolution": "node",
-        "module": "esnext",
-        "target": "es2019",
-        "noUnusedLocals": false,
-        "noUnusedParameters": false,
-        "noImplicitThis": true,
-        "jsx": "react",
-        "jsxFactory": "h.createElement",
-        "jsxFragmentFactory": "h.Fragment"
-    },
-    "include": ["src", "tests"],
-    "exclude": ["dist", "build"]
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
+    "declaration": true,
+    "experimentalDecorators": true,
+    "noErrorTruncation": true,
+    "lib": [
+      "dom",
+      "es2020"
+    ],
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "module": "esnext",
+    "target": "es2019",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitThis": true,
+    "jsx": "react",
+    "jsxFactory": "h.createElement",
+    "jsxFragmentFactory": "h.Fragment"
+  },
+  "include": [
+    "src",
+    "tests"
+  ],
+  "exclude": [
+    "dist",
+    "build"
+  ]
 }
