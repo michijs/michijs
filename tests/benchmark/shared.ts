@@ -30,6 +30,8 @@ const swapRows = async () => {
 const select = async (index: number) => {
   const tableBody = await getTableBody();
   const linkToClick = await tableBody[index].$('a');
+  if(!linkToClick)
+    throw 'linkToClick not found'
   await linkToClick.click();
 };
 const deleteRow = async (index: number) => {
@@ -46,6 +48,8 @@ const clear = async () => {
 
 const getRowId = async (element: ElementHandle<HTMLElement>) => {
   const td = await element.$('td');
+  if(!td)
+    throw 'td not found'
   const textContentProperty = await td.getProperty('textContent');
   const textContent = await textContentProperty.jsonValue<string>();
   return Number(textContent);
@@ -54,9 +58,9 @@ const getRowId = async (element: ElementHandle<HTMLElement>) => {
 export async function makePerformanceTests() {
   const results = new Map<Result, number>();
   const saveResult = async (key: Result, functionToMeasure: () => Promise<void>) => {
-    const t0 = (await page.metrics()).Timestamp;
+    const t0 = (await page.metrics()).Timestamp!;
     await functionToMeasure();
-    const t1 = (await page.metrics()).Timestamp;
+    const t1 = (await page.metrics()).Timestamp!;
     results.set(key, Number((Number(t1 - t0) * 1000).toFixed(2)));
   };
   it('creates 1000 rows when clicking run', async () => {

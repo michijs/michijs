@@ -24,7 +24,7 @@ export class Target<V> {
     return [];
   }
 
-  private createSingleItem(item: V, template = this.getTemplate(item)): ChildNode {
+  createSingleItem(item: V, template = this.getTemplate(item)): ChildNode {
     const el = template.cloneNode(true) as ChildNode;
     update(el, this.renderItem(item), this.isSVG, this.context);
     return el;
@@ -54,11 +54,11 @@ export class Target<V> {
   }
 
   pop() {
-    this.element.lastChild.remove();
+    this.element.lastChild?.remove();
   }
 
   shift() {
-    this.element.firstChild.remove();
+    this.element.firstChild?.remove();
   }
 
   remove(index: number) {
@@ -105,7 +105,7 @@ export class Target<V> {
           elB.after(elA);
         else { //if [A, nextSiblingA, ... , B] then replace B with A and move B before nextSiblingA
           elB.replaceWith(elA);
-          nextSiblingA.before(elB);
+          nextSiblingA?.before(elB);
         }
       }
     }

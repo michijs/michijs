@@ -1,13 +1,13 @@
-import { ElementFactory, PrimitiveType } from '../..';
+import { ElementFactory, NonNullablePrimitiveType } from '../..';
 
-export const PrimitiveFactory: ElementFactory = {
+export const PrimitiveFactory: Required<ElementFactory> = {
   compare(el: Element): boolean {
     return el.nodeType === 3;
   },
-  create(jsx: PrimitiveType) {
+  create(jsx: NonNullablePrimitiveType) {
     return document.createTextNode(jsx.toString());
   },
-  update(jsx: PrimitiveType, el: Element) {
+  update(jsx: NonNullablePrimitiveType, el: Element) {
     if (el.textContent !== jsx.toString())
       el.textContent = jsx.toString();
   }

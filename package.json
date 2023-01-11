@@ -39,6 +39,7 @@
     "benchmark-michijs": "set NODE_ENV=TESTING && jest --updateSnapshot --unhandled-rejections=strict --selectProjects=benchmark-michijs",
     "benchmark-vanilla": "set NODE_ENV=TESTING_VANILLA && jest --updateSnapshot --unhandled-rejections=strict --selectProjects=benchmark-vanilla",
     "coverage": "jest --no-cache --collect-coverage --selectProjects=library-tests",
+    "test-tsc": "tsc --noEmit",
     "test": "jest --no-cache --selectProjects=library-tests",
     "test-w": "jest --watch --no-cache --selectProjects=library-tests",
     "usnap": "jest --updateSnapshot --unhandled-rejections=strict --selectProjects=library-tests",
@@ -114,7 +115,7 @@
     ]
   },
   "simple-git-hooks": {
-    "pre-commit": "npx lint-staged"
+    "pre-commit": "npx lint-staged && npm run test-tsc"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "rome check --apply-suggested"

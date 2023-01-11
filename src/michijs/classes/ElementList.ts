@@ -34,7 +34,7 @@ export type RenderFunction<V> = (item: V) => JSX.Element;
 
 export class ElementList<V> implements ElementListInterface<V> {
   private targets = new Array<Target<V>>();
-  private data?: V[];
+  private data: V[];
   constructor(...initialData: V[]) {
     this.data = initialData;
   }
@@ -92,7 +92,7 @@ export class ElementList<V> implements ElementListInterface<V> {
     });
   }
 
-  pop(): V {
+  pop(): V | undefined {
     this.targets.forEach(target => target.pop());
     return this.data.pop();
   }
@@ -107,7 +107,7 @@ export class ElementList<V> implements ElementListInterface<V> {
     this.targets.forEach(target => target.reverse());
     return this.data.reverse();
   }
-  shift(): V {
+  shift(): V | undefined {
     this.targets.forEach(target => target.shift());
     return this.data.shift();
   }

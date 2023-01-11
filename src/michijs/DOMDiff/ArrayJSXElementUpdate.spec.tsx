@@ -1,5 +1,6 @@
 import { h } from '../h';
 import { update } from './update';
+jest.mock('../components/Router', () => ({}))
 
 describe('Array JSX Element Update', () => {
 

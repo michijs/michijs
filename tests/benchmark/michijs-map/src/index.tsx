@@ -19,7 +19,7 @@ function buildData(count = 1000) {
 const { state, transactions, ...storeSubscribable } = store({
   state: {
     data: new Array<Row>(),
-    selected: null as number,
+    selected: null as number | null,
     nextId: 1
   },
   transactions: {

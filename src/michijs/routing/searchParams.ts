@@ -19,7 +19,7 @@ let isUpdating = false;
 export const searchParams = observe({
   item: getInitialSearchParamsValue(),
   onChange: key => {
-    if (!isUpdating) {
+    if (!isUpdating && key) {
       const newUrl = new URL(location.href);
       const splittedKey = key.split('.')[1];
       setSearchParam(newUrl, splittedKey, searchParams[splittedKey]);

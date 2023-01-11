@@ -9,17 +9,17 @@ Element.prototype.$setEventListeners = function (this: Element, src, events) {
     if (this.$eventListenerList.has(src)) {
       const currentMap = this.$eventListenerList.get(src);
       events.forEach((newEvent, key) => {
-        const originalEvent = currentMap.get(key);
+        const originalEvent = currentMap?.get(key);
         if (originalEvent !== newEvent) {
           if (originalEvent)
             this.removeEventListener(key, originalEvent);
           this.addEventListener(key, newEvent);
-          currentMap.set(key, newEvent);
+          currentMap?.set(key, newEvent);
         }
       });
       // Remove unexistent events
-      if (events.size !== currentMap.size) {
-        currentMap.forEach((x, key) => {
+      if (events.size !== currentMap?.size) {
+        currentMap?.forEach((x, key) => {
           if (!events.has(key)) {
             this.removeEventListener(key, x);
             currentMap.delete(key);
@@ -36,7 +36,7 @@ Element.prototype.$setEventListeners = function (this: Element, src, events) {
     }
     // Remove all events
   } else if (this.$eventListenerList?.has(src)) {
-    this.$eventListenerList.get(src).forEach((x, key) => this.removeEventListener(key, x));
+    this.$eventListenerList?.get(src)?.forEach((x, key) => this.removeEventListener(key, x));
     this.$eventListenerList.delete(src);
   }
 };

@@ -74,9 +74,7 @@ describe('Observe tests', () => {
     let nonProxiedMap: Map<any, any>;
     let map: Map<any, any>;
     beforeEach(() => {
-      nonProxiedMap = undefined;
       nonProxiedMap = new Map();
-      map = undefined;
       map = observe({ item: new Map(), onChange: mockCallback, shouldValidatePropertyChange: () => true, propertyPath: '' });
     });
     it('Setting the same value two times must call its callback just one time', () => {
@@ -123,9 +121,7 @@ describe('Observe tests', () => {
     let nonProxiedSet: Set<any>;
     let set: Set<any>;
     beforeEach(() => {
-      nonProxiedSet = undefined;
       nonProxiedSet = new Set();
-      set = undefined;
       set = observe({ item: new Set(), onChange: mockCallback, shouldValidatePropertyChange: () => true, propertyPath: '' });
     });
     it('Setting the same value two times must call its callback just one time', () => {
@@ -172,9 +168,7 @@ describe('Observe tests', () => {
     let nonProxiedDate: Date;
     let date: Date;
     beforeEach(() => {
-      nonProxiedDate = undefined;
       nonProxiedDate = new Date();
-      date = undefined;
       date = observe({ item: new Date(), onChange: mockCallback, shouldValidatePropertyChange: () => true, propertyPath: '' });
     });
     it('Setting the same value two times must call its callback just one time', () => {

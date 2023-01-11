@@ -1,5 +1,9 @@
 import { ServerConfig, UserConfig } from '@michijs/server';
 
+// declare module '@michijs/server/bin/types'{
+//   export type DefaultEnvironment = 'TESTING'
+// }
+
 export const config: ServerConfig = (environment) => {
   const defaultConfig: UserConfig = {
     public: {

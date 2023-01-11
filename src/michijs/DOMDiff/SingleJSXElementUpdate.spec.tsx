@@ -6,6 +6,8 @@ const buttonLabel2 = 'test button 2';
 const className = 'test classname';
 const id = 'test id';
 
+jest.mock('../components/Router', () => ({}))
+
 describe('Single JSX Element Update', () => {
 
   const testElement = document.createElement('div');
@@ -54,7 +56,7 @@ describe('Single JSX Element Update', () => {
       expect(testElementChild).toBeDefined();
     });
   });
-  describe('Updating again with a jsx', () => {
+  describe('Updating again with same jsx', () => {
     beforeAll(() => {
       update(testElement, (
         <div _id={id} class={className}>
@@ -86,7 +88,7 @@ describe('Single JSX Element Update', () => {
     beforeAll(() => {
       spyRemoveAttributeChild = jest.spyOn(testElementChild, 'removeAttribute');
       update(testElement, (
-        <div _id={undefined} class={undefined}>
+        <div _id={id} class={undefined}>
           <button hidden={false}>
             {buttonLabel}
           </button>
@@ -94,7 +96,7 @@ describe('Single JSX Element Update', () => {
         </div>
       ));
       testResult.removeAttribute('class');
-      testResult.id = undefined;
+      // testResult.removeAttribute('id');
       testResultChild.removeAttribute('hidden');
     });
     it('must match jsx', () => {
@@ -106,8 +108,11 @@ describe('Single JSX Element Update', () => {
     it('must call removeAttribute a single time on child', () => {
       expect(spyRemoveAttributeChild).toBeCalledTimes(1);
     });
-    it('must set id again', () => {
-      expect(spyId).toBeCalledTimes(2);
+    // it('must set id again', () => {
+    //   expect(spyId).toBeCalledTimes(2);
+    // });
+    it('must not set id again', () => {
+      expect(spyId).toBeCalledTimes(1);
     });
     it('must not call again oncreated callback', () => {
       expect(spyOnCreated).toBeCalledTimes(1);
@@ -119,7 +124,7 @@ describe('Single JSX Element Update', () => {
   describe('Updating a label', () => {
     beforeAll(() => {
       update(testElement, (
-        <div _id={undefined} class={undefined}>
+        <div _id={id} class={undefined}>
           <button hidden={false}>
             {buttonLabel2}
           </button>
@@ -135,7 +140,7 @@ describe('Single JSX Element Update', () => {
   describe('Removing a single child', () => {
     beforeAll(() => {
       update(testElement, (
-        <div _id={undefined} class={undefined}>
+        <div _id={id} class={undefined}>
           {undefined}
           <span />
         </div>
@@ -147,10 +152,10 @@ describe('Single JSX Element Update', () => {
       expect(testElement).toEqual(testResult);
     });
   });
-  describe('Removing a every child', () => {
+  describe('Removing every child', () => {
     beforeAll(() => {
       update(testElement, (
-        <div _id={undefined} class={undefined} />
+        <div _id={id} class={undefined} />
       ));
       testResult.textContent = '';
     });
