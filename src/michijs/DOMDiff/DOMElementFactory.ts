@@ -1,7 +1,7 @@
 import { ElementFactory, MichiCustomElement, DOMElementJSXElement } from '../..';
 import { ObjectFactory } from './ObjectFactory';
 
-export const DOMElementFactory: ElementFactory = {
+export const DOMElementFactory: Required<ElementFactory> = {
   compare(el: Node, jsx: DOMElementJSXElement): boolean {
     return el === jsx.tag;
   },

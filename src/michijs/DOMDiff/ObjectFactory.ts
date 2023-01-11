@@ -3,7 +3,7 @@ import { setAttributes } from '../DOM/attributes/setAttributes';
 import { create } from './create';
 import { updateChildren } from './updateChildren';
 
-export const ObjectFactory: ElementFactory = {
+export const ObjectFactory: Required<ElementFactory> = {
   compare(el: Element, jsx: ObjectJSXElement): boolean {
     return el.localName === jsx.tag;
   },

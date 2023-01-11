@@ -2,7 +2,7 @@ import { observe } from './observe';
 import { EmptyObject, StoreProps, Store } from '../types';
 import { observable } from './observable';
 
-export function store<T extends object = EmptyObject, Y extends Record<string, Function> = EmptyObject>({ state = {} as T, transactions = {} as Y }: StoreProps<T, Y>): Store<T,Y> {
+export function store<T extends object = EmptyObject, Y extends Record<string, Function> = EmptyObject>({ state = {} as T, transactions = {} as Y }: StoreProps<T, Y>): Store<T, Y> {
   const { notify, ...observableProps } = observable<string[]>();
   const proxiedState = observe<T, string[]>({
     item: state as T,
@@ -12,8 +12,8 @@ export function store<T extends object = EmptyObject, Y extends Record<string, F
     subscribeCallback: (path, observer) => {
       const cuttedPath = path.slice(1);
       observableProps.subscribe((value) => {
-        const valuesFound = value.filter(x => x.startsWith(cuttedPath)).map(x => x.slice(cuttedPath.length));
-        if (valuesFound.length > 0)
+        const valuesFound = value?.filter(x => x.startsWith(cuttedPath)).map(x => x.slice(cuttedPath.length));
+        if (valuesFound && valuesFound.length > 0)
           observer(valuesFound);
       });
     }
@@ -33,8 +33,9 @@ export function store<T extends object = EmptyObject, Y extends Record<string, F
     }
   }) as Y;
 
-  const propertyChangedCallback = (propertyThatChanged: string) => {
-    propertiesThatChanged.push(propertyThatChanged);
+  const propertyChangedCallback = (propertyThatChanged?: string) => {
+    if (propertyThatChanged)
+      propertiesThatChanged.push(propertyThatChanged);
     tryToNotify();
   };
 

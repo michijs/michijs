@@ -27,7 +27,7 @@ export const ColorSelector = createCustomElement('color-selector', {
     return (
       <span>
         <input type="color" value={this.color} oninput={(ev) => {
-          this.color = ev.target.value as `#${string}`;
+          this.color = ev.target?.value as `#${string}`;
         }} />
       </span >
     );

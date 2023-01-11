@@ -1,4 +1,4 @@
-import { ClassJSXElement, ElementFactory, Fragment, h, SingleJSXElement } from '../..';
+import { ClassJSXElement, ElementFactory, Fragment, FunctionJSXElement, h, SingleJSXElement } from '../..';
 import { ObjectFactory } from './ObjectFactory';
 import { PrimitiveFactory } from './PrimitiveFactory';
 import { CommentFactory } from './CommentFactory';
@@ -9,7 +9,7 @@ import { DOMElementFactory } from './DOMElementFactory';
 
 export interface getElementFactoryResult { jsx: SingleJSXElement; factory: ElementFactory; }
 
-export function getElementFactory(jsx: SingleJSXElement, self: Element): { jsx: SingleJSXElement; factory: ElementFactory; } {
+export function getElementFactory(jsx: SingleJSXElement, self?: Element): { jsx: SingleJSXElement; factory: ElementFactory; } {
   if (jsx) {
     if (Array.isArray(jsx))
       return { jsx, factory: ListFactory };
@@ -18,9 +18,10 @@ export function getElementFactory(jsx: SingleJSXElement, self: Element): { jsx: 
       if (jsx.tag === undefined)
         return { jsx: classJSXToObjectJSXElement(h.createElement(Fragment, jsx.attrs) as ClassJSXElement), factory: ObjectFactory };
       else if (typeof jsx.tag === 'function') {
-        if (isClassJSXElement(jsx))
-          return { jsx: classJSXToObjectJSXElement(jsx), factory: ObjectFactory };
-        return getElementFactory(jsx.tag(jsx.attrs, self), self);
+        // Explicit casting because of tsc error
+        if (isClassJSXElement(jsx as ClassJSXElement | FunctionJSXElement))
+          return { jsx: classJSXToObjectJSXElement(jsx as ClassJSXElement), factory: ObjectFactory };
+        return getElementFactory((jsx as FunctionJSXElement).tag(jsx.attrs, self), self);
       } else if (typeof jsx.tag === 'object') {
         return { jsx, factory: DOMElementFactory };
       }

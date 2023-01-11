@@ -9,7 +9,7 @@ import { GlobalEvents } from '@lsegurado/htmltype/dist/Events';
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 export type CSSVar<T extends string> = KebabCase<T> & {
-  var<V extends undefined | string | number = undefined>(defaultValue?: V): `var(${KebabCase<T>}${V extends undefined? '': `,${V}`})`
+  var<V extends undefined | string | number = undefined>(defaultValue?: V): `var(${KebabCase<T>}${V extends undefined ? '' : `,${V}`})`
 }
 export type CssDeclaration<T extends object | unknown, PK extends string = '-'> = T extends object ? { [k in StringKeyOf<T>]: CssDeclaration<T[k], `${PK}-${k}`> } : CSSVar<PK>;
 type IfEquals<X, Y, A = X, B = never> =
@@ -86,14 +86,14 @@ export interface ObservableLike<T = any> {
   unsubscribe?(observer: ObserverCallback<T>): void,
 }
 
-export interface MichiProperties extends Lifecycle<any>, LifecycleInternals, Pick<ElementInternals, 'checkValidity' | 'reportValidity' | 'form' | 'validity' | 'validationMessage' | 'willValidate'> {
+export interface MichiProperties extends Lifecycle<any>, LifecycleInternals, Partial<Pick<ElementInternals, 'checkValidity' | 'reportValidity' | 'form' | 'validity' | 'validationMessage' | 'willValidate'>> {
   readonly $michi: {
     store: Store,
     cssStore: Store,
     alreadyRendered: boolean,
     shadowRoot?: ShadowRoot,
     styles: HTMLStyleElement[],
-    rerenderCallback(propertiesThatChanged: string[] | PropertyKey): void,
+    rerenderCallback(propertiesThatChanged?: string[] | PropertyKey): void,
     pendingTasks: number,
     unSubscribeFromStore: Array<() => void>,
     idGen?: ReturnType<typeof idGenerator>['getId'],
@@ -107,14 +107,15 @@ export interface MichiProperties extends Lifecycle<any>, LifecycleInternals, Pic
   rerender(): void,
   /**Create unique IDs with a discernible key */
   readonly idGen: ReturnType<typeof idGenerator>['getId'],
-  readonly name: string;
+  readonly name: string | null;
   readonly type: string;
 }
 
 export interface MichiCustomElement extends Element, MichiProperties {
 }
 
-export type PrimitiveType = bigint | string | number | null | undefined | boolean;
+export type NonNullablePrimitiveType = bigint | string | number | boolean;
+export type PrimitiveType = NonNullablePrimitiveType | null | undefined;
 
 interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> { }
 
@@ -130,12 +131,14 @@ export type DeepReadonly<T> =
 export interface IterableAttrs<T> {
   /**When iterating nodes its higly recomended to use keys */
   key?: number | string,
-  tag?: T
+  tag: T
 }
 
-export interface CommonJSXAttrs<T> extends IterableAttrs<T> { attrs?: (Record<string, any> & { children: JSX.Element[] }) }
-export type FragmentJSXElement = CommonJSXAttrs<typeof Fragment.tag>
-export type IterableJSX = AnyObject | ObjectJSXElement | FunctionJSXElement | ClassJSXElement | FragmentJSXElement;
+export interface CommonJSXAttrs<T> extends IterableAttrs<T> { attrs: (Record<string, any> & { children: JSX.Element[] }) }
+export type FragmentJSXElement = CommonJSXAttrs<typeof Fragment.tag | undefined>
+export type IterableJSX = {
+  key: number | string
+} & CommonJSXAttrs<Element>;
 export type ObjectJSXElement = CommonJSXAttrs<string>
 export type DOMElementJSXElement = CommonJSXAttrs<Element>
 export type FunctionJSXElement = CommonJSXAttrs<FC<any>>
@@ -156,7 +159,7 @@ export interface ValidatePropertyChangeFunction {
   (propertyPath?: string): boolean
 }
 
-export type CSSProperty = CSSObject | CSSProperties | string | number;
+export type CSSProperty = CSSObject | CSSProperties | string | number | undefined | null;
 export interface CSSObject {
   [key: string]: CSSProperty
 }
@@ -190,7 +193,7 @@ export interface StoreProps<T, Y> {
   transactions?: Y
 }
 
-export type ExtendableElements = keyof HTMLElements & keyof HTMLElementTagNameMap;
+export type ExtendableElements = (keyof HTMLElements & keyof HTMLElementTagNameMap) | undefined;
 
 export type Self<
   RC extends ReflectedCssVariablesType,
@@ -272,8 +275,8 @@ export interface Store<T extends object = EmptyObject, Y extends Record<string, 
 
 export interface ElementFactory {
   compare(el: Node, jsx: JSX.Element): boolean;
-  create(jsx: JSX.Element, isSVG: boolean, self: Element): ChildNode | ParentNode;
-  update?(jsx: JSX.Element, el: Node, isSVG: boolean, self: Element): void
+  create(jsx: JSX.Element, isSVG?: boolean, self?: Element): ChildNode | ParentNode;
+  update?(jsx: JSX.Element, el: Node, isSVG?: boolean, self?: Element): void
 }
 
 export type KeysAndKeysOf<O, P extends string | undefined = undefined, Order extends number | null = 1> =
@@ -297,10 +300,10 @@ export interface MichiElementProperties<
   A extends AttributesType,
   RA extends AttributesType,
   NOA extends AttributesType,
-  FRA extends Object,
+  FRA extends AttributesType,
   FOA extends boolean,
   EL extends Element,
-  EXTA extends keyof JSX.IntrinsicElements,
+  EXTA extends ExtendableElements,
   C extends CssVariablesType,
   RC extends ReflectedCssVariablesType,
   FRC extends Object
@@ -392,7 +395,7 @@ export interface MichiElementProperties<
   fakeRoot?: boolean
 }
 
-export interface CreateCustomElementStaticResult<FRC extends Object, FRA extends Object, FOA extends boolean, TA extends CustomElementTag, EXTA extends string> {
+export interface CreateCustomElementStaticResult<FRC extends Object, FRA extends Object, FOA extends boolean, TA extends CustomElementTag, EXTA extends ExtendableElements> {
   readonly tag: TA,
   readonly extends?: EXTA,
   readonly observedAttributes: Readonly<Array<keyof FRA & keyof FRC>>,
@@ -411,11 +414,11 @@ declare global {
      * @param src Who adds the event
      * @param ev A map containing the event and its callback
      */
-    $setEventListeners(this: Element, src: Element, ev: EventListenerMap): void;
+    $setEventListeners(this: Element, src: Element | undefined, ev: EventListenerMap): void;
     /**
      * The list of events and who created them through the setEventListeners method
      */
-    $eventListenerList?: Map<Element, EventListenerMap>;
+    $eventListenerList?: Map<Element | undefined, EventListenerMap>;
     /**
      * Children are not created or updated. Element creation/update is delegated
      */

@@ -6,7 +6,7 @@ import { setAttribute } from './setAttribute';
 import { compareAttributes } from './compareAttributes';
 
 export function setAttributes(el: Element, attributes: AnyObject, self?: Element) {
-  let events: EventListenerMap;
+  let events: EventListenerMap | undefined;
   Object.entries(attributes).forEach(([name, newValue]) => {
     // priority to properties and events
     if (name.startsWith('_')) {

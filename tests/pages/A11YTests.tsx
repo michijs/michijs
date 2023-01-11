@@ -1,12 +1,12 @@
 import { getFormData, h } from '../../src';
 import { A11YCounter } from '../A11YCounter';
-import { components } from '../routes';
+import { pages } from '../routes';
 
 interface CustomForm {
   counter: number
 }
 
-export const A11yTests = components.a11yTests(({ searchParams }) => (
+export const A11yTests = pages.a11yTests(({ searchParams }) => (
   <form onsubmit={(e) => {
     e.preventDefault();
     const formData = getFormData<CustomForm>(e);

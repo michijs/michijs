@@ -1,12 +1,13 @@
 import { observable } from './observable';
-import { ObservableObject, observe } from './observe';
+import { observe } from './observe';
 
 export function observableValue<T = unknown>(initialValue: T) {
-  const { notify, ...observableProps } = observable<ObservableObject<T, unknown>>();
-  const state = observe({
+  const { notify, ...observableProps } = observable<string>();
+  const state = observe<{ value: T }, string>({
     item: { value: initialValue, ...observableProps },
-    onChange: () => {
-      notify(state.value);
+    onChange: (propertyPath) => {
+      if (propertyPath)
+        notify(propertyPath);
     },
     shouldValidatePropertyChange: () => true,
     propertyPath: ''

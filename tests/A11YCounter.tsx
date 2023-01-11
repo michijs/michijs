@@ -55,7 +55,7 @@ export const A11YCounter = createCustomElement('a11y-counter', {
         <ElementInternals
           ariaValueText={this.value.toString()}
           formValue={this.value.toString()}
-          errorMessage={this.value > 0 ? null : 'Value should be greater than 0'} />
+          errorMessage={this.value > 0 ? undefined : 'Value should be greater than 0'} />
         <button type='button' onpointerup={this.decrementCount}>-</button>
         <span>{this.value}</span>
         <button type='button' onpointerup={this.incrementCount}>+</button>

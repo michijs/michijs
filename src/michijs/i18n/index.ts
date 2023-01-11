@@ -1,56 +1,118 @@
-import { observable } from '../hooks';
+import { observable, store } from '../hooks';
+import { ObservableLike, ObserverCallback, Store } from '../types';
 
 type StringObject = {
   [key: string]: string | StringObject
 } | string[] | StringObject[]
 
-export type Translation<T extends StringObject> = {
-  [key: string]: T | (() => Promise<{ default: T }>)
+export type Translation<T extends StringObject, K extends string> = {
+  [key in K]: T | (() => Promise<{ default: T }>)
 }
-type TransactionItem = { translation: Translation<StringObject>, selectedTranslation: StringObject, i18nObservable: ReturnType<typeof observable>, lang: { value: string } }
+export interface TranslationItem<T extends StringObject, K extends string> {
+  translation: Translation<T, K>,
+  store: CreateTranslationResultStore<T>
+}
+export type CreateTranslationResultStore<T extends StringObject> = Store<{
+  t: T;
+}, {
+  updateTranslation(newTranslation: T)
+}>;
+export interface CreateTranslationResult<T extends StringObject> {
+  store: CreateTranslationResultStore<T>
+  t: T
+};
 
-export class I18n {
-  private static translations = new Array<TransactionItem>()
-  static observer = observable();
-  static currentLanguage = navigator.language;
+export class I18n<K extends string> implements ObservableLike {
+  private translations = new Array<TranslationItem<StringObject, string>>()
+  private observer = observable();
+  private _currentLanguage: K | undefined;
+  private isUsingSystemLanguage = true;
 
-  static createTranslation<T extends StringObject>(translation: Translation<T>): { t: T, i18nObservable: ReturnType<typeof observable>, lang: { value: keyof Translation<T> } } {
-    const selectedTranslation = {} as T;
-    const lang = { value: undefined };
-    const i18nObservable = observable();
-    this.translations.push(this.updateTranslation({ translation, selectedTranslation, i18nObservable, lang }));
-    return { t: selectedTranslation, i18nObservable, lang };
+  constructor(initialLanguage?: string | null) {
+    if (initialLanguage) {
+      this._currentLanguage = initialLanguage as K;
+      this.isUsingSystemLanguage = false
+    }
+
+    window.addEventListener('languagechange', () => {
+      if (!this.isUsingSystemLanguage) {
+        this.setLanguage(navigator.language as K);
+      }
+    })
+  }
+  subscribe(observer: ObserverCallback<any>): void {
+    return this.observer.subscribe(observer);
+  }
+  unsubscribe?(observer: ObserverCallback<any>): void {
+    return this.observer.unsubscribe(observer);
   }
 
-  private static updateTranslation({ translation, selectedTranslation, i18nObservable, lang }: TransactionItem) {
-    const translationKeys = Object.keys(translation);
-    let key = translationKeys.find((key) => key === this.currentLanguage);
+  get currentLanguage(): K | undefined {
+    return this._currentLanguage
+  }
+  set currentLanguage(newLang: K | undefined) {
+    this.setLanguage(newLang);
+    this.isUsingSystemLanguage = false
+  }
+
+  createTranslation<T extends StringObject>(translation: Translation<T, K>) {
+    const translationResult = store({
+      state: {
+        t: {} as T
+      },
+      transactions: {
+        updateTranslation(newTranslation: T) {
+          Object.entries(newTranslation).forEach(([key, value]) => {
+            translationResult.state.t[key] = value
+          });
+        }
+      }
+    });
+    const translationItem = {
+      translation,
+      store: translationResult
+    };
+    this.translations.push(translationItem);
+    this.updateTranslation<T>(translationItem)
+    return translationResult;
+  }
+
+  private updateTranslation<T extends StringObject>({
+    translation,
+    store
+  }: TranslationItem<T, K>) {
+    const translationKeys = Object.keys(translation) as K[];
+    let key: K | undefined = this.currentLanguage ? translationKeys.find((key) => key === this.currentLanguage) : undefined;
     if (!key) { // It does not have the current language - Fallback to next language in navigator.languages
-      key = navigator.languages.find((key) => translationKeys.includes(key));
+      key = navigator.languages.find((key) => translationKeys.includes(key as K)) as K;
       if (!key) { // Does not include any browser language - I use the latest language of the object
         key = translationKeys[translationKeys.length - 1];
       }
     }
-    lang.value = key;
     const value = translation[key];
+    this._currentLanguage = key;
 
-    if (typeof value === 'function') {
+    if (typeof value === 'function')
       value().then(res => {
-        Object.assign(selectedTranslation, res.default);
-        i18nObservable.notify(this.currentLanguage);
+        store.transactions.updateTranslation(res.default)
       });
-    } else {
-      Object.assign(selectedTranslation, value);
-      i18nObservable.notify(this.currentLanguage);
-    }
-    return { translation, selectedTranslation, i18nObservable, lang };
+    else
+      store.transactions.updateTranslation(value as T)
+
   }
 
-  static setLanguage(newLang: string) {
-    this.currentLanguage = newLang;
-    //Update every translation
-    this.translations.forEach((x) => this.updateTranslation(x));
-    // Then notify
-    this.observer.notify(newLang);
+  private setLanguage(newLang: K | undefined) {
+    if (this._currentLanguage !== newLang) {
+      this._currentLanguage = newLang;
+      //Update every translation
+      this.translations.forEach((x) => this.updateTranslation(x));
+      // Then notify
+      this.observer.notify(newLang);
+    }
+  }
+
+  useSystemLanguage() {
+    this.setLanguage(navigator.language as K);
+    this.isUsingSystemLanguage = true
   }
 }

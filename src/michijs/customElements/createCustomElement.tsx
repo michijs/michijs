@@ -23,7 +23,7 @@ export function createCustomElement<
   A extends AttributesType = EmptyObject,
   RA extends ReflectedAttributesType = EmptyObject,
   NOA extends AttributesType = EmptyObject,
-  FRA extends Object = RA extends object ? {
+  FRA extends AttributesType = RA extends object ? {
     [k in keyof RA as KebabCase<k>]: RA[k]
   } : EmptyObject,
   M extends MethodsType = EmptyObject,
@@ -74,12 +74,12 @@ export function createCustomElement<
       pendingTasks: 0,
       rerenderCallback: (propertyThatChanged) => {
         if (observe)
-          Object.entries<() => void>(observe).forEach(([key, observer]) => {
+          Object.entries(observe).forEach(([key, observer]) => {
             const matches = typeof propertyThatChanged === 'object' ? propertyThatChanged.find(x => x.startsWith(key)) : propertyThatChanged === key;
 
             if (matches) {
               this.$michi.pendingTasks++;
-              observer.call(this);
+              observer?.call(this);
               this.$michi.pendingTasks--;
             }
           });
@@ -130,7 +130,7 @@ export function createCustomElement<
       for (const key in this.$michi.cssStore.state) {
         definePropertyFromStore(this, key, this.$michi.cssStore);
       }
-      defineReflectedAttributes(this, reflectedCssVariables, this.$michi.cssStore);
+      defineReflectedAttributes(this, this.$michi.cssStore, reflectedCssVariables);
       if (shadow) {
         const attachedShadow = this.attachShadow(shadow);
         this.$michi.shadowRoot = attachedShadow;
@@ -145,10 +145,10 @@ export function createCustomElement<
             })
 
             if (observe)
-              Object.entries<() => void>(observe).forEach(([key, observer]) => {
-                const matches = propertiesThatChanged.find(x => x.startsWith(key));
+              Object.entries(observe).forEach(([key, observer]) => {
+                const matches = propertiesThatChanged?.find(x => x.startsWith(key));
                 if (matches)
-                  observer.call(this);
+                  observer?.call(this);
               });
           });
         }
@@ -182,7 +182,7 @@ export function createCustomElement<
       for (const key in this.$michi.store.state) {
         definePropertyFromStore(this, key, this.$michi.store);
       }
-      defineReflectedAttributes(this, reflectedAttributes, this.$michi.store);
+      defineReflectedAttributes(this, this.$michi.store, reflectedAttributes);
       if (events)
         Object.entries(events).forEach(([key, value]) => defineEvent(this, key, value));
       if (getNonObservedAttributes) {
@@ -199,7 +199,7 @@ export function createCustomElement<
           };
           value.subscribe(subscribeFunction);
           if (value.unsubscribe)
-            this.$michi.unSubscribeFromStore.push(() => value.unsubscribe(subscribeFunction));
+            this.$michi.unSubscribeFromStore.push(() => value.unsubscribe?.(subscribeFunction));
         });
 
       if (formAssociated)
@@ -237,15 +237,15 @@ export function createCustomElement<
           });
 
           this.$michi.cssStore.subscribe((propertiesThatChanged) => {
-            propertiesThatChanged.forEach(key => {
+            propertiesThatChanged?.forEach(key => {
               setStyleProperty(this, `--${key}`, this.$michi.cssStore.state[key]);
             })
 
             if (observe)
-              Object.entries<() => void>(observe).forEach(([key, observer]) => {
-                const matches = propertiesThatChanged.find(x => x.startsWith(key));
+              Object.entries(observe).forEach(([key, observer]) => {
+                const matches = propertiesThatChanged?.find(x => x.startsWith(key));
                 if (matches)
-                  observer.call(this);
+                  observer?.call(this);
               });
           });
         }
@@ -321,10 +321,10 @@ export function createCustomElement<
     get willValidate() { return this.$michi.internals?.willValidate; }
 
     checkValidity() {
-      return this.$michi.internals?.checkValidity();
+      return this.$michi.internals?.checkValidity() ?? false;
     }
     reportValidity() {
-      return this.$michi.internals?.reportValidity();
+      return this.$michi.internals?.reportValidity() ?? false;
     }
   }
 

@@ -17,9 +17,10 @@ export type ObserveProps<T, Y> = {
 } & ObserveHandlerProps;
 
 export type ObservableObject<T, Y = string[]> = T extends Function ? T : (T extends object ?
-  {
-    [k in keyof T]: ObservableObject<T[k], Y>
-  } 
+  // {
+  //   [k in keyof T]: ObservableObject<T[k], Y>
+  // } 
+  T
   & Partial<ObservableLike<Y>> : T)
 
 export function observe<T, Y>(props: ObserveProps<T, Y>): ObservableObject<T, Y> {

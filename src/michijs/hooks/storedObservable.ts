@@ -15,7 +15,7 @@ export function storedObservable<T extends object>(obj: T, storage: Storage = lo
   );
 
   const listener = (ev: StorageEvent) => {
-    if (Object.keys(obj).includes(ev.key))
+    if (ev.key && Object.keys(obj).includes(ev.key))
       notify(ev.key as keyof T);
   };
 

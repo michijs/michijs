@@ -1,4 +1,4 @@
-import { ElementFactory, IterableAttrs, MichiCustomElement, update } from '../..';
+import { ElementFactory, IterableAttrs, IterableJSX, MichiCustomElement, update } from '../..';
 import { Target } from '../classes/Target';
 import { ListElement } from '../components/FragmentAndList';
 import { forEachChildren } from './forEachChildren';
@@ -11,14 +11,14 @@ function nodeNodeIsSameElement(node: ChildNode, jsx: JSX.Element) {
   return !isIterable;
 }
 
-function jsxIsIterable(jsx: JSX.Element): jsx is IterableAttrs<any> {
-  return typeof jsx === 'object' && 'key' in jsx;
+function jsxIsIterable(jsx: JSX.Element): jsx is IterableJSX {
+  return !!jsx && typeof jsx === 'object' && 'key' in jsx;
 }
 
-export function createTarget(el: ParentNode, isSVG: boolean, context: Element) {
+export function createTarget(el: ParentNode, isSVG?: boolean, context?: Element) {
   return new Target<JSX.Element>(el, (item) => {
     // TODO: should be a oncreate callback?
-    if (typeof item === 'object' && 'key' in item)
+    if (item && typeof item === 'object' && 'key' in item)
       item['attrs']['_$key'] = item.key;
     return item;
   }, isSVG, context);
@@ -32,7 +32,7 @@ export function mapFind<K, V>(map: Map<K, V>, callback: (value: V) => boolean): 
   return undefined;
 }
 
-export const ListFactory: ElementFactory = {
+export const ListFactory: Required<ElementFactory> = {
   compare(el: Element): boolean {
     return el.localName === ListElement.tag;
   },
@@ -42,51 +42,67 @@ export const ListFactory: ElementFactory = {
     return el;
   },
   update(jsx: JSX.Element[], el: ParentNode, isSVG?: boolean, contextElement?: MichiCustomElement) {
-    if (jsx.length === 0)
+    const newLength = jsx.length
+    if (newLength === 0)
       el.textContent = '';
     else {
       const pendingToInsertKeyedItems: { index: number, newChildJSX: JSX.Element, key: string | number }[] = [];
-      const pendingToRemoveKeyedItems = new Map<number, { key: string | number, child: ChildNode }>();
-      const RemovedKeyedItems = new Map<string | number, ChildNode>();
+      const pendingToReplaceKeyedItems = new Map<number, { key?: string | number, child: ChildNode }>();
+      const replacedKeyedItems = new Map<string | number, ChildNode>();
+      const removedKeyedItems = new Map<string | number, ChildNode>();
       const target = createTarget(el, isSVG, contextElement);
 
-      // Walk thought the current children and
+      // Walk thought the current children
       const nextIndex = forEachChildren(el.firstChild, (currentNode, i) => {
-        const newChildJSX = jsx[i];
-        if (nodeNodeIsSameElement(currentNode, newChildJSX))
-          target.updateNode(currentNode, newChildJSX)
-        else {
-          if (jsxIsIterable(newChildJSX)) {
-            pendingToRemoveKeyedItems.set(i, { key: currentNode.$key, child: currentNode })
-            pendingToInsertKeyedItems.push({ index: i, key: newChildJSX.key, newChildJSX });
-          } else {
-            if (currentNode.$key)
-              RemovedKeyedItems.set(currentNode.$key, currentNode);
-            target.replaceNode(currentNode, newChildJSX);
+        if (i < newLength) {
+          const newChildJSX = jsx[i];
+          if (nodeNodeIsSameElement(currentNode, newChildJSX))
+            target.updateNode(currentNode, newChildJSX)
+          else {
+            if (jsxIsIterable(newChildJSX)) {
+              pendingToReplaceKeyedItems.set(i, { key: currentNode.$key, child: currentNode })
+              pendingToInsertKeyedItems.push({ index: i, key: newChildJSX.key, newChildJSX });
+            } else {
+              if (currentNode.$key)
+                replacedKeyedItems.set(currentNode.$key, currentNode);
+              target.replaceNode(currentNode, newChildJSX);
+            }
           }
+        } else {
+          if (currentNode.$key)
+            removedKeyedItems.set(currentNode.$key, currentNode);
+          currentNode.remove();
+          return true
         }
       })
 
       // moved nodes on previously walked elements
       pendingToInsertKeyedItems.forEach(({ index, newChildJSX, key }) => {
-        const nodeInThePlace = pendingToRemoveKeyedItems.get(index);
+        // Cannot be null because the index is the same than pendingToInsertKeyedItems
+        const nodeInThePlace = pendingToReplaceKeyedItems.get(index)!;
 
-        let itemFound = RemovedKeyedItems.get(key);
-        if (itemFound) {
-          RemovedKeyedItems.delete(key);
-        } else {
-          const itemFoundInPendingToRemoveKeyedItems = mapFind(pendingToRemoveKeyedItems, (value) => value.key === key);
-          if (itemFoundInPendingToRemoveKeyedItems) {
-            const result = itemFoundInPendingToRemoveKeyedItems;
-            itemFound = result[1].child;
+        let itemFound = replacedKeyedItems.get(key);
+        if (itemFound)
+          replacedKeyedItems.delete(key);
+        else {
+          itemFound = removedKeyedItems.get(key);
+          if (itemFound)
+            removedKeyedItems.delete(key);
+          else {
+            const itemFoundInPendingToReplaceKeyedItems = mapFind(pendingToReplaceKeyedItems, (value) => value.key === key);
+            if (itemFoundInPendingToReplaceKeyedItems) {
+              const result = itemFoundInPendingToReplaceKeyedItems;
+              itemFound = result[1].child;
 
-            const tempChild = document.createComment('');
-            result[1].child.replaceWith(tempChild);
-            result[1].child = tempChild;
+              const tempChild = document.createComment('');
+              result[1].child.replaceWith(tempChild);
+              result[1].child = tempChild;
+            }
           }
         }
-        pendingToRemoveKeyedItems.delete(index);
-        RemovedKeyedItems.set(nodeInThePlace.key, nodeInThePlace.child);
+        pendingToReplaceKeyedItems.delete(index);
+        if (nodeInThePlace.key)
+          replacedKeyedItems.set(nodeInThePlace.key, nodeInThePlace.child);
         if (itemFound) {
           update(itemFound, newChildJSX, isSVG, contextElement);
           nodeInThePlace.child.replaceWith(itemFound);
@@ -97,10 +113,10 @@ export const ListFactory: ElementFactory = {
 
       // new nodes
       const pendingChildren = jsx.slice(nextIndex);
-      if (RemovedKeyedItems.size > 0)
+      if (replacedKeyedItems.size > 0 || removedKeyedItems.size > 0)
         target.insertChildNodesAt(nextIndex, ...pendingChildren.map(newChildJSX => {
           if (jsxIsIterable(newChildJSX)) {
-            const itemFound = RemovedKeyedItems.get(newChildJSX.key);
+            const itemFound = replacedKeyedItems.get(newChildJSX.key) || removedKeyedItems.get(newChildJSX.key);
             if (itemFound)
               return itemFound
           }

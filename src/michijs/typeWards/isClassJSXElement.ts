@@ -1,5 +1,5 @@
-import { ClassJSXElement, IterableJSX } from '../..';
+import { ClassJSXElement, FunctionJSXElement } from '../..';
 
-export function isClassJSXElement(param: IterableJSX): param is ClassJSXElement {
-  return param.tag.tag;
+export function isClassJSXElement(param: FunctionJSXElement | ClassJSXElement): param is ClassJSXElement {
+  return 'tag' in param.tag;
 }

@@ -1,6 +1,5 @@
-export * from './createRoute';
 export { hash } from './hash';
 export { searchParams } from './searchParams';
-export { registerRoutes } from './registerRoutes';
+export { createRouter } from './createRouter';
 export { goTo } from './goTo';
 export { wait } from './wait';

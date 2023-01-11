@@ -11,9 +11,9 @@ const AsyncComponentStyleSheet = createStyleSheet({
 export const AsyncComponent = createCustomElement('michi-async-component', {
   attributes: {
     /** For internal use only - The component currently showing */
-    currentComponent: null as Function,
+    currentComponent: null as Function | null,
     /** The promise to wait */
-    promise: undefined as () => Promise<{ [key: string]: JSX.Element }>,
+    promise: undefined as (() => Promise<{ [key: string]: JSX.Element }>) | undefined,
     /** The component key (by default is default)*/
     key: 'default',
     /**The component to display while the promise is loading */
@@ -26,8 +26,8 @@ export const AsyncComponent = createCustomElement('michi-async-component', {
   },
   methods: {
     async promiseChangeCallback() {
-      const promiseResult = await this.promise();
-      this.currentComponent = promiseResult[this.key] as unknown as Function;
+      const promiseResult = await this.promise?.();
+      this.currentComponent = promiseResult?.[this.key] as unknown as Function;
     },
     getCurrentComponent() {
       if (this.loadingComponent && !this.currentComponent)

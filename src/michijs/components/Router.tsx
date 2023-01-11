@@ -1,15 +1,15 @@
-import { createCustomElement } from '../customElements';
+import { createCustomElement } from '../customElements/createCustomElement';
 import { sharedUrlObservable } from '../routing/utils/sharedUrlObservable';
-import { AsyncRoute, ComponentFunction, Routes, SyncRoute, UrlFunction } from '../routing/types';
+import { AsyncRoute, Route, SyncRoute, UrlFunction } from '../routing/types';
 import { hash, searchParams } from '../routing';
-import { urlFn } from '../routing/registerRoutes';
+import { urlFn } from '../routing/createRouter';
 import { h } from '../h';
 
-export const Route = createCustomElement('michi-route', {
+export const Router = createCustomElement('michi-router', {
   attributes: {
     currentComponent: null as JSX.Element,
-    routes: undefined as Routes,
-    parentRoute: undefined as UrlFunction<any, any>,
+    routes: undefined as Record<string, Route> | undefined,
+    parentRoute: undefined as UrlFunction<any, any> | undefined,
   },
   lifecycle: {
     willMount() {
@@ -26,7 +26,12 @@ export const Route = createCustomElement('michi-route', {
       return locationPaths.length === urlPaths.length && !locationPaths.find((locationPath, index) => !urlPaths[index].startsWith(':') && locationPath !== urlPaths[index]);
     },
     getMatchedRoute() {
-      return this.routes[Object.keys(this.routes).find(key => this.matches(urlFn(key, this.parentRoute)().pathname, true))];
+      if (this.routes) {
+        const routeFound = Object.keys(this.routes).find(key => this.matches(urlFn(key, this.parentRoute)().pathname, true));
+        if (routeFound)
+          return this.routes[routeFound];
+      }
+      return null
     },
     processComponent(component?: JSX.Element) {
       if (component && typeof component === 'object' && 'tag' in component && typeof component.tag === 'function') {
@@ -44,7 +49,7 @@ export const Route = createCustomElement('michi-route', {
     onChangeURL() {
       const matchedRoute = this.getMatchedRoute();
       if (matchedRoute) {
-        const { title, component, promise, loadingComponent, key = 'default' } = matchedRoute as SyncRoute & AsyncRoute;//& RedirectRoute
+        const { title, component, promise, loadingComponent } = matchedRoute as SyncRoute & AsyncRoute;//& RedirectRoute
 
         // if (redirectTo) {
         //   goTo(redirectTo());
@@ -62,14 +67,13 @@ export const Route = createCustomElement('michi-route', {
           }
         };
 
-        if (component) 
+        if (component)
           updateCurrentComponent(component);
         else {
           if (loadingComponent) {
             updateCurrentComponent(loadingComponent);
           }
-          promise().then((result: { [key: string]: ComponentFunction<any, any> }) => {
-            const Component = result[key];
+          promise().then((Component) => {
             updateCurrentComponent(<Component />);
           });
         }

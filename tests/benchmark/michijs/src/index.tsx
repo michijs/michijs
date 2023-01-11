@@ -10,7 +10,7 @@ const nouns = ['table', 'chair', 'house', 'bbq', 'desk', 'car', 'pony', 'cookie'
 
 type Row = { label: string, id: number, selected?: boolean };
 let nextId = 1;
-let selectedId = null;
+let selectedId: number | null = null;
 function buildData(count = 1000) {
   const data = new Array<Row>();
   for (let i = 0; i < count; i++)

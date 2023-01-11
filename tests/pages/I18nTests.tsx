@@ -7,18 +7,27 @@ const supportedLanguages = [
   { key: 'es', label: 'Español' }
 ];
 
-const { t, i18nObservable, lang } = I18n.createTranslation({
+const translator = new I18n<'es' | 'en'>(localStorage.getItem('lang'));
+
+translator.subscribe(() => {
+  if (translator.currentLanguage)
+    localStorage.setItem('lang', translator.currentLanguage)
+})
+
+const store = translator.createTranslation({
   es: () => import('./i18nTests/es.json'),
   en
 });
+const t = store.state.t;
 
 export const I18nTests = createCustomElement('i18n-tests', {
   subscribeTo: {
-    i18nObservable
+    store
   },
   methods: {
     onChangeLanguage(ev: Events.TypedEvent<HTMLSelectElement>) {
-      I18n.setLanguage(ev.target.value);
+      if (ev.target)
+        translator.currentLanguage = (ev.target.value as 'es' | 'en');
     }
   },
   render() {
@@ -29,7 +38,7 @@ export const I18nTests = createCustomElement('i18n-tests', {
           as='select'
           onchange={this.onChangeLanguage}
           data={supportedLanguages}
-          renderItem={({ key, label }) => <option key={key} selected={key === lang.value} value={key}>{label}</option>}
+          renderItem={({ key, label }) => <option key={key} selected={key === translator.currentLanguage} value={key}>{label}</option>}
         />
         <span>{t.dogBit}</span>
       </>

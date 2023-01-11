@@ -1,56 +1,58 @@
-import { h, createRoute, registerRoutes, wait, createAsyncRoute } from '../src';
+import { h, createRouter, wait } from '../src';
 import { Main } from './pages/Main';
 
-export const { urls, Router, components } = registerRoutes({
-  performanceTests: createAsyncRoute()({
-    promise: () => import('./pages/PerformanceTests'),
-    key: 'PerformanceTests',
+export const { urls, Router, pages } = createRouter<{
+  searchParamsAndHash: {
+    searchParams: { counterParam: number, textParam: string, complexObjectParam: object },
+    hash: '#hashTest' | ''
+  },
+  a11yTests: {
+    searchParams: { disableFieldset: boolean }
+  }
+}>()({
+  performanceTests: {
+    promise: async () => (await import('./pages/PerformanceTests')).PerformanceTests,
     title: 'Performance tests Page'
-  }),
-  asyncTests: createAsyncRoute()({
-    promise: () => import('./pages/AsyncTests'),
-    key: 'AsyncTests',
+  },
+  asyncTests: {
+    promise: async () => (await import('./pages/AsyncTests')).AsyncTests,
     title: 'Async tests'
-  }),
-  searchParamsAndHash: createAsyncRoute<{ counterParam: number, textParam: string, complexObjectParam: object }, '#hashTest' | ''>()({
-    promise: () => import('./pages/SearchParamsAndHash'),
-    key: 'SearchParamsAndHash',
+  },
+  searchParamsAndHash: {
+    promise: async () => (await import('./pages/SearchParamsAndHash')).SearchParamsAndHash,
     title: 'Search params and hash tests'
-  }),
-  counterTests: createAsyncRoute()({
-    promise: () => import('./pages/CounterTests'),
-    key: 'CounterTests',
+  },
+  counterTests: {
+    promise: async () => (await import('./pages/CounterTests')).CounterTests,
     title: 'Counter tests Page'
-  }),
-  i18nTests: createAsyncRoute()({
-    promise: () => import('./pages/I18nTests'),
-    key: 'I18nTests',
+  },
+  i18nTests: {
+    promise: async () => (await import('./pages/I18nTests')).I18nTests,
     title: 'I18n tests Page'
-  }),
-  a11yTests: createAsyncRoute<{ disableFieldset: boolean }>()({
-    promise: () => import('./pages/A11YTests'),
-    key: 'A11yTests',
+  },
+  a11yTests: {
+    promise: async () => (await import('./pages/A11YTests')).A11yTests,
     title: 'A11Y tests Page'
-  }),
-  '/': createRoute({
+  },
+  '/': {
     component: <Main />,
     title: 'Main Page',
-  })
+  }
 });
-export const { urls: asyncTestsUrls, Router: AsyncTestsRouter } = registerRoutes({
-  test1: createAsyncRoute()({
+
+export const { urls: asyncTestsUrls, Router: AsyncTestsRouter } = createRouter()({
+  test1: {
     promise: async () => {
       await wait(5000);
-      return await import('./SimpleCounter');
+      const importResult = await import('./SimpleCounter');
+      return importResult.SimpleCounter;
     },
-    key: 'SimpleCounter',
     loadingComponent: <h1>loading...</h1>,
-  }),
-  test2: createAsyncRoute()({
-    promise: () => import('./SimpleCounter'),
-    key: 'SimpleCounter'
-  }),
-  test3: createRoute({
+  },
+  test2: {
+    promise: async () => (await import('./SimpleCounter')).SimpleCounter,
+  },
+  test3: {
     component: <div>test</div>,
-  }),
+  },
 }, urls.asyncTests);

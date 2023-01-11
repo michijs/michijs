@@ -1,4 +1,4 @@
-import { createCustomElement, h, Host, indexeddbObservable, wait } from '../src';
+import { createCustomElement, h, Host } from '../src';
 import { ColorSelector } from './ColorSelector';
 import { Router } from './routes';
 // // import sheet from './a.css' assert { type: 'css' };
