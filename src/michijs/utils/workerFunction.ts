@@ -1,6 +1,6 @@
 const workerFunctionBody = (() => {
   onmessage = ({ data: { functionToExecute, args } }) => {
-    const wrapper = (fn) => Function(`"use strict"; return (${fn.toString()})`)();
+    const wrapper = (fn: Function) => Function(`"use strict"; return (${fn.toString()})`)();
     const result = wrapper(functionToExecute)(...args);
     postMessage(result);
   };

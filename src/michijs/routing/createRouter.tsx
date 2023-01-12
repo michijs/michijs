@@ -34,7 +34,7 @@ export function createRouter<T extends CreateRouterSearchParamsAndHash>() {
       }
     });
 
-    const RouterProxy = (props) => {
+    const RouterProxy: CreateRouterResult<T, R>['Router'] = (props) => {
       return <Router {...props} _routes={routes} _parentRoute={parentRoute} />;
     };
 

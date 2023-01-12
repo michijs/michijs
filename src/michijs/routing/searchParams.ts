@@ -4,7 +4,7 @@ import { setSearchParam } from './utils/setSearchParam';
 import { sharedUrlObservable } from './utils/sharedUrlObservable';
 
 export const getInitialSearchParamsValue = () => {
-  const initialSearchParamsValue = {};
+  const initialSearchParamsValue: Record<string, any> = {};
   new URLSearchParams(location.search).forEach((value, key) => {
     try {
       initialSearchParamsValue[key] = JSON.parse(value);

@@ -1,4 +1,4 @@
-export function deepEqual(object1, object2) {
+export function deepEqual(object1: any, object2: any): boolean {
   if (object1 === object2)
     return true;
   
