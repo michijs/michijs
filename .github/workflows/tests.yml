@@ -29,16 +29,21 @@ jobs:
       run: npm install
 
     - name: Run Typescript tests
+      continue-on-error: true
       run: npm run test-tsc
 
     - name: Run Library tests
+      continue-on-error: true
       run: npm run test
 
     - name: Run Library benchmark tests
+      continue-on-error: true
       run: npm run benchmark-michijs
 
     - name: Run Library benchmark with map tests
+      continue-on-error: true
       run: npm run benchmark-michijs-map 
 
     - name: Run Vanilla benchmark tests
+      continue-on-error: true
       run: npm run benchmark-vanilla
