@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   Run:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     container: node:14
 
     steps:
@@ -24,9 +24,6 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 14.1.0
-
-    - name: Install CI dependencies
-      run: apt-get install -y libnss
 
     - name: Install dependencies
       run: npm install
