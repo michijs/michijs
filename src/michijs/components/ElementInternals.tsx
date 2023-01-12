@@ -1,14 +1,15 @@
 import type { Attributes } from '@lsegurado/htmltype';
-import type { FC, MichiCustomElement } from '../types';
+import type { FC } from '../types';
 import { h } from '../h';
 import { Fragment } from '.';
 import { setAttribute } from '../DOM/attributes/setAttribute';
 import { GetRoles } from '@lsegurado/htmltype/dist/Attributes';
+import { isMichiCustomElement } from '../typeWards/isMichiCustomElement';
 
 export type ElementInternalsProps =
   {
     /**Form controls usually expose a "value" property */
-    formValue: Parameters<ElementInternals['setFormValue']>[0];
+    formValue?: Parameters<ElementInternals['setFormValue']>[0];
     /**A validation message to show */
     errorMessage?: Parameters<ElementInternals['setValidity']>[1];
     validityStateFlags?: ValidityStateFlags;
@@ -26,13 +27,13 @@ export type ElementInternalsProps =
  * - Access element internals 
  * - Validate and assign values to forms
  */
-export const ElementInternals: FC<ElementInternalsProps> = ({ children, errorMessage, formValue, tabIndex = 0, validityStateFlags = { customError: true }, ...aria }, self: MichiCustomElement) => {
-  if (self && self.$michi.internals) {
+export const ElementInternals: FC<ElementInternalsProps> = ({ children, errorMessage, formValue, tabIndex = 0, validityStateFlags = { customError: true }, ...aria }, self) => {
+  if (self && isMichiCustomElement(self) &&self.$michi.internals) {
     if (errorMessage)
       self.$michi.internals.setValidity?.(validityStateFlags, errorMessage);
     else
       self.$michi.internals.setValidity?.({});
-    self.$michi.internals.setFormValue?.(formValue);
+    self.$michi.internals.setFormValue?.(formValue as Parameters<ElementInternals['setFormValue']>[0]);
 
     Object.entries({ tabIndex, ...aria }).forEach(([key, value]) => {
       if (self.$michi.internals)

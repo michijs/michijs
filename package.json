@@ -44,7 +44,7 @@
     "test-w": "jest --watch --no-cache --selectProjects=library-tests",
     "usnap": "jest --updateSnapshot --unhandled-rejections=strict --selectProjects=library-tests",
     "lint": "rome check --apply-suggested .",
-    "run-all-tests": "npm run test && npm run benchmark-michijs-map && npm run benchmark-michijs && npm run benchmark-vanilla"
+    "run-all-tests": "npm run test-tsc && npm run test && npm run benchmark-michijs-map && npm run benchmark-michijs && npm run benchmark-vanilla"
   },
   "keywords": [
     "web-components",
