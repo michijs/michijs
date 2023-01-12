@@ -7,6 +7,8 @@
   [![license][github-license]][github-license-url] 
   ![npm][npm-downloads] 
   ![npm][repo-size]
+  [![Tests](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml)
+  [![Tests](https://github.com/michijs/michijs/actions/workflows/tests.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/tests.yml)
 
 </div>
 
