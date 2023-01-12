@@ -12,7 +12,7 @@ export const observeSet = <Y>(props: ObserveProps<Set<any>, Y>) => {
     set: (target, property: keyof Set<any>, newValue, receiver) => customObjectSet(props)(target, property, newValue, receiver),
     get: (target, property: keyof Set<any> & 'subscribe') => {
       const targetProperty = Reflect.get(target, property);
-      const bindedTargetProperty = typeof targetProperty === 'function' ? targetProperty.bind(target) : targetProperty;
+      const bindedTargetProperty = typeof targetProperty === 'function' ? (targetProperty as Function).bind(target) : targetProperty;
       switch (property) {
         case 'clear': {
           return customMapAndSetClear(props, target, bindedTargetProperty);
