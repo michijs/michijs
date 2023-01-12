@@ -6,6 +6,8 @@ jobs:
   Run:
     runs-on: ubuntu-latest
     container: node:14
+    env:
+      CI: true
 
     steps:
     - name: Checkout repository
