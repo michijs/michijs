@@ -71,7 +71,7 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "@lsegurado/htmltype": "0.1.6"
+    "@lsegurado/htmltype": "0.1.7"
   },
   "jest": {
     "projects": [
