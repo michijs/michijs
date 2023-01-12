@@ -4,7 +4,6 @@
     "strictNullChecks": true,
     "strictBindCallApply": true,
     "resolveJsonModule": true,
-    "types": [],
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false,
@@ -31,6 +30,7 @@
     "tests"
   ],
   "exclude": [
+    "node_modules",
     "dist",
     "build"
   ]
