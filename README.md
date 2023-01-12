@@ -7,7 +7,7 @@
   [![license][github-license]][github-license-url] 
   ![npm][npm-downloads] 
   ![npm][repo-size]
-  [![Tests](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml)
+  [![CodeQL](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml)
   [![Tests](https://github.com/michijs/michijs/actions/workflows/tests.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/tests.yml)
 
 </div>
@@ -658,7 +658,7 @@ Become a sponsor and get your logo on our README on GitHub with a link to your s
  - [MIT](https://github.com/michijs/michijs/blob/master/LICENSE.md)
 
 [open-in-vscode]: https://img.shields.io/static/v1?label=Open%20in&logo=Visual%20Studio%20Code&message=Visual%20Studio%20Code&logoColor=007ACC&color=007ACC
-[open-in-vscode-url]: https://github1s.com/michijs/michijs/blob/remove-virtual-dom/src/index.tsx
+[open-in-vscode-url]: https://vscode.dev/github/michijs/michijs-template
 <!-- [open-in-vscode-url]: vscode://github.remotehub/open?url=https://github.com/lsegurado/ls-element -->
 [repo-size]: https://img.shields.io/github/repo-size/michijs/michijs
 [npm-downloads]: https://img.shields.io/npm/dt/@michijs/michijs
