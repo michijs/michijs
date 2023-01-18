@@ -1,15 +1,7 @@
 import { h, createRouter, wait } from '../src';
 import { Main } from './pages/Main';
 
-export const { urls, Router, pages } = createRouter<{
-  searchParamsAndHash: {
-    searchParams: { counterParam: number, textParam: string, complexObjectParam: object },
-    hash: '#hashTest' | ''
-  },
-  a11yTests: {
-    searchParams: { disableFieldset: boolean }
-  }
-}>()({
+export const { urls, Router, pages } = createRouter({
   performanceTests: {
     promise: async () => (await import('./pages/PerformanceTests')).PerformanceTests,
     title: 'Performance tests Page'
@@ -19,6 +11,12 @@ export const { urls, Router, pages } = createRouter<{
     title: 'Async tests'
   },
   searchParamsAndHash: {
+    searchParams: {
+      counterParam: Number,
+      textParam: String,
+      complexObjectParam: Object
+    },
+    hash: ['#hashTest'],
     promise: async () => (await import('./pages/SearchParamsAndHash')).SearchParamsAndHash,
     title: 'Search params and hash tests'
   },
@@ -31,6 +29,7 @@ export const { urls, Router, pages } = createRouter<{
     title: 'I18n tests Page'
   },
   a11yTests: {
+    searchParams: { disableFieldset: Boolean },
     promise: async () => (await import('./pages/A11YTests')).A11yTests,
     title: 'A11Y tests Page'
   },
@@ -40,7 +39,7 @@ export const { urls, Router, pages } = createRouter<{
   }
 });
 
-export const { urls: asyncTestsUrls, Router: AsyncTestsRouter } = createRouter()({
+export const { urls: asyncTestsUrls, Router: AsyncTestsRouter } = createRouter({
   test1: {
     promise: async () => {
       await wait(5000);

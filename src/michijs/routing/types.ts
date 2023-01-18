@@ -1,16 +1,21 @@
 import { Router } from '../components/Router';
-import { AnyObject, FC, GetElementProps } from '../types';
+import { FC, GetElementProps } from '../types';
 
-export type SearchParams = AnyObject | undefined;
-export type Hash = `#${string}` | '' | undefined;
+export type SearchParams = Record<string, (...args: any) => any> | undefined;
+export type Hash = [`#${string}` | ''] | undefined;
 
-export type PagesFunction<S extends SearchParams = undefined, H extends Hash = undefined> = FC<{ searchParams: S, hash: { [k in (H extends string ? H : '')]?: boolean } }>;
-export type UrlFunction<S extends SearchParams = undefined, H extends Hash = undefined> = (searchParamsAndHash?: { searchParams?: S, hash?: H }) => URL;
+export type GetSearchParams<S extends SearchParams> = S extends {} ? { [k in keyof S]?: ReturnType<S[k]> } : undefined
+export type GetHash<H extends Hash> = H extends {} ? {[k in H[number]]: boolean} : undefined
+
+export type PagesFunction<S extends SearchParams = undefined, H extends Hash = undefined> = FC<{ searchParams: GetSearchParams<S>, hash: GetHash<H> }>;
+export type UrlFunction<S extends SearchParams = undefined, H extends Hash = undefined> = (searchParamsAndHash?: { searchParams?: GetSearchParams<S>, hash?: keyof GetHash<H> }) => URL;
 
 export type CommonRouteProps = {
   /**The title of the page */
   title?: string,
   // preserveState?: boolean,
+  searchParams?: SearchParams
+  hash?: Hash
 }
 
 export type SyncRoute = {
@@ -38,14 +43,14 @@ export type CreateRouterSearchParamsAndHash = Record<string, {
   hash?: Hash
 }>
 
-export type CreateRouterResult<T extends CreateRouterSearchParamsAndHash, R extends Record<string, Route>> = {
+export type CreateRouterResult<R extends Record<string, Route>> = {
   urls: {
-    [k in keyof R]: k extends keyof T ? UrlFunction<T[k]['searchParams'], T[k]['hash']> : UrlFunction
+    [k in keyof R]: UrlFunction<R[k]['searchParams'], R[k]['hash']>
   },
   Router: FC<GetElementProps<typeof Router>>,
   pages: {
     [k in keyof R]: (
-      page: (k extends keyof T ? PagesFunction<T[k]['searchParams'], T[k]['hash']> : FC)
+      page: PagesFunction<R[k]['searchParams'], R[k]['hash']>
     ) => ReturnType<FC>
   }
 }

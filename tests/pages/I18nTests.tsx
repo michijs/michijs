@@ -9,16 +9,16 @@ const supportedLanguages = [
 
 const translator = new I18n<'es' | 'en'>(localStorage.getItem('lang'));
 
-translator.subscribe(() => {
-  if (translator.currentLanguage)
-    localStorage.setItem('lang', translator.currentLanguage)
-})
-
 const store = translator.createTranslation({
   es: () => import('./i18nTests/es.json'),
   en
 });
 const t = store.state.t;
+
+translator.subscribe(() => {
+  if (translator.currentLanguage)
+    localStorage.setItem('lang', translator.currentLanguage)
+})
 
 export const I18nTests = createCustomElement('i18n-tests', {
   subscribeTo: {

@@ -550,7 +550,6 @@ This will generate an element like:
 ## Routing
 The intention of using a custom routing tool is to avoid the use of strings to represent the urls and to use modern apis that allow the use of the URL object itself. It also allows to separate the components of the routes which allows a cleaner code.
 
-**Note: This is still a work in progress and may change in the future.**
 ```js
 const Redirect = () => {
   goTo(urls.syncRoute())
@@ -559,43 +558,45 @@ const Redirect = () => {
 }
 
 //Parent routes
-export const { urls, Router, components } = registerRoutes({
-  syncRoute: createRoute({
+export const { urls, Router, pages } = registerRoutes({
+  syncRoute: {
     /**The component to display */
     component: <div>Hello World</div>,
     title: 'Sync title'
-  }),
+  },
   //Redirect route
-  '/': createRoute({
+  '/': {
     component: <Redirect />
-  }),
+  },
 });
 
 //Child routes
-export const { urls: urlsChild, Router: RouterChild } = registerRoutes({
+export const { urls: urlsChild, Router: RouterChild, pages: pagesChild } = registerRoutes({
   // Async route
-  asyncChildRoute: createAsyncRoute<{ searchParam1: string, searchParam2: number }, '#hash1' | '#hash2'>()({
+  asyncChildRoute: {
+    searchParams: {
+      searchParam1: String, 
+      searchParam2: Number
+    },
+    hash: ['#hash1', '#hash2']
     /** The promise to wait */
-    promise: () => import('./AsyncChildExample'),
-    /** The component key (by default is default)*/
-    key: 'AsyncChildExample',
+    promise: async () => (await import('./AsyncChildExample')).AsyncChildExample,
     /**The title of the page */
     title: 'Async Page title'
     /**The component to display while the promise is loading */
     loadingComponent: <span>Loading...</span>
-  }),
+  },
   //The parent route
 }, urls.syncRoute);
 
-urlsChild.childRoute({ searchParams: { searchParam1: 'param 1', searchParam2: 2}, hash: '#hash1' })
+urlsChild.asyncChildRoute({ searchParams: { searchParam1: 'param 1', searchParam2: 2}, hash: '#hash1' })
 // Will generate this url: /sync-route/async-child-route?searchParam1=param+1&searchParam2=2#hash1
 ```
 Router and RouterChild are components that represent the mount points of each registered route.
 
-The "components" function is a utility to create asynchronous components that includes the search params and component hashes with the types that were defined when the route was registered
+The "pages" function is a utility to create asynchronous components that includes the search params and component hashes with the types that were defined when the route was registered
 ```js
-export const AsyncChildExample = components.childRoute(({ searchParams, hash }) => {
-  return (
+export const AsyncChildExample = pagesChild.asyncChildRoute(({ searchParams, hash }) => (
     <>
       {/* Will show the value of searchParam1 */}
       <div>{searchParams.searchParam1}</div>
@@ -603,8 +604,33 @@ export const AsyncChildExample = components.childRoute(({ searchParams, hash }) 
       <div>{hash['#hash1']}</div>
     </>
   );
+);
+```
+
+## I18n
+It is supported by using a custom store
+```js
+const translator = new I18n<'es' | 'en'>(localStorage.getItem('lang'));
+
+const store = translator.createTranslation({
+  es: () => import('./translations/es.json'),
+  en
+});
+const t = store.state.t;
+
+export const MyComponent = createCustomElement('my-component', {
+  subscribeTo: {
+    store
+  },
+  render() {
+    return (
+      <span>{t.hello}</span>
+    );
+  }
 });
 ```
+
+
 
 ## Limitations
 ### Observable objects
