@@ -1,5 +1,8 @@
-import 'expect-puppeteer';
+import { launch } from 'puppeteer';
 import { makePerformanceTests, Result } from './shared';
+
+const browser = await launch();
+const page = await browser.newPage();
 
 describe('Performance tests - MichiJS', () => {
   beforeAll(async () => {
@@ -21,7 +24,7 @@ describe('Performance tests - MichiJS', () => {
     expect(innerHTML).toMatchSnapshot();
   });
 
-  const results = makePerformanceTests();
+  const results = makePerformanceTests(page);
   afterAll(async () => {
 
     expect(

@@ -54,21 +54,18 @@
   ],
   "devDependencies": {
     "@michijs/server": "0.0.34",
-    "@reduxjs/toolkit": "^1.5.0",
-    "@types/expect-puppeteer": "^4.4.7",
-    "@types/jest": "^29.2.0",
-    "@types/jest-environment-puppeteer": "^5.0.2",
-    "@types/puppeteer": "^5.4.6",
-    "jest": "^29.2.2",
-    "jest-environment-jsdom": "^29.2.2",
-    "jest-puppeteer": "^6.1.1",
-    "lint-staged": "^10.5.4",
-    "puppeteer": "^14.0.0",
-    "redux": "^4.0.5",
-    "rome": "^0.10.1-next",
-    "simple-git-hooks": "^2.2.0",
-    "ts-jest": "^29.0.3",
-    "typescript": "^4.9.4"
+    "@reduxjs/toolkit": "1.5.0",
+    "@types/jest": "29.2.6",
+    "jest": "29.4.0",
+    "jest-environment-jsdom": "29.4.0",
+    "jest-puppeteer": "6.2.0",
+    "lint-staged": "13.1.0",
+    "puppeteer": "19.6.0",
+    "redux": "4.2.0",
+    "rome": "11.0.0",
+    "simple-git-hooks": "2.8.1",
+    "ts-jest": "29.0.5",
+    "typescript": "4.9.4"
   },
   "dependencies": {
     "@lsegurado/htmltype": "0.1.7"

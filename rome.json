@@ -7,13 +7,19 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "correctness": {
+      "complexity": {
+        "useSimplifiedLogicExpression": "off"
+      },
+      "suspicious": {
+        "noDoubleEquals": "off"
+      },
+      "style": {
         "useSingleVarDeclarator": "off",
-        "useSimplifiedLogicExpression": "off",
-        "noDelete": "off",
-        "noDoubleEquals": "off",
         "useBlockStatements": "off",
         "noImplicitBoolean": "off"
+      },
+      "performance": {
+        "noDelete": "off"
       }
     }
   }
