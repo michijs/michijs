@@ -1,3 +1,4 @@
+import { CSSProperties } from "@lsegurado/htmltype/dist/Attributes";
 import { CSSObject } from "../types";
 import { valueIsCSSObject } from "../typeWards/valueIsCSSObject";
 import { formatToKebabCase } from "../utils";
@@ -5,7 +6,7 @@ import { formatToKebabCase } from "../utils";
 /**
  * returns the list of rules from a css object
  */
-export const ruleListFromCssObject = (cssObject: CSSObject, selectors: string[] = []) => {
+export const ruleListFromCssObject = (cssObject: CSSObject | CSSProperties, selectors: string[] = []) => {
   const ruleList: string[] = [];
   const ruleDeclarations = Object.entries(cssObject).reduce((previousValue, [key, value]) => {
     if (value !== undefined && value !== null) {
