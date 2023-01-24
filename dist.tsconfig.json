@@ -1,25 +1,29 @@
 {
-    "compilerOptions": {
-        "allowJs": true,
-        "allowSyntheticDefaultImports": true,
-        "allowUnreachableCode": false,
-        "declaration": true,
-        "experimentalDecorators": true,
-        "noErrorTruncation": true,
-        "lib": [
-            "dom",
-            "es2020"
-        ],
-        "outDir": "dist",
-        "moduleResolution": "node",
-        "module": "es2020",
-        "target": "es2019",
-        "noUnusedLocals": false,
-        "noUnusedParameters": false,
-        "noImplicitThis": true,
-        "jsx": "react",
-        "jsxFactory": "h.createElement",
-        "jsxFragmentFactory": "h.Fragment"
-    },
-    "files": ["src/index.tsx"]
+  "compilerOptions": {
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictBindCallApply": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
+    "declaration": true,
+    "experimentalDecorators": true,
+    "noErrorTruncation": true,
+    "lib": [
+      "dom",
+      "es2020"
+    ],
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "module": "esnext",
+    "target": "es2019",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitThis": true,
+    "jsx": "react",
+    "jsxFactory": "h.createElement",
+    "jsxFragmentFactory": "h.Fragment"
+  },
+  "files": ["src/index.tsx"]
 }
