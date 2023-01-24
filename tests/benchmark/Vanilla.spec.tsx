@@ -1,4 +1,8 @@
+import { launch } from 'puppeteer';
 import { makePerformanceTests } from './shared';
+
+const browser = await launch();
+const page = await browser.newPage();
 
 describe('Performance tests - vanilla-js', () => {
   beforeAll(async () => {
@@ -12,7 +16,7 @@ describe('Performance tests - vanilla-js', () => {
       waitUntil: 'domcontentloaded'
     });
   });
-  const results = makePerformanceTests();
+  const results = makePerformanceTests(page);
   afterAll(async () => {
     expect(await results).toMatchSnapshot('Vanilla JS');
   });

@@ -1,5 +1,4 @@
-import 'expect-puppeteer';
-import { ElementHandle } from 'puppeteer';
+import { ElementHandle, Page } from 'puppeteer';
 
 export type Result =
   'create1000Rows'
@@ -12,50 +11,52 @@ export type Result =
   | 'appendRowsToLargeTable'
   | 'clearRows'
 
-const create1000Rows = async () => {
-  await page.click('#run');
-};
-const add1000Rows = async () => {
-  await page.click('#add');
-};
-const create10000Rows = async () => {
-  await page.click('#runlots');
-};
-const updateEvery10Rows = async () => {
-  await page.click('#update');
-};
-const swapRows = async () => {
-  await page.click('#swaprows');
-};
-const select = async (index: number) => {
-  const tableBody = await getTableBody();
-  const linkToClick = await tableBody[index].$('a');
-  if(!linkToClick)
-    throw 'linkToClick not found'
-  await linkToClick.click();
-};
-const deleteRow = async (index: number) => {
-  const tableBody = await getTableBody();
-  const linkToClick = await tableBody[index].$$<HTMLLinkElement>('a');
-  await linkToClick[1].evaluate((e) => e.click());
-};
-const getTableBody = async () => {
-  return await page.$$<HTMLElement>('tr');
-};
-const clear = async () => {
-  await page.click('#clear');
-};
 
-const getRowId = async (element: ElementHandle<HTMLElement>) => {
+const getRowId = async (element: ElementHandle<Element>) => {
   const td = await element.$('td');
-  if(!td)
+  if (!td)
     throw 'td not found'
   const textContentProperty = await td.getProperty('textContent');
-  const textContent = await textContentProperty.jsonValue<string>();
+  const textContent = await textContentProperty.jsonValue();
   return Number(textContent);
 };
 
-export async function makePerformanceTests() {
+export async function makePerformanceTests(page: Page) {
+
+  const create1000Rows = async () => {
+    await page.click('#run');
+  };
+  const add1000Rows = async () => {
+    await page.click('#add');
+  };
+  const create10000Rows = async () => {
+    await page.click('#runlots');
+  };
+  const updateEvery10Rows = async () => {
+    await page.click('#update');
+  };
+  const swapRows = async () => {
+    await page.click('#swaprows');
+  };
+  const select = async (index: number) => {
+    const tableBody = await getTableBody();
+    const linkToClick = await tableBody[index].$('a');
+    if (!linkToClick)
+      throw 'linkToClick not found'
+    await linkToClick.click();
+  };
+  const deleteRow = async (index: number) => {
+    const tableBody = await getTableBody();
+    const linkToClick = await tableBody[index].$$('a');
+    await linkToClick[1].evaluate((e) => e.click());
+  };
+  const getTableBody = async () => {
+    return await page.$$('tr');
+  };
+  const clear = async () => {
+    await page.click('#clear');
+  };
+
   const results = new Map<Result, number>();
   const saveResult = async (key: Result, functionToMeasure: () => Promise<void>) => {
     const t0 = (await page.metrics()).Timestamp!;
@@ -84,7 +85,7 @@ export async function makePerformanceTests() {
     expect(tableBody.length).toEqual(1000);
     for (let i = 0; i < tableBody.length; i++) {
       const innerHTMLProperty = await tableBody[i].getProperty('innerHTML');
-      const innerHTML = await innerHTMLProperty.jsonValue<string>();
+      const innerHTML = await innerHTMLProperty.jsonValue();
       if (i % 10 === 0) {
         expect(innerHTML.includes('!!!')).toBeTruthy();
       } else {
@@ -97,7 +98,7 @@ export async function makePerformanceTests() {
     await saveResult('selectRow', () => select(999));
     const tableBody = await getTableBody();
     const classNameProperty = await tableBody[999].getProperty('className');
-    const className = await classNameProperty.jsonValue<string>();
+    const className = await classNameProperty.jsonValue();
     expect(className).toEqual('danger');
   });
   it('swap a row (1000 rows)', async () => {
