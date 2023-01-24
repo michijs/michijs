@@ -279,15 +279,15 @@ export interface ElementFactory {
   update?(jsx: JSX.Element, el: Node, isSVG?: boolean, self?: Element): void
 }
 
-export type KeysAndKeysOf<O, P extends string | undefined = undefined, Order extends number | null = 1> =
+export type KeysAndKeysOf<O extends Record<string, any>, P extends string | undefined = undefined, Order extends number | null = 1> =
   Order extends null ? '' : (
     O extends any[]
     ? (P extends undefined ? number : `${P}.${number}`)
     : (
       O extends Record<PropertyKey, any>
       ? (P extends undefined ? keyof O : `${P}.${StringKeyOf<O>}`)
-      | keyof { [k in StringKeyOf<O> as (KeysAndKeysOf<O[k], P extends undefined ? k : `${P}.${k}`, Order extends 1 ? 2 : Order extends 2 ? 3 : null>)] }
-      : ''
+      | keyof { [k in StringKeyOf<O> as (KeysAndKeysOf<O[k], P extends undefined ? k : `${P}.${k}`, Order extends 1 ? 2 : Order extends 2 ? 3 : null>)]: never }
+      : never
     ));
 
 type FormStateRestoreCallbackMode = 'restore' | 'autocomplete';
