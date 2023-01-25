@@ -30,8 +30,6 @@
     "dist": "michi-server --dist",
     "build": "michi-server --build",
     "link": "michi-server --dist && npm link --force && tsc -w -p dist.tsconfig.json",
-    "publish-patch-version": "npm version patch && npm run publish-npm",
-    "publish-npm": "npm run dist && npm publish --access public",
     "start-benchmark-michijs": "michi-server --start --env=TESTING",
     "start-benchmark-michijs-map": "michi-server --start --env=TESTING_MAP",
     "start-benchmark-vanilla": "michi-server --start --env=TESTING_VANILLA",
