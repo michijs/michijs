@@ -1,4 +1,4 @@
-import { Attributes } from '@lsegurado/htmltype';
+import { Attributes } from '@michijs/htmltype';
 import { AnyObject, EventListenerMap } from '../../types';
 import { deepEqual } from '../../utils/deepEqual';
 import { setStyle } from './setStyle';

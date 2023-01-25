@@ -1,7 +1,7 @@
 import { SingleJSXElement } from '../types';
 import type {
   HTMLElements, SVGElements
-} from '@lsegurado/htmltype';
+} from '@michijs/htmltype';
 import { Tag } from './Tag';
 
 declare global {

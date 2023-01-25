@@ -16,7 +16,7 @@ import { addStylesheetsToDocumentOrShadowRoot } from '../utils/addStylesheetsToD
 import { h } from '../h';
 import { createStyleSheet, createCssVariables, updateStyleSheet } from '../css';
 import { cssVariablesFromCssObject } from '../css/cssVariablesFromCssObject';
-import { CSSProperties } from '@lsegurado/htmltype/dist/Attributes';
+import { CSSProperties } from '@michijs/htmltype/dist/Attributes';
 import { setStyleProperty } from '../DOM/attributes/setStyleProperty';
 
 export function createCustomElement<

@@ -1,11 +1,11 @@
-import { HTMLElements } from '@lsegurado/htmltype';
+import { HTMLElements } from '@michijs/htmltype';
 import { EventDispatcher } from './classes';
 import { idGenerator } from './hooks';
 import { Tag } from './h/Tag';
-import { CSSProperties, GetAttributes } from '@lsegurado/htmltype/dist/Attributes';
+import { CSSProperties, GetAttributes } from '@michijs/htmltype/dist/Attributes';
 import { Fragment } from './components';
 import { ObservableObject } from './hooks/observe';
-import { GlobalEvents } from '@lsegurado/htmltype/dist/Events';
+import { GlobalEvents } from '@michijs/htmltype/dist/Events';
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 export type CSSVar<T extends string> = KebabCase<T> & {

@@ -1,4 +1,4 @@
-import { Events } from '@lsegurado/htmltype';
+import { Events } from '@michijs/htmltype';
 import { createCustomElement, h, I18n, List } from '../../src';
 import en from './i18nTests/en.json';
 
