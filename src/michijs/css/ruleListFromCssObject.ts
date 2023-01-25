@@ -1,4 +1,4 @@
-import { CSSProperties } from "@lsegurado/htmltype/dist/Attributes";
+import { CSSProperties } from "@michijs/htmltype/dist/Attributes";
 import { CSSObject } from "../types";
 import { valueIsCSSObject } from "../typeWards/valueIsCSSObject";
 import { formatToKebabCase } from "../utils";

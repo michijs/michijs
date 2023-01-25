@@ -1,4 +1,4 @@
-import { HTMLElements } from '@lsegurado/htmltype';
+import { HTMLElements } from '@michijs/htmltype';
 import type { AnyObject, FC } from '../types';
 import { h } from '../h';
 import { Fragment } from '.';

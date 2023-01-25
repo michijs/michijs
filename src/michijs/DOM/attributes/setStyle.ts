@@ -1,4 +1,4 @@
-import { Attributes } from '@lsegurado/htmltype';
+import { Attributes } from '@michijs/htmltype';
 import { setAttribute } from './setAttribute';
 import { setStyleProperty } from './setStyleProperty';
 

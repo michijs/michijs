@@ -1,9 +1,9 @@
-import type { Attributes } from '@lsegurado/htmltype';
+import type { Attributes } from '@michijs/htmltype';
 import type { FC } from '../types';
 import { h } from '../h';
 import { Fragment } from '.';
 import { setAttribute } from '../DOM/attributes/setAttribute';
-import { GetRoles } from '@lsegurado/htmltype/dist/Attributes';
+import { GetRoles } from '@michijs/htmltype/dist/Attributes';
 import { isMichiCustomElement } from '../typeWards/isMichiCustomElement';
 
 export type ElementInternalsProps =

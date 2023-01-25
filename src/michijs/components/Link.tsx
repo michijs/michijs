@@ -1,7 +1,7 @@
 import type { FC } from '../types';
 import { h } from '../h';
 import { goTo } from '../routing';
-import { HTMLElements } from '@lsegurado/htmltype';
+import { HTMLElements } from '@michijs/htmltype';
 import { Tag } from '../h/Tag';
 
 type LinkProps = {
