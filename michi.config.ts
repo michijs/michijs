@@ -1,11 +1,8 @@
-import { ServerConfig, UserConfig } from '@michijs/server';
+import { ServerConfig, ServerConfigFactory, DefaultEnvironment } from '@michijs/server';
 
-// declare module '@michijs/server/bin/types'{
-//   export type DefaultEnvironment = 'TESTING'
-// }
 
-export const config: ServerConfig = (environment) => {
-  const defaultConfig: UserConfig = {
+export const config: ServerConfigFactory<'TESTING' | 'TESTING_MAP' | DefaultEnvironment> = (environment) => {
+  const defaultConfig: ServerConfig = {
     public: {
       path: './tests/public'
     },
