@@ -15,7 +15,7 @@
       "es2020"
     ],
     "outDir": "dist",
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
     "module": "esnext",
     "target": "es2019",
     "noUnusedLocals": false,
@@ -25,5 +25,7 @@
     "jsxFactory": "h.createElement",
     "jsxFragmentFactory": "h.Fragment"
   },
-  "files": ["src/index.tsx"]
+  "include": [
+    "src"
+  ]
 }

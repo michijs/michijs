@@ -1,0 +1,30 @@
+name: Release package
+on:
+  workflow_dispatch:
+    inputs:
+      release-type:
+        description: "Release type"
+        required: true
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+          - premajor
+          - preminor
+          - prepatch
+          - prerelease
+      release-notes:
+        description: "Release notes"
+        type: string
+
+jobs:
+  call-workflow:
+    name: 'Call Workflow'
+    uses: "michijs/.github/.github/workflows/release-package.yml@main"
+    with:
+      release-type: ${{ github.event.inputs.release-type }}
+      release-notes: ${{ github.event.inputs.release-notes }}
+    secrets:
+      NPM_ACCESS_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+      GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}

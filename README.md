@@ -9,9 +9,7 @@
   ![npm][repo-size]
   [![CodeQL](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml)
   [![Tests](https://github.com/michijs/michijs/actions/workflows/tests.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/tests.yml)
-
 </div>
-
 
 ## Why "MichiJS?"
 |  | MichiJS  |  React  |  StencilJS  | SvelteJS | VanillaJS |
