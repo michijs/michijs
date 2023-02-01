@@ -175,7 +175,7 @@ describe('Observe tests', () => {
       const newExampleValue = date.getTime() + 1
       date.setTime(newExampleValue);
       date.setTime(newExampleValue);
-      nonProxiedDate.setDate(newExampleValue);
+      nonProxiedDate.setTime(newExampleValue);
       expect(mockCallback).toBeCalledTimes(1);
     });
     afterEach(() => {
