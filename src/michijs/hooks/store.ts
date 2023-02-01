@@ -1,37 +1,37 @@
 import { observe } from './observe';
-import { EmptyObject, StoreProps, Store } from '../types';
+import { StoreProps, Store, EmptyObject } from '../types';
 import { observable } from './observable';
 
-export function store<T extends object = EmptyObject, Y extends Record<string, Function> = EmptyObject>({ state = {} as T, transactions = {} as Y }: StoreProps<T, Y>): Store<T, Y> {
+export function store<T extends object = EmptyObject, Y extends Record<string | symbol, Function> = EmptyObject>(props: StoreProps<T, Y>): Store<T, Y> {
   const { notify, ...observableProps } = observable<string[]>();
-  const proxiedState = observe<T, string[]>({
-    item: state as T,
+  const proxiedState = observe<T>({
+    item: props.state,
     onChange: (propertyPath) => propertyChangedCallback(propertyPath),
     shouldValidatePropertyChange: (propertyPath) => !propertiesThatChanged.find(x => x === propertyPath),
     propertyPath: '',
-    subscribeCallback: (path, observer) => {
-      const cuttedPath = path.slice(1);
-      observableProps.subscribe((value) => {
-        const valuesFound = value?.filter(x => x.startsWith(cuttedPath)).map(x => x.slice(cuttedPath.length));
-        if (valuesFound && valuesFound.length > 0)
-          observer(valuesFound);
-      });
-    }
+    // subscribeCallback: (path, observer) => {
+    //   const cuttedPath = path.slice(1);
+    //   observableProps.subscribe((value) => {
+    //     const valuesFound = value?.filter(x => x.startsWith(cuttedPath)).map(x => x.slice(cuttedPath.length));
+    //     if (valuesFound && valuesFound.length > 0)
+    //       observer(valuesFound);
+    //   });
+    // }
   });
   let dispatchInProgressCount = 0;
   let propertiesThatChanged = new Array<string>();
   // @ts-ignore
   const self = this;
-  const proxiedTransactions = new Proxy(transactions, {
+  const proxiedTransactions = (props.transactions ? new Proxy(props.transactions, {
     get(target, property) {
       return (...args) => {
         dispatchInProgressCount++;
-        const result = transactions[property as string].apply(self ?? target, args);
+        const result = props.transactions?.[property].apply(self ?? target, args);
         decrementDispatchInProgressCount();
         return result;
       };
     }
-  }) as Y;
+  }): {}) as Y;
 
   const propertyChangedCallback = (propertyThatChanged?: string) => {
     if (propertyThatChanged)

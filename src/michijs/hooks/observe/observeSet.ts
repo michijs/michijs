@@ -2,7 +2,7 @@ import { observe, ObserveProps } from '../observe';
 import { customMapAndSetClear, customMapAndSetDelete } from './mapAndSetCommonHandlers';
 import { customObjectDelete, customObjectSet } from './observeCommonObject';
 
-export const observeSet = <Y>(props: ObserveProps<Set<any>, Y>) => {
+export const observeSet = <T extends Set<unknown>>(props: ObserveProps<T>) => {
   const proxiedSet = new Set();
   props.item.forEach((value, key) => {
     const newPropertyPath = `${props.propertyPath}.${key}`;
@@ -30,9 +30,9 @@ export const observeSet = <Y>(props: ObserveProps<Set<any>, Y>) => {
         case 'delete': {
           return customMapAndSetDelete(props, target, bindedTargetProperty);
         }
-        case 'subscribe': {
-          return (callback) => props.subscribeCallback?.(props.propertyPath, callback);
-        }
+        // case 'subscribe': {
+        //   return (callback) => props.subscribeCallback?.(props.propertyPath, callback);
+        // }
         default: {
           return bindedTargetProperty;
         }

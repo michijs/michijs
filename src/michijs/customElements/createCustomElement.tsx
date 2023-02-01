@@ -1,5 +1,5 @@
 import { idGenerator, store } from '../hooks';
-import { Store, AttributesType, CSSObject, CreateCustomElementStaticResult, CssVariablesType, EmptyObject, EventsType, KebabCase, MichiCustomElement, MichiElementProperties, MethodsType, ReflectedAttributesType, ReflectedCssVariablesType, Self, SubscribeToType, CustomElementTag, ExtendableElements } from '../types';
+import { Store, AttributesType, CSSObject, CreateCustomElementStaticResult, CssVariablesType, EmptyObject, EventsType, KebabCase, MichiCustomElement, MichiElementProperties, MethodsType, ReflectedAttributesType, ReflectedCssVariablesType, Self, SubscribeToType, CustomElementTag, ExtendableElements, AnyObject } from '../types';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 import { defineTransactionFromStore } from './properties/defineTransactionFromStore';
 import { defineEvent } from './properties/defineEvent';
@@ -68,8 +68,8 @@ export function createCustomElement<
 
   class MichiCustomElementResult extends (classToExtend as CustomElementConstructor) implements MichiCustomElement {
     $michi: MichiCustomElement['$michi'] = {
-      store: store.apply(this, [{ state: { ...attributes, ...reflectedAttributes }, transactions }]) as Store,
-      cssStore: store.apply(this, [{ state: { ...cssVariables, ...reflectedCssVariables } }]) as Store,
+      store: store.apply(this, [{ state: { ...attributes, ...reflectedAttributes }, transactions }]) as Store<A & RA, T>,
+      cssStore: store.apply(this, [{ state: { ...cssVariables, ...reflectedCssVariables } }]) as Store<C & RC, EmptyObject>,
       alreadyRendered: false,
       pendingTasks: 0,
       rerenderCallback: (propertyThatChanged) => {
