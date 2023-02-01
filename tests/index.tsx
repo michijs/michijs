@@ -1,4 +1,4 @@
-import { createCustomElement, h, Host } from '../src';
+import { createCustomElement, h, Host, store } from '../src';
 import { ColorSelector } from './ColorSelector';
 import { Router } from './routes';
 // // import sheet from './a.css' assert { type: 'css' };
@@ -7,14 +7,14 @@ import { Router } from './routes';
 createCustomElement('root-test-element', {
   reflectedAttributes: {
     // arrayTest: new ElementList(0, 1, 2, 3, 4, 5, 6),
-    arrayTest: [0, 1, 2, 3, 4, 5, 6]
+    arrayTest: [0, 1, 2, 3, 4, 5]
   },
   shadow: false,
   transactions: {
     onClickArray() {
-      // this.arrayTest.push(7,8)
+      this.arrayTest.push(7,8)
       // this.arrayTest = [0, 1, 2, 3, 6]
-      this.arrayTest.reverse();
+      // this.arrayTest.reverse();
       // this.arrayTest.pop();
       // this.arrayTest.shift();
       // Scenario
@@ -22,11 +22,11 @@ createCustomElement('root-test-element', {
     }
   },
   fakeRoot: false,
-  // observe: {
-  //   'arrayTest.6'() {
-  //     console.log('6 Added');
-  //   }
-  // },
+  observe: {
+    'arrayTest.6'() {
+      console.log('6 Added');
+    }
+  },
   render() {
     return (
       <Host>

@@ -4,7 +4,6 @@ import { idGenerator } from './hooks';
 import { Tag } from './h/Tag';
 import { CSSProperties, GetAttributes } from '@michijs/htmltype/dist/Attributes';
 import { Fragment } from './components';
-import { ObservableObject } from './hooks/observe';
 import { GlobalEvents } from '@michijs/htmltype/dist/Events';
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
@@ -88,8 +87,8 @@ export interface ObservableLike<T = any> {
 
 export interface MichiProperties extends Lifecycle<any>, LifecycleInternals, Partial<Pick<ElementInternals, 'checkValidity' | 'reportValidity' | 'form' | 'validity' | 'validationMessage' | 'willValidate'>> {
   readonly $michi: {
-    store: Store,
-    cssStore: Store,
+    store: Store<AnyObject, AnyObject>,
+    cssStore: Store<AnyObject, EmptyObject>,
     alreadyRendered: boolean,
     shadowRoot?: ShadowRoot,
     styles: HTMLStyleElement[],
@@ -268,8 +267,8 @@ export interface LifecycleInternals {
   formStateRestoreCallback?(state: string, mode: FormStateRestoreCallbackMode): void
 }
 
-export interface Store<T extends object = EmptyObject, Y extends Record<string, Function> = EmptyObject> extends ObservableLike<string[]> {
-  state: ObservableObject<T, string[]>;
+export interface Store<T extends object = EmptyObject, Y extends Record<string | symbol, Function> = EmptyObject> extends ObservableLike<string[]> {
+  state: T;
   transactions: Y;
 }
 

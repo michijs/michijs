@@ -1,10 +1,10 @@
 import { setAttributes } from '../../DOM/attributes/setAttributes';
-import { MichiCustomElement, ReflectedAttributesType, Store } from '../../types';
+import { AnyObject, MichiCustomElement, ReflectedAttributesType, Store } from '../../types';
 import { formatToKebabCase } from '../../utils';
 import { definePropertyFromStore } from './definePropertyFromStore';
 
 
-export const defineReflectedAttributes = (self: MichiCustomElement, store: Store, reflectedAttributes?: ReflectedAttributesType) => {
+export const defineReflectedAttributes = (self: MichiCustomElement, store: Store<AnyObject, AnyObject>, reflectedAttributes?: ReflectedAttributesType) => {
   if (reflectedAttributes)
     for (const key in reflectedAttributes) {
       const standarizedAttributeName = formatToKebabCase(key);

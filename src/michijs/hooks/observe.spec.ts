@@ -172,9 +172,10 @@ describe('Observe tests', () => {
       date = observe({ item: new Date(), onChange: mockCallback, shouldValidatePropertyChange: () => true, propertyPath: '' });
     });
     it('Setting the same value two times must call its callback just one time', () => {
-      date.setDate(exampleValue);
-      date.setDate(exampleValue);
-      nonProxiedDate.setDate(exampleValue);
+      const newExampleValue = date.getTime() + 1
+      date.setTime(newExampleValue);
+      date.setTime(newExampleValue);
+      nonProxiedDate.setDate(newExampleValue);
       expect(mockCallback).toBeCalledTimes(1);
     });
     afterEach(() => {

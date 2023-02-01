@@ -26,17 +26,17 @@ export const customObjectDelete = ({ shouldValidatePropertyChange, propertyPath,
   };
 };
 
-export const observeCommonObject = <Y>({ item, ...props }: ObserveProps<object,Y>) => {
-  const itemCopy = {};
+export const observeCommonObject = <T extends object>({ item, ...props }: ObserveProps<T>): T => {
+  const itemCopy = {} as T;
   Object.entries(item).forEach(([key, value]) => {
     itemCopy[key] = observe({ ...props, item: value as object, propertyPath: `${props.propertyPath}.${key}` });
   });
-  return new Proxy(itemCopy, {
+  return new Proxy<T>(itemCopy, {
     set: customObjectSet(props),
     deleteProperty: customObjectDelete(props),
     get(target, p, receiver) {
-      if (p === 'subscribe')
-        return (callback) => props.subscribeCallback?.(props.propertyPath, callback);
+      // if (p === 'subscribe')
+      //   return (callback) => props.subscribeCallback?.(props.propertyPath, callback);
       return Reflect.get(target, p, receiver);
     }
   });
