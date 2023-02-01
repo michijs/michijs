@@ -1,5 +1,4 @@
-import { ServerConfig, ServerConfigFactory, DefaultEnvironment } from '@michijs/server';
-
+import { ServerConfig, ServerConfigFactory, DefaultEnvironment } from '@michijs/dev-server';
 
 export const config: ServerConfigFactory<'TESTING' | 'TESTING_MAP' | DefaultEnvironment> = (environment) => {
   const defaultConfig: ServerConfig = {

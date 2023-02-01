@@ -19,10 +19,5 @@
                 "isDefault": true
             },
         },
-        {
-            "label": "publish",
-            "type": "npm",
-            "script": "publish-patch-version"
-        },
     ]
 }
