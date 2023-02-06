@@ -15,4 +15,4 @@ export type { Attributes, Events, HTMLElements, SVGElements } from '@michijs/htm
 import './michijs/h/JSX';
 export * from './michijs/customElements';
 export * from './michijs/css';
-export * from './michijs/utils/getFormData';
+export * from './michijs/utils';
