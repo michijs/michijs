@@ -2,7 +2,7 @@
   "name": "@michijs/michijs",
   "author": "Lucas M. Segurado",
   "license": "MIT",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "files": [
     "dist/",
     "jsx-runtime/"
@@ -25,9 +25,9 @@
     "url": "https://github.com/michijs/michijs.git"
   },
   "funding": {
-		"type": "opencollective",
-		"url": "https://opencollective.com/michijs"
-	},
+    "type": "opencollective",
+    "url": "https://opencollective.com/michijs"
+  },
   "description": "Typescript library to build web components",
   "scripts": {
     "start": "michi-server --start",
