@@ -2,7 +2,7 @@
   "name": "@michijs/michijs",
   "author": "Lucas M. Segurado",
   "license": "MIT",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "files": [
     "dist/",
     "jsx-runtime/"
