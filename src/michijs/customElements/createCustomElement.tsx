@@ -16,7 +16,7 @@ import { addStylesheetsToDocumentOrShadowRoot } from '../utils/addStylesheetsToD
 import { h } from '../h';
 import { createStyleSheet, createCssVariables, updateStyleSheet } from '../css';
 import { cssVariablesFromCssObject } from '../css/cssVariablesFromCssObject';
-import { CSSProperties } from '@michijs/htmltype/dist/Attributes';
+import type { Attributes } from '@michijs/htmltype';
 import { setStyleProperty } from '../DOM/attributes/setStyleProperty';
 
 export function createCustomElement<
@@ -153,7 +153,7 @@ export function createCustomElement<
           });
         }
         if (computedStyleSheet) {
-          const callback: (() => CSSProperties) = computedStyleSheet.bind(this);
+          const callback: (() => Attributes.CSSProperties) = computedStyleSheet.bind(this);
           const styleSheet = createStyleSheet(callback(), [':host']);
           addStylesheetsToDocumentOrShadowRoot(attachedShadow, styleSheet);
 
@@ -250,7 +250,7 @@ export function createCustomElement<
           });
         }
         if (computedStyleSheet) {
-          const callback: (() => CSSProperties) = computedStyleSheet.bind(this);
+          const callback: (() => Attributes.CSSProperties) = computedStyleSheet.bind(this);
 
           const updateStylesheetCallback = () => {
             Object.entries(callback()).forEach(([key, value]) => {

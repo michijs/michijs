@@ -1,4 +1,4 @@
-import { CSSProperties } from "@michijs/htmltype/dist/Attributes";
+import type { Attributes } from "@michijs/htmltype";
 import { CSSObject } from "../types";
 import { valueIsCSSObject } from "../typeWards/valueIsCSSObject";
 import { formatToKebabCase } from "../utils";
@@ -6,7 +6,7 @@ import { formatToKebabCase } from "../utils";
 /**
  * returns the list of rules from a css object
  */
-export const ruleListFromCssObject = (cssObject: CSSObject | CSSProperties, selectors: string[] = []) => {
+export const ruleListFromCssObject = (cssObject: CSSObject | Attributes.CSSProperties, selectors: string[] = []) => {
   const ruleList: string[] = [];
   const ruleDeclarations = Object.entries(cssObject).reduce((previousValue, [key, value]) => {
     if (value !== undefined && value !== null) {
@@ -31,11 +31,11 @@ export const ruleListFromCssObject = (cssObject: CSSObject | CSSProperties, sele
     let ruleStart = '';
     let ruleEnd = '';
 
-    if(previousNotAtRules.length > 0){
+    if (previousNotAtRules.length > 0) {
       ruleStart += `${previousNotAtRules.join('')}{`
       ruleEnd += '}'
     }
-    if(atRules.length > 0){
+    if (atRules.length > 0) {
       ruleStart = `${atRules.join('{')}{${ruleStart}`
       ruleEnd += '}'.repeat(atRules.length)
     }

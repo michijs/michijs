@@ -1,10 +1,8 @@
-import { HTMLElements } from '@michijs/htmltype';
+import type { HTMLElements, Events, Attributes } from '@michijs/htmltype';
 import { EventDispatcher } from './classes';
 import { idGenerator } from './hooks';
 import { Tag } from './h/Tag';
-import { CSSProperties, GetAttributes } from '@michijs/htmltype/dist/Attributes';
 import { Fragment } from './components';
-import { GlobalEvents } from '@michijs/htmltype/dist/Events';
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 export type CSSVar<T extends string> = KebabCase<T> & {
@@ -158,7 +156,7 @@ export interface ValidatePropertyChangeFunction {
   (propertyPath?: string): boolean
 }
 
-export type CSSProperty = CSSObject | CSSProperties | string | number | undefined | null;
+export type CSSProperty = CSSObject | Attributes.CSSProperties | string | number | undefined | null;
 export interface CSSObject {
   [key: string]: CSSProperty
 }
@@ -212,13 +210,13 @@ export type Self<
   Attrs = FRA & FRC & {
     [k in StringKeyOf<E> as `on${Lowercase<k>}`]: E[k] extends EventDispatcher<infer D> ? (ev: CustomEvent<D>) => any : never
   }
-  & GlobalEvents<S>
-  & GetAttributes<'name'>
+  & Events.GlobalEvents<S>
+  & Attributes.GetAttributes<'name'>
 > = (
     {
       new(
         props?: Tag<
-          Exclude<HTMLElements[EXTA extends undefined ? 'div' : EXTA], keyof Attrs> & Partial<Attrs>,
+          Omit<HTMLElements[EXTA extends undefined ? 'div' : EXTA], keyof Attrs> & Partial<Attrs>,
           S
         >): S;
     }
@@ -322,7 +320,7 @@ export interface MichiElementProperties<
   /**
    * Allows you to define a Constructable Stylesheet that depend on the state of the component. When there is no shadow root the style will be reflected in the style attribute.
    */
-  computedStyleSheet?(): CSSProperties,
+  computedStyleSheet?(): Attributes.CSSProperties,
   // Unknown because Self was too complicated for typescript to represent
   /**
    * Allows to define reflected attributes and follows the Kebab case.

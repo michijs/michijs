@@ -1,9 +1,9 @@
-import { CSSProperties } from '@michijs/htmltype/dist/Attributes';
+import type { Attributes } from '@michijs/htmltype';
 import { CSSObject } from '../types';
 import { ruleListFromCssObject } from './ruleListFromCssObject';
 
 /**Allows to create a Constructable Stylesheet with a CSSObject */
-export const createStyleSheet = (cssObject: CSSObject | CSSProperties, selectors?: string[]) => {
+export const createStyleSheet = (cssObject: CSSObject | Attributes.CSSProperties, selectors?: string[]) => {
   const styleSheet = new CSSStyleSheet();
   const rules = ruleListFromCssObject(cssObject, selectors);
 

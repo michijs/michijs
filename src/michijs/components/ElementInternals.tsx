@@ -3,7 +3,6 @@ import type { FC } from '../types';
 import { h } from '../h';
 import { Fragment } from '.';
 import { setAttribute } from '../DOM/attributes/setAttribute';
-import { GetRoles } from '@michijs/htmltype/dist/Attributes';
 import { isMichiCustomElement } from '../typeWards/isMichiCustomElement';
 
 export type ElementInternalsProps =
@@ -18,7 +17,7 @@ export type ElementInternalsProps =
   } &
   Partial<
     ARIAMixin
-    & GetRoles<Attributes.AllRoles>
+    & Attributes.GetRoles<Attributes.AllRoles>
   >
 
 /**

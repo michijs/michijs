@@ -1,11 +1,11 @@
-import { CSSProperties } from "@michijs/htmltype/dist/Attributes";
+import type { Attributes } from "@michijs/htmltype";
 import { CSSObject } from "../types";
 import { ruleListFromCssObject } from "./ruleListFromCssObject";
 
 // Cannot extend or use proxy with CSSStyleSheet :(
 /**Allows to update a Constructable Stylesheet with a CSSObject */
-export const updateStyleSheet = (styleSheet: CSSStyleSheet, cssObject: CSSObject | CSSProperties, selectors?: string[]) => {
-    const rules = ruleListFromCssObject(cssObject, selectors);
-    styleSheet.replaceSync(rules.join(''))
-    return styleSheet
+export const updateStyleSheet = (styleSheet: CSSStyleSheet, cssObject: CSSObject | Attributes.CSSProperties, selectors?: string[]) => {
+  const rules = ruleListFromCssObject(cssObject, selectors);
+  styleSheet.replaceSync(rules.join(''))
+  return styleSheet
 };
