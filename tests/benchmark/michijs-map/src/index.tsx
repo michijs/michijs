@@ -1,4 +1,4 @@
-import { h, store, createCustomElement } from '../../../../src';
+import { h, store, createCustomElement, List } from '../../../../src';
 
 function _random(max: number) {
   return Math.round(Math.random() * 1000) % max;
@@ -72,18 +72,18 @@ const { state, transactions, ...storeSubscribable } = store({
   }
 });
 
-export const Tbody = createCustomElement('michi-table-body',
+export const Table = createCustomElement('michi-table',
   {
     extends: {
-      tag: 'tbody',
-      class: HTMLTableSectionElement
+      tag: 'table',
+      class: HTMLTableElement
     },
     subscribeTo: {
       storeSubscribable
     },
     fakeRoot: false,
     render() {
-      return state.data.map(({ id, label }) => (
+      return <List data={state.data} as="tbody" _id="tbody" renderItem={({ label, id }) => (
         <tr key={id} class={id === state.selected ? 'danger' : undefined}>
           <td _className="col-md-1">{id}</td>
           <td _className="col-md-4">
@@ -96,7 +96,7 @@ export const Tbody = createCustomElement('michi-table-body',
           </td>
           <td _className="col-md-6" />
         </tr>
-      ));
+      )} />
     }
   }
 );
