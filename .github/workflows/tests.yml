@@ -6,10 +6,7 @@ jobs:
   call-workflow:
     strategy:
       matrix:
-        scripts: [{script: test-tsc, name: "Typescript"}, {script: test, name: "Library"}]
-        # benchmark-michijs Library benchmark
-        # benchmark-michijs-map Library benchmark with map
-        # benchmark-vanilla Vanilla benchmark
+        scripts: [{script: test-tsc, name: "Typescript"}, {script: test, name: "Library"}, {script: benchmark-michijs, name: "Library benchmark"}, {script: benchmark-michijs-map, name: "Library benchmark with map"}, {script: benchmark-vanilla, name: "Vanilla benchmark"}]
     uses: michijs/.github/.github/workflows/execute-script.yml@main
     name: "Run ${{matrix.scripts.name}} tests"
     with:

@@ -21,22 +21,22 @@ const getRowId = async (element: ElementHandle<Element>) => {
   return Number(textContent);
 };
 
-export async function makePerformanceTests(page: Page) {
+export async function makePerformanceTests(page: () => Page) {
 
   const create1000Rows = async () => {
-    await page.click('#run');
+    await page().click('#run');
   };
   const add1000Rows = async () => {
-    await page.click('#add');
+    await page().click('#add');
   };
   const create10000Rows = async () => {
-    await page.click('#runlots');
+    await page().click('#runlots');
   };
   const updateEvery10Rows = async () => {
-    await page.click('#update');
+    await page().click('#update');
   };
   const swapRows = async () => {
-    await page.click('#swaprows');
+    await page().click('#swaprows');
   };
   const select = async (index: number) => {
     const tableBody = await getTableBody();
@@ -51,17 +51,17 @@ export async function makePerformanceTests(page: Page) {
     await linkToClick[1].evaluate((e) => e.click());
   };
   const getTableBody = async () => {
-    return await page.$$('tr');
+    return await page().$$('tr');
   };
   const clear = async () => {
-    await page.click('#clear');
+    await page().click('#clear');
   };
 
   const results = new Map<Result, number>();
   const saveResult = async (key: Result, functionToMeasure: () => Promise<void>) => {
-    const t0 = (await page.metrics()).Timestamp!;
+    const t0 = (await page().metrics()).Timestamp!;
     await functionToMeasure();
-    const t1 = (await page.metrics()).Timestamp!;
+    const t1 = (await page().metrics()).Timestamp!;
     results.set(key, Number((Number(t1 - t0) * 1000).toFixed(2)));
   };
   it('creates 1000 rows when clicking run', async () => {

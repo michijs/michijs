@@ -1,11 +1,12 @@
-import { launch } from 'puppeteer';
+import { Browser, launch, Page } from 'puppeteer';
 import { makePerformanceTests, Result } from './shared';
 
-const browser = await launch();
-const page = await browser.newPage();
-
 describe('Performance tests - MichiJS', () => {
+  let browser: Browser;
+  let page: Page;
   beforeAll(async () => {
+    browser = await launch();
+    page = await browser.newPage();
     jest.setTimeout(30000);
     await page.goto('http://localhost:3000', {
       waitUntil: 'domcontentloaded'
@@ -24,14 +25,26 @@ describe('Performance tests - MichiJS', () => {
     expect(innerHTML).toMatchSnapshot();
   });
 
-  const results = makePerformanceTests(page);
+  const results = makePerformanceTests(() => page);
   afterAll(async () => {
-
     expect(
       new Map<string, Map<Result, number>>([
         [new Date().getTime().toString(), await results],
         [
-          '2.0.0', new Map([
+          '1.0.0', new Map([
+            ['create1000Rows', 207.09],
+            ['replaceAllRows', 185.54],
+            ['partialUpdate', 44.55],
+            ['selectRow', 40.72],
+            ['swapRows', 23.92],
+            ['removeRow', 49.16],
+            ['createManyRows', 1639.74],
+            ['appendRowsToLargeTable', 267.65],
+            ['clearRows', 42.65]
+          ]),
+        ],
+        [
+          'legacy - 2.0.0', new Map([
             ['create1000Rows', 251.1],
             ['replaceAllRows', 249.82],
             ['partialUpdate', 84.96],
@@ -44,7 +57,7 @@ describe('Performance tests - MichiJS', () => {
           ]),
         ],
         [
-          '1.2.6', new Map([
+          'legacy - 1.2.6', new Map([
             ['create1000Rows', 628.04],
             ['replaceAllRows', 1338.53],
             ['partialUpdate', 89.95],
@@ -58,5 +71,6 @@ describe('Performance tests - MichiJS', () => {
         ]
       ])
     ).toMatchSnapshot('MichiJS Benchmarks');
+    await browser.close();
   });
 });
