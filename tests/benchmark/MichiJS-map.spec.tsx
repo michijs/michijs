@@ -32,7 +32,20 @@ describe('Performance tests - MichiJS', () => {
       new Map<string, Map<Result, number>>([
         [new Date().getTime().toString(), await results],
         [
-          '2.0.0', new Map([
+          '1.0.4', new Map([
+            ['create1000Rows', 220.12],
+            ['replaceAllRows', 275.18],
+            ['partialUpdate', 98.76],
+            ['selectRow', 78.52],
+            ['swapRows', 62.08],
+            ['removeRow', 108.76],
+            ['createManyRows', 1919.42],
+            ['appendRowsToLargeTable', 607.78],
+            ['clearRows', 23.28]
+          ]),
+        ],
+        [
+          'legacy - 2.0.0', new Map([
             ['create1000Rows', 251.1],
             ['replaceAllRows', 249.82],
             ['partialUpdate', 84.96],
@@ -45,7 +58,7 @@ describe('Performance tests - MichiJS', () => {
           ]),
         ],
         [
-          '1.2.6', new Map([
+          'legacy - 1.2.6', new Map([
             ['create1000Rows', 628.04],
             ['replaceAllRows', 1338.53],
             ['partialUpdate', 89.95],
