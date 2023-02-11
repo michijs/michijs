@@ -2,8 +2,8 @@ import { observable, store } from '../hooks';
 import { ObservableLike, ObserverCallback, Store } from '../types';
 
 type StringObject = {
-  [key: string]: string | StringObject
-} | string[] | StringObject[]
+  [key: string]: string | StringObject | undefined | null | number
+} | (string | StringObject | undefined | null | number)[]
 
 export type Translation<T extends StringObject, K extends string> = {
   [key in K]: T | (() => Promise<{ default: T }>)
@@ -17,10 +17,6 @@ export type CreateTranslationResultStore<T extends StringObject> = Store<{
 }, {
   updateTranslation(newTranslation: T)
 }>;
-export interface CreateTranslationResult<T extends StringObject> {
-  store: CreateTranslationResultStore<T>
-  t: T
-};
 
 export class I18n<K extends string> implements ObservableLike {
   private translations = new Array<TranslationItem<StringObject, string>>()
@@ -74,7 +70,7 @@ export class I18n<K extends string> implements ObservableLike {
     };
     this.translations.push(translationItem);
     this.updateTranslation<T>(translationItem)
-    return translationResult;
+    return { ...translationResult, t: translationResult.state.t };
   }
 
   private updateTranslation<T extends StringObject>({
