@@ -125,9 +125,11 @@ export type DeepReadonly<T> =
   T extends object ? DeepReadonlyObject<T> :
   T;
 
+export type Key = number | string
+
 export interface IterableAttrs<T> {
   /**When iterating nodes its higly recomended to use keys */
-  key?: number | string,
+  key?: Key,
   tag: T
 }
 
