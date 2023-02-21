@@ -141,7 +141,7 @@ export type IterableJSX = {
 export type ObjectJSXElement = CommonJSXAttrs<string>
 export type DOMElementJSXElement = CommonJSXAttrs<Element>
 export type FunctionJSXElement = CommonJSXAttrs<FC<any>>
-export type ClassJSXElement = CommonJSXAttrs<(new () => {}) & { tag: string, extends?: string }>
+export type ClassJSXElement = CommonJSXAttrs<(new (...args: any[]) => Element) & { tag: string, extends?: string }>
 export type SingleJSXElement = PrimitiveType | ObjectJSXElement | FunctionJSXElement | FragmentJSXElement | ClassJSXElement | ArrayJSXElement | DOMElementJSXElement;
 export type ArrayJSXElement = SingleJSXElement[];
 // export type PureObjectJSXElement = { tag: string } & Omit<CommonJSXAttrs,'children'> & {children: (PureObjectJSXElement | string)[]};
@@ -217,7 +217,7 @@ export type Self<
 > = (
     {
       new(
-        props?: Tag<
+        props: Tag<
           Omit<HTMLElements[EXTA extends undefined ? 'div' : EXTA], keyof Attrs> & Partial<Attrs>,
           S
         >): S;
