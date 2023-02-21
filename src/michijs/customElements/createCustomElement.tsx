@@ -328,10 +328,16 @@ export function createCustomElement<
     }
   }
 
-  if (extendsTag) {
-    window.customElements.define(tag, MichiCustomElementResult, { extends: extendsTag });
-  } else {
-    window.customElements.define(tag, MichiCustomElementResult);
+  try {
+    if (extendsTag) {
+      window.customElements.define(tag, MichiCustomElementResult, { extends: extendsTag });
+    } else {
+      window.customElements.define(tag, MichiCustomElementResult);
+    }
+  } catch {
+    // In some cases it can happen that a library A imports component X and a library B that consumes A also imports component X,
+    // in which case the application could crash. 
+    // To avoid it I catch the exception. In these cases, the first component to be registered will be taken.
   }
 
   return MichiCustomElementResult as any;
