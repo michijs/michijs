@@ -62,7 +62,7 @@
     "jest-environment-jsdom": "29.4.0",
     "jest-puppeteer": "7.0.0",
     "lint-staged": "13.1.1",
-    "puppeteer": "19.6.0",
+    "puppeteer": "19.7.1",
     "redux": "4.2.0",
     "rome": "11.0.0",
     "simple-git-hooks": "2.8.1",
