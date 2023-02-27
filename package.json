@@ -60,7 +60,7 @@
     "@types/jest": "29.4.0",
     "jest": "29.4.3",
     "jest-environment-jsdom": "29.4.3",
-    "jest-puppeteer": "7.0.0",
+    "jest-puppeteer": "7.0.1",
     "lint-staged": "13.1.1",
     "puppeteer": "19.7.1",
     "redux": "4.2.1",
