@@ -5,14 +5,17 @@ export const hash = new Proxy({}, {
     return location.hash === key;
   },
   set(_target, key: string, newValue) {
-    let newHash = '';
-    if (newValue) {
-      newHash = key;
+    const oldValue = location.hash === key;
+    if (oldValue !== newValue) {
+      let newHash = '';
+      if (newValue) {
+        newHash = key;
+      }
+      const newUrl = new URL(location.href);
+      newUrl.hash = newHash;
+      goTo(newUrl);
+      return true;
     }
-    const newUrl = new URL(location.href);
-    newUrl.hash = newHash;
-    goTo(newUrl);
-
     return true;
   }
 });
