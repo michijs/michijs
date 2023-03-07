@@ -10,8 +10,6 @@ export * from './michijs/types';
 export * from './michijs/DOM';
 export * from './michijs/DOMDiff';
 export * from './michijs/i18n';
-// Fix for unit tests
-export * from '@michijs/htmltype';
 import './michijs/h/JSX';
 export * from './michijs/customElements';
 export * from './michijs/css';

@@ -33,7 +33,7 @@ createCustomElement('root-test-element', {
         <Router />
         <math display="block">
           <mfrac>
-            <mn>1</mn>
+            <mn>{this.arrayTest.length}</mn>
             <msqrt>
               <mn>2</mn>
             </msqrt>
