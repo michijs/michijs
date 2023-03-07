@@ -3,7 +3,7 @@ import { observe } from './observe';
 
 const exampleValue = 1;
 const exampleValue2 = 2;
-const mockCallback = jest.fn(x => x);
+const mockCallback = jest.fn((x) => x);
 
 const objectTests = (initialValue: () => AnyObject | unknown[]) => {
   describe('object tests', () => {
@@ -13,7 +13,12 @@ const objectTests = (initialValue: () => AnyObject | unknown[]) => {
       nonProxiedObject = undefined;
       nonProxiedObject = initialValue();
       object = undefined;
-      object = observe({ item: initialValue(), onChange: mockCallback, shouldValidatePropertyChange: () => true, propertyPath: '' });
+      object = observe({
+        item: initialValue(),
+        onChange: mockCallback,
+        shouldValidatePropertyChange: () => true,
+        propertyPath: '',
+      });
     });
     it('Setting the same value two times must call its callback just one time', () => {
       object[0] = exampleValue;
@@ -75,7 +80,12 @@ describe('Observe tests', () => {
     let map: Map<any, any>;
     beforeEach(() => {
       nonProxiedMap = new Map();
-      map = observe({ item: new Map(), onChange: mockCallback, shouldValidatePropertyChange: () => true, propertyPath: '' });
+      map = observe({
+        item: new Map(),
+        onChange: mockCallback,
+        shouldValidatePropertyChange: () => true,
+        propertyPath: '',
+      });
     });
     it('Setting the same value two times must call its callback just one time', () => {
       map[0] = exampleValue;
@@ -122,7 +132,12 @@ describe('Observe tests', () => {
     let set: Set<any>;
     beforeEach(() => {
       nonProxiedSet = new Set();
-      set = observe({ item: new Set(), onChange: mockCallback, shouldValidatePropertyChange: () => true, propertyPath: '' });
+      set = observe({
+        item: new Set(),
+        onChange: mockCallback,
+        shouldValidatePropertyChange: () => true,
+        propertyPath: '',
+      });
     });
     it('Setting the same value two times must call its callback just one time', () => {
       set[0] = exampleValue;
@@ -169,10 +184,15 @@ describe('Observe tests', () => {
     let date: Date;
     beforeEach(() => {
       nonProxiedDate = new Date();
-      date = observe({ item: new Date(), onChange: mockCallback, shouldValidatePropertyChange: () => true, propertyPath: '' });
+      date = observe({
+        item: new Date(),
+        onChange: mockCallback,
+        shouldValidatePropertyChange: () => true,
+        propertyPath: '',
+      });
     });
     it('Setting the same value two times must call its callback just one time', () => {
-      const newExampleValue = date.getTime() + 1
+      const newExampleValue = date.getTime() + 1;
       date.setTime(newExampleValue);
       date.setTime(newExampleValue);
       nonProxiedDate.setTime(newExampleValue);
@@ -182,5 +202,4 @@ describe('Observe tests', () => {
       expect(date.getTime()).toEqual(nonProxiedDate.getTime());
     });
   });
-
 });

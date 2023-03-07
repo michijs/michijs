@@ -7,12 +7,18 @@ export function urlObservable() {
   window.addEventListener(WINDOW_URL_CHANGE_EVENTS.PUSH_STATE, notify);
   window.addEventListener('popstate', notify);
   const matches = (url: string, flexible: boolean = false) => {
-    const urlPaths = url.split('/').filter(x => x !== '');
-    let locationPaths = location.pathname.split('/').filter(x => x !== '');
+    const urlPaths = url.split('/').filter((x) => x !== '');
+    let locationPaths = location.pathname.split('/').filter((x) => x !== '');
     if (flexible) {
       locationPaths = locationPaths.slice(0, urlPaths.length);
     }
-    return locationPaths.length === urlPaths.length && !locationPaths.find((locationPath, index) => !urlPaths[index].startsWith(':') && locationPath !== urlPaths[index]);
+    return (
+      locationPaths.length === urlPaths.length &&
+      !locationPaths.find(
+        (locationPath, index) =>
+          !urlPaths[index].startsWith(':') && locationPath !== urlPaths[index],
+      )
+    );
   };
 
   return { ...observableProps, matches };

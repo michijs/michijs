@@ -1,16 +1,34 @@
 import { deepEqual } from '../../utils/deepEqual';
 import { observe, ObserveProps } from '../observe';
-import { customMapAndSetClear, customMapAndSetDelete } from './mapAndSetCommonHandlers';
+import {
+  customMapAndSetClear,
+  customMapAndSetDelete,
+} from './mapAndSetCommonHandlers';
 import { customObjectDelete, customObjectSet } from './observeCommonObject';
 
-export const observeMap = <T extends Map<unknown, unknown>>(props: ObserveProps<T>): T => {
+export const observeMap = <T extends Map<unknown, unknown>>(
+  props: ObserveProps<T>,
+): T => {
   const proxiedMap = new Map() as T;
-  props.item.forEach((value, key) => proxiedMap.set(key, observe({ ...props, item: value, propertyPath: `${props.propertyPath}.${key}` })));
+  props.item.forEach((value, key) =>
+    proxiedMap.set(
+      key,
+      observe({
+        ...props,
+        item: value,
+        propertyPath: `${props.propertyPath}.${key}`,
+      }),
+    ),
+  );
   return new Proxy<T>(proxiedMap, {
-    set: (target, property, newValue, receiver) => customObjectSet(props)(target, property, newValue, receiver),
+    set: (target, property, newValue, receiver) =>
+      customObjectSet(props)(target, property, newValue, receiver),
     get: (target, property) => {
       const targetProperty = Reflect.get(target, property);
-      const bindedTargetProperty = typeof targetProperty === 'function' ? (targetProperty as Function).bind(target) : targetProperty;
+      const bindedTargetProperty =
+        typeof targetProperty === 'function'
+          ? (targetProperty as Function).bind(target)
+          : targetProperty;
       switch (property) {
         case 'clear': {
           return customMapAndSetClear(props, target, bindedTargetProperty);
@@ -18,10 +36,18 @@ export const observeMap = <T extends Map<unknown, unknown>>(props: ObserveProps<
         case 'set': {
           return function (key, newValue) {
             const newPropertyPath = `${props.propertyPath}.${key}`;
-            const notifyChange = props.shouldValidatePropertyChange(newPropertyPath) && !deepEqual(newValue, target.get(key));
-            const result = bindedTargetProperty(key, observe({ ...props, item: newValue, propertyPath: newPropertyPath }));
-            if (notifyChange)
-              props.onChange(newPropertyPath);
+            const notifyChange =
+              props.shouldValidatePropertyChange(newPropertyPath) &&
+              !deepEqual(newValue, target.get(key));
+            const result = bindedTargetProperty(
+              key,
+              observe({
+                ...props,
+                item: newValue,
+                propertyPath: newPropertyPath,
+              }),
+            );
+            if (notifyChange) props.onChange(newPropertyPath);
             return result;
           };
         }
@@ -36,6 +62,6 @@ export const observeMap = <T extends Map<unknown, unknown>>(props: ObserveProps<
         }
       }
     },
-    deleteProperty: customObjectDelete(props)
+    deleteProperty: customObjectDelete(props),
   });
 };

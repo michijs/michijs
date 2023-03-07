@@ -1,9 +1,15 @@
-import { IterableAttrs, MichiCustomElement, PickWritable, StringKeyOf } from '../types';
+import {
+  IterableAttrs,
+  MichiCustomElement,
+  PickWritable,
+  StringKeyOf,
+} from '../types';
 
-export type DomInterface<E extends object> = { [K in StringKeyOf<E> as `_${K}`]: E[K] }
+export type DomInterface<E extends object> = {
+  [K in StringKeyOf<E> as `_${K}`]: E[K];
+};
 
-export type Tag<T, E> = T &
-{
+export type Tag<E> = {
   /**
    * Children are created but not updated
    */
@@ -16,9 +22,21 @@ export type Tag<T, E> = T &
   /**
    * Callback that is called when the element is created
    */
-  $oncreated?: (el: E, isSVG?: boolean, context?: MichiCustomElement) => void;
+  $oncreated?: (
+    el: E,
+    isSVG?: boolean,
+    isMATHML?: boolean,
+    context?: MichiCustomElement,
+  ) => void;
   /**
    * Callback that is called when the element is updated
    */
-  $onupdate?: (jsx: JSX.Element, el: E, isSVG?: boolean, context?: MichiCustomElement) => void
-} & Partial<DomInterface<PickWritable<E>>> & Partial<IterableAttrs<string>>
+  $onupdate?: (
+    jsx: JSX.Element,
+    el: E,
+    isSVG?: boolean,
+    isMATHML?: boolean,
+    context?: MichiCustomElement,
+  ) => void;
+  _?: Partial<PickWritable<E>>;
+} & Partial<IterableAttrs<string>>;

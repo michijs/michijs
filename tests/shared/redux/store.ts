@@ -5,10 +5,8 @@ export const store = configureStore({
   reducer: {
     counterStore,
   },
-  devTools: true
+  devTools: true,
 });
 
 const state = store.getState();
 export type StoreType = typeof state;
-
- 

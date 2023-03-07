@@ -8,7 +8,11 @@ import { IndexedDBCounter } from '../IndexedDBCounter';
 export const CounterTests = () => (
   <>
     <h1> Simple counter</h1>
-    <SimpleCounter oncountchanged={(ev) => { console.log(ev.detail); }} />
+    <SimpleCounter
+      oncountchanged={(ev) => {
+        console.log(ev.detail);
+      }}
+    />
     <SimpleCounter />
     <h1>Counter with redux store</h1>
     <CounterWithReduxStore />

@@ -5,10 +5,10 @@ export const counterStyle = createStyleSheet({
     display: 'inline-flex',
     flexDirection: 'row',
     '(:disabled)': {
-      backgroundColor: 'gray'
+      backgroundColor: 'gray',
     },
     '(:invalid)': {
-      border: '1px solid red'
+      border: '1px solid red',
     },
     // '@media (max-width: 600px)': {
     //   color: 'blue'
@@ -16,6 +16,6 @@ export const counterStyle = createStyleSheet({
   },
   span: {
     minWidth: '60px',
-    textAlign: 'center'
+    textAlign: 'center',
   },
 });

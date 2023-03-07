@@ -6,16 +6,15 @@ import { observeMap } from './observe/observeMap';
 import { observeSet } from './observe/observeSet';
 
 export type ObserveHandlerProps = {
-  onChange: ChangeFunction,
-  shouldValidatePropertyChange: ValidatePropertyChangeFunction,
-  propertyPath: string
-}
+  onChange: ChangeFunction;
+  shouldValidatePropertyChange: ValidatePropertyChangeFunction;
+  propertyPath: string;
+};
 
 export type ObserveProps<T> = {
-  item: T,
+  item: T;
   // subscribeCallback?: (path: string, observer: ObserverCallback<Y>) => void
 } & ObserveHandlerProps;
-
 
 // export type ObservableObject<T, Y = string[]> = T extends Function ? T : (
 //   T extends Array<unknown> ? (
@@ -41,8 +40,8 @@ export function observe<T>(props: ObserveProps<T>): T {
     if (Array.isArray(props.item))
       return observeArray(props as ObserveProps<unknown[]>) as T;
     // Many built-in objects, for example Map, Set, Date, Promise and others make use of so-called internal slots.
-    // These are like properties but reserved for internal, specification-only purposes. 
-    // For instance, Map stores items in the internal slot [[MapData]]. 
+    // These are like properties but reserved for internal, specification-only purposes.
+    // For instance, Map stores items in the internal slot [[MapData]].
     // Built-in methods access them directly, not via [[Get]]/[[Set]] internal methods. So Proxy can’t intercept that.
     else if (props.item instanceof Date)
       return observeDate(props as ObserveProps<Date>) as T;

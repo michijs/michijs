@@ -18,30 +18,43 @@ export const Router = createCustomElement('michi-router', {
   },
   methods: {
     matches(url: string, flexible: boolean = false) {
-      const urlPaths = url.split('/').filter(x => x !== '');
-      let locationPaths = location.pathname.split('/').filter(x => x !== '');
+      const urlPaths = url.split('/').filter((x) => x !== '');
+      let locationPaths = location.pathname.split('/').filter((x) => x !== '');
       if (flexible) {
         locationPaths = locationPaths.slice(0, urlPaths.length);
       }
-      return locationPaths.length === urlPaths.length && !locationPaths.find((locationPath, index) => !urlPaths[index].startsWith(':') && locationPath !== urlPaths[index]);
+      return (
+        locationPaths.length === urlPaths.length &&
+        !locationPaths.find(
+          (locationPath, index) =>
+            !urlPaths[index].startsWith(':') &&
+            locationPath !== urlPaths[index],
+        )
+      );
     },
     getMatchedRoute() {
       if (this.routes) {
-        const routeFound = Object.keys(this.routes).find(key => this.matches(urlFn(key, this.parentRoute)().pathname, true));
-        if (routeFound)
-          return this.routes[routeFound];
+        const routeFound = Object.keys(this.routes).find((key) =>
+          this.matches(urlFn(key, this.parentRoute)().pathname, true),
+        );
+        if (routeFound) return this.routes[routeFound];
       }
-      return null
+      return null;
     },
     processComponent(component?: JSX.Element) {
-      if (component && typeof component === 'object' && 'tag' in component && typeof component.tag === 'function') {
+      if (
+        component &&
+        typeof component === 'object' &&
+        'tag' in component &&
+        typeof component.tag === 'function'
+      ) {
         return {
           ...component,
           attrs: {
             ...component.attrs,
             searchParams,
-            hash
-          }
+            hash,
+          },
         };
       }
       return component;
@@ -49,7 +62,8 @@ export const Router = createCustomElement('michi-router', {
     onChangeURL() {
       const matchedRoute = this.getMatchedRoute();
       if (matchedRoute) {
-        const { title, component, promise, loadingComponent } = matchedRoute as SyncRoute & AsyncRoute;//& RedirectRoute
+        const { title, component, promise, loadingComponent } =
+          matchedRoute as SyncRoute & AsyncRoute; //& RedirectRoute
 
         // if (redirectTo) {
         //   goTo(redirectTo());
@@ -67,8 +81,7 @@ export const Router = createCustomElement('michi-router', {
           }
         };
 
-        if (component)
-          updateCurrentComponent(component);
+        if (component) updateCurrentComponent(component);
         else {
           if (loadingComponent) {
             updateCurrentComponent(loadingComponent);
@@ -78,19 +91,18 @@ export const Router = createCustomElement('michi-router', {
           });
         }
         // }
-      } else
-        this.currentComponent = null;
-    }
+      } else this.currentComponent = null;
+    },
   },
   observe: {
     sharedUrlObservable() {
       this.onChangeURL();
-    }
+    },
   },
   subscribeTo: {
-    sharedUrlObservable
+    sharedUrlObservable,
   },
   render() {
     return this.processComponent(this.currentComponent);
-  }
+  },
 });

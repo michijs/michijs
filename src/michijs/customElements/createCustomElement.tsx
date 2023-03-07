@@ -1,5 +1,23 @@
 import { idGenerator, store } from '../hooks';
-import { Store, AttributesType, CSSObject, CreateCustomElementStaticResult, CssVariablesType, EmptyObject, EventsType, KebabCase, MichiCustomElement, MichiElementProperties, MethodsType, ReflectedAttributesType, ReflectedCssVariablesType, Self, SubscribeToType, CustomElementTag, ExtendableElements, AnyObject } from '../types';
+import {
+  Store,
+  AttributesType,
+  CSSObject,
+  CreateCustomElementStaticResult,
+  CssVariablesType,
+  EmptyObject,
+  EventsType,
+  KebabCase,
+  MichiCustomElement,
+  MichiElementProperties,
+  MethodsType,
+  ReflectedAttributesType,
+  ReflectedCssVariablesType,
+  Self,
+  SubscribeToType,
+  CustomElementTag,
+  ExtendableElements,
+} from '../types';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 import { defineTransactionFromStore } from './properties/defineTransactionFromStore';
 import { defineEvent } from './properties/defineEvent';
@@ -16,16 +34,18 @@ import { addStylesheetsToDocumentOrShadowRoot } from '../utils/addStylesheetsToD
 import { h } from '../h';
 import { createStyleSheet, createCssVariables, updateStyleSheet } from '../css';
 import { cssVariablesFromCssObject } from '../css/cssVariablesFromCssObject';
-import type { Attributes } from '@michijs/htmltype';
+import type { CSSProperties } from '@michijs/htmltype';
 import { setStyleProperty } from '../DOM/attributes/setStyleProperty';
 
 export function createCustomElement<
   A extends AttributesType = EmptyObject,
   RA extends ReflectedAttributesType = EmptyObject,
   NOA extends AttributesType = EmptyObject,
-  FRA extends AttributesType = RA extends object ? {
-    [k in keyof RA as KebabCase<k>]: RA[k]
-  } : EmptyObject,
+  FRA extends AttributesType = RA extends object
+    ? {
+        [k in keyof RA as KebabCase<k>]: RA[k];
+      }
+    : EmptyObject,
   M extends MethodsType = EmptyObject,
   T extends MethodsType = EmptyObject,
   E extends EventsType = EmptyObject,
@@ -35,12 +55,35 @@ export function createCustomElement<
   EXTA extends ExtendableElements = undefined,
   C extends CssVariablesType = EmptyObject,
   RC extends ReflectedCssVariablesType = EmptyObject,
-  FRC extends CssVariablesType = RC extends object ? {
-    [k in keyof RC as KebabCase<k>]: RC[k]
-  } : EmptyObject,
-  TA extends CustomElementTag = CustomElementTag
->(tag: TA, elementProperties: MichiElementProperties<M, T, E, S, A, RA, NOA, FRA, FOA, EL, EXTA, C, RC, FRC> & ThisType<InstanceType<Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA, FRC>>> = {}): Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA, FRC> & CreateCustomElementStaticResult<FRC, FRA, FOA, TA, EXTA> {
-
+  FRC extends CssVariablesType = RC extends object
+    ? {
+        [k in keyof RC as KebabCase<k>]: RC[k];
+      }
+    : EmptyObject,
+  TA extends CustomElementTag = CustomElementTag,
+>(
+  tag: TA,
+  elementProperties: MichiElementProperties<
+    M,
+    T,
+    E,
+    S,
+    A,
+    RA,
+    NOA,
+    FRA,
+    FOA,
+    EL,
+    EXTA,
+    C,
+    RC,
+    FRC
+  > &
+    ThisType<
+      InstanceType<Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA, FRC>>
+    > = {},
+): Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA, FRC> &
+  CreateCustomElementStaticResult<FRC, FRA, FOA, TA, EXTA> {
   const {
     events,
     attributes,
@@ -59,23 +102,33 @@ export function createCustomElement<
     reflectedCssVariables,
     methods,
     fakeRoot = !shadow,
-    formAssociated = false
+    formAssociated = false,
   } = elementProperties;
-  const { class: classToExtend = HTMLElement, tag: extendsTag } = extendsObject ?? {};
+  const { class: classToExtend = HTMLElement, tag: extendsTag } =
+    extendsObject ?? {};
 
-  if (events)
-    Object.entries(events).forEach(([key, value]) => value.init(key));
+  if (events) Object.entries(events).forEach(([key, value]) => value.init(key));
 
-  class MichiCustomElementResult extends (classToExtend as CustomElementConstructor) implements MichiCustomElement {
+  class MichiCustomElementResult
+    extends (classToExtend as CustomElementConstructor)
+    implements MichiCustomElement
+  {
     $michi: MichiCustomElement['$michi'] = {
-      store: store.apply(this, [{ state: { ...attributes, ...reflectedAttributes }, transactions }]) as Store<A & RA, T>,
-      cssStore: store.apply(this, [{ state: { ...cssVariables, ...reflectedCssVariables } }]) as Store<C & RC, EmptyObject>,
+      store: store.apply(this, [
+        { state: { ...attributes, ...reflectedAttributes }, transactions },
+      ]) as Store<A & RA, T>,
+      cssStore: store.apply(this, [
+        { state: { ...cssVariables, ...reflectedCssVariables } },
+      ]) as Store<C & RC, EmptyObject>,
       alreadyRendered: false,
       pendingTasks: 0,
       rerenderCallback: (propertyThatChanged) => {
         if (observe)
           Object.entries(observe).forEach(([key, observer]) => {
-            const matches = typeof propertyThatChanged === 'object' ? propertyThatChanged.find(x => x.startsWith(key)) : propertyThatChanged === key;
+            const matches =
+              typeof propertyThatChanged === 'object'
+                ? propertyThatChanged.find((x) => x.startsWith(key))
+                : propertyThatChanged === key;
 
             if (matches) {
               this.$michi.pendingTasks++;
@@ -91,27 +144,42 @@ export function createCustomElement<
       unSubscribeFromStore: new Array<() => void>(),
       idGen: undefined,
       internals: undefined,
-    }
-    connected
-    willMount
-    willUpdate
-    willConstruct
-    didConstruct
-    didMount
-    didUpdate
-    willReceiveAttribute
-    didUnmount
-    associatedCallback
-    disabledCallback
-    resetCallback
-    stateRestoreCallback
+    };
+    connected;
+    willMount;
+    willUpdate;
+    willConstruct;
+    didConstruct;
+    didMount;
+    didUpdate;
+    willReceiveAttribute;
+    didUnmount;
+    associatedCallback;
+    disabledCallback;
+    resetCallback;
+    stateRestoreCallback;
     render = render as MichiCustomElement['render'];
-    child<T extends (new () => any) | HTMLElement = HTMLElement>(selector: string) {
-      return getRootNode(this).querySelector(selector) as unknown as T extends (new () => any) ? InstanceType<T> : T;
+    child<T extends (new () => any) | HTMLElement = HTMLElement>(
+      selector: string,
+    ) {
+      return getRootNode(this).querySelector(
+        selector,
+      ) as unknown as T extends new () => any ? InstanceType<T> : T;
     }
     renderCallback() {
       const newChildren = this.render?.();
-      updateChildren(getMountPoint(this), [...this.$michi.styles.map(x => h.createElement(x, { $staticChildren: true })), newChildren], false, this);
+      updateChildren(
+        getMountPoint(this),
+        [
+          ...this.$michi.styles.map((x) =>
+            h.createElement(x, { $staticChildren: true }),
+          ),
+          newChildren,
+        ],
+        false,
+        false,
+        this,
+      );
     }
     rerender() {
       this.willUpdate?.();
@@ -130,51 +198,70 @@ export function createCustomElement<
       for (const key in this.$michi.cssStore.state) {
         definePropertyFromStore(this, key, this.$michi.cssStore);
       }
-      defineReflectedAttributes(this, this.$michi.cssStore, reflectedCssVariables);
+      defineReflectedAttributes(
+        this,
+        this.$michi.cssStore,
+        reflectedCssVariables,
+      );
       if (shadow) {
         const attachedShadow = this.attachShadow(shadow);
         this.$michi.shadowRoot = attachedShadow;
 
         if (cssVariables || reflectedCssVariables) {
-          const styleSheet = createCssVariables(':host', this.$michi.cssStore.state as CSSObject)
+          const styleSheet = createCssVariables(
+            ':host',
+            this.$michi.cssStore.state as CSSObject,
+          );
 
           addStylesheetsToDocumentOrShadowRoot(attachedShadow, styleSheet);
           this.$michi.cssStore.subscribe((propertiesThatChanged) => {
             updateStyleSheet(styleSheet, {
-              [':host']: cssVariablesFromCssObject(this.$michi.cssStore.state as CSSObject)
-            })
+              [':host']: cssVariablesFromCssObject(
+                this.$michi.cssStore.state as CSSObject,
+              ),
+            });
 
             if (observe)
               Object.entries(observe).forEach(([key, observer]) => {
-                const matches = propertiesThatChanged?.find(x => x.startsWith(key));
-                if (matches)
-                  observer?.call(this);
+                const matches = propertiesThatChanged?.find((x) =>
+                  x.startsWith(key),
+                );
+                if (matches) observer?.call(this);
               });
           });
         }
         if (computedStyleSheet) {
-          const callback: (() => Attributes.CSSProperties) = computedStyleSheet.bind(this);
+          const callback: () => CSSProperties = computedStyleSheet.bind(this);
           const styleSheet = createStyleSheet(callback(), [':host']);
           addStylesheetsToDocumentOrShadowRoot(attachedShadow, styleSheet);
 
           const updateStylesheetCallback = () => {
-            updateStyleSheet(styleSheet, callback(), [':host'])
+            updateStyleSheet(styleSheet, callback(), [':host']);
           };
           this.$michi.cssStore.subscribe(updateStylesheetCallback);
           this.$michi.store.subscribe(updateStylesheetCallback);
           if (subscribeTo)
-            Object.values(subscribeTo).forEach((store) => store.subscribe(updateStylesheetCallback));
+            Object.values(subscribeTo).forEach((store) =>
+              store.subscribe(updateStylesheetCallback),
+            );
         }
         if (adoptedStyleSheets)
-          addStylesheetsToDocumentOrShadowRoot(attachedShadow, ...adoptedStyleSheets);
+          addStylesheetsToDocumentOrShadowRoot(
+            attachedShadow,
+            ...adoptedStyleSheets,
+          );
       }
       if (lifecycle)
-        Object.entries(lifecycle).forEach(([key, value]) => this[key] = value);
+        Object.entries(lifecycle).forEach(
+          ([key, value]) => (this[key] = value),
+        );
 
-      this.willConstruct?.()
+      this.willConstruct?.();
 
       if (methods)
-        Object.entries(methods).forEach(([key, value]) => defineMethod(this, key, value));
+        Object.entries(methods).forEach(([key, value]) =>
+          defineMethod(this, key, value),
+        );
 
       for (const key in this.$michi.store.transactions) {
         defineTransactionFromStore(this, key);
@@ -184,28 +271,36 @@ export function createCustomElement<
       }
       defineReflectedAttributes(this, this.$michi.store, reflectedAttributes);
       if (events)
-        Object.entries(events).forEach(([key, value]) => defineEvent(this, key, value));
+        Object.entries(events).forEach(([key, value]) =>
+          defineEvent(this, key, value),
+        );
       if (getNonObservedAttributes) {
         const nonObservedAttributes = getNonObservedAttributes.apply(this);
-        Object.entries(nonObservedAttributes).forEach(([key, value]) => this[key] = value);
+        Object.entries(nonObservedAttributes).forEach(
+          ([key, value]) => (this[key] = value),
+        );
       }
       if (subscribeTo)
         Object.entries(subscribeTo).forEach(([key, value]) => {
-          const subscribeFunction = (propertiesThatChanged?: string[] | unknown) => {
+          const subscribeFunction = (
+            propertiesThatChanged?: string[] | unknown,
+          ) => {
             if (propertiesThatChanged && Array.isArray(propertiesThatChanged))
-              this.$michi.rerenderCallback(propertiesThatChanged.map(x => `${key}.${x}`));//TODO: ?
-            else
-              this.$michi.rerenderCallback(key);
+              this.$michi.rerenderCallback(
+                propertiesThatChanged.map((x) => `${key}.${x}`),
+              ); //TODO: ?
+            else this.$michi.rerenderCallback(key);
           };
           value.subscribe(subscribeFunction);
           if (value.unsubscribe)
-            this.$michi.unSubscribeFromStore.push(() => value.unsubscribe?.(subscribeFunction));
+            this.$michi.unSubscribeFromStore.push(() =>
+              value.unsubscribe?.(subscribeFunction),
+            );
         });
 
-      if (formAssociated)
-        this.$michi.internals = this.attachInternals();
+      if (formAssociated) this.$michi.internals = this.attachInternals();
 
-      this.didConstruct?.()
+      this.didConstruct?.();
     }
 
     attributeChangedCallback(name: string, oldValue, newValue) {
@@ -218,15 +313,26 @@ export function createCustomElement<
         } catch {
           oldValueCopy = this[name];
         }
-        if (parsedNewValue != oldValueCopy && !deepEqual(oldValueCopy, parsedNewValue))//Prevents type changes - ex: changing from oldValue="text" to newValue=123 on reflected attributes
+        if (
+          parsedNewValue != oldValueCopy &&
+          !deepEqual(oldValueCopy, parsedNewValue)
+        )
+          //Prevents type changes - ex: changing from oldValue="text" to newValue=123 on reflected attributes
           this[name] = parsedNewValue;
       }
     }
 
-    static get extends() { return extendsTag; }
-    static get tag() { return tag; }
+    static get extends() {
+      return extendsTag;
+    }
+    static get tag() {
+      return tag;
+    }
     static get observedAttributes() {
-      return Object.keys({ ...reflectedAttributes, ...reflectedCssVariables }).map(key => formatToKebabCase(key));
+      return Object.keys({
+        ...reflectedAttributes,
+        ...reflectedCssVariables,
+      }).map((key) => formatToKebabCase(key));
     }
 
     connectedCallback() {
@@ -237,20 +343,25 @@ export function createCustomElement<
           });
 
           this.$michi.cssStore.subscribe((propertiesThatChanged) => {
-            propertiesThatChanged?.forEach(key => {
-              setStyleProperty(this, `--${key}`, this.$michi.cssStore.state[key]);
-            })
+            propertiesThatChanged?.forEach((key) => {
+              setStyleProperty(
+                this,
+                `--${key}`,
+                this.$michi.cssStore.state[key],
+              );
+            });
 
             if (observe)
               Object.entries(observe).forEach(([key, observer]) => {
-                const matches = propertiesThatChanged?.find(x => x.startsWith(key));
-                if (matches)
-                  observer?.call(this);
+                const matches = propertiesThatChanged?.find((x) =>
+                  x.startsWith(key),
+                );
+                if (matches) observer?.call(this);
               });
           });
         }
         if (computedStyleSheet) {
-          const callback: (() => Attributes.CSSProperties) = computedStyleSheet.bind(this);
+          const callback: () => CSSProperties = computedStyleSheet.bind(this);
 
           const updateStylesheetCallback = () => {
             Object.entries(callback()).forEach(([key, value]) => {
@@ -261,10 +372,15 @@ export function createCustomElement<
           this.$michi.cssStore.subscribe(updateStylesheetCallback);
           this.$michi.store.subscribe(updateStylesheetCallback);
           if (subscribeTo)
-            Object.values(subscribeTo).forEach((store) => store.subscribe(updateStylesheetCallback));
+            Object.values(subscribeTo).forEach((store) =>
+              store.subscribe(updateStylesheetCallback),
+            );
         }
         if (adoptedStyleSheets)
-          addStylesheetsToDocumentOrShadowRoot(this.getRootNode() as unknown as DocumentOrShadowRoot, ...adoptedStyleSheets);
+          addStylesheetsToDocumentOrShadowRoot(
+            this.getRootNode() as unknown as DocumentOrShadowRoot,
+            ...adoptedStyleSheets,
+          );
       }
       this.connected?.();
       setReflectedAttributes(this, MichiCustomElementResult.observedAttributes);
@@ -274,8 +390,7 @@ export function createCustomElement<
           this.$michi.fakeRoot = document.createElement('michi-fragment');
           this.$michi.fakeRoot.$ignore = true;
           mountPoint.prepend(this.$michi.fakeRoot);
-        } else if (!shadow)
-          this.$doNotTouchChildren = true;
+        } else if (!shadow) this.$doNotTouchChildren = true;
         this.willMount?.();
         this.renderCallback();
         this.$michi.alreadyRendered = true;
@@ -313,12 +428,24 @@ export function createCustomElement<
     // The following properties and methods aren't strictly required,
     // but browser-level form controls provide them. Providing them helps
     // ensure consistency with browser-provided controls.
-    get form() { return this.$michi.internals?.form; }
-    get name() { return this.getAttribute('name'); }
-    get type() { return this.localName; }
-    get validity() { return this.$michi.internals?.validity; }
-    get validationMessage() { return this.$michi.internals?.validationMessage; }
-    get willValidate() { return this.$michi.internals?.willValidate; }
+    get form() {
+      return this.$michi.internals?.form;
+    }
+    get name() {
+      return this.getAttribute('name');
+    }
+    get type() {
+      return this.localName;
+    }
+    get validity() {
+      return this.$michi.internals?.validity;
+    }
+    get validationMessage() {
+      return this.$michi.internals?.validationMessage;
+    }
+    get willValidate() {
+      return this.$michi.internals?.willValidate;
+    }
 
     checkValidity() {
       return this.$michi.internals?.checkValidity() ?? false;
@@ -330,13 +457,15 @@ export function createCustomElement<
 
   try {
     if (extendsTag) {
-      window.customElements.define(tag, MichiCustomElementResult, { extends: extendsTag });
+      window.customElements.define(tag, MichiCustomElementResult, {
+        extends: extendsTag,
+      });
     } else {
       window.customElements.define(tag, MichiCustomElementResult);
     }
   } catch {
     // In some cases it can happen that a library A imports component X and a library B that consumes A also imports component X,
-    // in which case the application could crash. 
+    // in which case the application could crash.
     // To avoid it I catch the exception. In these cases, the first component to be registered will be taken.
   }
 

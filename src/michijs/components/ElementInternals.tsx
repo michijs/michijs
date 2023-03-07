@@ -1,38 +1,45 @@
-import type { Attributes } from '@michijs/htmltype';
+import type { AllAttributes } from '@michijs/htmltype';
 import type { FC } from '../types';
 import { h } from '../h';
 import { Fragment } from '.';
 import { setAttribute } from '../DOM/attributes/setAttribute';
 import { isMichiCustomElement } from '../typeWards/isMichiCustomElement';
 
-export type ElementInternalsProps =
-  {
-    /**Form controls usually expose a "value" property */
-    formValue?: Parameters<ElementInternals['setFormValue']>[0];
-    /**A validation message to show */
-    errorMessage?: Parameters<ElementInternals['setValidity']>[1];
-    validityStateFlags?: ValidityStateFlags;
-    tabIndex?: number;
-    children?: JSX.Element;
-  } &
-  Partial<
-    ARIAMixin
-    & Attributes.GetRoles<Attributes.AllRoles>
-  >
+export type ElementInternalsProps = {
+  /**Form controls usually expose a "value" property */
+  formValue?: Parameters<ElementInternals['setFormValue']>[0];
+  /**A validation message to show */
+  errorMessage?: Parameters<ElementInternals['setValidity']>[1];
+  validityStateFlags?: ValidityStateFlags;
+  tabIndex?: number;
+  children?: JSX.Element;
+  role?: AllAttributes['role'];
+} & Partial<ARIAMixin>;
 
 /**
  * It allows to:
  * - Make the element accessible to the browser
- * - Access element internals 
+ * - Access element internals
  * - Validate and assign values to forms
  */
-export const ElementInternals: FC<ElementInternalsProps> = ({ children, errorMessage, formValue, tabIndex = 0, validityStateFlags = { customError: true }, ...aria }, self) => {
-  if (self && isMichiCustomElement(self) &&self.$michi.internals) {
+export const ElementInternals: FC<ElementInternalsProps> = (
+  {
+    children,
+    errorMessage,
+    formValue,
+    tabIndex = 0,
+    validityStateFlags = { customError: true },
+    ...aria
+  },
+  self,
+) => {
+  if (self && isMichiCustomElement(self) && self.$michi.internals) {
     if (errorMessage)
       self.$michi.internals.setValidity?.(validityStateFlags, errorMessage);
-    else
-      self.$michi.internals.setValidity?.({});
-    self.$michi.internals.setFormValue?.(formValue as Parameters<ElementInternals['setFormValue']>[0]);
+    else self.$michi.internals.setValidity?.({});
+    self.$michi.internals.setFormValue?.(
+      formValue as Parameters<ElementInternals['setFormValue']>[0],
+    );
 
     Object.entries({ tabIndex, ...aria }).forEach(([key, value]) => {
       if (self.$michi.internals)
@@ -40,11 +47,14 @@ export const ElementInternals: FC<ElementInternalsProps> = ({ children, errorMes
           if (value !== self.$michi.internals[key])
             self.$michi.internals[key] = value;
         } else if (key in self) {
-          if (self[key] !== value)
-            self[key] = value;
+          if (self[key] !== value) self[key] = value;
         } else {
           const ariaSplitted = key.split('aria');
-          setAttribute(self, ariaSplitted.map(x => x.toLowerCase()).join('-'), value);
+          setAttribute(
+            self,
+            ariaSplitted.map((x) => x.toLowerCase()).join('-'),
+            value,
+          );
         }
     });
   }

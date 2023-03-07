@@ -6,5 +6,5 @@ export const CommentFactory: ElementFactory = {
   },
   create() {
     return document.createComment('');
-  }
+  },
 };

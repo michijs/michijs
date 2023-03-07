@@ -3,19 +3,23 @@ import { counterStyle } from './shared/counterStyle';
 
 export const SimpleCounter = createCustomElement('simple-counter', {
   reflectedAttributes: {
-    count: 0
+    count: 0,
   },
   methods: {
-    decrementCount() { this.count--; },
-    incrementCount() { this.count++; },
+    decrementCount() {
+      this.count--;
+    },
+    incrementCount() {
+      this.count++;
+    },
   },
   events: {
-    countChanged: new EventDispatcher<number>()
+    countChanged: new EventDispatcher<number>(),
   },
   observe: {
     count() {
       this.countChanged(this.count);
-    }
+    },
   },
   adoptedStyleSheets: [counterStyle],
   render() {
@@ -26,5 +30,5 @@ export const SimpleCounter = createCustomElement('simple-counter', {
         <button onpointerup={this.incrementCount}>+</button>
       </>
     );
-  }
+  },
 });

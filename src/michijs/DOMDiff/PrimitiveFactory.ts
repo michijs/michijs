@@ -8,7 +8,6 @@ export const PrimitiveFactory: Required<ElementFactory> = {
     return document.createTextNode(jsx.toString());
   },
   update(jsx: NonNullablePrimitiveType, el: Element) {
-    if (el.textContent !== jsx.toString())
-      el.textContent = jsx.toString();
-  }
+    if (el.textContent !== jsx.toString()) el.textContent = jsx.toString();
+  },
 };

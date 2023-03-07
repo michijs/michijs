@@ -14,22 +14,26 @@ const style = css`
 
 export const ColorSelector = createCustomElement('color-selector', {
   reflectedCssVariables: {
-    color: '#ff0000' as `#${string}`
+    color: '#ff0000' as `#${string}`,
   },
   computedStyleSheet() {
     return {
       color: 'white',
-      '--example': this.color === '#ff0000' ? '"red"' : '"not red"'
-    }
+      '--example': this.color === '#ff0000' ? '"red"' : '"not red"',
+    };
   },
   adoptedStyleSheets: [style],
   render() {
     return (
       <span>
-        <input type="color" value={this.color} oninput={(ev) => {
-          this.color = ev.target?.value as `#${string}`;
-        }} />
-      </span >
+        <input
+          type="color"
+          value={this.color}
+          oninput={(ev) => {
+            this.color = ev.target?.value as `#${string}`;
+          }}
+        />
+      </span>
     );
-  }
+  },
 });

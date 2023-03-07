@@ -1,12 +1,14 @@
-export function setAttribute(element: Element | HTMLElement, key: string, newValue: any) {
+export function setAttribute(
+  element: Element | HTMLElement,
+  key: string,
+  newValue: any,
+) {
   switch (true) {
     case newValue === null:
     case newValue === undefined:
     case typeof newValue === 'boolean': {
-      if (newValue)
-        element.setAttribute(key, '');
-      else
-        element.removeAttribute(key);
+      if (newValue) element.setAttribute(key, '');
+      else element.removeAttribute(key);
       break;
     }
     case typeof newValue === 'object': {

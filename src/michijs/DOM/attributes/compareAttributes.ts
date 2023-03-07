@@ -8,7 +8,6 @@ export function compareAttributes(el: Element, name: string, value: unknown) {
     return el.hasAttribute(name);
   } else if (value === 'true' || value === 'false') {
     return el.getAttribute(name) === value;
-  } 
+  }
   return deepEqual(getAttributeValue(el.getAttribute(name)), value);
-  
 }

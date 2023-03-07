@@ -1,25 +1,30 @@
 import { observable, store } from '../hooks';
 import { ObservableLike, ObserverCallback, Store } from '../types';
 
-type StringObject = {
-  [key: string]: string | StringObject | undefined | null | number
-} | (string | StringObject | undefined | null | number)[]
+type StringObject =
+  | {
+      [key: string]: string | StringObject | undefined | null | number;
+    }
+  | (string | StringObject | undefined | null | number)[];
 
 export type Translation<T extends StringObject, K extends string> = {
-  [key in K]: T | (() => Promise<{ default: T }>)
-}
+  [key in K]: T | (() => Promise<{ default: T }>);
+};
 export interface TranslationItem<T extends StringObject, K extends string> {
-  translation: Translation<T, K>,
-  store: CreateTranslationResultStore<T>
+  translation: Translation<T, K>;
+  store: CreateTranslationResultStore<T>;
 }
-export type CreateTranslationResultStore<T extends StringObject> = Store<{
-  t: T;
-}, {
-  updateTranslation(newTranslation: T)
-}>;
+export type CreateTranslationResultStore<T extends StringObject> = Store<
+  {
+    t: T;
+  },
+  {
+    updateTranslation(newTranslation: T);
+  }
+>;
 
 export class I18n<K extends string> implements ObservableLike {
-  private translations = new Array<TranslationItem<StringObject, string>>()
+  private translations = new Array<TranslationItem<StringObject, string>>();
   private observer = observable();
   private _currentLanguage: K | undefined;
   private isUsingSystemLanguage = true;
@@ -27,14 +32,14 @@ export class I18n<K extends string> implements ObservableLike {
   constructor(initialLanguage?: string | null) {
     if (initialLanguage) {
       this._currentLanguage = initialLanguage as K;
-      this.isUsingSystemLanguage = false
+      this.isUsingSystemLanguage = false;
     }
 
     window.addEventListener('languagechange', () => {
       if (!this.isUsingSystemLanguage) {
         this.setLanguage(navigator.language as K);
       }
-    })
+    });
   }
   subscribe(observer: ObserverCallback<any>): void {
     return this.observer.subscribe(observer);
@@ -44,44 +49,50 @@ export class I18n<K extends string> implements ObservableLike {
   }
 
   get currentLanguage(): K | undefined {
-    return this._currentLanguage
+    return this._currentLanguage;
   }
   set currentLanguage(newLang: K | undefined) {
     this.setLanguage(newLang);
-    this.isUsingSystemLanguage = false
+    this.isUsingSystemLanguage = false;
   }
 
   createTranslation<T extends StringObject>(translation: Translation<T, K>) {
     const translationResult = store({
       state: {
-        t: {} as T
+        t: {} as T,
       },
       transactions: {
         updateTranslation(newTranslation: T) {
           Object.entries(newTranslation).forEach(([key, value]) => {
-            translationResult.state.t[key] = value
+            translationResult.state.t[key] = value;
           });
-        }
-      }
+        },
+      },
     });
     const translationItem = {
       translation,
-      store: translationResult
+      store: translationResult,
     };
     this.translations.push(translationItem);
-    this.updateTranslation<T>(translationItem)
+    this.updateTranslation<T>(translationItem);
     return { ...translationResult, t: translationResult.state.t };
   }
 
   private updateTranslation<T extends StringObject>({
     translation,
-    store
+    store,
   }: TranslationItem<T, K>) {
     const translationKeys = Object.keys(translation) as K[];
-    let key: K | undefined = this.currentLanguage ? translationKeys.find((key) => key === this.currentLanguage) : undefined;
-    if (!key) { // It does not have the current language - Fallback to next language in navigator.languages
-      key = navigator.languages.find((key) => translationKeys.includes(key as K)) as K;
-      if (!key) { // Does not include any browser language - I use the latest language of the object
+    let key: K | undefined = this.currentLanguage
+      ? translationKeys.find((key) => key === this.currentLanguage)
+      : undefined;
+    if (!key) {
+      // It does not have the current language - Fallback to next language in navigator.languages
+      key = navigator.languages.find((key) =>
+        translationKeys.includes(key as K),
+      ) as K;
+      if (!key) {
+        // Does not include any browser language - I use the latest language of the object
         key = translationKeys[translationKeys.length - 1];
       }
     }
@@ -89,12 +100,10 @@ export class I18n<K extends string> implements ObservableLike {
     this._currentLanguage = key;
 
     if (typeof value === 'function')
-      value().then(res => {
-        store.transactions.updateTranslation(res.default)
+      value().then((res) => {
+        store.transactions.updateTranslation(res.default);
       });
-    else
-      store.transactions.updateTranslation(value as T)
-
+    else store.transactions.updateTranslation(value as T);
   }
 
   private setLanguage(newLang: K | undefined) {
@@ -109,6 +118,6 @@ export class I18n<K extends string> implements ObservableLike {
 
   useSystemLanguage() {
     this.setLanguage(navigator.language as K);
-    this.isUsingSystemLanguage = true
+    this.isUsingSystemLanguage = true;
   }
 }

@@ -1,9 +1,8 @@
 import { h } from '../h';
 import { update } from './update';
-jest.mock('../components/Router', () => ({}))
+jest.mock('../components/Router', () => ({}));
 
 describe('Array JSX Element Update', () => {
-
   const items = ['0', '1', '2', '3'];
   const testResultElement = document.createElement('div');
   const testResultElementContent = document.createTextNode('0');
@@ -15,7 +14,12 @@ describe('Array JSX Element Update', () => {
   const testResultElement3 = testResultElement.cloneNode(true);
   testResultElement3.childNodes[0].textContent = '3';
   const testResult = document.createElement('michi-list');
-  testResult.append(testResultElement, testResultElement1, testResultElement2, testResultElement3);
+  testResult.append(
+    testResultElement,
+    testResultElement1,
+    testResultElement2,
+    testResultElement3,
+  );
   const testElement = document.createElement('michi-list');
   //   let testElementChild;
   //   const util = {
@@ -32,9 +36,10 @@ describe('Array JSX Element Update', () => {
 
   describe('Updating with an array', () => {
     beforeAll(() => {
-      update(testElement, (
-        items.map(x => <div key={x}>{x}</div>)
-      ));
+      update(
+        testElement,
+        items.map((x) => <div key={x}>{x}</div>),
+      );
     });
     it('must create element 1 time', () => {
       expect(spyCreateElement).toBeCalledTimes(1);
@@ -55,9 +60,10 @@ describe('Array JSX Element Update', () => {
       spyRemoveNode.mockClear();
       spyCreateElement.mockClear();
       spyCloneNode.mockClear();
-      update(testElement, (
-        items.reverse().map(x => <div key={x}>{x}</div>)
-      ));
+      update(
+        testElement,
+        items.reverse().map((x) => <div key={x}>{x}</div>),
+      );
     });
     it('must create element 0 times', () => {
       expect(spyCreateElement).toBeCalledTimes(0);
@@ -75,13 +81,19 @@ describe('Array JSX Element Update', () => {
   describe('Swapping two elements on the array', () => {
     beforeAll(() => {
       [items[0], items[3]] = [items[3], items[0]];
-      testResult.append(testResult.childNodes.item(3), testResult.childNodes.item(1), testResult.childNodes.item(2), testResult.childNodes.item(0));
+      testResult.append(
+        testResult.childNodes.item(3),
+        testResult.childNodes.item(1),
+        testResult.childNodes.item(2),
+        testResult.childNodes.item(0),
+      );
       spyRemoveNode.mockClear();
       spyCreateElement.mockClear();
       spyCloneNode.mockClear();
-      update(testElement, (
-        items.map(x => <div key={x}>{x}</div>)
-      ));
+      update(
+        testElement,
+        items.map((x) => <div key={x}>{x}</div>),
+      );
     });
     it('must create element 0 times', () => {
       expect(spyCreateElement).toBeCalledTimes(0);
@@ -105,9 +117,10 @@ describe('Array JSX Element Update', () => {
       spyRemoveNode.mockClear();
       spyCreateElement.mockClear();
       spyCloneNode.mockClear();
-      update(testElement, (
-        items.map(x => <div key={x}>{x}</div>)
-      ));
+      update(
+        testElement,
+        items.map((x) => <div key={x}>{x}</div>),
+      );
     });
     it('must create element 0 times', () => {
       expect(spyCreateElement).toBeCalledTimes(0);

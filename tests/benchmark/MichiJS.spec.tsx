@@ -9,12 +9,12 @@ describe('Performance tests - MichiJS', () => {
     page = await browser.newPage();
     jest.setTimeout(30000);
     await page.goto('http://localhost:3000', {
-      waitUntil: 'domcontentloaded'
+      waitUntil: 'domcontentloaded',
     });
   });
   afterEach(async () => {
     await page.reload({
-      waitUntil: 'domcontentloaded'
+      waitUntil: 'domcontentloaded',
     });
   });
 
@@ -31,7 +31,8 @@ describe('Performance tests - MichiJS', () => {
       new Map<string, Map<Result, number>>([
         [new Date().getTime().toString(), await results],
         [
-          '1.0.0', new Map([
+          '1.0.0',
+          new Map([
             ['create1000Rows', 207.09],
             ['replaceAllRows', 185.54],
             ['partialUpdate', 44.55],
@@ -40,11 +41,12 @@ describe('Performance tests - MichiJS', () => {
             ['removeRow', 49.16],
             ['createManyRows', 1639.74],
             ['appendRowsToLargeTable', 267.65],
-            ['clearRows', 42.65]
+            ['clearRows', 42.65],
           ]),
         ],
         [
-          'legacy - 2.0.0', new Map([
+          'legacy - 2.0.0',
+          new Map([
             ['create1000Rows', 251.1],
             ['replaceAllRows', 249.82],
             ['partialUpdate', 84.96],
@@ -53,11 +55,12 @@ describe('Performance tests - MichiJS', () => {
             ['removeRow', 80.18],
             ['createManyRows', 1782.93],
             ['appendRowsToLargeTable', 412.64],
-            ['clearRows', 114.61]
+            ['clearRows', 114.61],
           ]),
         ],
         [
-          'legacy - 1.2.6', new Map([
+          'legacy - 1.2.6',
+          new Map([
             ['create1000Rows', 628.04],
             ['replaceAllRows', 1338.53],
             ['partialUpdate', 89.95],
@@ -66,10 +69,10 @@ describe('Performance tests - MichiJS', () => {
             ['removeRow', 56.07],
             ['createManyRows', 7013.5],
             ['appendRowsToLargeTable', 1579.74],
-            ['clearRows', 67.7]
-          ])
-        ]
-      ])
+            ['clearRows', 67.7],
+          ]),
+        ],
+      ]),
     ).toMatchSnapshot('MichiJS Benchmarks');
     await browser.close();
   });

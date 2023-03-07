@@ -1,7 +1,7 @@
 import { ElementHandle, Page } from 'puppeteer';
 
 export type Result =
-  'create1000Rows'
+  | 'create1000Rows'
   | 'replaceAllRows'
   | 'partialUpdate'
   | 'selectRow'
@@ -9,20 +9,17 @@ export type Result =
   | 'removeRow'
   | 'createManyRows'
   | 'appendRowsToLargeTable'
-  | 'clearRows'
-
+  | 'clearRows';
 
 const getRowId = async (element: ElementHandle<Element>) => {
   const td = await element.$('td');
-  if (!td)
-    throw 'td not found'
+  if (!td) throw 'td not found';
   const textContentProperty = await td.getProperty('textContent');
   const textContent = await textContentProperty.jsonValue();
   return Number(textContent);
 };
 
 export async function makePerformanceTests(page: () => Page) {
-
   const create1000Rows = async () => {
     await page().click('#run');
   };
@@ -41,8 +38,7 @@ export async function makePerformanceTests(page: () => Page) {
   const select = async (index: number) => {
     const tableBody = await getTableBody();
     const linkToClick = await tableBody[index].$('a');
-    if (!linkToClick)
-      throw 'linkToClick not found'
+    if (!linkToClick) throw 'linkToClick not found';
     await linkToClick.click();
   };
   const deleteRow = async (index: number) => {
@@ -58,7 +54,10 @@ export async function makePerformanceTests(page: () => Page) {
   };
 
   const results = new Map<Result, number>();
-  const saveResult = async (key: Result, functionToMeasure: () => Promise<void>) => {
+  const saveResult = async (
+    key: Result,
+    functionToMeasure: () => Promise<void>,
+  ) => {
     const t0 = (await page().metrics()).Timestamp!;
     await functionToMeasure();
     const t1 = (await page().metrics()).Timestamp!;

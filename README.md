@@ -410,7 +410,7 @@ el.className = 'test';
 In MichiJS you have the freedom to use both attributes and properties and the result will be the same:
 ```jsx
 // Using properties
-() => <div _className='test'></div>
+() => <div _={{className: 'test'}}></div>
 // Using attributes
 () => <div class='test'></div>
 ```

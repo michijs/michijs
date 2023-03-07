@@ -18,7 +18,7 @@ export const getInitialSearchParamsValue = () => {
 let isUpdating = false;
 export const searchParams = observe({
   item: getInitialSearchParamsValue(),
-  onChange: key => {
+  onChange: (key) => {
     if (!isUpdating && key) {
       const newUrl = new URL(location.href);
       const splittedKey = key.split('.')[1];
@@ -27,13 +27,13 @@ export const searchParams = observe({
     }
   },
   shouldValidatePropertyChange: () => true,
-  propertyPath: ''
+  propertyPath: '',
 });
 const updateSearchParams = () => {
   isUpdating = true;
   // TODO: find a better way to do this
   const newInitialValue = getInitialSearchParamsValue();
-  Object.keys(searchParams).forEach(key => {
+  Object.keys(searchParams).forEach((key) => {
     delete searchParams[key];
   });
   Object.entries(newInitialValue).forEach(([key, newValue]) => {

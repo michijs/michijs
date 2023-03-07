@@ -3,8 +3,8 @@ import { createCustomElement } from '../customElements/createCustomElement';
 
 const AsyncComponentStyleSheet = createStyleSheet({
   ':host': {
-    display: 'contents'
-  }
+    display: 'contents',
+  },
 });
 
 /**Create a component whose content will load after the promise ends. In the meantime you can choose to show a load component or not show anything. */
@@ -13,7 +13,9 @@ export const AsyncComponent = createCustomElement('michi-async-component', {
     /** For internal use only - The component currently showing */
     currentComponent: null as Function | null,
     /** The promise to wait */
-    promise: undefined as (() => Promise<{ [key: string]: JSX.Element }>) | undefined,
+    promise: undefined as
+      | (() => Promise<{ [key: string]: JSX.Element }>)
+      | undefined,
     /** The component key (by default is default)*/
     key: 'default',
     /**The component to display while the promise is loading */
@@ -22,7 +24,7 @@ export const AsyncComponent = createCustomElement('michi-async-component', {
   lifecycle: {
     willMount() {
       this.promiseChangeCallback();
-    }
+    },
   },
   methods: {
     async promiseChangeCallback() {
@@ -34,18 +36,15 @@ export const AsyncComponent = createCustomElement('michi-async-component', {
         return this.loadingComponent;
 
       return this.currentComponent;
-
-    }
+    },
   },
   adoptedStyleSheets: [AsyncComponentStyleSheet],
   observe: {
     promise() {
       this.promiseChangeCallback();
-    }
+    },
   },
   render() {
-    return (
-      this.getCurrentComponent()
-    );
-  }
+    return this.getCurrentComponent();
+  },
 });

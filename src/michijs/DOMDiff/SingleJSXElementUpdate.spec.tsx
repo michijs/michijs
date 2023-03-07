@@ -6,16 +6,15 @@ const buttonLabel2 = 'test button 2';
 const className = 'test classname';
 const id = 'test id';
 
-jest.mock('../components/Router', () => ({}))
+jest.mock('../components/Router', () => ({}));
 
 describe('Single JSX Element Update', () => {
-
   const testElement = document.createElement('div');
   let testElementChild;
   const util = {
     onCreatedCallback: (el) => {
       testElementChild = el;
-    }
+    },
   };
   const spySetAttribute = jest.spyOn(testElement, 'setAttribute');
   const spyRemoveAttribute = jest.spyOn(testElement, 'removeAttribute');
@@ -33,14 +32,15 @@ describe('Single JSX Element Update', () => {
 
   describe('Updating with a jsx', () => {
     beforeAll(() => {
-      update(testElement, (
-        <div _id={id} class={className}>
+      update(
+        testElement,
+        <div _={{ id }} class={className}>
           <button hidden $oncreated={util.onCreatedCallback}>
             {buttonLabel}
           </button>
           <span />
-        </div>
-      ));
+        </div>,
+      );
     });
     it('must call setAttribute a single time', () => {
       expect(spySetAttribute).toBeCalledTimes(1);
@@ -58,14 +58,15 @@ describe('Single JSX Element Update', () => {
   });
   describe('Updating again with same jsx', () => {
     beforeAll(() => {
-      update(testElement, (
-        <div _id={id} class={className}>
+      update(
+        testElement,
+        <div _={{ id }} class={className}>
           <button hidden $oncreated={util.onCreatedCallback}>
             {buttonLabel}
           </button>
           <span />
-        </div>
-      ));
+        </div>,
+      );
     });
     it('must match jsx', () => {
       expect(testElement).toEqual(testResult);
@@ -87,14 +88,13 @@ describe('Single JSX Element Update', () => {
     let spyRemoveAttributeChild;
     beforeAll(() => {
       spyRemoveAttributeChild = jest.spyOn(testElementChild, 'removeAttribute');
-      update(testElement, (
-        <div _id={id} class={undefined}>
-          <button hidden={false}>
-            {buttonLabel}
-          </button>
+      update(
+        testElement,
+        <div _={{ id }} class={undefined}>
+          <button hidden={false}>{buttonLabel}</button>
           <span />
-        </div>
-      ));
+        </div>,
+      );
       testResult.removeAttribute('class');
       // testResult.removeAttribute('id');
       testResultChild.removeAttribute('hidden');
@@ -123,14 +123,13 @@ describe('Single JSX Element Update', () => {
   });
   describe('Updating a label', () => {
     beforeAll(() => {
-      update(testElement, (
-        <div _id={id} class={undefined}>
-          <button hidden={false}>
-            {buttonLabel2}
-          </button>
+      update(
+        testElement,
+        <div _={{ id }} class={undefined}>
+          <button hidden={false}>{buttonLabel2}</button>
           <span />
-        </div>
-      ));
+        </div>,
+      );
       testResultChild.textContent = buttonLabel2;
     });
     it('must match jsx', () => {
@@ -139,12 +138,13 @@ describe('Single JSX Element Update', () => {
   });
   describe('Removing a single child', () => {
     beforeAll(() => {
-      update(testElement, (
-        <div _id={id} class={undefined}>
+      update(
+        testElement,
+        <div _={{ id }} class={undefined}>
           {undefined}
           <span />
-        </div>
-      ));
+        </div>,
+      );
       // undefined jsx must result on comments to keep the track of positions
       testResultChild.replaceWith(document.createComment(''));
     });
@@ -154,9 +154,7 @@ describe('Single JSX Element Update', () => {
   });
   describe('Removing every child', () => {
     beforeAll(() => {
-      update(testElement, (
-        <div _id={id} class={undefined} />
-      ));
+      update(testElement, <div _={{ id }} class={undefined} />);
       testResult.textContent = '';
     });
     it('must match jsx', () => {

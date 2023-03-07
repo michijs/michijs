@@ -3,16 +3,14 @@ import { bindFunction } from '../utils/bindFunction';
 Element.prototype.$setEventListeners = function (this: Element, src, events) {
   // New events
   if (events.size > 0) {
-    if (!this.$eventListenerList)
-      this.$eventListenerList = new Map();
-    // Updating 
+    if (!this.$eventListenerList) this.$eventListenerList = new Map();
+    // Updating
     if (this.$eventListenerList.has(src)) {
       const currentMap = this.$eventListenerList.get(src);
       events.forEach((newEvent, key) => {
         const originalEvent = currentMap?.get(key);
         if (originalEvent !== newEvent) {
-          if (originalEvent)
-            this.removeEventListener(key, originalEvent);
+          if (originalEvent) this.removeEventListener(key, originalEvent);
           this.addEventListener(key, newEvent);
           currentMap?.set(key, newEvent);
         }
@@ -26,8 +24,8 @@ Element.prototype.$setEventListeners = function (this: Element, src, events) {
           }
         });
       }
-
-    } else {//Add new events
+    } else {
+      //Add new events
       events.forEach((newEvent, key) => {
         const bindedEvent = bindFunction(src, newEvent);
         this.addEventListener(key, bindedEvent);
@@ -36,7 +34,9 @@ Element.prototype.$setEventListeners = function (this: Element, src, events) {
     }
     // Remove all events
   } else if (this.$eventListenerList?.has(src)) {
-    this.$eventListenerList?.get(src)?.forEach((x, key) => this.removeEventListener(key, x));
+    this.$eventListenerList
+      ?.get(src)
+      ?.forEach((x, key) => this.removeEventListener(key, x));
     this.$eventListenerList.delete(src);
   }
 };

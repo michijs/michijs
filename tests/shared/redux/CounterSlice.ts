@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  count: 0
+  count: 0,
 };
 
 const CounterSlice = createSlice({
@@ -14,7 +14,7 @@ const CounterSlice = createSlice({
     decrement(state) {
       return { count: state.count - 1 };
     },
-  }
+  },
 });
 
 const { reducer, actions } = CounterSlice;

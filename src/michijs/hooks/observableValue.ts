@@ -7,12 +7,10 @@ export function observableValue<T = unknown>(initialValue: T) {
   const state = observe<{ value: T } & ObservableLike<string>>({
     item: { value: initialValue, ...observableProps },
     onChange: (propertyPath) => {
-      if (propertyPath)
-        notify(propertyPath);
+      if (propertyPath) notify(propertyPath);
     },
     shouldValidatePropertyChange: () => true,
-    propertyPath: ''
+    propertyPath: '',
   });
   return state;
 }
-
