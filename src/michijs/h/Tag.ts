@@ -9,7 +9,7 @@ export type DomInterface<E extends object> = {
   [K in StringKeyOf<E> as `_${K}`]: E[K];
 };
 
-export type Tag<E> = {
+export type Tag<E, T> = T & {
   /**
    * Children are created but not updated
    */

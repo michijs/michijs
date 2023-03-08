@@ -350,12 +350,11 @@ export type Self<
     Pick<AllAttributes, 'name'>,
 > = {
   new (
-    props: Omit<
-      HTMLElements[EXTA extends undefined ? 'div' : EXTA],
-      keyof Attrs
-    > &
-      Partial<Attrs> &
-      Tag<S>,
+    props: Tag<
+      S,
+      Omit<HTMLElements[EXTA extends undefined ? 'div' : EXTA], keyof Attrs> &
+        Partial<Attrs>
+    >,
   ): S;
 };
 
