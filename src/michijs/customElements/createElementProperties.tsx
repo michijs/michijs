@@ -5,7 +5,7 @@ import {
   KebabCase,
   MethodsType,
   MichiElementProperties,
-  Self,
+  CustomElementClass,
   SubscribeToType,
   CssVariablesType,
   ReflectedAttributesType,
@@ -53,7 +53,9 @@ export function createElementProperties<
     FRC
   > &
     ThisType<
-      InstanceType<Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, undefined, FRC>>
+      InstanceType<
+        CustomElementClass<RC, C, M, T, E, A, RA, NOA, EL, FRA, undefined, FRC>
+      >
     > = {},
 ) {
   return elementProperties;

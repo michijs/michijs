@@ -10,8 +10,8 @@ declare global {
     }
     interface IntrinsicElements
       extends HTMLElements,
-      MathMLElements,
-      SVGElements {
+        MathMLElements,
+        SVGElements {
       a: Tag<HTMLElementTagNameMap['a'], HTMLElements['a']>;
       abbr: Tag<HTMLElementTagNameMap['abbr'], HTMLElements['abbr']>;
       address: Tag<HTMLElementTagNameMap['address'], HTMLElements['address']>;
@@ -248,7 +248,7 @@ declare global {
       s: Tag<HTMLElementTagNameMap['s'], HTMLElements['s']>;
       samp: Tag<HTMLElementTagNameMap['samp'], HTMLElements['samp']>;
       script: Tag<HTMLElementTagNameMap['script'], HTMLElements['script']> &
-      Tag<SVGElementTagNameMap['script'], SVGElements['script']>;
+        Tag<SVGElementTagNameMap['script'], SVGElements['script']>;
       section: Tag<HTMLElementTagNameMap['section'], HTMLElements['section']>;
       select: Tag<HTMLElementTagNameMap['select'], HTMLElements['select']>;
       semantics: Tag<MathMLElement, MathMLElements['semantics']>;
@@ -259,7 +259,7 @@ declare global {
       stop: Tag<SVGElementTagNameMap['stop'], SVGElements['stop']>;
       strong: Tag<HTMLElementTagNameMap['strong'], HTMLElements['strong']>;
       style: Tag<HTMLElementTagNameMap['style'], HTMLElements['style']> &
-      Tag<SVGElementTagNameMap['style'], SVGElements['style']>;
+        Tag<SVGElementTagNameMap['style'], SVGElements['style']>;
       sub: Tag<HTMLElementTagNameMap['sub'], HTMLElements['sub']>;
       summary: Tag<HTMLElementTagNameMap['summary'], HTMLElements['summary']>;
       sup: Tag<HTMLElementTagNameMap['sup'], HTMLElements['sup']>;
@@ -284,7 +284,7 @@ declare global {
       thead: Tag<HTMLElementTagNameMap['thead'], HTMLElements['thead']>;
       time: Tag<HTMLElementTagNameMap['time'], HTMLElements['time']>;
       title: Tag<HTMLElementTagNameMap['title'], HTMLElements['title']> &
-      Tag<SVGElementTagNameMap['title'], SVGElements['title']>;
+        Tag<SVGElementTagNameMap['title'], SVGElements['title']>;
       tr: Tag<HTMLElementTagNameMap['tr'], HTMLElements['tr']>;
       track: Tag<HTMLElementTagNameMap['track'], HTMLElements['track']>;
       u: Tag<HTMLElementTagNameMap['u'], HTMLElements['u']>;
@@ -297,3 +297,6 @@ declare global {
     }
   }
 }
+
+// "data" | "hgroup" | "menu" | "slot"
+// type a = Exclude<keyof HTMLElementTagNameMap, keyof JSX.IntrinsicElements>

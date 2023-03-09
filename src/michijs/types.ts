@@ -139,10 +139,6 @@ export type DelimiterCase<
     >
   : Value;
 
-export type ExtendsKeys<T extends object, E> = {
-  [K in keyof T]-?: NonUndefined<T[K]> extends E ? K : never;
-}[keyof T];
-
 export type KebabCase<Value> = DelimiterCase<Value, '-'>;
 
 export type RequiredKeys<T> = {
@@ -309,7 +305,34 @@ export type ExtendableElements =
   | (keyof HTMLElements & keyof HTMLElementTagNameMap)
   | undefined;
 
-export type Self<
+export type CustomElementEvents<E extends EventsType> = Readonly<{
+  [k in keyof E]: E[k] extends EventDispatcher<infer T>
+    ? (detail?: T) => boolean
+    : any;
+}>;
+
+export type CustomElementThis<
+  RC extends ReflectedCssVariablesType,
+  C extends CssVariablesType,
+  M extends MethodsType,
+  T extends MethodsType,
+  E extends EventsType,
+  A extends AttributesType,
+  RA extends ReflectedAttributesType,
+  NOA extends AttributesType,
+  EL extends Element,
+> = RC &
+  C &
+  A &
+  RA &
+  NOA &
+  M &
+  T &
+  CustomElementEvents<E> &
+  MichiProperties &
+  EL;
+
+export type CustomElementClass<
   RC extends ReflectedCssVariablesType,
   C extends CssVariablesType,
   M extends MethodsType,
@@ -323,21 +346,7 @@ export type Self<
   EXTA extends ExtendableElements,
   FRC extends CssVariablesType,
   // TODO: Readonly MichiCustomElement?
-  S extends Element = RC &
-    C &
-    A &
-    RA &
-    NOA &
-    Readonly<
-      M &
-        T & {
-          [k in keyof E]: E[k] extends EventDispatcher<infer T>
-            ? (detail?: T) => boolean
-            : any;
-        }
-    > &
-    MichiProperties &
-    EL,
+  S extends Element = CustomElementThis<RC, C, M, T, E, A, RA, NOA, EL>,
   Attrs = FRA &
     FRC & {
       [k in

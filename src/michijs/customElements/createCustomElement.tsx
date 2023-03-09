@@ -13,10 +13,11 @@ import {
   MethodsType,
   ReflectedAttributesType,
   ReflectedCssVariablesType,
-  Self,
+  CustomElementClass,
   SubscribeToType,
   CustomElementTag,
   ExtendableElements,
+  CustomElementThis,
 } from '../types';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 import { defineTransactionFromStore } from './properties/defineTransactionFromStore';
@@ -79,10 +80,8 @@ export function createCustomElement<
     RC,
     FRC
   > &
-    ThisType<
-      InstanceType<Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA, FRC>>
-    > = {},
-): Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA, FRC> &
+    ThisType<CustomElementThis<RC, C, M, T, E, A, RA, NOA, EL>> = {},
+): CustomElementClass<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA, FRC> &
   CreateCustomElementStaticResult<FRC, FRA, FOA, TA, EXTA> {
   const {
     events,
