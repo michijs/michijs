@@ -343,10 +343,14 @@ export interface MichiElementOptions {
   events?: EventsType;
   /**Allows to define non observed attributes. This is useful for complex objects that cannot be observed.*/
   nonObservedAttributes?: Function;
+  // nonObservedAttributes?(): AttributesType;
   /**
    * Allows you to define a Constructable Stylesheet that depend on the state of the component. When there is no shadow root the style will be reflected in the style attribute.
    */
   computedStyleSheet?: Function;
+  // computedStyleSheet?(): CSSObject;
+
+  // nonObservedAttributes?(): AttributesType;
   /**Allows to define CSS variables. CSS variables changes does not trigger a rerender*/
   cssVariables?: CssVariablesType;
   /**
@@ -388,7 +392,7 @@ export interface MichiElementOptions {
   /**
    * Contains methods with a name of an attribute / reflected attribute / observable like. Those methods are executed when a change has been made to their corresponding property.
    */
-  observe?: OptionalRecord<string, () => void>
+  observe?: OptionalRecord<string, Function>
   // observe?: {
   //   [k in KeysAndKeysOf<RA>]?: () => void;
   // } & {
@@ -408,7 +412,19 @@ export interface MichiElementOptions {
   extends?: ExtendsObject;
 }
 
-export type ElementProps<O extends MichiElementOptions, S extends HTMLElement, Attrs = (
+export type MichiElementSelf<O extends MichiElementOptions> = (
+  O['attributes'] &
+  O['reflectedAttributes'] &
+  O['cssVariables'] &
+  O['reflectedCssVariables'] &
+  O['transactions'] &
+  O['methods'] &
+  (O['nonObservedAttributes'] extends (() => infer NOA) ? NOA : {}) &
+  CustomElementEvents<O['events']> &
+  MichiProperties &
+  (O['extends'] extends { class: infer E; } ? (E extends new (...args: any) => any ? InstanceType<E> : HTMLElement) : HTMLElement))
+
+type MichiElementProps<O extends MichiElementOptions, S extends HTMLElement, Attrs = (
   {
     [k in keyof O['reflectedAttributes']as KebabCase<k>]: O['reflectedAttributes'][k];
   }
@@ -430,12 +446,12 @@ export type ElementProps<O extends MichiElementOptions, S extends HTMLElement, A
 >
 
 
-export type CustomElementClass<
+export type MichiElementClass<
   O extends MichiElementOptions,
   S extends HTMLElement
 > = {
   new(
-    props: ElementProps<O, S>,
+    props: MichiElementProps<O, S>,
   ): S;
   readonly tag: string;
   readonly extends?: string;
