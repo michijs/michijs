@@ -3,21 +3,15 @@ import {
   Store,
   AttributesType,
   CSSObject,
-  CreateCustomElementStaticResult,
   CssVariablesType,
   EmptyObject,
-  EventsType,
-  KebabCase,
   MichiCustomElement,
-  MichiElementProperties,
   MethodsType,
-  ReflectedAttributesType,
-  ReflectedCssVariablesType,
-  CustomElementClass,
-  SubscribeToType,
   CustomElementTag,
-  ExtendableElements,
-  CustomElementThis,
+  CustomElementEvents,
+  MichiProperties,
+  MichiElementOptions,
+  CustomElementClass
 } from '../types';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 import { defineTransactionFromStore } from './properties/defineTransactionFromStore';
@@ -39,50 +33,20 @@ import type { CSSProperties } from '@michijs/htmltype';
 import { setStyleProperty } from '../DOM/attributes/setStyleProperty';
 
 export function createCustomElement<
-  A extends AttributesType = EmptyObject,
-  RA extends ReflectedAttributesType = EmptyObject,
-  NOA extends AttributesType = EmptyObject,
-  FRA extends AttributesType = RA extends object
-    ? {
-        [k in keyof RA as KebabCase<k>]: RA[k];
-      }
-    : EmptyObject,
-  M extends MethodsType = EmptyObject,
-  T extends MethodsType = EmptyObject,
-  E extends EventsType = EmptyObject,
-  S extends SubscribeToType = EmptyObject,
-  EL extends Element = HTMLElement,
-  FOA extends boolean = false,
-  EXTA extends ExtendableElements = undefined,
-  C extends CssVariablesType = EmptyObject,
-  RC extends ReflectedCssVariablesType = EmptyObject,
-  FRC extends CssVariablesType = RC extends object
-    ? {
-        [k in keyof RC as KebabCase<k>]: RC[k];
-      }
-    : EmptyObject,
-  TA extends CustomElementTag = CustomElementTag,
->(
-  tag: TA,
-  elementProperties: MichiElementProperties<
-    M,
-    T,
-    E,
-    S,
-    A,
-    RA,
-    NOA,
-    FRA,
-    FOA,
-    EL,
-    EXTA,
-    C,
-    RC,
-    FRC
-  > &
-    ThisType<CustomElementThis<RC, C, M, T, E, A, RA, NOA, EL>> = {},
-): CustomElementClass<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA, FRC> &
-  CreateCustomElementStaticResult<FRC, FRA, FOA, TA, EXTA> {
+  O extends MichiElementOptions,
+  S extends HTMLElement = (
+    O['attributes'] &
+    O['reflectedAttributes'] &
+    O['cssVariables'] &
+    O['reflectedCssVariables'] &
+    O['transactions'] &
+    O['methods'] &
+    (O['nonObservedAttributes'] extends (() => infer NOA) ? NOA : {}) &
+    CustomElementEvents<O['events']> &
+    MichiProperties &
+    (O['extends'] extends { class: infer E; } ? (E extends new (...args: any) => any ? InstanceType<E> : HTMLElement) : HTMLElement))
+>(tag: CustomElementTag, elementOptions: O & ThisType<S>): CustomElementClass<O, S> {
+
   const {
     events,
     attributes,
@@ -102,7 +66,7 @@ export function createCustomElement<
     methods,
     fakeRoot = !shadow,
     formAssociated = false,
-  } = elementProperties;
+  } = elementOptions;
   const { class: classToExtend = HTMLElement, tag: extendsTag } =
     extendsObject ?? {};
 
@@ -110,15 +74,15 @@ export function createCustomElement<
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
-    implements MichiCustomElement
-  {
+    implements MichiCustomElement {
+    // props?: ElementProps<O, S>
     $michi: MichiCustomElement['$michi'] = {
       store: store.apply(this, [
         { state: { ...attributes, ...reflectedAttributes }, transactions },
-      ]) as Store<A & RA, T>,
+      ]) as Store<AttributesType, MethodsType>,
       cssStore: store.apply(this, [
         { state: { ...cssVariables, ...reflectedCssVariables } },
-      ]) as Store<C & RC, EmptyObject>,
+      ]) as Store<CssVariablesType, EmptyObject>,
       alreadyRendered: false,
       pendingTasks: 0,
       rerenderCallback: (propertyThatChanged) => {
