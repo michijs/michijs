@@ -10,7 +10,7 @@ import {
   CustomElementTag,
   MichiElementOptions,
   MichiElementClass,
-  MichiElementSelf
+  MichiElementSelf,
 } from '../types';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 import { defineTransactionFromStore } from './properties/defineTransactionFromStore';
@@ -32,10 +32,13 @@ import type { CSSProperties } from '@michijs/htmltype';
 import { setStyleProperty } from '../DOM/attributes/setStyleProperty';
 
 export function createCustomElement<
-  O extends MichiElementOptions,
-  S extends HTMLElement = MichiElementSelf<O>
->(tag: CustomElementTag, elementOptions: O & ThisType<S>): MichiElementClass<O, S> {
-
+  // TODO: fix this
+  O extends MichiElementOptions = {},
+  S extends HTMLElement = MichiElementSelf<O>,
+>(
+  tag: CustomElementTag,
+  elementOptions?: O & ThisType<S>,
+): MichiElementClass<O, S> {
   const {
     events,
     attributes,
@@ -55,7 +58,7 @@ export function createCustomElement<
     methods,
     fakeRoot = !shadow,
     formAssociated = false,
-  } = elementOptions;
+  } = elementOptions ?? {};
   const { class: classToExtend = HTMLElement, tag: extendsTag } =
     extendsObject ?? {};
 
@@ -63,7 +66,8 @@ export function createCustomElement<
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
-    implements MichiCustomElement {
+    implements MichiCustomElement
+  {
     $michi: MichiCustomElement['$michi'] = {
       store: store.apply(this, [
         { state: { ...attributes, ...reflectedAttributes }, transactions },

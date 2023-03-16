@@ -8,14 +8,24 @@ import { writeFileSync, rmSync, mkdirSync } from 'fs';
 const elements = new Map<string, string[]>();
 
 supportedHTMLElements.forEach((x) => {
-  elements.set(x, [`Tag<HTMLElementTagNameMap["${x}"], HTMLElements["${x}"]>`]);
+  elements.set(x.tagName, [
+    `HTMLElements["${x.tagName}"]`,
+    `Tag<${x.elementInterface}>`,
+  ]);
 });
 supportedMathMLElements.forEach((x) => {
-  elements.set(x, [`Tag<MathMLElement, MathMLElements["${x}"]>`]);
+  elements.set(x.tagName, [
+    `MathMLElements["${x.tagName}"]`,
+    `Tag<${x.elementInterface}>`,
+  ]);
 });
 supportedSVGElements.forEach((x) => {
-  const newItems = [`Tag<SVGElementTagNameMap["${x}"], SVGElements["${x}"]>`];
-  elements.get(x)?.push(...newItems) ?? elements.set(x, newItems);
+  const newItems = [
+    `SVGElements["${x.tagName}"]`,
+    `Tag<${x.elementInterface}>`,
+  ];
+  elements.get(x.tagName)?.push(...newItems) ??
+    elements.set(x.tagName, newItems);
 });
 
 rmSync('./src/michijs/h/generated', { recursive: true, force: true });

@@ -58,6 +58,7 @@ describe('h tests', () => {
     );
   });
   it('Class JSX result', () => {
+    // TODO:
     expect(
       <TestCustomElement {...testAttrs}>{testChild}</TestCustomElement>,
     ).toEqual(ClassJSXResult);

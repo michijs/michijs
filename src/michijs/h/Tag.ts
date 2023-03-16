@@ -1,3 +1,4 @@
+import { HTMLElements, MathMLElements, SVGElements } from '@michijs/htmltype';
 import {
   IterableAttrs,
   MichiCustomElement,
@@ -9,7 +10,7 @@ export type DomInterface<E extends object> = {
   [K in StringKeyOf<E> as `_${K}`]: E[K];
 };
 
-export type Tag<E, T> = T & {
+export interface Tag<E> extends Partial<IterableAttrs<string>> {
   /**
    * Children are created but not updated
    */
@@ -39,4 +40,4 @@ export type Tag<E, T> = T & {
     context?: MichiCustomElement,
   ) => void;
   _?: Partial<PickWritable<E>>;
-} & Partial<IterableAttrs<string>>;
+}

@@ -19,8 +19,8 @@ export type CssDeclaration<
   PK extends string = '-',
 > = T extends object
   ? {
-    [k in StringKeyOf<T>]: CssDeclaration<T[k], `${PK}-${k}`>;
-  }
+      [k in StringKeyOf<T>]: CssDeclaration<T[k], `${PK}-${k}`>;
+    }
   : CSSVar<PK>;
 type IfEquals<X, Y, A = X, B = never> = (<T>() => T extends X ? 1 : 2) extends <
   T,
@@ -84,16 +84,16 @@ export type SplitIncludingDelimiters<
   ? []
   : Source extends `${infer FirstPart}${Delimiter}${infer SecondPart}`
   ? Source extends `${FirstPart}${infer UsedDelimiter}${SecondPart}`
-  ? UsedDelimiter extends Delimiter
-  ? Source extends `${infer FirstPart}${UsedDelimiter}${infer SecondPart}`
-  ? [
-    ...SplitIncludingDelimiters<FirstPart, Delimiter>,
-    UsedDelimiter,
-    ...SplitIncludingDelimiters<SecondPart, Delimiter>,
-  ]
-  : never
-  : never
-  : never
+    ? UsedDelimiter extends Delimiter
+      ? Source extends `${infer FirstPart}${UsedDelimiter}${infer SecondPart}`
+        ? [
+            ...SplitIncludingDelimiters<FirstPart, Delimiter>,
+            UsedDelimiter,
+            ...SplitIncludingDelimiters<SecondPart, Delimiter>,
+          ]
+        : never
+      : never
+    : never
   : [Source];
 
 type StringPartToDelimiterCase<
@@ -114,16 +114,16 @@ type StringArrayToDelimiterCase<
   Delimiter extends string,
 > = Parts extends [`${infer FirstPart}`, ...infer RemainingParts]
   ? `${StringPartToDelimiterCase<
-    FirstPart,
-    UsedWordSeparators,
-    UsedUpperCaseCharacters,
-    Delimiter
-  >}${StringArrayToDelimiterCase<
-    RemainingParts,
-    UsedWordSeparators,
-    UsedUpperCaseCharacters,
-    Delimiter
-  >}`
+      FirstPart,
+      UsedWordSeparators,
+      UsedUpperCaseCharacters,
+      Delimiter
+    >}${StringArrayToDelimiterCase<
+      RemainingParts,
+      UsedWordSeparators,
+      UsedUpperCaseCharacters,
+      Delimiter
+    >}`
   : '';
 
 export type DelimiterCase<
@@ -131,11 +131,11 @@ export type DelimiterCase<
   Delimiter extends string,
 > = Value extends string
   ? StringArrayToDelimiterCase<
-    SplitIncludingDelimiters<Value, WordSeparators | UpperCaseCharacters>,
-    WordSeparators,
-    UpperCaseCharacters,
-    Delimiter
-  >
+      SplitIncludingDelimiters<Value, WordSeparators | UpperCaseCharacters>,
+      WordSeparators,
+      UpperCaseCharacters,
+      Delimiter
+    >
   : Value;
 
 export type KebabCase<Value> = DelimiterCase<Value, '-'>;
@@ -158,18 +158,18 @@ export interface ObservableLike<T = any> {
 
 export interface MichiProperties
   extends Lifecycle,
-  LifecycleInternals,
-  Partial<
-    Pick<
-      ElementInternals,
-      | 'checkValidity'
-      | 'reportValidity'
-      | 'form'
-      | 'validity'
-      | 'validationMessage'
-      | 'willValidate'
-    >
-  > {
+    LifecycleInternals,
+    Partial<
+      Pick<
+        ElementInternals,
+        | 'checkValidity'
+        | 'reportValidity'
+        | 'form'
+        | 'validity'
+        | 'validationMessage'
+        | 'willValidate'
+      >
+    > {
   // props?: unknown,
   readonly $michi: {
     store: Store<AnyObject, AnyObject>;
@@ -197,12 +197,12 @@ export interface MichiProperties
   readonly type: string;
 }
 
-export interface MichiCustomElement extends HTMLElement, MichiProperties { }
+export interface MichiCustomElement extends HTMLElement, MichiProperties {}
 
 export type NonNullablePrimitiveType = bigint | string | number | boolean;
 export type PrimitiveType = NonNullablePrimitiveType | null | undefined;
 
-interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> { }
+interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> {}
 
 type DeepReadonlyObject<T> = {
   readonly [P in keyof T]: DeepReadonly<T[P]>;
@@ -284,7 +284,10 @@ export type OptionalRecord<K extends keyof any, T> = {
 export type AttributesType = OptionalRecord<string, PrimitiveType | AnyObject>;
 // Removed because overcomplicates types on definition of components
 // export type ReflectedAttributesType = Record<PropertyKey, Exclude<PrimitiveType, true> | AnyObject>;
-export type ReflectedAttributesType = OptionalRecord<string, PrimitiveType | AnyObject>;
+export type ReflectedAttributesType = OptionalRecord<
+  string,
+  PrimitiveType | AnyObject
+>;
 
 export type CssVariablesType = CSSObject;
 // export type ReflectedCssVariablesType = Record<string, Exclude<PrimitiveType, true>>;
@@ -309,10 +312,9 @@ export type ExtendableElements = keyof HTMLElements;
 
 export type CustomElementEvents<E extends EventsType | undefined> = Readonly<{
   [k in keyof E]: E[k] extends EventDispatcher<infer T>
-  ? (detail?: T) => boolean
-  : any;
+    ? (detail?: T) => boolean
+    : any;
 }>;
-
 
 export interface ExtendsObject {
   /**The tag to extend */
@@ -392,7 +394,7 @@ export interface MichiElementOptions {
   /**
    * Contains methods with a name of an attribute / reflected attribute / observable like. Those methods are executed when a change has been made to their corresponding property.
    */
-  observe?: OptionalRecord<string, Function>
+  observe?: OptionalRecord<string, Function>;
   // observe?: {
   //   [k in KeysAndKeysOf<RA>]?: () => void;
   // } & {
@@ -412,47 +414,56 @@ export interface MichiElementOptions {
   extends?: ExtendsObject;
 }
 
-export type MichiElementSelf<O extends MichiElementOptions> = (
-  O['attributes'] &
+export type MichiElementSelf<O extends MichiElementOptions> = O['attributes'] &
   O['reflectedAttributes'] &
   O['cssVariables'] &
   O['reflectedCssVariables'] &
   O['transactions'] &
   O['methods'] &
-  (O['nonObservedAttributes'] extends (() => infer NOA) ? NOA : {}) &
+  (O['nonObservedAttributes'] extends () => infer NOA ? NOA : {}) &
   CustomElementEvents<O['events']> &
   MichiProperties &
-  (O['extends'] extends { class: infer E; } ? (E extends new (...args: any) => any ? InstanceType<E> : HTMLElement) : HTMLElement))
+  (O['extends'] extends { class: infer E }
+    ? E extends new (
+        ...args: any
+      ) => any
+      ? InstanceType<E>
+      : HTMLElement
+    : HTMLElement);
 
-type MichiElementProps<O extends MichiElementOptions, S extends HTMLElement, Attrs = (
-  {
-    [k in keyof O['reflectedAttributes']as KebabCase<k>]: O['reflectedAttributes'][k];
-  }
-  & {
-    [k in keyof O['reflectedCssVariables']as KebabCase<k>]: O['reflectedCssVariables'][k];
-  }
-  & {
-    [k in keyof O['events']as k extends string ? `on${Lowercase<k>}` : never]?: O['events'][k] extends EventDispatcher<
-      infer D
-    >
-    ? (ev: CustomEvent<D>) => any
-    : never;
-  }
-  & GlobalEvents<S extends HTMLElement ? S : HTMLElement>
-)> = Tag<
-  S,
-  Omit<HTMLElements[(O['extends'] extends { tag: infer T } ? (T extends HTMLElements ? T : 'div') : 'div')], keyof Attrs> &
-  Partial<Attrs>
->
-
+type MichiElementProps<
+  O extends MichiElementOptions,
+  S extends HTMLElement,
+  Attrs = {
+    [k in
+      keyof O['reflectedAttributes'] as KebabCase<k>]: O['reflectedAttributes'][k];
+  } & {
+    [k in
+      keyof O['reflectedCssVariables'] as KebabCase<k>]: O['reflectedCssVariables'][k];
+  } & {
+    [k in
+      keyof O['events'] as k extends string
+        ? `on${Lowercase<k>}`
+        : never]?: O['events'][k] extends EventDispatcher<infer D>
+      ? (ev: CustomEvent<D>) => any
+      : never;
+  } & { name: string } & GlobalEvents<S extends HTMLElement ? S : HTMLElement>,
+> = Tag<S> &
+  Omit<
+    HTMLElements[O['extends'] extends { tag: infer T }
+      ? T extends HTMLElements
+        ? T
+        : 'div'
+      : 'div'],
+    keyof Attrs
+  > &
+  Partial<Attrs>;
 
 export type MichiElementClass<
   O extends MichiElementOptions,
-  S extends HTMLElement
+  S extends HTMLElement,
 > = {
-  new(
-    props: MichiElementProps<O, S>,
-  ): S;
+  new (props: MichiElementProps<O, S>): S;
   readonly tag: string;
   readonly extends?: string;
   readonly observedAttributes: Readonly<string[]>;
@@ -541,7 +552,6 @@ export interface ElementFactory {
   ): void;
 }
 
-
 export interface CreateCustomElementStaticResult<
   FRC extends Object,
   FRA extends Object,
@@ -556,14 +566,14 @@ export interface CreateCustomElementStaticResult<
 }
 
 export type GetElementProps<El extends any> = El extends {
-  new(arg: infer T): any;
+  new (arg: infer T): any;
 }
   ? T
   : El extends (...args: any) => any
   ? Parameters<El>[0]
-  // : El extends MichiCustomElement
-  // ? El['props']
-  : never;
+  : // : El extends MichiCustomElement
+    // ? El['props']
+    never;
 
 export type EventListenerMap = Map<string, EventListener>;
 
