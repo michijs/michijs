@@ -316,9 +316,9 @@ export type CustomElementEvents<E extends EventsType | undefined> = Readonly<{
     : any;
 }>;
 
-export interface ExtendsObject {
+export interface ExtendsObject<T extends ExtendableElements = 'div'> {
   /**The tag to extend */
-  tag: ExtendableElements;
+  tag: T;
   /**The class you want to extend */
   class: typeof HTMLElement;
 }
@@ -411,8 +411,12 @@ export interface MichiElementOptions {
   // (FOA extends true ? LifecycleInternals : {});
 
   /**Allows to create a Customized built-in element */
-  extends?: ExtendsObject;
+  extends?: ExtendsObject<ExtendableElements>;
 }
+
+export type ExtendsAttributes<
+  O extends ExtendsObject<ExtendableElements> | undefined,
+> = O extends ExtendsObject<infer T> ? HTMLElements[T] : HTMLElements['div'];
 
 export type MichiElementSelf<O extends MichiElementOptions> = O['attributes'] &
   O['reflectedAttributes'] &
@@ -447,16 +451,9 @@ type MichiElementProps<
         : never]?: O['events'][k] extends EventDispatcher<infer D>
       ? (ev: CustomEvent<D>) => any
       : never;
-  } & { name: string } & GlobalEvents<S extends HTMLElement ? S : HTMLElement>,
+  } & { name: string } & GlobalEvents<S>,
 > = Tag<S> &
-  Omit<
-    HTMLElements[O['extends'] extends { tag: infer T }
-      ? T extends HTMLElements
-        ? T
-        : 'div'
-      : 'div'],
-    keyof Attrs
-  > &
+  Omit<ExtendsAttributes<O['extends']>, keyof Attrs> &
   Partial<Attrs>;
 
 export type MichiElementClass<
