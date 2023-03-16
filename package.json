@@ -75,6 +75,7 @@
     "@michijs/htmltype": "0.1.14-8"
   },
   "jest": {
+    "testTimeout": 30000,
     "projects": [
       {
         "displayName": "library-tests",
