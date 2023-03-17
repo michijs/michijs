@@ -9,7 +9,7 @@ const elements = new Map<
   string,
   {
     attributes: string[];
-    elementInterfaces;
+    elementInterfaces: string[];
   }
 >();
 
@@ -45,9 +45,18 @@ mkdirSync('./src/michijs/h/generated');
 
 writeFileSync(
   './src/michijs/h/generated/JSX.ts',
-  ` import { HTMLElements, MathMLElements, SVGElements } from "@michijs/htmltype";
+  ` import { HTMLElements as HTMLElementsHTMLType, MathMLElements, SVGElements as SVGElementsHTMLType } from "@michijs/htmltype";
   import { MichiAttributes } from "../MichiAttributes";
   import { SingleJSXElement } from '../../types';
+
+  interface ElementsInterfaceOverride {
+    ${Array.from(elements)
+      .filter(([_name, x]) => x.elementInterfaces.length > 1)
+      .map(([name, x]) => `${name}: ${x.elementInterfaces.join(' & ')}`)
+      .join(',\n')}
+  }
+  interface HTMLElements extends HTMLElementsHTMLType<ElementsInterfaceOverride>{}
+  interface SVGElements extends SVGElementsHTMLType<ElementsInterfaceOverride>{}
 
   declare global {
     namespace JSX {

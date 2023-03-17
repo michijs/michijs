@@ -1,6 +1,20 @@
-import { HTMLElements, MathMLElements, SVGElements } from '@michijs/htmltype';
+import {
+  HTMLElements as HTMLElementsHTMLType,
+  MathMLElements,
+  SVGElements as SVGElementsHTMLType,
+} from '@michijs/htmltype';
 import { MichiAttributes } from '../MichiAttributes';
 import { SingleJSXElement } from '../../types';
+
+interface ElementsInterfaceOverride {
+  title: HTMLElementTagNameMap['title'] & SVGElementTagNameMap['title'];
+  style: HTMLElementTagNameMap['style'] & SVGElementTagNameMap['style'];
+  a: HTMLElementTagNameMap['a'] & SVGElementTagNameMap['a'];
+  script: HTMLElementTagNameMap['script'] & SVGElementTagNameMap['script'];
+}
+interface HTMLElements
+  extends HTMLElementsHTMLType<ElementsInterfaceOverride> {}
+interface SVGElements extends SVGElementsHTMLType<ElementsInterfaceOverride> {}
 
 declare global {
   namespace JSX {

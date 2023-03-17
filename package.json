@@ -72,7 +72,7 @@
     "typescript": "5.0.2"
   },
   "peerDependencies": {
-    "@michijs/htmltype": "0.1.14-beta.1"
+    "@michijs/htmltype": "0.2.2"
   },
   "jest": {
     "testTimeout": 30000,
