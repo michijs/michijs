@@ -6,7 +6,7 @@ import type {
 import { EventDispatcher } from './classes';
 import { idGenerator } from './hooks';
 import { Fragment } from './components';
-import { Tag } from './h/Tag';
+import { MichiAttributes } from './h/MichiAttributes';
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 export type CSSVar<T extends string> = KebabCase<T> & {
@@ -449,10 +449,10 @@ type MichiElementProps<
       keyof O['events'] as k extends string
         ? `on${Lowercase<k>}`
         : never]?: O['events'][k] extends EventDispatcher<infer D>
-      ? (ev: CustomEvent<D>) => any
+      ? (ev: CustomEvent<D>) => unknown
       : never;
   } & { name: string } & GlobalEvents<S>,
-> = Tag<S> &
+> = MichiAttributes<S> &
   Omit<ExtendsAttributes<O['extends']>, keyof Attrs> &
   Partial<Attrs>;
 

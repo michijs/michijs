@@ -5,27 +5,39 @@ import {
 } from '@michijs/htmltype/supported';
 import { writeFileSync, rmSync, mkdirSync } from 'fs';
 
-const elements = new Map<string, string[]>();
+const elements = new Map<
+  string,
+  {
+    attributes: string[];
+    elementInterfaces;
+  }
+>();
 
 supportedHTMLElements.forEach((x) => {
-  elements.set(x.tagName, [
-    `HTMLElements["${x.tagName}"]`,
-    `Tag<${x.elementInterface}>`,
-  ]);
+  elements.set(x.tagName, {
+    attributes: [`HTMLElements["${x.tagName}"]`],
+    elementInterfaces: [x.elementInterface],
+  });
 });
 supportedMathMLElements.forEach((x) => {
-  elements.set(x.tagName, [
-    `MathMLElements["${x.tagName}"]`,
-    `Tag<${x.elementInterface}>`,
-  ]);
+  elements.set(x.tagName, {
+    attributes: [`MathMLElements["${x.tagName}"]`],
+    elementInterfaces: [x.elementInterface],
+  });
 });
 supportedSVGElements.forEach((x) => {
-  const newItems = [
-    `SVGElements["${x.tagName}"]`,
-    `Tag<${x.elementInterface}>`,
-  ];
-  elements.get(x.tagName)?.push(...newItems) ??
-    elements.set(x.tagName, newItems);
+  const attributes = `SVGElements["${x.tagName}"]`;
+  const elementInterface = x.elementInterface;
+  const element = elements.get(x.tagName);
+  if (element) {
+    element.attributes.push(attributes);
+    element.elementInterfaces.push(elementInterface);
+  } else {
+    elements.set(x.tagName, {
+      attributes: [attributes],
+      elementInterfaces: [x.elementInterface],
+    });
+  }
 });
 
 rmSync('./src/michijs/h/generated', { recursive: true, force: true });
@@ -34,9 +46,9 @@ mkdirSync('./src/michijs/h/generated');
 writeFileSync(
   './src/michijs/h/generated/JSX.ts',
   ` import { HTMLElements, MathMLElements, SVGElements } from "@michijs/htmltype";
-  import { Tag } from "../Tag";
+  import { MichiAttributes } from "../MichiAttributes";
   import { SingleJSXElement } from '../../types';
-  
+
   declare global {
     namespace JSX {
       type Element = SingleJSXElement;
@@ -46,7 +58,12 @@ writeFileSync(
       interface IntrinsicElements extends HTMLElements, MathMLElements, SVGElements {
         ${Array.from(elements)
           .sort()
-          .map(([key, types]) => `${key}: ${types.join(' & ')};`)
+          .map(
+            ([key, { attributes, elementInterfaces }]) =>
+              `${key}: ${attributes.join(
+                ' & ',
+              )} & MichiAttributes<${elementInterfaces.join(' & ')}>;`,
+          )
           .join('\n')}
       }
     }

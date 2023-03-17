@@ -12,10 +12,14 @@
   "linter": {
     "enabled": true,
     "rules": {
+      "a11y": {
+        "useValidAnchor": "off"
+      },
       "complexity": {
         "useSimplifiedLogicExpression": "off"
       },
       "suspicious": {
+        "noExplicitAny": "off",
         "noDoubleEquals": "off"
       },
       "style": {
