@@ -2,7 +2,7 @@
   "name": "@michijs/michijs",
   "author": "Lucas M. Segurado",
   "license": "MIT",
-  "version": "1.0.6",
+  "version": "1.0.7-beta.2",
   "files": [
     "dist/",
     "jsx-runtime/"
@@ -34,6 +34,7 @@
     "dist": "michi-server --dist",
     "build": "michi-server --build",
     "link": "michi-server --dist && npm link --force && tsc -w -p dist.tsconfig.json",
+    "generate-types": "ts-node --project tasks.tsconfig.json ./tasks/generateTypes.ts",
     "start-benchmark-michijs": "michi-server --start --env=TESTING",
     "start-benchmark-michijs-map": "michi-server --start --env=TESTING_MAP",
     "start-benchmark-vanilla": "michi-server --start --env=TESTING_VANILLA",
@@ -67,12 +68,14 @@
     "rome": "11.0.0",
     "simple-git-hooks": "2.8.1",
     "ts-jest": "29.0.5",
-    "typescript": "4.9.5"
+    "ts-node": "10.9.1",
+    "typescript": "5.0.2"
   },
   "peerDependencies": {
-    "@michijs/htmltype": "0.1.14-1"
+    "@michijs/htmltype": "0.2.2"
   },
   "jest": {
+    "testTimeout": 30000,
     "projects": [
       {
         "displayName": "library-tests",

@@ -1,0 +1,44 @@
+name: "Update generated"
+
+on: [push]
+
+jobs:
+  submit-changes: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          # We must fetch at least the immediate parents so that if this is
+          # a pull request then we can checkout the head.
+          fetch-depth: 2
+
+        # Setup Node.js environment
+      - name: Set up Node.js 16.17.0
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.17.0
+          # Important!
+          registry-url: 'https://registry.npmjs.org'
+          always-auth: true
+
+      - name: Install dependencies
+        run: npm install
+
+      # Execute task
+      - name: Execute task
+        run: npm run generate-types
+      # Configure Git
+      - name: Git configuration
+        run: |
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
+      # Commit changes
+      - name: Commit changes
+        run: |
+          git add .
+          git commit -m 'chore: updated generated types' || echo "No changes to commit"
+      # Push repository changes
+      - name: Push changes to repository
+        run: |
+          git push origin || echo "No changes to push"

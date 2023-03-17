@@ -1,15 +1,10 @@
-import {
-  IterableAttrs,
-  MichiCustomElement,
-  PickWritable,
-  StringKeyOf,
-} from '../types';
+import { IterableAttrs, MichiCustomElement, PickWritable } from '../types';
 
-export type DomInterface<E extends object> = {
-  [K in StringKeyOf<E> as `_${K}`]: E[K];
-};
+// export type ElementInterfaceAttributes<E extends object> = {
+//   [K in StringKeyOf<PickWritable<E>> as `_${K}`]?: E[K];
+// };
 
-export type Tag<E> = {
+export interface MichiAttributes<E> extends Partial<IterableAttrs<string>> {
   /**
    * Children are created but not updated
    */
@@ -39,4 +34,4 @@ export type Tag<E> = {
     context?: MichiCustomElement,
   ) => void;
   _?: Partial<PickWritable<E>>;
-} & Partial<IterableAttrs<string>>;
+}

@@ -7,7 +7,6 @@ describe('Performance tests - MichiJS', () => {
   beforeAll(async () => {
     browser = await launch();
     page = await browser.newPage();
-    jest.setTimeout(30000);
     await page.goto('http://localhost:3000', {
       waitUntil: 'domcontentloaded',
     });

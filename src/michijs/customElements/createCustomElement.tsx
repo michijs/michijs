@@ -3,20 +3,14 @@ import {
   Store,
   AttributesType,
   CSSObject,
-  CreateCustomElementStaticResult,
   CssVariablesType,
   EmptyObject,
-  EventsType,
-  KebabCase,
   MichiCustomElement,
-  MichiElementProperties,
   MethodsType,
-  ReflectedAttributesType,
-  ReflectedCssVariablesType,
-  Self,
-  SubscribeToType,
   CustomElementTag,
-  ExtendableElements,
+  MichiElementOptions,
+  MichiElementClass,
+  MichiElementSelf,
 } from '../types';
 import { formatToKebabCase } from '../utils/formatToKebabCase';
 import { defineTransactionFromStore } from './properties/defineTransactionFromStore';
@@ -38,52 +32,12 @@ import type { CSSProperties } from '@michijs/htmltype';
 import { setStyleProperty } from '../DOM/attributes/setStyleProperty';
 
 export function createCustomElement<
-  A extends AttributesType = EmptyObject,
-  RA extends ReflectedAttributesType = EmptyObject,
-  NOA extends AttributesType = EmptyObject,
-  FRA extends AttributesType = RA extends object
-    ? {
-        [k in keyof RA as KebabCase<k>]: RA[k];
-      }
-    : EmptyObject,
-  M extends MethodsType = EmptyObject,
-  T extends MethodsType = EmptyObject,
-  E extends EventsType = EmptyObject,
-  S extends SubscribeToType = EmptyObject,
-  EL extends Element = HTMLElement,
-  FOA extends boolean = false,
-  EXTA extends ExtendableElements = undefined,
-  C extends CssVariablesType = EmptyObject,
-  RC extends ReflectedCssVariablesType = EmptyObject,
-  FRC extends CssVariablesType = RC extends object
-    ? {
-        [k in keyof RC as KebabCase<k>]: RC[k];
-      }
-    : EmptyObject,
-  TA extends CustomElementTag = CustomElementTag,
+  O extends MichiElementOptions = {},
+  S extends HTMLElement = MichiElementSelf<O>,
 >(
-  tag: TA,
-  elementProperties: MichiElementProperties<
-    M,
-    T,
-    E,
-    S,
-    A,
-    RA,
-    NOA,
-    FRA,
-    FOA,
-    EL,
-    EXTA,
-    C,
-    RC,
-    FRC
-  > &
-    ThisType<
-      InstanceType<Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA, FRC>>
-    > = {},
-): Self<RC, C, M, T, E, A, RA, NOA, EL, FRA, EXTA, FRC> &
-  CreateCustomElementStaticResult<FRC, FRA, FOA, TA, EXTA> {
+  tag: CustomElementTag,
+  elementOptions?: O & ThisType<S>,
+): MichiElementClass<O, S> {
   const {
     events,
     attributes,
@@ -103,7 +57,7 @@ export function createCustomElement<
     methods,
     fakeRoot = !shadow,
     formAssociated = false,
-  } = elementProperties;
+  } = elementOptions ?? {};
   const { class: classToExtend = HTMLElement, tag: extendsTag } =
     extendsObject ?? {};
 
@@ -116,10 +70,10 @@ export function createCustomElement<
     $michi: MichiCustomElement['$michi'] = {
       store: store.apply(this, [
         { state: { ...attributes, ...reflectedAttributes }, transactions },
-      ]) as Store<A & RA, T>,
+      ]) as Store<AttributesType, MethodsType>,
       cssStore: store.apply(this, [
         { state: { ...cssVariables, ...reflectedCssVariables } },
-      ]) as Store<C & RC, EmptyObject>,
+      ]) as Store<CssVariablesType, EmptyObject>,
       alreadyRendered: false,
       pendingTasks: 0,
       rerenderCallback: (propertyThatChanged) => {

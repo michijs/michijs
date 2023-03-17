@@ -1,13 +1,12 @@
 import type {
   HTMLElements,
-  GlobalEvents,
   CSSProperties,
-  AllAttributes,
+  GlobalEvents,
 } from '@michijs/htmltype';
 import { EventDispatcher } from './classes';
 import { idGenerator } from './hooks';
-import { Tag } from './h/Tag';
 import { Fragment } from './components';
+import { MichiAttributes } from './h/MichiAttributes';
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 export type CSSVar<T extends string> = KebabCase<T> & {
@@ -139,10 +138,6 @@ export type DelimiterCase<
     >
   : Value;
 
-export type ExtendsKeys<T extends object, E> = {
-  [K in keyof T]-?: NonUndefined<T[K]> extends E ? K : never;
-}[keyof T];
-
 export type KebabCase<Value> = DelimiterCase<Value, '-'>;
 
 export type RequiredKeys<T> = {
@@ -162,7 +157,7 @@ export interface ObservableLike<T = any> {
 }
 
 export interface MichiProperties
-  extends Lifecycle<any>,
+  extends Lifecycle,
     LifecycleInternals,
     Partial<
       Pick<
@@ -175,6 +170,7 @@ export interface MichiProperties
         | 'willValidate'
       >
     > {
+  // props?: unknown,
   readonly $michi: {
     store: Store<AnyObject, AnyObject>;
     cssStore: Store<AnyObject, EmptyObject>;
@@ -201,7 +197,7 @@ export interface MichiProperties
   readonly type: string;
 }
 
-export interface MichiCustomElement extends Element, MichiProperties {}
+export interface MichiCustomElement extends HTMLElement, MichiProperties {}
 
 export type NonNullablePrimitiveType = bigint | string | number | boolean;
 export type PrimitiveType = NonNullablePrimitiveType | null | undefined;
@@ -280,11 +276,18 @@ export type CustomElementTag = `${string}-${string}`;
 
 export type AnyObject = Record<string, any>;
 
+export type OptionalRecord<K extends keyof any, T> = {
+  [P in K]?: T;
+};
+
 // I need to use object to avoid infinite loop in KeysAndKeysOf
-export type AttributesType = Record<string, PrimitiveType | AnyObject>;
+export type AttributesType = OptionalRecord<string, PrimitiveType | AnyObject>;
 // Removed because overcomplicates types on definition of components
 // export type ReflectedAttributesType = Record<PropertyKey, Exclude<PrimitiveType, true> | AnyObject>;
-export type ReflectedAttributesType = Record<string, PrimitiveType | AnyObject>;
+export type ReflectedAttributesType = OptionalRecord<
+  string,
+  PrimitiveType | AnyObject
+>;
 
 export type CssVariablesType = CSSObject;
 // export type ReflectedCssVariablesType = Record<string, Exclude<PrimitiveType, true>>;
@@ -305,61 +308,165 @@ export interface StoreProps<T, Y> {
   transactions?: Y;
 }
 
-export type ExtendableElements =
-  | (keyof HTMLElements & keyof HTMLElementTagNameMap)
-  | undefined;
+export type ExtendableElements = keyof HTMLElements;
 
-export type Self<
-  RC extends ReflectedCssVariablesType,
-  C extends CssVariablesType,
-  M extends MethodsType,
-  T extends MethodsType,
-  E extends EventsType,
-  A extends AttributesType,
-  RA extends ReflectedAttributesType,
-  NOA extends AttributesType,
-  EL extends Element,
-  FRA extends Object,
-  EXTA extends ExtendableElements,
-  FRC extends CssVariablesType,
-  // TODO: Readonly MichiCustomElement?
-  S extends Element = RC &
-    C &
-    A &
-    RA &
-    NOA &
-    Readonly<
-      M &
-        T & {
-          [k in keyof E]: E[k] extends EventDispatcher<infer T>
-            ? (detail?: T) => boolean
-            : any;
-        }
-    > &
-    MichiProperties &
-    EL,
-  Attrs = FRA &
-    FRC & {
-      [k in
-        StringKeyOf<E> as `on${Lowercase<k>}`]: E[k] extends EventDispatcher<
-        infer D
-      >
-        ? (ev: CustomEvent<D>) => any
-        : never;
-    } & GlobalEvents<S> &
-    Pick<AllAttributes, 'name'>,
+export type CustomElementEvents<E extends EventsType | undefined> = Readonly<{
+  [k in keyof E]: E[k] extends EventDispatcher<infer T>
+    ? (detail?: T) => boolean
+    : any;
+}>;
+
+export interface ExtendsObject<T extends ExtendableElements = 'div'> {
+  /**The tag to extend */
+  tag: T;
+  /**The class you want to extend */
+  class: typeof HTMLElement;
+}
+
+export interface MichiElementOptions {
+  /**Allows to define attributes.*/
+  attributes?: AttributesType;
+  /**
+   * Allows to define reflected attributes and follows the Kebab case.
+   * A reflected attribute cannot be initialized with a true value
+   * @link https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr
+   */
+  reflectedAttributes?: AttributesType;
+  /**Transactions are functions that notify changes at the end of the transaction.*/
+  transactions?: MethodsType;
+  /**Methods are functions that notify changes at the time of making the change.*/
+  methods?: MethodsType;
+  /**Function that renders the component.*/
+  render?: Function;
+  /**
+   * Allows you to define an event to his parent and triggering it easily. It will be defined using Lower case. For example countChanged will be registered as countchanged.
+   * @link https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
+   */
+  events?: EventsType;
+  /**Allows to define non observed attributes. This is useful for complex objects that cannot be observed.*/
+  nonObservedAttributes?: Function;
+  // nonObservedAttributes?(): AttributesType;
+  /**
+   * Allows you to define a Constructable Stylesheet that depend on the state of the component. When there is no shadow root the style will be reflected in the style attribute.
+   */
+  computedStyleSheet?: Function;
+  // computedStyleSheet?(): CSSObject;
+
+  // nonObservedAttributes?(): AttributesType;
+  /**Allows to define CSS variables. CSS variables changes does not trigger a rerender*/
+  cssVariables?: CssVariablesType;
+  /**
+   * Allows to define reflected CSS variables and follows the Kebab case. CSS variables changes does not trigger a rerender
+   * A reflected CSS variable cannot be initialized with a true value
+   * @link https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr
+   */
+  reflectedCssVariables?: ReflectedCssVariablesType;
+  /**
+   * This tells the browser to treat the element like a form control.
+   * @link https://web.dev/more-capable-form-controls/
+   */
+  formAssociated?: boolean;
+  /**
+   * Allows to use Constructable Stylesheets.
+   * Remember that you need to use Shadow DOM to be able to use Constructable Stylesheets. In case your component doesn't support this feature, it will return a style tag.
+   * @link https://developers.google.com/web/updates/2019/02/constructable-stylesheets
+   */
+  adoptedStyleSheets?: CSSStyleSheet[];
+  /** Allows to create a fake root on the element. This is especially useful to emulate a shadow root if you don't have shadow root. Since it allows you to add children from a parent node
+   * @default
+   * false //if you have shadow root.
+   * true //if you do not
+   */
+  fakeRoot?: boolean;
+  /**
+   * Allows you to add a Shadow DOM. By default, it uses open mode on Autonomous Custom elements and does not use Shadow DOM on Customized built-in elements. Only the following elements are allowed to use Shadow DOM.
+   * @link https://dom.spec.whatwg.org/#dom-element-attachshadow
+   * @default
+   * {mode: 'open'} //on Autonomous Custom elements
+   * false //on Customized built-in elements
+   */
+  shadow?: false | ShadowRootInit;
+  /**
+   * Allows you to subscribe to an observable like (like a store). When the store emit an event, the custom element will be re-rendered.
+   * @link https://github.com/sindresorhus/type-fest/blob/main/source/observable-like.d.ts
+   */
+  subscribeTo?: SubscribeToType;
+  /**
+   * Contains methods with a name of an attribute / reflected attribute / observable like. Those methods are executed when a change has been made to their corresponding property.
+   */
+  observe?: OptionalRecord<string, Function>;
+  // observe?: {
+  //   [k in KeysAndKeysOf<RA>]?: () => void;
+  // } & {
+  //   [k in KeysAndKeysOf<A>]?: () => void;
+  // } & {
+  //   [k in KeysAndKeysOf<C>]?: () => void;
+  // } & {
+  //   [k in KeysAndKeysOf<RC>]?: () => void;
+  // } & (S extends EmptyObject ? { [k in keyof S]?: () => void } : EmptyObject);
+
+  /**Contains all lifecycle methods.*/
+  lifecycle?: Lifecycle & LifecycleInternals;
+  // lifecycle?: Lifecycle<FRA & FRC> &
+  // (FOA extends true ? LifecycleInternals : {});
+
+  /**Allows to create a Customized built-in element */
+  extends?: ExtendsObject<ExtendableElements>;
+}
+
+export type ExtendsAttributes<
+  O extends ExtendsObject<ExtendableElements> | undefined,
+> = O extends ExtendsObject<infer T> ? HTMLElements[T] : HTMLElements['div'];
+
+export type MichiElementSelf<O extends MichiElementOptions> = O['attributes'] &
+  O['reflectedAttributes'] &
+  O['cssVariables'] &
+  O['reflectedCssVariables'] &
+  O['transactions'] &
+  O['methods'] &
+  (O['nonObservedAttributes'] extends () => infer NOA ? NOA : {}) &
+  CustomElementEvents<O['events']> &
+  MichiProperties &
+  (O['extends'] extends { class: infer E }
+    ? E extends new (
+        ...args: any
+      ) => any
+      ? InstanceType<E>
+      : HTMLElement
+    : HTMLElement);
+
+type MichiElementProps<
+  O extends MichiElementOptions,
+  S extends HTMLElement,
+  Attrs = {
+    [k in
+      keyof O['reflectedAttributes'] as KebabCase<k>]: O['reflectedAttributes'][k];
+  } & {
+    [k in
+      keyof O['reflectedCssVariables'] as KebabCase<k>]: O['reflectedCssVariables'][k];
+  } & {
+    [k in
+      keyof O['events'] as k extends string
+        ? `on${Lowercase<k>}`
+        : never]?: O['events'][k] extends EventDispatcher<infer D>
+      ? (ev: CustomEvent<D>) => unknown
+      : never;
+  } & { name: string } & GlobalEvents<S>,
+> = MichiAttributes<S> &
+  Omit<ExtendsAttributes<O['extends']>, keyof Attrs> &
+  Partial<Attrs>;
+
+export type MichiElementClass<
+  O extends MichiElementOptions,
+  S extends HTMLElement,
 > = {
-  new (
-    props: Omit<
-      HTMLElements[EXTA extends undefined ? 'div' : EXTA],
-      keyof Attrs
-    > &
-      Partial<Attrs> &
-      Tag<S>,
-  ): S;
+  new (props: MichiElementProps<O, S>): S;
+  readonly tag: string;
+  readonly extends?: string;
+  readonly observedAttributes: Readonly<string[]>;
+  formAssociated: boolean;
 };
-
-interface Lifecycle<FRA> {
+export interface Lifecycle {
   /**This method is called at the start of constructor.*/
   willConstruct?(): void;
   /**This method is called at the end of constructor.*/
@@ -377,12 +484,20 @@ interface Lifecycle<FRA> {
   /**This method is called after re-rendering occurs. */
   didUpdate?(): void;
   /**This method is called before a component does anything with an attribute. */
-  willReceiveAttribute?<WRAN extends keyof FRA>(
-    name: WRAN,
-    newValue: FRA[WRAN],
-    oldValue: FRA[WRAN],
+  willReceiveAttribute?(
+    name: string,
+    newValue: unknown,
+    oldValue: unknown,
   ): void;
+  // willReceiveAttribute?<WRAN extends keyof FRA>(
+  //   name: WRAN,
+  //   newValue: FRA[WRAN],
+  //   oldValue: FRA[WRAN],
+  // ): void;
 }
+
+type FormStateRestoreCallbackMode = 'restore' | 'autocomplete';
+
 export interface LifecycleInternals {
   /**Called when the browser associates the element with a form element, or disassociates the element from a form element. */
   formAssociatedCallback?(form: HTMLFormElement): void;
@@ -434,139 +549,6 @@ export interface ElementFactory {
   ): void;
 }
 
-export type KeysAndKeysOf<
-  O extends Record<string, any>,
-  P extends string | undefined = undefined,
-  Order extends number | null = 1,
-> = Order extends null
-  ? ''
-  : O extends any[]
-  ? P extends undefined
-    ? number
-    : `${P}.${number}`
-  : O extends Record<PropertyKey, any>
-  ?
-      | (P extends undefined ? keyof O : `${P}.${StringKeyOf<O>}`)
-      | keyof {
-          [k in
-            StringKeyOf<O> as KeysAndKeysOf<
-              O[k],
-              P extends undefined ? k : `${P}.${k}`,
-              Order extends 1 ? 2 : Order extends 2 ? 3 : null
-            >]: never;
-        }
-  : never;
-
-type FormStateRestoreCallbackMode = 'restore' | 'autocomplete';
-
-export interface MichiElementProperties<
-  M extends MethodsType,
-  T extends MethodsType,
-  E extends EventsType,
-  S extends SubscribeToType,
-  A extends AttributesType,
-  RA extends AttributesType,
-  NOA extends AttributesType,
-  FRA extends AttributesType,
-  FOA extends boolean,
-  EL extends Element,
-  EXTA extends ExtendableElements,
-  C extends CssVariablesType,
-  RC extends ReflectedCssVariablesType,
-  FRC extends Object,
-> {
-  /**Allows to define attributes.*/
-  attributes?: A;
-  /**Allows to define CSS variables. CSS variables changes does not trigger a rerender*/
-  cssVariables?: C;
-  /**Allows to define non observed attributes. This is useful for complex objects that cannot be observed.*/
-  nonObservedAttributes?(): NOA;
-  /**
-   * Allows to define reflected CSS variables and follows the Kebab case. CSS variables changes does not trigger a rerender
-   * A reflected CSS variable cannot be initialized with a true value
-   * @link https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr
-   */
-  reflectedCssVariables?: RC;
-  /**
-   * Allows you to define a Constructable Stylesheet that depend on the state of the component. When there is no shadow root the style will be reflected in the style attribute.
-   */
-  computedStyleSheet?(): CSSProperties;
-  // Unknown because Self was too complicated for typescript to represent
-  /**
-   * Allows to define reflected attributes and follows the Kebab case.
-   * A reflected attribute cannot be initialized with a true value
-   * @link https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr
-   */
-  reflectedAttributes?: RA;
-  /**Transactions are functions that notify changes at the end of the transaction.*/
-  transactions?: T;
-  /**Methods are functions that notify changes at the time of making the change.*/
-  methods?: M;
-  /**Function that renders the component.*/
-  render?: Function;
-  /**
-   * Contains methods with a name of an attribute / reflected attribute / observable like. Those methods are executed when a change has been made to their corresponding property.
-   */
-  observe?: {
-    [k in KeysAndKeysOf<RA>]?: () => void;
-  } & {
-    [k in KeysAndKeysOf<A>]?: () => void;
-  } & {
-    [k in KeysAndKeysOf<C>]?: () => void;
-  } & {
-    [k in KeysAndKeysOf<RC>]?: () => void;
-  } & (S extends EmptyObject ? { [k in keyof S]?: () => void } : EmptyObject);
-  // observers?: ArrayWithOneOrMoreElements<[callback: (propertiesThatChanged: O[]) => void, target: ArrayWithOneOrMoreElements<O>]>,,
-  /**
-   * This tells the browser to treat the element like a form control.
-   * @link https://web.dev/more-capable-form-controls/
-   */
-  formAssociated?: FOA;
-  /**
-   * Allows to use Constructable Stylesheets.
-   * Remember that you need to use Shadow DOM to be able to use Constructable Stylesheets. In case your component doesn't support this feature, it will return a style tag.
-   * @link https://developers.google.com/web/updates/2019/02/constructable-stylesheets
-   */
-  adoptedStyleSheets?: CSSStyleSheet[];
-  /**Contains all lifecycle methods.*/
-  lifecycle?: Lifecycle<FRA & FRC> &
-    (FOA extends true ? LifecycleInternals : {});
-  /**
-   * Allows you to define an event to his parent and triggering it easily. It will be defined using Lower case. For example countChanged will be registered as countchanged.
-   * @link https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
-   */
-  events?: E;
-  /**
-   * Allows you to subscribe to an observable like (like a store). When the store emit an event, the custom element will be re-rendered.
-   * @link https://github.com/sindresorhus/type-fest/blob/main/source/observable-like.d.ts
-   */
-  subscribeTo?: S;
-  /**
-   * Allows you to add a Shadow DOM. By default, it uses open mode on Autonomous Custom elements and does not use Shadow DOM on Customized built-in elements. Only the following elements are allowed to use Shadow DOM.
-   * @link https://dom.spec.whatwg.org/#dom-element-attachshadow
-   * @default
-   * {mode: 'open'} //on Autonomous Custom elements
-   * false //on Customized built-in elements
-   */
-  shadow?: false | ShadowRootInit;
-  /**
-   * Allows to create a Customized built-in element
-   * @link https://developers.google.com/web/fundamentals/web-components/customelements#extendhtml
-   */
-  extends?: {
-    /**The tag to extend */
-    tag: EXTA;
-    /**The class you want to extend */
-    class: new () => EL;
-  };
-  /** Allows to create a fake root on the element. This is especially useful to emulate a shadow root if you don't have shadow root. Since it allows you to add children from a parent node
-   * @default
-   * false //if you have shadow root.
-   * true //if you do not
-   */
-  fakeRoot?: boolean;
-}
-
 export interface CreateCustomElementStaticResult<
   FRC extends Object,
   FRA extends Object,
@@ -586,7 +568,9 @@ export type GetElementProps<El extends any> = El extends {
   ? T
   : El extends (...args: any) => any
   ? Parameters<El>[0]
-  : never;
+  : // : El extends MichiCustomElement
+    // ? El['props']
+    never;
 
 export type EventListenerMap = Map<string, EventListener>;
 

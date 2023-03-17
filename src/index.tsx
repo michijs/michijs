@@ -10,7 +10,7 @@ export * from './michijs/types';
 export * from './michijs/DOM';
 export * from './michijs/DOMDiff';
 export * from './michijs/i18n';
-import './michijs/h/JSX';
+import './michijs/h/generated/JSX';
 export * from './michijs/customElements';
 export * from './michijs/css';
 export * from './michijs/utils';
