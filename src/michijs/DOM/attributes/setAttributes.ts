@@ -1,5 +1,6 @@
 import type { CSSProperties } from '@michijs/htmltype';
 import { AnyObject, EventListenerMap } from '../../types';
+import { deepEqual } from '../../utils/deepEqual';
 import { setStyle } from './setStyle';
 import { setAttribute } from './setAttribute';
 import { compareAttributes } from './compareAttributes';
@@ -14,7 +15,7 @@ export function setAttributes(
     // priority to properties and events
     if (name === '_') {
       Object.entries(newValue).forEach(([propertyName, value]) => {
-        if (el[propertyName] != value) el[propertyName] = value;
+        if (!deepEqual(el[propertyName], value)) el[propertyName] = value;
       });
     } else if (name.startsWith('on')) {
       const eventName = name.slice(2) as keyof ElementEventMap;

@@ -1,5 +1,5 @@
 export function deepEqual(object1: any, object2: any): boolean {
-  if (object1 === object2) return true;
+  if (object1 === object2 || object1 == object2) return true;
 
   const type = typeof object1;
   const areDifferentTypes = type !== typeof object2;
