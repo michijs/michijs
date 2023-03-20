@@ -51,7 +51,7 @@ export function observe<T>(props: ObserveProps<T>): T {
       return observeSet(props as ObserveProps<Set<any>>) as T;
     else if (Object.getPrototypeOf(props.item) === Object.prototype)
       return observeCommonObject(props as ObserveProps<object>) as T;
-    throw `The object with path "${props.propertyPath}" cannot be observed ${props.item}`;
+    // console.error(`The object with path "${props.propertyPath}" cannot be observed ${props.item}`)
   }
   return props.item as T;
 }
