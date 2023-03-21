@@ -3,8 +3,11 @@ import { goTo } from './goTo';
 export const hash = new Proxy(
   {},
   {
-    get(_target, key: string) {
-      return location.hash === key;
+    get(_target, key) {
+      if (typeof key === 'string') {
+        return location.hash === key;
+      }
+      return () => false;
     },
     set(_target, key: string, newValue) {
       const oldValue = location.hash === key;
