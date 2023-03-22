@@ -38,8 +38,12 @@ const FunctionJSXResult: FunctionJSXElement = {
   attrs: testAttrs,
 };
 
-const TestCustomElement = createCustomElement('michi-test');
-const ClassJSXResult: ClassJSXElement = {
+const TestCustomElement = createCustomElement('michi-test', {
+  // dumb attribute to avoid ts issues
+  render() {},
+});
+// : ClassJSXElement
+const ClassJSXResult = {
   tag: TestCustomElement,
   attrs: testAttrs,
 };

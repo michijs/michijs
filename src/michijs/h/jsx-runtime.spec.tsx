@@ -44,7 +44,8 @@ const FunctionJSXResult: FunctionJSXElement = {
 
 const TestCustomElement = createCustomElement('michi-test');
 
-const ClassJSXResult: ClassJSXElement = {
+// ClassJSXElement
+const ClassJSXResult = {
   tag: TestCustomElement,
   attrs: testAttrs,
 };

@@ -32,7 +32,7 @@ import type { CSSProperties } from '@michijs/htmltype';
 import { setStyleProperty } from '../DOM/attributes/setStyleProperty';
 
 export function createCustomElement<
-  O extends MichiElementOptions = {},
+  O extends MichiElementOptions,
   S extends HTMLElement = MichiElementSelf<O>,
 >(
   tag: CustomElementTag,
