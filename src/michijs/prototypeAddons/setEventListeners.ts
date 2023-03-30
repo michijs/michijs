@@ -1,3 +1,4 @@
+import { EventListenerMap } from '../types';
 import { bindFunction } from '../utils/bindFunction';
 
 Element.prototype.$setEventListeners = function (this: Element, src, events) {
@@ -26,11 +27,13 @@ Element.prototype.$setEventListeners = function (this: Element, src, events) {
       }
     } else {
       //Add new events
+      const bindedEvents: EventListenerMap = new Map();
       events.forEach((newEvent, key) => {
         const bindedEvent = bindFunction(src, newEvent);
         this.addEventListener(key, bindedEvent);
+        bindedEvents.set(key, bindedEvent);
       });
-      this.$eventListenerList.set(src, events);
+      this.$eventListenerList.set(src, bindedEvents);
     }
     // Remove all events
   } else if (this.$eventListenerList?.has(src)) {

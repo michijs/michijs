@@ -26,23 +26,29 @@ export function store<
   let propertiesThatChanged = new Array<string>();
   // @ts-ignore
   const self = this;
-  const proxiedTransactions = (
-    props.transactions
-      ? new Proxy(props.transactions, {
-          get(target, property) {
-            return (...args) => {
-              dispatchInProgressCount++;
-              const result = props.transactions?.[property].apply(
-                self ?? target,
-                args,
-              );
-              decrementDispatchInProgressCount();
-              return result;
-            };
-          },
-        })
-      : {}
+  const proxiedTransactions = Object.entries(props.transactions ?? {}).reduce(
+    (previousValue, [key, value]) => {
+      previousValue[key] = (...args) => {
+        dispatchInProgressCount++;
+        const result = self ? value.apply(self, args) : value(...args);
+        decrementDispatchInProgressCount();
+        return result;
+      };
+      return previousValue;
+    },
+    {},
   ) as Y;
+  // Removed because of event listener validations
+  // const proxiedTransactions = (props.transactions ? new Proxy(props.transactions, {
+  //   get(target, property) {
+  //     return (...args) => {
+  //       dispatchInProgressCount++;
+  //       const result = props.transactions?.[property].apply(self ?? target, args);
+  //       decrementDispatchInProgressCount();
+  //       return result;
+  //     };
+  //   }
+  // }): {}) as Y;
 
   const propertyChangedCallback = (propertyThatChanged?: string) => {
     if (propertyThatChanged) propertiesThatChanged.push(propertyThatChanged);
