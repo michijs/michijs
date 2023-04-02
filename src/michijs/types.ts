@@ -202,7 +202,7 @@ export interface MichiCustomElement extends HTMLElement, MichiProperties {}
 export type NonNullablePrimitiveType = bigint | string | number | boolean;
 export type PrimitiveType = NonNullablePrimitiveType | null | undefined;
 
-interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> {}
+type DeepReadonlyArray<T> = ReadonlyArray<DeepReadonly<T>>;
 
 type DeepReadonlyObject<T> = {
   readonly [P in keyof T]: DeepReadonly<T[P]>;
@@ -568,9 +568,9 @@ export type GetElementProps<El extends any> = El extends {
   ? T
   : El extends (...args: any) => any
   ? Parameters<El>[0]
-  : // : El extends MichiCustomElement
-    // ? El['props']
-    never;
+  : El extends keyof JSX.IntrinsicElements
+  ? JSX.IntrinsicElements[El]
+  : never;
 
 export type EventListenerMap = Map<string, EventListener>;
 

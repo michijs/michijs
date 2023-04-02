@@ -1,4 +1,4 @@
-import { DeepReadonly, ObjectJSXElement } from '../..';
+import { DeepReadonly, GetElementProps, ObjectJSXElement } from '../..';
 import { ListElement } from '../components/FragmentAndList';
 import { ListAttrs } from '../components/List';
 import { Target } from './Target';
@@ -38,13 +38,13 @@ export class ElementList<V> implements ElementListInterface<V> {
    * This allows it to have a performance close to vanilla js.
    * An operation on the data implies an operation on the associated elements.
    */
-  List = <E extends string = typeof ListElement.tag>({
+  List = <const E>({
     as,
     renderItem,
     ...attrs
-  }: Omit<ListAttrs<V, E>, 'data' | 'renderItem'> & {
-    renderItem: RenderFunction<V>;
-  }) => {
+  }: { as: E } & Omit<GetElementProps<E>, 'children'> & {
+      renderItem: RenderFunction<V>;
+    }) => {
     return {
       tag: as ?? ListElement.tag,
       attrs: {

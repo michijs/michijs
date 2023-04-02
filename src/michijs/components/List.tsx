@@ -1,20 +1,15 @@
 import { createTarget, ListFactory } from '../DOMDiff/ListFactory';
 import { h } from '../h';
-import { FC, MichiCustomElement } from '../types';
+import { GetElementProps, MichiCustomElement } from '../types';
 import { ListElement } from './FragmentAndList';
 
-export type ListAttrs<Y, T extends string> = Parameters<
-  FC<{
-    as?: T;
-    data: Y[];
-    renderItem: (item: Y, index: number) => JSX.Element;
-  }>
->[0] &
-  (T extends keyof JSX.IntrinsicElements
-    ? JSX.IntrinsicElements[T]
-    : JSX.IntrinsicElements['div']) & { children?: never };
+export type ListAttrs<Y, T> = {
+  as?: T;
+  data: Y[];
+  renderItem: (item: Y, index: number) => JSX.Element;
+} & Omit<GetElementProps<T>, 'children'>;
 
-export function List<Y, T extends string = typeof ListElement.tag>(
+export function List<Y, const T>(
   { as, data, renderItem, ...attrs }: ListAttrs<Y, T>,
   self?: MichiCustomElement,
 ) {

@@ -65,7 +65,7 @@
     "lint-staged": "13.2.0",
     "puppeteer": "19.8.0",
     "redux": "4.2.1",
-    "rome": "11.0.0",
+    "rome": "12.0.0",
     "simple-git-hooks": "2.8.1",
     "ts-jest": "29.0.5",
     "ts-node": "10.9.1",
@@ -121,7 +121,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "rome check --apply-suggested",
+      "rome check --apply",
       "rome format --write"
     ]
   }
