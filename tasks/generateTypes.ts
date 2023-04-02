@@ -55,8 +55,8 @@ writeFileSync(
       .map(([name, x]) => `${name}: ${x.elementInterfaces.join(' & ')}`)
       .join(',\n')}
   }
-  interface HTMLElements extends HTMLElementsHTMLType<ElementsInterfaceOverride>{}
-  interface SVGElements extends SVGElementsHTMLType<ElementsInterfaceOverride>{}
+  type HTMLElements = HTMLElementsHTMLType<ElementsInterfaceOverride>;
+  type SVGElements = SVGElementsHTMLType<ElementsInterfaceOverride>;
 
   declare global {
     namespace JSX {
