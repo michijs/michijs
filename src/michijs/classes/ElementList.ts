@@ -38,11 +38,11 @@ export class ElementList<V> implements ElementListInterface<V> {
    * This allows it to have a performance close to vanilla js.
    * An operation on the data implies an operation on the associated elements.
    */
-  List = <const E>({
+  List = <const E = typeof ListElement>({
     as,
     renderItem,
     ...attrs
-  }: { as: E } & Omit<GetElementProps<E>, 'children'> & {
+  }: { as?: E } & Omit<GetElementProps<E>, 'children'> & {
       renderItem: RenderFunction<V>;
     }) => {
     return {
