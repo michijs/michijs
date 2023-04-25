@@ -60,7 +60,7 @@
     "Autonomous custom elements"
   ],
   "devDependencies": {
-    "@michijs/dev-server": "0.3.1",
+    "@michijs/dev-server": "0.3.2",
     "@reduxjs/toolkit": "1.9.5",
     "@types/jest": "29.5.1",
     "jest": "29.5.0",
