@@ -69,7 +69,7 @@
     "lint-staged": "13.2.2",
     "puppeteer": "20.1.1",
     "redux": "4.2.1",
-    "rome": "12.0.0",
+    "rome": "12.1.0",
     "simple-git-hooks": "2.8.1",
     "ts-jest": "29.1.0",
     "ts-node": "10.9.1",
