@@ -1,5 +1,5 @@
-import { EventDispatcher } from '../../classes';
-import { MichiCustomElement } from '../../types';
+import { EventDispatcher } from "../../classes";
+import { MichiCustomElement } from "../../types";
 
 export function defineEvent(
   self: MichiCustomElement,

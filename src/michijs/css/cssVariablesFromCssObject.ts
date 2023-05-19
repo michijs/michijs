@@ -1,5 +1,5 @@
-import { CSSObject } from '../types';
-import { valueIsCSSObject } from '../typeWards/valueIsCSSObject';
+import { CSSObject } from "../types";
+import { valueIsCSSObject } from "../typeWards/valueIsCSSObject";
 
 export const cssVariablesFromCssObject = (
   cssObject: CSSObject,
@@ -14,7 +14,7 @@ export const cssVariablesFromCssObject = (
       };
     else
       obj[
-        `--${properties.length > 0 ? `${properties.join('-')}-` : ''}${key}`
+        `--${properties.length > 0 ? `${properties.join("-")}-` : ""}${key}`
       ] = value;
   });
 

@@ -1,5 +1,5 @@
-import { h, Link } from '../../src';
-import { urls } from '../routes';
+import { h, Link } from "../../src";
+import { urls } from "../routes";
 
 export const Main = () => (
   <>
@@ -12,14 +12,14 @@ export const Main = () => (
       url={urls.searchParamsAndHash({
         searchParams: {
           counterParam: 0,
-          textParam: 'initial text',
+          textParam: "initial text",
           complexObjectParam: { simpleObject: { test: 1234 } },
         },
-        hash: '#hashTest',
+        hash: "#hashTest",
       })}
     >
       Search params and hash tests
     </Link>
-    <Link url={'https://www.google.com'}>External link</Link>
+    <Link url={"https://www.google.com"}>External link</Link>
   </>
 );

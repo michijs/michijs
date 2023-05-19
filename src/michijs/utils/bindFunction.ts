@@ -1,4 +1,4 @@
-import { isArrowFunction } from './isArrowFunction';
+import { isArrowFunction } from "./isArrowFunction";
 
 export function bindFunction<T extends Function | undefined>(
   self: Element | null | undefined,

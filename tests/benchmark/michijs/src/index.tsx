@@ -1,63 +1,63 @@
-import { h, createCustomElement, ElementList } from '../../../../src';
+import { h, createCustomElement, ElementList } from "../../../../src";
 
 function _random(max: number) {
   return Math.round(Math.random() * 1000) % max;
 }
 
 const adjectives = [
-  'pretty',
-  'large',
-  'big',
-  'small',
-  'tall',
-  'short',
-  'long',
-  'handsome',
-  'plain',
-  'quaint',
-  'clean',
-  'elegant',
-  'easy',
-  'angry',
-  'crazy',
-  'helpful',
-  'mushy',
-  'odd',
-  'unsightly',
-  'adorable',
-  'important',
-  'inexpensive',
-  'cheap',
-  'expensive',
-  'fancy',
+  "pretty",
+  "large",
+  "big",
+  "small",
+  "tall",
+  "short",
+  "long",
+  "handsome",
+  "plain",
+  "quaint",
+  "clean",
+  "elegant",
+  "easy",
+  "angry",
+  "crazy",
+  "helpful",
+  "mushy",
+  "odd",
+  "unsightly",
+  "adorable",
+  "important",
+  "inexpensive",
+  "cheap",
+  "expensive",
+  "fancy",
 ];
 const colours = [
-  'red',
-  'yellow',
-  'blue',
-  'green',
-  'pink',
-  'brown',
-  'purple',
-  'brown',
-  'white',
-  'black',
-  'orange',
+  "red",
+  "yellow",
+  "blue",
+  "green",
+  "pink",
+  "brown",
+  "purple",
+  "brown",
+  "white",
+  "black",
+  "orange",
 ];
 const nouns = [
-  'table',
-  'chair',
-  'house',
-  'bbq',
-  'desk',
-  'car',
-  'pony',
-  'cookie',
-  'sandwich',
-  'burger',
-  'pizza',
-  'mouse',
-  'keyboard',
+  "table",
+  "chair",
+  "house",
+  "bbq",
+  "desk",
+  "car",
+  "pony",
+  "cookie",
+  "sandwich",
+  "burger",
+  "pizza",
+  "mouse",
+  "keyboard",
 ];
 const adjectivesLength = adjectives.length;
 const coloursLength = colours.length;
@@ -84,7 +84,7 @@ const add = () => rows.push(...buildData());
 const update = () => {
   for (let i = 0; i < rows.getData().length; i += 10) {
     rows.update(i, (value) => {
-      value.label += ' !!!';
+      value.label += " !!!";
       return value;
     });
   }
@@ -110,9 +110,9 @@ const deleteItem = (id: number) =>
   rows.remove(rows.getData().findIndex((x) => x.id === id));
 const swapRows = () => rows.swap(1, 998);
 
-export const Table = createCustomElement('michi-table', {
+export const Table = createCustomElement("michi-table", {
   extends: {
-    tag: 'table',
+    tag: "table",
     class: HTMLTableElement,
   },
   fakeRoot: false,
@@ -120,24 +120,24 @@ export const Table = createCustomElement('michi-table', {
     return (
       <rows.List
         as="tbody"
-        _={{ id: 'tbody' }}
+        _={{ id: "tbody" }}
         renderItem={({ label, id, selected }) => (
-          <tr class={selected ? 'danger' : undefined}>
-            <td _={{ className: 'col-md-1' }}>{id}</td>
-            <td _={{ className: 'col-md-4' }}>
+          <tr class={selected ? "danger" : undefined}>
+            <td _={{ className: "col-md-1" }}>{id}</td>
+            <td _={{ className: "col-md-4" }}>
               <a _={{ onclick: () => select(id) }}>{label}</a>
             </td>
-            <td _={{ className: 'col-md-1' }}>
+            <td _={{ className: "col-md-1" }}>
               <a onclick={() => deleteItem(id)}>
                 <span
                   _={{
-                    className: 'glyphicon glyphicon-remove',
-                    ariaHidden: 'true',
+                    className: "glyphicon glyphicon-remove",
+                    ariaHidden: "true",
                   }}
                 />
               </a>
             </td>
-            <td _={{ className: 'col-md-6' }} />
+            <td _={{ className: "col-md-6" }} />
           </tr>
         )}
       />
@@ -145,81 +145,81 @@ export const Table = createCustomElement('michi-table', {
   },
 });
 
-export const TableManager = createCustomElement('michi-table-manager', {
+export const TableManager = createCustomElement("michi-table-manager", {
   extends: {
-    tag: 'div',
+    tag: "div",
     class: HTMLDivElement,
   },
   fakeRoot: false,
   render() {
     return (
-      <div _={{ className: 'row' }}>
-        <div _={{ className: 'col-sm-6 smallpad' }}>
+      <div _={{ className: "row" }}>
+        <div _={{ className: "col-sm-6 smallpad" }}>
           <button
             _={{
-              type: 'button',
-              className: 'btn btn-primary btn-block',
-              id: 'run',
+              type: "button",
+              className: "btn btn-primary btn-block",
+              id: "run",
               onclick: run,
             }}
           >
             Create 1,000 rows
           </button>
         </div>
-        <div _={{ className: 'col-sm-6 smallpad' }}>
+        <div _={{ className: "col-sm-6 smallpad" }}>
           <button
             _={{
-              type: 'button',
-              className: 'btn btn-primary btn-block',
-              id: 'runlots',
+              type: "button",
+              className: "btn btn-primary btn-block",
+              id: "runlots",
               onclick: runLots,
             }}
           >
             Create 10,000 rows
           </button>
         </div>
-        <div _={{ className: 'col-sm-6 smallpad' }}>
+        <div _={{ className: "col-sm-6 smallpad" }}>
           <button
             _={{
-              type: 'button',
-              className: 'btn btn-primary btn-block',
-              id: 'add',
+              type: "button",
+              className: "btn btn-primary btn-block",
+              id: "add",
               onclick: add,
             }}
           >
             Append 1,000 rows
           </button>
         </div>
-        <div _={{ className: 'col-sm-6 smallpad' }}>
+        <div _={{ className: "col-sm-6 smallpad" }}>
           <button
             _={{
-              type: 'button',
-              className: 'btn btn-primary btn-block',
-              id: 'update',
+              type: "button",
+              className: "btn btn-primary btn-block",
+              id: "update",
               onclick: update,
             }}
           >
             Update every 10th row
           </button>
         </div>
-        <div _={{ className: 'col-sm-6 smallpad' }}>
+        <div _={{ className: "col-sm-6 smallpad" }}>
           <button
             _={{
-              type: 'button',
-              className: 'btn btn-primary btn-block',
-              id: 'clear',
+              type: "button",
+              className: "btn btn-primary btn-block",
+              id: "clear",
               onclick: clear,
             }}
           >
             Clear
           </button>
         </div>
-        <div _={{ className: 'col-sm-6 smallpad' }}>
+        <div _={{ className: "col-sm-6 smallpad" }}>
           <button
             _={{
-              type: 'button',
-              className: 'btn btn-primary btn-block',
-              id: 'swaprows',
+              type: "button",
+              className: "btn btn-primary btn-block",
+              id: "swaprows",
               onclick: swapRows,
             }}
           >

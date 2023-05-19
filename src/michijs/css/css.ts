@@ -11,11 +11,11 @@ export const css = (
   styleSheet.replaceSync(
     cssObject.raw.reduce((previousValue, currentValue, i) => {
       const type = typeof props[i];
-      if (type === 'string' || type === 'number')
+      if (type === "string" || type === "number")
         return `${previousValue}${currentValue}${props[i]}`;
       return `${previousValue}${currentValue}`;
       // The accumulator takes the first value if you don't pass a value as the second argument:
-    }, ''),
+    }, ""),
   );
   return styleSheet;
 };

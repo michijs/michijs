@@ -2,8 +2,8 @@ import {
   CustomElementTag,
   MichiElementOptions,
   MichiElementSelf,
-} from '../types';
-import { createCustomElement } from './createCustomElement';
+} from "../types";
+import { createCustomElement } from "./createCustomElement";
 
 export function customElement(tag: TemplateStringsArray) {
   return function <

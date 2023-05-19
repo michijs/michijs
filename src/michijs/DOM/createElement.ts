@@ -1,4 +1,4 @@
-import { setAttributes } from './attributes/setAttributes';
+import { setAttributes } from "./attributes/setAttributes";
 
 export function createElement<
   T extends keyof JSX.IntrinsicElements,

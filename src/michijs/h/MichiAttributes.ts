@@ -1,4 +1,4 @@
-import { IterableAttrs, MichiCustomElement, PickWritable } from '../types';
+import { IterableAttrs, MichiCustomElement, PickWritable } from "../types";
 
 // export type ElementInterfaceAttributes<E extends object> = {
 //   [K in StringKeyOf<PickWritable<E>> as `_${K}`]?: E[K];

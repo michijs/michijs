@@ -1,7 +1,7 @@
-import { createCustomElement, EventDispatcher, h } from '../src';
-import { counterStyle } from './shared/counterStyle';
+import { createCustomElement, EventDispatcher, h } from "../src";
+import { counterStyle } from "./shared/counterStyle";
 
-export const SimpleCounter = createCustomElement('simple-counter', {
+export const SimpleCounter = createCustomElement("simple-counter", {
   reflectedAttributes: {
     count: 0,
   },

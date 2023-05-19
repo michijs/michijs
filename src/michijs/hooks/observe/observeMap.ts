@@ -1,10 +1,10 @@
-import { deepEqual } from '../../utils/deepEqual';
-import { observe, ObserveProps } from '../observe';
+import { deepEqual } from "../../utils/deepEqual";
+import { observe, ObserveProps } from "../observe";
 import {
   customMapAndSetClear,
   customMapAndSetDelete,
-} from './mapAndSetCommonHandlers';
-import { customObjectDelete, customObjectSet } from './observeCommonObject';
+} from "./mapAndSetCommonHandlers";
+import { customObjectDelete, customObjectSet } from "./observeCommonObject";
 
 export const observeMap = <T extends Map<unknown, unknown>>(
   props: ObserveProps<T>,
@@ -26,14 +26,14 @@ export const observeMap = <T extends Map<unknown, unknown>>(
     get: (target, property) => {
       const targetProperty = Reflect.get(target, property);
       const bindedTargetProperty =
-        typeof targetProperty === 'function'
+        typeof targetProperty === "function"
           ? (targetProperty as Function).bind(target)
           : targetProperty;
       switch (property) {
-        case 'clear': {
+        case "clear": {
           return customMapAndSetClear(props, target, bindedTargetProperty);
         }
-        case 'set': {
+        case "set": {
           return function (key, newValue) {
             const newPropertyPath = `${props.propertyPath}.${key}`;
             const notifyChange =
@@ -51,7 +51,7 @@ export const observeMap = <T extends Map<unknown, unknown>>(
             return result;
           };
         }
-        case 'delete': {
+        case "delete": {
           return customMapAndSetDelete(props, target, bindedTargetProperty);
         }
         // case 'subscribe': {

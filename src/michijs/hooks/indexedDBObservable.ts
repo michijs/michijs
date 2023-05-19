@@ -1,8 +1,8 @@
-import { AnyObject, ObservableLike } from '../types';
-import { observable } from './observable';
+import { AnyObject, ObservableLike } from "../types";
+import { observable } from "./observable";
 
 interface TypedIDBObjectStoreParameters<T extends AnyObject>
-  extends Omit<IDBObjectStoreParameters, 'keyPath'> {
+  extends Omit<IDBObjectStoreParameters, "keyPath"> {
   keyPath?: keyof T | (keyof T)[] | null;
 }
 
@@ -12,7 +12,7 @@ type ObjectStore<T extends AnyObject> = {
 
 /** This example shows a variety of different uses of object stores, from updating the data structure with IDBObjectStore.createIndex inside an onupgradeneeded function, to adding a new item to our object store with IDBObjectStore.add. For a full working example, see our To-do Notifications app (view example live.) */
 interface TypedIDBObjectStore<T extends AnyObject>
-  extends Omit<IDBObjectStore, 'add' | 'get' | 'getAll' | 'put'> {
+  extends Omit<IDBObjectStore, "add" | "get" | "getAll" | "put"> {
   /**
    * Adds or updates a record in store with the given value and key.
    *
@@ -85,7 +85,7 @@ function initDb<T extends AnyObject>(
       });
     };
     openRequest.onerror = () => {
-      console.error('Error', openRequest.error);
+      console.error("Error", openRequest.error);
     };
 
     openRequest.onsuccess = () => {
@@ -123,23 +123,23 @@ export function indexedDBObservable<T extends AnyObject>(
         {},
         {
           get(_, method: keyof TypedIDBObjectStore<T>) {
-            let transactionMode: IDBTransactionMode = 'readonly';
+            let transactionMode: IDBTransactionMode = "readonly";
             switch (method) {
-              case 'add':
-              case 'clear':
-              case 'delete':
-              case 'deleteIndex':
-              case 'put': {
-                transactionMode = 'readwrite';
+              case "add":
+              case "clear":
+              case "delete":
+              case "deleteIndex":
+              case "put": {
+                transactionMode = "readwrite";
               }
             }
             if (
               [
-                'autoIncrement',
-                'indexNames',
-                'keyPath',
-                'name',
-                'transaction',
+                "autoIncrement",
+                "indexNames",
+                "keyPath",
+                "name",
+                "transaction",
               ].includes(method)
             ) {
               return new Promise(async (resolve) => {
@@ -159,7 +159,7 @@ export function indexedDBObservable<T extends AnyObject>(
                   transaction.onerror = reject;
                   if (result instanceof IDBRequest) {
                     result.onsuccess = () => {
-                      if (transactionMode === 'readwrite') {
+                      if (transactionMode === "readwrite") {
                         notify(p);
                         bc.postMessage(p);
                       }

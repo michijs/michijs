@@ -2,8 +2,8 @@ import {
   ElementFactory,
   MichiCustomElement,
   DOMElementJSXElement,
-} from '../..';
-import { ObjectFactory } from './ObjectFactory';
+} from "../..";
+import { ObjectFactory } from "./ObjectFactory";
 
 export const DOMElementFactory: Required<ElementFactory> = {
   compare(el: Node, jsx: DOMElementJSXElement): boolean {
@@ -25,8 +25,8 @@ export const DOMElementFactory: Required<ElementFactory> = {
     isMATHMLParam?: boolean,
     self?: MichiCustomElement,
   ) {
-    const isSVG = isSVGParam || jsx.tag.localName === 'svg';
-    const isMATHML = !isSVG && (isMATHMLParam || jsx.tag.localName === 'math');
+    const isSVG = isSVGParam || jsx.tag.localName === "svg";
+    const isMATHML = !isSVG && (isMATHMLParam || jsx.tag.localName === "math");
     ObjectFactory.update(jsx, el, isSVG, isMATHML, self);
   },
 };

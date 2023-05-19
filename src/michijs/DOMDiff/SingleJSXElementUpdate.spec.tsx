@@ -1,36 +1,36 @@
-import { h } from '../h';
-import { update } from './update';
+import { h } from "../h";
+import { update } from "./update";
 
-const buttonLabel = 'test button';
-const buttonLabel2 = 'test button 2';
-const className = 'test classname';
-const id = 'test id';
+const buttonLabel = "test button";
+const buttonLabel2 = "test button 2";
+const className = "test classname";
+const id = "test id";
 
-jest.mock('../components/Router', () => ({}));
+jest.mock("../components/Router", () => ({}));
 
-describe('Single JSX Element Update', () => {
-  const testElement = document.createElement('div');
+describe("Single JSX Element Update", () => {
+  const testElement = document.createElement("div");
   let testElementChild;
   const util = {
     onCreatedCallback: (el) => {
       testElementChild = el;
     },
   };
-  const spySetAttribute = jest.spyOn(testElement, 'setAttribute');
-  const spyRemoveAttribute = jest.spyOn(testElement, 'removeAttribute');
-  const spyId = jest.spyOn(testElement, 'id', 'set');
-  const spyOnCreated = jest.spyOn(util, 'onCreatedCallback');
+  const spySetAttribute = jest.spyOn(testElement, "setAttribute");
+  const spyRemoveAttribute = jest.spyOn(testElement, "removeAttribute");
+  const spyId = jest.spyOn(testElement, "id", "set");
+  const spyOnCreated = jest.spyOn(util, "onCreatedCallback");
 
-  const testResult = document.createElement('div');
+  const testResult = document.createElement("div");
   testResult.id = id;
-  testResult.setAttribute('class', className);
-  const testResultChild = document.createElement('button');
-  testResultChild.setAttribute('hidden', '');
+  testResult.setAttribute("class", className);
+  const testResultChild = document.createElement("button");
+  testResultChild.setAttribute("hidden", "");
   testResultChild.textContent = buttonLabel;
   testResult.append(testResultChild);
-  testResult.append(document.createElement('span'));
+  testResult.append(document.createElement("span"));
 
-  describe('Updating with a jsx', () => {
+  describe("Updating with a jsx", () => {
     beforeAll(() => {
       update(
         testElement,
@@ -42,21 +42,21 @@ describe('Single JSX Element Update', () => {
         </div>,
       );
     });
-    it('must call setAttribute a single time', () => {
+    it("must call setAttribute a single time", () => {
       expect(spySetAttribute).toBeCalledTimes(1);
     });
-    it('must set id a single time', () => {
+    it("must set id a single time", () => {
       expect(spyId).toBeCalledTimes(1);
     });
-    it('must match jsx', () => {
+    it("must match jsx", () => {
       expect(testElement).toEqual(testResult);
     });
-    it('must call oncreated callback', () => {
+    it("must call oncreated callback", () => {
       expect(spyOnCreated).toBeCalledTimes(1);
       expect(testElementChild).toBeDefined();
     });
   });
-  describe('Updating again with same jsx', () => {
+  describe("Updating again with same jsx", () => {
     beforeAll(() => {
       update(
         testElement,
@@ -68,26 +68,26 @@ describe('Single JSX Element Update', () => {
         </div>,
       );
     });
-    it('must match jsx', () => {
+    it("must match jsx", () => {
       expect(testElement).toEqual(testResult);
     });
-    it('must not call setAttribute again', () => {
+    it("must not call setAttribute again", () => {
       expect(spySetAttribute).toBeCalledTimes(1);
     });
-    it('must not set id again', () => {
+    it("must not set id again", () => {
       expect(spyId).toBeCalledTimes(1);
     });
-    it('must not call again oncreated callback', () => {
+    it("must not call again oncreated callback", () => {
       expect(spyOnCreated).toBeCalledTimes(1);
     });
-    it('must not create another button instance', () => {
+    it("must not create another button instance", () => {
       expect(testElementChild).toBe(testElement.childNodes.item(0));
     });
   });
-  describe('Removing every attribute', () => {
+  describe("Removing every attribute", () => {
     let spyRemoveAttributeChild;
     beforeAll(() => {
-      spyRemoveAttributeChild = jest.spyOn(testElementChild, 'removeAttribute');
+      spyRemoveAttributeChild = jest.spyOn(testElementChild, "removeAttribute");
       update(
         testElement,
         <div _={{ id }} class={undefined}>
@@ -95,33 +95,33 @@ describe('Single JSX Element Update', () => {
           <span />
         </div>,
       );
-      testResult.removeAttribute('class');
+      testResult.removeAttribute("class");
       // testResult.removeAttribute('id');
-      testResultChild.removeAttribute('hidden');
+      testResultChild.removeAttribute("hidden");
     });
-    it('must match jsx', () => {
+    it("must match jsx", () => {
       expect(testElement).toEqual(testResult);
     });
-    it('must call removeAttribute a single time', () => {
+    it("must call removeAttribute a single time", () => {
       expect(spyRemoveAttribute).toBeCalledTimes(1);
     });
-    it('must call removeAttribute a single time on child', () => {
+    it("must call removeAttribute a single time on child", () => {
       expect(spyRemoveAttributeChild).toBeCalledTimes(1);
     });
     // it('must set id again', () => {
     //   expect(spyId).toBeCalledTimes(2);
     // });
-    it('must not set id again', () => {
+    it("must not set id again", () => {
       expect(spyId).toBeCalledTimes(1);
     });
-    it('must not call again oncreated callback', () => {
+    it("must not call again oncreated callback", () => {
       expect(spyOnCreated).toBeCalledTimes(1);
     });
-    it('must not create another button instance', () => {
+    it("must not create another button instance", () => {
       expect(testElementChild).toBe(testElement.childNodes.item(0));
     });
   });
-  describe('Updating a label', () => {
+  describe("Updating a label", () => {
     beforeAll(() => {
       update(
         testElement,
@@ -132,11 +132,11 @@ describe('Single JSX Element Update', () => {
       );
       testResultChild.textContent = buttonLabel2;
     });
-    it('must match jsx', () => {
+    it("must match jsx", () => {
       expect(testElement).toEqual(testResult);
     });
   });
-  describe('Removing a single child', () => {
+  describe("Removing a single child", () => {
     beforeAll(() => {
       update(
         testElement,
@@ -146,18 +146,18 @@ describe('Single JSX Element Update', () => {
         </div>,
       );
       // undefined jsx must result on comments to keep the track of positions
-      testResultChild.replaceWith(document.createComment(''));
+      testResultChild.replaceWith(document.createComment(""));
     });
-    it('must match jsx', () => {
+    it("must match jsx", () => {
       expect(testElement).toEqual(testResult);
     });
   });
-  describe('Removing every child', () => {
+  describe("Removing every child", () => {
     beforeAll(() => {
       update(testElement, <div _={{ id }} class={undefined} />);
-      testResult.textContent = '';
+      testResult.textContent = "";
     });
-    it('must match jsx', () => {
+    it("must match jsx", () => {
       expect(testElement).toEqual(testResult);
     });
   });

@@ -1,9 +1,9 @@
-import { deepEqual } from '../../utils/deepEqual';
-import { observe, ObserveHandlerProps, ObserveProps } from '../observe';
+import { deepEqual } from "../../utils/deepEqual";
+import { observe, ObserveHandlerProps, ObserveProps } from "../observe";
 
 export const customObjectSet = (
   props: ObserveHandlerProps,
-): Required<ProxyHandler<object>>['set'] => {
+): Required<ProxyHandler<object>>["set"] => {
   return (target, property, newValue, receiver) => {
     const { propertyPath, shouldValidatePropertyChange, onChange } = props;
     const oldValue = target[property];
@@ -26,7 +26,7 @@ export const customObjectDelete = ({
   shouldValidatePropertyChange,
   propertyPath,
   onChange,
-}: ObserveHandlerProps): Required<ProxyHandler<object>>['deleteProperty'] => {
+}: ObserveHandlerProps): Required<ProxyHandler<object>>["deleteProperty"] => {
   return (target, property) => {
     const newPropertyPath = `${propertyPath}.${property.toString()}`;
     const hasAnOldValue =

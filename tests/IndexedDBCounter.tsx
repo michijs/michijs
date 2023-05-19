@@ -4,21 +4,21 @@ import {
   EventDispatcher,
   indexedDBObservable,
   createCustomElement,
-} from '../src';
-import { counterStyle } from './shared/counterStyle';
+} from "../src";
+import { counterStyle } from "./shared/counterStyle";
 
 const storedCount = indexedDBObservable<{
   counter: {
     count: number;
     id: number;
   };
-}>('counter', {
+}>("counter", {
   counter: {
-    keyPath: 'id',
+    keyPath: "id",
   },
 });
 
-export const IndexedDBCounter = createCustomElement('indexed-db-counter', {
+export const IndexedDBCounter = createCustomElement("indexed-db-counter", {
   attributes: {
     count: (await storedCount.counter?.get(1))?.count ?? 0,
   },

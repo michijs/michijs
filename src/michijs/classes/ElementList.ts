@@ -1,11 +1,11 @@
-import { DeepReadonly, GetElementProps, ObjectJSXElement } from '../..';
-import { ListElement } from '../components/FragmentAndList';
-import { ListAttrs } from '../components/List';
-import { Target } from './Target';
+import { DeepReadonly, GetElementProps, ObjectJSXElement } from "../..";
+import { ListElement } from "../components/FragmentAndList";
+import { ListAttrs } from "../components/List";
+import { Target } from "./Target";
 
 export type ElementListInterface<V> = Pick<
   V[],
-  'push' | 'pop' | 'reverse' | 'shift' | 'unshift'
+  "push" | "pop" | "reverse" | "shift" | "unshift"
 > & {
   /**
    * Removes all the list elements
@@ -42,7 +42,7 @@ export class ElementList<V> implements ElementListInterface<V> {
     as,
     renderItem,
     ...attrs
-  }: { as?: E } & Omit<GetElementProps<E>, 'children'> & {
+  }: { as?: E } & Omit<GetElementProps<E>, "children"> & {
       renderItem: RenderFunction<V>;
     }) => {
     return {

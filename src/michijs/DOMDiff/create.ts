@@ -1,5 +1,5 @@
-import { SingleJSXElement } from '../types';
-import { getElementFactory } from './getElementFactory';
+import { SingleJSXElement } from "../types";
+import { getElementFactory } from "./getElementFactory";
 
 export function create(
   newJSX: SingleJSXElement,

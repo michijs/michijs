@@ -3,10 +3,10 @@ import {
   EventDispatcher,
   h,
   ElementInternals,
-} from '../src';
-import { counterStyle } from './shared/counterStyle';
+} from "../src";
+import { counterStyle } from "./shared/counterStyle";
 
-export const A11YCounter = createCustomElement('a11y-counter', {
+export const A11YCounter = createCustomElement("a11y-counter", {
   formAssociated: true,
   attributes: {
     value: 0,
@@ -16,10 +16,10 @@ export const A11YCounter = createCustomElement('a11y-counter', {
   },
   methods: {
     decrementCount() {
-      if (!this.matches(':disabled')) this.value--;
+      if (!this.matches(":disabled")) this.value--;
     },
     incrementCount() {
-      if (!this.matches(':disabled')) this.value++;
+      if (!this.matches(":disabled")) this.value++;
     },
   },
   lifecycle: {
@@ -27,17 +27,17 @@ export const A11YCounter = createCustomElement('a11y-counter', {
       this.value = this.count;
     },
     formAssociatedCallback(form) {
-      console.log('Form associated', form);
+      console.log("Form associated", form);
     },
     formDisabledCallback(disabled) {
-      console.log('Form disabled', disabled);
+      console.log("Form disabled", disabled);
     },
     formResetCallback() {
       this.value = this.count;
-      console.log('Form reset');
+      console.log("Form reset");
     },
     formStateRestoreCallback(state, mode) {
-      console.log('Form state restore', state, mode);
+      console.log("Form state restore", state, mode);
     },
   },
   events: {
@@ -59,14 +59,14 @@ export const A11YCounter = createCustomElement('a11y-counter', {
           ariaValueText={this.value.toString()}
           formValue={this.value.toString()}
           errorMessage={
-            this.value > 0 ? undefined : 'Value should be greater than 0'
+            this.value > 0 ? undefined : "Value should be greater than 0"
           }
         />
-        <button type='button' onpointerup={this.decrementCount}>
+        <button type="button" onpointerup={this.decrementCount}>
           -
         </button>
         <span>{this.value}</span>
-        <button type='button' onpointerup={this.incrementCount}>
+        <button type="button" onpointerup={this.incrementCount}>
           +
         </button>
       </>

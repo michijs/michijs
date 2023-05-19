@@ -1,6 +1,6 @@
-import { ObservableLike } from '../types';
-import { observable } from './observable';
-import { observe } from './observe';
+import { ObservableLike } from "../types";
+import { observable } from "./observable";
+import { observe } from "./observe";
 
 export function observableValue<T = unknown>(initialValue: T) {
   const { notify, ...observableProps } = observable<string>();
@@ -10,7 +10,7 @@ export function observableValue<T = unknown>(initialValue: T) {
       if (propertyPath) notify(propertyPath);
     },
     shouldValidatePropertyChange: () => true,
-    propertyPath: '',
+    propertyPath: "",
   });
   return state;
 }

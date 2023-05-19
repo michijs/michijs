@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
 function _random(max) {
   return Math.round(Math.random() * 1000) % max;
 }
 
-const rowTemplate = document.createElement('tr');
+const rowTemplate = document.createElement("tr");
 rowTemplate.innerHTML =
   "<td class='col-md-1'></td><td class='col-md-4'><a class='lbl'></a></td><td class='col-md-1'><a class='remove'><span class='remove glyphicon glyphicon-remove' aria-hidden='true'></span></a></td><td class='col-md-6'></td>";
 
@@ -17,59 +17,59 @@ class Store {
   }
   buildData(count = 1000) {
     var adjectives = [
-      'pretty',
-      'large',
-      'big',
-      'small',
-      'tall',
-      'short',
-      'long',
-      'handsome',
-      'plain',
-      'quaint',
-      'clean',
-      'elegant',
-      'easy',
-      'angry',
-      'crazy',
-      'helpful',
-      'mushy',
-      'odd',
-      'unsightly',
-      'adorable',
-      'important',
-      'inexpensive',
-      'cheap',
-      'expensive',
-      'fancy',
+      "pretty",
+      "large",
+      "big",
+      "small",
+      "tall",
+      "short",
+      "long",
+      "handsome",
+      "plain",
+      "quaint",
+      "clean",
+      "elegant",
+      "easy",
+      "angry",
+      "crazy",
+      "helpful",
+      "mushy",
+      "odd",
+      "unsightly",
+      "adorable",
+      "important",
+      "inexpensive",
+      "cheap",
+      "expensive",
+      "fancy",
     ];
     var colours = [
-      'red',
-      'yellow',
-      'blue',
-      'green',
-      'pink',
-      'brown',
-      'purple',
-      'brown',
-      'white',
-      'black',
-      'orange',
+      "red",
+      "yellow",
+      "blue",
+      "green",
+      "pink",
+      "brown",
+      "purple",
+      "brown",
+      "white",
+      "black",
+      "orange",
     ];
     var nouns = [
-      'table',
-      'chair',
-      'house',
-      'bbq',
-      'desk',
-      'car',
-      'pony',
-      'cookie',
-      'sandwich',
-      'burger',
-      'pizza',
-      'mouse',
-      'keyboard',
+      "table",
+      "chair",
+      "house",
+      "bbq",
+      "desk",
+      "car",
+      "pony",
+      "cookie",
+      "sandwich",
+      "burger",
+      "pizza",
+      "mouse",
+      "keyboard",
     ];
     var data = [];
     for (var i = 0; i < count; i++)
@@ -83,7 +83,7 @@ class Store {
   }
   updateData(mod = 10) {
     for (let i = 0; i < this.data.length; i += 10) {
-      this.data[i].label += ' !!!';
+      this.data[i].label += " !!!";
       // this.data[i] = Object.assign({}, this.data[i], {label: this.data[i].label +' !!!'});
     }
   }
@@ -136,7 +136,7 @@ class Store {
 
 var getParentId = function (elem) {
   while (elem) {
-    if (elem.tagName === 'TR') {
+    if (elem.tagName === "TR") {
       return elem.data_id;
     }
     elem = elem.parentNode;
@@ -156,47 +156,47 @@ class Main {
     this.data = [];
     this.selectedRow = undefined;
 
-    document.getElementById('main').addEventListener('click', (e) => {
+    document.getElementById("main").addEventListener("click", (e) => {
       //console.log("listener",e);
-      if (e.target.matches('#add')) {
+      if (e.target.matches("#add")) {
         e.preventDefault();
         //console.log("add");
         this.add();
-      } else if (e.target.matches('#run')) {
+      } else if (e.target.matches("#run")) {
         e.preventDefault();
         //console.log("run");
         this.run();
-      } else if (e.target.matches('#update')) {
+      } else if (e.target.matches("#update")) {
         e.preventDefault();
         //console.log("update");
         this.update();
-      } else if (e.target.matches('#hideall')) {
+      } else if (e.target.matches("#hideall")) {
         e.preventDefault();
         //console.log("hideAll");
         this.hideAll();
-      } else if (e.target.matches('#showall')) {
+      } else if (e.target.matches("#showall")) {
         e.preventDefault();
         //console.log("showAll");
         this.showAll();
-      } else if (e.target.matches('#runlots')) {
+      } else if (e.target.matches("#runlots")) {
         e.preventDefault();
         //console.log("runLots");
         this.runLots();
-      } else if (e.target.matches('#clear')) {
+      } else if (e.target.matches("#clear")) {
         e.preventDefault();
         //console.log("clear");
         this.clear();
-      } else if (e.target.matches('#swaprows')) {
+      } else if (e.target.matches("#swaprows")) {
         e.preventDefault();
         //console.log("swapRows");
         this.swapRows();
-      } else if (e.target.matches('.remove')) {
+      } else if (e.target.matches(".remove")) {
         e.preventDefault();
         let id = getParentId(e.target);
         let idx = this.findIdx(id);
         //console.log("delete",idx);
         this.delete(idx);
-      } else if (e.target.matches('.lbl')) {
+      } else if (e.target.matches(".lbl")) {
         e.preventDefault();
         let id = getParentId(e.target);
         let idx = this.findIdx(id);
@@ -204,7 +204,7 @@ class Main {
         this.select(idx);
       }
     });
-    this.tbody = document.getElementById('tbody');
+    this.tbody = document.getElementById("tbody");
   }
   findIdx(id) {
     for (let i = 0; i < this.data.length; i++) {
@@ -234,7 +234,7 @@ class Main {
   }
   unselect() {
     if (this.selectedRow !== undefined) {
-      this.selectedRow.className = '';
+      this.selectedRow.className = "";
       this.selectedRow = undefined;
     }
   }
@@ -242,7 +242,7 @@ class Main {
     this.unselect();
     this.store.select(this.data[idx].id);
     this.selectedRow = this.rows[idx];
-    this.selectedRow.className = 'danger';
+    this.selectedRow.className = "danger";
   }
   recreateSelection() {
     let old_selection = this.store.selected;
@@ -250,7 +250,7 @@ class Main {
     if (sel_idx >= 0) {
       this.store.select(this.data[sel_idx].id);
       this.selectedRow = this.rows[sel_idx];
-      this.selectedRow.className = 'danger';
+      this.selectedRow.className = "danger";
     }
   }
   delete(idx) {
@@ -275,7 +275,7 @@ class Main {
     // var cNode = tbody.cloneNode(false);
     // tbody.parentNode.replaceChild(cNode ,tbody);
     // ~212 msecs
-    this.tbody.textContent = '';
+    this.tbody.textContent = "";
 
     // ~236 msecs
     // var rangeObj = new Range();

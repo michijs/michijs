@@ -1,5 +1,5 @@
-import { EventListenerMap } from '../types';
-import { bindFunction } from '../utils/bindFunction';
+import { EventListenerMap } from "../types";
+import { bindFunction } from "../utils/bindFunction";
 
 Element.prototype.$setEventListeners = function (this: Element, src, events) {
   // New events

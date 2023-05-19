@@ -1,10 +1,10 @@
-import { updateChildren } from '../DOMDiff';
+import { updateChildren } from "../DOMDiff";
 
 export function renderSync(
   Component: JSX.Element,
   mountPoint: ParentNode = document.body,
 ) {
-  mountPoint.textContent = '';
+  mountPoint.textContent = "";
   updateChildren(
     mountPoint,
     Array.isArray(Component) ? Component : [Component],
@@ -18,9 +18,9 @@ export async function render(
   mountPoint: ParentNode,
 ): Promise<ParentNode> {
   return new Promise((resolve) => {
-    if (document.readyState !== 'complete')
-      document.addEventListener('readystatechange', () => {
-        if (document.readyState === 'complete')
+    if (document.readyState !== "complete")
+      document.addEventListener("readystatechange", () => {
+        if (document.readyState === "complete")
           resolve(renderSync(Component, mountPoint));
       });
     else resolve(renderSync(Component, mountPoint));

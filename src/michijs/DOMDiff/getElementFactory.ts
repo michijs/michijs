@@ -3,16 +3,16 @@ import {
   ElementFactory,
   FunctionJSXElement,
   SingleJSXElement,
-} from '../types';
-import { h } from '../h';
-import { ObjectFactory } from './ObjectFactory';
-import { PrimitiveFactory } from './PrimitiveFactory';
-import { CommentFactory } from './CommentFactory';
-import { ListFactory } from './ListFactory';
-import { isClassJSXElement } from '../typeWards/isClassJSXElement';
-import { classJSXToObjectJSXElement } from '../utils/classJSXToObjectJSXElement';
-import { DOMElementFactory } from './DOMElementFactory';
-import { Fragment } from '../components';
+} from "../types";
+import { h } from "../h";
+import { ObjectFactory } from "./ObjectFactory";
+import { PrimitiveFactory } from "./PrimitiveFactory";
+import { CommentFactory } from "./CommentFactory";
+import { ListFactory } from "./ListFactory";
+import { isClassJSXElement } from "../typeWards/isClassJSXElement";
+import { classJSXToObjectJSXElement } from "../utils/classJSXToObjectJSXElement";
+import { DOMElementFactory } from "./DOMElementFactory";
+import { Fragment } from "../components";
 
 export interface getElementFactoryResult {
   jsx: SingleJSXElement;
@@ -25,7 +25,7 @@ export function getElementFactory(
 ): { jsx: SingleJSXElement; factory: ElementFactory } {
   if (jsx) {
     if (Array.isArray(jsx)) return { jsx, factory: ListFactory };
-    else if (typeof jsx === 'object' && 'tag' in jsx) {
+    else if (typeof jsx === "object" && "tag" in jsx) {
       //Fix for non-jsx objects
       // Solves undefined Fragment caused by some compilers
       if (jsx.tag === undefined)
@@ -35,7 +35,7 @@ export function getElementFactory(
           ),
           factory: ObjectFactory,
         };
-      else if (typeof jsx.tag === 'function') {
+      else if (typeof jsx.tag === "function") {
         // Explicit casting because of tsc error
         if (isClassJSXElement(jsx as ClassJSXElement | FunctionJSXElement))
           return {
@@ -46,7 +46,7 @@ export function getElementFactory(
           (jsx as FunctionJSXElement).tag(jsx.attrs, self),
           self,
         );
-      } else if (typeof jsx.tag === 'object') {
+      } else if (typeof jsx.tag === "object") {
         return { jsx, factory: DOMElementFactory };
       }
       return { jsx, factory: ObjectFactory };

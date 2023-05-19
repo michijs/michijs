@@ -1,7 +1,7 @@
-import { ElementFactory, MichiCustomElement, ObjectJSXElement } from '../..';
-import { setAttributes } from '../DOM/attributes/setAttributes';
-import { create } from './create';
-import { updateChildren } from './updateChildren';
+import { ElementFactory, MichiCustomElement, ObjectJSXElement } from "../..";
+import { setAttributes } from "../DOM/attributes/setAttributes";
+import { create } from "./create";
+import { updateChildren } from "./updateChildren";
 
 export const ObjectFactory: Required<ElementFactory> = {
   compare(el: Element, jsx: ObjectJSXElement): boolean {
@@ -13,8 +13,8 @@ export const ObjectFactory: Required<ElementFactory> = {
     isMATHMLParam?: boolean,
     self?: Element,
   ) {
-    const isSVG = isSVGParam || jsx.tag === 'svg';
-    const isMATHML = !isSVG && (isMATHMLParam || jsx.tag === 'math');
+    const isSVG = isSVGParam || jsx.tag === "svg";
+    const isMATHML = !isSVG && (isMATHMLParam || jsx.tag === "math");
     let el: Element;
     const {
       children,
@@ -26,14 +26,14 @@ export const ObjectFactory: Required<ElementFactory> = {
     } = jsx.attrs;
     if (isSVG) {
       if (jsx.attrs?.is)
-        el = document.createElementNS('http://www.w3.org/2000/svg', jsx.tag, {
+        el = document.createElementNS("http://www.w3.org/2000/svg", jsx.tag, {
           is: jsx.attrs.is,
         });
-      else el = document.createElementNS('http://www.w3.org/2000/svg', jsx.tag);
+      else el = document.createElementNS("http://www.w3.org/2000/svg", jsx.tag);
     } else if (isMATHML) {
       if (jsx.attrs?.is)
         el = document.createElementNS(
-          'http://www.w3.org/1998/Math/MathML',
+          "http://www.w3.org/1998/Math/MathML",
           jsx.tag,
           {
             is: jsx.attrs.is,
@@ -41,7 +41,7 @@ export const ObjectFactory: Required<ElementFactory> = {
         );
       else
         el = document.createElementNS(
-          'http://www.w3.org/1998/Math/MathML',
+          "http://www.w3.org/1998/Math/MathML",
           jsx.tag,
         );
     } else if (jsx.attrs?.is)
@@ -66,8 +66,8 @@ export const ObjectFactory: Required<ElementFactory> = {
     isMATHMLParam?: boolean,
     self?: MichiCustomElement,
   ) {
-    const isSVG = isSVGParam || jsx.tag === 'svg';
-    const isMATHML = !isSVG && (isMATHMLParam || jsx.tag === 'math');
+    const isSVG = isSVGParam || jsx.tag === "svg";
+    const isMATHML = !isSVG && (isMATHMLParam || jsx.tag === "math");
     const {
       children,
       $staticChildren,

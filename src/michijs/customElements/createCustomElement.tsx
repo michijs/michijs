@@ -1,4 +1,4 @@
-import { idGenerator, store } from '../hooks';
+import { idGenerator, store } from "../hooks";
 import {
   Store,
   AttributesType,
@@ -11,25 +11,25 @@ import {
   MichiElementOptions,
   MichiElementClass,
   MichiElementSelf,
-} from '../types';
-import { formatToKebabCase } from '../utils/formatToKebabCase';
-import { defineTransactionFromStore } from './properties/defineTransactionFromStore';
-import { defineEvent } from './properties/defineEvent';
-import { definePropertyFromStore } from './properties/definePropertyFromStore';
-import { setReflectedAttributes } from './properties/setReflectedAttributes';
-import { defineMethod } from './properties/defineMethod';
-import { deepEqual } from '../utils/deepEqual';
-import { getRootNode } from '../DOM/getRootNode';
-import { getAttributeValue } from '../DOM/attributes/getAttributeValue';
-import { getMountPoint } from '../DOM/getMountPoint';
-import { updateChildren } from '../DOMDiff';
-import { defineReflectedAttributes } from './properties/defineReflectedAttributes';
-import { addStylesheetsToDocumentOrShadowRoot } from '../utils/addStylesheetsToDocumentOrShadowRoot';
-import { h } from '../h';
-import { createStyleSheet, createCssVariables, updateStyleSheet } from '../css';
-import { cssVariablesFromCssObject } from '../css/cssVariablesFromCssObject';
-import type { CSSProperties } from '@michijs/htmltype';
-import { setStyleProperty } from '../DOM/attributes/setStyleProperty';
+} from "../types";
+import { formatToKebabCase } from "../utils/formatToKebabCase";
+import { defineTransactionFromStore } from "./properties/defineTransactionFromStore";
+import { defineEvent } from "./properties/defineEvent";
+import { definePropertyFromStore } from "./properties/definePropertyFromStore";
+import { setReflectedAttributes } from "./properties/setReflectedAttributes";
+import { defineMethod } from "./properties/defineMethod";
+import { deepEqual } from "../utils/deepEqual";
+import { getRootNode } from "../DOM/getRootNode";
+import { getAttributeValue } from "../DOM/attributes/getAttributeValue";
+import { getMountPoint } from "../DOM/getMountPoint";
+import { updateChildren } from "../DOMDiff";
+import { defineReflectedAttributes } from "./properties/defineReflectedAttributes";
+import { addStylesheetsToDocumentOrShadowRoot } from "../utils/addStylesheetsToDocumentOrShadowRoot";
+import { h } from "../h";
+import { createStyleSheet, createCssVariables, updateStyleSheet } from "../css";
+import { cssVariablesFromCssObject } from "../css/cssVariablesFromCssObject";
+import type { CSSProperties } from "@michijs/htmltype";
+import { setStyleProperty } from "../DOM/attributes/setStyleProperty";
 
 export function createCustomElement<
   O extends MichiElementOptions,
@@ -50,7 +50,7 @@ export function createCustomElement<
     subscribeTo,
     adoptedStyleSheets,
     extends: extendsObject,
-    shadow = extendsObject ? false : { mode: 'open' },
+    shadow = extendsObject ? false : { mode: "open" },
     computedStyleSheet,
     cssVariables,
     reflectedCssVariables,
@@ -67,7 +67,7 @@ export function createCustomElement<
     extends (classToExtend as CustomElementConstructor)
     implements MichiCustomElement
   {
-    $michi: MichiCustomElement['$michi'] = {
+    $michi: MichiCustomElement["$michi"] = {
       store: store.apply(this, [
         { state: { ...attributes, ...reflectedAttributes }, transactions },
       ]) as Store<AttributesType, MethodsType>,
@@ -80,7 +80,7 @@ export function createCustomElement<
         if (observe)
           Object.entries(observe).forEach(([key, observer]) => {
             const matches =
-              typeof propertyThatChanged === 'object'
+              typeof propertyThatChanged === "object"
                 ? propertyThatChanged.find((x) => x.startsWith(key))
                 : propertyThatChanged === key;
 
@@ -112,7 +112,7 @@ export function createCustomElement<
     disabledCallback;
     resetCallback;
     stateRestoreCallback;
-    render = render as MichiCustomElement['render'];
+    render = render as MichiCustomElement["render"];
     child<T extends (new () => any) | HTMLElement = HTMLElement>(
       selector: string,
     ) {
@@ -163,14 +163,14 @@ export function createCustomElement<
 
         if (cssVariables || reflectedCssVariables) {
           const styleSheet = createCssVariables(
-            ':host',
+            ":host",
             this.$michi.cssStore.state as CSSObject,
           );
 
           addStylesheetsToDocumentOrShadowRoot(attachedShadow, styleSheet);
           this.$michi.cssStore.subscribe((propertiesThatChanged) => {
             updateStyleSheet(styleSheet, {
-              [':host']: cssVariablesFromCssObject(
+              [":host"]: cssVariablesFromCssObject(
                 this.$michi.cssStore.state as CSSObject,
               ),
             });
@@ -186,11 +186,11 @@ export function createCustomElement<
         }
         if (computedStyleSheet) {
           const callback: () => CSSProperties = computedStyleSheet.bind(this);
-          const styleSheet = createStyleSheet(callback(), [':host']);
+          const styleSheet = createStyleSheet(callback(), [":host"]);
           addStylesheetsToDocumentOrShadowRoot(attachedShadow, styleSheet);
 
           const updateStylesheetCallback = () => {
-            updateStyleSheet(styleSheet, callback(), [':host']);
+            updateStyleSheet(styleSheet, callback(), [":host"]);
           };
           this.$michi.cssStore.subscribe(updateStylesheetCallback);
           this.$michi.store.subscribe(updateStylesheetCallback);
@@ -341,7 +341,7 @@ export function createCustomElement<
       if (!this.$michi.alreadyRendered) {
         if (fakeRoot) {
           const mountPoint = getMountPoint(this);
-          this.$michi.fakeRoot = document.createElement('michi-fragment');
+          this.$michi.fakeRoot = document.createElement("michi-fragment");
           this.$michi.fakeRoot.$ignore = true;
           mountPoint.prepend(this.$michi.fakeRoot);
         } else if (!shadow) this.$doNotTouchChildren = true;
@@ -386,7 +386,7 @@ export function createCustomElement<
       return this.$michi.internals?.form;
     }
     get name() {
-      return this.getAttribute('name');
+      return this.getAttribute("name");
     }
     get type() {
       return this.localName;
