@@ -28,3 +28,5 @@ UserInterfaceState.xcuserstate
 package-lock.json
 .eslintcache
 coverage
+
+rome.json
