@@ -1,22 +1,22 @@
-import { createCustomElement } from '../customElements/createCustomElement';
-import { h } from '.';
+import { createCustomElement } from "../customElements/createCustomElement";
+import { h } from ".";
 import {
   ClassJSXElement,
   FC,
   FragmentJSXElement,
   FunctionJSXElement,
   ObjectJSXElement,
-} from '../types';
-import { Fragment } from '../components/FragmentAndList';
+} from "../types";
+import { Fragment } from "../components/FragmentAndList";
 
-jest.mock('../customElements/createCustomElement', () => ({
+jest.mock("../customElements/createCustomElement", () => ({
   createCustomElement: (tag: string) => ({ tag }),
 }));
 
-const testChild = 'child';
+const testChild = "child";
 const testAttrs = {
-  id: 'testID',
-  _: { className: 'textClassName' },
+  id: "testID",
+  _: { className: "textClassName" },
   children: [testChild],
 };
 const fragmentResult: FragmentJSXElement = {
@@ -26,11 +26,11 @@ const fragmentResult: FragmentJSXElement = {
   },
 };
 const objectJSXResult: ObjectJSXElement = {
-  tag: 'div',
+  tag: "div",
   attrs: testAttrs,
 };
 
-const DivProxy: FC<JSX.IntrinsicElements['div']> = (attrs) => (
+const DivProxy: FC<JSX.IntrinsicElements["div"]> = (attrs) => (
   <div {...attrs} />
 );
 const FunctionJSXResult: FunctionJSXElement = {
@@ -38,7 +38,7 @@ const FunctionJSXResult: FunctionJSXElement = {
   attrs: testAttrs,
 };
 
-const TestCustomElement = createCustomElement('michi-test', {
+const TestCustomElement = createCustomElement("michi-test", {
   // dumb attribute to avoid ts issues
   render() {},
 });
@@ -48,20 +48,20 @@ const ClassJSXResult = {
   attrs: testAttrs,
 };
 
-describe('h tests', () => {
-  it('Fragment result', () => {
+describe("h tests", () => {
+  it("Fragment result", () => {
     const fragment = (<Fragment />) as ClassJSXElement;
     expect(fragment.tag.tag).toEqual(fragmentResult.tag);
   });
-  it('Object JSX result', () => {
+  it("Object JSX result", () => {
     expect(<div {...testAttrs}>{testChild}</div>).toEqual(objectJSXResult);
   });
-  it('Function JSX result', () => {
+  it("Function JSX result", () => {
     expect(<DivProxy {...testAttrs}>{testChild}</DivProxy>).toEqual(
       FunctionJSXResult,
     );
   });
-  it('Class JSX result', () => {
+  it("Class JSX result", () => {
     // TODO:
     expect(
       <TestCustomElement {...testAttrs}>{testChild}</TestCustomElement>,

@@ -1,13 +1,13 @@
-import { ObserveHandlerProps } from '../observe';
+import { ObserveHandlerProps } from "../observe";
 
 export const customMapAndSetClear = (
   {
     onChange,
     propertyPath,
-  }: Pick<ObserveHandlerProps, 'onChange' | 'propertyPath'>,
+  }: Pick<ObserveHandlerProps, "onChange" | "propertyPath">,
   target: Map<any, any> | Set<any>,
-  clearFn: Map<any, any>['clear'] | Set<any>['clear'],
-): Map<any, any>['clear'] | Set<any>['clear'] => {
+  clearFn: Map<any, any>["clear"] | Set<any>["clear"],
+): Map<any, any>["clear"] | Set<any>["clear"] => {
   return function () {
     const notifyChange = target.size !== 0;
     const result = clearFn();
@@ -19,8 +19,8 @@ export const customMapAndSetClear = (
 export const customMapAndSetDelete = (
   { propertyPath, onChange, shouldValidatePropertyChange }: ObserveHandlerProps,
   target: Map<any, any> | Set<any>,
-  deleteFn: Map<any, any>['delete'] | Set<any>['delete'],
-): Map<any, any>['delete'] | Set<any>['delete'] => {
+  deleteFn: Map<any, any>["delete"] | Set<any>["delete"],
+): Map<any, any>["delete"] | Set<any>["delete"] => {
   //In Map is key, in Set is value
   return function (key) {
     const newPropertyPath = `${propertyPath}.${key}`;

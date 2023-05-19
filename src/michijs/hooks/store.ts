@@ -1,6 +1,6 @@
-import { observe } from './observe';
-import { StoreProps, Store, EmptyObject } from '../types';
-import { observable } from './observable';
+import { observe } from "./observe";
+import { StoreProps, Store, EmptyObject } from "../types";
+import { observable } from "./observable";
 
 export function store<
   T extends object = EmptyObject,
@@ -12,7 +12,7 @@ export function store<
     onChange: (propertyPath) => propertyChangedCallback(propertyPath),
     shouldValidatePropertyChange: (propertyPath) =>
       !propertiesThatChanged.find((x) => x === propertyPath),
-    propertyPath: '',
+    propertyPath: "",
     // subscribeCallback: (path, observer) => {
     //   const cuttedPath = path.slice(1);
     //   observableProps.subscribe((value) => {

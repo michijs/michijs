@@ -12,7 +12,7 @@ export const idGenerator = () => {
     // 	(c ^ randomBytes() & 15 >> c / 4).toString(16)
     // );
 
-    const uint32 = cryptoObj.getRandomValues(new Uint32Array(4)).join('-');
+    const uint32 = cryptoObj.getRandomValues(new Uint32Array(4)).join("-");
     return uint32;
   };
 

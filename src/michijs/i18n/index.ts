@@ -1,5 +1,5 @@
-import { observable, store } from '../hooks';
-import { ObservableLike, ObserverCallback, Store } from '../types';
+import { observable, store } from "../hooks";
+import { ObservableLike, ObserverCallback, Store } from "../types";
 
 type StringObject =
   | {
@@ -35,7 +35,7 @@ export class I18n<K extends string> implements ObservableLike {
       this.isUsingSystemLanguage = false;
     }
 
-    window.addEventListener('languagechange', () => {
+    window.addEventListener("languagechange", () => {
       if (!this.isUsingSystemLanguage) {
         this.setLanguage(navigator.language as K);
       }
@@ -99,7 +99,7 @@ export class I18n<K extends string> implements ObservableLike {
     const value = translation[key];
     this._currentLanguage = key;
 
-    if (typeof value === 'function')
+    if (typeof value === "function")
       value().then((res) => {
         store.transactions.updateTranslation(res.default);
       });

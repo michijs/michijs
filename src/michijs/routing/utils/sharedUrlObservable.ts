@@ -1,3 +1,3 @@
-import { urlObservable } from '../../hooks';
+import { urlObservable } from "../../hooks";
 
 export const sharedUrlObservable = urlObservable();

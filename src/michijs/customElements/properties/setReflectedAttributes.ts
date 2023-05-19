@@ -1,5 +1,5 @@
-import { MichiCustomElement } from '../../types';
-import { setAttribute } from '../../DOM/attributes/setAttribute';
+import { MichiCustomElement } from "../../types";
+import { setAttribute } from "../../DOM/attributes/setAttribute";
 
 export function setReflectedAttributes(
   self: MichiCustomElement,

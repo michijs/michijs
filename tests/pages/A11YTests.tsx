@@ -1,6 +1,6 @@
-import { getFormData, h } from '../../src';
-import { A11YCounter } from '../A11YCounter';
-import { pages } from '../routes';
+import { getFormData, h } from "../../src";
+import { A11YCounter } from "../A11YCounter";
+import { pages } from "../routes";
 
 interface CustomForm {
   counter: number;

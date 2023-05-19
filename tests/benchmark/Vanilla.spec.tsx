@@ -1,24 +1,24 @@
-import { Browser, launch, Page } from 'puppeteer';
-import { makePerformanceTests } from './shared';
+import { Browser, launch, Page } from "puppeteer";
+import { makePerformanceTests } from "./shared";
 
-describe('Performance tests - vanilla-js', () => {
+describe("Performance tests - vanilla-js", () => {
   let browser: Browser;
   let page: Page;
   beforeAll(async () => {
     browser = await launch();
     page = await browser.newPage();
-    await page.goto('http://localhost:3000', {
-      waitUntil: 'domcontentloaded',
+    await page.goto("http://localhost:3000", {
+      waitUntil: "domcontentloaded",
     });
   });
   afterEach(async () => {
     await page.reload({
-      waitUntil: 'domcontentloaded',
+      waitUntil: "domcontentloaded",
     });
   });
   const results = makePerformanceTests(() => page);
   afterAll(async () => {
-    expect(await results).toMatchSnapshot('Vanilla JS');
+    expect(await results).toMatchSnapshot("Vanilla JS");
     await browser.close();
   });
 });

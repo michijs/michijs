@@ -1,3 +1,3 @@
 export function isCustomElement(tag: string, is?: string) {
-  return is || tag.indexOf('-') !== -1;
+  return is || tag.indexOf("-") !== -1;
 }

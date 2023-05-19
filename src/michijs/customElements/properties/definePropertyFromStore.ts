@@ -1,4 +1,4 @@
-import { AnyObject, MichiCustomElement, Store } from '../../types';
+import { AnyObject, MichiCustomElement, Store } from "../../types";
 
 export function definePropertyFromStore(
   self: MichiCustomElement,

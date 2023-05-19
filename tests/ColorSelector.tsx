@@ -1,4 +1,4 @@
-import { createCustomElement, css, h } from '../src';
+import { createCustomElement, css, h } from "../src";
 
 const style = css`
     span {
@@ -12,14 +12,14 @@ const style = css`
     }
 `;
 
-export const ColorSelector = createCustomElement('color-selector', {
+export const ColorSelector = createCustomElement("color-selector", {
   reflectedCssVariables: {
-    color: '#ff0000' as `#${string}`,
+    color: "#ff0000" as `#${string}`,
   },
   computedStyleSheet() {
     return {
-      color: 'white',
-      '--example': this.color === '#ff0000' ? '"red"' : '"not red"',
+      color: "white",
+      "--example": this.color === "#ff0000" ? '"red"' : '"not red"',
     };
   },
   adoptedStyleSheets: [style],

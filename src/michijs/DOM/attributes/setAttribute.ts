@@ -6,12 +6,12 @@ export function setAttribute(
   switch (true) {
     case newValue === null:
     case newValue === undefined:
-    case typeof newValue === 'boolean': {
-      if (newValue) element.setAttribute(key, '');
+    case typeof newValue === "boolean": {
+      if (newValue) element.setAttribute(key, "");
       else element.removeAttribute(key);
       break;
     }
-    case typeof newValue === 'object': {
+    case typeof newValue === "object": {
       element.setAttribute(key, JSON.stringify(newValue));
       break;
     }

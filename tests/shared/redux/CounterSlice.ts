@@ -1,11 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   count: 0,
 };
 
 const CounterSlice = createSlice({
-  name: 'Counter',
+  name: "Counter",
   initialState,
   reducers: {
     increment(state) {

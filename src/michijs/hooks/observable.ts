@@ -1,4 +1,4 @@
-import { ObservableLike, ObserverCallback } from '../types';
+import { ObservableLike, ObserverCallback } from "../types";
 
 type OnSubscribe = (length: number) => void;
 export function observable<T = unknown>(
@@ -13,7 +13,7 @@ export function observable<T = unknown>(
     });
   };
 
-  const subscribe: ObservableLike<T>['subscribe'] = (observer): void => {
+  const subscribe: ObservableLike<T>["subscribe"] = (observer): void => {
     observers.add(observer);
     onSuscribe?.(observers.size);
   };

@@ -1,10 +1,10 @@
-import { createCustomElement, h, Host } from '../src';
-import { ColorSelector } from './ColorSelector';
-import { Router } from './routes';
+import { createCustomElement, h, Host } from "../src";
+import { ColorSelector } from "./ColorSelector";
+import { Router } from "./routes";
 // // import sheet from './a.css' assert { type: 'css' };
 // // console.log(sheet)
 
-createCustomElement('root-test-element', {
+createCustomElement("root-test-element", {
   reflectedAttributes: {
     // arrayTest: new ElementList(0, 1, 2, 3, 4, 5, 6),
     arrayTest: [0, 1, 2, 3, 4, 5],
@@ -23,8 +23,8 @@ createCustomElement('root-test-element', {
   },
   fakeRoot: false,
   observe: {
-    'arrayTest.6'() {
-      console.log('6 Added');
+    "arrayTest.6"() {
+      console.log("6 Added");
     },
   },
   render() {

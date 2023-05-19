@@ -1,4 +1,4 @@
-import { ObserveProps } from '../observe';
+import { ObserveProps } from "../observe";
 
 export const observeDate = <T extends Date>({
   item,
@@ -14,8 +14,8 @@ export const observeDate = <T extends Date>({
   return new Proxy<T>(clone, {
     get(target, property) {
       const targetProperty = Reflect.get(target, property);
-      if (typeof property === 'string') {
-        if (property.startsWith('set')) {
+      if (typeof property === "string") {
+        if (property.startsWith("set")) {
           return function (...args) {
             const oldValue = target.getTime();
             const result = (targetProperty as Function).apply(target, args);
@@ -28,7 +28,7 @@ export const observeDate = <T extends Date>({
         // else if (property === 'subscribe')
         //   return (callback) => subscribeCallback?.(propertyPath, callback);
       }
-      return typeof targetProperty === 'function'
+      return typeof targetProperty === "function"
         ? targetProperty.bind(target)
         : targetProperty;
     },

@@ -1,10 +1,10 @@
-import { h, createCustomElement, Host, EventDispatcher } from '../src';
-import { counterStyle } from './shared/counterStyle';
-import { decrement, increment } from './shared/redux/CounterSlice';
-import { store } from './shared/redux/store';
+import { h, createCustomElement, Host, EventDispatcher } from "../src";
+import { counterStyle } from "./shared/counterStyle";
+import { decrement, increment } from "./shared/redux/CounterSlice";
+import { store } from "./shared/redux/store";
 
 export const CounterWithReduxStore = createCustomElement(
-  'counter-with-redux-store',
+  "counter-with-redux-store",
   {
     methods: {
       count() {

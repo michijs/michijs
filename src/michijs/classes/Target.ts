@@ -1,6 +1,6 @@
-import { create } from '../DOMDiff';
-import { update } from '../DOMDiff/update';
-import { RenderFunction } from './ElementList';
+import { create } from "../DOMDiff";
+import { update } from "../DOMDiff/update";
+import { RenderFunction } from "./ElementList";
 
 export class Target<V> {
   private template: ChildNode | ParentNode;
@@ -35,7 +35,7 @@ export class Target<V> {
   }
 
   clear() {
-    this.element.textContent = '';
+    this.element.textContent = "";
   }
 
   replace(...items: V[]) {

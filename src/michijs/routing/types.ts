@@ -1,8 +1,8 @@
-import { Router } from '../components/Router';
-import { FC, GetElementProps } from '../types';
+import { Router } from "../components/Router";
+import { FC, GetElementProps } from "../types";
 
 export type SearchParams = Record<string, (...args: any) => any> | undefined;
-export type Hash = [`#${string}` | ''] | undefined;
+export type Hash = [`#${string}` | ""] | undefined;
 
 export type GetSearchParams<S extends SearchParams> = S extends {}
   ? {
@@ -65,12 +65,12 @@ export type CreateRouterSearchParamsAndHash = Record<
 
 export type CreateRouterResult<R extends Record<string, Route>> = {
   urls: {
-    [k in keyof R]: UrlFunction<R[k]['searchParams'], R[k]['hash']>;
+    [k in keyof R]: UrlFunction<R[k]["searchParams"], R[k]["hash"]>;
   };
   Router: FC<GetElementProps<typeof Router>>;
   pages: {
     [k in keyof R]: (
-      page: PagesFunction<R[k]['searchParams'], R[k]['hash']>,
+      page: PagesFunction<R[k]["searchParams"], R[k]["hash"]>,
     ) => ReturnType<FC>;
   };
 };

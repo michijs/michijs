@@ -1,5 +1,5 @@
-import { SingleJSXElement } from '../..';
-import { getElementFactory } from './getElementFactory';
+import { SingleJSXElement } from "../..";
+import { getElementFactory } from "./getElementFactory";
 
 export const update = (
   element: ChildNode,

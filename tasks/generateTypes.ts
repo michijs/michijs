@@ -2,8 +2,8 @@ import {
   supportedHTMLElements,
   supportedMathMLElements,
   supportedSVGElements,
-} from '@michijs/htmltype/supported';
-import { writeFileSync, rmSync, mkdirSync } from 'fs';
+} from "@michijs/htmltype/supported";
+import { writeFileSync, rmSync, mkdirSync } from "fs";
 
 const elements = new Map<
   string,
@@ -40,11 +40,11 @@ supportedSVGElements.forEach((x) => {
   }
 });
 
-rmSync('./src/michijs/h/generated', { recursive: true, force: true });
-mkdirSync('./src/michijs/h/generated');
+rmSync("./src/michijs/h/generated", { recursive: true, force: true });
+mkdirSync("./src/michijs/h/generated");
 
 writeFileSync(
-  './src/michijs/h/generated/JSX.ts',
+  "./src/michijs/h/generated/JSX.ts",
   ` import { HTMLElements as HTMLElementsHTMLType, MathMLElements, SVGElements as SVGElementsHTMLType } from "@michijs/htmltype";
   import { MichiAttributes } from "../MichiAttributes";
   import { SingleJSXElement } from '../../types';
@@ -52,8 +52,8 @@ writeFileSync(
   interface ElementsInterfaceOverride {
     ${Array.from(elements)
       .filter(([_name, x]) => x.elementInterfaces.length > 1)
-      .map(([name, x]) => `${name}: ${x.elementInterfaces.join(' & ')}`)
-      .join(',\n')}
+      .map(([name, x]) => `${name}: ${x.elementInterfaces.join(" & ")}`)
+      .join(",\n")}
   }
   type HTMLElements = HTMLElementsHTMLType<ElementsInterfaceOverride>;
   type SVGElements = SVGElementsHTMLType<ElementsInterfaceOverride>;
@@ -70,10 +70,10 @@ writeFileSync(
           .map(
             ([key, { attributes, elementInterfaces }]) =>
               `${key}: ${attributes.join(
-                ' & ',
-              )} & MichiAttributes<${elementInterfaces.join(' & ')}>;`,
+                " & ",
+              )} & MichiAttributes<${elementInterfaces.join(" & ")}>;`,
           )
-          .join('\n')}
+          .join("\n")}
       }
     }
   }`,

@@ -1,18 +1,18 @@
-import { CssDeclaration, AnyObject } from '../types';
-import { formatToKebabCase } from '../utils';
+import { CssDeclaration, AnyObject } from "../types";
+import { formatToKebabCase } from "../utils";
 
 export function declareCssVariables<T extends AnyObject>(
-  parent = '-',
+  parent = "-",
 ): CssDeclaration<T> {
   return new Proxy(
     {},
     {
       get(_, p) {
         if (Symbol.toPrimitive === p) return () => parent;
-        else if (p === 'var') {
+        else if (p === "var") {
           return (defaultValue) =>
             `var(${parent}${
-              defaultValue !== undefined ? `,${defaultValue}` : ''
+              defaultValue !== undefined ? `,${defaultValue}` : ""
             })`;
           // When having a variable called like a function its broken
           // } else if (parent[p]) {

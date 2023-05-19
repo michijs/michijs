@@ -1,5 +1,5 @@
-import { h, Link } from '../../src';
-import { AsyncTestsRouter, asyncTestsUrls } from '../routes';
+import { h, Link } from "../../src";
+import { AsyncTestsRouter, asyncTestsUrls } from "../routes";
 
 export const AsyncTests = () => (
   <>

@@ -1,4 +1,4 @@
-import { ClassJSXElement, ObjectJSXElement } from '../types';
+import { ClassJSXElement, ObjectJSXElement } from "../types";
 
 export const classJSXToObjectJSXElement = ({
   tag,

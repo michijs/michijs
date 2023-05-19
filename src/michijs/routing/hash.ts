@@ -1,10 +1,10 @@
-import { goTo } from './goTo';
+import { goTo } from "./goTo";
 
 export const hash = new Proxy(
   {},
   {
     get(_target, key) {
-      if (typeof key === 'string') {
+      if (typeof key === "string") {
         return location.hash === key;
       }
       return () => false;
@@ -12,7 +12,7 @@ export const hash = new Proxy(
     set(_target, key: string, newValue) {
       const oldValue = location.hash === key;
       if (oldValue !== newValue) {
-        let newHash = '';
+        let newHash = "";
         if (newValue) {
           newHash = key;
         }

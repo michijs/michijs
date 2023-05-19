@@ -2,21 +2,21 @@ import type {
   HTMLElements,
   CSSProperties,
   GlobalEvents,
-} from '@michijs/htmltype';
-import { EventDispatcher } from './classes';
-import { idGenerator } from './hooks';
-import { Fragment } from './components';
-import { MichiAttributes } from './h/MichiAttributes';
+} from "@michijs/htmltype";
+import { EventDispatcher } from "./classes";
+import { idGenerator } from "./hooks";
+import { Fragment } from "./components";
+import { MichiAttributes } from "./h/MichiAttributes";
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 export type CSSVar<T extends string> = KebabCase<T> & {
   var<V extends undefined | string | number = undefined>(
     defaultValue?: V,
-  ): `var(${KebabCase<T>}${V extends undefined ? '' : `,${V}`})`;
+  ): `var(${KebabCase<T>}${V extends undefined ? "" : `,${V}`})`;
 };
 export type CssDeclaration<
   T extends object | unknown,
-  PK extends string = '-',
+  PK extends string = "-",
 > = T extends object
   ? {
       [k in StringKeyOf<T>]: CssDeclaration<T[k], `${PK}-${k}`>;
@@ -47,40 +47,40 @@ export type PickNonFunction<E extends object> = Pick<E, NonFunctionKeys<E>>;
 
 // export type LowerCaseCharacters = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z';
 export type UpperCaseCharacters =
-  | 'A'
-  | 'B'
-  | 'C'
-  | 'D'
-  | 'E'
-  | 'F'
-  | 'G'
-  | 'H'
-  | 'I'
-  | 'J'
-  | 'K'
-  | 'L'
-  | 'M'
-  | 'N'
-  | 'O'
-  | 'P'
-  | 'Q'
-  | 'R'
-  | 'S'
-  | 'T'
-  | 'U'
-  | 'V'
-  | 'W'
-  | 'X'
-  | 'Y'
-  | 'Z';
+  | "A"
+  | "B"
+  | "C"
+  | "D"
+  | "E"
+  | "F"
+  | "G"
+  | "H"
+  | "I"
+  | "J"
+  | "K"
+  | "L"
+  | "M"
+  | "N"
+  | "O"
+  | "P"
+  | "Q"
+  | "R"
+  | "S"
+  | "T"
+  | "U"
+  | "V"
+  | "W"
+  | "X"
+  | "Y"
+  | "Z";
 
-export type WordSeparators = '-' | '_' | ' ';
+export type WordSeparators = "-" | "_" | " ";
 export type ArrayWithOneOrMoreElements<T> = [T, ...T[]];
 
 export type SplitIncludingDelimiters<
   Source extends string,
   Delimiter extends string,
-> = Source extends ''
+> = Source extends ""
   ? []
   : Source extends `${infer FirstPart}${Delimiter}${infer SecondPart}`
   ? Source extends `${FirstPart}${infer UsedDelimiter}${SecondPart}`
@@ -124,7 +124,7 @@ type StringArrayToDelimiterCase<
       UsedUpperCaseCharacters,
       Delimiter
     >}`
-  : '';
+  : "";
 
 export type DelimiterCase<
   Value,
@@ -138,7 +138,7 @@ export type DelimiterCase<
     >
   : Value;
 
-export type KebabCase<Value> = DelimiterCase<Value, '-'>;
+export type KebabCase<Value> = DelimiterCase<Value, "-">;
 
 export type RequiredKeys<T> = {
   [K in keyof T]-?: {} extends Pick<T, K> ? never : K;
@@ -162,12 +162,12 @@ export interface MichiProperties
     Partial<
       Pick<
         ElementInternals,
-        | 'checkValidity'
-        | 'reportValidity'
-        | 'form'
-        | 'validity'
-        | 'validationMessage'
-        | 'willValidate'
+        | "checkValidity"
+        | "reportValidity"
+        | "form"
+        | "validity"
+        | "validationMessage"
+        | "willValidate"
       >
     > {
   // props?: unknown,
@@ -180,7 +180,7 @@ export interface MichiProperties
     rerenderCallback(propertiesThatChanged?: string[] | PropertyKey): void;
     pendingTasks: number;
     unSubscribeFromStore: Array<() => void>;
-    idGen?: ReturnType<typeof idGenerator>['getId'];
+    idGen?: ReturnType<typeof idGenerator>["getId"];
     internals?: ElementInternals;
     fakeRoot?: HTMLElement;
   };
@@ -192,7 +192,7 @@ export interface MichiProperties
   /**Forces the element to re-render */
   rerender(): void;
   /**Create unique IDs with a discernible key */
-  readonly idGen: ReturnType<typeof idGenerator>['getId'];
+  readonly idGen: ReturnType<typeof idGenerator>["getId"];
   readonly name: string | null;
   readonly type: string;
 }
@@ -316,7 +316,7 @@ export type CustomElementEvents<E extends EventsType | undefined> = Readonly<{
     : any;
 }>;
 
-export interface ExtendsObject<T extends ExtendableElements = 'div'> {
+export interface ExtendsObject<T extends ExtendableElements = "div"> {
   /**The tag to extend */
   tag: T;
   /**The class you want to extend */
@@ -416,18 +416,18 @@ export interface MichiElementOptions {
 
 export type ExtendsAttributes<
   O extends ExtendsObject<ExtendableElements> | undefined,
-> = O extends ExtendsObject<infer T> ? HTMLElements[T] : HTMLElements['div'];
+> = O extends ExtendsObject<infer T> ? HTMLElements[T] : HTMLElements["div"];
 
-export type MichiElementSelf<O extends MichiElementOptions> = O['attributes'] &
-  O['reflectedAttributes'] &
-  O['cssVariables'] &
-  O['reflectedCssVariables'] &
-  O['transactions'] &
-  O['methods'] &
-  (O['nonObservedAttributes'] extends () => infer NOA ? NOA : {}) &
-  CustomElementEvents<O['events']> &
+export type MichiElementSelf<O extends MichiElementOptions> = O["attributes"] &
+  O["reflectedAttributes"] &
+  O["cssVariables"] &
+  O["reflectedCssVariables"] &
+  O["transactions"] &
+  O["methods"] &
+  (O["nonObservedAttributes"] extends () => infer NOA ? NOA : {}) &
+  CustomElementEvents<O["events"]> &
   MichiProperties &
-  (O['extends'] extends { class: infer E }
+  (O["extends"] extends { class: infer E }
     ? E extends new (
         ...args: any
       ) => any
@@ -440,20 +440,20 @@ type MichiElementProps<
   S extends HTMLElement,
   Attrs = {
     [k in
-      keyof O['reflectedAttributes'] as KebabCase<k>]: O['reflectedAttributes'][k];
+      keyof O["reflectedAttributes"] as KebabCase<k>]: O["reflectedAttributes"][k];
   } & {
     [k in
-      keyof O['reflectedCssVariables'] as KebabCase<k>]: O['reflectedCssVariables'][k];
+      keyof O["reflectedCssVariables"] as KebabCase<k>]: O["reflectedCssVariables"][k];
   } & {
     [k in
-      keyof O['events'] as k extends string
+      keyof O["events"] as k extends string
         ? `on${Lowercase<k>}`
-        : never]?: O['events'][k] extends EventDispatcher<infer D>
+        : never]?: O["events"][k] extends EventDispatcher<infer D>
       ? (ev: CustomEvent<D>) => unknown
       : never;
   } & { name: string } & GlobalEvents<S>,
 > = MichiAttributes<S> &
-  Omit<ExtendsAttributes<O['extends']>, keyof Attrs> &
+  Omit<ExtendsAttributes<O["extends"]>, keyof Attrs> &
   Partial<Attrs>;
 
 export type MichiElementClass<
@@ -496,7 +496,7 @@ export interface Lifecycle {
   // ): void;
 }
 
-type FormStateRestoreCallbackMode = 'restore' | 'autocomplete';
+type FormStateRestoreCallbackMode = "restore" | "autocomplete";
 
 export interface LifecycleInternals {
   /**Called when the browser associates the element with a form element, or disassociates the element from a form element. */

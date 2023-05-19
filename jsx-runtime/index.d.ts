@@ -1,1 +1,1 @@
-export { jsx, jsxs, jsxDEV, Fragment } from '../dist';
+export { jsx, jsxs, jsxDEV, Fragment } from "../dist";

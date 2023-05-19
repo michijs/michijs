@@ -1,6 +1,6 @@
 export function getAttributeValue(value?: string | null) {
   switch (true) {
-    case value === '' || value === 'true': {
+    case value === "" || value === "true": {
       return true;
     }
     case value === null || value === undefined: {

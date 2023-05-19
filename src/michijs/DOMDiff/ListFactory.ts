@@ -1,19 +1,19 @@
-import { Target } from '../classes/Target';
-import { ListElement } from '../components/FragmentAndList';
-import { ElementFactory, IterableJSX, MichiCustomElement } from '../types';
-import { forEachChildren } from './forEachChildren';
-import { update } from './update';
+import { Target } from "../classes/Target";
+import { ListElement } from "../components/FragmentAndList";
+import { ElementFactory, IterableJSX, MichiCustomElement } from "../types";
+import { forEachChildren } from "./forEachChildren";
+import { update } from "./update";
 
 function nodeNodeIsSameElement(node: ChildNode, jsx: JSX.Element) {
   const isIterable = jsxIsIterable(jsx);
-  if ('$key' in node)
+  if ("$key" in node)
     // Node keyed - jsx must be keyed and same key
     return isIterable && jsx.key === node.$key;
   return !isIterable;
 }
 
 function jsxIsIterable(jsx: JSX.Element): jsx is IterableJSX {
-  return !!jsx && typeof jsx === 'object' && 'key' in jsx;
+  return !!jsx && typeof jsx === "object" && "key" in jsx;
 }
 
 export function createTarget(
@@ -26,9 +26,9 @@ export function createTarget(
     el,
     (item) => {
       // TODO: should be a oncreate callback?
-      if (item && typeof item === 'object' && 'key' in item)
-        item['attrs']['_'] = {
-          ...(item['attrs']['_'] ?? {}),
+      if (item && typeof item === "object" && "key" in item)
+        item["attrs"]["_"] = {
+          ...(item["attrs"]["_"] ?? {}),
           $key: item.key,
         };
       return item;
@@ -60,7 +60,7 @@ export const ListFactory: Required<ElementFactory> = {
     self?: Element,
   ) {
     const el: HTMLElement | SVGElement = isSVG
-      ? document.createElementNS('http://www.w3.org/2000/svg', ListElement.tag)
+      ? document.createElementNS("http://www.w3.org/2000/svg", ListElement.tag)
       : document.createElement(ListElement.tag);
     createTarget(el, isSVG, isMATHML, self).appendItems(...jsx);
     return el;
@@ -73,7 +73,7 @@ export const ListFactory: Required<ElementFactory> = {
     contextElement?: MichiCustomElement,
   ) {
     const newLength = jsx.length;
-    if (newLength === 0) el.textContent = '';
+    if (newLength === 0) el.textContent = "";
     else {
       const pendingToInsertKeyedItems: {
         index: number;
@@ -138,7 +138,7 @@ export const ListFactory: Required<ElementFactory> = {
               const result = itemFoundInPendingToReplaceKeyedItems;
               itemFound = result[1].child;
 
-              const tempChild = document.createComment('');
+              const tempChild = document.createComment("");
               result[1].child.replaceWith(tempChild);
               result[1].child = tempChild;
             }

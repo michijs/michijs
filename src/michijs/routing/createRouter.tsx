@@ -1,8 +1,8 @@
-import { Router } from '../components/Router';
-import { h } from '../h';
-import { formatToKebabCase } from '../utils/formatToKebabCase';
-import { PagesFunction, CreateRouterResult, UrlFunction, Route } from './types';
-import { setSearchParam } from './utils/setSearchParam';
+import { Router } from "../components/Router";
+import { h } from "../h";
+import { formatToKebabCase } from "../utils/formatToKebabCase";
+import { PagesFunction, CreateRouterResult, UrlFunction, Route } from "./types";
+import { setSearchParam } from "./utils/setSearchParam";
 
 export const urlFn = (
   property: string,
@@ -14,7 +14,7 @@ export const urlFn = (
       ? `${parentRouteURL.origin}${parentRouteURL.pathname}`
       : location.origin;
     const propertyName = formatToKebabCase(
-      property.startsWith('/') ? property : `/${property}`,
+      property.startsWith("/") ? property : `/${property}`,
     );
     const url = new URL(`${baseURL}${propertyName}`);
     if (searchParams)
@@ -50,7 +50,7 @@ export function createRouter<R extends Record<string, Route>>(
     },
   );
 
-  const RouterProxy: CreateRouterResult<R>['Router'] = (props) => {
+  const RouterProxy: CreateRouterResult<R>["Router"] = (props) => {
     return <Router {...props} _={{ routes: routes, parentRoute }} />;
   };
 

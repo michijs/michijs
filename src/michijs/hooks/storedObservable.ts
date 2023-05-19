@@ -1,6 +1,6 @@
-import { deepEqual } from '../utils/deepEqual';
-import { observable } from './observable';
-import { observe } from './observe';
+import { deepEqual } from "../utils/deepEqual";
+import { observable } from "./observable";
+import { observe } from "./observe";
 
 export function storedObservable<T extends object>(
   obj: T,
@@ -8,10 +8,10 @@ export function storedObservable<T extends object>(
 ) {
   const { notify, ...observableProps } = observable<keyof T>(
     (newLength) => {
-      if (newLength === 0) window.removeEventListener('storage', listener);
+      if (newLength === 0) window.removeEventListener("storage", listener);
     },
     (newLength) => {
-      if (newLength === 1) window.addEventListener('storage', listener);
+      if (newLength === 1) window.addEventListener("storage", listener);
     },
   );
 
@@ -46,7 +46,7 @@ export function storedObservable<T extends object>(
             notify(p);
           },
           shouldValidatePropertyChange: () => true,
-          propertyPath: '',
+          propertyPath: "",
         });
         return value;
       },

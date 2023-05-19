@@ -1,12 +1,12 @@
-import { setAttributes } from '../../DOM/attributes/setAttributes';
+import { setAttributes } from "../../DOM/attributes/setAttributes";
 import {
   AnyObject,
   MichiCustomElement,
   ReflectedAttributesType,
   Store,
-} from '../../types';
-import { formatToKebabCase } from '../../utils';
-import { definePropertyFromStore } from './definePropertyFromStore';
+} from "../../types";
+import { formatToKebabCase } from "../../utils";
+import { definePropertyFromStore } from "./definePropertyFromStore";
 
 export const defineReflectedAttributes = (
   self: MichiCustomElement,

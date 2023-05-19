@@ -1,7 +1,7 @@
-import { observe } from '../hooks';
-import { goTo } from './goTo';
-import { setSearchParam } from './utils/setSearchParam';
-import { sharedUrlObservable } from './utils/sharedUrlObservable';
+import { observe } from "../hooks";
+import { goTo } from "./goTo";
+import { setSearchParam } from "./utils/setSearchParam";
+import { sharedUrlObservable } from "./utils/sharedUrlObservable";
 
 export const getInitialSearchParamsValue = () => {
   const initialSearchParamsValue: Record<string, any> = {};
@@ -21,13 +21,13 @@ export const searchParams = observe({
   onChange: (key) => {
     if (!isUpdating && key) {
       const newUrl = new URL(location.href);
-      const splittedKey = key.split('.')[1];
+      const splittedKey = key.split(".")[1];
       setSearchParam(newUrl, splittedKey, searchParams[splittedKey]);
       goTo(newUrl);
     }
   },
   shouldValidatePropertyChange: () => true,
-  propertyPath: '',
+  propertyPath: "",
 });
 const updateSearchParams = () => {
   isUpdating = true;

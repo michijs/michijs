@@ -1,11 +1,11 @@
-import { createCustomElement } from '../customElements/createCustomElement';
-import { sharedUrlObservable } from '../routing/utils/sharedUrlObservable';
-import { AsyncRoute, Route, SyncRoute, UrlFunction } from '../routing/types';
-import { hash, searchParams } from '../routing';
-import { urlFn } from '../routing/createRouter';
-import { h } from '../h';
+import { createCustomElement } from "../customElements/createCustomElement";
+import { sharedUrlObservable } from "../routing/utils/sharedUrlObservable";
+import { AsyncRoute, Route, SyncRoute, UrlFunction } from "../routing/types";
+import { hash, searchParams } from "../routing";
+import { urlFn } from "../routing/createRouter";
+import { h } from "../h";
 
-export const Router = createCustomElement('michi-router', {
+export const Router = createCustomElement("michi-router", {
   attributes: {
     currentComponent: null as JSX.Element,
     routes: undefined as Record<string, Route> | undefined,
@@ -17,9 +17,9 @@ export const Router = createCustomElement('michi-router', {
     },
   },
   methods: {
-    matches(url: string, flexible: boolean = false) {
-      const urlPaths = url.split('/').filter((x) => x !== '');
-      let locationPaths = location.pathname.split('/').filter((x) => x !== '');
+    matches(url: string, flexible = false) {
+      const urlPaths = url.split("/").filter((x) => x !== "");
+      let locationPaths = location.pathname.split("/").filter((x) => x !== "");
       if (flexible) {
         locationPaths = locationPaths.slice(0, urlPaths.length);
       }
@@ -27,7 +27,7 @@ export const Router = createCustomElement('michi-router', {
         locationPaths.length === urlPaths.length &&
         !locationPaths.find(
           (locationPath, index) =>
-            !urlPaths[index].startsWith(':') &&
+            !urlPaths[index].startsWith(":") &&
             locationPath !== urlPaths[index],
         )
       );
@@ -44,9 +44,9 @@ export const Router = createCustomElement('michi-router', {
     processComponent(component?: JSX.Element) {
       if (
         component &&
-        typeof component === 'object' &&
-        'tag' in component &&
-        typeof component.tag === 'function'
+        typeof component === "object" &&
+        "tag" in component &&
+        typeof component.tag === "function"
       ) {
         return {
           ...component,

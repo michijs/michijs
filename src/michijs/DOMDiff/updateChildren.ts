@@ -1,7 +1,7 @@
-import { MichiCustomElement } from '../types';
-import { update } from './update';
-import { create } from './create';
-import { forEachChildren } from './forEachChildren';
+import { MichiCustomElement } from "../types";
+import { update } from "./update";
+import { create } from "./create";
+import { forEachChildren } from "./forEachChildren";
 
 export async function updateChildren(
   el: ParentNode,

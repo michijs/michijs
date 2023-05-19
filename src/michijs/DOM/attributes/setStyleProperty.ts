@@ -1,4 +1,4 @@
-import { formatToKebabCase } from '../../utils';
+import { formatToKebabCase } from "../../utils";
 
 export const setStyleProperty = (
   element: HTMLElement,

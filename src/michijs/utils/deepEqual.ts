@@ -6,13 +6,13 @@ export function deepEqual(object1: any, object2: any): boolean {
   if (areDifferentTypes) return false;
 
   switch (type) {
-    case 'function': {
+    case "function": {
       return (
         object1.name === object2.name &&
         object1.toString() === object2.toString()
       );
     }
-    case 'object': {
+    case "object": {
       // TODO: add set / map etc
       if (Array.isArray(object1)) {
         if (object1.length !== object2.length) return false;

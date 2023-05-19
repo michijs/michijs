@@ -1,9 +1,9 @@
-import { h } from '../../src';
-import { BuiltInButton } from '../BuiltInButton';
-import { CounterWithReduxStore } from '../CounterWithReduxStore';
-import { SimpleCounter } from '../SimpleCounter';
-import { StoredObservableCounter } from '../StoredObservableCounter';
-import { IndexedDBCounter } from '../IndexedDBCounter';
+import { h } from "../../src";
+import { BuiltInButton } from "../BuiltInButton";
+import { CounterWithReduxStore } from "../CounterWithReduxStore";
+import { SimpleCounter } from "../SimpleCounter";
+import { StoredObservableCounter } from "../StoredObservableCounter";
+import { IndexedDBCounter } from "../IndexedDBCounter";
 
 export const CounterTests = () => (
   <>

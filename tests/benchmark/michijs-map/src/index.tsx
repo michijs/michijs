@@ -1,63 +1,63 @@
-import { h, store, createCustomElement, List } from '../../../../src';
+import { h, store, createCustomElement, List } from "../../../../src";
 
 function _random(max: number) {
   return Math.round(Math.random() * 1000) % max;
 }
 
 const adjectives = [
-  'pretty',
-  'large',
-  'big',
-  'small',
-  'tall',
-  'short',
-  'long',
-  'handsome',
-  'plain',
-  'quaint',
-  'clean',
-  'elegant',
-  'easy',
-  'angry',
-  'crazy',
-  'helpful',
-  'mushy',
-  'odd',
-  'unsightly',
-  'adorable',
-  'important',
-  'inexpensive',
-  'cheap',
-  'expensive',
-  'fancy',
+  "pretty",
+  "large",
+  "big",
+  "small",
+  "tall",
+  "short",
+  "long",
+  "handsome",
+  "plain",
+  "quaint",
+  "clean",
+  "elegant",
+  "easy",
+  "angry",
+  "crazy",
+  "helpful",
+  "mushy",
+  "odd",
+  "unsightly",
+  "adorable",
+  "important",
+  "inexpensive",
+  "cheap",
+  "expensive",
+  "fancy",
 ];
 const colours = [
-  'red',
-  'yellow',
-  'blue',
-  'green',
-  'pink',
-  'brown',
-  'purple',
-  'brown',
-  'white',
-  'black',
-  'orange',
+  "red",
+  "yellow",
+  "blue",
+  "green",
+  "pink",
+  "brown",
+  "purple",
+  "brown",
+  "white",
+  "black",
+  "orange",
 ];
 const nouns = [
-  'table',
-  'chair',
-  'house',
-  'bbq',
-  'desk',
-  'car',
-  'pony',
-  'cookie',
-  'sandwich',
-  'burger',
-  'pizza',
-  'mouse',
-  'keyboard',
+  "table",
+  "chair",
+  "house",
+  "bbq",
+  "desk",
+  "car",
+  "pony",
+  "cookie",
+  "sandwich",
+  "burger",
+  "pizza",
+  "mouse",
+  "keyboard",
 ];
 const adjectivesLength = adjectives.length;
 const coloursLength = colours.length;
@@ -85,7 +85,7 @@ const { state, transactions, ...storeSubscribable } = store({
   transactions: {
     updateData(mod = 10) {
       for (let i = 0; i < state.data.length; i += mod) {
-        state.data[i].label += ' !!!';
+        state.data[i].label += " !!!";
         // this.data[i] = Object.assign({}, this.data[i], {label: this.data[i].label +' !!!'});
       }
     },
@@ -132,9 +132,9 @@ const { state, transactions, ...storeSubscribable } = store({
   },
 });
 
-export const Table = createCustomElement('michi-table', {
+export const Table = createCustomElement("michi-table", {
   extends: {
-    tag: 'table',
+    tag: "table",
     class: HTMLTableElement,
   },
   subscribeTo: {
@@ -146,24 +146,24 @@ export const Table = createCustomElement('michi-table', {
       <List
         data={state.data}
         as="tbody"
-        _={{ id: 'tbody' }}
+        _={{ id: "tbody" }}
         renderItem={({ label, id }) => (
-          <tr key={id} class={id === state.selected ? 'danger' : undefined}>
-            <td _={{ className: 'col-md-1' }}>{id}</td>
-            <td _={{ className: 'col-md-4' }}>
+          <tr key={id} class={id === state.selected ? "danger" : undefined}>
+            <td _={{ className: "col-md-1" }}>{id}</td>
+            <td _={{ className: "col-md-4" }}>
               <a _={{ onclick: () => transactions.select(id) }}>{label}</a>
             </td>
-            <td _={{ className: 'col-md-1' }}>
+            <td _={{ className: "col-md-1" }}>
               <a onclick={() => transactions.delete(id)}>
                 <span
                   _={{
-                    className: 'glyphicon glyphicon-remove',
-                    ariaHidden: 'true',
+                    className: "glyphicon glyphicon-remove",
+                    ariaHidden: "true",
                   }}
                 />
               </a>
             </td>
-            <td _={{ className: 'col-md-6' }} />
+            <td _={{ className: "col-md-6" }} />
           </tr>
         )}
       />
@@ -171,81 +171,81 @@ export const Table = createCustomElement('michi-table', {
   },
 });
 
-export const TableManager = createCustomElement('michi-table-manager', {
+export const TableManager = createCustomElement("michi-table-manager", {
   extends: {
-    tag: 'div',
+    tag: "div",
     class: HTMLDivElement,
   },
   fakeRoot: false,
   render() {
     return (
-      <div _={{ className: 'row' }}>
-        <div _={{ className: 'col-sm-6 smallpad' }}>
+      <div _={{ className: "row" }}>
+        <div _={{ className: "col-sm-6 smallpad" }}>
           <button
             _={{
-              type: 'button',
-              className: 'btn btn-primary btn-block',
-              id: 'run',
+              type: "button",
+              className: "btn btn-primary btn-block",
+              id: "run",
               onclick: transactions.run,
             }}
           >
             Create 1,000 rows
           </button>
         </div>
-        <div _={{ className: 'col-sm-6 smallpad' }}>
+        <div _={{ className: "col-sm-6 smallpad" }}>
           <button
             _={{
-              type: 'button',
-              className: 'btn btn-primary btn-block',
-              id: 'runlots',
+              type: "button",
+              className: "btn btn-primary btn-block",
+              id: "runlots",
               onclick: transactions.runLots,
             }}
           >
             Create 10,000 rows
           </button>
         </div>
-        <div _={{ className: 'col-sm-6 smallpad' }}>
+        <div _={{ className: "col-sm-6 smallpad" }}>
           <button
             _={{
-              type: 'button',
-              className: 'btn btn-primary btn-block',
-              id: 'add',
+              type: "button",
+              className: "btn btn-primary btn-block",
+              id: "add",
               onclick: transactions.add,
             }}
           >
             Append 1,000 rows
           </button>
         </div>
-        <div _={{ className: 'col-sm-6 smallpad' }}>
+        <div _={{ className: "col-sm-6 smallpad" }}>
           <button
             _={{
-              type: 'button',
-              className: 'btn btn-primary btn-block',
-              id: 'update',
+              type: "button",
+              className: "btn btn-primary btn-block",
+              id: "update",
               onclick: transactions.update,
             }}
           >
             Update every 10th row
           </button>
         </div>
-        <div _={{ className: 'col-sm-6 smallpad' }}>
+        <div _={{ className: "col-sm-6 smallpad" }}>
           <button
             _={{
-              type: 'button',
-              className: 'btn btn-primary btn-block',
-              id: 'clear',
+              type: "button",
+              className: "btn btn-primary btn-block",
+              id: "clear",
               onclick: transactions.clear,
             }}
           >
             Clear
           </button>
         </div>
-        <div _={{ className: 'col-sm-6 smallpad' }}>
+        <div _={{ className: "col-sm-6 smallpad" }}>
           <button
             _={{
-              type: 'button',
-              className: 'btn btn-primary btn-block',
-              id: 'swapRows',
+              type: "button",
+              className: "btn btn-primary btn-block",
+              id: "swapRows",
               onclick: transactions.swapRows,
             }}
           >
