@@ -1,0 +1,10 @@
+name: "Format"
+
+on: [push, workflow_dispatch]
+
+jobs:
+  call-workflow:
+    uses: michijs/.github/.github/workflows/format.yml@main
+    name: "Run format"
+    secrets:
+      GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
