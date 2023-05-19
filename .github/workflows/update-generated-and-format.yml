@@ -1,4 +1,4 @@
-name: "Update generated"
+name: "Update generated and format"
 
 on: [push, workflow_dispatch]
 
@@ -43,6 +43,7 @@ jobs:
         run: git push origin || true
   format:
     uses: michijs/.github/.github/workflows/format.yml@main
+    needs: submit-changes
     name: "Run format"
     secrets:
       GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
