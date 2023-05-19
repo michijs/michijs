@@ -72,7 +72,7 @@ type IndexeddbObservableResult<T extends AnyObject> = {
 function initDb<T extends AnyObject>(
   name: string,
   objectsStore: ObjectStore<T>,
-  version: number = 1,
+  version = 1,
 ): Promise<IDBDatabase> {
   return new Promise((resolve) => {
     const openRequest = indexedDB.open(name, version);
@@ -102,7 +102,7 @@ function initDb<T extends AnyObject>(
 export function indexedDBObservable<T extends AnyObject>(
   name: string,
   objectsStore: ObjectStore<T>,
-  version: number = 1,
+  version = 1,
 ): IndexeddbObservableResult<T> {
   const listenerEventName = `indexedDB-${name}-change`;
   const bc = new BroadcastChannel(listenerEventName);
