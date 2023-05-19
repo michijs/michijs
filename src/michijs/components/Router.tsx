@@ -17,7 +17,7 @@ export const Router = createCustomElement("michi-router", {
     },
   },
   methods: {
-    matches(url: string, flexible: boolean = false) {
+    matches(url: string, flexible = false) {
       const urlPaths = url.split("/").filter((x) => x !== "");
       let locationPaths = location.pathname.split("/").filter((x) => x !== "");
       if (flexible) {

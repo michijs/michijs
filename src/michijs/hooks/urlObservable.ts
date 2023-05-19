@@ -6,7 +6,7 @@ export function urlObservable() {
 
   window.addEventListener(WINDOW_URL_CHANGE_EVENTS.PUSH_STATE, notify);
   window.addEventListener("popstate", notify);
-  const matches = (url: string, flexible: boolean = false) => {
+  const matches = (url: string, flexible = false) => {
     const urlPaths = url.split("/").filter((x) => x !== "");
     let locationPaths = location.pathname.split("/").filter((x) => x !== "");
     if (flexible) {
