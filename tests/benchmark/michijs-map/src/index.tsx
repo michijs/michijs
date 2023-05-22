@@ -245,7 +245,7 @@ export const TableManager = createCustomElement("michi-table-manager", {
             _={{
               type: "button",
               className: "btn btn-primary btn-block",
-              id: "swapRows",
+              id: "swaprows",
               onclick: transactions.swapRows,
             }}
           >
