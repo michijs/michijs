@@ -41,6 +41,8 @@ jobs:
       # Push repository changes
       - name: Push changes to repository
         run: git push origin || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   lint:
     uses: michijs/.github/.github/workflows/lint.yml@main
     name: "Run lint"
