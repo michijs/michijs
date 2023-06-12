@@ -662,7 +662,7 @@ If you REALLY need polyfills i recommend you to read this topics:
 
 ## Supporting MichiJS
 ### Sponsors
-Support us with a donation and help us continue our activities [here](https://www.paypal.com/paypalme/lsegurado).
+Support us with a donation and help us continue our activities [here](https://www.paypal.com/paypalme/lsegurado2).
 <!-- ### Contributors
 TODO:
 <a href="https://github.com/@lsegurado/ls-element/graphs/contributors">
