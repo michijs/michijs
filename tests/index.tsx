@@ -124,3 +124,10 @@ createCustomElement("root-test-element", {
 //     }
 // }
 // console.log(unproxyfy(a))
+
+
+type Observable<T> = (T extends object ? { [K in keyof T]: Observable<T[K]> } : (newValue: T) => T) & { subscribe(): void }
+
+const b = undefined as unknown as Observable<{
+  count: number
+}>
