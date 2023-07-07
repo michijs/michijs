@@ -1,33 +1,35 @@
 export function deepEqual(object1: any, object2: any): boolean {
-  if (object1 === object2 || object1 == object2) return true;
+  const object1Value = object1?.valueOf();
+  const object2Value = object2?.valueOf();
+  if (object1Value === object2Value || object1Value == object2Value) return true;
 
-  const type = typeof object1;
-  const areDifferentTypes = type !== typeof object2;
+  const type = typeof object1Value;
+  const areDifferentTypes = type !== typeof object2Value;
   if (areDifferentTypes) return false;
 
   switch (type) {
     case "function": {
       return (
-        object1.name === object2.name &&
-        object1.toString() === object2.toString()
+        object1Value.name === object2Value.name &&
+        object1Value.toString() === object2Value.toString()
       );
     }
     case "object": {
       // TODO: add set / map etc
-      if (Array.isArray(object1)) {
-        if (object1.length !== object2.length) return false;
-        return !object1.find(
-          (value, index) => !deepEqual(value, object2[index]),
+      if (Array.isArray(object1Value)) {
+        if (object1Value.length !== object2Value.length) return false;
+        return !object1Value.find(
+          (value, index) => !deepEqual(value, object2Value[index]),
         );
       }
       // null can't have keys, so I use the non-null value
-      for (const key in object1 !== null && object1 !== void 0
-        ? object1
-        : object2) {
+      for (const key in object1Value !== null && object1Value !== void 0
+        ? object1Value
+        : object2Value) {
         if (
           !deepEqual(
-            object1 === null || object1 === void 0 ? void 0 : object1[key],
-            object2 === null || object2 === void 0 ? void 0 : object2[key],
+            object1Value === null || object1Value === void 0 ? void 0 : object1Value[key],
+            object2Value === null || object2Value === void 0 ? void 0 : object2Value[key],
           )
         )
           return false;
@@ -37,8 +39,8 @@ export function deepEqual(object1: any, object2: any): boolean {
   }
   return false;
 }
-// export function deepEqual(object1, object2) {
-//   const result = deepEqual2(object1, object2)
-//   console.log(object1, object2, result)
+// export function deepEqual(object1Value, object2Value) {
+//   const result = deepEqual2(object1Value, object2Value)
+//   console.log(object1Value, object2Value, result)
 //   return result;
 // }

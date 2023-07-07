@@ -8,17 +8,19 @@ export const customObjectSet = (
     const { propertyPath, shouldValidatePropertyChange, onChange } = props;
     const oldValue = target[property];
     const newPropertyPath = `${propertyPath}.${property.toString()}`;
-    const notifyChange =
-      shouldValidatePropertyChange(newPropertyPath) &&
-      !deepEqual(newValue, oldValue);
-    const proxyValue = observe({
-      ...props,
-      item: newValue,
-      propertyPath: newPropertyPath,
-    });
-    const result = Reflect.set(target, property, proxyValue, receiver);
-    if (notifyChange) onChange(newPropertyPath);
-    return result;
+
+    if (!deepEqual(newValue, oldValue)) {
+      const proxyValue = observe<object>({
+        ...props,
+        item: newValue,
+        propertyPath: newPropertyPath,
+      });
+      const result = Reflect.set(target, property, proxyValue, receiver);
+      // Notify change?
+      if (shouldValidatePropertyChange(newPropertyPath)) onChange(newPropertyPath);
+      return result;
+    }
+    return true;
   };
 };
 

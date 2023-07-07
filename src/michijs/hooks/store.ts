@@ -13,14 +13,6 @@ export function store<
     shouldValidatePropertyChange: (propertyPath) =>
       !propertiesThatChanged.find((x) => x === propertyPath),
     propertyPath: "",
-    // subscribeCallback: (path, observer) => {
-    //   const cuttedPath = path.slice(1);
-    //   observableProps.subscribe((value) => {
-    //     const valuesFound = value?.filter(x => x.startsWith(cuttedPath)).map(x => x.slice(cuttedPath.length));
-    //     if (valuesFound && valuesFound.length > 0)
-    //       observer(valuesFound);
-    //   });
-    // }
   });
   let dispatchInProgressCount = 0;
   let propertiesThatChanged = new Array<string>();

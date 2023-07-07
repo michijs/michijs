@@ -60,9 +60,9 @@ button.onclick = () => {
   console.log(a);
 };
 
-document.body.innerHTML = "";
-document.body.append(button);
-document.body.append(a);
+// document.body.innerHTML = "";
+// document.body.append(button);
+// document.body.append(a);
 
 const A = {
   valueOf() {
