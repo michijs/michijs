@@ -1,6 +1,5 @@
 import { DeepReadonly, GetElementProps, ObjectJSXElement } from "../..";
 import { ListElement } from "../components/FragmentAndList";
-import { ListAttrs } from "../components/List";
 import { Target } from "./Target";
 
 export type ElementListInterface<V> = Pick<
