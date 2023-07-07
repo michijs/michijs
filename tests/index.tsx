@@ -124,4 +124,4 @@ createCustomElement("root-test-element", {
 //     }
 // }
 // console.log(unproxyfy(a))
-import('./test')
+import("./test");
