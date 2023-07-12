@@ -5,9 +5,12 @@ export const PrimitiveFactory: Required<ElementFactory> = {
     return el.nodeType === 3;
   },
   create(jsx: NonNullablePrimitiveType) {
-    return document.createTextNode(jsx.toString());
-  },
-  update(jsx: NonNullablePrimitiveType, el: Element) {
-    if (el.textContent !== jsx.toString()) el.textContent = jsx.toString();
-  },
+    const textNode = document.createTextNode(jsx.toString());
+    if (jsx.subscribe) {
+      jsx.subscribe((newValue) => {
+        textNode.textContent = newValue?.toString() ?? '';
+      })
+    }
+    return textNode;
+  }
 };

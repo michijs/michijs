@@ -7,6 +7,7 @@ import { EventDispatcher } from "./classes";
 import { idGenerator } from "./hooks";
 import { Fragment } from "./components";
 import { MichiAttributes } from "./h/MichiAttributes";
+import { ProxiedValue } from "./hooks/observe/ProxiedValue";
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 export type CSSVar<T extends string> = KebabCase<T> & {
@@ -199,7 +200,14 @@ export interface MichiProperties
 
 export interface MichiCustomElement extends HTMLElement, MichiProperties {}
 
-export type NonNullablePrimitiveType = bigint | string | number | boolean;
+export type ObservableValue<T> = T & Partial<ProxiedValue<T>>;
+
+
+export type Observable<T> = (T extends object ? {
+  [K in keyof T]: T[K] extends Function ? T[K] : Observable<T[K]>;
+} : T) & Partial<ProxiedValue<T>>;
+
+export type NonNullablePrimitiveType = bigint | string | number | boolean | Observable<(bigint | string | number | boolean)>;
 export type PrimitiveType = NonNullablePrimitiveType | null | undefined;
 
 type DeepReadonlyArray<T> = ReadonlyArray<DeepReadonly<T>>;
@@ -540,13 +548,6 @@ export interface ElementFactory {
     isMATHML?: boolean,
     self?: Element,
   ): ChildNode | ParentNode;
-  update?(
-    jsx: JSX.Element,
-    el: Node,
-    isSVG?: boolean,
-    isMATHML?: boolean,
-    self?: Element,
-  ): void;
 }
 
 export interface CreateCustomElementStaticResult<

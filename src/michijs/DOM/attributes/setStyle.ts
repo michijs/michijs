@@ -14,9 +14,13 @@ export function setStyle(
     Object.entries(cssObject).forEach(([key, value]) => {
       // Manual Update is faster than Object.assign
       setStyleProperty(element, key, value);
+      if (value.subscribe)
+        value.subscribe((newValue) => setStyleProperty(element, key, newValue))
     });
-  } else {
-    setAttribute(element, "style", cssObject);
-  }
+  } 
+  // TODO: check if its possible
+  // else {
+  //   setAttribute(element, "style", cssObject);
+  // }
   // }
 }

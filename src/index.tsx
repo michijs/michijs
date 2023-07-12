@@ -1,4 +1,3 @@
-import "./michijs/prototypeAddons";
 export { h } from "./michijs/h";
 export { jsx, jsxs, jsxDEV, Fragment } from "./michijs/h/jsx-runtime";
 export * from "./michijs/constants";

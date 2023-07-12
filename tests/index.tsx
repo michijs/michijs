@@ -1,62 +1,62 @@
-import { createCustomElement, h, Host } from "../src";
-import { ColorSelector } from "./ColorSelector";
-import { Router } from "./routes";
-// // import sheet from './a.css' assert { type: 'css' };
-// // console.log(sheet)
+// import { createCustomElement, h, Host } from "../src";
+// import { ColorSelector } from "./ColorSelector";
+// import { Router } from "./routes";
+// // // import sheet from './a.css' assert { type: 'css' };
+// // // console.log(sheet)
 
-createCustomElement("root-test-element", {
-  reflectedAttributes: {
-    // arrayTest: new ElementList(0, 1, 2, 3, 4, 5, 6),
-    arrayTest: [0, 1, 2, 3, 4, 5],
-  },
-  shadow: false,
-  transactions: {
-    onClickArray() {
-      this.arrayTest.push(7, 8);
-      // this.arrayTest = [0, 1, 2, 3, 6]
-      // this.arrayTest.reverse();
-      // this.arrayTest.pop();
-      // this.arrayTest.shift();
-      // Scenario
-      // this.arrayTest = [6, 3, 2, 1, 0]
-    },
-  },
-  fakeRoot: false,
-  observe: {
-    "arrayTest.6"() {
-      console.log("6 Added");
-    },
-  },
-  render() {
-    return (
-      <Host>
-        <Router />
-        <math display="block">
-          <mfrac>
-            <mn>{this.arrayTest.length}</mn>
-            <msqrt>
-              <mn>2</mn>
-            </msqrt>
-          </mfrac>
-        </math>
-        {/* <List
-          as='div'
-          data={this.arrayTest}
-          renderItem={item => <div key={item} onclick={this.onClickArray}>{item}</div>}
-        /> */}
-        <ColorSelector />
-        {this.arrayTest.map((item) => (
-          <div key={item} onclick={this.onClickArray}>
-            {item}
-          </div>
-        ))}
-        {/* <this.arrayTest.List
-          renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}
-        /> */}
-      </Host>
-    );
-  },
-});
+// createCustomElement("root-test-element", {
+//   reflectedAttributes: {
+//     // arrayTest: new ElementList(0, 1, 2, 3, 4, 5, 6),
+//     arrayTest: [0, 1, 2, 3, 4, 5],
+//   },
+//   shadow: false,
+//   transactions: {
+//     onClickArray() {
+//       this.arrayTest.push(7, 8);
+//       // this.arrayTest = [0, 1, 2, 3, 6]
+//       // this.arrayTest.reverse();
+//       // this.arrayTest.pop();
+//       // this.arrayTest.shift();
+//       // Scenario
+//       // this.arrayTest = [6, 3, 2, 1, 0]
+//     },
+//   },
+//   fakeRoot: false,
+//   observe: {
+//     "arrayTest.6"() {
+//       console.log("6 Added");
+//     },
+//   },
+//   render() {
+//     return (
+//       <Host>
+//         <Router />
+//         <math display="block">
+//           <mfrac>
+//             <mn>{this.arrayTest.length}</mn>
+//             <msqrt>
+//               <mn>2</mn>
+//             </msqrt>
+//           </mfrac>
+//         </math>
+//         {/* <List
+//           as='div'
+//           data={this.arrayTest}
+//           renderItem={item => <div key={item} onclick={this.onClickArray}>{item}</div>}
+//         /> */}
+//         <ColorSelector />
+//         {this.arrayTest.map((item) => (
+//           <div key={item} onclick={this.onClickArray}>
+//             {item}
+//           </div>
+//         ))}
+//         {/* <this.arrayTest.List
+//           renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}
+//         /> */}
+//       </Host>
+//     );
+//   },
+// });
 
 // const a = indexeddbObservable<
 //   {

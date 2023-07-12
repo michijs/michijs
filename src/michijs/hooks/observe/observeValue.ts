@@ -1,6 +1,5 @@
-import { ObserveProps } from "../observe";
 import { ProxiedValue } from "./ProxiedValue";
 
-export const observeValue = <T extends object>(props: ObserveProps<T>) => {
-  return new ProxiedValue(props.item)
+export const observeValue = <T extends unknown>(item: T) => {
+  return new ProxiedValue(item)
 };

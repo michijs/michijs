@@ -1,7 +1,6 @@
-import { ElementFactory, MichiCustomElement, ObjectJSXElement } from "../..";
+import { ElementFactory, ObjectJSXElement } from "../..";
 import { setAttributes } from "../DOM/attributes/setAttributes";
 import { create } from "./create";
-import { updateChildren } from "./updateChildren";
 
 export const ObjectFactory: Required<ElementFactory> = {
   compare(el: Element, jsx: ObjectJSXElement): boolean {
@@ -58,28 +57,5 @@ export const ObjectFactory: Required<ElementFactory> = {
     setAttributes(el, attrs, self);
 
     return el;
-  },
-  update(
-    jsx: ObjectJSXElement,
-    el: Element,
-    isSVGParam?: boolean,
-    isMATHMLParam?: boolean,
-    self?: MichiCustomElement,
-  ) {
-    const isSVG = isSVGParam || jsx.tag === "svg";
-    const isMATHML = !isSVG && (isMATHMLParam || jsx.tag === "math");
-    const {
-      children,
-      $staticChildren,
-      $oncreated,
-      $doNotTouchChildren,
-      $onupdate,
-      ...attrs
-    } = jsx.attrs;
-    $onupdate?.(jsx, el, isSVG, isMATHML, self);
-    if (!el.$doNotTouchChildren && !$doNotTouchChildren && !$staticChildren)
-      updateChildren(el, children, isSVG, isMATHML, self);
-
-    setAttributes(el, attrs, self);
   },
 };

@@ -1,25 +1,24 @@
-import { observe, ObserveProps } from "../observe";
+import { observe } from "../observe";
+import { Observable } from "../../types";
+import { ProxiedValue } from "./ProxiedValue";
 import { customObjectDelete, customObjectSet } from "./observeCommonObject";
 
-export function observeArray<T extends Array<unknown>>({
-  item,
-  ...props
-}: ObserveProps<T>): T {
-  const proxiedArray = item.map((value, key) =>
-    observe({
-      ...props,
-      item: value,
-      propertyPath: `${props.propertyPath}.${key}`,
-    }),
+export function observeArray<T extends Array<unknown>>(item: T) {
+  const proxiedArray = item.map((value) =>
+    observe(value),
   );
-  return new Proxy(proxiedArray, {
-    set: (target, property, newValue, receiver) =>
-      customObjectSet(props)(target, property, newValue, receiver),
-    deleteProperty: customObjectDelete(props),
-    get(target, p, receiver) {
-      // if (p === 'subscribe')
-      //   return (callback) => props.subscribeCallback?.(props.propertyPath, callback);
-      return Reflect.get(target, p, receiver);
+  
+  const newObservable = new ProxiedValue(proxiedArray);
+  return new Proxy(newObservable, {
+    set: customObjectSet,
+    deleteProperty: customObjectDelete,
+    get(target, property, receiver) {
+      if (property in target)
+        return Reflect.get(target, property);
+      else {
+        
+
+      }
     },
     // Any change calls the set trap
     // get(target, property) {
@@ -59,5 +58,5 @@ export function observeArray<T extends Array<unknown>>({
     // }
     // }
     // },
-  }) as T;
+  }) as unknown as Observable<T>;
 }

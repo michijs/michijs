@@ -1,33 +1,34 @@
-import { ObserveHandlerProps } from "../observe";
+import { Observable } from "../../types";
+import { ProxiedValue } from "./ProxiedValue";
 
 export const customMapAndSetClear = (
-  {
-    onChange,
-    propertyPath,
-  }: Pick<ObserveHandlerProps, "onChange" | "propertyPath">,
-  target: Map<any, any> | Set<any>,
+  target: ProxiedValue<Map<unknown, Observable<unknown>> | Set<Observable<unknown>>>,
   clearFn: Map<any, any>["clear"] | Set<any>["clear"],
 ): Map<any, any>["clear"] | Set<any>["clear"] => {
   return function () {
-    const notifyChange = target.size !== 0;
-    const result = clearFn();
-    if (notifyChange) onChange(propertyPath); //TODO: Should send each index?
-    return result;
+    if (target.shouldCheckForChanges()) {
+      if (target.$value.size !== 0) {
+        clearFn();
+        target.notify()
+      }
+    } else {
+      clearFn();
+      //TODO: Should send each index?
+      target.notify()
+    }
   };
 };
 
 export const customMapAndSetDelete = (
-  { propertyPath, onChange, shouldValidatePropertyChange }: ObserveHandlerProps,
-  target: Map<any, any> | Set<any>,
-  deleteFn: Map<any, any>["delete"] | Set<any>["delete"],
-): Map<any, any>["delete"] | Set<any>["delete"] => {
+  target: ProxiedValue<Map<unknown, Observable<unknown>> | Set<Observable<unknown>>>,
+  deleteFn: Map<unknown, Observable<unknown>>["delete"] | Set<Observable<unknown>>["delete"],
+): Map<unknown, Observable<unknown>>["delete"] | Set<Observable<unknown>>["delete"] => {
   //In Map is key, in Set is value
   return function (key) {
-    const newPropertyPath = `${propertyPath}.${key}`;
-    const notifyChange =
-      shouldValidatePropertyChange(newPropertyPath) && target.has(key);
     const result = deleteFn(key);
-    if (notifyChange) onChange(newPropertyPath); //TODO: ?
+    if(result)
+      target.notify();
+    //TODO: ?
     return result;
   };
 };
