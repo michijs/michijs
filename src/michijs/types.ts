@@ -202,12 +202,19 @@ export interface MichiCustomElement extends HTMLElement, MichiProperties {}
 
 export type ObservableValue<T> = T & Partial<ProxiedValue<T>>;
 
+export type Observable<T> = (T extends object
+  ? {
+      [K in keyof T]: T[K] extends Function ? T[K] : Observable<T[K]>;
+    }
+  : T) &
+  Partial<ProxiedValue<T>>;
 
-export type Observable<T> = (T extends object ? {
-  [K in keyof T]: T[K] extends Function ? T[K] : Observable<T[K]>;
-} : T) & Partial<ProxiedValue<T>>;
-
-export type NonNullablePrimitiveType = bigint | string | number | boolean | Observable<(bigint | string | number | boolean)>;
+export type NonNullablePrimitiveType =
+  | bigint
+  | string
+  | number
+  | boolean
+  | Observable<bigint | string | number | boolean>;
 export type PrimitiveType = NonNullablePrimitiveType | null | undefined;
 
 type DeepReadonlyArray<T> = ReadonlyArray<DeepReadonly<T>>;

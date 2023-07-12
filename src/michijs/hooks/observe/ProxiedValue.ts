@@ -11,14 +11,13 @@ export class ProxiedValue<T> implements ObservableLike<T> {
   }
 
   set $value(newValue: T) {
-    console.log(newValue, this.value)
+    console.log(newValue, this.value);
     if (this.shouldCheckForChanges()) {
       if (!deepEqual(newValue, this.value)) {
         this.value = newValue;
-        this.notify(newValue)
+        this.notify(newValue);
       }
-    } else
-      this.value = newValue;
+    } else this.value = newValue;
   }
   get $value() {
     return this.value;
@@ -37,20 +36,18 @@ export class ProxiedValue<T> implements ObservableLike<T> {
     this.observers?.forEach((observer) => {
       observer(value);
     });
-  };
+  }
 
   subscribe(observer: ObserverCallback<T>) {
-    if (this.observers)
-      this.observers.add(observer);
-    else
-      this.observers = new Set([observer]);
-  };
+    if (this.observers) this.observers.add(observer);
+    else this.observers = new Set([observer]);
+  }
 
   unsubscribe(oldObserver: ObserverCallback<T>) {
     this.observers?.delete(oldObserver);
-  };
+  }
 
   shouldCheckForChanges() {
-    return !!this.observers
+    return !!this.observers;
   }
 }

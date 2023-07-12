@@ -11,15 +11,17 @@ export const observeDate = <T extends Date>(item) => {
   const newObservable = new ProxiedValue<T>(clone);
   return new Proxy(newObservable, {
     get(target, property) {
-      if (property in target)
-        return Reflect.get(target, property);
+      if (property in target) return Reflect.get(target, property);
       else if (target.$value) {
         const targetProperty = Reflect.get(target.$value, property);
         if (typeof property === "string") {
           if (property.startsWith("set")) {
             return function (...args) {
               const oldValue = target.$value.getTime();
-              const result = (targetProperty as Function).apply(target.$value, args);
+              const result = (targetProperty as Function).apply(
+                target.$value,
+                args,
+              );
               const newValue = target.$value.getTime();
               if (newValue !== oldValue) target.notify();
 
@@ -33,6 +35,6 @@ export const observeDate = <T extends Date>(item) => {
           ? targetProperty.bind(target.$value)
           : targetProperty;
       }
-    }
+    },
   }) as unknown as Observable<T>;
 };

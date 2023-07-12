@@ -10,9 +10,7 @@ import { customObjectDelete, customObjectSet } from "./observeCommonObject";
 export const observeSet = <T extends Set<unknown>>(item) => {
   const proxiedSet = new Set<Observable<unknown>>();
   item.forEach((value) => {
-    proxiedSet.add(
-      observe(value),
-    );
+    proxiedSet.add(observe(value));
   });
   const newObservable = new ProxiedValue<T>(proxiedSet);
   return new Proxy(newObservable, {
@@ -33,22 +31,16 @@ export const observeSet = <T extends Set<unknown>>(item) => {
             const updateCallback = () => {
               const observedItem = observe<object>(newValue);
 
-              const result = bindedTargetProperty(
-                observedItem
-              );
+              const result = bindedTargetProperty(observedItem);
 
               observedItem.notify?.();
               return result;
             };
 
             if (target?.shouldCheckForChanges?.()) {
-              if (!target.$value.has(newValue))
-                return updateCallback();
-              else
-                return 
-            }
-            else
-              return updateCallback();
+              if (!target.$value.has(newValue)) return updateCallback();
+              else return;
+            } else return updateCallback();
           };
         }
         case "delete": {

@@ -8,28 +8,21 @@ import {
 } from "./mapAndSetCommonHandlers";
 import { customObjectDelete, customObjectSet } from "./observeCommonObject";
 
-export const observeMap = <T extends Map<unknown, unknown>>(
-  item: T,
-): T => {
+export const observeMap = <T extends Map<unknown, unknown>>(item: T): T => {
   const proxiedMap = new Map() as Map<unknown, Observable<unknown>>;
-  item.forEach((value, key) =>
-    proxiedMap.set(
-      key,
-      observe(value),
-    ),
-  );
+  item.forEach((value, key) => proxiedMap.set(key, observe(value)));
 
   const newObservable = new ProxiedValue(proxiedMap);
   return new Proxy(newObservable, {
     set: customObjectSet,
     get: (target, property) => {
-      if (property in target)
-        return Reflect.get(target, property);
+      if (property in target) return Reflect.get(target, property);
       else {
         const targetProperty = Reflect.get(target.$value, property);
-        const bindedTargetProperty = typeof targetProperty === "function"
-          ? (targetProperty as Function).bind(target.$value)
-          : targetProperty;
+        const bindedTargetProperty =
+          typeof targetProperty === "function"
+            ? (targetProperty as Function).bind(target.$value)
+            : targetProperty;
         switch (property) {
           case "clear": {
             return customMapAndSetClear(target, bindedTargetProperty);
@@ -42,21 +35,15 @@ export const observeMap = <T extends Map<unknown, unknown>>(
                 const observedItem = observe<object>(newValue);
                 observedItem.observers = oldValue?.observers;
 
-                const result = bindedTargetProperty(
-                  key,
-                  observedItem
-                );
+                const result = bindedTargetProperty(key, observedItem);
 
                 observedItem.notify?.();
                 return result;
               };
 
               if (oldValue?.shouldCheckForChanges?.()) {
-                if (!deepEqual(newValue, oldValue))
-                  return updateCallback();
-              }
-              else
-                return updateCallback();
+                if (!deepEqual(newValue, oldValue)) return updateCallback();
+              } else return updateCallback();
             };
           }
           case "delete": {

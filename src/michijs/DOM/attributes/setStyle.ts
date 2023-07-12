@@ -15,9 +15,9 @@ export function setStyle(
       // Manual Update is faster than Object.assign
       setStyleProperty(element, key, value);
       if (value.subscribe)
-        value.subscribe((newValue) => setStyleProperty(element, key, newValue))
+        value.subscribe((newValue) => setStyleProperty(element, key, newValue));
     });
-  } 
+  }
   // TODO: check if its possible
   // else {
   //   setAttribute(element, "style", cssObject);

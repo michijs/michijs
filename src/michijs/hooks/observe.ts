@@ -8,8 +8,7 @@ import { observeValue } from "./observe/observeValue";
 
 export function observe<T>(item: T): Observable<T> {
   if (item && typeof item === "object") {
-    if (Array.isArray(item))
-      return observeArray(item) as Observable<T>;
+    if (Array.isArray(item)) return observeArray(item) as Observable<T>;
     // Many built-in objects, for example Map, Set, Date, Promise and others make use of so-called internal slots.
     // These are like properties but reserved for internal, specification-only purposes.
     // For instance, Map stores items in the internal slot [[MapData]].

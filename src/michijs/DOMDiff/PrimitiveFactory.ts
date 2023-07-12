@@ -8,9 +8,9 @@ export const PrimitiveFactory: Required<ElementFactory> = {
     const textNode = document.createTextNode(jsx.toString());
     if (jsx.subscribe) {
       jsx.subscribe((newValue) => {
-        textNode.textContent = newValue?.toString() ?? '';
-      })
+        textNode.textContent = newValue?.toString() ?? "";
+      });
     }
     return textNode;
-  }
+  },
 };

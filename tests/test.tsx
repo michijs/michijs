@@ -69,7 +69,6 @@ import { create, h, observe } from "../src";
 
 // console.log(tests, A.subscribe);
 
-
 const aasdf = observe({
   level2: {
     date: new Date(),
@@ -77,35 +76,36 @@ const aasdf = observe({
     level1: {
       number: 1,
       // set: new Set()
-    }
-  }
-})
+    },
+  },
+});
 
-aasdf.level2.level1.number.subscribe?.((val) => console.log(val))
-aasdf.level2.date.subscribe?.((val) => console.log(val))
-aasdf.level2.map.subscribe?.((val) => console.log(val))
-aasdf.level2.level1.number = 2
+aasdf.level2.level1.number.subscribe?.((val) => console.log(val));
+aasdf.level2.date.subscribe?.((val) => console.log(val));
+aasdf.level2.map.subscribe?.((val) => console.log(val));
+aasdf.level2.level1.number = 2;
 aasdf.level2.date.setMonth(aasdf.level2.date.getMonth() + 1);
-aasdf.level2.map.set('xd', 1);
+aasdf.level2.map.set("xd", 1);
 aasdf.level2.map.clear();
-
 
 const a = create(
   <div
     _={{
-      id: aasdf.level2.level1.number
+      id: aasdf.level2.level1.number,
     }}
     name={aasdf.level2.level1.number}
-    onclick={() => { aasdf.level2.level1.number++ }}>
+    onclick={() => {
+      aasdf.level2.level1.number++;
+    }}
+  >
     asdf: {aasdf.level2.level1.number}
-  </div>
-)
-document.body.append(a)
+  </div>,
+);
+document.body.append(a);
 // TODO: set is broken, add arrays subscription return values
 // aasdf.level2.level1.set.add(1);
 // console.log(aasdf.level2.level1.set.has(1))
 // aasdf.level3.subscribe?.((val) => console.log(val))
-
 
 // aasdf.level3.level2 = {
 //   level1: 12

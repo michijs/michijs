@@ -4,20 +4,15 @@ import { ProxiedValue } from "./ProxiedValue";
 import { customObjectDelete, customObjectSet } from "./observeCommonObject";
 
 export function observeArray<T extends Array<unknown>>(item: T) {
-  const proxiedArray = item.map((value) =>
-    observe(value),
-  );
-  
+  const proxiedArray = item.map((value) => observe(value));
+
   const newObservable = new ProxiedValue(proxiedArray);
   return new Proxy(newObservable, {
     set: customObjectSet,
     deleteProperty: customObjectDelete,
     get(target, property, receiver) {
-      if (property in target)
-        return Reflect.get(target, property);
+      if (property in target) return Reflect.get(target, property);
       else {
-        
-
       }
     },
     // Any change calls the set trap

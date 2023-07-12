@@ -1,7 +1,8 @@
 export function deepEqual(object1: any, object2: any): boolean {
   const object1Value = object1?.valueOf();
   const object2Value = object2?.valueOf();
-  if (object1Value === object2Value || object1Value == object2Value) return true;
+  if (object1Value === object2Value || object1Value == object2Value)
+    return true;
 
   const type = typeof object1Value;
   const areDifferentTypes = type !== typeof object2Value;
@@ -28,8 +29,12 @@ export function deepEqual(object1: any, object2: any): boolean {
         : object2Value) {
         if (
           !deepEqual(
-            object1Value === null || object1Value === void 0 ? void 0 : object1Value[key],
-            object2Value === null || object2Value === void 0 ? void 0 : object2Value[key],
+            object1Value === null || object1Value === void 0
+              ? void 0
+              : object1Value[key],
+            object2Value === null || object2Value === void 0
+              ? void 0
+              : object2Value[key],
           )
         )
           return false;

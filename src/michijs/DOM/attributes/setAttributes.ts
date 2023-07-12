@@ -17,7 +17,7 @@ export function setAttributes(
       Object.entries(newValue).forEach(([propertyName, value]) => {
         el[propertyName] = value;
         if (value.subscribe)
-          value.subscribe((newValue) => el[propertyName] = newValue)
+          value.subscribe((newValue) => (el[propertyName] = newValue));
       });
     } else if (name.startsWith("on")) {
       const eventName = name.slice(2) as keyof ElementEventMap;
@@ -30,7 +30,7 @@ export function setAttributes(
     } else if (!compareAttributes(el, name, newValue)) {
       setAttribute(el, name, newValue);
       if (newValue.subscribe)
-        newValue.subscribe((newValue) => setAttribute(el, name, newValue))
+        newValue.subscribe((newValue) => setAttribute(el, name, newValue));
     }
   });
   if (events) el.$setEventListeners(self, events);
