@@ -16,23 +16,9 @@ export const customObjectSet: CommonObjectProxyHandler<object>["set"] = (
   if (property in target)
     return Reflect.set(target, property, newValue, receiver);
   if (target.$value) {
-    const oldValue = target.$value[property];
-
-    const updateCallback = (value: object) => {
-      const observedItem = observe<object>(newValue);
-
-      observedItem.observers = oldValue.observers;
-      // Intentionally ignoring receiver - it ignores target.$value as the target and takes target
-      const result = Reflect.set(value, property, observedItem);
-
-      observedItem.notify?.();
-      return result;
-    };
-
-    if (target.$value[property].shouldCheckForChanges()) {
-      if (!deepEqual(newValue, oldValue)) return updateCallback(target.$value);
-    } else return updateCallback(target.$value);
-    return true;
+    const observedItem = observe<object>(newValue);
+    // Intentionally ignoring receiver - it ignores target.$value as the target and takes target
+    return Reflect.set(target.$value[property], '$value', observedItem.$value);
   }
   return false;
 };

@@ -1,4 +1,4 @@
-import { create, h, observe } from "../src";
+import { computedObserve, create, h, observe } from "../src";
 // const h = {
 //   createElement(tag, attrs, ...childrenProps): JSX.Element {
 //     console.log(childrenProps)
@@ -69,36 +69,46 @@ import { create, h, observe } from "../src";
 
 // console.log(tests, A.subscribe);
 
-const aasdf = observe({
+const store = observe({
   level2: {
     date: new Date(),
     map: new Map(),
     level1: {
       number: 1,
+      undefined: undefined,
       // set: new Set()
     },
   },
 });
 
-aasdf.level2.level1.number.subscribe?.((val) => console.log(val));
-aasdf.level2.date.subscribe?.((val) => console.log(val));
-aasdf.level2.map.subscribe?.((val) => console.log(val));
-aasdf.level2.level1.number = 2;
-aasdf.level2.date.setMonth(aasdf.level2.date.getMonth() + 1);
-aasdf.level2.map.set("xd", 1);
-aasdf.level2.map.clear();
+const { number } = store.level2.level1;
+
+store.level2.level1.subscribe?.((newValue) => console.log('level1', newValue))
+store.level2.level1.undefined.subscribe?.((val) => console.log('undefined',val));
+store.level2.level1.number.subscribe?.((val) => console.log(val));
+store.level2.date.subscribe?.((val) => console.log(val));
+store.level2.map.subscribe?.((val) => console.log(val));
+const computed = computedObserve(() => number + 1, [number])
+
+computed.subscribe?.((newValue) => console.log('computed', newValue));
+
+store.level2.level1.number = 2;
+store.level2.level1.undefined = 3;
+store.level2.date.setMonth(store.level2.date.getMonth() + 1);
+store.level2.map.set("xd", 1);
+store.level2.map.clear();
 
 const a = create(
   <div
     _={{
-      id: aasdf.level2.level1.number,
+      id: number,
     }}
-    name={aasdf.level2.level1.number}
+    name={number}
     onclick={() => {
-      aasdf.level2.level1.number++;
+      store.level2.level1.number++;
     }}
   >
-    asdf: {aasdf.level2.level1.number}
+    asdf: {number}
   </div>,
 );
 document.body.append(a);
@@ -107,6 +117,6 @@ document.body.append(a);
 // console.log(aasdf.level2.level1.set.has(1))
 // aasdf.level3.subscribe?.((val) => console.log(val))
 
-// aasdf.level3.level2 = {
-//   level1: 12
+// store.level2.level1 = {
+//   number: 12
 // }

@@ -178,9 +178,7 @@ export interface MichiProperties
     alreadyRendered: boolean;
     shadowRoot?: ShadowRoot;
     styles: HTMLStyleElement[];
-    rerenderCallback(propertiesThatChanged?: string[] | PropertyKey): void;
     pendingTasks: number;
-    unSubscribeFromStore: Array<() => void>;
     idGen?: ReturnType<typeof idGenerator>["getId"];
     internals?: ElementInternals;
     fakeRoot?: HTMLElement;
@@ -190,8 +188,6 @@ export interface MichiProperties
   child<T extends (new () => HTMLElement) | HTMLElement = HTMLElement>(
     selector: string,
   ): T extends new () => HTMLElement ? InstanceType<T> : T;
-  /**Forces the element to re-render */
-  rerender(): void;
   /**Create unique IDs with a discernible key */
   readonly idGen: ReturnType<typeof idGenerator>["getId"];
   readonly name: string | null;
@@ -206,7 +202,7 @@ export type Observable<T> = (T extends object
   ? {
       [K in keyof T]: T[K] extends Function ? T[K] : Observable<T[K]>;
     }
-  : T) &
+  : T extends undefined ? unknown : T) &
   Partial<ProxiedValue<T>>;
 
 export type NonNullablePrimitiveType =
@@ -312,8 +308,6 @@ export type MethodsType = Record<string, Function>;
 
 export type EventsType = Record<string, EventDispatcher<unknown>>;
 
-export type SubscribeToType = Record<string, ObservableLike>;
-
 export type EmptyObject = Record<never, never>;
 
 export interface StoreProps<T, Y> {
@@ -401,15 +395,6 @@ export interface MichiElementOptions {
    * false //on Customized built-in elements
    */
   shadow?: false | ShadowRootInit;
-  /**
-   * Allows you to subscribe to an observable like (like a store). When the store emit an event, the custom element will be re-rendered.
-   * @link https://github.com/sindresorhus/type-fest/blob/main/source/observable-like.d.ts
-   */
-  subscribeTo?: SubscribeToType;
-  /**
-   * Contains methods with a name of an attribute / reflected attribute / observable like. Those methods are executed when a change has been made to their corresponding property.
-   */
-  observe?: OptionalRecord<string, Function>;
   // observe?: {
   //   [k in KeysAndKeysOf<RA>]?: () => void;
   // } & {
@@ -494,10 +479,6 @@ export interface Lifecycle {
   didMount?(): void;
   /**This method is called after a component is removed from the DOM. */
   didUnmount?(): void;
-  /**This method is called before re-rendering occurs. */
-  willUpdate?(): void;
-  /**This method is called after re-rendering occurs. */
-  didUpdate?(): void;
   /**This method is called before a component does anything with an attribute. */
   willReceiveAttribute?(
     name: string,

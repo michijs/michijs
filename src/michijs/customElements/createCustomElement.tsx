@@ -44,10 +44,8 @@ export function createCustomElement<
     nonObservedAttributes: getNonObservedAttributes,
     reflectedAttributes,
     transactions,
-    observe,
     lifecycle,
     render,
-    subscribeTo,
     adoptedStyleSheets,
     extends: extendsObject,
     shadow = extendsObject ? false : { mode: "open" },
@@ -76,36 +74,15 @@ export function createCustomElement<
       ]) as Store<CssVariablesType, EmptyObject>,
       alreadyRendered: false,
       pendingTasks: 0,
-      rerenderCallback: (propertyThatChanged) => {
-        if (observe)
-          Object.entries(observe).forEach(([key, observer]) => {
-            const matches =
-              typeof propertyThatChanged === "object"
-                ? propertyThatChanged.find((x) => x.startsWith(key))
-                : propertyThatChanged === key;
-
-            if (matches) {
-              this.$michi.pendingTasks++;
-              observer?.call(this);
-              this.$michi.pendingTasks--;
-            }
-          });
-
-        if (this.$michi.alreadyRendered && this.$michi.pendingTasks === 0)
-          this.rerender();
-      },
       styles: [],
-      unSubscribeFromStore: new Array<() => void>(),
       idGen: undefined,
       internals: undefined,
     };
     connected;
     willMount;
-    willUpdate;
     willConstruct;
     didConstruct;
     didMount;
-    didUpdate;
     willReceiveAttribute;
     didUnmount;
     associatedCallback;
@@ -135,11 +112,6 @@ export function createCustomElement<
         this,
       );
     }
-    rerender() {
-      this.willUpdate?.();
-      this.renderCallback();
-      this.didUpdate?.();
-    }
     get idGen() {
       if (!this.$michi.idGen) {
         this.$michi.idGen = idGenerator().getId;
@@ -168,20 +140,12 @@ export function createCustomElement<
           );
 
           addStylesheetsToDocumentOrShadowRoot(attachedShadow, styleSheet);
-          this.$michi.cssStore.subscribe((propertiesThatChanged) => {
+          this.$michi.cssStore.subscribe(() => {
             updateStyleSheet(styleSheet, {
               [":host"]: cssVariablesFromCssObject(
                 this.$michi.cssStore.state as CSSObject,
               ),
             });
-
-            if (observe)
-              Object.entries(observe).forEach(([key, observer]) => {
-                const matches = propertiesThatChanged?.find((x) =>
-                  x.startsWith(key),
-                );
-                if (matches) observer?.call(this);
-              });
           });
         }
         if (computedStyleSheet) {
@@ -194,10 +158,6 @@ export function createCustomElement<
           };
           this.$michi.cssStore.subscribe(updateStylesheetCallback);
           this.$michi.store.subscribe(updateStylesheetCallback);
-          if (subscribeTo)
-            Object.values(subscribeTo).forEach((store) =>
-              store.subscribe(updateStylesheetCallback),
-            );
         }
         if (adoptedStyleSheets)
           addStylesheetsToDocumentOrShadowRoot(
@@ -234,23 +194,6 @@ export function createCustomElement<
           ([key, value]) => (this[key] = value),
         );
       }
-      if (subscribeTo)
-        Object.entries(subscribeTo).forEach(([key, value]) => {
-          const subscribeFunction = (
-            propertiesThatChanged?: string[] | unknown,
-          ) => {
-            if (propertiesThatChanged && Array.isArray(propertiesThatChanged))
-              this.$michi.rerenderCallback(
-                propertiesThatChanged.map((x) => `${key}.${x}`),
-              ); //TODO: ?
-            else this.$michi.rerenderCallback(key);
-          };
-          value.subscribe(subscribeFunction);
-          if (value.unsubscribe)
-            this.$michi.unSubscribeFromStore.push(() =>
-              value.unsubscribe?.(subscribeFunction),
-            );
-        });
 
       if (formAssociated) this.$michi.internals = this.attachInternals();
 
@@ -304,14 +247,6 @@ export function createCustomElement<
                 this.$michi.cssStore.state[key],
               );
             });
-
-            if (observe)
-              Object.entries(observe).forEach(([key, observer]) => {
-                const matches = propertiesThatChanged?.find((x) =>
-                  x.startsWith(key),
-                );
-                if (matches) observer?.call(this);
-              });
           });
         }
         if (computedStyleSheet) {
@@ -325,10 +260,6 @@ export function createCustomElement<
           updateStylesheetCallback();
           this.$michi.cssStore.subscribe(updateStylesheetCallback);
           this.$michi.store.subscribe(updateStylesheetCallback);
-          if (subscribeTo)
-            Object.values(subscribeTo).forEach((store) =>
-              store.subscribe(updateStylesheetCallback),
-            );
         }
         if (adoptedStyleSheets)
           addStylesheetsToDocumentOrShadowRoot(
@@ -348,15 +279,12 @@ export function createCustomElement<
         this.willMount?.();
         this.renderCallback();
         this.$michi.alreadyRendered = true;
-        this.$michi.store.subscribe(this.$michi.rerenderCallback);
         this.didMount?.();
       }
     }
 
     disconnectedCallback() {
       if (!document.contains(this)) {
-        // TODO: what happens if element is moved?
-        this.$michi.unSubscribeFromStore.forEach((fn) => fn());
         this.didUnmount?.();
       }
     }

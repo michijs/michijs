@@ -11,7 +11,6 @@ export class ProxiedValue<T> implements ObservableLike<T> {
   }
 
   set $value(newValue: T) {
-    console.log(newValue, this.value);
     if (this.shouldCheckForChanges()) {
       if (!deepEqual(newValue, this.value)) {
         this.value = newValue;
