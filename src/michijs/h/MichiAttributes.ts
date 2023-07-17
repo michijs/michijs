@@ -13,7 +13,7 @@ export interface MichiAttributes<E> extends Partial<IterableAttrs<string>> {
    * Children are not created or updated. Element creation/update is delegated
    */
   $doNotTouchChildren?: boolean;
-  children?: JSX.Element;
+  // children?: JSX.Element;
   /**
    * Callback that is called when the element is created
    */

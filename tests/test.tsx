@@ -1,4 +1,4 @@
-import { computedObserve, create, h, observe } from "../src";
+import { If, computedObserve, create, h, observe } from "../src";
 // const h = {
 //   createElement(tag, attrs, ...childrenProps): JSX.Element {
 //     console.log(childrenProps)
@@ -72,7 +72,7 @@ import { computedObserve, create, h, observe } from "../src";
 const store = observe({
   level2: {
     date: new Date(),
-    map: new Map(),
+    map: new Map<string, number>(),
     level1: {
       number: 1,
       undefined: undefined,
@@ -84,11 +84,11 @@ const store = observe({
 const { number } = store.level2.level1;
 
 store.level2.level1.subscribe?.((newValue) => console.log('level1', newValue))
-store.level2.level1.undefined.subscribe?.((val) => console.log('undefined',val));
+store.level2.level1.undefined.subscribe?.((val) => console.log('undefined', val));
 store.level2.level1.number.subscribe?.((val) => console.log(val));
 store.level2.date.subscribe?.((val) => console.log(val));
 store.level2.map.subscribe?.((val) => console.log(val));
-const computed = computedObserve(() => number + 1, [number])
+const computed = computedObserve(() => !!Number.isInteger(number / 2), [number])
 
 computed.subscribe?.((newValue) => console.log('computed', newValue));
 
@@ -96,6 +96,8 @@ store.level2.level1.number = 2;
 store.level2.level1.undefined = 3;
 store.level2.date.setMonth(store.level2.date.getMonth() + 1);
 store.level2.map.set("xd", 1);
+store.level2.map.get("xd")?.subscribe?.((newValue) => console.log('map xd key changed', newValue));
+store.level2.map.set("xd", 2);
 store.level2.map.clear();
 
 const a = create(
@@ -109,7 +111,12 @@ const a = create(
     }}
   >
     asdf: {number}
-  </div>,
+    <If
+      condition={computed}
+      then={() => "Es par"}
+      else={() => <span>Es impar</span>}
+    />
+  </div>
 );
 document.body.append(a);
 // TODO: set is broken, add arrays subscription return values

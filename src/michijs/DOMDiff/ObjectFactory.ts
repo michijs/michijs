@@ -1,5 +1,6 @@
 import { ElementFactory, ObjectJSXElement } from "../..";
 import { setAttributes } from "../DOM/attributes/setAttributes";
+import { Namespaces, RootTags } from "../constants/namespaces";
 import { create } from "./create";
 
 export const ObjectFactory: Required<ElementFactory> = {
@@ -12,8 +13,8 @@ export const ObjectFactory: Required<ElementFactory> = {
     isMATHMLParam?: boolean,
     self?: Element,
   ) {
-    const isSVG = isSVGParam || jsx.tag === "svg";
-    const isMATHML = !isSVG && (isMATHMLParam || jsx.tag === "math");
+    const isSVG = isSVGParam || jsx.tag === RootTags.SVG;
+    const isMATHML = !isSVG && (isMATHMLParam || jsx.tag === RootTags.MATHML);
     let el: Element;
     const {
       children,
@@ -25,14 +26,14 @@ export const ObjectFactory: Required<ElementFactory> = {
     } = jsx.attrs;
     if (isSVG) {
       if (jsx.attrs?.is)
-        el = document.createElementNS("http://www.w3.org/2000/svg", jsx.tag, {
+        el = document.createElementNS(Namespaces.SVG, jsx.tag, {
           is: jsx.attrs.is,
         });
-      else el = document.createElementNS("http://www.w3.org/2000/svg", jsx.tag);
+      else el = document.createElementNS(Namespaces.SVG, jsx.tag);
     } else if (isMATHML) {
       if (jsx.attrs?.is)
         el = document.createElementNS(
-          "http://www.w3.org/1998/Math/MathML",
+          Namespaces.MATHML,
           jsx.tag,
           {
             is: jsx.attrs.is,
@@ -40,7 +41,7 @@ export const ObjectFactory: Required<ElementFactory> = {
         );
       else
         el = document.createElementNS(
-          "http://www.w3.org/1998/Math/MathML",
+          Namespaces.MATHML,
           jsx.tag,
         );
     } else if (jsx.attrs?.is)

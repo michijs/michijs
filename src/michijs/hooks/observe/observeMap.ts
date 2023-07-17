@@ -1,4 +1,3 @@
-import { deepEqual } from "../../utils/deepEqual";
 import { observe } from "../observe";
 import { Observable } from "../../types";
 import { ProxiedValue } from "./ProxiedValue";
@@ -8,8 +7,8 @@ import {
 } from "./mapAndSetCommonHandlers";
 import { customObjectDelete, customObjectSet } from "./observeCommonObject";
 
-export const observeMap = <T extends Map<unknown, unknown>>(item: T): T => {
-  const proxiedMap = new Map() as Map<unknown, Observable<unknown>>;
+export const observeMap = <T extends Map<unknown, any>>(item: T): T => {
+  const proxiedMap = new Map<unknown, Observable<any>>();
   item.forEach((value, key) => proxiedMap.set(key, observe(value)));
 
   const newObservable = new ProxiedValue(proxiedMap);
@@ -29,21 +28,14 @@ export const observeMap = <T extends Map<unknown, unknown>>(item: T): T => {
           }
           case "set": {
             return function (key, newValue) {
-              const oldValue = target.$value.get(key);
+              const hasOldValue = target.$value.has(key);
+              const observedItem = observe<object>(newValue);
 
-              const updateCallback = () => {
-                const observedItem = observe<object>(newValue);
-                observedItem.observers = oldValue?.observers;
-
-                const result = bindedTargetProperty(key, observedItem);
-
-                observedItem.notify?.();
-                return result;
-              };
-
-              if (oldValue?.shouldCheckForChanges?.()) {
-                if (!deepEqual(newValue, oldValue)) return updateCallback();
-              } else return updateCallback();
+              if (hasOldValue)
+                // Intentionally ignoring receiver - it ignores target.$value as the target and takes target
+                return Reflect.set(target.$value.get(key), '$value', observedItem.$value);
+              else
+                return bindedTargetProperty(key, observedItem)
             };
           }
           case "delete": {

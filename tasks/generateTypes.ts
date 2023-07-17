@@ -62,7 +62,10 @@ writeFileSync(
     namespace JSX {
       type Element = SingleJSXElement;
       interface ElementChildrenAttribute {
-        children: JSX.Element; // specify children name to use
+        children: SingleJSXElement; // specify children name to use
+      }
+      interface IntrinsicAttributes {
+        children?: SingleJSXElement;
       }
       interface IntrinsicElements extends HTMLElements, MathMLElements, SVGElements {
         ${Array.from(elements)

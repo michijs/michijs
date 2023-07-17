@@ -1,6 +1,6 @@
 import type { CSSProperties } from "@michijs/htmltype";
-import { setAttribute } from "./setAttribute";
 import { setStyleProperty } from "./setStyleProperty";
+import { formatToKebabCase } from "../../utils";
 
 export function setStyle(
   element: Element | HTMLElement,
@@ -9,13 +9,13 @@ export function setStyle(
   // if (supportsAdoptingStyleSheets && self) {
   //   AdoptedStyle({ id: self.id }, [createStyleSheet(cssObject, [`#${id}`])], self);
   // } else {
-  element.removeAttribute("style");
   if (cssObject && "style" in element) {
     Object.entries(cssObject).forEach(([key, value]) => {
+      const formattedKey = formatToKebabCase(key);
       // Manual Update is faster than Object.assign
-      setStyleProperty(element, key, value);
+      setStyleProperty(element, formattedKey, value);
       if (value.subscribe)
-        value.subscribe((newValue) => setStyleProperty(element, key, newValue));
+        value.subscribe((newValue) => setStyleProperty(element, formattedKey, newValue));
     });
   }
   // TODO: check if its possible

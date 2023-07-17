@@ -1,4 +1,3 @@
-import { deepEqual } from "../../utils/deepEqual";
 import { observe } from "../observe";
 import { Observable } from "../../types";
 import { ProxiedValue } from "./ProxiedValue";

@@ -1,5 +1,5 @@
 import type { CSSProperties } from "@michijs/htmltype";
-import { AnyObject, EventListenerMap } from "../../types";
+import { AnyObject } from "../../types";
 import { setStyle } from "./setStyle";
 import { setAttribute } from "./setAttribute";
 import { compareAttributes } from "./compareAttributes";
@@ -10,7 +10,6 @@ export function setAttributes(
   attributes: AnyObject,
   self?: Element,
 ) {
-  let events: EventListenerMap | undefined;
   Object.entries(attributes).forEach(([name, newValue]) => {
     // priority to properties and events
     if (name === "_") {
@@ -23,15 +22,12 @@ export function setAttributes(
       const eventName = name.slice(2) as keyof ElementEventMap;
       const bindedEvent = bindFunction(self, newValue);
       el.addEventListener(eventName, bindedEvent);
-      // if (!events) events = new Map();
-      // events.set(eventName, newValue);
-    } else if (name === "style") {
+    } else if (name === "style") 
       setStyle(el, newValue as CSSProperties);
-    } else if (!compareAttributes(el, name, newValue)) {
+    else if (!compareAttributes(el, name, newValue)) {
       setAttribute(el, name, newValue);
       if (newValue.subscribe)
         newValue.subscribe((newValue) => setAttribute(el, name, newValue));
     }
   });
-  if (events) el.$setEventListeners(self, events);
 }

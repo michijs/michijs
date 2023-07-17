@@ -42,6 +42,7 @@ export function getElementFactory(
             jsx: classJSXToObjectJSXElement(jsx as ClassJSXElement),
             factory: ObjectFactory,
           };
+          
         return getElementFactory(
           (jsx as FunctionJSXElement).tag(jsx.attrs, self),
           self,

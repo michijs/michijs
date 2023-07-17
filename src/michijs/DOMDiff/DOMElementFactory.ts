@@ -15,7 +15,7 @@ export const DOMElementFactory: Required<ElementFactory> = {
     isMATHML?: boolean,
     self?: Element,
   ) {
-    DOMElementFactory.update(jsx, jsx.tag, isSVG, isMATHML, self);
+    // DOMElementFactory.update(jsx, jsx.tag, isSVG, isMATHML, self);
     return jsx.tag;
   },
   update(
