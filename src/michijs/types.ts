@@ -261,7 +261,7 @@ export type ArrayJSXElement = SingleJSXElement[];
 // export type PureObjectJSXElement = { tag: string } & Omit<CommonJSXAttrs,'children'> & {children: (PureObjectJSXElement | string)[]};
 
 export interface FC<T = {}, S = Element> {
-  (attrs: T, self?: S | null): JSX.Element;
+  (attrs: T, self?: S | null): Node;
 }
 
 export type PropertyKey = string | number | symbol;

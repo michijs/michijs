@@ -15,13 +15,14 @@ type SVGElements = SVGElementsHTMLType<ElementsInterfaceOverride>;
 
 declare global {
   namespace JSX {
-    type Element = SingleJSXElement
+    type ElementType = SingleJSXElement | ((props: any) => Node);
+    type Element = Node | HTMLElement | SVGElement | MathMLElement | string | number
     interface ElementChildrenAttribute {
       children: SingleJSXElement; // specify children name to use
     }
-    interface IntrinsicAttributes {
-      children?: SingleJSXElement;
-    }
+    // interface IntrinsicAttributes {
+    //   children?: SingleJSXElement;
+    // }
     interface IntrinsicElements extends HTMLElements, MathMLElements, SVGElements {
       a: HTMLElements["a"] & SVGElements["a"] & MichiAttributes<HTMLElementTagNameMap['a'] & SVGElementTagNameMap['a']>;
       abbr: HTMLElements["abbr"] & MichiAttributes<HTMLElementTagNameMap['abbr']>;

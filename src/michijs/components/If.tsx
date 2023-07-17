@@ -8,7 +8,7 @@ interface IfProps {
 }
 
 export const If: FC<IfProps> = (props) => {
-  const getCurrentElement = (value) => create(value ? props.then() : props.else?.()) ?? document.createComment('')
+  const getCurrentElement = (value) => value ? props.then() : props.else?.() ?? document.createComment('')
   let el = getCurrentElement(props.condition.valueOf()) as Element;
 
   props.condition.subscribe?.((newValue) => {
@@ -17,5 +17,5 @@ export const If: FC<IfProps> = (props) => {
     el = newEl as Element;
   })
 
-  return { tag: el, attrs: { children: [] } };
+  return el;
 }

@@ -100,11 +100,10 @@ store.level2.map.get("xd")?.subscribe?.((newValue) => console.log('map xd key ch
 store.level2.map.set("xd", 2);
 store.level2.map.clear();
 
-const a = create(
-  <div
-    _={{
-      id: number,
-    }}
+const a = <div
+    // _={{
+    //   id: number,
+    // }}
     name={number}
     onclick={() => {
       store.level2.level1.number++;
@@ -117,7 +116,7 @@ const a = create(
       else={() => <span>Es impar</span>}
     />
   </div>
-);
+;
 document.body.append(a);
 // TODO: set is broken, add arrays subscription return values
 // aasdf.level2.level1.set.add(1);
