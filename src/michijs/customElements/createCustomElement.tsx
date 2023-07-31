@@ -22,7 +22,6 @@ import { deepEqual } from "../utils/deepEqual";
 import { getRootNode } from "../DOM/getRootNode";
 import { getAttributeValue } from "../DOM/attributes/getAttributeValue";
 import { getMountPoint } from "../DOM/getMountPoint";
-import { updateChildren } from "../DOMDiff";
 import { defineReflectedAttributes } from "./properties/defineReflectedAttributes";
 import { addStylesheetsToDocumentOrShadowRoot } from "../utils/addStylesheetsToDocumentOrShadowRoot";
 import { h } from "../h";
@@ -99,18 +98,18 @@ export function createCustomElement<
     }
     renderCallback() {
       const newChildren = this.render?.();
-      updateChildren(
-        getMountPoint(this),
-        [
-          ...this.$michi.styles.map((x) =>
-            h.createElement(x, { $staticChildren: true }),
-          ),
-          newChildren,
-        ],
-        false,
-        false,
-        this,
-      );
+      // updateChildren(
+      //   getMountPoint(this),
+      //   [
+      //     ...this.$michi.styles.map((x) =>
+      //       h.createElement(x, { $staticChildren: true }),
+      //     ),
+      //     newChildren,
+      //   ],
+      //   false,
+      //   false,
+      //   this,
+      // );
     }
     get idGen() {
       if (!this.$michi.idGen) {

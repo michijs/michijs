@@ -10,11 +10,12 @@ type ForEachChildrenCallback = (
 export const forEachChildren = (
   initialNode: ChildNode | null,
   callback: ForEachChildrenCallback,
+  shouldContinueCallback: (currentNode: ChildNode | null) => any = (currentNode: ChildNode | null) => currentNode
 ) => {
   let i = 0;
   if (initialNode) {
     let currentNode: ChildNode | null = initialNode;
-    while (currentNode) {
+    while (currentNode && shouldContinueCallback(currentNode)) {
       const nextSibling = currentNode.nextSibling;
       if (!currentNode.$ignore) {
         if (!callback(currentNode, i)) i++;

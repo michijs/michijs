@@ -1,6 +1,6 @@
 import { createCustomElement } from "../customElements/createCustomElement";
 import { h } from "../h";
-import { Fragment } from "../components/FragmentAndList";
+import { Fragment } from "../components/Fragment";
 import {
   ClassJSXElement,
   FC,

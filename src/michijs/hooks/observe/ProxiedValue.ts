@@ -1,3 +1,4 @@
+import { hasToJSON } from "../../typeWards/hasToJSON";
 import { ObservableLike, ObserverCallback } from "../../types";
 import { deepEqual } from "../../utils";
 
@@ -29,6 +30,13 @@ export class ProxiedValue<T> implements ObservableLike<T> {
 
   toString() {
     return this.$value?.toString && this.$value?.toString();
+  }
+
+  toJSON() {
+    if (this.$value && hasToJSON(this.$value))
+      return this.$value.toJSON()
+
+    return this.$value
   }
 
   notify(value = this.value) {

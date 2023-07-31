@@ -205,12 +205,13 @@ export type Observable<T> = (T extends Map<infer K, infer V> ? Map<K, Observable
   : T extends undefined ? unknown : T) &
   Partial<ProxiedValue<T>>;
 
+export type ObservableNonNullablePrimitiveType = Observable<bigint | string | number | boolean>;
 export type NonNullablePrimitiveType =
   | bigint
   | string
   | number
   | boolean
-  | Observable<bigint | string | number | boolean>;
+  | ObservableNonNullablePrimitiveType;
 export type PrimitiveType = NonNullablePrimitiveType | null | undefined;
 
 type DeepReadonlyArray<T> = ReadonlyArray<DeepReadonly<T>>;
@@ -235,16 +236,16 @@ export interface IterableAttrs<T> {
 }
 
 export interface CommonJSXAttrs<T> extends IterableAttrs<T> {
-  attrs: Record<string, any> & { children: JSX.Element[] };
+  attrs: Record<string, any> & { children: SingleJSXElement[] };
 }
 export type FragmentJSXElement = CommonJSXAttrs<
-  typeof Fragment.tag | undefined
+  null | undefined
 >;
 export type IterableJSX = {
   key: number | string;
 } & CommonJSXAttrs<Element>;
 export type ObjectJSXElement = CommonJSXAttrs<string>;
-export type DOMElementJSXElement = CommonJSXAttrs<Element>;
+export type DOMElementJSXElement = CommonJSXAttrs<ParentNode>;
 export type FunctionJSXElement = CommonJSXAttrs<FC<any>>;
 export type ClassJSXElement = CommonJSXAttrs<
   (new (...args: any[]) => Element) & { tag: string; extends?: string }
@@ -256,12 +257,14 @@ export type SingleJSXElement =
   | FragmentJSXElement
   | ClassJSXElement
   | ArrayJSXElement
-  | DOMElementJSXElement;
+  | DOMElementJSXElement
+  | Node
+  | {}
 export type ArrayJSXElement = SingleJSXElement[];
 // export type PureObjectJSXElement = { tag: string } & Omit<CommonJSXAttrs,'children'> & {children: (PureObjectJSXElement | string)[]};
 
-export interface FC<T = {}, S = Element> {
-  (attrs: T, self?: S | null): Node;
+export interface FC<T = {}, S extends Element = Element, C = CreateOptions<S>> {
+  (attrs: T, context?: C): SingleJSXElement;
 }
 
 export type PropertyKey = string | number | symbol;
@@ -352,16 +355,11 @@ export interface MichiElementOptions {
    * @link https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
    */
   events?: EventsType;
-  /**Allows to define non observed attributes. This is useful for complex objects that cannot be observed.*/
-  nonObservedAttributes?: Function;
-  // nonObservedAttributes?(): AttributesType;
   /**
    * Allows you to define a Constructable Stylesheet that depend on the state of the component. When there is no shadow root the style will be reflected in the style attribute.
    */
   computedStyleSheet?: Function;
   // computedStyleSheet?(): CSSObject;
-
-  // nonObservedAttributes?(): AttributesType;
   /**Allows to define CSS variables. CSS variables changes does not trigger a rerender*/
   cssVariables?: CssVariablesType;
   /**
@@ -424,7 +422,6 @@ export type MichiElementSelf<O extends MichiElementOptions> = O["attributes"] &
   O["reflectedCssVariables"] &
   O["transactions"] &
   O["methods"] &
-  (O["nonObservedAttributes"] extends () => infer NOA ? NOA : {}) &
   CustomElementEvents<O["events"]> &
   MichiProperties &
   (O["extends"] extends { class: infer E }
@@ -440,13 +437,13 @@ type MichiElementProps<
   S extends HTMLElement,
   Attrs = {
     [k in
-    keyof O["reflectedAttributes"]as KebabCase<k>]: O["reflectedAttributes"][k];
+    keyof O["reflectedAttributes"] as KebabCase<k>]: O["reflectedAttributes"][k];
   } & {
     [k in
-    keyof O["reflectedCssVariables"]as KebabCase<k>]: O["reflectedCssVariables"][k];
+    keyof O["reflectedCssVariables"] as KebabCase<k>]: O["reflectedCssVariables"][k];
   } & {
     [k in
-    keyof O["events"]as k extends string
+    keyof O["events"] as k extends string
     ? `on${Lowercase<k>}`
     : never]?: O["events"][k] extends EventDispatcher<infer D>
     ? (ev: CustomEvent<D>) => unknown
@@ -456,10 +453,10 @@ type MichiElementProps<
   Omit<ExtendsAttributes<O["extends"]>, keyof Attrs> &
   Partial<Attrs>;
 
-export type MichiElementClass<
+export interface MichiElementClass<
   O extends MichiElementOptions,
   S extends HTMLElement,
-> = {
+> {
   new(props: MichiElementProps<O, S>): S;
   readonly tag: string;
   readonly extends?: string;
@@ -562,6 +559,12 @@ export type GetElementProps<El extends any> = El extends {
   : never;
 
 export type EventListenerMap = Map<string, EventListener>;
+
+export interface CreateOptions<E extends Element = Element> {
+  readonly isSVG?: boolean,
+  readonly isMATHML?: boolean,
+  readonly contextElement?: E
+}
 
 declare global {
   interface Element {

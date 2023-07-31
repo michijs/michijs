@@ -1,27 +1,25 @@
-import { DeepReadonly, GetElementProps, ObjectJSXElement } from "../..";
-import { ListElement } from "../components/FragmentAndList";
+import { CreateOptions, GetElementProps, SingleJSXElement } from "../..";
+import { create } from "../DOMDiff";
+// import { ListElement } from "../components/FragmentAndList";
 import { Target } from "./Target";
 
-export type ElementListInterface<V> = Pick<
-  V[],
-  "push" | "pop" | "reverse" | "shift" | "unshift"
-> & {
+export type ElementListInterface<V> = Array<V> & {
   /**
    * Removes all the list elements
    */
-  clear();
+  $clear();
   /**
    * Replace all the list elements
    */
-  replace(...items: V[]);
+  $replace(...items: V[]);
   /**
    * Removes an item
    */
-  remove(id: number);
+  $remove(index: number);
   /**
-   * Updates an item
+   * Swaps two items
    */
-  update(id: number, callback: (oldValue: V) => V);
+  $swap(indexA: number, indexB: number);
 };
 
 export type RenderFunction<V> = (item: V) => JSX.Element;
@@ -37,64 +35,46 @@ export class ElementList<V> implements ElementListInterface<V> {
    * This allows it to have a performance close to vanilla js.
    * An operation on the data implies an operation on the associated elements.
    */
-  List = <const E = typeof ListElement>({
-    as,
+  List = <const E = 'div'>({
+    as: asTag,
     renderItem,
     ...attrs
   }: { as?: E } & Omit<GetElementProps<E>, "children"> & {
-      renderItem: RenderFunction<V>;
-    }) => {
-    return {
-      tag: as ?? ListElement.tag,
-      attrs: {
-        ...attrs,
-        children: [],
-        $doNotTouchChildren: true,
-        $oncreated: (el: Element, isSVG, isMATHML, context) => {
-          const target = new Target<V>(
-            el,
-            renderItem,
-            isSVG,
-            isMATHML,
-            context,
-          );
-          if (this.data.length > 0) target.appendItems(...this.data);
-          this.targets.push(target);
-        },
-      },
-    } as ObjectJSXElement;
+    renderItem: RenderFunction<V>;
+  }, context: CreateOptions) => {
+    const el = create({
+      tag: asTag ?? 'div',
+      attrs
+    } as SingleJSXElement)
+
+    this.targets.push(new Target(el, renderItem, context))
+
+    return el;
   };
 
-  clear() {
+  $clear() {
     this.targets.forEach((target) => target.clear());
     this.data = [];
   }
 
-  replace(...items: V[]) {
+  $replace(...items: V[]) {
     this.targets.forEach((target) => target.replace(...items));
     this.data = items;
   }
 
-  remove(index: number) {
+  $remove(index: number) {
     this.data = this.data.filter((_x, i) => i !== index);
     this.targets.forEach((target) => target.remove(index));
   }
 
-  update(index: number, callback: (oldValue: V) => V) {
-    if (index < this.data.length) {
-      const oldValue = this.data[index];
-      const newValue = callback(oldValue);
-      this.data[index] = newValue;
-      this.targets.forEach((target) => target.update(index, newValue));
+  $swap(indexA: number, indexB: number) {
+    if (this.data.length > indexA && this.data.length > indexB) {
+      this.targets.forEach((target) => target.swap(indexA, indexB));
+      [this.data[indexA], this.data[indexB]] = [
+        this.data[indexB],
+        this.data[indexA],
+      ];
     }
-  }
-
-  updateAll(callback: (oldValue: V) => V) {
-    this.data.forEach((oldValue, index) => {
-      const newValue = callback(oldValue);
-      this.data[index] = newValue;
-      this.targets.forEach((target) => target.update(index, newValue));
-    });
   }
 
   pop(): V | undefined {
@@ -120,15 +100,7 @@ export class ElementList<V> implements ElementListInterface<V> {
     this.targets.forEach((target) => target.prependItems(...items));
     return this.data.unshift(...items);
   }
-  swap(indexA: number, indexB: number) {
-    if (this.data.length > indexA && this.data.length > indexB) {
-      this.targets.forEach((target) => target.swap(indexA, indexB));
-      [this.data[indexA], this.data[indexB]] = [
-        this.data[indexB],
-        this.data[indexA],
-      ];
-    }
-  }
+
   // sort(compareFn?: (a: T, b: T) => number): this {
   //     throw new Error('Method not implemented.');
   // }
@@ -156,7 +128,6 @@ export class ElementList<V> implements ElementListInterface<V> {
   //       this.data.splice(start, deleteCount, ...items);
   //     }
   // }
-  getData(): DeepReadonly<V[]> {
-    return this.data as unknown as DeepReadonly<V[]>;
-  }
 }
+
+

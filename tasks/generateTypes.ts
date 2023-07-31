@@ -60,8 +60,7 @@ writeFileSync(
 
   declare global {
     namespace JSX {
-      type ElementType = SingleJSXElement | ((props: any) => Node);
-      type Element = Node | HTMLElement | SVGElement | MathMLElement | string | number
+      type Element = SingleJSXElement
       interface ElementChildrenAttribute {
         children: SingleJSXElement; // specify children name to use
       }

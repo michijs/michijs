@@ -1,41 +1,23 @@
-import { create } from "../DOMDiff";
-import { update } from "../DOMDiff/update";
+import { create, Fragment } from "../DOMDiff";
+import { CreateOptions } from "../types";
 import { RenderFunction } from "./ElementList";
 
 export class Target<V> {
-  private template: ChildNode | ParentNode;
-
   constructor(
-    private element: ParentNode,
+    private element: Fragment,
     private renderItem: RenderFunction<V>,
-    private isSVG?: boolean,
-    private isMATHML?: boolean,
-    private context?: Element,
+    private options: CreateOptions
   ) {}
-
-  private getTemplate(value: V) {
-    return (
-      this.template ??
-      create(this.renderItem(value), this.isSVG, this.isMATHML, this.context)
-    );
-  }
-
-  private create(...items: V[]): ChildNode[] {
-    if (items.length > 0) {
-      const template = this.getTemplate(items[0]);
-      return items.map((item) => this.createSingleItem(item, template));
-    }
-    return [];
-  }
-
-  createSingleItem(item: V, template = this.getTemplate(item)): ChildNode {
-    const el = template.cloneNode(true) as ChildNode;
-    update(el, this.renderItem(item), this.isSVG, this.isMATHML, this.context);
-    return el;
-  }
 
   clear() {
     this.element.textContent = "";
+  }
+
+  createSingleItem(value: V){
+    return create(this.renderItem(value), this.options)
+  }
+  create(...value: V[]){
+    return value.map(x => this.createSingleItem(x))
   }
 
   replace(...items: V[]) {
@@ -47,20 +29,6 @@ export class Target<V> {
   replaceNode(el: ChildNode, value: V) {
     const newNode = this.createSingleItem(value);
     el.replaceWith(newNode);
-  }
-
-  update(index: number, value: V) {
-    update(
-      this.element.childNodes.item(index),
-      this.renderItem(value),
-      this.isSVG,
-      this.isMATHML,
-      this.context,
-    );
-  }
-
-  updateNode(el: ChildNode, value: V) {
-    update(el, this.renderItem(value), this.isSVG, this.isMATHML, this.context);
   }
 
   pop() {
@@ -137,7 +105,7 @@ export class Target<V> {
     // });
   }
 
-  insertChildNodesAt(i: number, ...childNodes: ChildNode[]) {
+  insertChildNodesAt(i: number, ...childNodes: Node[]) {
     if (i === 0) this.element.prepend(...childNodes);
     else this.element.childNodes.item(i - 1).after(...childNodes);
   }

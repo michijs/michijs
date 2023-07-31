@@ -1,50 +1,31 @@
-import { createStyleSheet } from "../css/createStyleSheet";
-import { createCustomElement } from "../customElements/createCustomElement";
+import { create } from "../DOMDiff";
+import { isChildNode } from "../typeWards/isChildNode";
+import { CreateOptions } from "../types";
 
-const AsyncComponentStyleSheet = createStyleSheet({
-  ":host": {
-    display: "contents",
-  },
-});
+interface AsyncComponentProps<J> {
+  promise: Promise<J>,
+  render(promiseResult: J): JSX.Element,
+  loadingComponent?: JSX.Element
+}
 
-/**Create a component whose content will load after the promise ends. In the meantime you can choose to show a load component or not show anything. */
-export const AsyncComponent = createCustomElement("michi-async-component", {
-  attributes: {
-    /** For internal use only - The component currently showing */
-    currentComponent: null as Function | null,
-    /** The promise to wait */
-    promise: undefined as
-      | (() => Promise<{ [key: string]: JSX.Element }>)
-      | undefined,
-    /** The component key (by default is default)*/
-    key: "default",
-    /**The component to display while the promise is loading */
-    loadingComponent: undefined as JSX.Element,
-  },
-  lifecycle: {
-    willMount() {
-      this.promiseChangeCallback();
-    },
-  },
-  methods: {
-    async promiseChangeCallback() {
-      const promiseResult = await this.promise?.();
-      this.currentComponent = promiseResult?.[this.key] as unknown as Function;
-    },
-    getCurrentComponent() {
-      if (this.loadingComponent && !this.currentComponent)
-        return this.loadingComponent;
+export const AsyncComponent = <J extends unknown>(props: AsyncComponentProps<J>, context: CreateOptions) => {
+  const el = props.loadingComponent ? create(props.loadingComponent, context) : document.createComment('');
+  // Intentional
+  const elChildNodes = Array.from(el.childNodes);
 
-      return this.currentComponent;
-    },
-  },
-  adoptedStyleSheets: [AsyncComponentStyleSheet],
-  observe: {
-    promise() {
-      this.promiseChangeCallback();
-    },
-  },
-  render() {
-    return this.getCurrentComponent();
-  },
-});
+  props.promise.then(promiseResult => {
+    const newEl = create(props.render(promiseResult), context);
+    if (isChildNode(el))
+      el.replaceWith(newEl)
+    else {
+      const firstNode = elChildNodes.pop();
+      if (firstNode) {
+        firstNode.replaceWith(newEl);
+        elChildNodes.forEach(x => x.remove())
+      } else 
+        throw "Empty loading components are not allowed"
+    }
+  })
+
+  return el;
+}

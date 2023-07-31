@@ -7,7 +7,7 @@ import {
   FunctionJSXElement,
   ObjectJSXElement,
 } from "../types";
-import { Fragment } from "../components/FragmentAndList";
+import { Fragment } from "../components/Fragment";
 
 jest.mock("../customElements/createCustomElement", () => ({
   createCustomElement: (tag: string) => ({ tag }),

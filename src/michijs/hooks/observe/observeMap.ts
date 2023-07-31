@@ -7,7 +7,7 @@ import {
 } from "./mapAndSetCommonHandlers";
 import { customObjectDelete, customObjectSet } from "./observeCommonObject";
 
-export const observeMap = <T extends Map<unknown, any>>(item: T): T => {
+export const observeMap = <T extends Map<unknown, any>>(item: T) => {
   const proxiedMap = new Map<unknown, Observable<any>>();
   item.forEach((value, key) => proxiedMap.set(key, observe(value)));
 

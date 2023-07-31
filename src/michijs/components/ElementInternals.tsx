@@ -1,9 +1,8 @@
 import type { AllAttributes } from "@michijs/htmltype";
 import type { FC } from "../types";
-import { h } from "../h";
-import { Fragment } from ".";
 import { setAttribute } from "../DOM/attributes/setAttribute";
 import { isMichiCustomElement } from "../typeWards/isMichiCustomElement";
+import { bindObservable } from "../hooks/bindObservable";
 
 export type ElementInternalsProps = {
   /**Form controls usually expose a "value" property */
@@ -31,32 +30,37 @@ export const ElementInternals: FC<ElementInternalsProps> = (
     validityStateFlags = { customError: true },
     ...aria
   },
-  self,
+  options,
 ) => {
+  const self = options?.contextElement
   if (self && isMichiCustomElement(self) && self.$michi.internals) {
-    if (errorMessage)
-      self.$michi.internals.setValidity?.(validityStateFlags, errorMessage);
-    else self.$michi.internals.setValidity?.({});
-    self.$michi.internals.setFormValue?.(
-      formValue as Parameters<ElementInternals["setFormValue"]>[0],
-    );
+    bindObservable(errorMessage, (newValue) => {
+      if (newValue)
+        self.$michi.internals!.setValidity?.(validityStateFlags, newValue);
+      else self.$michi.internals!.setValidity?.({});
+    })
+
+    bindObservable(formValue, (newValue) => {
+      self.$michi.internals!.setFormValue?.(
+        newValue as Parameters<ElementInternals["setFormValue"]>[0],
+      );
+    })
 
     Object.entries({ tabIndex, ...aria }).forEach(([key, value]) => {
       if (self.$michi.internals)
-        if (key in self.$michi.internals) {
-          if (value !== self.$michi.internals[key])
-            self.$michi.internals[key] = value;
-        } else if (key in self) {
-          if (self[key] !== value) self[key] = value;
-        } else {
-          const ariaSplitted = key.split("aria");
-          setAttribute(
+        if (key in self.$michi.internals)
+          bindObservable(value, (newValue) => self.$michi.internals![key] = newValue)
+        else if (key in self)
+          bindObservable(value, (newValue) => self[key] = newValue)
+        else {
+          const formattedKey = key.split("aria").map((x) => x.toLowerCase()).join("-");
+          bindObservable(value, (newValue) => setAttribute(
             self,
-            ariaSplitted.map((x) => x.toLowerCase()).join("-"),
-            value,
-          );
+            formattedKey,
+            newValue,
+          ))
         }
     });
   }
-  return <Fragment children={children} />;
+  return children;
 };

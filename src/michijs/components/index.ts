@@ -4,4 +4,4 @@ export { If } from "./If";
 export { Router } from "./Router";
 export { Link } from "./Link";
 export { List } from "./List";
-export { Fragment } from "./FragmentAndList";
+export { Fragment } from "./Fragment";

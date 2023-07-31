@@ -1,4 +1,5 @@
-import { If, computedObserve, create, h, observe } from "../src";
+import { Fragment, Host, If, computedObserve, create, h, observe } from "../src";
+import { AsyncComponent } from "../src/michijs/components/AsyncComponent";
 // const h = {
 //   createElement(tag, attrs, ...childrenProps): JSX.Element {
 //     console.log(childrenProps)
@@ -78,6 +79,7 @@ const store = observe({
       undefined: undefined,
       // set: new Set()
     },
+    array: [1,2,3,4,5]
   },
 });
 
@@ -88,23 +90,23 @@ store.level2.level1.undefined.subscribe?.((val) => console.log('undefined', val)
 store.level2.level1.number.subscribe?.((val) => console.log(val));
 store.level2.date.subscribe?.((val) => console.log(val));
 store.level2.map.subscribe?.((val) => console.log(val));
-const computed = computedObserve(() => !!Number.isInteger(number / 2), [number])
+const computed = computedObserve(() => !!Number.isInteger(number / 2), [number]);
 
 computed.subscribe?.((newValue) => console.log('computed', newValue));
 
 store.level2.level1.number = 2;
-store.level2.level1.undefined = 3;
 store.level2.date.setMonth(store.level2.date.getMonth() + 1);
 store.level2.map.set("xd", 1);
 store.level2.map.get("xd")?.subscribe?.((newValue) => console.log('map xd key changed', newValue));
 store.level2.map.set("xd", 2);
 store.level2.map.clear();
 
-const a = <div
+const a = create(
+  <div
     // _={{
     //   id: number,
     // }}
-    name={number}
+    id={number}
     onclick={() => {
       store.level2.level1.number++;
     }}
@@ -112,12 +114,16 @@ const a = <div
     asdf: {number}
     <If
       condition={computed}
-      then={() => "Es par"}
+      then={() => <span>Es par</span>}
       else={() => <span>Es impar</span>}
     />
   </div>
-;
+);
+
 document.body.append(a);
+
+
+// document.body.append(fragment)
 // TODO: set is broken, add arrays subscription return values
 // aasdf.level2.level1.set.add(1);
 // console.log(aasdf.level2.level1.set.has(1))

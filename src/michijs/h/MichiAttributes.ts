@@ -6,7 +6,7 @@ import { IterableAttrs, MichiCustomElement, PickWritable, SingleJSXElement } fro
 
 export interface MichiAttributes<E> extends Partial<IterableAttrs<string>> {
 
-  children?: JSX.ElementType;
+  children?: JSX.Element;
   /**
    * Children are created but not updated
    */

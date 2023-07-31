@@ -50,6 +50,6 @@ export const observeCommonObject = <T extends object>(
     deleteProperty: customObjectDelete,
     get(target, p, receiver) {
       return Reflect.get(p in target ? target : target.$value, p, receiver);
-    },
+    }
   }) as unknown as Observable<T>;
 };
