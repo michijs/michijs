@@ -1,7 +1,7 @@
 import { create } from "../DOMDiff";
+import { VirtualFragment } from "../classes/VirtualFragment";
 import { bindObservable } from "../hooks/bindObservable";
-import { isChildNode } from "../typeWards/isChildNode";
-import { CreateOptions, GetElementProps, ObservableLike, SingleJSXElement } from "../types";
+import { CreateOptions, FC, GetElementProps, ObservableLike, SingleJSXElement } from "../types";
 
 type IfProps<T> = {
   as?: T,
@@ -10,17 +10,14 @@ type IfProps<T> = {
   else?(): JSX.Element
 } & Omit<GetElementProps<T>, "children">
 
-export const If = <const T = 'div'>({ as: asTag, condition, then, else: elseComponent, ...attrs }: IfProps<T>, options: CreateOptions) => {
-  const el = create({
-    tag: asTag ?? 'div',
+export const If = <const T = FC>({ as: asTag, condition, then, else: elseComponent, ...attrs }: IfProps<T>, options: CreateOptions) => {
+  const el = asTag ? create({
+    tag: asTag,
     attrs
-  } as SingleJSXElement) as Element
-
-  if (asTag && !isChildNode(el))
-    throw `Value ${asTag} is not valid as "If" tag`
+  } as SingleJSXElement) as ParentNode: new VirtualFragment()
 
   bindObservable(condition, (newValue) => {
-    el.innerHTML = '';
+    el.textContent = '';
     if (newValue) {
       if (then)
         el.append(create(then(), options))
@@ -28,5 +25,5 @@ export const If = <const T = 'div'>({ as: asTag, condition, then, else: elseComp
       if (elseComponent)
         el.append(create(elseComponent(), options))
   })
-  return el;
+  return el.valueOf();
 }

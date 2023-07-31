@@ -1,7 +1,8 @@
-import { CreateOptions, GetElementProps, SingleJSXElement } from "../..";
+import { CreateOptions, FC, GetElementProps, SingleJSXElement } from "../..";
 import { create } from "../DOMDiff";
 // import { ListElement } from "../components/FragmentAndList";
 import { Target } from "./Target";
+import { VirtualFragment } from "./VirtualFragment";
 
 export type ElementListInterface<V> = Array<V> & {
   /**
@@ -35,17 +36,17 @@ export class ElementList<V> implements ElementListInterface<V> {
    * This allows it to have a performance close to vanilla js.
    * An operation on the data implies an operation on the associated elements.
    */
-  List = <const E = 'div'>({
+  List = <const E = FC>({
     as: asTag,
     renderItem,
     ...attrs
   }: { as?: E } & Omit<GetElementProps<E>, "children"> & {
     renderItem: RenderFunction<V>;
   }, context: CreateOptions) => {
-    const el = create({
-      tag: asTag ?? 'div',
+    const el = asTag ? create({
+      tag: asTag,
       attrs
-    } as SingleJSXElement)
+    } as SingleJSXElement) as ParentNode: new VirtualFragment()
 
     this.targets.push(new Target(el, renderItem, context))
 

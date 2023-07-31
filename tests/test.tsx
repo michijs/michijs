@@ -114,8 +114,8 @@ const a = create(
     asdf: {number}
     <If
       condition={computed}
-      then={() => <span>Es par</span>}
-      else={() => <span>Es impar</span>}
+      then={() => "Es par"}
+      else={() => "Es impar"}
     />
   </div>
 );

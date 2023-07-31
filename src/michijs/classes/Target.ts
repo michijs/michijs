@@ -1,22 +1,23 @@
-import { create, Fragment } from "../DOMDiff";
+import { create } from "../DOMDiff";
 import { CreateOptions } from "../types";
 import { RenderFunction } from "./ElementList";
+import { VirtualFragment } from "./VirtualFragment";
 
 export class Target<V> {
   constructor(
-    private element: Fragment,
+    private element: VirtualFragment | ParentNode,
     private renderItem: RenderFunction<V>,
     private options: CreateOptions
-  ) {}
+  ) { }
 
   clear() {
     this.element.textContent = "";
   }
 
-  createSingleItem(value: V){
+  createSingleItem(value: V) {
     return create(this.renderItem(value), this.options)
   }
-  create(...value: V[]){
+  create(...value: V[]) {
     return value.map(x => this.createSingleItem(x))
   }
 
@@ -40,7 +41,7 @@ export class Target<V> {
   }
 
   remove(index: number) {
-    this.element.childNodes.item(index)?.remove();
+    this.element.childNodes[index]?.remove();
   }
 
   insertItemsAt(i: number, ...items: V[]) {
@@ -68,8 +69,8 @@ export class Target<V> {
   }
 
   swap(indexA: number, indexB: number) {
-    const elA = this.element.childNodes.item(indexA);
-    const elB = this.element.childNodes.item(indexB);
+    const elA = this.element.childNodes[indexA];
+    const elB = this.element.childNodes[indexB];
     if (elA && elB) {
       const previousSiblingA = elA.previousSibling;
       if (previousSiblingA) {
@@ -107,6 +108,6 @@ export class Target<V> {
 
   insertChildNodesAt(i: number, ...childNodes: Node[]) {
     if (i === 0) this.element.prepend(...childNodes);
-    else this.element.childNodes.item(i - 1).after(...childNodes);
+    else this.element.childNodes[i - 1].after(...childNodes);
   }
 }

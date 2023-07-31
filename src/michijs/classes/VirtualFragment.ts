@@ -1,19 +1,21 @@
-import { forEachChildren } from "./forEachChildren";
+import { forEachChildren } from "../DOMDiff/forEachChildren";
 
-export class FragmentChildNodes extends Array<ChildNode> implements NodeListOf<ChildNode> {
+export class VirtualChildNodes extends Array<ChildNode> implements NodeListOf<ChildNode> {
   item(index: number) {
-    return this.at(index) ?? null as unknown as ChildNode 
+    return this.at(index) ?? null as unknown as ChildNode
   }
   forEach(callbackfn: (value: ChildNode, key: number, parent: any) => void, thisArg?: any): void {
     super.forEach(callbackfn, thisArg)
   }
 }
 
-export class Fragment implements Pick<Node, 'textContent'>, Pick<ParentNode, 'prepend' | 'append' | 'replaceChildren' | 'lastChild' | 'childNodes'>, Pick<ChildNode, 'replaceWith'> {
-  private startItem = document.createComment('fs');
-  private endItem = document.createComment('fe');
+export class VirtualFragment implements Pick<ParentNode, 'textContent'| 'prepend' | 'append' | 'replaceChildren' | 'firstChild' | 'lastChild' | 'childNodes'>, Pick<ChildNode, 'replaceWith'> {
+  private startItem = document.createComment('<fragment>');
+  private endItem = document.createComment('</fragment>');
+  private initialFragment = new DocumentFragment();
 
-  constructor(private initialItems: Fragment[] = []) {
+  constructor(initialItems: Node[] = []) {
+    this.initialFragment.append(this.startItem, ...initialItems, this.endItem)
   }
   replaceWith(...nodes: (string | Node)[]): void {
     this.replaceChildren(...nodes);
@@ -21,10 +23,10 @@ export class Fragment implements Pick<Node, 'textContent'>, Pick<ParentNode, 'pr
     this.endItem.remove();
   }
   prepend(...nodes: (string | Node)[]): void {
-    this.firstChild?.after(...nodes);
+    this.startItem?.after(...nodes);
   }
   append(...nodes: (string | Node)[]): void {
-    this.lastChild?.before(...nodes);
+    this.endItem?.before(...nodes);
   }
   replaceChildren(...nodes: (string | Node)[]): void {
     forEachChildren(
@@ -34,14 +36,14 @@ export class Fragment implements Pick<Node, 'textContent'>, Pick<ParentNode, 'pr
       },
       (node) => node !== this.endItem
     )
-    this.startItem?.after(...nodes);
+    this.append(...nodes);
   }
   get lastChild() {
     const previousSibling = this.endItem.previousSibling;
     return previousSibling !== this.startItem ? previousSibling : null;
   }
   get childNodes() {
-    const childNodes = new FragmentChildNodes();
+    const childNodes = new VirtualChildNodes();
     forEachChildren(
       this.startItem.nextSibling,
       (node) => {
@@ -49,7 +51,7 @@ export class Fragment implements Pick<Node, 'textContent'>, Pick<ParentNode, 'pr
       },
       (node) => node !== this.endItem
     )
-    
+
     return childNodes;
   }
   get firstChild() {
@@ -68,14 +70,11 @@ export class Fragment implements Pick<Node, 'textContent'>, Pick<ParentNode, 'pr
     return textContext;
   }
   set textContent(content: string) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(content, "text/html");
-    this.replaceChildren(doc)
+    const fragment = document.createRange().createContextualFragment(content);
+    this.replaceChildren(fragment)
   }
 
   valueOf(): Node {
-    const fragment = new DocumentFragment();
-    fragment.append(this.startItem, ...this.initialItems.map(x => x.valueOf()), this.endItem);
-    return fragment;
+    return this.initialFragment;
   }
 }
