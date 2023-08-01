@@ -1,4 +1,5 @@
 import { forEachChildren } from "../DOMDiff/forEachChildren";
+import { isElement } from "../typeWards/isElement";
 
 export class VirtualChildNodes extends Array<ChildNode> implements NodeListOf<ChildNode> {
   item(index: number) {
@@ -9,7 +10,7 @@ export class VirtualChildNodes extends Array<ChildNode> implements NodeListOf<Ch
   }
 }
 
-export class VirtualFragment implements Pick<ParentNode, 'textContent'| 'prepend' | 'append' | 'replaceChildren' | 'firstChild' | 'lastChild' | 'childNodes'>, Pick<ChildNode, 'replaceWith'> {
+export class VirtualFragment implements Pick<ParentNode, 'textContent' | 'prepend' | 'append' | 'replaceChildren' | 'firstChild' | 'lastChild' | 'childNodes'>, Pick<ChildNode, 'remove' | 'replaceWith' | 'textContent'>, Pick<Element, 'innerHTML'> {
   private startItem = document.createComment('<fragment>');
   private endItem = document.createComment('</fragment>');
   private initialFragment = new DocumentFragment();
@@ -18,9 +19,19 @@ export class VirtualFragment implements Pick<ParentNode, 'textContent'| 'prepend
     this.initialFragment.append(this.startItem, ...initialItems, this.endItem)
   }
   replaceWith(...nodes: (string | Node)[]): void {
-    this.replaceChildren(...nodes);
-    this.startItem.remove();
-    this.endItem.remove();
+    if (this.startItem.isConnected) {
+      const childNodes = this.childNodes;
+      this.startItem.replaceWith(...nodes);
+      this.initialFragment.textContent = '';
+      this.initialFragment.append(this.startItem, ...childNodes, this.endItem);
+    }
+  }
+  remove(): void {
+    if (this.startItem.isConnected) {
+      const childNodes = this.childNodes;
+      this.initialFragment.textContent = '';
+      this.initialFragment.append(this.startItem, ...childNodes, this.endItem);
+    }
   }
   prepend(...nodes: (string | Node)[]): void {
     this.startItem?.after(...nodes);
@@ -58,23 +69,34 @@ export class VirtualFragment implements Pick<ParentNode, 'textContent'| 'prepend
     const nextSibling = this.endItem.nextSibling;
     return nextSibling !== this.endItem ? nextSibling : null;
   }
+  get innerHTML() {
+    let innerHTML = '';
+    forEachChildren(
+      this.startItem.nextSibling,
+      (node) => innerHTML += isElement(node) ? node.outerHTML : node.textContent,
+      (node) => node !== this.endItem
+    )
+    return innerHTML;
+  }
+  set innerHTML(content: string) {
+    const fragment = document.createRange().createContextualFragment(content);
+    this.replaceChildren(fragment)
+  }
   get textContent() {
     let textContext = '';
     forEachChildren(
       this.startItem.nextSibling,
-      (node) => {
-        textContext += node.textContent;
-      },
+      (node) => textContext += node.textContent,
       (node) => node !== this.endItem
     )
     return textContext;
   }
   set textContent(content: string) {
-    const fragment = document.createRange().createContextualFragment(content);
-    this.replaceChildren(fragment)
+    this.replaceChildren(content)
   }
 
   valueOf(): Node {
+    this.remove();
     return this.initialFragment;
   }
 }

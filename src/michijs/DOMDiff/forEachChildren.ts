@@ -5,7 +5,7 @@
 type ForEachChildrenCallback = (
   childNode: ChildNode,
   index: number,
-) => void | boolean;
+) => void;
 
 export const forEachChildren = (
   initialNode: ChildNode | null,
@@ -18,7 +18,7 @@ export const forEachChildren = (
     while (currentNode && shouldContinueCallback(currentNode)) {
       const nextSibling = currentNode.nextSibling;
       if (!currentNode.$ignore) {
-        if (!callback(currentNode, i)) i++;
+        callback(currentNode, i); i++;
       }
       currentNode = nextSibling;
     }

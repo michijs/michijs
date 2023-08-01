@@ -1,5 +1,5 @@
 export function isElement(
-  el: Element | ParentNode,
+  el: Element | ParentNode | ChildNode,
 ): el is Element {
   return "setAttribute" in el;
 }

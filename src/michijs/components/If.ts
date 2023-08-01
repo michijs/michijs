@@ -14,7 +14,7 @@ export const If = <const T = FC>({ as: asTag, condition, then, else: elseCompone
   const el = asTag ? create({
     tag: asTag,
     attrs
-  } as SingleJSXElement) as ParentNode: new VirtualFragment()
+  } as SingleJSXElement) as ChildNode & ParentNode : new VirtualFragment()
 
   bindObservable(condition, (newValue) => {
     el.textContent = '';

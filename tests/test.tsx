@@ -79,7 +79,7 @@ const store = observe({
       undefined: undefined,
       // set: new Set()
     },
-    array: [1,2,3,4,5]
+    array: [1, 2, 3, 4, 5]
   },
 });
 
@@ -114,8 +114,8 @@ const a = create(
     asdf: {number}
     <If
       condition={computed}
-      then={() => "Es par"}
-      else={() => "Es impar"}
+      then={() => <div>Es par</div>}
+      else={() => <div>Es impar</div>}
     />
   </div>
 );
