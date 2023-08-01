@@ -1,3 +1,4 @@
+import { CreateOptions } from "../types";
 import { setAttributes } from "./attributes/setAttributes";
 
 export function createElement<
@@ -10,10 +11,10 @@ export function createElement<
 >(
   tagName: T,
   attributes?: JSX.IntrinsicElements[T],
-  options?: ElementCreationOptions,
+  options?: ElementCreationOptions & CreateOptions,
 ) {
   const el = document.createElement(tagName, options);
-  if (attributes) setAttributes(el, attributes);
+  if (attributes) setAttributes(el, attributes, options);
 
   return el as unknown as E & (new (props?: JSX.IntrinsicElements[T]) => E);
 }

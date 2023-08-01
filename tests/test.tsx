@@ -1,4 +1,4 @@
-import { Fragment, Host, If, computedObserve, create, h, observe } from "../src";
+import { Fragment, Host, If, computedObserve, create, h, observe, wait } from "../src";
 import { AsyncComponent } from "../src/michijs/components/AsyncComponent";
 // const h = {
 //   createElement(tag, attrs, ...childrenProps): JSX.Element {
@@ -114,14 +114,22 @@ const a = create(
     asdf: {number}
     <If
       condition={computed}
-      then={() => <div>Es par</div>}
-      else={() => <div>Es impar</div>}
+      then={<div>Es par</div>}
+      else={<div>Es impar</div>}
+    />
+    <AsyncComponent
+      promise={
+        new Promise(async (resolve) => {
+          await wait(2000);
+          resolve('Ready')
+        })
+      }
+      loadingComponent={<div>Loading...</div>}
     />
   </div>
 );
 
 document.body.append(a);
-
 
 // document.body.append(fragment)
 // TODO: set is broken, add arrays subscription return values

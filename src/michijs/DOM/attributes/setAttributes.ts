@@ -1,5 +1,5 @@
 import type { CSSProperties } from "@michijs/htmltype";
-import { AnyObject } from "../../types";
+import { AnyObject, CreateOptions } from "../../types";
 import { setStyle } from "./setStyle";
 import { setAttribute } from "./setAttribute";
 import { compareAttributes } from "./compareAttributes";
@@ -9,7 +9,7 @@ import { bindObservable } from "../../hooks/bindObservable";
 export function setAttributes(
   el: Element,
   attributes: AnyObject,
-  self?: Element,
+  options?: CreateOptions,
 ) {
   Object.entries(attributes).forEach(([name, newValue]) => {
     // priority to properties and events
@@ -17,7 +17,7 @@ export function setAttributes(
       Object.entries(newValue).forEach(([propertyName, value]) => bindObservable(value, (newValue) => (el[propertyName] = newValue)));
     else if (name.startsWith("on")) {
       const eventName = name.slice(2) as keyof ElementEventMap;
-      const bindedEvent = bindFunction(self, newValue);
+      const bindedEvent = bindFunction(options?.contextElement, newValue);
       el.addEventListener(eventName, bindedEvent);
     } else if (name === "style" && typeof newValue === 'object')
       setStyle(el, newValue as CSSProperties);

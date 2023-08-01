@@ -12,6 +12,6 @@ export const createDOMElement = (jsx: DOMElementJSXElement, options: CreateOptio
   jsx.tag.append(...children.map((x) => create(x, options)));
 
   if (isElement(jsx.tag))
-    setAttributes(jsx.tag, attrs, options.contextElement);
+    setAttributes(jsx.tag, attrs, options);
   return jsx.tag;
 }

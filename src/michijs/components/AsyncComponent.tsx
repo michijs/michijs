@@ -1,31 +1,33 @@
 import { create } from "../DOMDiff";
-import { isChildNode } from "../typeWards/isChildNode";
-import { CreateOptions } from "../types";
+import { VirtualFragment } from "../classes/VirtualFragment";
+import { CreateOptions, FC, GetElementProps, SingleJSXElement } from "../types";
 
-interface AsyncComponentProps<J> {
+type AsyncComponentProps<J, T> = {
+  as?: T,
   promise: Promise<J>,
-  render(promiseResult: J): JSX.Element,
+  render?(promiseResult: J): JSX.Element,
+  renderError?(reson: any): JSX.Element,
   loadingComponent?: JSX.Element
-}
+} & Omit<GetElementProps<T>, "children">
 
-export const AsyncComponent = <J extends unknown>(props: AsyncComponentProps<J>, context: CreateOptions) => {
-  const el = props.loadingComponent ? create(props.loadingComponent, context) : document.createComment('');
-  // Intentional
-  const elChildNodes = Array.from(el.childNodes);
+export const AsyncComponent = <J extends unknown, const T = FC>({ as: asTag, promise, render, renderError, loadingComponent, ...attrs }: AsyncComponentProps<J, T>, options: CreateOptions) => {
+  let el = asTag ? create({
+    tag: asTag,
+    attrs
+  } as SingleJSXElement) as ChildNode & ParentNode : new VirtualFragment();
+  el.append(create(loadingComponent, options))
 
-  props.promise.then(promiseResult => {
-    const newEl = create(props.render(promiseResult), context);
-    if (isChildNode(el))
-      el.replaceWith(newEl)
-    else {
-      const firstNode = elChildNodes.pop();
-      if (firstNode) {
-        firstNode.replaceWith(newEl);
-        elChildNodes.forEach(x => x.remove())
-      } else 
-        throw "Empty loading components are not allowed"
+  promise.then(promiseResult => {
+    const oldEl = el;
+    el = create(render?.(promiseResult) ?? promiseResult, options) as (ChildNode & ParentNode);
+    oldEl.replaceWith(el)
+  }).catch((reason) => {
+    if (renderError) {
+      const oldEl = el;
+      el = create(renderError(reason), options) as (ChildNode & ParentNode);
+      oldEl.replaceWith(el)
     }
   })
 
-  return el;
+  return el.valueOf();
 }

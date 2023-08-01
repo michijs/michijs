@@ -53,7 +53,7 @@ export const createObject = (jsx: ObjectJSXElement, options: CreateOptions) => {
     isSVG
   })));
 
-  setAttributes(el, attrs, options.contextElement);
+  setAttributes(el, attrs, options);
 
   return el;
 }

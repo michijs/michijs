@@ -23,7 +23,7 @@ export const defineReflectedAttributes = (
           const newAttributes = {
             [standarizedAttributeName]: store.state[key as string],
           };
-          setAttributes(self, newAttributes, self);
+          setAttributes(self, newAttributes, { contextElement: self });
         }
       });
     }
