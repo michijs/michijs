@@ -1,5 +1,5 @@
 import { Observable } from "../../types";
-import { ProxiedValue } from "./ProxiedValue";
+import { ProxiedValue } from "../../classes/ProxiedValue";
 
 export const observeDate = <T extends Date>(item) => {
   let clone;
@@ -23,7 +23,7 @@ export const observeDate = <T extends Date>(item) => {
                 args,
               );
               const newValue = target.$value.getTime();
-              if (newValue !== oldValue) target.notify();
+              if (newValue !== oldValue) target.notify(target.$value);
 
               return result;
             };

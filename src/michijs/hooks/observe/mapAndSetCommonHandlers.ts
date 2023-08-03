@@ -1,5 +1,5 @@
 import { Observable } from "../../types";
-import { ProxiedValue } from "./ProxiedValue";
+import { ProxiedValue } from "../../classes/ProxiedValue";
 
 export const customMapAndSetClear = (
   target: ProxiedValue<
@@ -11,12 +11,12 @@ export const customMapAndSetClear = (
     if (target.shouldCheckForChanges()) {
       if (target.$value.size !== 0) {
         clearFn();
-        target.notify();
+        target.notify(target.$value);
       }
     } else {
       clearFn();
       //TODO: Should send each index?
-      target.notify();
+      target.notify(target.$value);
     }
   };
 };
@@ -34,7 +34,7 @@ export const customMapAndSetDelete = (
   //In Map is key, in Set is value
   return function (key) {
     const result = deleteFn(key);
-    if (result) target.notify();
+    if (result) target.notify(target.$value);
     //TODO: ?
     return result;
   };

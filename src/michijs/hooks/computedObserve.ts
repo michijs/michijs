@@ -1,5 +1,5 @@
 import { ObservableLike, ObservableValue } from "../types";
-import { ProxiedValue } from "./observe/ProxiedValue";
+import { ProxiedValue } from "../classes/ProxiedValue";
 
 export const computedObserve = <T>(callback: () => T, deps: Partial<ObservableLike<any>>[]): ObservableValue<T> => {
 

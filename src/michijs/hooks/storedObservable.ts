@@ -1,35 +1,32 @@
+import { ProxiedValue } from "../classes/ProxiedValue";
+import { Observable } from "../types";
 import { deepEqual } from "../utils/deepEqual";
 import { observe } from "./observe";
 
 export function storedObservable<T extends object>(
-  obj: T,
+  item: T,
   storage: Storage = localStorage,
-) {
-  const { notify, ...observableProps } = observable<keyof T>(
-    (newLength) => {
-      if (newLength === 0) window.removeEventListener("storage", listener);
-    },
-    (newLength) => {
-      if (newLength === 1) window.addEventListener("storage", listener);
-    },
-  );
-
-  const listener = (ev: StorageEvent) => {
-    if (ev.key && Object.keys(obj).includes(ev.key)) notify(ev.key as keyof T);
-  };
-
+): Observable<T> {
   function getStorageValue(key: string) {
     const localStorageValue = storage.getItem(key);
     if (localStorageValue) {
       try {
         return JSON.parse(localStorageValue);
       } catch {
-        return obj[key];
+        return item[key];
       }
     } else {
-      return obj[key];
+      return item[key];
     }
   }
+
+  const newObservable = Object.keys(item).reduce((previousValue, key) => {
+    return observe({ ...previousValue, key: getStorageValue(key) }, new Set([
+      () => {
+        storage.setItem(key, JSON.stringify(newObservable[key]));
+      }
+    ]));
+  }, {}) as T;
 
   const storageStore = new Proxy(
     {},

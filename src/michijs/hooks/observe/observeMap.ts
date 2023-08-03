@@ -1,19 +1,19 @@
 import { observe } from "../observe";
-import { Observable } from "../../types";
-import { ProxiedValue } from "./ProxiedValue";
+import { Observable, ObserverCallback } from "../../types";
+import { ProxiedValue } from "../../classes/ProxiedValue";
 import {
   customMapAndSetClear,
   customMapAndSetDelete,
 } from "./mapAndSetCommonHandlers";
 import { customObjectDelete, customObjectSet } from "./observeCommonObject";
 
-export const observeMap = <T extends Map<unknown, any>>(item: T) => {
+export const observeMap = <T extends Map<unknown, any>>(item: T, initialObservers?: Set<ObserverCallback<unknown>>) => {
   const proxiedMap = new Map<unknown, Observable<any>>();
-  item.forEach((value, key) => proxiedMap.set(key, observe(value)));
+  item.forEach((value, key) => proxiedMap.set(key, observe(value, initialObservers)));
 
   const newObservable = new ProxiedValue(proxiedMap);
   return new Proxy(newObservable, {
-    set: customObjectSet,
+    set: customObjectSet(initialObservers),
     get: (target, property) => {
       if (property in target) return Reflect.get(target, property);
       else {
@@ -50,6 +50,6 @@ export const observeMap = <T extends Map<unknown, any>>(item: T) => {
         }
       }
     },
-    deleteProperty: customObjectDelete,
+    deleteProperty: customObjectDelete(),
   }) as unknown as Observable<T>;
 };

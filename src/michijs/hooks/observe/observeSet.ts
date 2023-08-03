@@ -1,16 +1,16 @@
 import { observe } from "../observe";
-import { Observable } from "../../types";
-import { ProxiedValue } from "./ProxiedValue";
+import { Observable, ObserverCallback } from "../../types";
+import { ProxiedValue } from "../../classes/ProxiedValue";
 import {
   customMapAndSetClear,
   customMapAndSetDelete,
 } from "./mapAndSetCommonHandlers";
 import { customObjectDelete, customObjectSet } from "./observeCommonObject";
 
-export const observeSet = <T extends Set<unknown>>(item) => {
+export const observeSet = <T extends Set<unknown>>(item: T, initialObservers?: Set<ObserverCallback<unknown>>) => {
   const proxiedSet = new Set<Observable<unknown>>();
   item.forEach((value) => {
-    proxiedSet.add(observe(value));
+    proxiedSet.add(observe(value, initialObservers));
   });
   const newObservable = new ProxiedValue<T>(proxiedSet);
   return new Proxy(newObservable, {
@@ -33,7 +33,7 @@ export const observeSet = <T extends Set<unknown>>(item) => {
 
               const result = bindedTargetProperty(observedItem);
 
-              observedItem.notify?.();
+              observedItem.notify?.(target.$value);
               return result;
             };
 

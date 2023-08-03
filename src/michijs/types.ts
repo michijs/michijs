@@ -6,7 +6,7 @@ import type {
 import { EventDispatcher } from "./classes";
 import { idGenerator } from "./hooks";
 import { MichiAttributes } from "./h/MichiAttributes";
-import { ProxiedValue } from "./hooks/observe/ProxiedValue";
+import { ProxiedValue } from "./classes/ProxiedValue";
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 export type CSSVar<T extends string> = KebabCase<T> & {

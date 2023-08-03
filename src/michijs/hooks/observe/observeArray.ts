@@ -1,15 +1,15 @@
 import { observe } from "../observe";
-import { Observable } from "../../types";
-import { ProxiedValue } from "./ProxiedValue";
+import { Observable, ObserverCallback } from "../../types";
+import { ProxiedValue } from "../../classes/ProxiedValue";
 import { customObjectDelete, customObjectSet } from "./observeCommonObject";
 
-export function observeArray<T extends Array<unknown>>(item: T) {
-  const proxiedArray = item.map((value) => observe(value));
+export function observeArray<T extends Array<unknown>>(item: T, initialObservers?: Set<ObserverCallback<unknown>>) {
+  const proxiedArray = item.map((value) => observe(value, initialObservers));
 
-  const newObservable = new ProxiedValue(proxiedArray);
+  const newObservable = new ProxiedValue(proxiedArray, initialObservers);
   return new Proxy(newObservable, {
-    set: customObjectSet,
-    deleteProperty: customObjectDelete,
+    set: customObjectSet(initialObservers),
+    deleteProperty: customObjectDelete(),
     get(target, property, receiver) {
       if (property in target) return Reflect.get(target, property);
       else {

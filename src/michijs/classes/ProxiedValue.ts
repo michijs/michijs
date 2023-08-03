@@ -1,15 +1,15 @@
-import { hasToJSON } from "../../typeWards/hasToJSON";
-import { ObservableLike, ObserverCallback } from "../../types";
-import { deepEqual } from "../../utils";
-import { computedObserve } from "../computedObserve";
+import { hasToJSON } from "../typeWards/hasToJSON";
+import { ObserverCallback } from "../types";
+import { deepEqual } from "../utils";
+import { computedObserve } from "../hooks/computedObserve";
+import { Observable } from "./Observable";
 
-export class ProxiedValue<T> implements ObservableLike<T> {
+export class ProxiedValue<T> extends Observable<T> {
   private value: T;
-  observers: Set<ObserverCallback<T>> | undefined;
 
   constructor(initialValue?: T, initialObservers?: Set<ObserverCallback<T>>) {
+    super(initialObservers)
     this.value = initialValue as T;
-    this.observers = initialObservers;
   }
 
   set $value(newValue: T) {
@@ -39,21 +39,6 @@ export class ProxiedValue<T> implements ObservableLike<T> {
       return this.$value.toJSON()
 
     return this.$value
-  }
-
-  notify(value = this.$value) {
-    this.observers?.forEach((observer) => {
-      observer(value);
-    });
-  }
-
-  subscribe(observer: ObserverCallback<T>) {
-    if (this.observers) this.observers.add(observer);
-    else this.observers = new Set([observer]);
-  }
-
-  unsubscribe(oldObserver: ObserverCallback<T>) {
-    this.observers?.delete(oldObserver);
   }
 
   shouldCheckForChanges() {

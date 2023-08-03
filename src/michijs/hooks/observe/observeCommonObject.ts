@@ -1,12 +1,12 @@
 import { observe } from "../observe";
-import { Observable } from "../../types";
-import { ProxiedValue } from "./ProxiedValue";
+import { Observable, ObserverCallback } from "../../types";
+import { ProxiedValue } from "../../classes/ProxiedValue";
 
 type CommonObjectProxyHandler<T extends object> = Required<
   ProxyHandler<ProxiedValue<T>>
 >;
 
-export const customObjectSet: CommonObjectProxyHandler<object>["set"] = (
+export const customObjectSet = <T extends object>(initialObservers?: Set<ObserverCallback<unknown>>): CommonObjectProxyHandler<T>["set"] => (
   target,
   property,
   newValue,
@@ -15,14 +15,14 @@ export const customObjectSet: CommonObjectProxyHandler<object>["set"] = (
   if (property in target)
     return Reflect.set(target, property, newValue, receiver);
   if (target.$value) {
-    const observedItem = observe<object>(newValue);
+    const observedItem = observe<object>(newValue, initialObservers);
     // Intentionally ignoring receiver - it ignores target.$value as the target and takes target
     return Reflect.set(target.$value[property], '$value', observedItem.$value);
   }
   return false;
 };
 
-export const customObjectDelete: CommonObjectProxyHandler<object>["deleteProperty"] =
+export const customObjectDelete = <T extends object>(): CommonObjectProxyHandler<T>["deleteProperty"] =>
   (target, property) => {
     if (property in target) return Reflect.deleteProperty(target, property);
     if (target.$value) {
@@ -36,18 +36,18 @@ export const customObjectDelete: CommonObjectProxyHandler<object>["deletePropert
   };
 
 export const observeCommonObject = <T extends object>(
-  item: T,
+  item: T, initialObservers?: Set<ObserverCallback<unknown>>
 ): Observable<T> => {
   const newObservable = new ProxiedValue<T>(
     Object.entries(item).reduce((previousValue, [key, value]) => {
-      const observedItem = observe(value);
+      const observedItem = observe(value, initialObservers);
       previousValue[key] = observedItem;
       return previousValue;
     }, {}) as T,
   );
   return new Proxy(newObservable, {
-    set: customObjectSet,
-    deleteProperty: customObjectDelete,
+    set: customObjectSet(initialObservers),
+    deleteProperty: customObjectDelete(),
     get(target, p, receiver) {
       return Reflect.get(p in target ? target : target.$value, p, receiver);
     }
