@@ -5,7 +5,6 @@ import type {
 } from "@michijs/htmltype";
 import { EventDispatcher } from "./classes";
 import { idGenerator } from "./hooks";
-import { Fragment } from "./components";
 import { MichiAttributes } from "./h/MichiAttributes";
 import { ProxiedValue } from "./hooks/observe/ProxiedValue";
 

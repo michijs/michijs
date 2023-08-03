@@ -103,10 +103,10 @@ store.level2.map.clear();
 
 const a = create(
   <div
-    // _={{
-    //   id: number,
-    // }}
-    id={number}
+    _={{
+      id: number.toString(),
+    }}
+    // id={number}
     onclick={() => {
       store.level2.level1.number++;
     }}

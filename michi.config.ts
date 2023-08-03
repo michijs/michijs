@@ -31,11 +31,6 @@ export const config: ServerConfigFactory<
       defaultConfig.esbuildOptions.entryPoints = [
         "./tests/benchmark/michijs/src/index.tsx",
       ];
-    } else if (environment === "TESTING_MAP") {
-      defaultConfig.public!.path = "./tests/benchmark/michijs-map/public";
-      defaultConfig.esbuildOptions.entryPoints = [
-        "./tests/benchmark/michijs-map/src/index.tsx",
-      ];
     } else {
       defaultConfig.public!.path = "./tests/benchmark/vanillajs/public";
       defaultConfig.esbuildOptions.entryPoints = [

@@ -1,16 +1,15 @@
 import { hasToJSON } from "../../typeWards/hasToJSON";
-import { ObservableLike, ObserverCallback } from "../../types";
+import { ObserverCallback } from "../../types";
 import { deepEqual } from "../../utils";
 import { computedObserve } from "../computedObserve";
+import { ProxiedValue } from "../observe/ProxiedValue";
 
-export class ProxiedValue<T> implements ObservableLike<T> {
-  private value: T;
-  observers: Set<ObserverCallback<T>> | undefined;
-
+export class ProxiedStoredValue<T> extends ProxiedValue<T> {
   constructor(initialValue?: T, initialObservers?: Set<ObserverCallback<T>>) {
-    this.value = initialValue as T;
-    this.observers = initialObservers;
+    super(initialValue, initialObservers)
   }
+
+  check
 
   set $value(newValue: T) {
     if (this.shouldCheckForChanges()) {
@@ -26,7 +25,7 @@ export class ProxiedValue<T> implements ObservableLike<T> {
 
   // Avoids typescript errors
   protected valueOf() {
-    return this.$value;
+    return this.value;
   }
 
   public toString(props) {
@@ -41,22 +40,11 @@ export class ProxiedValue<T> implements ObservableLike<T> {
     return this.$value
   }
 
-  notify(value = this.$value) {
-    this.observers?.forEach((observer) => {
-      observer(value);
-    });
-  }
-
   subscribe(observer: ObserverCallback<T>) {
-    if (this.observers) this.observers.add(observer);
-    else this.observers = new Set([observer]);
+    super.subscribe(observer);
   }
 
   unsubscribe(oldObserver: ObserverCallback<T>) {
-    this.observers?.delete(oldObserver);
-  }
-
-  shouldCheckForChanges() {
-    return !!this.observers;
+    super.unsubscribe(oldObserver);
   }
 }

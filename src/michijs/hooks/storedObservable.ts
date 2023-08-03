@@ -1,5 +1,4 @@
 import { deepEqual } from "../utils/deepEqual";
-import { observable } from "./observable";
 import { observe } from "./observe";
 
 export function storedObservable<T extends object>(

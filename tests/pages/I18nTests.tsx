@@ -1,5 +1,5 @@
 import type { TypedEvent } from "@michijs/htmltype";
-import { createCustomElement, h, I18n, List } from "../../src";
+import { createCustomElement, h, I18n } from "../../src";
 import en from "./i18nTests/en.json";
 
 const supportedLanguages = [
@@ -34,7 +34,7 @@ export const I18nTests = createCustomElement("i18n-tests", {
     return (
       <>
         <span>{t.language}</span>
-        <List
+        {/* <List
           as="select"
           onchange={this.onChangeLanguage}
           data={supportedLanguages}
@@ -47,7 +47,7 @@ export const I18nTests = createCustomElement("i18n-tests", {
               {label}
             </option>
           )}
-        />
+        /> */}
         <span>{t.dogBit}</span>
       </>
     );
