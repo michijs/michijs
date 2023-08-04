@@ -5,7 +5,7 @@ import {
 } from "@michijs/dev-server";
 
 export const config: ServerConfigFactory<
-  "TESTING" | "TESTING_MAP" | DefaultEnvironment
+  "TESTING" | DefaultEnvironment
 > = (environment) => {
   const defaultConfig: ServerConfig = {
     public: {
