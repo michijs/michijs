@@ -1,14 +1,19 @@
 import { Route, UrlFunction } from "../routing/types";
 import { urlFn } from "../routing/createRouter";
-import { CreateOptions, ExtendableComponentWithoutChildren, FC, SingleJSXElement } from "../types";
+import {
+  CreateOptions,
+  ExtendableComponentWithoutChildren,
+  FC,
+  SingleJSXElement,
+} from "../types";
 import { UrlObservable, computedObserve, create } from "../..";
 import { VirtualFragment } from "../classes/VirtualFragment";
 import { bindObservable } from "../hooks/bindObservable";
 
 export type RouterProps<T> = ExtendableComponentWithoutChildren<T> & {
-  routes: Record<string, Route>,
-  parentRoute?: UrlFunction<any, any>,
-}
+  routes: Record<string, Route>;
+  parentRoute?: UrlFunction<any, any>;
+};
 
 export const Router = <const T = FC>({ as: asTag, routes, parentRoute, ...attrs }: RouterProps<T>, options: CreateOptions) => {
   const el = asTag ? create({
