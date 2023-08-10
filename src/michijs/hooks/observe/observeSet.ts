@@ -7,7 +7,10 @@ import {
 } from "./mapAndSetCommonHandlers";
 import { customObjectDelete, customObjectSet } from "./observeCommonObject";
 
-export const observeSet = <T extends Set<unknown>>(item: T, initialObservers?: Set<ObserverCallback<unknown>>) => {
+export const observeSet = <T extends Set<unknown>>(
+  item: T,
+  initialObservers?: Set<ObserverCallback<unknown>>,
+) => {
   const proxiedSet = new Set<Observable<unknown>>();
   item.forEach((value) => {
     proxiedSet.add(observe(value, initialObservers));

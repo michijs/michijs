@@ -13,7 +13,7 @@ export const Link: FC<LinkProps> = (
   { state = {}, title = document.title, url, ...attrs },
   options,
 ) => {
-  const href = typeof url === 'object' && "href" in url ? url.href : url;
+  const href = typeof url === "object" && "href" in url ? url.href : url;
   return (
     <a
       {...attrs}

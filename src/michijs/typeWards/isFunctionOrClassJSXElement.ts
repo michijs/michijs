@@ -1,4 +1,8 @@
-import { ClassJSXElement, FunctionJSXElement, ObjectJSXElement } from "../types";
+import {
+  ClassJSXElement,
+  FunctionJSXElement,
+  ObjectJSXElement,
+} from "../types";
 
 export function isFunctionOrClassJSXElement(
   jsx: FunctionJSXElement | ClassJSXElement | ObjectJSXElement,

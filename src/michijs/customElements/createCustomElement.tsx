@@ -56,7 +56,12 @@ export function createCustomElement<
     implements MichiCustomElement
   {
     $michi: MichiCustomElement["$michi"] = {
-      store: observe({ ...attributes, ...reflectedAttributes, ...cssVariables, ...reflectedCssVariables }),
+      store: observe({
+        ...attributes,
+        ...reflectedAttributes,
+        ...cssVariables,
+        ...reflectedCssVariables,
+      }),
       alreadyRendered: false,
       styles: [],
       idGen: undefined,
@@ -83,7 +88,7 @@ export function createCustomElement<
     }
     renderCallback() {
       const newChildren = create(this.render?.(), {
-        contextElement: this
+        contextElement: this,
       });
       getMountPoint(this).append(newChildren);
     }

@@ -1,4 +1,13 @@
-import { Fragment, Host, If, computedObserve, create, h, observe, wait } from "../src";
+import {
+  Fragment,
+  Host,
+  If,
+  computedObserve,
+  create,
+  h,
+  observe,
+  wait,
+} from "../src";
 import { AsyncComponent } from "../src/michijs/components/AsyncComponent";
 // const h = {
 //   createElement(tag, attrs, ...childrenProps): JSX.Element {
@@ -79,25 +88,32 @@ const store = observe({
       undefined: undefined,
       // set: new Set()
     },
-    array: [1, 2, 3, 4, 5]
+    array: [1, 2, 3, 4, 5],
   },
 });
 
 const { number } = store.level2.level1;
 
-store.level2.level1.subscribe?.((newValue) => console.log('level1', newValue))
-store.level2.level1.undefined.subscribe?.((val) => console.log('undefined', val));
+store.level2.level1.subscribe?.((newValue) => console.log("level1", newValue));
+store.level2.level1.undefined.subscribe?.((val) =>
+  console.log("undefined", val),
+);
 store.level2.level1.number.subscribe?.((val) => console.log(val));
 store.level2.date.subscribe?.((val) => console.log(val));
 store.level2.map.subscribe?.((val) => console.log(val));
-const computed = computedObserve(() => !!Number.isInteger(number / 2), [number]);
+const computed = computedObserve(
+  () => !!Number.isInteger(number / 2),
+  [number],
+);
 
-computed.subscribe?.((newValue) => console.log('computed', newValue));
+computed.subscribe?.((newValue) => console.log("computed", newValue));
 
 store.level2.level1.number = 2;
 store.level2.date.setMonth(store.level2.date.getMonth() + 1);
 store.level2.map.set("xd", 1);
-store.level2.map.get("xd")?.subscribe?.((newValue) => console.log('map xd key changed', newValue));
+store.level2.map
+  .get("xd")
+  ?.subscribe?.((newValue) => console.log("map xd key changed", newValue));
 store.level2.map.set("xd", 2);
 store.level2.map.clear();
 
@@ -111,10 +127,10 @@ const a = create(
       store.level2 = {
         ...store.level2,
         level1: {
-          number: store.level2.level1.number +1,
-          undefined: 123
-        }
-      }
+          number: store.level2.level1.number + 1,
+          undefined: 123,
+        },
+      };
       store.level2.level1.number++;
     }}
   >
@@ -129,12 +145,12 @@ const a = create(
       promise={
         new Promise(async (resolve) => {
           await wait(2000);
-          resolve('Ready')
+          resolve("Ready");
         })
       }
       loadingComponent={<div>Loading...</div>}
     />
-  </div>
+  </div>,
 );
 
 document.body.append(a);

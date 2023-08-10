@@ -7,9 +7,14 @@ import {
 } from "./mapAndSetCommonHandlers";
 import { customObjectDelete, customObjectSet } from "./observeCommonObject";
 
-export const observeMap = <T extends Map<unknown, any>>(item: T, initialObservers?: Set<ObserverCallback<unknown>>) => {
+export const observeMap = <T extends Map<unknown, any>>(
+  item: T,
+  initialObservers?: Set<ObserverCallback<unknown>>,
+) => {
   const proxiedMap = new Map<unknown, Observable<any>>();
-  item.forEach((value, key) => proxiedMap.set(key, observe(value, initialObservers)));
+  item.forEach((value, key) =>
+    proxiedMap.set(key, observe(value, initialObservers)),
+  );
 
   const newObservable = new ProxiedValue(proxiedMap);
   return new Proxy(newObservable, {
@@ -33,9 +38,12 @@ export const observeMap = <T extends Map<unknown, any>>(item: T, initialObserver
 
               if (hasOldValue)
                 // Intentionally ignoring receiver - it ignores target.$value as the target and takes target
-                return Reflect.set(target.$value.get(key), '$value', observedItem.$value);
-              else
-                return bindedTargetProperty(key, observedItem)
+                return Reflect.set(
+                  target.$value.get(key),
+                  "$value",
+                  observedItem.$value,
+                );
+              else return bindedTargetProperty(key, observedItem);
             };
           }
           case "delete": {

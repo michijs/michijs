@@ -1,7 +1,10 @@
 import { Observable, ObserverCallback } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 
-export const observeDate = <T extends Date>(item: T, initialObservers?: Set<ObserverCallback<unknown>>) => {
+export const observeDate = <T extends Date>(
+  item: T,
+  initialObservers?: Set<ObserverCallback<unknown>>,
+) => {
   let clone;
   try {
     clone = structuredClone(item);

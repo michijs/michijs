@@ -3,7 +3,10 @@ import { Observable, ObserverCallback } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 import { customObjectDelete, customObjectSet } from "./observeCommonObject";
 
-export function observeArray<T extends Array<unknown>>(item: T, initialObservers?: Set<ObserverCallback<unknown>>) {
+export function observeArray<T extends Array<unknown>>(
+  item: T,
+  initialObservers?: Set<ObserverCallback<unknown>>,
+) {
   const proxiedArray = item.map((value) => observe(value, initialObservers));
 
   const newObservable = new ProxiedValue(proxiedArray, initialObservers);

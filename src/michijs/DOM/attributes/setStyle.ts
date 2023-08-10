@@ -14,7 +14,9 @@ export function setStyle(
     Object.entries(cssObject).forEach(([key, value]) => {
       const formattedKey = formatToKebabCase(key);
       // Manual Update is faster than Object.assign
-      bindObservable(value, (newValue) => setStyleProperty(element, formattedKey, newValue))
+      bindObservable(value, (newValue) =>
+        setStyleProperty(element, formattedKey, newValue),
+      );
     });
   }
   // TODO: check if its possible

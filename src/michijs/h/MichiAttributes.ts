@@ -1,11 +1,15 @@
-import { IterableAttrs, MichiCustomElement, PickWritable, SingleJSXElement } from "../types";
+import {
+  IterableAttrs,
+  MichiCustomElement,
+  PickWritable,
+  SingleJSXElement,
+} from "../types";
 
 // export type ElementInterfaceAttributes<E extends object> = {
 //   [K in StringKeyOf<PickWritable<E>> as `_${K}`]?: E[K];
 // };
 
 export interface MichiAttributes<E> extends Partial<IterableAttrs<string>> {
-
   children?: JSX.Element;
   /**
    * Children are created but not updated

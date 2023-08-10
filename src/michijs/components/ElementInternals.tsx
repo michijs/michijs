@@ -32,33 +32,37 @@ export const ElementInternals: FC<ElementInternalsProps> = (
   },
   options,
 ) => {
-  const self = options?.contextElement
+  const self = options?.contextElement;
   if (self && isMichiCustomElement(self) && self.$michi.internals) {
     bindObservable(errorMessage, (newValue) => {
       if (newValue)
         self.$michi.internals!.setValidity?.(validityStateFlags, newValue);
       else self.$michi.internals!.setValidity?.({});
-    })
+    });
 
     bindObservable(formValue, (newValue) => {
       self.$michi.internals!.setFormValue?.(
         newValue as Parameters<ElementInternals["setFormValue"]>[0],
       );
-    })
+    });
 
     Object.entries({ tabIndex, ...aria }).forEach(([key, value]) => {
       if (self.$michi.internals)
         if (key in self.$michi.internals)
-          bindObservable(value, (newValue) => self.$michi.internals![key] = newValue)
+          bindObservable(
+            value,
+            (newValue) => (self.$michi.internals![key] = newValue),
+          );
         else if (key in self)
-          bindObservable(value, (newValue) => self[key] = newValue)
+          bindObservable(value, (newValue) => (self[key] = newValue));
         else {
-          const formattedKey = key.split("aria").map((x) => x.toLowerCase()).join("-");
-          bindObservable(value, (newValue) => setAttribute(
-            self,
-            formattedKey,
-            newValue,
-          ))
+          const formattedKey = key
+            .split("aria")
+            .map((x) => x.toLowerCase())
+            .join("-");
+          bindObservable(value, (newValue) =>
+            setAttribute(self, formattedKey, newValue),
+          );
         }
     });
   }

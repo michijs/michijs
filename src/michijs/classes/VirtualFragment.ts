@@ -1,35 +1,55 @@
 import { forEachChildren } from "../DOMDiff/forEachChildren";
 import { isElement } from "../typeWards/isElement";
 
-export class VirtualChildNodes extends Array<ChildNode> implements NodeListOf<ChildNode> {
+export class VirtualChildNodes
+  extends Array<ChildNode>
+  implements NodeListOf<ChildNode>
+{
   item(index: number) {
-    return this.at(index) ?? null as unknown as ChildNode
+    return this.at(index) ?? (null as unknown as ChildNode);
   }
-  forEach(callbackfn: (value: ChildNode, key: number, parent: any) => void, thisArg?: any): void {
-    super.forEach(callbackfn, thisArg)
+  forEach(
+    callbackfn: (value: ChildNode, key: number, parent: any) => void,
+    thisArg?: any,
+  ): void {
+    super.forEach(callbackfn, thisArg);
   }
 }
 
-export class VirtualFragment implements Pick<ParentNode, 'textContent' | 'prepend' | 'append' | 'replaceChildren' | 'firstChild' | 'lastChild' | 'childNodes'>, Pick<ChildNode, 'remove' | 'replaceWith' | 'textContent'>, Pick<Element, 'innerHTML'> {
-  private startItem = document.createComment('<fragment>');
-  private endItem = document.createComment('</fragment>');
+export class VirtualFragment
+  implements
+    Pick<
+      ParentNode,
+      | "textContent"
+      | "prepend"
+      | "append"
+      | "replaceChildren"
+      | "firstChild"
+      | "lastChild"
+      | "childNodes"
+    >,
+    Pick<ChildNode, "remove" | "replaceWith" | "textContent">,
+    Pick<Element, "innerHTML">
+{
+  private startItem = document.createComment("<fragment>");
+  private endItem = document.createComment("</fragment>");
   private initialFragment = new DocumentFragment();
 
   constructor(initialItems: Node[] = []) {
-    this.initialFragment.append(this.startItem, ...initialItems, this.endItem)
+    this.initialFragment.append(this.startItem, ...initialItems, this.endItem);
   }
   replaceWith(...nodes: (string | Node)[]): void {
     if (this.startItem.isConnected) {
       const childNodes = this.childNodes;
       this.startItem.replaceWith(...nodes);
-      this.initialFragment.textContent = '';
+      this.initialFragment.textContent = "";
       this.initialFragment.append(this.startItem, ...childNodes, this.endItem);
     }
   }
   remove(): void {
     if (this.startItem.isConnected) {
       const childNodes = this.childNodes;
-      this.initialFragment.textContent = '';
+      this.initialFragment.textContent = "";
       this.initialFragment.append(this.startItem, ...childNodes, this.endItem);
     }
   }
@@ -45,8 +65,8 @@ export class VirtualFragment implements Pick<ParentNode, 'textContent' | 'prepen
       (node) => {
         node.remove();
       },
-      (node) => node !== this.endItem
-    )
+      (node) => node !== this.endItem,
+    );
     this.append(...nodes);
   }
   get lastChild() {
@@ -60,8 +80,8 @@ export class VirtualFragment implements Pick<ParentNode, 'textContent' | 'prepen
       (node) => {
         childNodes.push(node);
       },
-      (node) => node !== this.endItem
-    )
+      (node) => node !== this.endItem,
+    );
 
     return childNodes;
   }
@@ -70,29 +90,30 @@ export class VirtualFragment implements Pick<ParentNode, 'textContent' | 'prepen
     return nextSibling !== this.endItem ? nextSibling : null;
   }
   get innerHTML() {
-    let innerHTML = '';
+    let innerHTML = "";
     forEachChildren(
       this.startItem.nextSibling,
-      (node) => innerHTML += isElement(node) ? node.outerHTML : node.textContent,
-      (node) => node !== this.endItem
-    )
+      (node) =>
+        (innerHTML += isElement(node) ? node.outerHTML : node.textContent),
+      (node) => node !== this.endItem,
+    );
     return innerHTML;
   }
   set innerHTML(content: string) {
     const fragment = document.createRange().createContextualFragment(content);
-    this.replaceChildren(fragment)
+    this.replaceChildren(fragment);
   }
   get textContent() {
-    let textContext = '';
+    let textContext = "";
     forEachChildren(
       this.startItem.nextSibling,
-      (node) => textContext += node.textContent,
-      (node) => node !== this.endItem
-    )
+      (node) => (textContext += node.textContent),
+      (node) => node !== this.endItem,
+    );
     return textContext;
   }
   set textContent(content: string) {
-    this.replaceChildren(content)
+    this.replaceChildren(content);
   }
 
   valueOf(): Node {

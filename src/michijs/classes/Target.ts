@@ -7,18 +7,18 @@ export class Target<V> {
   constructor(
     private element: VirtualFragment | ParentNode,
     private renderItem: RenderFunction<V>,
-    private options: CreateOptions
-  ) { }
+    private options: CreateOptions,
+  ) {}
 
   clear() {
     this.element.textContent = "";
   }
 
   createSingleItem(value: V) {
-    return create(this.renderItem(value), this.options)
+    return create(this.renderItem(value), this.options);
   }
   create(...value: V[]) {
-    return value.map(x => this.createSingleItem(x))
+    return value.map((x) => this.createSingleItem(x));
   }
 
   replace(...items: V[]) {

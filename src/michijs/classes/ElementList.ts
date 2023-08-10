@@ -1,4 +1,10 @@
-import { CreateOptions, ExtendableComponentWithoutChildren, FC, GetElementProps, SingleJSXElement } from "../..";
+import {
+  CreateOptions,
+  ExtendableComponentWithoutChildren,
+  FC,
+  GetElementProps,
+  SingleJSXElement,
+} from "../..";
 import { create } from "../DOMDiff";
 // import { ListElement } from "../components/FragmentAndList";
 import { Target } from "./Target";
@@ -36,19 +42,24 @@ export class ElementList<V> implements ElementListInterface<V> {
    * This allows it to have a performance close to vanilla js.
    * An operation on the data implies an operation on the associated elements.
    */
-  List = <const E = FC>({
-    as: asTag,
-    renderItem,
-    ...attrs
-  }: ExtendableComponentWithoutChildren<E> & {
-    renderItem: RenderFunction<V>;
-  }, context: CreateOptions) => {
-    const el = asTag ? create({
-      tag: asTag,
-      attrs
-    } as SingleJSXElement) as ParentNode: new VirtualFragment()
+  List = <const E = FC>(
+    {
+      as: asTag,
+      renderItem,
+      ...attrs
+    }: ExtendableComponentWithoutChildren<E> & {
+      renderItem: RenderFunction<V>;
+    },
+    context: CreateOptions,
+  ) => {
+    const el = asTag
+      ? (create({
+          tag: asTag,
+          attrs,
+        } as SingleJSXElement) as ParentNode)
+      : new VirtualFragment();
 
-    this.targets.push(new Target(el, renderItem, context))
+    this.targets.push(new Target(el, renderItem, context));
 
     return el;
   };
@@ -130,5 +141,3 @@ export class ElementList<V> implements ElementListInterface<V> {
   //     }
   // }
 }
-
-

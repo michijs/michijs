@@ -21,11 +21,14 @@ export function storedObservable<T extends object>(
   }
 
   const newObservable = Object.keys(item).reduce((previousValue, key) => {
-    return observe({ ...previousValue, key: getStorageValue(key) }, new Set([
-      () => {
-        storage.setItem(key, JSON.stringify(newObservable[key]));
-      }
-    ]));
+    return observe(
+      { ...previousValue, key: getStorageValue(key) },
+      new Set([
+        () => {
+          storage.setItem(key, JSON.stringify(newObservable[key]));
+        },
+      ]),
+    );
   }, {}) as T;
 
   const storageStore = new Proxy(

@@ -8,7 +8,7 @@ export class ProxiedValue<T> extends Observable<T> {
   private value: T;
 
   constructor(initialValue?: T, initialObservers?: Set<ObserverCallback<T>>) {
-    super(initialObservers)
+    super(initialObservers);
     this.value = initialValue as T;
   }
 
@@ -35,10 +35,9 @@ export class ProxiedValue<T> extends Observable<T> {
   }
 
   toJSON() {
-    if (this.$value && hasToJSON(this.$value))
-      return this.$value.toJSON()
+    if (this.$value && hasToJSON(this.$value)) return this.$value.toJSON();
 
-    return this.$value
+    return this.$value;
   }
 
   shouldCheckForChanges() {

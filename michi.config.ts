@@ -4,9 +4,9 @@ import {
   DefaultEnvironment,
 } from "@michijs/dev-server";
 
-export const config: ServerConfigFactory<
-  "TESTING" | DefaultEnvironment
-> = ({ environment }) => {
+export const config: ServerConfigFactory<"TESTING" | DefaultEnvironment> = ({
+  environment,
+}) => {
   const defaultConfig: ServerConfig = {
     public: {
       path: "./tests/public",

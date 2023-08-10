@@ -6,6 +6,7 @@ type HostProps = HTMLElements["div"] & AnyObject;
 
 /**Allows to set attributes and event listeners to the host element itself. */
 export const Host: FC<HostProps> = ({ children, ...attrs }, options) => {
-  if (attrs && options?.contextElement) setAttributes(options.contextElement, attrs, options);
+  if (attrs && options?.contextElement)
+    setAttributes(options.contextElement, attrs, options);
   return children;
 };

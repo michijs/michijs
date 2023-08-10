@@ -7,26 +7,26 @@ type CommonObjectProxyHandler<T extends object> = Required<
   ProxyHandler<ProxiedValue<T>>
 >;
 
-export const customObjectSet = <T extends object>(initialObservers?: Set<ObserverCallback<unknown>>): CommonObjectProxyHandler<T>["set"] => (
-  target,
-  property,
-  newValue,
-  receiver,
-) => {
-  if (property in target)
-    return Reflect.set(target, property, newValue, receiver);
-  if (target.$value) {
-    // const observedItem = observe<object>(newValue, initialObservers);
-    // Intentionally ignoring receiver - it ignores target.$value as the target and takes target
-    //   return Reflect.set(target.$value[property], '$value', observedItem.$value)
-    setObservableValue(target.$value[property], newValue)
+export const customObjectSet =
+  <T extends object>(
+    initialObservers?: Set<ObserverCallback<unknown>>,
+  ): CommonObjectProxyHandler<T>["set"] =>
+  (target, property, newValue, receiver) => {
+    if (property in target)
+      return Reflect.set(target, property, newValue, receiver);
+    if (target.$value) {
+      // const observedItem = observe<object>(newValue, initialObservers);
+      // Intentionally ignoring receiver - it ignores target.$value as the target and takes target
+      //   return Reflect.set(target.$value[property], '$value', observedItem.$value)
+      setObservableValue(target.$value[property], newValue);
 
-    return true;
-  }
-  return false;
-};
+      return true;
+    }
+    return false;
+  };
 
-export const customObjectDelete = <T extends object>(): CommonObjectProxyHandler<T>["deleteProperty"] =>
+export const customObjectDelete =
+  <T extends object>(): CommonObjectProxyHandler<T>["deleteProperty"] =>
   (target, property) => {
     if (property in target) return Reflect.deleteProperty(target, property);
     if (target.$value) {
@@ -40,7 +40,8 @@ export const customObjectDelete = <T extends object>(): CommonObjectProxyHandler
   };
 
 export const observeCommonObject = <T extends object>(
-  item: T, initialObservers?: Set<ObserverCallback<unknown>>
+  item: T,
+  initialObservers?: Set<ObserverCallback<unknown>>,
 ): Observable<T> => {
   const newObservable = new ProxiedValue<T>(
     Object.entries(item).reduce((previousValue, [key, value]) => {
@@ -54,6 +55,6 @@ export const observeCommonObject = <T extends object>(
     deleteProperty: customObjectDelete(),
     get(target, p, receiver) {
       return Reflect.get(p in target ? target : target.$value, p, receiver);
-    }
+    },
   }) as unknown as Observable<T>;
 };

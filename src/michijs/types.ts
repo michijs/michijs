@@ -19,8 +19,8 @@ export type CssDeclaration<
   PK extends string = "-",
 > = T extends object
   ? {
-    [k in StringKeyOf<T>]: CssDeclaration<T[k], `${PK}-${k}`>;
-  }
+      [k in StringKeyOf<T>]: CssDeclaration<T[k], `${PK}-${k}`>;
+    }
   : CSSVar<PK>;
 type IfEquals<X, Y, A = X, B = never> = (<T>() => T extends X ? 1 : 2) extends <
   T,
@@ -78,9 +78,12 @@ export type WordSeparators = "-" | "_" | " ";
 export type ArrayWithOneOrMoreElements<T> = [T, ...T[]];
 
 export type ExtendableComponent<T> = {
-  as?: T,
-} & GetElementProps<T>
-export type ExtendableComponentWithoutChildren<T> = Omit<ExtendableComponent<T>, 'children'>
+  as?: T;
+} & GetElementProps<T>;
+export type ExtendableComponentWithoutChildren<T> = Omit<
+  ExtendableComponent<T>,
+  "children"
+>;
 
 export type SplitIncludingDelimiters<
   Source extends string,
@@ -89,16 +92,16 @@ export type SplitIncludingDelimiters<
   ? []
   : Source extends `${infer FirstPart}${Delimiter}${infer SecondPart}`
   ? Source extends `${FirstPart}${infer UsedDelimiter}${SecondPart}`
-  ? UsedDelimiter extends Delimiter
-  ? Source extends `${infer FirstPart}${UsedDelimiter}${infer SecondPart}`
-  ? [
-    ...SplitIncludingDelimiters<FirstPart, Delimiter>,
-    UsedDelimiter,
-    ...SplitIncludingDelimiters<SecondPart, Delimiter>,
-  ]
-  : never
-  : never
-  : never
+    ? UsedDelimiter extends Delimiter
+      ? Source extends `${infer FirstPart}${UsedDelimiter}${infer SecondPart}`
+        ? [
+            ...SplitIncludingDelimiters<FirstPart, Delimiter>,
+            UsedDelimiter,
+            ...SplitIncludingDelimiters<SecondPart, Delimiter>,
+          ]
+        : never
+      : never
+    : never
   : [Source];
 
 type StringPartToDelimiterCase<
@@ -119,16 +122,16 @@ type StringArrayToDelimiterCase<
   Delimiter extends string,
 > = Parts extends [`${infer FirstPart}`, ...infer RemainingParts]
   ? `${StringPartToDelimiterCase<
-    FirstPart,
-    UsedWordSeparators,
-    UsedUpperCaseCharacters,
-    Delimiter
-  >}${StringArrayToDelimiterCase<
-    RemainingParts,
-    UsedWordSeparators,
-    UsedUpperCaseCharacters,
-    Delimiter
-  >}`
+      FirstPart,
+      UsedWordSeparators,
+      UsedUpperCaseCharacters,
+      Delimiter
+    >}${StringArrayToDelimiterCase<
+      RemainingParts,
+      UsedWordSeparators,
+      UsedUpperCaseCharacters,
+      Delimiter
+    >}`
   : "";
 
 export type DelimiterCase<
@@ -136,11 +139,11 @@ export type DelimiterCase<
   Delimiter extends string,
 > = Value extends string
   ? StringArrayToDelimiterCase<
-    SplitIncludingDelimiters<Value, WordSeparators | UpperCaseCharacters>,
-    WordSeparators,
-    UpperCaseCharacters,
-    Delimiter
-  >
+      SplitIncludingDelimiters<Value, WordSeparators | UpperCaseCharacters>,
+      WordSeparators,
+      UpperCaseCharacters,
+      Delimiter
+    >
   : Value;
 
 export type KebabCase<Value> = DelimiterCase<Value, "-">;
@@ -163,18 +166,18 @@ export interface ObservableLike<T = any> {
 
 export interface MichiProperties
   extends Lifecycle,
-  LifecycleInternals,
-  Partial<
-    Pick<
-      ElementInternals,
-      | "checkValidity"
-      | "reportValidity"
-      | "form"
-      | "validity"
-      | "validationMessage"
-      | "willValidate"
-    >
-  > {
+    LifecycleInternals,
+    Partial<
+      Pick<
+        ElementInternals,
+        | "checkValidity"
+        | "reportValidity"
+        | "form"
+        | "validity"
+        | "validationMessage"
+        | "willValidate"
+      >
+    > {
   // props?: unknown,
   readonly $michi: {
     store: Observable<AttributesType>;
@@ -195,18 +198,24 @@ export interface MichiProperties
   readonly type: string;
 }
 
-export interface MichiCustomElement extends HTMLElement, MichiProperties { }
+export interface MichiCustomElement extends HTMLElement, MichiProperties {}
 
 export type ObservableValue<T> = T & Partial<ProxiedValue<T>>;
 
-export type Observable<T> = (T extends Map<infer K, infer V> ? Map<K, Observable<V>> : T extends object
+export type Observable<T> = (T extends Map<infer K, infer V>
+  ? Map<K, Observable<V>>
+  : T extends object
   ? {
-    [K in keyof T]: T[K] extends Function ? T[K] : Observable<T[K]>;
-  }
-  : T extends undefined ? unknown : T) &
+      [K in keyof T]: T[K] extends Function ? T[K] : Observable<T[K]>;
+    }
+  : T extends undefined
+  ? unknown
+  : T) &
   Partial<ProxiedValue<T>>;
 
-export type ObservableNonNullablePrimitiveType = Observable<bigint | string | number | boolean>;
+export type ObservableNonNullablePrimitiveType = Observable<
+  bigint | string | number | boolean
+>;
 export type NonNullablePrimitiveType =
   | bigint
   | string
@@ -239,9 +248,7 @@ export interface IterableAttrs<T> {
 export interface CommonJSXAttrs<T> extends IterableAttrs<T> {
   attrs: Record<string, any> & { children: SingleJSXElement[] };
 }
-export type FragmentJSXElement = CommonJSXAttrs<
-  null | undefined
->;
+export type FragmentJSXElement = CommonJSXAttrs<null | undefined>;
 export type IterableJSX = {
   key: number | string;
 } & CommonJSXAttrs<Element>;
@@ -260,7 +267,7 @@ export type SingleJSXElement =
   | ArrayJSXElement
   | DOMElementJSXElement
   | Node
-  | {}
+  | {};
 export type ArrayJSXElement = SingleJSXElement[];
 // export type PureObjectJSXElement = { tag: string } & Omit<CommonJSXAttrs,'children'> & {children: (PureObjectJSXElement | string)[]};
 
@@ -318,8 +325,8 @@ export type ExtendableElements = keyof HTMLElements;
 
 export type CustomElementEvents<E extends EventsType | undefined> = Readonly<{
   [k in keyof E]: E[k] extends EventDispatcher<infer T>
-  ? (detail?: T) => boolean
-  : any;
+    ? (detail?: T) => boolean
+    : any;
 }>;
 
 export interface ExtendsObject<T extends ExtendableElements = "div"> {
@@ -411,10 +418,10 @@ export type MichiElementSelf<O extends MichiElementOptions> = O["attributes"] &
   MichiProperties &
   (O["extends"] extends { class: infer E }
     ? E extends new (
-      ...args: any
-    ) => any
-    ? InstanceType<E>
-    : HTMLElement
+        ...args: any
+      ) => any
+      ? InstanceType<E>
+      : HTMLElement
     : HTMLElement);
 
 type MichiElementProps<
@@ -422,17 +429,17 @@ type MichiElementProps<
   S extends HTMLElement,
   Attrs = {
     [k in
-    keyof O["reflectedAttributes"]as KebabCase<k>]: O["reflectedAttributes"][k];
+      keyof O["reflectedAttributes"] as KebabCase<k>]: O["reflectedAttributes"][k];
   } & {
     [k in
-    keyof O["reflectedCssVariables"]as KebabCase<k>]: O["reflectedCssVariables"][k];
+      keyof O["reflectedCssVariables"] as KebabCase<k>]: O["reflectedCssVariables"][k];
   } & {
     [k in
-    keyof O["events"]as k extends string
-    ? `on${Lowercase<k>}`
-    : never]?: O["events"][k] extends EventDispatcher<infer D>
-    ? (ev: CustomEvent<D>) => unknown
-    : never;
+      keyof O["events"] as k extends string
+        ? `on${Lowercase<k>}`
+        : never]?: O["events"][k] extends EventDispatcher<infer D>
+      ? (ev: CustomEvent<D>) => unknown
+      : never;
   } & { name: string } & GlobalEvents<S>,
 > = MichiAttributes<S> &
   Omit<ExtendsAttributes<O["extends"]>, keyof Attrs> &
@@ -442,12 +449,12 @@ export interface MichiElementClass<
   O extends MichiElementOptions,
   S extends HTMLElement,
 > {
-  new(props: MichiElementProps<O, S>): S;
+  new (props: MichiElementProps<O, S>): S;
   readonly tag: string;
   readonly extends?: string;
   readonly observedAttributes: Readonly<string[]>;
   formAssociated: boolean;
-};
+}
 export interface Lifecycle {
   /**This method is called at the start of constructor.*/
   willConstruct?(): void;
@@ -526,7 +533,7 @@ export interface CreateCustomElementStaticResult<
 }
 
 export type GetElementProps<El extends any> = El extends {
-  new(arg: infer T): any;
+  new (arg: infer T): any;
 }
   ? T
   : El extends (...args: any) => any
@@ -538,9 +545,9 @@ export type GetElementProps<El extends any> = El extends {
 export type EventListenerMap = Map<string, EventListener>;
 
 export interface CreateOptions<E extends Element = Element> {
-  readonly isSVG?: boolean,
-  readonly isMATHML?: boolean,
-  readonly contextElement?: E
+  readonly isSVG?: boolean;
+  readonly isMATHML?: boolean;
+  readonly contextElement?: E;
 }
 
 declare global {
