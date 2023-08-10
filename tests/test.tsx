@@ -108,9 +108,17 @@ const a = create(
     }}
     // id={number}
     onclick={() => {
+      store.level2 = {
+        ...store.level2,
+        level1: {
+          number: store.level2.level1.number +1,
+          undefined: 123
+        }
+      }
       store.level2.level1.number++;
     }}
   >
+    {store.level2}
     asdf: {number}
     <If
       condition={computed}

@@ -1,6 +1,7 @@
 import { observe } from "../observe";
 import { Observable, ObserverCallback } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
+import { setObservableValue } from "../../utils/setObservableValue";
 
 type CommonObjectProxyHandler<T extends object> = Required<
   ProxyHandler<ProxiedValue<T>>
@@ -15,9 +16,12 @@ export const customObjectSet = <T extends object>(initialObservers?: Set<Observe
   if (property in target)
     return Reflect.set(target, property, newValue, receiver);
   if (target.$value) {
-    const observedItem = observe<object>(newValue, initialObservers);
+    // const observedItem = observe<object>(newValue, initialObservers);
     // Intentionally ignoring receiver - it ignores target.$value as the target and takes target
-    return Reflect.set(target.$value[property], '$value', observedItem.$value);
+    //   return Reflect.set(target.$value[property], '$value', observedItem.$value)
+    setObservableValue(target.$value[property], newValue)
+
+    return true;
   }
   return false;
 };
