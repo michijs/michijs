@@ -1,14 +1,14 @@
-import { Observable } from "../../types";
+import { Observable, ObserverCallback } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 
-export const observeDate = <T extends Date>(item) => {
+export const observeDate = <T extends Date>(item: T, initialObservers?: Set<ObserverCallback<unknown>>) => {
   let clone;
   try {
     clone = structuredClone(item);
   } catch {
     clone = new Date(item);
   }
-  const newObservable = new ProxiedValue<T>(clone);
+  const newObservable = new ProxiedValue<T>(clone, initialObservers);
   return new Proxy(newObservable, {
     get(target, property) {
       if (property in target) return Reflect.get(target, property);

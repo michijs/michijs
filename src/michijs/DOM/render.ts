@@ -1,13 +1,12 @@
+import { create } from "../DOMDiff";
+
 export function renderSync(
   Component: JSX.Element,
   mountPoint: ParentNode = document.body,
 ) {
   mountPoint.textContent = "";
-  // updateChildren(
-  //   mountPoint,
-  //   Array.isArray(Component) ? Component : [Component],
-  //   false,
-  // );
+  const renderResult = create(Component);
+  mountPoint.append(renderResult);
   return mountPoint;
 }
 

@@ -1,108 +1,42 @@
-import { createCustomElement } from "../customElements/createCustomElement";
-import { sharedUrlObservable } from "../routing/utils/sharedUrlObservable";
-import { AsyncRoute, Route, SyncRoute, UrlFunction } from "../routing/types";
-import { hash, searchParams } from "../routing";
+import { Route, UrlFunction } from "../routing/types";
 import { urlFn } from "../routing/createRouter";
-import { h } from "../h";
+import { CreateOptions, ExtendableComponentWithoutChildren, FC, SingleJSXElement } from "../types";
+import { UrlObservable, computedObserve, create } from "../..";
+import { VirtualFragment } from "../classes/VirtualFragment";
+import { bindObservable } from "../hooks/bindObservable";
 
-export const Router = createCustomElement("michi-router", {
-  attributes: {
-    currentComponent: null as JSX.Element,
-    routes: undefined as Record<string, Route> | undefined,
-    parentRoute: undefined as UrlFunction<any, any> | undefined,
-  },
-  lifecycle: {
-    willMount() {
-      this.onChangeURL();
-    },
-  },
-  methods: {
-    matches(url: string, flexible = false) {
-      const urlPaths = url.split("/").filter((x) => x !== "");
-      let locationPaths = location.pathname.split("/").filter((x) => x !== "");
-      if (flexible) {
-        locationPaths = locationPaths.slice(0, urlPaths.length);
-      }
-      return (
-        locationPaths.length === urlPaths.length &&
-        !locationPaths.find(
-          (locationPath, index) =>
-            !urlPaths[index].startsWith(":") &&
-            locationPath !== urlPaths[index],
-        )
+export type RouterProps<T> = ExtendableComponentWithoutChildren<T> & {
+  routes: Record<string, Route>,
+  parentRoute?: UrlFunction<any, any>,
+}
+
+export const Router = <const T = FC>({ as: asTag, routes, parentRoute, ...attrs }: RouterProps<T>, options: CreateOptions) => {
+  const el = asTag ? create({
+    tag: asTag,
+    attrs
+  } as SingleJSXElement) as ChildNode & ParentNode : new VirtualFragment();
+
+  const matchedRoute = computedObserve(() => {
+    if (routes) {
+      const routeFound = Object.keys(routes).find((key) =>
+        UrlObservable.matches(urlFn(key, parentRoute)().pathname, true),
       );
-    },
-    getMatchedRoute() {
-      if (this.routes) {
-        const routeFound = Object.keys(this.routes).find((key) =>
-          this.matches(urlFn(key, this.parentRoute)().pathname, true),
-        );
-        if (routeFound) return this.routes[routeFound];
-      }
-      return null;
-    },
-    processComponent(component?: JSX.Element) {
-      if (
-        component &&
-        typeof component === "object" &&
-        "tag" in component &&
-        typeof component.tag === "function"
-      ) {
-        return {
-          ...component,
-          attrs: {
-            ...component.attrs,
-            searchParams,
-            hash,
-          },
-        };
-      }
-      return component;
-    },
-    onChangeURL() {
-      const matchedRoute = this.getMatchedRoute();
-      if (matchedRoute) {
-        const { title, component, promise, loadingComponent } =
-          matchedRoute as SyncRoute & AsyncRoute; //& RedirectRoute
+      if (routeFound) return routes[routeFound];
+    }
+    return null;
+  }, [UrlObservable]);
 
-        // if (redirectTo) {
-        //   goTo(redirectTo());
-        // } else {
-        if (title) {
-          document.title = title;
-        }
-        const newLocationHref = location.href;
+  bindObservable(matchedRoute, (newMatchedRoute) => {
+    // const newCache = el.childNodes.length > 0 ? Array.from(el.childNodes) : undefined
+    el.textContent = '';
 
-        const updateCurrentComponent = (component: JSX.Element) => {
-          const currentLocationHref = location.href;
-          //Avoids bugs with route changes
-          if (currentLocationHref === newLocationHref) {
-            this.currentComponent = component;
-          }
-        };
+    if (newMatchedRoute) {
+      const { title, component } = newMatchedRoute;
+      if (title)
+        document.title = title;
 
-        if (component) updateCurrentComponent(component);
-        else {
-          if (loadingComponent) {
-            updateCurrentComponent(loadingComponent);
-          }
-          promise().then((Component) => {
-            updateCurrentComponent(<Component />);
-          });
-        }
-        // }
-      } else this.currentComponent = null;
-    },
-  },
-  observe: {
-    sharedUrlObservable() {
-      this.onChangeURL();
-    },
-  },
-  subscribeTo: {
-    sharedUrlObservable,
-  },
-  render() {
-    return this.processComponent(this.currentComponent);
-  },
-});
+      el.append(create(component, options))
+    }
+  })
+  return el;
+}

@@ -1,4 +1,4 @@
-import { CreateOptions, FC, GetElementProps, SingleJSXElement } from "../..";
+import { CreateOptions, ExtendableComponentWithoutChildren, FC, GetElementProps, SingleJSXElement } from "../..";
 import { create } from "../DOMDiff";
 // import { ListElement } from "../components/FragmentAndList";
 import { Target } from "./Target";
@@ -40,7 +40,7 @@ export class ElementList<V> implements ElementListInterface<V> {
     as: asTag,
     renderItem,
     ...attrs
-  }: { as?: E } & Omit<GetElementProps<E>, "children"> & {
+  }: ExtendableComponentWithoutChildren<E> & {
     renderItem: RenderFunction<V>;
   }, context: CreateOptions) => {
     const el = asTag ? create({

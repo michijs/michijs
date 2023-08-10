@@ -1,14 +1,13 @@
 import { create } from "../DOMDiff";
 import { VirtualFragment } from "../classes/VirtualFragment";
 import { bindObservable } from "../hooks/bindObservable";
-import { CreateOptions, FC, GetElementProps, ObservableLike, SingleJSXElement } from "../types";
+import { CreateOptions, ExtendableComponentWithoutChildren, FC, ObservableLike, SingleJSXElement } from "../types";
 
-type IfProps<T> = {
-  as?: T,
+type IfProps<T> = ExtendableComponentWithoutChildren<T> & {
   condition: Partial<ObservableLike<unknown>>,
   then?: JSX.Element,
   else?: JSX.Element
-} & Omit<GetElementProps<T>, "children">
+}
 
 export const If = <const T = FC>({ as: asTag, condition, then, else: elseComponent, ...attrs }: IfProps<T>, options: CreateOptions) => {
   const el = asTag ? create({

@@ -1,5 +1,4 @@
-import { observable, store } from "../hooks";
-import { ObservableLike, ObserverCallback, Store } from "../types";
+import { ObservableLike, ObserverCallback } from "../types";
 
 type StringObject =
   | {

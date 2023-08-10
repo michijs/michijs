@@ -1,7 +1,7 @@
 import { observe } from "../hooks";
 import { goTo } from "./goTo";
 import { setSearchParam } from "./utils/setSearchParam";
-import { sharedUrlObservable } from "./utils/sharedUrlObservable";
+import { UrlObservable } from "../classes/index";
 
 export const getInitialSearchParamsValue = () => {
   const initialSearchParamsValue: Record<string, any> = {};
@@ -43,6 +43,4 @@ const updateSearchParams = () => {
   isUpdating = false;
 };
 
-sharedUrlObservable.subscribe(() => {
-  updateSearchParams();
-});
+UrlObservable.subscribe(updateSearchParams);

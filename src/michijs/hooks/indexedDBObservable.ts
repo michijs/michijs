@@ -1,5 +1,5 @@
+import { Observable } from "../classes";
 import { AnyObject, ObservableLike } from "../types";
-import { observable } from "./observable";
 
 interface TypedIDBObjectStoreParameters<T extends AnyObject>
   extends Omit<IDBObjectStoreParameters, "keyPath"> {
@@ -106,18 +106,18 @@ export function indexedDBObservable<T extends AnyObject>(
 ): IndexeddbObservableResult<T> {
   const listenerEventName = `indexedDB-${name}-change`;
   const bc = new BroadcastChannel(listenerEventName);
-  const { notify, ...observableProps } = observable<keyof T>();
+  const observable = new Observable<keyof T>();
 
   bc.onmessage = (ev: MessageEvent<string>) => {
-    notify(ev.data);
+    observable.notify(ev.data);
   };
 
   const dbPromise = initDb(name, objectsStore, version);
 
   return new Proxy({} as unknown as IndexeddbObservableResult<T>, {
     get(_, p: string) {
-      if (Object.keys(observableProps).includes(p)) {
-        return observableProps[p];
+      if (Object.keys(observable).includes(p)) {
+        return observable[p];
       }
       return new Proxy(
         {},
@@ -160,7 +160,7 @@ export function indexedDBObservable<T extends AnyObject>(
                   if (result instanceof IDBRequest) {
                     result.onsuccess = () => {
                       if (transactionMode === "readwrite") {
-                        notify(p);
+                        observable.notify(p);
                         bc.postMessage(p);
                       }
                       resolve(result.result);

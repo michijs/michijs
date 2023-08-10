@@ -6,7 +6,7 @@ import {
 
 export const config: ServerConfigFactory<
   "TESTING" | DefaultEnvironment
-> = (environment) => {
+> = ({ environment }) => {
   const defaultConfig: ServerConfig = {
     public: {
       path: "./tests/public",

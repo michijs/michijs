@@ -77,6 +77,11 @@ export type UpperCaseCharacters =
 export type WordSeparators = "-" | "_" | " ";
 export type ArrayWithOneOrMoreElements<T> = [T, ...T[]];
 
+export type ExtendableComponent<T> = {
+  as?: T,
+} & GetElementProps<T>
+export type ExtendableComponentWithoutChildren<T> = Omit<ExtendableComponent<T>, 'children'>
+
 export type SplitIncludingDelimiters<
   Source extends string,
   Delimiter extends string,
@@ -172,15 +177,12 @@ export interface MichiProperties
   > {
   // props?: unknown,
   readonly $michi: {
-    store: Store<AnyObject, AnyObject>;
-    cssStore: Store<AnyObject, EmptyObject>;
+    store: Observable<AttributesType>;
     alreadyRendered: boolean;
     shadowRoot?: ShadowRoot;
     styles: HTMLStyleElement[];
-    pendingTasks: number;
     idGen?: ReturnType<typeof idGenerator>["getId"];
     internals?: ElementInternals;
-    fakeRoot?: HTMLElement;
   };
   render?(): JSX.Element;
   /**Allows to get a child element from the host with the selector */
@@ -312,13 +314,6 @@ export type EventsType = Record<string, EventDispatcher<unknown>>;
 
 export type EmptyObject = Record<never, never>;
 
-export interface StoreProps<T, Y> {
-  /**Allows to define the store state. */
-  state: T;
-  /**Transactions are functions that notify changes at the end of the transaction. */
-  transactions?: Y;
-}
-
 export type ExtendableElements = keyof HTMLElements;
 
 export type CustomElementEvents<E extends EventsType | undefined> = Readonly<{
@@ -343,8 +338,6 @@ export interface MichiElementOptions {
    * @link https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr
    */
   reflectedAttributes?: AttributesType;
-  /**Transactions are functions that notify changes at the end of the transaction.*/
-  transactions?: MethodsType;
   /**Methods are functions that notify changes at the time of making the change.*/
   methods?: MethodsType;
   /**Function that renders the component.*/
@@ -378,12 +371,6 @@ export interface MichiElementOptions {
    * @link https://developers.google.com/web/updates/2019/02/constructable-stylesheets
    */
   adoptedStyleSheets?: CSSStyleSheet[];
-  /** Allows to create a fake root on the element. This is especially useful to emulate a shadow root if you don't have shadow root. Since it allows you to add children from a parent node
-   * @default
-   * false //if you have shadow root.
-   * true //if you do not
-   */
-  fakeRoot?: boolean;
   /**
    * Allows you to add a Shadow DOM. By default, it uses open mode on Autonomous Custom elements and does not use Shadow DOM on Customized built-in elements. Only the following elements are allowed to use Shadow DOM.
    * @link https://dom.spec.whatwg.org/#dom-element-attachshadow
@@ -419,7 +406,6 @@ export type MichiElementSelf<O extends MichiElementOptions> = O["attributes"] &
   O["reflectedAttributes"] &
   O["cssVariables"] &
   O["reflectedCssVariables"] &
-  O["transactions"] &
   O["methods"] &
   CustomElementEvents<O["events"]> &
   MichiProperties &
@@ -436,13 +422,13 @@ type MichiElementProps<
   S extends HTMLElement,
   Attrs = {
     [k in
-    keyof O["reflectedAttributes"] as KebabCase<k>]: O["reflectedAttributes"][k];
+    keyof O["reflectedAttributes"]as KebabCase<k>]: O["reflectedAttributes"][k];
   } & {
     [k in
-    keyof O["reflectedCssVariables"] as KebabCase<k>]: O["reflectedCssVariables"][k];
+    keyof O["reflectedCssVariables"]as KebabCase<k>]: O["reflectedCssVariables"][k];
   } & {
     [k in
-    keyof O["events"] as k extends string
+    keyof O["events"]as k extends string
     ? `on${Lowercase<k>}`
     : never]?: O["events"][k] extends EventDispatcher<infer D>
     ? (ev: CustomEvent<D>) => unknown
@@ -516,14 +502,6 @@ export interface LifecycleInternals {
   ): void;
 }
 
-export interface Store<
-  T extends object = EmptyObject,
-  Y extends Record<string | symbol, Function> = EmptyObject,
-> extends ObservableLike<string[]> {
-  state: T;
-  transactions: Y;
-}
-
 export interface ElementFactory {
   compare(el: Node, jsx: JSX.Element): boolean;
   create(
@@ -566,25 +544,6 @@ export interface CreateOptions<E extends Element = Element> {
 }
 
 declare global {
-  interface Element {
-    /**
-     * Children are not created or updated. Element creation/update is delegated
-     */
-    $doNotTouchChildren?: boolean;
-  }
-
-  interface ChildNode {
-    /**
-     * An identifier of an item within a list
-     */
-    $key?: string | number;
-    /**
-     * Tells the custom element that this element should be completely ignored on render
-     * Cannot be used on lists
-     */
-    $ignore?: boolean;
-  }
-
   interface Window {
     msCrypto?: Crypto;
   }

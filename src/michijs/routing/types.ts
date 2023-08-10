@@ -40,20 +40,20 @@ export type SyncRoute = {
   component?: JSX.Element;
 } & CommonRouteProps;
 
-export type AsyncRoute = {
-  // if typed properly the type of pages does not work
-  /** The promise to wait */
-  promise: Function;
-  /** The component key (by default is default)*/
-  /**The component to display while the promise is loading */
-  loadingComponent?: JSX.Element;
-} & CommonRouteProps;
+// export type AsyncRoute = {
+//   // if typed properly the type of pages does not work
+//   /** The promise to wait */
+//   promise: Function;
+//   /** The component key (by default is default)*/
+//   /**The component to display while the promise is loading */
+//   loadingComponent?: JSX.Element;
+// } & CommonRouteProps;
 
 // export type RedirectRoute = {
 //     redirectTo?: () => string | URL,
 // }
 
-export type Route = SyncRoute | AsyncRoute; //| RedirectRoute ;
+export type Route = SyncRoute;
 
 export type CreateRouterSearchParamsAndHash = Record<
   string,
