@@ -1,5 +1,5 @@
-import { observe } from "../observe";
-import { Observable, ObserverCallback } from "../../types";
+import { useObserve } from "../useObserve";
+import { ObservableType, ObserverCallback } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 import {
   customMapAndSetClear,
@@ -9,16 +9,15 @@ import { customObjectDelete, customObjectSet } from "./observeCommonObject";
 
 export const observeSet = <T extends Set<unknown>>(
   item: T,
-  initialObservers?: Set<ObserverCallback<unknown>>,
+  initialObservers: ObserverCallback<T>[] = []
 ) => {
-  const proxiedSet = new Set<Observable<unknown>>();
+  const proxiedSet = new Set<ObservableType<unknown>>();
   item.forEach((value) => {
-    proxiedSet.add(observe(value, initialObservers));
+    proxiedSet.add(useObserve(value));
   });
   const newObservable = new ProxiedValue<T>(proxiedSet);
   return new Proxy(newObservable, {
-    set: (target, property: keyof Set<any>, newValue, receiver) =>
-      customObjectSet(target, property, newValue, receiver),
+    set: customObjectSet,
     get: (target, property: keyof Set<any> & "subscribe") => {
       const targetProperty = Reflect.get(target.$value, property);
       const bindedTargetProperty =
@@ -32,7 +31,7 @@ export const observeSet = <T extends Set<unknown>>(
         case "add": {
           return function (newValue) {
             const updateCallback = () => {
-              const observedItem = observe<object>(newValue);
+              const observedItem = useObserve<object>(newValue);
 
               const result = bindedTargetProperty(observedItem);
 

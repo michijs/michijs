@@ -1,14 +1,14 @@
 import { h, createRouter, wait } from "../src";
+import { AsyncComponent } from "../src/michijs/components/AsyncComponent";
 import { Main } from "./pages/Main";
 
 export const { urls, Router, pages } = createRouter({
   performanceTests: {
-    promise: async () =>
-      (await import("./pages/PerformanceTests")).PerformanceTests,
+    component: <AsyncComponent promise={() => import("./pages/PerformanceTests")} />,
     title: "Performance tests Page",
   },
   asyncTests: {
-    promise: async () => (await import("./pages/AsyncTests")).AsyncTests,
+    component: <AsyncComponent promise={() => import("./pages/AsyncTests")} />,
     title: "Async tests",
   },
   searchParamsAndHash: {
@@ -18,21 +18,20 @@ export const { urls, Router, pages } = createRouter({
       complexObjectParam: Object,
     },
     hash: ["#hashTest"],
-    promise: async () =>
-      (await import("./pages/SearchParamsAndHash")).SearchParamsAndHash,
+    component: <AsyncComponent promise={() => import("./pages/SearchParamsAndHash")} />,
     title: "Search params and hash tests",
   },
   counterTests: {
-    promise: async () => (await import("./pages/CounterTests")).CounterTests,
+    component: <AsyncComponent promise={() => import("./pages/CounterTests")} />,
     title: "Counter tests Page",
   },
   i18nTests: {
-    promise: async () => (await import("./pages/I18nTests")).I18nTests,
+    component: <AsyncComponent promise={() => import("./pages/I18nTests")} />,
     title: "I18n tests Page",
   },
   a11yTests: {
     searchParams: { disableFieldset: Boolean },
-    promise: async () => (await import("./pages/A11YTests")).A11yTests,
+    component: <AsyncComponent promise={() => import("./pages/A11YTests")} />,
     title: "A11Y tests Page",
   },
   "/": {
@@ -44,15 +43,19 @@ export const { urls, Router, pages } = createRouter({
 export const { urls: asyncTestsUrls, Router: AsyncTestsRouter } = createRouter(
   {
     test1: {
-      promise: async () => {
-        await wait(5000);
-        const importResult = await import("./SimpleCounter");
-        return importResult.SimpleCounter;
-      },
-      loadingComponent: <h1>loading...</h1>,
+      component: (
+        <AsyncComponent
+          promise={async () => {
+            await wait(5000);
+            const importResult = await import("./SimpleCounter");
+            return importResult.SimpleCounter;
+          }}
+          loadingComponent={<h1>loading...</h1>}
+        />
+      )
     },
     test2: {
-      promise: async () => (await import("./SimpleCounter")).SimpleCounter,
+      component: <AsyncComponent promise={async () => (await import("./SimpleCounter")).SimpleCounter} />,
     },
     test3: {
       component: <div>test</div>,

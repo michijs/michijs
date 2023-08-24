@@ -51,7 +51,7 @@ export function createRouter<R extends Record<string, Route>>(
   );
 
   const RouterProxy: CreateRouterResult<R>["Router"] = (props) => {
-    return <Router {...props} _={{ routes: routes, parentRoute }} />;
+    return <Router {...props} routes={routes} parentRoute={parentRoute} />;
   };
 
   return { urls, Router: RouterProxy, pages } as CreateRouterResult<R>;

@@ -1,5 +1,5 @@
-import { observe } from "../observe";
-import { Observable, ObserverCallback } from "../../types";
+import { useObserve } from "../useObserve";
+import { ObservableType, ObserverCallback } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 import {
   customMapAndSetClear,
@@ -7,18 +7,19 @@ import {
 } from "./mapAndSetCommonHandlers";
 import { customObjectDelete, customObjectSet } from "./observeCommonObject";
 
-export const observeMap = <T extends Map<unknown, any>>(
+export const observeMap = <E, T extends Map<unknown, E>>(
   item: T,
-  initialObservers?: Set<ObserverCallback<unknown>>,
+  initialObservers: ObserverCallback<T>[] = []
 ) => {
-  const proxiedMap = new Map<unknown, Observable<any>>();
+  const newInitialObservers: ObserverCallback<any>[] = [...initialObservers, () => newObservable.notifyCurrentValue()]
+  const proxiedMap = new Map<unknown, ObservableType<E>>();
   item.forEach((value, key) =>
-    proxiedMap.set(key, observe(value, initialObservers)),
+    proxiedMap.set(key, useObserve(value, newInitialObservers)),
   );
 
-  const newObservable = new ProxiedValue(proxiedMap);
+  const newObservable = new ProxiedValue<T>(proxiedMap as T, initialObservers);
   return new Proxy(newObservable, {
-    set: customObjectSet(initialObservers),
+    set: customObjectSet(newInitialObservers),
     get: (target, property) => {
       if (property in target) return Reflect.get(target, property);
       else {
@@ -34,12 +35,12 @@ export const observeMap = <T extends Map<unknown, any>>(
           case "set": {
             return function (key, newValue) {
               const hasOldValue = target.$value.has(key);
-              const observedItem = observe<object>(newValue);
+              const observedItem = useObserve<object>(newValue, newInitialObservers);
 
               if (hasOldValue)
                 // Intentionally ignoring receiver - it ignores target.$value as the target and takes target
                 return Reflect.set(
-                  target.$value.get(key),
+                  target.$value.get(key)!,
                   "$value",
                   observedItem.$value,
                 );
@@ -58,6 +59,6 @@ export const observeMap = <T extends Map<unknown, any>>(
         }
       }
     },
-    deleteProperty: customObjectDelete(),
-  }) as unknown as Observable<T>;
+    deleteProperty: customObjectDelete,
+  }) as unknown as ObservableType<T>;
 };

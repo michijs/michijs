@@ -1,5 +1,5 @@
 import { AnyObject } from "../types";
-import { observe } from "./observe";
+import { useObserve } from "./useObserve";
 
 const exampleValue = 1;
 const exampleValue2 = 2;
@@ -13,7 +13,7 @@ const objectTests = (initialValue: () => AnyObject | unknown[]) => {
       nonProxiedObject = undefined;
       nonProxiedObject = initialValue();
       object = undefined;
-      object = observe({
+      object = useObserve({
         item: initialValue(),
         onChange: mockCallback,
         shouldValidatePropertyChange: () => true,
@@ -80,7 +80,7 @@ describe("Observe tests", () => {
     let map: Map<any, any>;
     beforeEach(() => {
       nonProxiedMap = new Map();
-      map = observe({
+      map = useObserve({
         item: new Map(),
         onChange: mockCallback,
         shouldValidatePropertyChange: () => true,
@@ -132,7 +132,7 @@ describe("Observe tests", () => {
     let set: Set<any>;
     beforeEach(() => {
       nonProxiedSet = new Set();
-      set = observe({
+      set = useObserve({
         item: new Set(),
         onChange: mockCallback,
         shouldValidatePropertyChange: () => true,
@@ -184,7 +184,7 @@ describe("Observe tests", () => {
     let date: Date;
     beforeEach(() => {
       nonProxiedDate = new Date();
-      date = observe({
+      date = useObserve({
         item: new Date(),
         onChange: mockCallback,
         shouldValidatePropertyChange: () => true,

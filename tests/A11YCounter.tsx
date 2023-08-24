@@ -3,6 +3,7 @@ import {
   EventDispatcher,
   h,
   ElementInternals,
+  useComputedObserve,
 } from "../src";
 import { counterStyle } from "./shared/counterStyle";
 
@@ -43,24 +44,17 @@ export const A11YCounter = createCustomElement("a11y-counter", {
   events: {
     countChanged: new EventDispatcher<number>(),
   },
-  observe: {
-    value() {
-      this.countChanged(this.value);
-    },
-    count() {
-      this.value = this.count;
-    },
-  },
   adoptedStyleSheets: [counterStyle],
   render() {
+    this.value.subscribe?.(this.countChanged);
+    this.count.subscribe?.(() => this.value = this.count);
+    const errorMessage = useComputedObserve(() => this.value > 0 ? undefined : "Value should be greater than 0", [this.value])
     return (
       <>
         <ElementInternals
           ariaValueText={this.value.toString()}
           formValue={this.value.toString()}
-          errorMessage={
-            this.value > 0 ? undefined : "Value should be greater than 0"
-          }
+          errorMessage={errorMessage}
         />
         <button type="button" onpointerup={this.decrementCount}>
           -

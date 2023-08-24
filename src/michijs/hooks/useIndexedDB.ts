@@ -99,7 +99,7 @@ function initDb<T extends AnyObject>(
   });
 }
 
-export function indexedDBObservable<T extends AnyObject>(
+export function useIndexedDB<T extends AnyObject>(
   name: string,
   objectsStore: ObjectStore<T>,
   version = 1,

@@ -1,9 +1,10 @@
-import { observe } from "../..";
-import { Observable } from "../types";
+import { useObserve } from "../..";
+import { ObservableType, ObserverCallback } from "../types";
 
-export function setObservableValue<T extends Observable<unknown>>(
+export function setObservableValue<T extends ObservableType<any>>(
   object1: T,
   object2: any,
+  initialObservers?: ObserverCallback<T>[]
 ): boolean {
   const object1Value = object1?.valueOf();
   const object2Value = object2?.valueOf();
@@ -13,35 +14,32 @@ export function setObservableValue<T extends Observable<unknown>>(
   const type = typeof object1Value;
   const areDifferentTypes = type !== typeof object2Value;
   if (areDifferentTypes) {
-    Reflect.set(object1, "$value", observe(object2).$value);
-    return true;
+    return Reflect.set(object1, "$value", useObserve(object2, initialObservers).$value);
   }
   switch (type) {
     case "function": {
-      Reflect.set(object1, "$value", object2Value);
+      return Reflect.set(object1, "$value", object2Value);
     }
     case "object": {
       if (object1Value || object2Value) {
         if (Array.isArray(object1Value)) {
-          const nonNullObject1 = object1Value ?? observe([]);
-          nonNullObject1.length = object2Value.length;
-          object2Value.forEach((x, i) => (nonNullObject1[i] = x));
+          (object1 as unknown as []).length = object2Value.length;
+          object2Value.forEach((x, i) => (object1[i] = x));
         } else {
-          const nonNullObject1 = object1Value ?? observe({});
-          for (const key in Object.keys({ ...object1Value, ...object2Value })) {
-            nonNullObject1[key] = object2Value[key];
+          for (const key in { ...object1Value, ...object2Value }) {
+            object1[key] = object2Value[key];
           }
         }
+        return true;
         // TODO: add set / map etc
       } else {
-        Reflect.set(object1, "$value", observe(object2).$value);
+        return Reflect.set(object1, "$value", useObserve(object2, initialObservers).$value);
       }
     }
     default: {
-      Reflect.set(object1, "$value", observe(object2).$value);
+      return Reflect.set(object1, "$value", object2);
     }
   }
-  return true;
 }
 // export function deepEqual(object1Value, object2Value) {
 //   const result = deepEqual2(object1Value, object2Value)

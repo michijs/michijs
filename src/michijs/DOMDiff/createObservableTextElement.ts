@@ -4,9 +4,9 @@ import { createTextElement } from "./createTextElement";
 export const createObservableTextElement = (
   jsx: ObservableNonNullablePrimitiveType,
 ) => {
-  const textNode = createTextElement(jsx);
+  const textNode = createTextElement(jsx.valueOf());
   jsx.subscribe?.(
-    (newValue) => (textNode.textContent = newValue?.toString() ?? ""),
+    (newValue) => (textNode.textContent = (typeof newValue === 'object' ? JSON.stringify(newValue) : newValue?.toString()) ?? ""),
   );
   return textNode;
 };

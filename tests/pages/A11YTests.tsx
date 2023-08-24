@@ -6,7 +6,7 @@ interface CustomForm {
   counter: number;
 }
 
-export const A11yTests = pages.a11yTests(({ searchParams }) => (
+const A11yTests = pages.a11yTests(({ searchParams }) => (
   <form
     onsubmit={(e) => {
       e.preventDefault();
@@ -29,3 +29,5 @@ export const A11yTests = pages.a11yTests(({ searchParams }) => (
     <button type="reset">Reset</button>
   </form>
 ));
+
+export default A11yTests

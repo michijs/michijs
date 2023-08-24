@@ -180,7 +180,7 @@ export interface MichiProperties
     > {
   // props?: unknown,
   readonly $michi: {
-    store: Observable<AttributesType>;
+    store: ObservableType<AttributesType>;
     alreadyRendered: boolean;
     shadowRoot?: ShadowRoot;
     styles: HTMLStyleElement[];
@@ -202,18 +202,18 @@ export interface MichiCustomElement extends HTMLElement, MichiProperties {}
 
 export type ObservableValue<T> = T & Partial<ProxiedValue<T>>;
 
-export type Observable<T> = (T extends Map<infer K, infer V>
-  ? Map<K, Observable<V>>
+export type ObservableType<T> = (T extends Map<infer K, infer V>
+  ? Map<K, ObservableType<V>>
   : T extends object
   ? {
-      [K in keyof T]: T[K] extends Function ? T[K] : Observable<T[K]>;
+      [K in keyof T]: T[K] extends Function ? T[K] : ObservableType<T[K]>;
     }
   : T extends undefined
   ? unknown
-  : T) &
-  Partial<ProxiedValue<T>>;
+  : ObservableValue<T>) &
+  ObservableValue<T>;
 
-export type ObservableNonNullablePrimitiveType = Observable<
+export type ObservableNonNullablePrimitiveType = ObservableType<
   bigint | string | number | boolean
 >;
 export type NonNullablePrimitiveType =
@@ -409,10 +409,10 @@ export type ExtendsAttributes<
   O extends ExtendsObject<ExtendableElements> | undefined,
 > = O extends ExtendsObject<infer T> ? HTMLElements[T] : HTMLElements["div"];
 
-export type MichiElementSelf<O extends MichiElementOptions> = O["attributes"] &
+export type MichiElementSelf<O extends MichiElementOptions> = ObservableType<O["attributes"] &
   O["reflectedAttributes"] &
   O["cssVariables"] &
-  O["reflectedCssVariables"] &
+  O["reflectedCssVariables"]> &
   O["methods"] &
   CustomElementEvents<O["events"]> &
   MichiProperties &

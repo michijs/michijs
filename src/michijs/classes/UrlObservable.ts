@@ -3,7 +3,7 @@ import { ObserverCallback } from "../types";
 import { Observable } from "./Observable";
 
 class UrlObservableSingleton extends Observable<Event | PopStateEvent> {
-  constructor(initialObservers?: Set<ObserverCallback<Event | PopStateEvent>>) {
+  constructor(initialObservers?: ObserverCallback<Event | PopStateEvent>[]) {
     super(initialObservers);
     window.addEventListener(WINDOW_URL_CHANGE_EVENTS.PUSH_STATE, this.notify);
     window.addEventListener("popstate", this.notify);

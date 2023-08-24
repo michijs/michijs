@@ -1,11 +1,14 @@
 import { ObservableLike, ObserverCallback } from "../types";
 
 export class Observable<T> implements ObservableLike<T> {
-  observers: Set<ObserverCallback<T>> | undefined;
+  // Intentional explicit null value - it breaks proxy otherwise
+  observers: Set<ObserverCallback<T>> | null = null;
 
-  constructor(initialObservers?: Set<ObserverCallback<T>>) {
-    this.observers = initialObservers;
+  constructor(initialObservers?: ObserverCallback<T>[]) {
+    if (initialObservers)
+      this.observers = new Set(initialObservers);
   }
+
   notify(value) {
     this.observers?.forEach((observer) => {
       observer(value);

@@ -1,7 +1,7 @@
 import { Route, UrlFunction } from "../routing/types";
 import { urlFn } from "../routing/createRouter";
 import { CreateOptions, ExtendableComponentWithoutChildren, FC, SingleJSXElement } from "../types";
-import { UrlObservable, computedObserve, create } from "../..";
+import { UrlObservable, useComputedObserve, create } from "../..";
 import { VirtualFragment } from "../classes/VirtualFragment";
 import { bindObservable } from "../hooks/bindObservable";
 
@@ -16,7 +16,7 @@ export const Router = <const T = FC>({ as: asTag, routes, parentRoute, ...attrs 
     attrs
   } as SingleJSXElement) as ChildNode & ParentNode : new VirtualFragment();
 
-  const matchedRoute = computedObserve(() => {
+  const matchedRoute = useComputedObserve(() => {
     if (routes) {
       const routeFound = Object.keys(routes).find((key) =>
         UrlObservable.matches(urlFn(key, parentRoute)().pathname, true),
@@ -30,10 +30,12 @@ export const Router = <const T = FC>({ as: asTag, routes, parentRoute, ...attrs 
     // const newCache = el.childNodes.length > 0 ? Array.from(el.childNodes) : undefined
     el.textContent = '';
 
-    if (newMatchedRoute) {
-      const { title, component } = newMatchedRoute;
+    if (newMatchedRoute?.$value) {
+      const { title, component } = newMatchedRoute.$value;
       if (title)
         document.title = title;
+
+        // TODO: add search params and hash
 
       el.append(create(component, options))
     }

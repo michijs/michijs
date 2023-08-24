@@ -1,4 +1,4 @@
-import { idGenerator, observe } from "../hooks";
+import { idGenerator, useObserve } from "../hooks";
 import {
   CSSObject,
   MichiCustomElement,
@@ -56,7 +56,7 @@ export function createCustomElement<
     implements MichiCustomElement
   {
     $michi: MichiCustomElement["$michi"] = {
-      store: observe({
+      store: useObserve({
         ...attributes,
         ...reflectedAttributes,
         ...cssVariables,

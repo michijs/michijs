@@ -1,9 +1,9 @@
-import { Observable, ObserverCallback } from "../../types";
+import { ObservableType, ObserverCallback } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 
 export const observeDate = <T extends Date>(
   item: T,
-  initialObservers?: Set<ObserverCallback<unknown>>,
+  initialObservers?: ObserverCallback<T>[]
 ) => {
   let clone;
   try {
@@ -39,5 +39,5 @@ export const observeDate = <T extends Date>(
           : targetProperty;
       }
     },
-  }) as unknown as Observable<T>;
+  }) as unknown as ObservableType<T>;
 };

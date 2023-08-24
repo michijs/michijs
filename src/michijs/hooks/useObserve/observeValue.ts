@@ -3,5 +3,5 @@ import { ObserverCallback } from "../../types";
 
 export const observeValue = <T extends unknown>(
   item: T,
-  initialObservers?: Set<ObserverCallback<unknown>>,
+  initialObservers?: ObserverCallback<T>[]
 ) => new ProxiedValue(item, initialObservers);

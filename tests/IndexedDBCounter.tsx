@@ -2,12 +2,13 @@ import {
   h,
   Host,
   EventDispatcher,
-  indexedDBObservable,
+  useIndexedDB,
   createCustomElement,
+  useComputedObserve,
 } from "../src";
 import { counterStyle } from "./shared/counterStyle";
 
-const storedCount = indexedDBObservable<{
+const storedCount = useIndexedDB<{
   counter: {
     count: number;
     id: number;
@@ -18,16 +19,17 @@ const storedCount = indexedDBObservable<{
   },
 });
 
+const count = useComputedObserve(async () => {
+  return (await storedCount.counter?.get(1))?.count ?? 0
+}, [storedCount]) 
+
 export const IndexedDBCounter = createCustomElement("indexed-db-counter", {
-  attributes: {
-    count: (await storedCount.counter?.get(1))?.count ?? 0,
-  },
   methods: {
     decrementCount() {
-      storedCount.counter?.put({ count: this.count - 1, id: 1 });
+      storedCount.counter?.put({ count: count - 1, id: 1 });
     },
     incrementCount() {
-      storedCount.counter?.put({ count: this.count + 1, id: 1 });
+      storedCount.counter?.put({ count: count + 1, id: 1 });
     },
   },
   events: {
@@ -35,19 +37,16 @@ export const IndexedDBCounter = createCustomElement("indexed-db-counter", {
   },
   observe: {
     async storedCount() {
-      this.count = (await storedCount.counter?.get(1))?.count ?? 0;
-      this.countChanged(this.count);
+      count = (await storedCount.counter?.get(1))?.count ?? 0;
+      this.countChanged(count);
     },
-  },
-  subscribeTo: {
-    storedCount,
   },
   adoptedStyleSheets: [counterStyle],
   render() {
     return (
-      <Host count={this.count}>
+      <Host count={count}>
         <button onpointerup={this.decrementCount}>-</button>
-        <span>{this.count}</span>
+        <span>{count}</span>
         <button onpointerup={this.incrementCount}>+</button>
       </Host>
     );
