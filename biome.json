@@ -1,0 +1,44 @@
+{
+  "files": {
+    "ignore": ["**/*.json"]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentSize": 2
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "linter": {
+    "ignore": ["**/*.json"],
+    "enabled": true,
+    "rules": {
+      "a11y": {
+        "useValidAnchor": "off",
+        "useButtonType": "off"
+      },
+      "complexity": {
+        "useSimplifiedLogicExpression": "off"
+      },
+      "suspicious": {
+        "noEmptyInterface": "off",
+        "noAssignInExpressions": "off",
+        "noExplicitAny": "off",
+        "noDoubleEquals": "off"
+      },
+      "style": {
+        "useSingleVarDeclarator": "off",
+        "useBlockStatements": "off",
+        "noNonNullAssertion": "off",
+        "noImplicitBoolean": "off"
+      },
+      "correctness": {
+        "noUnreachableSuper": "off"
+      },
+      "performance": {
+        "noDelete": "off"
+      }
+    }
+  }
+}
