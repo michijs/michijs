@@ -7,6 +7,8 @@ import {
   h,
   useObserve,
   wait,
+  useStyleSheet,
+  css,
 } from "../src";
 import { AsyncComponent } from "../src/michijs/components/AsyncComponent";
 // const h = {
@@ -80,6 +82,7 @@ import { AsyncComponent } from "../src/michijs/components/AsyncComponent";
 // console.log(tests, A.subscribe);
 
 const level2InitialValue = {
+  color: 'red',
   date: new Date(),
   map: new Map<string, number>(),
   level1: {
@@ -99,6 +102,10 @@ const computed = useComputedObserve(
   [number],
 );
 
+for (const key in store.$value) {
+  console.log(key)
+}
+
 
 // store.level2.level1.subscribe?.((newValue) => console.log("level1", newValue));
 // store.level2.level1.undefined.subscribe?.((val) =>
@@ -113,13 +120,13 @@ const computed = useComputedObserve(
 
 
 // store.level2.level1.number = 2;
-store.level2.date.setMonth(store.level2.date.getMonth() + 1);
-store.level2.map.set("xd", 1);
-store.level2.map
-  .get("xd")
-  ?.subscribe?.((newValue) => console.log("map xd key changed", newValue));
-store.level2.map.set("xd", 2);
-store.level2.map.clear();
+// store.level2.date.setMonth(store.level2.date.getMonth() + 1);
+// store.level2.map.set("xd", 1);
+// store.level2.map
+//   .get("xd")
+//   ?.subscribe?.((newValue) => console.log("map xd key changed", newValue));
+// store.level2.map.set("xd", 2);
+// store.level2.map.clear();
 
 const a = create(
   <div
@@ -128,20 +135,21 @@ const a = create(
     }}
     // id={number}
     onclick={() => {
-      // console.log(JSON.stringify(store.level2))
+      console.log(store.level2.color.valueOf() === 'red')
       store.level2 = {
         ...level2InitialValue,
+        color: store.level2.color.valueOf() === 'red' ? 'blue' : 'red',
         // ...store.level2,
         level1: {
           number: store.level2.level1.number + 1,
           undefined: 123,
         },
       };
-      // store.level2.level1.number++;
+      store.level2.level1.number++;
     }}
   >
     {store.level2}
-    <div>
+    <div class="xd">
       asdf: {number}
     </div>
     <If
@@ -162,6 +170,13 @@ const a = create(
 );
 
 document.body.append(a);
+
+
+// document.adoptedStyleSheets = [css`body{
+//   background:red; 
+//   & div{color:red} 
+//   }`]
+document.adoptedStyleSheets = [useStyleSheet({ body: { background: store.level2.color, '& div': { color: 'red' } } })]
 
 // document.body.append(fragment)
 // TODO: set is broken, add arrays subscription return values

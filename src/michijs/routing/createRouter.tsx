@@ -1,5 +1,7 @@
 import { Router } from "../components/Router";
 import { h } from "../h";
+import { useSearchParams } from "../hooks";
+import { useHash } from "../hooks";
 import { formatToKebabCase } from "../utils/formatToKebabCase";
 import { PagesFunction, CreateRouterResult, UrlFunction, Route } from "./types";
 import { setSearchParam } from "./utils/setSearchParam";
@@ -44,7 +46,9 @@ export function createRouter<R extends Record<string, Route>>(
     {
       get(_, _property) {
         return (fn: PagesFunction<any, any>) => {
-          return fn;
+          const hash = useHash();
+          const searchParams = useSearchParams()
+          return () => fn({hash, searchParams});
         };
       },
     },

@@ -1,7 +1,7 @@
 import { CssDeclaration, AnyObject } from "../types";
 import { formatToKebabCase } from "../utils";
 
-export function declareCssVariables<T extends AnyObject>(
+export function useCssVariables<T extends AnyObject>(
   parent = "-",
 ): CssDeclaration<T> {
   return new Proxy(
@@ -21,7 +21,7 @@ export function declareCssVariables<T extends AnyObject>(
           //   else
           //     return parent[p]
         } else
-          return declareCssVariables(
+          return useCssVariables(
             `${parent}-${formatToKebabCase(p.toString())}`,
           );
       },

@@ -1,9 +1,9 @@
 import { Route, UrlFunction } from "../routing/types";
 import { urlFn } from "../routing/createRouter";
 import { CreateOptions, ExtendableComponentWithoutChildren, FC, SingleJSXElement } from "../types";
-import { UrlObservable, useComputedObserve, create } from "../..";
+import { HistoryManager, useComputedObserve, create } from "../..";
 import { VirtualFragment } from "../classes/VirtualFragment";
-import { bindObservable } from "../hooks/bindObservable";
+import { bindObservable } from "../utils";
 
 export type RouterProps<T> = ExtendableComponentWithoutChildren<T> & {
   routes: Record<string, Route>,
@@ -12,33 +12,30 @@ export type RouterProps<T> = ExtendableComponentWithoutChildren<T> & {
 
 export const Router = <const T = FC>({ as: asTag, routes, parentRoute, ...attrs }: RouterProps<T>, options: CreateOptions) => {
   const el = asTag ? create({
-    tag: asTag,
+    jsxTag: asTag,
     attrs
   } as SingleJSXElement) as ChildNode & ParentNode : new VirtualFragment();
 
   const matchedRoute = useComputedObserve(() => {
-    if (routes) {
-      const routeFound = Object.keys(routes).find((key) =>
-        UrlObservable.matches(urlFn(key, parentRoute)().pathname, true),
-      );
-      if (routeFound) return routes[routeFound];
-    }
-    return null;
-  }, [UrlObservable]);
+    return Object.keys(routes).find((key) =>
+      HistoryManager.matches(urlFn(key, parentRoute)().pathname, true),
+    );
+  }, [HistoryManager]);
 
   bindObservable(matchedRoute, (newMatchedRoute) => {
     // const newCache = el.childNodes.length > 0 ? Array.from(el.childNodes) : undefined
     el.textContent = '';
 
-    if (newMatchedRoute?.$value) {
-      const { title, component } = newMatchedRoute.$value;
+    if (newMatchedRoute) {
+      const { title, component } = routes[newMatchedRoute];
       if (title)
         document.title = title;
 
-        // TODO: add search params and hash
+      // TODO: add search params and hash
 
       el.append(create(component, options))
     }
   })
-  return el;
+
+  return el.valueOf();
 }

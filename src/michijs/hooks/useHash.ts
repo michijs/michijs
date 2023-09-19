@@ -1,14 +1,18 @@
-import { useComputedObserve } from ".";
-import { goTo } from "../routing/goTo";
-import { UrlObservable } from "../classes/UrlObservable";
+import { useComputedObserve } from "./useComputedObserve";
+import { HistoryManager, ObservableFromEventListener } from "../classes";
+import { ObservableType } from "../types";
 
-export const useHash = useComputedObserve(() => ({
+const hashListener = new ObservableFromEventListener(window, 'hashchange')
+
+const Hash = useComputedObserve(() => (!!location.hash ? {
   [location.hash]: true,
-}), [UrlObservable])
+}: {}), [hashListener]);
 
-useHash.subscribe?.((newValue) => {
-  const [newHash] = newValue ? Object.entries(newValue).find(([_, value]) => value) ?? [''] : [''];
+export const useHash = <T extends string = string>() => Hash as ObservableType<Partial<Record<T, boolean>>>
+
+Hash.subscribe?.((newValue) => {
+  const [newHash] = newValue ? Object.entries(newValue).find(([_, value]) => value.valueOf()) ?? [''] : [''];
   const newUrl = new URL(location.href);
   newUrl.hash = newHash;
-  goTo(newUrl);
+  HistoryManager.push(newUrl);
 })

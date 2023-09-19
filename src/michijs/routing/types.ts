@@ -55,14 +55,6 @@ export type SyncRoute = {
 
 export type Route = SyncRoute;
 
-export type CreateRouterSearchParamsAndHash = Record<
-  string,
-  {
-    searchParams?: SearchParams;
-    hash?: Hash;
-  }
->;
-
 export type CreateRouterResult<R extends Record<string, Route>> = {
   urls: {
     [k in keyof R]: UrlFunction<R[k]["searchParams"], R[k]["hash"]>;

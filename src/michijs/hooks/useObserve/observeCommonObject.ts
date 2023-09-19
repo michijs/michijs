@@ -17,7 +17,13 @@ export const customObjectSet = <T>(initialObservers: ObserverCallback<T>[]): Com
       //   return Reflect.set(target.$value[property], '$value', observedItem.$value)
       // console.log(target, target.$value, target.$value[property])
 
-      return setObservableValue(target.$value[property], newValue, initialObservers);
+      if (target.$value[property])
+        return setObservableValue(target.$value[property], newValue, initialObservers);
+      else {
+        const result = Reflect.set(target.$value, property, useObserve(newValue, initialObservers));
+        target.notify(target.$value)
+        return result
+      }
     }
     return false;
   };
@@ -35,10 +41,10 @@ export const customObjectDelete: CommonObjectProxyHandler<any>["deleteProperty"]
     return false;
   };
 
-export const observeCommonObject = <T extends object>(
+export function observeCommonObject<T extends object>(
   item: T,
   initialObservers: ObserverCallback<T>[] = []
-): ObservableType<T> => {
+): ObservableType<T> {
   const newInitialObservers = [...initialObservers, () => {
     newObservable.notifyCurrentValue()
   }]
@@ -54,7 +60,15 @@ export const observeCommonObject = <T extends object>(
     set: customObjectSet(newInitialObservers),
     deleteProperty: customObjectDelete,
     get(target, p, receiver) {
-      return Reflect.get(p in target ? target : target.$value, p, receiver);
+      if (p in target)
+        return Reflect.get(target, p, receiver);
+      else if (p in target.$value)
+        return Reflect.get(target.$value, p, receiver)
+      else {
+        console.log(target.$value, p)
+        Reflect.set(target.$value, p, useObserve(undefined, newInitialObservers), receiver)
+      }
+      return Reflect.get(target.$value, p, receiver);
     },
   }) as unknown as ObservableType<T>;
 };

@@ -54,15 +54,15 @@ type PromisableTypedIDBObjectStore<T extends AnyObject> = {
   [k in keyof TypedIDBObjectStore<T>]: TypedIDBObjectStore<T>[k] extends (
     ...args: any
   ) => any
-    ? (
-        ...args: Parameters<TypedIDBObjectStore<T>[k]>
-      ) => Promise<
-        | (ReturnType<TypedIDBObjectStore<T>[k]> extends IDBRequest<infer R>
-            ? R
-            : ReturnType<TypedIDBObjectStore<T>[k]>)
-        | null
-      >
-    : Promise<TypedIDBObjectStore<T>[k]>;
+  ? (
+    ...args: Parameters<TypedIDBObjectStore<T>[k]>
+  ) => Promise<
+    | (ReturnType<TypedIDBObjectStore<T>[k]> extends IDBRequest<infer R>
+      ? R
+      : ReturnType<TypedIDBObjectStore<T>[k]>)
+    | null
+  >
+  : Promise<TypedIDBObjectStore<T>[k]>;
 };
 
 type IndexeddbObservableResult<T extends AnyObject> = {
@@ -114,11 +114,11 @@ export function useIndexedDB<T extends AnyObject>(
 
   const dbPromise = initDb(name, objectsStore, version);
 
-  return new Proxy({} as unknown as IndexeddbObservableResult<T>, {
-    get(_, p: string) {
-      if (Object.keys(observable).includes(p)) {
-        return observable[p];
-      }
+  return new Proxy(observable as unknown as IndexeddbObservableResult<T>, {
+    get(target, p: string, receiver) {
+      if (p in target)
+        return Reflect.get(target, p, receiver)
+
       return new Proxy(
         {},
         {

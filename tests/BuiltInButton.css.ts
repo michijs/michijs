@@ -1,6 +1,6 @@
-import { createStyleSheet } from "../src";
+import { useStyleSheet } from "../src";
 
-export const buttonStyle = createStyleSheet({
+export const buttonStyle = useStyleSheet({
   'button[is="built-in-button"]': {
     display: "block",
     backgroundColor: "orange",

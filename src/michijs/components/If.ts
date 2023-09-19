@@ -1,6 +1,6 @@
 import { create } from "../DOMDiff";
-import { VirtualFragment } from "../classes/VirtualFragment";
-import { bindObservable } from "../hooks/bindObservable";
+import { VirtualFragment } from "../classes";
+import { bindObservable } from "../utils";
 import {
   CreateOptions,
   ExtendableComponentWithoutChildren,
@@ -21,7 +21,7 @@ export const If = <const T = FC>(
 ) => {
   const el = asTag
     ? (create({
-        tag: asTag,
+        jsxTag: asTag,
         attrs,
       } as SingleJSXElement) as ChildNode & ParentNode)
     : new VirtualFragment();

@@ -2,7 +2,6 @@ import {
   CreateOptions,
   ExtendableComponentWithoutChildren,
   FC,
-  GetElementProps,
   SingleJSXElement,
 } from "../..";
 import { create } from "../DOMDiff";
@@ -54,7 +53,7 @@ export class ElementList<V> implements ElementListInterface<V> {
   ) => {
     const el = asTag
       ? (create({
-          tag: asTag,
+          jsxTag: asTag,
           attrs,
         } as SingleJSXElement) as ParentNode)
       : new VirtualFragment();

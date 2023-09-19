@@ -20,7 +20,7 @@ export function useStorage<T extends object>(
   }
   const newObservable = useObserve<T>(Object.keys(item).reduce((previousValue, key) => ({ ...previousValue, [key]: getStorageValue(key) }), {} as T));
 
-  Object.entries(newObservable).forEach(([key, value]) => {
+  Object.entries(newObservable.valueOf()).forEach(([key, value]) => {
     value?.subscribe?.((newValue) => {
       storage.setItem(key, JSON.stringify(newValue));
     })
@@ -29,9 +29,6 @@ export function useStorage<T extends object>(
   const windowObservable = new ObservableFromEventListener(window, "storage");
 
   windowObservable.subscribe((ev) => {
-
-    // TODO: Validate which storage and window
-    console.log(ev?.currentTarget, ev?.currentTarget === window)
     if (ev?.key && Object.keys(item).includes(ev.key)) newObservable[ev.key] = getStorageValue(ev.key);
   })
 

@@ -381,7 +381,7 @@ It allows to:
 Create a component whose content will load after the promise ends. In the meantime you can choose to show a load component or not show anything.
 
 ### Link
-Provides the ability to move around the web page without reloading the page. It uses the same attributes as an anchor tag but also allows the use of URL objects. Uses the goTo method.
+Provides the ability to move around the web page without reloading the page. It uses the same attributes as an anchor tag but also allows the use of URL objects. Uses the HistoryManager.push method.
 
 ## Custom element methods
 ### child
@@ -550,7 +550,7 @@ The intention of using a custom routing tool is to avoid the use of strings to r
 
 ```js
 const Redirect = () => {
-  goTo(urls.syncRoute())
+  HistoryManager.push(urls.syncRoute())
   // Will generate and go to this url: /sync-route
   return <></>
 }

@@ -1,16 +1,17 @@
 import { CSSObject } from "../types";
 import { valueIsCSSObject } from "../typeWards/valueIsCSSObject";
 
-export const cssVariablesFromCssObject = (
+export const convertCssObjectToCssVariablesObject = (
   cssObject: CSSObject,
   properties: string[] = [],
-): Record<string, string> => {
+): CSSObject => {
   let obj = {};
-  Object.entries(cssObject).forEach(([key, value]) => {
+  Object.keys(cssObject.valueOf()).forEach(key => {
+    const value = cssObject[key];
     if (valueIsCSSObject(value))
       obj = {
         ...obj,
-        ...cssVariablesFromCssObject(value, properties.concat(key)),
+        ...convertCssObjectToCssVariablesObject(value, properties.concat(key)),
       };
     else
       obj[

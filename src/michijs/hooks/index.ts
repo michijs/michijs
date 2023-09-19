@@ -1,6 +1,8 @@
-export { useStorage } from "./useStorage";
-export { useComputedObserve } from "./useComputedObserve";
 export { useObserve } from "./useObserve";
+export { useComputedObserve } from "./useComputedObserve";
+export { useAsyncComputedObserve } from "./useAsyncComputedObserve";
+export { useHash } from "./useHash";
+export { useStorage } from "./useStorage";
 export { usePureFunction } from "./usePureFunction";
 export { useIndexedDB } from "./useIndexedDB";
 export { useSearchParams } from "./useSearchParams";

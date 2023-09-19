@@ -1,29 +1,30 @@
 import type { TypedEvent } from "@michijs/htmltype";
-import { createCustomElement, h, I18n } from "../../src";
+import { createCustomElement, h, I18n, useStorage } from "../../src";
 import en from "./i18nTests/en.json";
 
-const supportedLanguages = [
+type SupportedLanguages = "es" | "en";
+
+const supportedLanguages: [{ key: SupportedLanguages, label: string }] = [
   { key: "en", label: "English" },
   { key: "es", label: "Español" },
 ];
 
-const translator = new I18n<"es" | "en">(localStorage.getItem("lang"));
+const languageStorage = useStorage({
+  lang: 'en' as SupportedLanguages
+})
+
+const translator = new I18n<SupportedLanguages>(languageStorage.lang);
 
 const t = await translator.createTranslation({
   es: () => import("./i18nTests/es.json"),
   en,
 });
 
-translator.subscribe(() => {
-  if (translator.currentLanguage)
-    localStorage.setItem("lang", translator.currentLanguage);
-});
-
 const I18nTests = createCustomElement("i18n-tests", {
   methods: {
     onChangeLanguage(ev: TypedEvent<HTMLSelectElement>) {
       if (ev.target)
-        translator.currentLanguage = ev.target.value as "es" | "en";
+        languageStorage.lang = ev.target.value as SupportedLanguages
     },
   },
   render() {

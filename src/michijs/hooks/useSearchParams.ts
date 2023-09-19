@@ -1,7 +1,8 @@
-import { useComputedObserve } from ".";
-import { goTo } from "../routing/goTo";
+import { useComputedObserve } from "./useComputedObserve";
+import { HistoryManager } from "../classes/HistoryManager";
 import { setSearchParam } from "../routing/utils/setSearchParam";
-import { UrlObservable } from "../classes/index";
+import { ObservableType } from "../types";
+// // import { setSearchParam } from "../routing/utils/setSearchParam";
 
 export const getSearchParamsValue = () => {
   const initialSearchParamsValue: Record<string, unknown> = {};
@@ -15,13 +16,25 @@ export const getSearchParamsValue = () => {
   return initialSearchParamsValue;
 };
 
-export const useSearchParams = useComputedObserve(getSearchParamsValue, [UrlObservable])
+const SearchParams = useComputedObserve(() => getSearchParamsValue(), [HistoryManager]);
 
-Object.entries(useSearchParams).forEach(([key, value]) => {
-  value?.subscribe?.((newValue) => {
-    const newUrl = new URL(location.href);
-    const splittedKey = key.split(".")[1];
-    setSearchParam(newUrl, splittedKey, newValue);
-    goTo(newUrl);
+export function useSearchParams<T extends Record<string, unknown> = Record<string, unknown>>(): ObservableType<T> { return SearchParams as unknown as ObservableType<T> };
+
+
+SearchParams.subscribe?.((newValue) => {
+  console.log(newValue)
+  const newUrl = new URL(location.href);
+  Object.keys(newValue).forEach(x => {
+    setSearchParam(newUrl, x, newValue[x]);
   })
+  HistoryManager.push(newUrl);
 })
+
+// Object.entries(SearchParams).forEach(([key, value]) => {
+//   value?.subscribe?.((newValue) => {
+//     const newUrl = new URL(location.href);
+//     const splittedKey = key.split(".")[1];
+//     setSearchParam(newUrl, splittedKey, newValue);
+//     HistoryManager.push(newUrl);
+//   })
+// })

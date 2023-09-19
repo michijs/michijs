@@ -1,7 +1,7 @@
 import type { CSSProperties } from "@michijs/htmltype";
 import { setStyleProperty } from "./setStyleProperty";
 import { formatToKebabCase } from "../../utils";
-import { bindObservable } from "../../hooks/bindObservable";
+import { bindObservable } from "../../utils";
 
 export function setStyle(
   element: Element | HTMLElement,

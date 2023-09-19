@@ -1,30 +1,22 @@
-import { setAttributes } from "../../DOM/attributes/setAttributes";
+import { setProperty } from "../../DOM/attributes/setProperty";
 import {
-  AnyObject,
   MichiCustomElement,
-  ReflectedAttributesType,
-  Store,
+  ObservableType,
+  ReflectedAttributesType
 } from "../../types";
 import { formatToKebabCase } from "../../utils";
-import { definePropertyFromStore } from "./definePropertyFromStore";
+import { definePropertyFromObservable } from "./definePropertyFromObservable";
 
 export const defineReflectedAttributes = (
   self: MichiCustomElement,
-  store: Store<AnyObject, AnyObject>,
+  observable: ObservableType<any>,
   reflectedAttributes?: ReflectedAttributesType,
 ) => {
   if (reflectedAttributes)
     for (const key in reflectedAttributes) {
       const standarizedAttributeName = formatToKebabCase(key);
       if (key !== standarizedAttributeName)
-        definePropertyFromStore(self, standarizedAttributeName, store, key);
-      store.subscribe((propertiesThatChanged) => {
-        if (propertiesThatChanged?.find((x) => x.startsWith(key))) {
-          const newAttributes = {
-            [standarizedAttributeName]: store.state[key as string],
-          };
-          setAttributes(self, newAttributes, { contextElement: self });
-        }
-      });
+        definePropertyFromObservable(self, standarizedAttributeName, observable, key);
+      observable[key].subscribe((newValue) => setProperty(self, standarizedAttributeName, newValue, { contextElement: self }));
     }
 };

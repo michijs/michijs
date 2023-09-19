@@ -1,15 +1,16 @@
-import { idGenerator, useObserve } from "../hooks";
+import { idGenerator, useComputedObserve, useObserve } from "../hooks";
 import {
-  CSSObject,
   MichiCustomElement,
   CustomElementTag,
   MichiElementOptions,
   MichiElementClass,
   MichiElementSelf,
+  CSSObject,
+  ObservableType,
 } from "../types";
 import { formatToKebabCase } from "../utils/formatToKebabCase";
 import { defineEvent } from "./properties/defineEvent";
-import { definePropertyFromStore } from "./properties/definePropertyFromStore";
+import { definePropertyFromObservable } from "./properties/definePropertyFromObservable";
 import { setReflectedAttributes } from "./properties/setReflectedAttributes";
 import { defineMethod } from "./properties/defineMethod";
 import { deepEqual } from "../utils/deepEqual";
@@ -18,11 +19,13 @@ import { getAttributeValue } from "../DOM/attributes/getAttributeValue";
 import { getMountPoint } from "../DOM/getMountPoint";
 import { defineReflectedAttributes } from "./properties/defineReflectedAttributes";
 import { addStylesheetsToDocumentOrShadowRoot } from "../utils/addStylesheetsToDocumentOrShadowRoot";
-import { createStyleSheet, createCssVariables, updateStyleSheet } from "../css";
-import { cssVariablesFromCssObject } from "../css/cssVariablesFromCssObject";
+import { useStyleSheet } from "../css";
 import type { CSSProperties } from "@michijs/htmltype";
 import { setStyleProperty } from "../DOM/attributes/setStyleProperty";
 import { create } from "../DOMDiff";
+import { bindObservable } from "../utils";
+import { convertCssObjectToCssVariablesObject } from "../css/convertCssObjectToCssVariablesObject";
+import { inspectForObservables } from "../utils";
 
 export function createCustomElement<
   O extends MichiElementOptions,
@@ -53,8 +56,7 @@ export function createCustomElement<
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
-    implements MichiCustomElement
-  {
+    implements MichiCustomElement {
     $michi: MichiCustomElement["$michi"] = {
       store: useObserve({
         ...attributes,
@@ -101,43 +103,34 @@ export function createCustomElement<
     constructor() {
       super();
 
-      for (const key in this.$michi.store.state) {
-        definePropertyFromStore(this, key, this.$michi.store);
+      for (const key in (this.$michi.store.valueOf() as object)) {
+        definePropertyFromObservable(this, key, this.$michi.store);
       }
       defineReflectedAttributes(
         this,
-        this.$michi.cssStore,
+        this.$michi.store,
         reflectedCssVariables,
       );
+      defineReflectedAttributes(this, this.$michi.store, reflectedAttributes);
       if (shadow) {
         const attachedShadow = this.attachShadow(shadow);
         this.$michi.shadowRoot = attachedShadow;
-
         if (cssVariables || reflectedCssVariables) {
-          const styleSheet = createCssVariables(
-            ":host",
-            this.$michi.cssStore.state as CSSObject,
-          );
+          const allCssVariables = Object.keys(cssVariables ?? {}).concat(Object.keys(reflectedCssVariables ?? {})).reduce((previousValue, x) => {
+            previousValue[x] = this[x];
+            return previousValue
+          }, {}) as unknown as ObservableType<CSSObject>;
 
-          addStylesheetsToDocumentOrShadowRoot(attachedShadow, styleSheet);
-          this.$michi.cssStore.subscribe(() => {
-            updateStyleSheet(styleSheet, {
-              [":host"]: cssVariablesFromCssObject(
-                this.$michi.cssStore.state as CSSObject,
-              ),
-            });
+          const parsedCssVariables = useComputedObserve(() => (convertCssObjectToCssVariablesObject(allCssVariables)), Object.values(allCssVariables))
+          const styleSheet = useStyleSheet({
+            ":host": parsedCssVariables,
           });
+          addStylesheetsToDocumentOrShadowRoot(attachedShadow, styleSheet);
         }
         if (computedStyleSheet) {
           const callback: () => CSSProperties = computedStyleSheet.bind(this);
-          const styleSheet = createStyleSheet(callback(), [":host"]);
+          const styleSheet = useStyleSheet({ ":host": callback() });
           addStylesheetsToDocumentOrShadowRoot(attachedShadow, styleSheet);
-
-          const updateStylesheetCallback = () => {
-            updateStyleSheet(styleSheet, callback(), [":host"]);
-          };
-          // this.$michi.cssStore.subscribe(updateStylesheetCallback);
-          // this.$michi.store.subscribe(updateStylesheetCallback);
         }
         if (adoptedStyleSheets)
           addStylesheetsToDocumentOrShadowRoot(
@@ -156,7 +149,6 @@ export function createCustomElement<
         Object.entries(methods).forEach(([key, value]) =>
           defineMethod(this, key, value),
         );
-      defineReflectedAttributes(this, this.$michi.store, reflectedAttributes);
       if (events)
         Object.entries(events).forEach(([key, value]) =>
           defineEvent(this, key, value),
@@ -202,19 +194,11 @@ export function createCustomElement<
     connectedCallback() {
       if (!this.$michi.shadowRoot) {
         if (cssVariables || reflectedCssVariables) {
-          Object.entries(this.$michi.cssStore.state).forEach(([key, value]) => {
-            setStyleProperty(this, `--${key}`, value);
-          });
-
-          this.$michi.cssStore.subscribe((propertiesThatChanged) => {
-            propertiesThatChanged?.forEach((key) => {
-              setStyleProperty(
-                this,
-                `--${key}`,
-                this.$michi.cssStore.state[key],
-              );
-            });
-          });
+          Object.keys(cssVariables ?? {}).concat(Object.keys(reflectedCssVariables ?? {})).forEach(key => {
+            bindObservable(this.$michi.store[key], (value) => {
+              setStyleProperty(this, `--${key}`, value)
+            })
+          })
         }
         if (computedStyleSheet) {
           const callback: () => CSSProperties = computedStyleSheet.bind(this);
@@ -225,8 +209,7 @@ export function createCustomElement<
             });
           };
           updateStylesheetCallback();
-          this.$michi.cssStore.subscribe(updateStylesheetCallback);
-          this.$michi.store.subscribe(updateStylesheetCallback);
+          useComputedObserve(updateStylesheetCallback, inspectForObservables(callback()));
         }
         if (adoptedStyleSheets)
           addStylesheetsToDocumentOrShadowRoot(

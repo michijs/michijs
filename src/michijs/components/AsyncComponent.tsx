@@ -1,5 +1,6 @@
 import { create } from "../DOMDiff";
-import { VirtualFragment } from "../classes/VirtualFragment";
+import { VirtualFragment } from "../classes";
+import { h } from "../h";
 import { CreateOptions, FC, GetElementProps, SingleJSXElement } from "../types";
 
 type AsyncComponentProps<T> = {
@@ -14,15 +15,20 @@ export const AsyncComponent = <const T = FC>(
 ) => {
   let el = asTag
     ? (create({
-      tag: asTag,
+      jsxTag: asTag,
       attrs,
     } as SingleJSXElement) as ChildNode & ParentNode)
     : new VirtualFragment();
-  el.append(create(loadingComponent, options));
+
+  if (loadingComponent)
+    el.append(create(loadingComponent, options));
 
   const render = (promiseResult: JSX.Element | { default: JSX.Element }) => {
     const oldEl = el;
-    el = create((promiseResult as { default: JSX.Element }).default ?? promiseResult, options) as ChildNode & ParentNode;
+    const Res = (promiseResult as { default: JSX.Element }).default ?? promiseResult ?? null;
+
+    el = create(typeof Res === "object" &&
+      Res && "jsxTag" in Res ? Res : <Res />, options) as ChildNode & ParentNode;
     oldEl.replaceWith(el);
   };
 

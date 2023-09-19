@@ -1,5 +1,5 @@
 import { CreateOptions } from "../types";
-import { setAttributes } from "./attributes/setAttributes";
+import { setProperties } from "./attributes/setProperties";
 
 export function createElement<
   T extends keyof JSX.IntrinsicElements,
@@ -14,7 +14,7 @@ export function createElement<
   options?: ElementCreationOptions & CreateOptions,
 ) {
   const el = document.createElement(tagName, options);
-  if (attributes) setAttributes(el, attributes, options);
+  if (attributes) setProperties(el, attributes, options);
 
   return el as unknown as E & (new (props?: JSX.IntrinsicElements[T]) => E);
 }

@@ -1,0 +1,16 @@
+import { isObservableType } from "../typeWards/isObservableType";
+import { ObservableType } from "../types";
+
+export function inspectForObservables<T>(obj: T): ObservableType<T>[] {
+  if (obj)
+    if (isObservableType<T>(obj)) {
+      return [obj]
+    } else if (typeof obj === 'object') {
+      const observables = new Array<ObservableType<any>>();
+      Object.values(obj).forEach((x) => {
+        observables.push(...inspectForObservables(x))
+      });
+      return observables;
+    }
+  return []
+}

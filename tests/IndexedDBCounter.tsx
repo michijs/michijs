@@ -4,7 +4,7 @@ import {
   EventDispatcher,
   useIndexedDB,
   createCustomElement,
-  useComputedObserve,
+  useAsyncComputedObserve,
 } from "../src";
 import { counterStyle } from "./shared/counterStyle";
 
@@ -19,13 +19,13 @@ const storedCount = useIndexedDB<{
   },
 });
 
-const count = useComputedObserve(async () => {
+const count = useAsyncComputedObserve(async () => {
   return (await storedCount.counter?.get(1))?.count ?? 0
-}, [storedCount]) 
+}, [storedCount], (await storedCount.counter?.get(1))?.count ?? 0) 
 
 export const IndexedDBCounter = createCustomElement("indexed-db-counter", {
   methods: {
-    decrementCount() {
+    async decrementCount() {
       storedCount.counter?.put({ count: count - 1, id: 1 });
     },
     incrementCount() {
@@ -35,14 +35,10 @@ export const IndexedDBCounter = createCustomElement("indexed-db-counter", {
   events: {
     countChanged: new EventDispatcher<number>(),
   },
-  observe: {
-    async storedCount() {
-      count = (await storedCount.counter?.get(1))?.count ?? 0;
-      this.countChanged(count);
-    },
-  },
   adoptedStyleSheets: [counterStyle],
   render() {
+    count.subscribe?.(this.countChanged)
+    
     return (
       <Host count={count}>
         <button onpointerup={this.decrementCount}>-</button>

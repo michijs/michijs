@@ -1,12 +1,13 @@
 import { ObservableType, ObservableLike } from "../types";
 import { useObserve } from "./useObserve";
-import { setObservableValue } from "../utils/setObservableValue";
+import { setObservableValue } from "../utils";
 
-export const useComputedObserve = <T>(
+export function useComputedObserve<T>(
   callback: () => T,
   deps: Partial<ObservableLike<any>>[],
-): ObservableType<T> => {
+): ObservableType<T> {
   const newObservable = useObserve(callback());
+  console.log(newObservable)
 
   const listener = () => setObservableValue(newObservable, callback());
 

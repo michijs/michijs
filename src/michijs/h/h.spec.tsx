@@ -20,13 +20,13 @@ const testAttrs = {
   children: [testChild],
 };
 const fragmentResult: FragmentJSXElement = {
-  tag: Fragment.tag,
+  jsxTag: Fragment.tag,
   attrs: {
     children: [],
   },
 };
 const objectJSXResult: ObjectJSXElement = {
-  tag: "div",
+  jsxTag: "div",
   attrs: testAttrs,
 };
 
@@ -34,7 +34,7 @@ const DivProxy: FC<JSX.IntrinsicElements["div"]> = (attrs) => (
   <div {...attrs} />
 );
 const FunctionJSXResult: FunctionJSXElement = {
-  tag: DivProxy,
+  jsxTag: DivProxy,
   attrs: testAttrs,
 };
 
@@ -44,14 +44,14 @@ const TestCustomElement = createCustomElement("michi-test", {
 });
 // : ClassJSXElement
 const ClassJSXResult = {
-  tag: TestCustomElement,
+  jsxTag: TestCustomElement,
   attrs: testAttrs,
 };
 
 describe("h tests", () => {
   it("Fragment result", () => {
     const fragment = (<Fragment />) as ClassJSXElement;
-    expect(fragment.tag.tag).toEqual(fragmentResult.tag);
+    expect(fragment.jsxTag.tag).toEqual(fragmentResult.jsxTag);
   });
   it("Object JSX result", () => {
     expect(<div {...testAttrs}>{testChild}</div>).toEqual(objectJSXResult);

@@ -16,13 +16,9 @@ export const SimpleCounter = createCustomElement("simple-counter", {
   events: {
     countChanged: new EventDispatcher<number>(),
   },
-  observe: {
-    count() {
-      this.countChanged(this.count);
-    },
-  },
   adoptedStyleSheets: [counterStyle],
   render() {
+    this.count.subscribe(this.countChanged)
     return (
       <>
         <button onpointerup={this.decrementCount}>-</button>

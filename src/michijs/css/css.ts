@@ -1,3 +1,6 @@
+import { isObservableType } from "../typeWards/isObservableType";
+import { ObservableType } from "../types";
+
 /**
  * Allows to create a Constructable Stylesheet with a Template String.
  * Recomended extension for VSCode:
@@ -5,17 +8,20 @@
  */
 export const css = (
   cssObject: TemplateStringsArray,
-  ...props: (string | number)[]
+  ...props: (ObservableType<string | number> | string | number)[]
 ) => {
-  const styleSheet = new CSSStyleSheet();
-  styleSheet.replaceSync(
-    cssObject.raw.reduce((previousValue, currentValue, i) => {
-      const type = typeof props[i];
-      if (type === "string" || type === "number")
-        return `${previousValue}${currentValue}${props[i]}`;
-      return `${previousValue}${currentValue}`;
+  const getCss = () => {
+    return cssObject.raw.reduce((previousValue, currentValue, i) => {
+      return `${previousValue}${currentValue}${props[i]?.valueOf() ?? ''}`;
       // The accumulator takes the first value if you don't pass a value as the second argument:
-    }, ""),
-  );
+    }, "")
+  }
+  const styleSheet = new CSSStyleSheet();
+  const updateStyleSheetCallback = () => styleSheet.replaceSync(getCss());
+  styleSheet.replaceSync(getCss());
+  props.forEach(x => {
+    if (isObservableType(x))
+      x.subscribe?.(updateStyleSheetCallback)
+  })
   return styleSheet;
 };

@@ -1,15 +1,15 @@
-import { createStyleSheet } from "../../src";
+import { useStyleSheet } from "../../src";
 
-export const counterStyle = createStyleSheet({
+export const counterStyle = useStyleSheet({
   ":host": {
     display: "inline-flex",
     flexDirection: "row",
-    "(:disabled)": {
-      backgroundColor: "gray",
-    },
-    "(:invalid)": {
-      border: "1px solid red",
-    },
+    // "(:disabled)": {
+    //   backgroundColor: "gray",
+    // },
+    // "(:invalid)": {
+    //   border: "1px solid red",
+    // },
     // '@media (max-width: 600px)': {
     //   color: 'blue'
     // }

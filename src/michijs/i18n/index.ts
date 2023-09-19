@@ -1,5 +1,6 @@
 import { Observable } from "../classes";
 import { useObserve } from "../hooks";
+import { isObservableType } from "../typeWards/isObservableType";
 import { ObservableType, ObserverCallback } from "../types";
 import { setObservableValue } from "../utils/setObservableValue";
 
@@ -17,12 +18,14 @@ export class I18n<K extends string> extends Observable<K> {
   private _currentLanguage: K | undefined;
   private isUsingSystemLanguage = true;
 
-  constructor(initialLanguage?: string | null, initialObservers?: ObserverCallback<K>[]) {
+  constructor(language?: K | null, initialObservers?: ObserverCallback<K>[]) {
     super(initialObservers);
-    if (initialLanguage) {
-      this._currentLanguage = initialLanguage as K;
+    if (language) {
+      this._currentLanguage = language as K;
       this.isUsingSystemLanguage = false;
     }
+    if (isObservableType(language))
+      language?.subscribe?.((newValue) => { if (newValue) this.setLanguage(newValue as K) })
 
     window.addEventListener("languagechange", () => {
       if (!this.isUsingSystemLanguage)

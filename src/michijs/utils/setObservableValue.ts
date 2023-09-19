@@ -8,6 +8,7 @@ export function setObservableValue<T extends ObservableType<any>>(
 ): boolean {
   const object1Value = object1?.valueOf();
   const object2Value = object2?.valueOf();
+  
   if (object1Value === object2Value || object1Value == object2Value)
     return true;
 

@@ -20,17 +20,17 @@ const testAttrs = {
   children: [testChild],
 };
 const fragmentResult: FragmentJSXElement = {
-  tag: Fragment.tag,
+  jsxTag: Fragment.tag,
   attrs: {
     children: [],
   },
 };
 const objectJSXResult: ObjectJSXElement = {
-  tag: "div",
+  jsxTag: "div",
   attrs: testAttrs,
 };
 const objectJSXResultWithTwoChildren: ObjectJSXElement = {
-  tag: "div",
+  jsxTag: "div",
   attrs: { ...testAttrs, children: [testChild, testChild] },
 };
 
@@ -38,7 +38,7 @@ const DivProxy: FC<JSX.IntrinsicElements["div"]> = (attrs) => (
   <div {...attrs} />
 );
 const FunctionJSXResult: FunctionJSXElement = {
-  tag: DivProxy,
+  jsxTag: DivProxy,
   attrs: testAttrs,
 };
 
@@ -57,12 +57,12 @@ describe("jsx-runtime tests", () => {
       { children: undefined },
       undefined,
     ) as ClassJSXElement;
-    expect(fragment.tag.tag).toEqual(fragmentResult.tag);
+    expect(fragment.jsxTag.tag).toEqual(fragmentResult.jsxTag);
   });
   it("Object JSX result", () => {
     expect(
       jsx(
-        objectJSXResult.tag,
+        objectJSXResult.jsxTag,
         { ...testAttrs, children: testChild },
         undefined,
       ),
@@ -81,7 +81,7 @@ describe("jsx-runtime tests", () => {
   it("Multiple children JSX result", () => {
     expect(
       jsx(
-        objectJSXResult.tag,
+        objectJSXResult.jsxTag,
         { ...testAttrs, children: [testChild, testChild] },
         undefined,
       ),

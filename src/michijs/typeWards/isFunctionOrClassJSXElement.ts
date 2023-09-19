@@ -7,5 +7,5 @@ import {
 export function isFunctionOrClassJSXElement(
   jsx: FunctionJSXElement | ClassJSXElement | ObjectJSXElement,
 ): jsx is ClassJSXElement | FunctionJSXElement {
-  return typeof jsx.tag === "function";
+  return typeof jsx.jsxTag === "function";
 }

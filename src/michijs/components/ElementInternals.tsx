@@ -2,7 +2,7 @@ import type { AllAttributes } from "@michijs/htmltype";
 import type { FC } from "../types";
 import { setAttribute } from "../DOM/attributes/setAttribute";
 import { isMichiCustomElement } from "../typeWards/isMichiCustomElement";
-import { bindObservable } from "../hooks/bindObservable";
+import { bindObservable } from "../utils";
 
 export type ElementInternalsProps = {
   /**Form controls usually expose a "value" property */
