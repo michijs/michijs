@@ -55,11 +55,10 @@ export const ElementInternals: FC<ElementInternalsProps> = (
           );
         else if (key in self)
           bindObservable(value, (newValue) => (self[key] = newValue));
+        // Some browsers still dont support internals
         else {
           const formattedKey = key
-            .split("aria")
-            .map((x) => x.toLowerCase())
-            .join("-");
+            .toLowerCase().replace('aria', 'aria-');
           bindObservable(value, (newValue) =>
             setAttribute(self, formattedKey, newValue),
           );

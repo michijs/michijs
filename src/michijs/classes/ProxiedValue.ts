@@ -5,23 +5,23 @@ import { useComputedObserve } from "../hooks/useComputedObserve";
 import { Observable } from "./Observable";
 
 export class ProxiedValue<T> extends Observable<T> {
-  private value: T;
+  private $privateValue: T;
 
   constructor(initialValue?: T, initialObservers?: ObserverCallback<T>[]) {
     super(initialObservers);
-    this.value = initialValue!
+    this.$privateValue = initialValue!
   }
 
   set $value(newValue: T) {
     if (this.shouldCheckForChanges()) {
-      if (!deepEqual(newValue, this.value)) {
-        this.value = newValue;
+      if (!deepEqual(newValue, this.$privateValue)) {
+        this.$privateValue = newValue;
         this.notify(newValue);
       }
-    } else this.value = newValue;
+    } else this.$privateValue = newValue;
   }
   get $value() {
-    return this.value;
+    return this.$privateValue;
   }
 
   notifyCurrentValue() {

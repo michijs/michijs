@@ -63,15 +63,15 @@ export function observeCommonObject<T extends unknown>(
     set: customObjectSet(newInitialObservers),
     deleteProperty: customObjectDelete,
     get(target, p, receiver) {
-      // if (p in target)
-      //   return Reflect.get(target, p, receiver);
-      // else if (p in target.$value)
-      //   return Reflect.get(target.$value, p, receiver)
-      // else {
-      //   proxy[p] = undefined
-      // }
-      // return Reflect.get(target.$value, p, receiver);
-      return Reflect.get(p in target ? target: target.$value, p, receiver);
+      if (p in target)
+        return Reflect.get(target, p, receiver);
+      else if (p in target.$value)
+        return Reflect.get(target.$value, p, receiver)
+      else {
+        proxy[p] = undefined
+      }
+      return Reflect.get(target.$value, p, receiver);
+      // return Reflect.get(p in target ? target: target.$value, p, receiver);
     },
   }) as unknown as ObservableType<T>;
   return proxy
