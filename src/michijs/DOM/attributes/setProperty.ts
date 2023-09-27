@@ -9,10 +9,10 @@ import type { CSSProperties } from "@michijs/htmltype";
 
 export function setProperty(
   el: Element,
-  name: string, 
+  name: string,
   newValue: any,
   options?: CreateOptions,
-){
+) {
   // priority to properties and events
   if (name === "_")
     Object.entries(newValue).forEach(([propertyName, value]) =>
@@ -24,6 +24,10 @@ export function setProperty(
     el.addEventListener(eventName, bindedEvent);
   } else if (name === "style" && typeof newValue === "object")
     setStyle(el, newValue as CSSProperties);
-  else if (!compareAttributes(el, name, newValue))
-    bindObservable(newValue, (newValue) => setAttribute(el, name, newValue));
+  else {
+    bindObservable(newValue, (newValue) => {
+      if (!compareAttributes(el, name, newValue))
+        setAttribute(el, name, newValue)
+    });
+  }
 }

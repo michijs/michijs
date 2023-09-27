@@ -24,7 +24,7 @@ export class ProxiedValue<T> extends Observable<T> {
     return this.value;
   }
 
-  notifyCurrentValue(){
+  notifyCurrentValue() {
     this.notify(this.$value)
   }
 
@@ -42,6 +42,10 @@ export class ProxiedValue<T> extends Observable<T> {
     if (this.$value && hasToJSON(this.$value)) return this.$value.toJSON();
 
     return this.$value;
+  }
+
+  [Symbol.toPrimitive]() {
+    return this.valueOf()
   }
 
   shouldCheckForChanges() {

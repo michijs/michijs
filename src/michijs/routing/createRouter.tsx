@@ -1,15 +1,13 @@
 import { Router } from "../components/Router";
 import { h } from "../h";
-import { useSearchParams } from "../hooks";
-import { useHash } from "../hooks";
 import { formatToKebabCase } from "../utils/formatToKebabCase";
-import { PagesFunction, CreateRouterResult, UrlFunction, Route } from "./types";
+import { CreateRouterResult, UrlFunction } from "./types";
 import { setSearchParam } from "./utils/setSearchParam";
 
 export const urlFn = (
   property: string,
-  parentRoute?: UrlFunction<any, any>,
-): UrlFunction<any, any> => {
+  parentRoute?: UrlFunction,
+): UrlFunction => {
   return ({ searchParams, hash } = {}) => {
     const parentRouteURL = parentRoute?.();
     const baseURL = parentRouteURL
@@ -23,15 +21,15 @@ export const urlFn = (
       Object.entries(searchParams).forEach(([name, value]) =>
         setSearchParam(url, name, value),
       );
-    if (hash) url.hash = hash;
+    if (hash?.valueOf()) url.hash = hash.valueOf();
 
     return url;
   };
 };
 
-export function createRouter<R extends Record<string, Route>>(
+export function createRouter<R extends Record<string, JSX.Element>>(
   routes: R,
-  parentRoute?: UrlFunction<any, any>,
+  parentRoute?: UrlFunction,
 ) {
   const urls = new Proxy(
     {},
@@ -41,22 +39,10 @@ export function createRouter<R extends Record<string, Route>>(
       },
     },
   );
-  const pages = new Proxy(
-    {},
-    {
-      get(_, _property) {
-        return (fn: PagesFunction<any, any>) => {
-          const hash = useHash();
-          const searchParams = useSearchParams()
-          return () => fn({hash, searchParams});
-        };
-      },
-    },
-  );
 
-  const RouterProxy: CreateRouterResult<R>["Router"] = (props) => {
+  const RouterProxy: CreateRouterResult<R>[1] = (props) => {
     return <Router {...props} routes={routes} parentRoute={parentRoute} />;
   };
 
-  return { urls, Router: RouterProxy, pages } as CreateRouterResult<R>;
+  return [urls, RouterProxy] as CreateRouterResult<R>;
 }

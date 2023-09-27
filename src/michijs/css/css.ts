@@ -1,5 +1,6 @@
-import { isObservableType } from "../typeWards/isObservableType";
+import { useStringTemplate } from "../hooks/useStringTemplate";
 import { ObservableType } from "../types";
+import { bindObservable } from "../utils";
 
 /**
  * Allows to create a Constructable Stylesheet with a Template String.
@@ -10,18 +11,10 @@ export const css = (
   cssObject: TemplateStringsArray,
   ...props: (ObservableType<string | number> | string | number)[]
 ) => {
-  const getCss = () => {
-    return cssObject.raw.reduce((previousValue, currentValue, i) => {
-      return `${previousValue}${currentValue}${props[i]?.valueOf() ?? ''}`;
-      // The accumulator takes the first value if you don't pass a value as the second argument:
-    }, "")
-  }
+  const template = useStringTemplate(cssObject, ...props);
   const styleSheet = new CSSStyleSheet();
-  const updateStyleSheetCallback = () => styleSheet.replaceSync(getCss());
-  styleSheet.replaceSync(getCss());
-  props.forEach(x => {
-    if (isObservableType(x))
-      x.subscribe?.(updateStyleSheetCallback)
+  bindObservable(template, (newValue) => {
+    styleSheet.replaceSync(newValue);
   })
   return styleSheet;
 };

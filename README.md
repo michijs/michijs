@@ -62,12 +62,9 @@ export const MyCounter = createCustomElement('my-counter', {
     countChanged: new EventDispatcher<number>()
   },
   adoptedStyleSheets: [counterStyle],
-  observe: {
-    count() {
-      this.countChanged(this.count)
-    }
-  },
   render() {
+    this.count.subscribe?.(this.countChanged)
+
     return (
       <>
         <button onpointerup={this.decrementCount}>-</button>
@@ -143,18 +140,9 @@ A component consists of the following properties:
       <td colspan="3">Allows to define attributes.</td>
     </tr>
     <tr>
-      <td>nonObservedAttributes</td>
-      <td colspan="3">Allows to define non observed attributes. This is useful for 
-      <a href="#observable-objects">complex objects that cannot be observed</a>.</td>
-    </tr>
-    <tr>
       <td>reflectedAttributes</td>
       <td colspan="3">Allows to define <a href="https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr">reflected attributes</a> and follows the Kebab case. A reflected attribute cannot be initialized with a true value
       </td>
-    </tr>
-    <tr>
-      <td>transactions</td>
-      <td colspan="3">Transactions are functions that notify changes at the end of the transaction.</td>
     </tr>
     <tr>
       <td>methods</td>
@@ -181,13 +169,9 @@ A component consists of the following properties:
       <td colspan="3">Function that renders the component.</td>
     </tr>
     <tr>
-      <td>observe</td>
-      <td colspan="3">Contains methods with a name of an attribute / reflected attribute / css variables / observable like. Those methods are executed when a change has been made to their corresponding property.</td>
-    </tr>
-    <tr>
-      <td rowspan="16">lifecycle</td>
+      <td rowspan="14">lifecycle</td>
       <tr>
-        <td rowspan="10">Custom Element related</td>
+        <td rowspan="8">Custom Element related</td>
         <tr>
           <td>willConstruct</td>
           <td>This method is called at the start of constructor.</td>
@@ -207,14 +191,6 @@ A component consists of the following properties:
         <tr>
           <td>didMount</td>
           <td>This method is called after the component has mounted.</td>
-        </tr>
-        <tr>
-          <td>willUpdate</td>
-          <td>This method is called before re-rendering occurs.</td>
-        </tr>
-        <tr>
-          <td>didUpdate</td>
-          <td>This method is called after re-rendering occurs.</td>
         </tr>
         <tr>
           <td>willReceiveAttribute</td>
@@ -262,20 +238,12 @@ A component consists of the following properties:
       <td colspan="3">Allows you to define an <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events">event</a> to his parent and triggering it easily. It will be defined using Lower case. For example countChanged will be registered as countchanged.</td>
     </tr>
     <tr>
-      <td>subscribeTo</td>
-      <td colspan="3">Allows you to subscribe to an <a href="https://github.com/sindresorhus/type-fest/blob/main/source/observable-like.d.ts">observable like</a> (like a store). When the store emit an event, the custom element will be re-rendered.</td>
-    </tr>
-    <tr>
       <td>shadow</td>
       <td colspan="3">Allows you to add a Shadow DOM. By default, it uses open mode on Autonomous Custom elements and does not use Shadow DOM on Customized built-in elements. Only <a href="https://dom.spec.whatwg.org/#dom-element-attachshadow">this elements</a> are allowed to use Shadow DOM.</td>
     </tr>
     <tr>
       <td>formAssociated</td>
       <td colspan="3">This tells the browser to treat the element like a <a href="https://web.dev/more-capable-form-controls/">form control</a>.</td>
-    </tr>
-    <tr>
-      <td>fakeRoot</td>
-      <td colspan="3">Allows to create a fake root on the element. This is especially useful if you don't have shadow root. Since it allows you to add children from a parent node.</td>
     </tr>
     <tr>
       <td rowspan="3">extends</td>
@@ -321,6 +289,8 @@ Each component has an store to listen for changes in its state.
 
 ## CSS
 To use css we provide functions to create Constructable Stylesheets.
+__Our stylesheets can also subscribe to observables.__
+
 ### createStyleSheet
 Allows to create a Constructable Stylesheet with a CSSObject
 ```js
@@ -363,11 +333,8 @@ import sheet from './styles.css' assert { type: 'css' };
 ### Host
 Allows to set attributes and event listeners to the host element itself.
 
-### List
-Creates a container component without styles with the tag "michi-list"
-
 ### Fragment
-Creates a container component without styles with the tag "michi-fragment"
+Creates a virtual node that wrapps elements
 
 ### ElementInternals
 *(Only available if formAssociated is true)*

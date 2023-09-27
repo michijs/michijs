@@ -1,8 +1,9 @@
-import { h, Link } from "../../src";
+import { h, Link, Title } from "../../src";
 import { urls } from "../routes";
 
 export const Main = () => (
   <>
+    <Title>Main Page</Title>
     <Link url={urls.counterTests()}>Counter tests</Link>
     <Link url={urls.asyncTests()}>Async tests</Link>
     <Link url={urls.performanceTests()}>Performance tests</Link>

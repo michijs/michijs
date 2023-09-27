@@ -7,10 +7,7 @@ class HistoryManagerSingleton extends Observable<string | URL>{
 
   constructor(initialObservers?: ObserverCallback<string | URL>[]) {
     super(initialObservers);
-    window.addEventListener("popstate", () => {
-      const url = this.history.pop();
-      this.notify(url)
-    });
+    window.addEventListener("popstate", () => this.notify(location.href));
   }
 
   back(fallbackUrl: string | URL) {
@@ -28,7 +25,7 @@ class HistoryManagerSingleton extends Observable<string | URL>{
       // This will trigger an exception if its an external link string
       history.replaceState(undefined, "", url);
       this.history.splice(this.history.length, 1, url)
-    } catch(ex) {
+    } catch (ex) {
       console.error(ex)
       const href = typeof url === "object" && "href" in url ? url.href : url;
       window.location.href = href;
@@ -41,7 +38,7 @@ class HistoryManagerSingleton extends Observable<string | URL>{
       // This will trigger an exception if its an string
       history.pushState(undefined, "", url);
       this.history.push(url)
-    } catch(ex) {
+    } catch (ex) {
       console.error(ex)
       const href = typeof url === "object" && "href" in url ? url.href : url;
       window.location.href = href;
@@ -50,9 +47,9 @@ class HistoryManagerSingleton extends Observable<string | URL>{
   }
 
   matches(url: string, flexible = false) {
-    if(window.URLPattern){
+    if (window.URLPattern) {
       const p = new window.URLPattern({
-        pathname: url,
+        pathname: `${url}*`,
         baseURL: location.origin,
         search: "*",
         hash: "*",

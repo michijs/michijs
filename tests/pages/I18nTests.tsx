@@ -1,5 +1,5 @@
 import type { TypedEvent } from "@michijs/htmltype";
-import { createCustomElement, h, I18n, useStorage } from "../../src";
+import { createCustomElement, h, I18n, Title, useStorage } from "../../src";
 import en from "./i18nTests/en.json";
 
 type SupportedLanguages = "es" | "en";
@@ -30,6 +30,7 @@ const I18nTests = createCustomElement("i18n-tests", {
   render() {
     return (
       <>
+        <Title>I18n tests Page</Title>
         <span>{t.language}</span>
         {/* <List
           as="select"

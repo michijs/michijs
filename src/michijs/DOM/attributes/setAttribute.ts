@@ -3,7 +3,7 @@ export function setAttribute(
   key: string,
   newValue: any,
 ) {
-  const value = newValue.valueOf();
+  const value = newValue?.valueOf();
   switch (true) {
     case value === null:
     case value === undefined:

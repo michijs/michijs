@@ -4,10 +4,9 @@ import { observeCommonObject } from "./useObserve/observeCommonObject";
 import { observeDate } from "./useObserve/observeDate";
 import { observeMap } from "./useObserve/observeMap";
 import { observeSet } from "./useObserve/observeSet";
-import { observeValue } from "./useObserve/observeValue";
 
 export function useObserve<T>(
-  item: T,
+  item?: T,
   initialObservers?: ObserverCallback<T>[]
 ): ObservableType<T> {
   if (item && typeof item === "object") {
@@ -23,9 +22,7 @@ export function useObserve<T>(
       return observeMap(item, initialObservers) as unknown as ObservableType<T>;
     else if (item instanceof Set)
       return observeSet(item, initialObservers) as unknown as ObservableType<T>;
-    else if (Object.getPrototypeOf(item) === Object.prototype)
-      return observeCommonObject(item, initialObservers) as ObservableType<T>;
     // console.error(`The object with path "${props.propertyPath}" cannot be observed ${item}`)
   }
-  return observeValue(item, initialObservers) as unknown as ObservableType<T>;
+  return observeCommonObject(item, initialObservers) as unknown as ObservableType<T>;
 }

@@ -22,11 +22,6 @@ createCustomElement("root-test-element", {
     },
   },
   fakeRoot: false,
-  observe: {
-    "arrayTest.6"() {
-      console.log("6 Added");
-    },
-  },
   render() {
     return (
       <Host>

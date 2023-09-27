@@ -6,4 +6,5 @@ export { useStorage } from "./useStorage";
 export { usePureFunction } from "./usePureFunction";
 export { useIndexedDB } from "./useIndexedDB";
 export { useSearchParams } from "./useSearchParams";
+export { useStringTemplate } from "./useStringTemplate";
 export { idGenerator } from "./idGenerator";

@@ -1,7 +1,8 @@
 export const setSearchParam = (url: URL, name: string, value: unknown) => {
-  if (value !== undefined)
+  const valueOf = value?.valueOf()
+  if (valueOf !== undefined)
     url.searchParams.set(
       name,
-      typeof value === "object" ? JSON.stringify(value) : (value as string),
+      typeof valueOf === "object" ? JSON.stringify(valueOf) : valueOf as string,
     );
 };

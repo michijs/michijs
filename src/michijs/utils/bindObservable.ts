@@ -2,7 +2,7 @@ import { isObservableType } from "../typeWards/isObservableType";
 import { ObservableType, ObserverCallback } from "../types";
 
 export const bindObservable = <T extends unknown>(
-  observable: T,
+  observable: ObservableType<T>,
   callback: ObserverCallback<T>,
 ) => {
   if (isObservableType(observable)) {

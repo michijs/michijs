@@ -5,11 +5,18 @@ import { setObservableValue } from "../utils";
 export function useComputedObserve<T>(
   callback: () => T,
   deps: Partial<ObservableLike<any>>[],
+  options?: {
+    onBeforeUpdate?(): void,
+    onAfterUpdate?(): void
+  }
 ): ObservableType<T> {
   const newObservable = useObserve(callback());
-  console.log(newObservable)
 
-  const listener = () => setObservableValue(newObservable, callback());
+  const listener = () => {
+    options?.onBeforeUpdate?.()
+    setObservableValue(newObservable, callback())
+    options?.onAfterUpdate?.()
+  };
 
   deps.forEach((x) => x.subscribe?.(listener));
 

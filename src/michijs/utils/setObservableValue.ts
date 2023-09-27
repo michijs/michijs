@@ -38,7 +38,7 @@ export function setObservableValue<T extends ObservableType<any>>(
       }
     }
     default: {
-      return Reflect.set(object1, "$value", object2);
+      return Reflect.set(object1, "$value", object2Value);
     }
   }
 }

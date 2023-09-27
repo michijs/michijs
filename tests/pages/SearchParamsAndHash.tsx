@@ -1,4 +1,4 @@
-import { h, useSearchParams, useHash, useComputedObserve } from "../../src";
+import { h, useSearchParams, useHash, useComputedObserve, Title } from "../../src";
 import { SimpleCounter } from "../SimpleCounter";
 
 const SearchParamsAndHash = () => {
@@ -10,6 +10,7 @@ const SearchParamsAndHash = () => {
 
   return (
     <>
+      <Title>Search params and hash tests</Title>
       <button
         onclick={() => {
           hash["#hashTest"] = !hash["#hashTest"]?.valueOf();

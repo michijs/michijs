@@ -20,8 +20,9 @@ export const customObjectSet = <T>(initialObservers: ObserverCallback<T>[]): Com
       if (target.$value[property])
         return setObservableValue(target.$value[property], newValue, initialObservers);
       else {
-        const result = Reflect.set(target.$value, property, useObserve(newValue, initialObservers));
-        target.notify(target.$value)
+        const newItem = useObserve(newValue, initialObservers);
+        const result = Reflect.set(target.$value, property, newItem);
+        newItem.notify?.(newItem.$value)
         return result
       }
     }
@@ -41,7 +42,7 @@ export const customObjectDelete: CommonObjectProxyHandler<any>["deleteProperty"]
     return false;
   };
 
-export function observeCommonObject<T extends object>(
+export function observeCommonObject<T extends unknown>(
   item: T,
   initialObservers: ObserverCallback<T>[] = []
 ): ObservableType<T> {
@@ -49,26 +50,29 @@ export function observeCommonObject<T extends object>(
     newObservable.notifyCurrentValue()
   }]
   const newObservable = new ProxiedValue<T>(
-    Object.entries(item).reduce((previousValue, [key, value]) => {
-      const observedItem = useObserve(value, newInitialObservers);
-      previousValue[key] = observedItem;
-      return previousValue;
-    }, {}) as T,
+    item && Object.getPrototypeOf(item) === Object.prototype ?
+      Object.entries(item).reduce((previousValue, [key, value]) => {
+        const observedItem = useObserve(value, newInitialObservers);
+        previousValue[key] = observedItem;
+        return previousValue;
+      }, {}) as T
+      : item,
     initialObservers
   );
-  return new Proxy(newObservable, {
+  const proxy = new Proxy(newObservable, {
     set: customObjectSet(newInitialObservers),
     deleteProperty: customObjectDelete,
     get(target, p, receiver) {
-      if (p in target)
-        return Reflect.get(target, p, receiver);
-      else if (p in target.$value)
-        return Reflect.get(target.$value, p, receiver)
-      else {
-        console.log(target.$value, p)
-        Reflect.set(target.$value, p, useObserve(undefined, newInitialObservers), receiver)
-      }
-      return Reflect.get(target.$value, p, receiver);
+      // if (p in target)
+      //   return Reflect.get(target, p, receiver);
+      // else if (p in target.$value)
+      //   return Reflect.get(target.$value, p, receiver)
+      // else {
+      //   proxy[p] = undefined
+      // }
+      // return Reflect.get(target.$value, p, receiver);
+      return Reflect.get(p in target ? target: target.$value, p, receiver);
     },
   }) as unknown as ObservableType<T>;
+  return proxy
 };
