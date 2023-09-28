@@ -39,15 +39,16 @@ export const createObject = (jsx: ObjectJSXElement, options: CreateOptions) => {
   // $oncreated?.(el, isSVG, isMATHML, self);
 
   // if (!el.$doNotTouchChildren && !$doNotTouchChildren)
-  el.append(
-    ...children.map((x) =>
-      create(x, {
-        ...options,
-        isMATHML,
-        isSVG,
-      }),
-    ),
-  );
+  const newOptions = {
+    ...options,
+    isMATHML,
+    isSVG,
+  };
+  if (children)
+    if (Array.isArray(children))
+      el.append(...children.map((x) => create(x, newOptions)));
+    else
+      el.append(create(children, newOptions));
 
   setProperties(el, attrs, options);
 

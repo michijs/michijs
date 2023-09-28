@@ -1,6 +1,6 @@
 import type { FC } from "../types";
-import { h } from "../h";
 import { HistoryManager } from "../classes";
+import { jsx } from "../h";
 
 type LinkProps = {
   url: URL | string;
@@ -12,16 +12,17 @@ export const Link: FC<LinkProps> = (
   options,
 ) => {
   const href = typeof url === "object" && "href" in url ? url.href : url;
-  return (
-    <a
-      {...attrs}
-      href={href}
-      onclick={(e) => {
+  return jsx(
+    'a',
+    {
+      ...attrs,
+      href,
+      onclick: (e) => {
         e.preventDefault()
         HistoryManager.push(url)
         if (options?.contextElement)
           attrs.onclick?.apply(options.contextElement, [e]);
-      }}
-    />
-  );
+      }
+    }
+  )
 };

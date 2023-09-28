@@ -158,10 +158,18 @@ export type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>;
 export interface ObserverCallback<T> {
   (value: T): void;
 }
+export interface CompatibleObserverCallback<T> {
+  // its optional to keep compatibility with others observers like redux
+  (value?: T): void;
+}
 
 export interface ObservableLike<T = any> {
   subscribe(observer: ObserverCallback<T>): void;
   unsubscribe?(observer: ObserverCallback<T>): void;
+}
+export interface CompatibleObservableLike<T = any> {
+  subscribe(observer: CompatibleObserverCallback<T>): void;
+  unsubscribe?(observer: CompatibleObserverCallback<T>): void;
 }
 
 export interface MichiProperties
@@ -200,6 +208,7 @@ export interface MichiProperties
 
 export interface MichiCustomElement extends HTMLElement, MichiProperties { }
 
+// Needs to be partial to allow asignation operation
 export type ObservableValue<T> = T & Partial<ProxiedValue<T>>;
 
 export type ObservableType<T> = (T extends Map<infer K, infer V>
@@ -240,7 +249,7 @@ export type Key = number | string;
 
 
 export interface CommonJSXAttrs<T> {
-  attrs: Record<string, any> & { children: SingleJSXElement[] };
+  attrs: Record<string, any> & { children?: SingleJSXElement[] | SingleJSXElement };
   jsxTag: T;
 }
 export type FragmentJSXElement = CommonJSXAttrs<null | undefined>;
@@ -262,7 +271,7 @@ export type SingleJSXElement =
   | ArrayJSXElement
   | DOMElementJSXElement
   | Node
-  | {};
+  // | {};
 export type ArrayJSXElement = SingleJSXElement[];
 
 export interface FC<T = {}, S extends Element = Element, C = CreateOptions<S>> {

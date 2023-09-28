@@ -25,7 +25,7 @@ import { setStyleProperty } from "../DOM/attributes/setStyleProperty";
 import { create } from "../DOMDiff";
 import { bindObservable } from "../utils";
 import { convertCssObjectToCssVariablesObject } from "../css/convertCssObjectToCssVariablesObject";
-import { inspectForObservables } from "../utils";
+import { getObservables } from "../utils";
 
 export function createCustomElement<
   O extends MichiElementOptions,
@@ -209,7 +209,7 @@ export function createCustomElement<
             });
           };
           updateStylesheetCallback();
-          useComputedObserve(updateStylesheetCallback, inspectForObservables(callback()));
+          useComputedObserve(updateStylesheetCallback, getObservables(callback()));
         }
         if (adoptedStyleSheets)
           addStylesheetsToDocumentOrShadowRoot(

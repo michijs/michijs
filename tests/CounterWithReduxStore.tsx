@@ -1,4 +1,4 @@
-import { h, createCustomElement, Host, EventDispatcher, useComputedObserve } from "../src";
+import { createCustomElement, Host, EventDispatcher, useComputedObserve } from "../src";
 import { counterStyle } from "./shared/counterStyle";
 import { decrement, increment } from "./shared/redux/CounterSlice";
 import { store } from "./shared/redux/store";

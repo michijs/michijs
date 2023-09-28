@@ -1,4 +1,4 @@
-import { h, Link, Title } from "../../src";
+import { Link, Title } from "../../src";
 import { urls } from "../routes";
 
 export const Main = () => (

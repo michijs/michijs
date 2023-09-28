@@ -1,7 +1,7 @@
-import { Title, h } from "../../src";
+import { FC, Title } from "../../src";
 import { TableManager, Table } from "../benchmark/michijs/src/index";
 
-const PerformanceTests = () => (
+const PerformanceTests: FC = () => (
   <>
     <Title>Performance tests Page</Title>
     <TableManager />

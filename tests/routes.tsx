@@ -1,4 +1,4 @@
-import { h, createRouter, wait } from "../src";
+import { createRouter, wait } from "../src";
 import { AsyncComponent } from "../src/michijs/components/AsyncComponent";
 import { Main } from "./pages/Main";
 

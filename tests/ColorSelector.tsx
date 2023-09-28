@@ -1,4 +1,4 @@
-import { createCustomElement, css, h, useComputedObserve } from "../src";
+import { createCustomElement, css, useComputedObserve } from "../src";
 
 const style = css`
     span {

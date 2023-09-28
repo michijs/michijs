@@ -1,7 +1,6 @@
 import {
   createCustomElement,
   EventDispatcher,
-  h,
   ElementInternals,
   useComputedObserve,
 } from "../src";
@@ -50,12 +49,11 @@ export const A11YCounter = createCustomElement("a11y-counter", {
     this.count.subscribe?.(() => this.value = this.count);
     const errorMessage = useComputedObserve(() => this.value > 0 ? undefined : "Value should be greater than 0", [this.value])
     return (
-      <>
-        <ElementInternals
-          ariaValueText={this.value.toString()}
-          formValue={this.value.toString()}
-          errorMessage={errorMessage}
-        />
+      <ElementInternals
+        ariaValueText={this.value.toString()}
+        formValue={this.value.toString()}
+        errorMessage={errorMessage}
+      >
         <button type="button" onpointerup={this.decrementCount}>
           -
         </button>
@@ -63,7 +61,7 @@ export const A11YCounter = createCustomElement("a11y-counter", {
         <button type="button" onpointerup={this.incrementCount}>
           +
         </button>
-      </>
+      </ElementInternals>
     );
   },
 });

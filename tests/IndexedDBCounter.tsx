@@ -1,5 +1,4 @@
 import {
-  h,
   Host,
   EventDispatcher,
   useIndexedDB,

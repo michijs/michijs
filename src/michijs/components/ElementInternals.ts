@@ -34,17 +34,19 @@ export const ElementInternals: FC<ElementInternalsProps> = (
 ) => {
   const self = options?.contextElement;
   if (self && isMichiCustomElement(self) && self.$michi.internals) {
-    bindObservable(errorMessage, (newValue) => {
-      if (newValue)
-        self.$michi.internals!.setValidity?.(validityStateFlags, newValue);
-      else self.$michi.internals!.setValidity?.({});
-    });
+    if (errorMessage)
+      bindObservable(errorMessage, (newValue) => {
+        if (newValue)
+          self.$michi.internals!.setValidity?.(validityStateFlags, newValue);
+        else self.$michi.internals!.setValidity?.({});
+      });
 
-    bindObservable(formValue, (newValue) => {
-      self.$michi.internals!.setFormValue?.(
-        newValue as Parameters<ElementInternals["setFormValue"]>[0],
-      );
-    });
+    if (formValue)
+      bindObservable(formValue, (newValue) => {
+        self.$michi.internals!.setFormValue?.(
+          newValue as Parameters<ElementInternals["setFormValue"]>[0],
+        );
+      });
 
     Object.entries({ tabIndex, ...aria }).forEach(([key, value]) => {
       if (self.$michi.internals)

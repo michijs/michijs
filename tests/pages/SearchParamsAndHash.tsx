@@ -1,4 +1,4 @@
-import { h, useSearchParams, useHash, useComputedObserve, Title } from "../../src";
+import { useSearchParams, useHash, useComputedObserve, Title } from "../../src";
 import { SimpleCounter } from "../SimpleCounter";
 
 const SearchParamsAndHash = () => {

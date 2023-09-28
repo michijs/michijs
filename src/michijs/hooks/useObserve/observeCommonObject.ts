@@ -52,7 +52,7 @@ export function observeCommonObject<T extends unknown>(
   const newObservable = new ProxiedValue<T>(
     item && Object.getPrototypeOf(item) === Object.prototype ?
       Object.entries(item).reduce((previousValue, [key, value]) => {
-        const observedItem = useObserve(value, newInitialObservers);
+        const observedItem = useObserve<any>(value, newInitialObservers);
         previousValue[key] = observedItem;
         return previousValue;
       }, {}) as T
@@ -65,13 +65,12 @@ export function observeCommonObject<T extends unknown>(
     get(target, p, receiver) {
       if (p in target)
         return Reflect.get(target, p, receiver);
-      else if (p in target.$value)
+      else if (target.$value && typeof target.$value === 'object' && p in target.$value)
         return Reflect.get(target.$value, p, receiver)
       else {
         proxy[p] = undefined
       }
-      return Reflect.get(target.$value, p, receiver);
-      // return Reflect.get(p in target ? target: target.$value, p, receiver);
+      return proxy[p];
     },
   }) as unknown as ObservableType<T>;
   return proxy

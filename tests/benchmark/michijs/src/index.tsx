@@ -1,4 +1,4 @@
-import { h, createCustomElement, ElementList } from "../../../../src";
+import { createCustomElement, ElementList } from "../../../../src";
 
 function _random(max: number) {
   return Math.round(Math.random() * 1000) % max;

@@ -17,6 +17,6 @@ export const defineReflectedAttributes = (
       const standarizedAttributeName = formatToKebabCase(key);
       if (key !== standarizedAttributeName)
         definePropertyFromObservable(self, standarizedAttributeName, observable, key);
-      observable[key].subscribe((newValue) => setProperty(self, standarizedAttributeName, newValue, { contextElement: self }));
+      observable[key].subscribe?.((newValue) => setProperty(self, standarizedAttributeName, newValue, { contextElement: self }));
     }
 };

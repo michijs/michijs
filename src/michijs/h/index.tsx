@@ -1,20 +1,12 @@
-import { Fragment } from "../components/Fragment";
+import { Fragment } from "../components";
+import { Key } from "../types";
 
-export const h = {
-  createElement(jsxTag, attrs, ...childrenProps): JSX.Element {
-    const { children: attrsChildren, key, ...finalAttrs } = attrs ?? {};
+function jsx(jsxTag, attrs: Record<string, unknown> = {}, key?: Key) {
+  return {
+    jsxTag,
+    attrs,
+    key,
+  };
+}
 
-    return {
-      jsxTag,
-      attrs: {
-        ...finalAttrs,
-        children:
-          childrenProps.length > 0 || !attrsChildren
-            ? childrenProps
-            : attrsChildren,
-      },
-      key,
-    };
-  },
-  Fragment,
-};
+export { jsx, jsx as jsxs, jsx as jsxDEV, Fragment };

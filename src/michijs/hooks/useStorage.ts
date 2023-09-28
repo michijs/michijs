@@ -28,7 +28,7 @@ export function useStorage<T extends object>(
 
   const windowObservable = new ObservableFromEventListener(window, "storage");
 
-  windowObservable.subscribe((ev) => {
+  windowObservable.subscribe?.((ev) => {
     if (ev?.key && Object.keys(item).includes(ev.key)) newObservable[ev.key] = getStorageValue(ev.key);
   })
 

@@ -1,7 +1,7 @@
 export { deepEqual } from "./deepEqual";
 export { formatToKebabCase } from "./formatToKebabCase";
 export { getFormData } from "./getFormData";
-export { inspectForObservables } from "./inspectForObservables";
+export { getObservables } from "./getObservables";
 export { addStylesheetsToDocumentOrShadowRoot } from "./addStylesheetsToDocumentOrShadowRoot";
 export { wait } from "./wait";
 export { bindObservable } from "./bindObservable";

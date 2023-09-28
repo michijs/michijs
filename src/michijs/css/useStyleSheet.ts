@@ -2,14 +2,14 @@ import { useComputedObserve } from "../hooks";
 import { bindObservable } from "../utils";
 import { CSSObject } from "../types";
 import { formatToKebabCase } from "../utils";
-import { inspectForObservables } from "../utils/inspectForObservables";
+import { getObservables } from "../utils/getObservables";
 
 /**Allows to create a Constructable Stylesheet with a CSSObject */
 export const useStyleSheet = (
   cssObject: CSSObject,
 ) => {
   const styleSheet = new CSSStyleSheet();
-  const observables = inspectForObservables(cssObject);
+  const observables = getObservables(cssObject);
   const stringResult = useComputedObserve(() => {
     const formattedObject = formatToKebabCase(JSON.stringify(cssObject))
     // Example "--example":"\\"red\\""

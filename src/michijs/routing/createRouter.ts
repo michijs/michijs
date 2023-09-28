@@ -1,5 +1,5 @@
 import { Router } from "../components/Router";
-import { h } from "../h";
+import { jsx } from "../h";
 import { formatToKebabCase } from "../utils/formatToKebabCase";
 import { CreateRouterResult, UrlFunction } from "./types";
 import { setSearchParam } from "./utils/setSearchParam";
@@ -40,9 +40,11 @@ export function createRouter<R extends Record<string, JSX.Element>>(
     },
   );
 
-  const RouterProxy: CreateRouterResult<R>[1] = (props) => {
-    return <Router {...props} routes={routes} parentRoute={parentRoute} />;
-  };
+  const RouterProxy: CreateRouterResult<R>[1] = (props) => jsx(Router, {
+      ...props,
+      routes,
+      parentRoute
+  });
 
   return [urls, RouterProxy] as CreateRouterResult<R>;
 }

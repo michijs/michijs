@@ -1,7 +1,8 @@
 import { useObserve } from "../..";
-import { ObservableType, ObserverCallback } from "../types";
+import { ObserverCallback } from "../types";
 
-export function setObservableValue<T extends ObservableType<any>>(
+// <T extends ObservableType<any>>
+export function setObservableValue<T extends object>(
   object1: T,
   object2: any,
   initialObservers?: ObserverCallback<T>[]

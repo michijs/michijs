@@ -1,5 +1,4 @@
 import { createCustomElement } from "../customElements/createCustomElement";
-import { h } from "../h";
 import { Fragment } from "../components/Fragment";
 import {
   ClassJSXElement,
@@ -8,7 +7,7 @@ import {
   FunctionJSXElement,
   ObjectJSXElement,
 } from "../types";
-import { jsx } from "./jsx-runtime";
+import { jsx } from "./";
 jest.mock("../customElements/createCustomElement", () => ({
   createCustomElement: (tag: string) => ({ tag }),
 }));
@@ -20,7 +19,7 @@ const testAttrs = {
   children: [testChild],
 };
 const fragmentResult: FragmentJSXElement = {
-  jsxTag: Fragment.tag,
+  jsxTag: null,
   attrs: {
     children: [],
   },

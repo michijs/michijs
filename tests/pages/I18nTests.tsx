@@ -1,5 +1,5 @@
 import type { TypedEvent } from "@michijs/htmltype";
-import { createCustomElement, h, I18n, Title, useStorage } from "../../src";
+import { createCustomElement, I18n, Title, useStorage } from "../../src";
 import en from "./i18nTests/en.json";
 
 type SupportedLanguages = "es" | "en";

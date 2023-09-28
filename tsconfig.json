@@ -22,9 +22,13 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noImplicitThis": true,
-    "jsx": "react",
-    "jsxFactory": "h.createElement",
-    "jsxFragmentFactory": "h.Fragment"
+    "jsx": "react-jsx",
+    "jsxImportSource": "@michijs/michijs",
+    "paths": {
+      "@michijs/michijs/*": [
+        "./src/*"
+      ]
+    }
   },
   "include": [
     "src",

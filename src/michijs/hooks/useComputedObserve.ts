@@ -1,10 +1,10 @@
-import { ObservableType, ObservableLike } from "../types";
+import { ObservableType, CompatibleObservableLike } from "../types";
 import { useObserve } from "./useObserve";
 import { setObservableValue } from "../utils";
 
 export function useComputedObserve<T>(
   callback: () => T,
-  deps: Partial<ObservableLike<any>>[],
+  deps: Partial<CompatibleObservableLike<any>>[],
   options?: {
     onBeforeUpdate?(): void,
     onAfterUpdate?(): void

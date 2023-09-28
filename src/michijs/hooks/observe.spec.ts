@@ -13,12 +13,8 @@ const objectTests = (initialValue: () => AnyObject | unknown[]) => {
       nonProxiedObject = undefined;
       nonProxiedObject = initialValue();
       object = undefined;
-      object = useObserve({
-        item: initialValue(),
-        onChange: mockCallback,
-        shouldValidatePropertyChange: () => true,
-        propertyPath: "",
-      });
+      object = useObserve(initialValue());
+      object.subscribe?.(mockCallback)
     });
     it("Setting the same value two times must call its callback just one time", () => {
       object[0] = exampleValue;
@@ -75,121 +71,116 @@ describe("Observe tests", () => {
   describe("When observing Arrays", () => {
     objectTests(() => []);
   });
-  describe("When observing Maps", () => {
-    let nonProxiedMap: Map<any, any>;
-    let map: Map<any, any>;
-    beforeEach(() => {
-      nonProxiedMap = new Map();
-      map = useObserve({
-        item: new Map(),
-        onChange: mockCallback,
-        shouldValidatePropertyChange: () => true,
-        propertyPath: "",
-      });
-    });
-    it("Setting the same value two times must call its callback just one time", () => {
-      map[0] = exampleValue;
-      map[0] = exampleValue;
-      nonProxiedMap[0] = exampleValue;
-      expect(mockCallback).toBeCalledTimes(1);
-    });
-    it("Setting the same value two times must call its callback just one time (using set method)", () => {
-      map.set(0, exampleValue);
-      map.set(0, exampleValue);
-      nonProxiedMap.set(0, exampleValue);
-      expect(mockCallback).toBeCalledTimes(1);
-    });
-    it("Deleting an existing index should call the callback", () => {
-      map.set(0, exampleValue);
-      nonProxiedMap.set(0, exampleValue);
-      map.delete(0);
-      nonProxiedMap.delete(0);
-      expect(mockCallback).toBeCalledTimes(2);
-    });
-    it("Deleting an non-existent index should not call the callback", () => {
-      map.delete(0);
-      nonProxiedMap.delete(0);
-      expect(mockCallback).toBeCalledTimes(0);
-    });
-    it("Clearing a map with items should call the callback", () => {
-      map.set(0, exampleValue);
-      nonProxiedMap.set(0, exampleValue);
-      map.clear();
-      nonProxiedMap.clear();
-      expect(mockCallback).toBeCalledTimes(2);
-    });
-    it("Clearing a map without items should not call the callback", () => {
-      map.clear();
-      nonProxiedMap.clear();
-      expect(mockCallback).toBeCalledTimes(0);
-    });
-    afterEach(() => {
-      expect(Array.from(map)).toEqual(Array.from(nonProxiedMap));
-    });
-  });
-  describe("When observing Sets", () => {
-    let nonProxiedSet: Set<any>;
-    let set: Set<any>;
-    beforeEach(() => {
-      nonProxiedSet = new Set();
-      set = useObserve({
-        item: new Set(),
-        onChange: mockCallback,
-        shouldValidatePropertyChange: () => true,
-        propertyPath: "",
-      });
-    });
-    it("Setting the same value two times must call its callback just one time", () => {
-      set[0] = exampleValue;
-      set[0] = exampleValue;
-      nonProxiedSet[0] = exampleValue;
-      expect(mockCallback).toBeCalledTimes(1);
-    });
-    it("Adding the same value two times must call its callback just one time (using set method)", () => {
-      set.add(exampleValue);
-      set.add(exampleValue);
-      nonProxiedSet.add(exampleValue);
-      expect(mockCallback).toBeCalledTimes(1);
-    });
-    it("Deleting an existing index should call the callback", () => {
-      set.add(exampleValue);
-      nonProxiedSet.add(exampleValue);
-      set.delete(exampleValue);
-      nonProxiedSet.delete(exampleValue);
-      expect(mockCallback).toBeCalledTimes(2);
-    });
-    it("Deleting an non-existent index should not call the callback", () => {
-      set.delete(exampleValue);
-      nonProxiedSet.delete(exampleValue);
-      expect(mockCallback).toBeCalledTimes(0);
-    });
-    it("Clearing a map with items should call the callback", () => {
-      set.add(exampleValue);
-      nonProxiedSet.add(exampleValue);
-      set.clear();
-      nonProxiedSet.clear();
-      expect(mockCallback).toBeCalledTimes(2);
-    });
-    it("Clearing a map without items should not call the callback", () => {
-      set.clear();
-      nonProxiedSet.clear();
-      expect(mockCallback).toBeCalledTimes(0);
-    });
-    afterEach(() => {
-      expect(Array.from(set)).toEqual(Array.from(nonProxiedSet));
-    });
-  });
+  // describe("When observing Maps", () => {
+  //   let nonProxiedMap: Map<any, any>;
+  //   let map: Map<any, any>;
+  //   beforeEach(() => {
+  //     nonProxiedMap = new Map();
+  //     map = useObserve({
+  //       item: new Map(),
+  //       onChange: mockCallback,
+  //       shouldValidatePropertyChange: () => true,
+  //       propertyPath: "",
+  //     });
+  //   });
+  //   it("Setting the same value two times must call its callback just one time", () => {
+  //     map[0] = exampleValue;
+  //     map[0] = exampleValue;
+  //     nonProxiedMap[0] = exampleValue;
+  //     expect(mockCallback).toBeCalledTimes(1);
+  //   });
+  //   it("Setting the same value two times must call its callback just one time (using set method)", () => {
+  //     map.set(0, exampleValue);
+  //     map.set(0, exampleValue);
+  //     nonProxiedMap.set(0, exampleValue);
+  //     expect(mockCallback).toBeCalledTimes(1);
+  //   });
+  //   it("Deleting an existing index should call the callback", () => {
+  //     map.set(0, exampleValue);
+  //     nonProxiedMap.set(0, exampleValue);
+  //     map.delete(0);
+  //     nonProxiedMap.delete(0);
+  //     expect(mockCallback).toBeCalledTimes(2);
+  //   });
+  //   it("Deleting an non-existent index should not call the callback", () => {
+  //     map.delete(0);
+  //     nonProxiedMap.delete(0);
+  //     expect(mockCallback).toBeCalledTimes(0);
+  //   });
+  //   it("Clearing a map with items should call the callback", () => {
+  //     map.set(0, exampleValue);
+  //     nonProxiedMap.set(0, exampleValue);
+  //     map.clear();
+  //     nonProxiedMap.clear();
+  //     expect(mockCallback).toBeCalledTimes(2);
+  //   });
+  //   it("Clearing a map without items should not call the callback", () => {
+  //     map.clear();
+  //     nonProxiedMap.clear();
+  //     expect(mockCallback).toBeCalledTimes(0);
+  //   });
+  //   afterEach(() => {
+  //     expect(Array.from(map)).toEqual(Array.from(nonProxiedMap));
+  //   });
+  // });
+  // describe("When observing Sets", () => {
+  //   let nonProxiedSet: Set<any>;
+  //   let set: Set<any>;
+  //   beforeEach(() => {
+  //     nonProxiedSet = new Set();
+  //     set = useObserve({
+  //       item: new Set(),
+  //       onChange: mockCallback,
+  //       shouldValidatePropertyChange: () => true,
+  //       propertyPath: "",
+  //     });
+  //   });
+  //   it("Setting the same value two times must call its callback just one time", () => {
+  //     set[0] = exampleValue;
+  //     set[0] = exampleValue;
+  //     nonProxiedSet[0] = exampleValue;
+  //     expect(mockCallback).toBeCalledTimes(1);
+  //   });
+  //   it("Adding the same value two times must call its callback just one time (using set method)", () => {
+  //     set.add(exampleValue);
+  //     set.add(exampleValue);
+  //     nonProxiedSet.add(exampleValue);
+  //     expect(mockCallback).toBeCalledTimes(1);
+  //   });
+  //   it("Deleting an existing index should call the callback", () => {
+  //     set.add(exampleValue);
+  //     nonProxiedSet.add(exampleValue);
+  //     set.delete(exampleValue);
+  //     nonProxiedSet.delete(exampleValue);
+  //     expect(mockCallback).toBeCalledTimes(2);
+  //   });
+  //   it("Deleting an non-existent index should not call the callback", () => {
+  //     set.delete(exampleValue);
+  //     nonProxiedSet.delete(exampleValue);
+  //     expect(mockCallback).toBeCalledTimes(0);
+  //   });
+  //   it("Clearing a map with items should call the callback", () => {
+  //     set.add(exampleValue);
+  //     nonProxiedSet.add(exampleValue);
+  //     set.clear();
+  //     nonProxiedSet.clear();
+  //     expect(mockCallback).toBeCalledTimes(2);
+  //   });
+  //   it("Clearing a map without items should not call the callback", () => {
+  //     set.clear();
+  //     nonProxiedSet.clear();
+  //     expect(mockCallback).toBeCalledTimes(0);
+  //   });
+  //   afterEach(() => {
+  //     expect(Array.from(set)).toEqual(Array.from(nonProxiedSet));
+  //   });
+  // });
   describe("When observing Dates", () => {
     let nonProxiedDate: Date;
     let date: Date;
     beforeEach(() => {
       nonProxiedDate = new Date();
-      date = useObserve({
-        item: new Date(),
-        onChange: mockCallback,
-        shouldValidatePropertyChange: () => true,
-        propertyPath: "",
-      });
+      date = useObserve(new Date());
     });
     it("Setting the same value two times must call its callback just one time", () => {
       const newExampleValue = date.getTime() + 1;

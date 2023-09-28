@@ -1,5 +1,4 @@
-export { h } from "./michijs/h";
-export { jsx, jsxs, jsxDEV, Fragment } from "./michijs/h/jsx-runtime";
+export { jsx, jsxs, jsxDEV, Fragment } from "./michijs/h";
 export * from "./michijs/constants";
 export * from "./michijs/components";
 export * from "./michijs/classes";

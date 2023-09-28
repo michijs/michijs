@@ -14,7 +14,7 @@ export const Router = <const T = FC>({ as: asTag, routes, parentRoute, ...attrs 
   const el = asTag ? create({
     jsxTag: asTag,
     attrs
-  } as SingleJSXElement) as ChildNode & ParentNode : new VirtualFragment();
+  } as unknown as SingleJSXElement) as ChildNode & ParentNode : new VirtualFragment();
   const cache: Record<string, Node[]> = {};
 
   const matchedRoute = useComputedObserve(() => {
@@ -26,19 +26,18 @@ export const Router = <const T = FC>({ as: asTag, routes, parentRoute, ...attrs 
 
   bindObservable(matchedRoute, (newMatchedRoute) => {
     const newCache = el.childNodes.length > 0 ? Array.from(el.childNodes) : undefined
-    el.textContent = '';
     if (currentRoute && newCache)
       cache[currentRoute] = newCache
 
     if (newMatchedRoute) {
-      if (cache[newMatchedRoute]) el.append(...cache[newMatchedRoute]);
+      if (cache[newMatchedRoute]) el.replaceChildren(...cache[newMatchedRoute]);
       else {
         const component = routes[newMatchedRoute];
-        el.append(create(component, options))
+        el.replaceChildren(create(component, options))
       }
     }
     currentRoute = newMatchedRoute
   })
 
-  return el.valueOf();
+  return el.valueOf() as Node;
 }
