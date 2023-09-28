@@ -10,16 +10,15 @@ const storedCount = useStorage({
   count: 0,
 });
 
+function decrementCount() {
+  storedCount.count--;
+}
+function incrementCount() {
+  storedCount.count++;
+}
+
 export const StoredObservableCounter = customElement`stored-observable-counter`(
   {
-    methods: {
-      decrementCount() {
-        storedCount.count--;
-      },
-      incrementCount() {
-        storedCount.count++;
-      },
-    },
     events: {
       countChanged: new EventDispatcher<number>(),
     },
@@ -28,9 +27,9 @@ export const StoredObservableCounter = customElement`stored-observable-counter`(
       storedCount.count.subscribe?.(this.countChanged)
       return (
         <Host count={storedCount.count}>
-          <button onpointerup={this.decrementCount}>-</button>
+          <button onpointerup={decrementCount}>-</button>
           <span>{storedCount.count}</span>
-          <button onpointerup={this.incrementCount}>+</button>
+          <button onpointerup={incrementCount}>+</button>
         </Host>
       );
     },

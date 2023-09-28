@@ -3,20 +3,17 @@ import { counterStyle } from "./shared/counterStyle";
 import { decrement, increment } from "./shared/redux/CounterSlice";
 import { store } from "./shared/redux/store";
 
+
+function decrementCount() {
+  store.dispatch(decrement());
+}
+function incrementCount() {
+  store.dispatch(increment());
+}
+
 export const CounterWithReduxStore = createCustomElement(
   "counter-with-redux-store",
   {
-    methods: {
-      count() {
-        return store.getState().counterStore.count;
-      },
-      decrementCount() {
-        store.dispatch(decrement());
-      },
-      incrementCount() {
-        store.dispatch(increment());
-      },
-    },
     events: {
       countChanged: new EventDispatcher<number>(),
     },
@@ -26,9 +23,9 @@ export const CounterWithReduxStore = createCustomElement(
 
       return (
         <Host count={count}>
-          <button onpointerup={this.decrementCount}>-</button>
+          <button onpointerup={decrementCount}>-</button>
           <span>{count}</span>
-          <button onpointerup={this.incrementCount}>+</button>
+          <button onpointerup={incrementCount}>+</button>
         </Host>
       );
     },

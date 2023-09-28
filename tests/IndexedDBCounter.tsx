@@ -20,17 +20,17 @@ const storedCount = useIndexedDB<{
 
 const count = useAsyncComputedObserve(async () => {
   return (await storedCount.counter?.get(1))?.count ?? 0
-}, [storedCount], (await storedCount.counter?.get(1))?.count ?? 0) 
+}, [storedCount], (await storedCount.counter?.get(1))?.count ?? 0)
+
+
+function decrementCount() {
+  storedCount.counter?.put({ count: count - 1, id: 1 });
+}
+function incrementCount() {
+  storedCount.counter?.put({ count: count + 1, id: 1 });
+}
 
 export const IndexedDBCounter = createCustomElement("indexed-db-counter", {
-  methods: {
-    async decrementCount() {
-      storedCount.counter?.put({ count: count - 1, id: 1 });
-    },
-    incrementCount() {
-      storedCount.counter?.put({ count: count + 1, id: 1 });
-    },
-  },
   events: {
     countChanged: new EventDispatcher<number>(),
   },
@@ -40,9 +40,9 @@ export const IndexedDBCounter = createCustomElement("indexed-db-counter", {
     
     return (
       <Host count={count}>
-        <button onpointerup={this.decrementCount}>-</button>
+        <button onpointerup={decrementCount}>-</button>
         <span>{count}</span>
-        <button onpointerup={this.incrementCount}>+</button>
+        <button onpointerup={incrementCount}>+</button>
       </Host>
     );
   },
