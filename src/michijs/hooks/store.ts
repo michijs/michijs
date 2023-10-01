@@ -24,13 +24,11 @@ export function store<
   });
   let dispatchInProgressCount = 0;
   let propertiesThatChanged = new Array<string>();
-  // @ts-ignore
-  const self = this;
   const proxiedTransactions = Object.entries(props.transactions ?? {}).reduce(
     (previousValue, [key, value]) => {
       previousValue[key] = (...args) => {
         dispatchInProgressCount++;
-        const result = self ? value.apply(self, args) : value(...args);
+        const result = this ? value.apply(this, args) : value(...args);
         decrementDispatchInProgressCount();
         return result;
       };
