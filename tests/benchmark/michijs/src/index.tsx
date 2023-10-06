@@ -1,4 +1,4 @@
-import { createCustomElement, ElementList } from "../../../../src";
+import { ObservableType, createCustomElement, useObserve } from "../../../../src";
 
 function _random(max: number) {
   return Math.round(Math.random() * 1000) % max;
@@ -63,52 +63,38 @@ const adjectivesLength = adjectives.length;
 const coloursLength = colours.length;
 const nounsLength = nouns.length;
 
-type Row = { label: string; id: number; selected?: boolean };
+type Row = { label: string; id: number; selected?: string };
 let nextId = 1;
-let selectedId: number | null = null;
+let selectedItem: ObservableType<Row> | null = null;
 function buildData(count = 1000) {
   const data = new Array<Row>(count);
   for (let i = 0; i < count; i++)
     data[i] = {
       id: nextId++,
-      label: `${adjectives[_random(adjectivesLength)]} ${
-        colours[_random(coloursLength)]
-      } ${nouns[_random(nounsLength)]}`,
+      label: `${adjectives[_random(adjectivesLength)]} ${colours[_random(coloursLength)]
+        } ${nouns[_random(nounsLength)]}`,
     };
   return data;
 }
-const rows = new ElementList<Row>();
-const run = () => rows.replace(...buildData());
-const runLots = () => rows.replace(...buildData(10000));
+const rows = useObserve<Row[]>([]);
+const run = () => rows.$replace?.(...buildData());
+const runLots = () => rows.$replace?.(...buildData(10000));
 const add = () => rows.push(...buildData());
 const update = () => {
-  for (let i = 0; i < rows.getData().length; i += 10) {
-    rows.update(i, (value) => {
-      value.label += " !!!";
-      return value;
-    });
+  for (let i = 0; i < rows.length; i += 10) {
+    rows[i].label += " !!!";
   }
 };
-const clear = () => rows.clear();
-const select = (id: number) => {
-  const index = rows.getData().findIndex((x) => x.id === id);
-  rows.update(index, (value) => {
-    if (selectedId) {
-      const selectedIndex = rows.getData().findIndex((x) => x.selected);
-      if (selectedIndex >= 0)
-        rows.update(selectedIndex, (value) => {
-          value.selected = undefined;
-          return value;
-        });
-    }
-    value.selected = true;
-    selectedId = value.id;
-    return value;
-  });
+const clear = () => rows.$clear?.();
+const select = (row: ObservableType<Row>) => {
+  row.selected = 'danger';
+  if (selectedItem)
+    selectedItem.selected = undefined;
+  selectedItem = row;
 };
 const deleteItem = (id: number) =>
-  rows.remove(rows.getData().findIndex((x) => x.id === id));
-const swapRows = () => rows.swap(1, 998);
+  rows.$remove?.(rows.findIndex((x) => x.id === id));
+const swapRows = () => rows.$swap?.(1, 998);
 
 export const Table = createCustomElement("michi-table", {
   extends: {
@@ -116,18 +102,20 @@ export const Table = createCustomElement("michi-table", {
     class: HTMLTableElement,
   },
   render() {
+    const List = rows.List!
+
     return (
-      <rows.List
+      <List
         as="tbody"
         _={{ id: "tbody" }}
-        renderItem={({ label, id, selected }) => (
-          <tr class={selected ? "danger" : undefined}>
-            <td _={{ className: "col-md-1" }}>{id}</td>
+        renderItem={(row) => (
+          <tr class={row.selected}>
+            <td _={{ className: "col-md-1" }}>{row.id}</td>
             <td _={{ className: "col-md-4" }}>
-              <a _={{ onclick: () => select(id) }}>{label}</a>
+              <a _={{ onclick: () => select(row) }}>{row.label}</a>
             </td>
             <td _={{ className: "col-md-1" }}>
-              <a onclick={() => deleteItem(id)}>
+              <a onclick={() => deleteItem(row.id)}>
                 <span
                   _={{
                     className: "glyphicon glyphicon-remove",
@@ -138,7 +126,8 @@ export const Table = createCustomElement("michi-table", {
             </td>
             <td _={{ className: "col-md-6" }} />
           </tr>
-        )}
+        )
+        }
       />
     );
   },

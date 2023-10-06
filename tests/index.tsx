@@ -1,8 +1,8 @@
-import { createCustomElement, Host, If } from "../src";
+import { createCustomElement, Host, If, useObserve } from "../src";
 import { ColorSelector } from "./ColorSelector";
 import { Router } from "./routes";
-// // import sheet from './a.css' assert { type: 'css' };
-// // console.log(sheet)
+// import sheet from './a.css' assert { type: 'css' };
+// console.log(sheet)
 
 createCustomElement("root-test-element", {
   reflectedAttributes: {
@@ -10,7 +10,7 @@ createCustomElement("root-test-element", {
     arrayTest: [0, 1, 2, 3, 4, 5],
   },
   shadow: false,
-  transactions: {
+  methods: {
     onClickArray() {
       this.arrayTest.push(7, 8);
       // this.arrayTest = [0, 1, 2, 3, 6]
@@ -40,11 +40,9 @@ createCustomElement("root-test-element", {
           renderItem={item => <div key={item} onclick={this.onClickArray}>{item}</div>}
         /> */}
         <ColorSelector />
-        {/* {this.arrayTest.map((item) => (
-          <div key={item} onclick={this.onClickArray}>
-            {item}
-          </div>
-        ))} */}
+        <div onclick={this.onClickArray}>
+          {this.arrayTest}
+        </div>
         {/* <this.arrayTest.List
           renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}
         /> */}
@@ -52,34 +50,16 @@ createCustomElement("root-test-element", {
     );
   },
 });
-// const a = indexeddbObservable<
-//   {
-//     logs: {
-//       test: string
-//     }
-//   }
-// >('testdb', {
-//   logs: {
-//     keyPath: 'test'
-//   }
-// })
 
-// await wait(2000);
-// a.logs.add({
-//   test: 'xd2'
-// })
-// a.logs.add({
-//   test: 'xd3'
-// })
-// console.log(a.logs.getAll().result)
 // TODO:
-// Update readme
-// check blank space in template
-// Deploy live demo
-// Remove param from htmlElements since is deprecated
-// Unit tests some functions from element list
-// unlinked attributes ex: <div {bla ? ...obj1: ...obj2}/>
-// and obj2 has an attribute that obj1 does not that attribute will be unlinked...
+// Fix Title component
+// Fix List beign undefined not allowed as jsx
+// Finish map and set
+// 
+
+
+
+
 // documentTransition test
 // const titulo1 = document.createElement('h1');
 // titulo1.textContent = 'hola 1'
@@ -104,18 +84,3 @@ createCustomElement("root-test-element", {
 
 //     }
 // }, 300)
-
-// const unproxyfy = (object: unknown) => {
-//     if (typeof object === 'object') {
-//         const unproxyfiedObject = {};
-//         Object.entries(object).forEach(([key, value]) => {
-//             unproxyfiedObject[key] = unproxyfy(value)
-//         })
-
-//         return unproxyfiedObject;
-//     }else{
-//         return object;
-//     }
-// }
-// console.log(unproxyfy(a))
-// import("./test");

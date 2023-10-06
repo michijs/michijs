@@ -119,7 +119,7 @@ export function createCustomElement<
           const allCssVariables = Object.keys(cssVariables ?? {}).concat(Object.keys(reflectedCssVariables ?? {})).reduce((previousValue, x) => {
             previousValue[x] = this[x];
             return previousValue
-          }, {}) as unknown as ObservableType<CSSObject>;
+          }, {});
 
           const parsedCssVariables = useComputedObserve(() => (convertCssObjectToCssVariablesObject(allCssVariables)), Object.values(allCssVariables))
           const styleSheet = useStyleSheet({

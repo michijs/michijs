@@ -9,10 +9,6 @@ export const createObject = (jsx: ObjectJSXElement, options: CreateOptions) => {
   let el: Element;
   const {
     children,
-    $staticChildren,
-    $oncreated,
-    $doNotTouchChildren,
-    $onupdate,
     ...attrs
   } = jsx.attrs;
   if (isSVG) {

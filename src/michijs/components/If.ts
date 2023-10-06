@@ -10,7 +10,7 @@ import {
 } from "../types";
 
 type IfProps<T> = ExtendableComponentWithoutChildren<T> & {
-  condition: ObservableLike<unknown>;
+  condition: ObservableLike<any>;
   then?: JSX.Element;
   else?: JSX.Element;
 };

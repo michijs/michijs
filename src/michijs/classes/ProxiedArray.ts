@@ -2,39 +2,21 @@ import {
   CreateOptions,
   ExtendableComponentWithoutChildren,
   FC,
+  ObserverCallback,
+  ProxiedValue,
   SingleJSXElement,
+  ProxiedArrayInterface
 } from "../..";
 import { create } from "../DOMDiff";
 // import { ListElement } from "../components/FragmentAndList";
 import { Target } from "./Target";
 import { VirtualFragment } from "./VirtualFragment";
 
-export type ElementListInterface<V> = Array<V> & {
-  /**
-   * Removes all the list elements
-   */
-  $clear();
-  /**
-   * Replace all the list elements
-   */
-  $replace(...items: V[]);
-  /**
-   * Removes an item
-   */
-  $remove(index: number);
-  /**
-   * Swaps two items
-   */
-  $swap(indexA: number, indexB: number);
-};
 
-export type RenderFunction<V> = (item: V) => JSX.Element;
-
-export class ElementList<V> implements ElementListInterface<V> {
+export class ProxiedArray<V> extends ProxiedValue<V[]> implements ProxiedArrayInterface<V> {
   private targets = new Array<Target<V>>();
-  private data: V[];
-  constructor(...initialData: V[]) {
-    this.data = initialData;
+  constructor(initialData: V[], initialObservers?: ObserverCallback<V[]>[]) {
+    super(initialData, initialObservers)
   }
   /**
    * Is a proxy that allows you to avoid using dom diff algorithms to render lists.
@@ -47,69 +29,87 @@ export class ElementList<V> implements ElementListInterface<V> {
       renderItem,
       ...attrs
     }: ExtendableComponentWithoutChildren<E> & {
-      renderItem: RenderFunction<V>;
+      renderItem: FC<V>;
     },
     context: CreateOptions,
-  ) => {
+  ): Node => {
     const el = asTag
       ? (create({
-          jsxTag: asTag,
-          attrs,
-        } as SingleJSXElement) as ParentNode)
+        jsxTag: asTag,
+        attrs,
+      } as SingleJSXElement) as ParentNode)
       : new VirtualFragment();
 
     this.targets.push(new Target(el, renderItem, context));
 
-    return el;
+    return el as Node;
   };
 
   $clear() {
     this.targets.forEach((target) => target.clear());
-    this.data = [];
+    this.$value = [];
+    this.notifyCurrentValue();
   }
 
   $replace(...items: V[]) {
     this.targets.forEach((target) => target.replace(...items));
-    this.data = items;
+    this.$value = items;
+    this.notifyCurrentValue();
+    return items.length;
   }
 
   $remove(index: number) {
-    this.data = this.data.filter((_x, i) => i !== index);
+    this.$value = this.$value.filter((_x, i) => i !== index);
     this.targets.forEach((target) => target.remove(index));
+    this.notifyCurrentValue();
+    return this.$value.length;
   }
 
   $swap(indexA: number, indexB: number) {
-    if (this.data.length > indexA && this.data.length > indexB) {
+    if (this.$value.length > indexA && this.$value.length > indexB) {
       this.targets.forEach((target) => target.swap(indexA, indexB));
-      [this.data[indexA], this.data[indexB]] = [
-        this.data[indexB],
-        this.data[indexA],
+      [this.$value[indexA], this.$value[indexB]] = [
+        this.$value[indexB],
+        this.$value[indexA],
       ];
+      this.notifyCurrentValue()
     }
   }
 
   pop(): V | undefined {
     this.targets.forEach((target) => target.pop());
-    return this.data.pop();
+    const result = this.$value.pop();
+    this.notifyCurrentValue();
+
+    return result;
   }
 
   push(...items: V[]): number {
     if (items.length > 0)
       this.targets.forEach((target) => target.appendItems(...items));
-    this.data?.push(...items);
-    return this.data.length;
+    const result = this.$value?.push(...items);
+
+    this.notifyCurrentValue();
+    return result;
   }
   reverse() {
     this.targets.forEach((target) => target.reverse());
-    return this.data.reverse();
+    const result = this.$value.reverse();
+
+    this.notifyCurrentValue();
+    return result;
   }
   shift(): V | undefined {
     this.targets.forEach((target) => target.shift());
-    return this.data.shift();
+    const result = this.$value.shift();
+    this.notifyCurrentValue();
+    return result;
   }
   unshift(...items: V[]): number {
     this.targets.forEach((target) => target.prependItems(...items));
-    return this.data.unshift(...items);
+    const result = this.$value.unshift(...items);
+    this.notifyCurrentValue();
+    return result;
   }
 
   // sort(compareFn?: (a: T, b: T) => number): this {

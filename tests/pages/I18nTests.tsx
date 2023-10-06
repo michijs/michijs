@@ -4,10 +4,10 @@ import en from "./i18nTests/en.json";
 
 type SupportedLanguages = "es" | "en";
 
-const supportedLanguages: [{ key: SupportedLanguages, label: string }] = [
-  { key: "en", label: "English" },
-  { key: "es", label: "Español" },
-];
+const supportedLanguages: Record<SupportedLanguages, string> = {
+  en: 'English',
+  es: 'Español'
+}
 
 const languageStorage = useStorage({
   lang: 'en' as SupportedLanguages
@@ -32,20 +32,16 @@ const I18nTests = createCustomElement("i18n-tests", {
       <>
         <Title>I18n tests Page</Title>
         <span>{t.language}</span>
-        {/* <List
-          as="select"
-          onchange={this.onChangeLanguage}
-          data={supportedLanguages}
-          renderItem={({ key, label }) => (
+        <select onchange={this.onChangeLanguage}>
+          {Object.entries(supportedLanguages).map(([key, label]) => (
             <option
-              key={key}
               selected={key === translator.currentLanguage}
               value={key}
             >
               {label}
             </option>
-          )}
-        /> */}
+          ))}
+        </select>
         <span>{t.dogBit}</span>
       </>
     );

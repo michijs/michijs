@@ -1,5 +1,5 @@
 import { hasToJSON } from "../typeWards/hasToJSON";
-import { ObserverCallback } from "../types";
+import type { ObserverCallback, ObservableType } from "../types";
 import { deepEqual } from "../utils";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { Observable } from "./Observable";
@@ -33,9 +33,17 @@ export class ProxiedValue<T> extends Observable<T> {
     return this.$value;
   }
 
-  public toString(props) {
+  public toObservableString(): ObservableType<string> {
     // @ts-ignore
-    return useComputedObserve(() => this.$value?.toString?.(props), [this]);
+    return useComputedObserve(() => this.$value?.toString?.(), [this]);
+  }
+
+  public toBoolean() {
+    return Boolean(this.$value);
+  }
+
+  public compareTo(anotherValue: unknown): boolean{
+    return this.$value === anotherValue?.valueOf();
   }
 
   toJSON() {
@@ -46,6 +54,9 @@ export class ProxiedValue<T> extends Observable<T> {
 
   [Symbol.toPrimitive]() {
     return this.valueOf()
+  }
+  protected [Symbol.toStringTag]() {
+    return this.toString()
   }
 
   shouldCheckForChanges() {

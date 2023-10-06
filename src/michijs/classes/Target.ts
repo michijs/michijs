@@ -1,12 +1,11 @@
 import { create } from "../DOMDiff";
-import { CreateOptions } from "../types";
-import { RenderFunction } from "./ElementList";
+import { CreateOptions, FC } from "../types";
 import { VirtualFragment } from "./VirtualFragment";
 
 export class Target<V> {
   constructor(
     private element: VirtualFragment | ParentNode,
-    private renderItem: RenderFunction<V>,
+    private renderItem: FC<V>,
     private options: CreateOptions,
   ) {}
 

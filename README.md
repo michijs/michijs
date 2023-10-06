@@ -391,17 +391,6 @@ el.setAttribute('class', 'test')
 ```
 In this way the jsx syntax of MichiJS is more similar to html.
 
-## Special attributes
-
-### $staticChildren
-Indicates that their children are created but not updated
-### $doNotTouchChildren
-Indicates that their Children are not created or updated. Element creation/update is delegated
-### $oncreated
-Callback that is called when the element is created
-### $onupdate
-Callback that is called when the element is updated
-
 ## Lists
 There are 3 ways to create a list
 ### Using map

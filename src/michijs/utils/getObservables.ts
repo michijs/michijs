@@ -4,7 +4,7 @@ import { ObservableType } from "../types";
 export function getObservables<T>(obj: T): ObservableType<T>[] {
   if (obj)
     if (isObservableType<T>(obj)) {
-      return [obj]
+      return [obj as ObservableType<T>]
     } else if (typeof obj === 'object') {
       const observables = new Array<ObservableType<any>>();
       Object.values(obj).forEach((x) => {

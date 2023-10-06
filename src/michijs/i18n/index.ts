@@ -2,30 +2,29 @@ import { Observable } from "../classes";
 import { useObserve } from "../hooks";
 import { isObservableType } from "../typeWards/isObservableType";
 import { ObservableType, ObserverCallback } from "../types";
+import { bindObservable } from "../utils";
 import { setObservableValue } from "../utils/setObservableValue";
 
 
-export type Translation<T, K extends string> = {
+export type Translation<K extends string, T> = {
   [key in K]: T | (() => Promise<{ default: T }>) | (() => Promise<T>);
 };
-export interface TranslationItem<T, K extends string> {
-  translation: Translation<T, K>;
+export interface TranslationItem<K extends string, T> {
+  translation: Translation<K, T>;
   observable: ObservableType<T>;
 }
 
 export class I18n<K extends string> extends Observable<K> {
-  private translations = new Array<TranslationItem<any, K>>();
+  private translations = new Array<TranslationItem<K, any>>();
   private _currentLanguage: K | undefined;
   private isUsingSystemLanguage = true;
 
   constructor(language?: K | null, initialObservers?: ObserverCallback<K>[]) {
     super(initialObservers);
     if (language) {
-      this._currentLanguage = language as K;
+      bindObservable(language, (newValue) => this.setLanguage(newValue as K))
       this.isUsingSystemLanguage = false;
     }
-    if (isObservableType(language))
-      language?.subscribe?.((newValue) => { if (newValue) this.setLanguage(newValue as K) })
 
     window.addEventListener("languagechange", () => {
       if (!this.isUsingSystemLanguage)
@@ -41,10 +40,10 @@ export class I18n<K extends string> extends Observable<K> {
     this.isUsingSystemLanguage = false;
   }
 
-  async createTranslation<T>(translation: Translation<T, K>): Promise<ObservableType<T>> {
+  async createTranslation<T>(translation: Translation<K, T>): Promise<ObservableType<T>> {
     const currentTranslation = await this.getCurrentTranslation(translation);
     const observable = useObserve<T>(currentTranslation);
-    const translationItem: TranslationItem<T, K> = {
+    const translationItem: TranslationItem<K, T> = {
       translation,
       observable,
     };
@@ -52,9 +51,7 @@ export class I18n<K extends string> extends Observable<K> {
     return observable;
   }
 
-  private getCurrentTranslation<T>(
-    translation
-      : Translation<T, K>): Promise<T> {
+  private getCurrentTranslation<T>(translation: Translation<K, T>): Promise<T> {
     return new Promise<T>((resolve) => {
       const translationKeys = Object.keys(translation) as K[];
       let key: K | undefined = this.currentLanguage

@@ -3,10 +3,9 @@ import type {
   CSSProperties,
   GlobalEvents,
 } from "@michijs/htmltype";
-import { EventDispatcher } from "./classes";
-import { idGenerator } from "./hooks";
-import { MichiAttributes } from "./h/MichiAttributes";
-import { ProxiedValue } from "./classes/ProxiedValue";
+import type { EventDispatcher, ProxiedValue } from "./classes";
+import type { idGenerator } from "./hooks";
+import type { MichiAttributes } from "./h/MichiAttributes";
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 export type CSSVar<T extends string> = KebabCase<T> & {
@@ -80,10 +79,9 @@ export type ArrayWithOneOrMoreElements<T> = [T, ...T[]];
 export type ExtendableComponent<T> = {
   as?: T;
 } & GetElementProps<T>;
-export type ExtendableComponentWithoutChildren<T> = Omit<
-  ExtendableComponent<T>,
-  "children"
->;
+
+// Intentionally using never - otherwise generics does not work
+export type ExtendableComponentWithoutChildren<T> = ExtendableComponent<T> & { children?: never };
 
 export type SplitIncludingDelimiters<
   Source extends string,
@@ -164,7 +162,7 @@ export interface CompatibleObserverCallback<T> {
 }
 
 export interface ObservableLike<T = any> {
-  subscribe(observer: ObserverCallback<T>): void;
+  subscribe?(observer: ObserverCallback<T>): void;
   unsubscribe?(observer: ObserverCallback<T>): void;
 }
 export interface CompatibleObservableLike<T = any> {
@@ -208,18 +206,51 @@ export interface MichiProperties
 
 export interface MichiCustomElement extends HTMLElement, MichiProperties { }
 
-// Needs to be partial to allow asignation operation
-export type ObservableValue<T> = T & Partial<ProxiedValue<T>>;
 
-export type ObservableType<T> = (T extends Map<infer K, infer V>
-  ? Map<K, ObservableType<V>>
+export interface ProxiedArrayInterface<V> extends ProxiedValue<V[]> {
+  /**
+   * Removes all the list elements
+   */
+  $clear();
+  /**
+   * Replace all the list elements
+   */
+  $replace(...items: V[]): number;
+  /**
+   * Removes an item
+   */
+  $remove(index: number);
+  /**
+   * Swaps two items
+   */
+  $swap(indexA: number, indexB: number);
+
+  List<const E = FC>(
+    props: ExtendableComponentWithoutChildren<E> & {
+      renderItem: FC<V>;
+    },
+    context: CreateOptions
+  ): Node
+};
+
+// Needs to be partial to allow asignation operation
+export type ObservableType<T> = T extends Array<infer V>
+  ? ObservableArray<ObservableType<V>>
+  : T extends Map<infer K, infer V>
+  ? ObservableMap<K, ObservableType<V>>
+  : T extends Set<infer V>
+  ? ObservableSet<ObservableType<V>>
   : T extends object
-  ? {
-    [K in keyof T]: T[K] extends Function ? T[K] : ObservableType<T[K]>;
-  }
-  : T extends undefined
-  ? unknown
-  : ObservableValue<T>) & ObservableValue<T>;
+  ? ObservableObject<T>
+  : T & Partial<ProxiedValue<T>>;
+
+export interface ObservableArray<T> extends Array<T>, Partial<ProxiedArrayInterface<T>> {
+}
+export interface ObservableMap<K, V> extends Map<K, V>, Partial<ProxiedValue<Map<K, V>>> { }
+export interface ObservableSet<V> extends Set<V>, Partial<ProxiedValue<Set<V>>> { }
+export type ObservableObject<T> = {
+  [K in keyof T]: ObservableType<T[K]>;
+} & T & Partial<ProxiedValue<T>>;
 
 export type ObservableNonNullablePrimitiveType = ObservableType<
   NonNullablePrimitiveType
@@ -271,7 +302,7 @@ export type SingleJSXElement =
   | ArrayJSXElement
   | DOMElementJSXElement
   | Node
-  // | {};
+// | {};
 export type ArrayJSXElement = SingleJSXElement[];
 
 export interface FC<T = {}, S extends Element = Element, C = CreateOptions<S>> {
@@ -294,7 +325,7 @@ export type CSSProperty =
   | undefined
   | null;
 export interface CSSObject {
-  [key: string]: ObservableType<CSSProperty> | CSSProperty;
+  [key: string]: CSSProperty;
 }
 
 export type CustomElementTag = `${string}-${string}`;

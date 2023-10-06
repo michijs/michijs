@@ -16,10 +16,8 @@ export const forEachChildren = (
     let currentNode: ChildNode | null = initialNode;
     while (currentNode && shouldContinueCallback(currentNode)) {
       const nextSibling = currentNode.nextSibling;
-      if (!currentNode.$ignore) {
-        callback(currentNode, i);
-        i++;
-      }
+      callback(currentNode, i);
+      i++;
       currentNode = nextSibling;
     }
   }

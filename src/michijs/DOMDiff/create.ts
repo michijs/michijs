@@ -6,6 +6,7 @@ import {
   CreateOptions,
   DOMElementJSXElement,
   NonNullablePrimitiveType,
+  ObservableNonNullablePrimitiveType,
   SingleJSXElement,
 } from "../types";
 import { classJSXToObjectJSXElement } from "../utils/classJSXToObjectJSXElement";
@@ -46,7 +47,7 @@ export function create(
         }
         return createObject(jsx, options);
       } else if (isObservableType(jsx))
-        return createObservableTextElement(jsx as NonNullablePrimitiveType);
+        return createObservableTextElement(jsx as unknown as ObservableNonNullablePrimitiveType);
       else return jsx as Node;
     }
     return createTextElement(jsx);

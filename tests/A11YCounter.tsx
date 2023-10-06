@@ -50,8 +50,8 @@ export const A11YCounter = createCustomElement("a11y-counter", {
     const errorMessage = useComputedObserve(() => this.value > 0 ? undefined : "Value should be greater than 0", [this.value])
     return (
       <ElementInternals
-        ariaValueText={this.value.toString()}
-        formValue={this.value.toString()}
+        ariaValueText={this.value.toObservableString?.()}
+        formValue={this.value.toObservableString?.()}
         errorMessage={errorMessage}
       >
         <button type="button" onpointerup={this.decrementCount}>

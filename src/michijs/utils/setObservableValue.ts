@@ -25,7 +25,8 @@ export function setObservableValue<T extends object>(
     case "object": {
       if (object1Value || object2Value) {
         if (Array.isArray(object1Value)) {
-          (object1 as unknown as []).length = object2Value.length;
+          // TODO: check
+          (object2Value as unknown as []).length = object2Value.length;
           object2Value.forEach((x, i) => (object1[i] = x));
         } else {
           for (const key in { ...object1Value, ...object2Value }) {
