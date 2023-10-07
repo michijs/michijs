@@ -13,10 +13,13 @@ script: HTMLElementTagNameMap['script'] & SVGElementTagNameMap['script']
 
   declare global {
     namespace JSX {
-      type Element = SingleJSXElement;
+      type Element = SingleJSXElement
       interface ElementChildrenAttribute {
-        children: JSX.Element; // specify children name to use
+        children: SingleJSXElement; // specify children name to use
       }
+      // interface IntrinsicAttributes {
+      //   children?: SingleJSXElement;
+      // }
       interface IntrinsicElements extends HTMLElements, MathMLElements, SVGElements {
         a: HTMLElements["a"] & SVGElements["a"] & MichiAttributes<HTMLElementTagNameMap['a'] & SVGElementTagNameMap['a']>;
 abbr: HTMLElements["abbr"] & MichiAttributes<HTMLElementTagNameMap['abbr']>;
