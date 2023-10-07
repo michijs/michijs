@@ -5,6 +5,8 @@ let command;
 if (env === "TESTING") command = "npm run start-benchmark-michijs";
 else command = "npm run start-benchmark-vanilla";
 
+console.log(command)
+
 module.exports = {
   launch: {
     dumpio: true,
