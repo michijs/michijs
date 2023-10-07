@@ -42,7 +42,11 @@ export class ProxiedValue<T> extends Observable<T> {
     return Boolean(this.$value);
   }
 
-  public compareTo(anotherValue: unknown): boolean{
+  public not() {
+    return !this.$value;
+  }
+
+  public is(anotherValue: unknown): boolean{
     return this.$value === anotherValue?.valueOf();
   }
 
@@ -62,4 +66,9 @@ export class ProxiedValue<T> extends Observable<T> {
   shouldCheckForChanges() {
     return !!this.observers;
   }
+
+  // Only for jest
+  asymmetricMatch(prop){
+    return this.is(prop)
+  };
 }

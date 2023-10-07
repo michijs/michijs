@@ -26,7 +26,7 @@ export function observeDate<T extends Date>(
                 args,
               );
               const newValue = target.$value.getTime();
-              if (newValue !== oldValue) target.notify(target.$value);
+              if (newValue !== oldValue) target.notifyCurrentValue()
 
               return result;
             };

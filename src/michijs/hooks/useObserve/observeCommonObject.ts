@@ -1,6 +1,6 @@
 import { useObserve } from "../useObserve";
 import { ObservableType, ObserverCallback } from "../../types";
-import { ProxiedValue } from "../../classes/ProxiedValue";
+import { ProxiedValue } from "../../classes";
 import { setObservableValue } from "../../utils/setObservableValue";
 
 type CommonObjectProxyHandler<T extends object> = Required<
@@ -32,10 +32,11 @@ export const customObjectSet = <T>(initialObservers: ObserverCallback<T>[]): Com
 export const customObjectDelete: CommonObjectProxyHandler<any>["deleteProperty"] =
   (target, property) => {
     if (property in target) return Reflect.deleteProperty(target, property);
-    if (target.$value) {
-      const deletedProperty = target.$value[property];
+    const deletedProperty = target.$value[property];
+    if (deletedProperty) {
+      Reflect.set(deletedProperty, '$value', undefined);
       // const result = Reflect.deleteProperty(target.$value, property);
-      deletedProperty.$value = undefined;
+      // deletedProperty.$value = undefined;
 
       return true;
     }
@@ -46,9 +47,13 @@ export const customObjectGet = <T extends ObservableType<any>>(proxy: () => T): 
   (target, p, receiver) => {
     if (p in target)
       return Reflect.get(target, p, receiver);
-    else if (target.$value && typeof target.$value === 'object' && p in target.$value)
-      return Reflect.get(target.$value, p, receiver)
-    else {
+    else if (target.$value) {
+      if (typeof target.$value === 'object' && p in target.$value)
+        return Reflect.get(target.$value, p, receiver)
+      else if (target.$value[p]) {
+        return target.$value[p]
+      }
+    } else {
       proxy()[p] = undefined
     }
     return proxy()[p];

@@ -1,6 +1,5 @@
 import { Observable } from "../classes";
 import { useObserve } from "../hooks";
-import { isObservableType } from "../typeWards/isObservableType";
 import { ObservableType, ObserverCallback } from "../types";
 import { bindObservable } from "../utils";
 import { setObservableValue } from "../utils/setObservableValue";

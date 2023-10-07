@@ -1,7 +1,6 @@
 import { createCustomElement } from "../customElements/createCustomElement";
 import { Fragment } from "../components/Fragment";
-import {
-  ClassJSXElement,
+import type {
   FC,
   FragmentJSXElement,
   FunctionJSXElement,
@@ -16,7 +15,7 @@ const testChild = "child";
 const testAttrs = {
   id: "testID",
   _: { className: "textClassName" },
-  children: [testChild],
+  children: testChild,
 };
 const fragmentResult: FragmentJSXElement = {
   jsxTag: null,
@@ -45,7 +44,7 @@ const TestCustomElement = createCustomElement("michi-test");
 
 // ClassJSXElement
 const ClassJSXResult = {
-  tag: TestCustomElement,
+  jsxTag: TestCustomElement,
   attrs: testAttrs,
 };
 
@@ -55,8 +54,8 @@ describe("jsx-runtime tests", () => {
       Fragment,
       { children: undefined },
       undefined,
-    ) as ClassJSXElement;
-    expect(fragment.jsxTag.tag).toEqual(fragmentResult.jsxTag);
+    );
+    expect(fragment.jsxTag).toEqual(fragmentResult.jsxTag);
   });
   it("Object JSX result", () => {
     expect(

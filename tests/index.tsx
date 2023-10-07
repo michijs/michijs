@@ -1,6 +1,9 @@
 import { createCustomElement, Host, If, useObserve } from "../src";
 import { ColorSelector } from "./ColorSelector";
 import { Router } from "./routes";
+
+const FALSE_VALUE = useObserve(false);
+console.log(FALSE_VALUE ? 'false': 'true')
 // import sheet from './a.css' assert { type: 'css' };
 // console.log(sheet)
 
