@@ -47,7 +47,9 @@ export function create(
         }
         return createObject(jsx, options);
       } else if (isObservableType(jsx))
-        return createObservableTextElement(jsx as unknown as ObservableNonNullablePrimitiveType);
+        return createObservableTextElement(
+          jsx as unknown as ObservableNonNullablePrimitiveType,
+        );
       else return jsx as Node;
     }
     return createTextElement(jsx);

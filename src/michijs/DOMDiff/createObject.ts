@@ -7,10 +7,7 @@ export const createObject = (jsx: ObjectJSXElement, options: CreateOptions) => {
   let isSVG = options.isSVG || jsx.jsxTag === RootTags.SVG;
   let isMATHML;
   let el: Element;
-  const {
-    children,
-    ...attrs
-  } = jsx.attrs;
+  const { children, ...attrs } = jsx.attrs;
   if (isSVG) {
     if (jsx.attrs?.is)
       el = document.createElementNS(Namespaces.SVG, jsx.jsxTag, {
@@ -43,8 +40,7 @@ export const createObject = (jsx: ObjectJSXElement, options: CreateOptions) => {
   if (children)
     if (Array.isArray(children))
       el.append(...children.map((x) => create(x, newOptions)));
-    else
-      el.append(create(children, newOptions));
+    else el.append(create(children, newOptions));
 
   setProperties(el, attrs, options);
 

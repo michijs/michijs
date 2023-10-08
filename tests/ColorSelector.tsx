@@ -19,7 +19,10 @@ export const ColorSelector = createCustomElement("color-selector", {
   computedStyleSheet() {
     return {
       color: "white",
-      "--example": useComputedObserve(() => this.color.valueOf() === "#ff0000" ? '"red"' : '"not red"', [this.color]),
+      "--example": useComputedObserve(
+        () => (this.color.valueOf() === "#ff0000" ? '"red"' : '"not red"'),
+        [this.color],
+      ),
     };
   },
   adoptedStyleSheets: [style],

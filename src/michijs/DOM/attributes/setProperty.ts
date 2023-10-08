@@ -6,7 +6,6 @@ import { bindFunction } from "../../utils/bindFunction";
 import { bindObservable } from "../../utils";
 import type { CSSProperties } from "@michijs/htmltype";
 
-
 export function setProperty(
   el: Element,
   name: string,
@@ -27,7 +26,7 @@ export function setProperty(
   else {
     bindObservable(newValue, (newValue) => {
       if (!compareAttributes(el, name, newValue))
-        setAttribute(el, name, newValue)
+        setAttribute(el, name, newValue);
     });
   }
 }

@@ -1,8 +1,12 @@
-import { createCustomElement, Host, EventDispatcher, useComputedObserve } from "../src";
+import {
+  createCustomElement,
+  Host,
+  EventDispatcher,
+  useComputedObserve,
+} from "../src";
 import { counterStyle } from "./shared/counterStyle";
 import { decrement, increment } from "./shared/redux/CounterSlice";
 import { store } from "./shared/redux/store";
-
 
 function decrementCount() {
   store.dispatch(decrement());
@@ -19,7 +23,10 @@ export const CounterWithReduxStore = createCustomElement(
     },
     adoptedStyleSheets: [counterStyle],
     render() {
-      const count = useComputedObserve(() => store.getState().counterStore.count, [store])
+      const count = useComputedObserve(
+        () => store.getState().counterStore.count,
+        [store],
+      );
 
       return (
         <Host count={count}>

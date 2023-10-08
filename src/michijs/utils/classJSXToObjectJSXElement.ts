@@ -2,7 +2,7 @@ import { ClassJSXElement, ObjectJSXElement } from "../types";
 
 export const classJSXToObjectJSXElement = ({
   jsxTag,
-  attrs
+  attrs,
 }: ClassJSXElement): ObjectJSXElement => {
   if (jsxTag.extends)
     return {
@@ -10,10 +10,10 @@ export const classJSXToObjectJSXElement = ({
       attrs: {
         ...attrs,
         is: jsxTag.tag,
-      }
+      },
     };
   return {
     jsxTag: jsxTag.tag,
-    attrs
+    attrs,
   };
 };

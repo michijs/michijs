@@ -56,7 +56,8 @@ export function createCustomElement<
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
-    implements MichiCustomElement {
+    implements MichiCustomElement
+  {
     $michi: MichiCustomElement["$michi"] = {
       store: useObserve({
         ...attributes,
@@ -103,25 +104,26 @@ export function createCustomElement<
     constructor() {
       super();
 
-      for (const key in (this.$michi.store.valueOf() as object)) {
+      for (const key in this.$michi.store.valueOf() as object) {
         definePropertyFromObservable(this, key, this.$michi.store);
       }
-      defineReflectedAttributes(
-        this,
-        this.$michi.store,
-        reflectedCssVariables,
-      );
+      defineReflectedAttributes(this, this.$michi.store, reflectedCssVariables);
       defineReflectedAttributes(this, this.$michi.store, reflectedAttributes);
       if (shadow) {
         const attachedShadow = this.attachShadow(shadow);
         this.$michi.shadowRoot = attachedShadow;
         if (cssVariables || reflectedCssVariables) {
-          const allCssVariables = Object.keys(cssVariables ?? {}).concat(Object.keys(reflectedCssVariables ?? {})).reduce((previousValue, x) => {
-            previousValue[x] = this[x];
-            return previousValue
-          }, {});
+          const allCssVariables = Object.keys(cssVariables ?? {})
+            .concat(Object.keys(reflectedCssVariables ?? {}))
+            .reduce((previousValue, x) => {
+              previousValue[x] = this[x];
+              return previousValue;
+            }, {});
 
-          const parsedCssVariables = useComputedObserve(() => (convertCssObjectToCssVariablesObject(allCssVariables)), Object.values(allCssVariables))
+          const parsedCssVariables = useComputedObserve(
+            () => convertCssObjectToCssVariablesObject(allCssVariables),
+            Object.values(allCssVariables),
+          );
           const styleSheet = useStyleSheet({
             ":host": parsedCssVariables,
           });
@@ -194,11 +196,13 @@ export function createCustomElement<
     connectedCallback() {
       if (!this.$michi.shadowRoot) {
         if (cssVariables || reflectedCssVariables) {
-          Object.keys(cssVariables ?? {}).concat(Object.keys(reflectedCssVariables ?? {})).forEach(key => {
-            bindObservable(this.$michi.store[key], (value) => {
-              setStyleProperty(this, `--${key}`, value)
-            })
-          })
+          Object.keys(cssVariables ?? {})
+            .concat(Object.keys(reflectedCssVariables ?? {}))
+            .forEach((key) => {
+              bindObservable(this.$michi.store[key], (value) => {
+                setStyleProperty(this, `--${key}`, value);
+              });
+            });
         }
         if (computedStyleSheet) {
           const callback: () => CSSProperties = computedStyleSheet.bind(this);
@@ -209,7 +213,10 @@ export function createCustomElement<
             });
           };
           updateStylesheetCallback();
-          useComputedObserve(updateStylesheetCallback, getObservables(callback()));
+          useComputedObserve(
+            updateStylesheetCallback,
+            getObservables(callback()),
+          );
         }
         if (adoptedStyleSheets)
           addStylesheetsToDocumentOrShadowRoot(

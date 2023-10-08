@@ -5,18 +5,20 @@ import {
   ObserverCallback,
   ProxiedValue,
   SingleJSXElement,
-  ProxiedArrayInterface
+  ProxiedArrayInterface,
 } from "../..";
 import { create } from "../DOMDiff";
 // import { ListElement } from "../components/FragmentAndList";
 import { Target } from "./Target";
 import { VirtualFragment } from "./VirtualFragment";
 
-
-export class ProxiedArray<V> extends ProxiedValue<V[]> implements ProxiedArrayInterface<V> {
+export class ProxiedArray<V>
+  extends ProxiedValue<V[]>
+  implements ProxiedArrayInterface<V>
+{
   private targets = new Array<Target<V>>();
   constructor(initialData: V[], initialObservers?: ObserverCallback<V[]>[]) {
-    super(initialData, initialObservers)
+    super(initialData, initialObservers);
   }
   /**
    * Is a proxy that allows you to avoid using dom diff algorithms to render lists.
@@ -35,9 +37,9 @@ export class ProxiedArray<V> extends ProxiedValue<V[]> implements ProxiedArrayIn
   ): Node => {
     const el = asTag
       ? (create({
-        jsxTag: asTag,
-        attrs,
-      } as SingleJSXElement) as ParentNode)
+          jsxTag: asTag,
+          attrs,
+        } as SingleJSXElement) as ParentNode)
       : new VirtualFragment();
 
     this.targets.push(new Target(el, renderItem, context));
@@ -72,7 +74,7 @@ export class ProxiedArray<V> extends ProxiedValue<V[]> implements ProxiedArrayIn
         this.$value[indexB],
         this.$value[indexA],
       ];
-      this.notifyCurrentValue()
+      this.notifyCurrentValue();
     }
   }
 

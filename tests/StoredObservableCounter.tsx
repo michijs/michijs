@@ -1,9 +1,4 @@
-import {
-  Host,
-  useStorage,
-  EventDispatcher,
-  customElement,
-} from "../src";
+import { Host, useStorage, EventDispatcher, customElement } from "../src";
 import { counterStyle } from "./shared/counterStyle";
 
 const storedCount = useStorage({
@@ -24,7 +19,7 @@ export const StoredObservableCounter = customElement`stored-observable-counter`(
     },
     adoptedStyleSheets: [counterStyle],
     render() {
-      storedCount.count.subscribe?.(this.countChanged)
+      storedCount.count.subscribe?.(this.countChanged);
       return (
         <Host count={storedCount.count}>
           <button onpointerup={decrementCount}>-</button>

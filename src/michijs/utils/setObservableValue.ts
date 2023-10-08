@@ -5,18 +5,22 @@ import { ObserverCallback } from "../types";
 export function setObservableValue<T extends object>(
   object1: T,
   object2: any,
-  initialObservers?: ObserverCallback<T>[]
+  initialObservers?: ObserverCallback<T>[],
 ): boolean {
   const object1Value = object1?.valueOf();
   const object2Value = object2?.valueOf();
-  
+
   if (object1Value === object2Value || object1Value == object2Value)
     return true;
 
   const type = typeof object1Value;
   const areDifferentTypes = type !== typeof object2Value;
   if (areDifferentTypes) {
-    return Reflect.set(object1, "$value", useObserve(object2, initialObservers).$value);
+    return Reflect.set(
+      object1,
+      "$value",
+      useObserve(object2, initialObservers).$value,
+    );
   }
   switch (type) {
     case "function": {
@@ -36,7 +40,11 @@ export function setObservableValue<T extends object>(
         return true;
         // TODO: add set / map etc
       } else {
-        return Reflect.set(object1, "$value", useObserve(object2, initialObservers).$value);
+        return Reflect.set(
+          object1,
+          "$value",
+          useObserve(object2, initialObservers).$value,
+        );
       }
     }
     default: {

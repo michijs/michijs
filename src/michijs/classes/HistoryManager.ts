@@ -1,8 +1,7 @@
 import { ObserverCallback } from "../types";
 import { Observable } from "./Observable";
 
-
-class HistoryManagerSingleton extends Observable<string | URL>{
+class HistoryManagerSingleton extends Observable<string | URL> {
   readonly history: (string | URL)[] = [location.pathname];
 
   constructor(initialObservers?: ObserverCallback<string | URL>[]) {
@@ -13,37 +12,36 @@ class HistoryManagerSingleton extends Observable<string | URL>{
   back(fallbackUrl: string | URL) {
     if (this.history.length > 0) {
       history.back();
-      const url = this.history.pop()
+      const url = this.history.pop();
       this.notify(url);
       return url;
-    } else
-      return this.replaceCurrentUrl(fallbackUrl);
+    } else return this.replaceCurrentUrl(fallbackUrl);
   }
 
   replaceCurrentUrl(url: string | URL) {
     try {
       // This will trigger an exception if its an external link string
       history.replaceState(undefined, "", url);
-      this.history.splice(this.history.length, 1, url)
+      this.history.splice(this.history.length, 1, url);
     } catch (ex) {
-      console.error(ex)
+      console.error(ex);
       const href = typeof url === "object" && "href" in url ? url.href : url;
       window.location.href = href;
     }
-    this.notify(url)
+    this.notify(url);
   }
 
   push(url: string | URL) {
     try {
       // This will trigger an exception if its an string
       history.pushState(undefined, "", url);
-      this.history.push(url)
+      this.history.push(url);
     } catch (ex) {
-      console.error(ex)
+      console.error(ex);
       const href = typeof url === "object" && "href" in url ? url.href : url;
       window.location.href = href;
     }
-    this.notify(url)
+    this.notify(url);
   }
 
   matches(url: string, flexible = false) {
@@ -53,7 +51,7 @@ class HistoryManagerSingleton extends Observable<string | URL>{
         baseURL: location.origin,
         search: "*",
         hash: "*",
-      })
+      });
       return p.test(location.href);
     }
     const urlPaths = url.split("/").filter((x) => x !== "");
@@ -71,4 +69,4 @@ class HistoryManagerSingleton extends Observable<string | URL>{
   }
 }
 
-export const HistoryManager = new HistoryManagerSingleton()
+export const HistoryManager = new HistoryManagerSingleton();

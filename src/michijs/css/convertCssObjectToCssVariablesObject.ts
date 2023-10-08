@@ -6,7 +6,7 @@ export const convertCssObjectToCssVariablesObject = (
   properties: string[] = [],
 ): CSSObject => {
   let obj = {};
-  Object.keys(cssObject.valueOf()).forEach(key => {
+  Object.keys(cssObject.valueOf()).forEach((key) => {
     const value = cssObject[key];
     if (valueIsCSSObject(value))
       obj = {

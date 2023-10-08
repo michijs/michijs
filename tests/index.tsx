@@ -40,9 +40,7 @@ createCustomElement("root-test-element", {
           renderItem={item => <div key={item} onclick={this.onClickArray}>{item}</div>}
         /> */}
         <ColorSelector />
-        <div onclick={this.onClickArray}>
-          {this.arrayTest}
-        </div>
+        <div onclick={this.onClickArray}>{this.arrayTest}</div>
         {/* <this.arrayTest.List
           renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}
         /> */}
@@ -56,9 +54,6 @@ createCustomElement("root-test-element", {
 // Finish map and set
 // Update docs about operators and observers
 // Fix A11y tests
-
-
-
 
 // documentTransition test
 // const titulo1 = document.createElement('h1');

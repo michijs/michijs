@@ -10,9 +10,9 @@ export const counterStyle = useStyleSheet({
   ":host": {
     display: "inline-flex",
     flexDirection: "row",
-    '@media (max-width: 600px)': {
-      color: 'blue'
-    }
+    "@media (max-width: 600px)": {
+      color: "blue",
+    },
   },
   span: {
     minWidth: "60px",

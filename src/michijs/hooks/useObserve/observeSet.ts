@@ -9,7 +9,7 @@ import { customObjectDelete, customObjectSet } from "./observeCommonObject";
 
 export const observeSet = <T extends Set<unknown>>(
   item: T,
-  initialObservers: ObserverCallback<T>[] = []
+  initialObservers: ObserverCallback<T>[] = [],
 ) => {
   const proxiedSet = new Set<ObservableType<unknown>>();
   item.forEach((value) => {

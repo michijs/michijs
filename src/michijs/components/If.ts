@@ -39,7 +39,8 @@ export const If = <const T = FC>(
     } else {
       cachedThen = newCache;
       if (cachedElse) el.replaceChildren(...cachedElse);
-      else if (elseComponent) el.replaceChildren(create(elseComponent, options));
+      else if (elseComponent)
+        el.replaceChildren(create(elseComponent, options));
     }
   });
   return el.valueOf() as Node;

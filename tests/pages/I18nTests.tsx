@@ -5,13 +5,13 @@ import en from "./i18nTests/en.json";
 type SupportedLanguages = "es" | "en";
 
 const supportedLanguages: Record<SupportedLanguages, string> = {
-  en: 'English',
-  es: 'Español'
-}
+  en: "English",
+  es: "Español",
+};
 
 const languageStorage = useStorage({
-  lang: 'en' as SupportedLanguages
-})
+  lang: "en" as SupportedLanguages,
+});
 
 const translator = new I18n<SupportedLanguages>(languageStorage.lang);
 
@@ -24,7 +24,7 @@ const I18nTests = createCustomElement("i18n-tests", {
   methods: {
     onChangeLanguage(ev: TypedEvent<HTMLSelectElement>) {
       if (ev.target)
-        languageStorage.lang = ev.target.value as SupportedLanguages
+        languageStorage.lang = ev.target.value as SupportedLanguages;
     },
   },
   render() {
@@ -34,10 +34,7 @@ const I18nTests = createCustomElement("i18n-tests", {
         <span>{t.language}</span>
         <select onchange={this.onChangeLanguage}>
           {Object.entries(supportedLanguages).map(([key, label]) => (
-            <option
-              selected={key === translator.currentLanguage}
-              value={key}
-            >
+            <option selected={key === translator.currentLanguage} value={key}>
               {label}
             </option>
           ))}
@@ -48,4 +45,4 @@ const I18nTests = createCustomElement("i18n-tests", {
   },
 });
 
-export default I18nTests
+export default I18nTests;

@@ -9,9 +9,12 @@ import { customObjectDelete, customObjectSet } from "./observeCommonObject";
 
 export const observeMap = <E, T extends Map<unknown, E>>(
   item: T,
-  initialObservers: ObserverCallback<T>[] = []
+  initialObservers: ObserverCallback<T>[] = [],
 ) => {
-  const newInitialObservers: ObserverCallback<any>[] = [...initialObservers, () => newObservable.notifyCurrentValue()]
+  const newInitialObservers: ObserverCallback<any>[] = [
+    ...initialObservers,
+    () => newObservable.notifyCurrentValue(),
+  ];
   const proxiedMap = new Map<unknown, ObservableType<E>>();
   item.forEach((value, key) =>
     proxiedMap.set(key, useObserve(value, newInitialObservers)),
@@ -35,7 +38,10 @@ export const observeMap = <E, T extends Map<unknown, E>>(
           case "set": {
             return function (key, newValue) {
               const hasOldValue = target.$value.has(key);
-              const observedItem = useObserve<object>(newValue, newInitialObservers);
+              const observedItem = useObserve<object>(
+                newValue,
+                newInitialObservers,
+              );
 
               if (hasOldValue)
                 // Intentionally ignoring receiver - it ignores target.$value as the target and takes target

@@ -2,10 +2,13 @@ import { useSearchParams, useHash, useComputedObserve, Title } from "../../src";
 import { SimpleCounter } from "../SimpleCounter";
 
 const SearchParamsAndHash = () => {
-  const searchParams = useSearchParams<{ counterParam: number, textParam: string }>();
-  const hash = useHash<'#hashTest'>();
+  const searchParams = useSearchParams<{
+    counterParam: number;
+    textParam: string;
+  }>();
+  const hash = useHash<"#hashTest">();
   const hashTestText = useComputedObserve(() => {
-    return `hash test is ${!!hash["#hashTest"]?.valueOf()}`
+    return `hash test is ${!!hash["#hashTest"]?.valueOf()}`;
   }, [hash]);
 
   return (
@@ -14,9 +17,11 @@ const SearchParamsAndHash = () => {
       <button
         onclick={() => {
           hash["#hashTest"] = !hash["#hashTest"]?.valueOf();
-          console.log(hash)
+          console.log(hash);
         }}
-      >{hashTestText}</button>
+      >
+        {hashTestText}
+      </button>
       <SimpleCounter
         count={searchParams.counterParam}
         oncountchanged={(newValue) => {
@@ -25,7 +30,7 @@ const SearchParamsAndHash = () => {
       />
       <div>{searchParams.textParam}</div>
     </>
-  )
-}
+  );
+};
 
 export default SearchParamsAndHash;

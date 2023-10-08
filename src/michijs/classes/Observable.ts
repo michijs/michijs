@@ -5,8 +5,7 @@ export class Observable<T> implements ObservableLike<T> {
   observers: Set<ObserverCallback<T>> | null = null;
 
   constructor(initialObservers?: ObserverCallback<T>[]) {
-    if (initialObservers)
-      this.observers = new Set(initialObservers);
+    if (initialObservers) this.observers = new Set(initialObservers);
   }
 
   notify(value) {

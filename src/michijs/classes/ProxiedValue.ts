@@ -9,7 +9,7 @@ export class ProxiedValue<T> extends Observable<T> {
 
   constructor(initialValue?: T, initialObservers?: ObserverCallback<T>[]) {
     super(initialObservers);
-    this.$privateValue = initialValue!
+    this.$privateValue = initialValue!;
   }
 
   set $value(newValue: T) {
@@ -25,7 +25,7 @@ export class ProxiedValue<T> extends Observable<T> {
   }
 
   notifyCurrentValue() {
-    this.notify(this.$value)
+    this.notify(this.$value);
   }
 
   // Avoids typescript errors
@@ -46,7 +46,7 @@ export class ProxiedValue<T> extends Observable<T> {
     return !this.$value;
   }
 
-  public is(anotherValue: unknown): boolean{
+  public is(anotherValue: unknown): boolean {
     return this.$value === anotherValue?.valueOf();
   }
 
@@ -57,10 +57,10 @@ export class ProxiedValue<T> extends Observable<T> {
   }
 
   [Symbol.toPrimitive]() {
-    return this.valueOf()
+    return this.valueOf();
   }
   protected [Symbol.toStringTag]() {
-    return this.toString()
+    return this.toString();
   }
 
   shouldCheckForChanges() {
@@ -72,7 +72,7 @@ export class ProxiedValue<T> extends Observable<T> {
   }
 
   // Only for jest
-  asymmetricMatch(prop){
-    return this.is(prop)
-  };
+  asymmetricMatch(prop) {
+    return this.is(prop);
+  }
 }
