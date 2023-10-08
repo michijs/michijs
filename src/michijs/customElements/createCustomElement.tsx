@@ -6,7 +6,13 @@ import type {
   MichiElementClass,
   MichiElementSelf,
 } from "../types";
-import { formatToKebabCase, bindObservable, getObservables, addStylesheetsToDocumentOrShadowRoot, deepEqual } from "../utils";
+import {
+  formatToKebabCase,
+  bindObservable,
+  getObservables,
+  addStylesheetsToDocumentOrShadowRoot,
+  deepEqual,
+} from "../utils";
 import { defineEvent } from "./properties/defineEvent";
 import { definePropertyFromObservable } from "./properties/definePropertyFromObservable";
 import { setReflectedAttributes } from "./properties/setReflectedAttributes";

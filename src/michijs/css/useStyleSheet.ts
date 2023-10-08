@@ -3,9 +3,7 @@ import type { CSSObject } from "../types";
 import { formatToKebabCase, getObservables, bindObservable } from "../utils";
 
 /**Allows to create a Constructable Stylesheet with a CSSObject */
-export function useStyleSheet(
-  cssObject: CSSObject,
-) {
+export function useStyleSheet(cssObject: CSSObject) {
   const styleSheet = new CSSStyleSheet();
   const observables = getObservables(cssObject);
   const stringResult = useComputedObserve(() => {
@@ -24,9 +22,8 @@ export function useStyleSheet(
 
   bindObservable(stringResult, (formattedObject) => {
     // Jest fix
-    if (styleSheet.replaceSync)
-      styleSheet.replaceSync(formattedObject)
+    if (styleSheet.replaceSync) styleSheet.replaceSync(formattedObject);
   });
 
   return styleSheet;
-};
+}
