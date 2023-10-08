@@ -10,19 +10,21 @@ export function useStyleSheet (
   const observables = getObservables(cssObject);
   const stringResult = useComputedObserve(() => {
     const formattedObject = formatToKebabCase(JSON.stringify(cssObject))
-    // Example "--example":"\\"red\\""
-    .replaceAll('\\', '')
-    // Only not double ""
-    .replace(/(?<!")"(?!")/g, '')
-    .replaceAll('""', '"')
-    .replaceAll(':{', '{')
-    .replaceAll(',', ';')
-    .replaceAll('};', `}`);
+      // Example "--example":"\\"red\\""
+      .replaceAll("\\", "")
+      // Only not double ""
+      .replace(/(?<!")"(?!")/g, "")
+      .replaceAll('""', '"')
+      .replaceAll(":{", "{")
+      .replaceAll(",", ";")
+      .replaceAll("};", `}`);
     // Removing initial and final { }
-    return formattedObject.slice(1, formattedObject.length -1);
-  }, observables)
+    return formattedObject.slice(1, formattedObject.length - 1);
+  }, observables);
 
-  bindObservable(stringResult, (formattedObject) => styleSheet.replaceSync(formattedObject))
-  
+  bindObservable(stringResult, (formattedObject) =>
+    styleSheet.replaceSync(formattedObject),
+  );
+
   return styleSheet;
 };

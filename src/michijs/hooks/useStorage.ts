@@ -18,19 +18,28 @@ export function useStorage<T extends object>(
       return item[key];
     }
   }
-  const newObservable = useObserve<T>(Object.keys(item).reduce((previousValue, key) => ({ ...previousValue, [key]: getStorageValue(key) }), {} as T));
+  const newObservable = useObserve<T>(
+    Object.keys(item).reduce(
+      (previousValue, key) => ({
+        ...previousValue,
+        [key]: getStorageValue(key),
+      }),
+      {} as T,
+    ),
+  );
 
   Object.entries(newObservable.valueOf()).forEach(([key, value]) => {
     value?.subscribe?.((newValue) => {
       storage.setItem(key, JSON.stringify(newValue));
-    })
-  })
+    });
+  });
 
   const windowObservable = new ObservableFromEventListener(window, "storage");
 
   windowObservable.subscribe?.((ev) => {
-    if (ev?.key && Object.keys(item).includes(ev.key)) newObservable[ev.key] = getStorageValue(ev.key);
-  })
+    if (ev?.key && Object.keys(item).includes(ev.key))
+      newObservable[ev.key] = getStorageValue(ev.key);
+  });
 
   return newObservable;
 }

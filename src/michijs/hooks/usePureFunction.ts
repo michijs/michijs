@@ -4,7 +4,7 @@ import { ProxiedValue } from "../classes";
 export const usePureFunction = <T>(
   callback: () => T,
   deps: Partial<ObservableLike<any>>[],
-): () => ProxiedValue<T> => {
+): (() => ProxiedValue<T>) => {
   const proxiedValue = new ProxiedValue<T>();
   let outdated = true;
 

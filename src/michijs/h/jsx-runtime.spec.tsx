@@ -47,11 +47,7 @@ const ClassJSXResult = {
 
 describe("jsx-runtime tests", () => {
   it("Fragment result", () => {
-    const fragment = jsx(
-      Fragment,
-      { children: undefined },
-      undefined,
-    );
+    const fragment = jsx(Fragment, { children: undefined }, undefined);
     expect(fragment.jsxTag).toEqual(fragmentResult.jsxTag);
   });
   it("Object JSX result", () => {

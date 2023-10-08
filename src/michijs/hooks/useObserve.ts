@@ -7,7 +7,7 @@ import { observeSet } from "./useObserve/observeSet";
 
 export function useObserve<T>(
   item?: T,
-  initialObservers?: ObserverCallback<T>[]
+  initialObservers?: ObserverCallback<T>[],
 ): ObservableType<T> {
   if (item && typeof item === "object") {
     if (Array.isArray(item))
@@ -17,12 +17,18 @@ export function useObserve<T>(
     // For instance, Map stores items in the internal slot [[MapData]].
     // Built-in methods access them directly, not via [[Get]]/[[Set]] internal methods. So Proxy can’t intercept that.
     else if (item instanceof Date)
-      return observeDate(item, initialObservers) as unknown as ObservableType<T>;
+      return observeDate(
+        item,
+        initialObservers,
+      ) as unknown as ObservableType<T>;
     else if (item instanceof Map)
       return observeMap(item, initialObservers) as unknown as ObservableType<T>;
     else if (item instanceof Set)
       return observeSet(item, initialObservers) as unknown as ObservableType<T>;
     // console.error(`The object with path "${props.propertyPath}" cannot be observed ${item}`)
   }
-  return observeCommonObject<T>(item as T, initialObservers) as unknown as ObservableType<T>;
+  return observeCommonObject<T>(
+    item as T,
+    initialObservers,
+  ) as unknown as ObservableType<T>;
 }

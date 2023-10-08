@@ -14,7 +14,7 @@ const objectTests = (initialValue: () => AnyObject | unknown[]) => {
       nonProxiedObject = initialValue();
       object = undefined;
       object = useObserve(initialValue());
-      object.subscribe?.(mockCallback)
+      object.subscribe?.(mockCallback);
     });
     it("Setting the same value two times must call its callback just one time", () => {
       object[0] = exampleValue;
@@ -57,7 +57,7 @@ const objectTests = (initialValue: () => AnyObject | unknown[]) => {
     });
 
     it("should return proper type", () => {
-      expect(object.typeof?.()).toStrictEqual('object');
+      expect(object.typeof?.()).toStrictEqual("object");
     });
     afterEach(() => {
       expect(object.valueOf()).toStrictEqual(nonProxiedObject);
@@ -185,7 +185,7 @@ describe("Observe tests", () => {
     beforeEach(() => {
       nonProxiedDate = new Date();
       date = useObserve(new Date());
-      date.subscribe?.(mockCallback)
+      date.subscribe?.(mockCallback);
     });
     it("Setting the same value two times must call its callback just one time", () => {
       const newExampleValue = date.getTime() + 1;

@@ -9,6 +9,6 @@ const AsyncTests = () => (
     <Link url={asyncTestsUrls.test3()}>Link to test 3</Link>
     <AsyncTestsRouter />
   </>
-)
+);
 
 export default AsyncTests;

@@ -3,7 +3,7 @@ import { ProxiedValue } from "../../classes/ProxiedValue";
 
 export function observeDate<T extends Date>(
   item: T,
-  initialObservers?: ObserverCallback<T>[]
+  initialObservers?: ObserverCallback<T>[],
 ) {
   let clone;
   try {
@@ -26,7 +26,7 @@ export function observeDate<T extends Date>(
                 args,
               );
               const newValue = target.$value.getTime();
-              if (newValue !== oldValue) target.notifyCurrentValue()
+              if (newValue !== oldValue) target.notifyCurrentValue();
 
               return result;
             };
@@ -40,4 +40,4 @@ export function observeDate<T extends Date>(
       }
     },
   }) as unknown as ObservableType<T>;
-};
+}

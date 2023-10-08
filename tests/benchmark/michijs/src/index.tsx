@@ -1,4 +1,8 @@
-import { ObservableType, createCustomElement, useObserve } from "../../../../src";
+import {
+  ObservableType,
+  createCustomElement,
+  useObserve,
+} from "../../../../src";
 
 function _random(max: number) {
   return Math.round(Math.random() * 1000) % max;
@@ -71,8 +75,9 @@ function buildData(count = 1000) {
   for (let i = 0; i < count; i++)
     data[i] = {
       id: nextId++,
-      label: `${adjectives[_random(adjectivesLength)]} ${colours[_random(coloursLength)]
-        } ${nouns[_random(nounsLength)]}`,
+      label: `${adjectives[_random(adjectivesLength)]} ${
+        colours[_random(coloursLength)]
+      } ${nouns[_random(nounsLength)]}`,
     };
   return data;
 }
@@ -87,9 +92,8 @@ const update = () => {
 };
 const clear = () => rows.$clear?.();
 const select = (row: ObservableType<Row>) => {
-  row.selected = 'danger';
-  if (selectedItem)
-    selectedItem.selected = undefined;
+  row.selected = "danger";
+  if (selectedItem) selectedItem.selected = undefined;
   selectedItem = row;
 };
 const deleteItem = (id: number) =>
@@ -102,7 +106,7 @@ export const Table = createCustomElement("michi-table", {
     class: HTMLTableElement,
   },
   render() {
-    const List = rows.List!
+    const List = rows.List!;
 
     return (
       <List
@@ -126,8 +130,7 @@ export const Table = createCustomElement("michi-table", {
             </td>
             <td _={{ className: "col-md-6" }} />
           </tr>
-        )
-        }
+        )}
       />
     );
   },

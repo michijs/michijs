@@ -4,7 +4,6 @@ import { ObservableType, ObserverCallback } from "../types";
 import { bindObservable } from "../utils";
 import { setObservableValue } from "../utils/setObservableValue";
 
-
 export type Translation<K extends string, T> = {
   [key in K]: T | (() => Promise<{ default: T }>) | (() => Promise<T>);
 };
@@ -21,7 +20,7 @@ export class I18n<K extends string> extends Observable<K> {
   constructor(language?: K | null, initialObservers?: ObserverCallback<K>[]) {
     super(initialObservers);
     if (language) {
-      bindObservable(language, (newValue) => this.setLanguage(newValue as K))
+      bindObservable(language, (newValue) => this.setLanguage(newValue as K));
       this.isUsingSystemLanguage = false;
     }
 
@@ -39,7 +38,9 @@ export class I18n<K extends string> extends Observable<K> {
     this.isUsingSystemLanguage = false;
   }
 
-  async createTranslation<T>(translation: Translation<K, T>): Promise<ObservableType<T>> {
+  async createTranslation<T>(
+    translation: Translation<K, T>,
+  ): Promise<ObservableType<T>> {
     const currentTranslation = await this.getCurrentTranslation(translation);
     const observable = useObserve<T>(currentTranslation);
     const translationItem: TranslationItem<K, T> = {
@@ -71,20 +72,24 @@ export class I18n<K extends string> extends Observable<K> {
 
       if (typeof value === "function")
         value().then((res) => {
-          resolve(res.default ?? res)
+          resolve(res.default ?? res);
         });
       else resolve(value as T);
-    })
+    });
   }
 
   private async setLanguage(newLang: K | undefined) {
     if (this._currentLanguage !== newLang) {
       this._currentLanguage = newLang;
       //Update every translation
-      await Promise.all(this.translations.map(async (x) => {
-        const currentTranslation = await this.getCurrentTranslation(x.translation)
-        setObservableValue(x.observable, currentTranslation)
-      }));
+      await Promise.all(
+        this.translations.map(async (x) => {
+          const currentTranslation = await this.getCurrentTranslation(
+            x.translation,
+          );
+          setObservableValue(x.observable, currentTranslation);
+        }),
+      );
       // Then notify
       this.notify(newLang);
     }

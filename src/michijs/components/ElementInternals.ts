@@ -59,8 +59,7 @@ export const ElementInternals: FC<ElementInternalsProps> = (
           bindObservable(value, (newValue) => (self[key] = newValue));
         // Some browsers still dont support internals
         else {
-          const formattedKey = key
-            .toLowerCase().replace('aria', 'aria-');
+          const formattedKey = key.toLowerCase().replace("aria", "aria-");
           bindObservable(value, (newValue) =>
             setAttribute(self, formattedKey, newValue),
           );

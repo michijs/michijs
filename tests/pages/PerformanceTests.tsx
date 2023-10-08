@@ -7,6 +7,6 @@ const PerformanceTests: FC = () => (
     <TableManager />
     <Table />
   </>
-)
+);
 
 export default PerformanceTests;

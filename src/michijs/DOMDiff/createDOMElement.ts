@@ -12,8 +12,7 @@ export const createDOMElement = (
   if (children)
     if (Array.isArray(children))
       jsx.jsxTag.append(...children.map((x) => create(x, options)));
-    else
-      jsx.jsxTag.append(create(children, options));
+    else jsx.jsxTag.append(create(children, options));
 
   if (isElement(jsx.jsxTag)) setProperties(jsx.jsxTag, attrs, options);
   return jsx.jsxTag;

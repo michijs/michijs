@@ -17,6 +17,6 @@ describe("Boolean expressions and operators", () => {
     expect(TRUE_VALUE.not?.()).toStrictEqual(false);
   });
   it("should return proper type", () => {
-    expect(TRUE_VALUE.typeof?.()).toStrictEqual('boolean');
+    expect(TRUE_VALUE.typeof?.()).toStrictEqual("boolean");
   });
 });

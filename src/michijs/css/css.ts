@@ -15,6 +15,6 @@ export function css(
   const styleSheet = new CSSStyleSheet();
   bindObservable(template, (newValue) => {
     styleSheet.replaceSync(newValue);
-  })
+  });
   return styleSheet;
 };

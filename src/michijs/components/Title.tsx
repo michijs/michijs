@@ -1,7 +1,7 @@
 // import { useStyleSheet } from "../css";
 import { createCustomElement } from "../customElements";
 
-export const Title = createCustomElement('michi-title', {
+export const Title = createCustomElement("michi-title", {
   lifecycle: {
     didConstruct(){
       const styles = new CSSStyleSheet();
@@ -10,7 +10,7 @@ export const Title = createCustomElement('michi-title', {
     },
     connected() {
       this.updateTitle();
-    }
+    },
   },
   // Brokes unit tests
   // adoptedStyleSheets: [useStyleSheet({ ':host': { display: 'none' } })],
@@ -21,6 +21,6 @@ export const Title = createCustomElement('michi-title', {
     }
   },
   render() {
-    return <slot onslotchange={this.updateTitle} />
-  }
-})
+    return <slot onslotchange={this.updateTitle} />;
+  },
+});

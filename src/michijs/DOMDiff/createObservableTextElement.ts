@@ -6,7 +6,11 @@ export const createObservableTextElement = (
 ) => {
   const textNode = createTextElement(jsx.valueOf());
   jsx.subscribe?.(
-    (newValue) => (textNode.textContent = (typeof newValue === 'object' ? JSON.stringify(newValue) : newValue?.toString()) ?? ""),
+    (newValue) =>
+      (textNode.textContent =
+        (typeof newValue === "object"
+          ? JSON.stringify(newValue)
+          : newValue?.toString()) ?? ""),
   );
   return textNode;
 };

@@ -29,4 +29,4 @@ const CounterTests = () => (
   </>
 );
 
-export default CounterTests
+export default CounterTests;

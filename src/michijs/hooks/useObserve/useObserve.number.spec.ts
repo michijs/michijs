@@ -51,6 +51,6 @@ describe("Number expressions and operators", () => {
     expect(Math.abs(OBSERVE_NUM3)).toBe(NUM1);
   });
   it("should return proper type", () => {
-    expect(OBSERVE_NUM1.typeof?.()).toStrictEqual('number');
+    expect(OBSERVE_NUM1.typeof?.()).toStrictEqual("number");
   });
 });

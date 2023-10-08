@@ -18,28 +18,35 @@ export const getSearchParamsValue = () => {
 
 let isUpdating = false;
 
-const SearchParams = useComputedObserve(() => getSearchParamsValue(), [HistoryManager], {
-  onBeforeUpdate() {
-    isUpdating = true;
+const SearchParams = useComputedObserve(
+  () => getSearchParamsValue(),
+  [HistoryManager],
+  {
+    onBeforeUpdate() {
+      isUpdating = true;
+    },
+    onAfterUpdate() {
+      isUpdating = false;
+    },
   },
-  onAfterUpdate() {
-    isUpdating = false;
-  }
-});
+);
 
-export function useSearchParams<T extends Record<string, unknown> = Record<string, unknown>>(): ObservableType<T> { return SearchParams as unknown as ObservableType<T> };
+export function useSearchParams<
+  T extends Record<string, unknown> = Record<string, unknown>,
+>(): ObservableType<T> {
+  return SearchParams as unknown as ObservableType<T>;
+}
 
 SearchParams.subscribe?.((newValue) => {
   // Prevents pushing new urls while updating search params
   if (!isUpdating) {
     const newUrl = new URL(location.href);
-    Object.keys(newValue).forEach(x => {
+    Object.keys(newValue).forEach((x) => {
       setSearchParam(newUrl, x, newValue[x]);
-    })
-    if (location.href !== newUrl.href)
-      HistoryManager.push(newUrl);
+    });
+    if (location.href !== newUrl.href) HistoryManager.push(newUrl);
   }
-})
+});
 
 // Object.entries(SearchParams).forEach(([key, value]) => {
 //   value?.subscribe?.((newValue) => {
