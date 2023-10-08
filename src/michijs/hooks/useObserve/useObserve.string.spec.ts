@@ -18,4 +18,7 @@ describe("String expressions and operators", () => {
   it("should return 'o' for 'Hello'[4]", () => {
     expect(OBSERVE_STR1[4]).toStrictEqual("o");
   });
+  it("should return proper type", () => {
+    expect(OBSERVE_STR1.typeof?.()).toStrictEqual('string');
+  });
 });

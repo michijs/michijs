@@ -52,10 +52,10 @@ createCustomElement("root-test-element", {
 });
 
 // TODO:
-// Fix Title component
 // Fix List beign undefined not allowed as jsx
 // Finish map and set
-// 
+// Update docs about operators and observers
+// Fix A11y tests
 
 
 

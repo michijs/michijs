@@ -55,6 +55,10 @@ const objectTests = (initialValue: () => AnyObject | unknown[]) => {
       delete nonProxiedObject[0];
       expect(mockCallback).toBeCalledTimes(0);
     });
+
+    it("should return proper type", () => {
+      expect(object.typeof?.()).toStrictEqual('object');
+    });
     afterEach(() => {
       expect(object.valueOf()).toStrictEqual(nonProxiedObject);
     });

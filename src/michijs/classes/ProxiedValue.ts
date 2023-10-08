@@ -67,6 +67,10 @@ export class ProxiedValue<T> extends Observable<T> {
     return !!this.observers;
   }
 
+  typeof() {
+    return typeof this.valueOf();
+  }
+
   // Only for jest
   asymmetricMatch(prop){
     return this.is(prop)
