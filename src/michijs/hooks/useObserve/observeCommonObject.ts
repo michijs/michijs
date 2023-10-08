@@ -1,7 +1,7 @@
 import { useObserve } from "../useObserve";
 import { ObservableType, ObserverCallback } from "../../types";
 import { ProxiedValue } from "../../classes";
-import { setObservableValue } from "../../utils/setObservableValue";
+import { setObservableValue } from "../../utils";
 
 type CommonObjectProxyHandler<T extends object> = Required<
   ProxyHandler<ProxiedValue<T>>
@@ -48,13 +48,13 @@ export const customObjectGet = <T extends ObservableType<any>>(proxy: () => T): 
     if (p in target)
       return Reflect.get(target, p, receiver);
     else if (target.$value) {
-      if (typeof target.$value === 'object' && p in target.$value)
-        return Reflect.get(target.$value, p, receiver)
-      else if (target.$value[p]) {
+      if (typeof target.$value === 'object')
+        if (p in target.$value)
+          return Reflect.get(target.$value, p, receiver)
+        else
+          proxy()[p] = undefined
+      else if (target.$value[p])
         return target.$value[p]
-      }
-    } else {
-      proxy()[p] = undefined
     }
     return proxy()[p];
   };

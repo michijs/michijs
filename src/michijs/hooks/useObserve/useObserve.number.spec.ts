@@ -1,4 +1,4 @@
-import { useObserve } from "../";
+import { useObserve } from "..";
 
 const NUM1 = 2;
 const NUM2 = 4;

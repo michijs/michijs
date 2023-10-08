@@ -1,5 +1,5 @@
 import { useComputedObserve, useObserve } from ".";
-import { setObservableValue } from "../utils/setObservableValue";
+import { setObservableValue } from "../utils";
 
 export function useAsyncComputedObserve<T>(callback: () => Promise<T>, deps: Parameters<typeof useComputedObserve<T>>[1], initialValue: T) {
   const newObservable = useObserve(initialValue);

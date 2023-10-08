@@ -1,5 +1,5 @@
 import { ObservableLike } from "../types";
-import { ProxiedValue } from "../classes/ProxiedValue";
+import { ProxiedValue } from "../classes";
 
 export const usePureFunction = <T>(
   callback: () => T,

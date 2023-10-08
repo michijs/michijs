@@ -7,10 +7,10 @@ import { bindObservable } from "../utils";
  * Recomended extension for VSCode:
  * @link https://marketplace.visualstudio.com/items?itemName=paulmolluzzo.convert-css-in-js
  */
-export const css = (
+export function css(
   cssObject: TemplateStringsArray,
   ...props: (ObservableType<string | number> | string | number)[]
-) => {
+) {
   const template = useStringTemplate(cssObject, ...props);
   const styleSheet = new CSSStyleSheet();
   bindObservable(template, (newValue) => {

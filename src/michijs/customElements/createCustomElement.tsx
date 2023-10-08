@@ -1,31 +1,24 @@
 import { idGenerator, useComputedObserve, useObserve } from "../hooks";
-import {
+import type {
   MichiCustomElement,
   CustomElementTag,
   MichiElementOptions,
   MichiElementClass,
   MichiElementSelf,
-  CSSObject,
-  ObservableType,
 } from "../types";
-import { formatToKebabCase } from "../utils/formatToKebabCase";
+import { formatToKebabCase, bindObservable, getObservables, addStylesheetsToDocumentOrShadowRoot, deepEqual } from "../utils";
 import { defineEvent } from "./properties/defineEvent";
 import { definePropertyFromObservable } from "./properties/definePropertyFromObservable";
 import { setReflectedAttributes } from "./properties/setReflectedAttributes";
 import { defineMethod } from "./properties/defineMethod";
-import { deepEqual } from "../utils/deepEqual";
 import { getRootNode } from "../DOM/getRootNode";
 import { getAttributeValue } from "../DOM/attributes/getAttributeValue";
 import { getMountPoint } from "../DOM/getMountPoint";
 import { defineReflectedAttributes } from "./properties/defineReflectedAttributes";
-import { addStylesheetsToDocumentOrShadowRoot } from "../utils/addStylesheetsToDocumentOrShadowRoot";
-import { useStyleSheet } from "../css";
+import { useStyleSheet, convertCssObjectToCssVariablesObject } from "../css";
 import type { CSSProperties } from "@michijs/htmltype";
 import { setStyleProperty } from "../DOM/attributes/setStyleProperty";
 import { create } from "../DOMDiff";
-import { bindObservable } from "../utils";
-import { convertCssObjectToCssVariablesObject } from "../css/convertCssObjectToCssVariablesObject";
-import { getObservables } from "../utils";
 
 export function createCustomElement<
   O extends MichiElementOptions,

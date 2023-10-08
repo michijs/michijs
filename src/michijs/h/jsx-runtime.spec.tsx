@@ -7,9 +7,6 @@ import type {
   ObjectJSXElement,
 } from "../types";
 import { jsx } from "./";
-jest.mock("../customElements/createCustomElement", () => ({
-  createCustomElement: (tag: string) => ({ tag }),
-}));
 
 const testChild = "child";
 const testAttrs = {
