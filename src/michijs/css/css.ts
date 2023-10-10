@@ -15,8 +15,7 @@ export function css(
   const styleSheet = new CSSStyleSheet();
   bindObservable(template, (newValue) => {
     // Jest fix
-    if (styleSheet.replaceSync)
-      styleSheet.replaceSync(newValue);
+    if (styleSheet.replaceSync) styleSheet.replaceSync(newValue);
   });
   return styleSheet;
-};
+}

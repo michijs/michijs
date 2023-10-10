@@ -3,13 +3,12 @@ import { createCustomElement } from "../customElements";
 
 const styles = new CSSStyleSheet();
 // Jest fix
-if (styles.replaceSync)
-  styles.replaceSync(':host{display: none}');
+if (styles.replaceSync) styles.replaceSync(":host{display: none}");
 
 export const Title = createCustomElement("michi-title", {
   lifecycle: {
     didConstruct() {
-      this.shadowRoot!.adoptedStyleSheets = [styles]
+      this.shadowRoot!.adoptedStyleSheets = [styles];
     },
     connected() {
       this.updateTitle();
@@ -19,9 +18,8 @@ export const Title = createCustomElement("michi-title", {
   // adoptedStyleSheets: [useStyleSheet({ ':host': { display: 'none' } })],
   methods: {
     updateTitle() {
-      if (this.textContent)
-        document.title = this.textContent;
-    }
+      if (this.textContent) document.title = this.textContent;
+    },
   },
   render() {
     return <slot onslotchange={this.updateTitle} />;

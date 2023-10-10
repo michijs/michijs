@@ -57,13 +57,10 @@ export const customObjectGet =
   (target, p, receiver) => {
     if (p in target) return Reflect.get(target, p, receiver);
     else if (target.$value) {
-      if (typeof target.$value === 'object')
-        if (p in target.$value)
-          return Reflect.get(target.$value, p, receiver)
-        else
-          proxy()[p] = undefined
-      else if (target.$value[p])
-        return target.$value[p]
+      if (typeof target.$value === "object")
+        if (p in target.$value) return Reflect.get(target.$value, p, receiver);
+        else proxy()[p] = undefined;
+      else if (target.$value[p]) return target.$value[p];
     }
     return proxy()[p];
   };
