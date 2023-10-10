@@ -224,7 +224,12 @@ export interface ProxiedArrayInterface<V> extends ProxiedValue<V[]> {
    * Swaps two items
    */
   $swap(indexA: number, indexB: number);
-
+  
+  /**
+   * Is a proxy that allows you to avoid using dom diff algorithms to render lists.
+   * This allows it to have a performance close to vanilla js.
+   * An operation on the data implies an operation on the associated elements.
+   */
   List<const E = FC>(
     props: ExtendableComponentWithoutChildren<E> & {
       renderItem: FC<V>;

@@ -1,29 +1,22 @@
-// import { useStyleSheet } from "../css";
 import { HistoryManager } from "../classes";
-import { createCustomElement } from "../customElements";
+import { FC } from "../types";
 import { wait } from "../utils";
+import { GenericElement } from "./GenericElement";
 
-const styles = new CSSStyleSheet();
-// Jest fix
-if (styles.replaceSync)
-  styles.replaceSync(':host{display: none}');
+export interface RedirectProps {
+  /**The target URL or location. */
+  to: URL | string | (() => URL | string);
+}
 
-export const Redirect = createCustomElement("michi-redirect", {
-  reflectedAttributes: {
-    to: null as string | null
-  },
-  lifecycle: {
-    connected() {
-      this.redirectTo()
-    },
-  },
-  // Brokes unit tests
-  // adoptedStyleSheets: [useStyleSheet({ ':host': { display: 'none' } })],
-  methods: {
-    async redirectTo() {
+/**
+ * Redirect component for navigating to a different URL or location.
+ **/
+export const Redirect: FC<RedirectProps> = ({ to }) => (
+  <GenericElement
+    onconnected={async () => {
+      const toValue = to.valueOf() as typeof to
       await wait(0)
-      if (this.to.toBoolean?.())
-        HistoryManager.push(this.to.toString())
-    }
-  },
-});
+      HistoryManager.push(typeof toValue === 'function' ? toValue() : toValue)
+    }}
+  />
+)

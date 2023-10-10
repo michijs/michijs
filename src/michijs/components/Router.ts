@@ -35,8 +35,8 @@ export const Router = <const T = FC>(
   let currentRoute: string | undefined = matchedRoute.valueOf();
 
   bindObservable(matchedRoute, (newMatchedRoute) => {
-    const newCache = Array.from(el.childNodes);
-    if (currentRoute) {
+    const newCache = el.childNodes.length ? Array.from(el.childNodes) : undefined;
+    if (currentRoute && newCache) {
       const fragment = new DocumentFragment();
       fragment.append(...newCache)
       cache[currentRoute] = fragment;

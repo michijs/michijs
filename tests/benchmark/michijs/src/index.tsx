@@ -2,6 +2,7 @@ import {
   ObservableType,
   createCustomElement,
   useObserve,
+  List
 } from "../../../../src";
 
 function _random(max: number) {
@@ -106,11 +107,10 @@ export const Table = createCustomElement("michi-table", {
     class: HTMLTableElement,
   },
   render() {
-    const List = rows.List!;
-
     return (
       <List
         as="tbody"
+        data={rows}
         _={{ id: "tbody" }}
         renderItem={(row) => (
           <tr class={row.selected}>

@@ -19,42 +19,45 @@ class HistoryManagerSingleton extends Observable<string | URL> {
   }
 
   replaceCurrentUrl(url: string | URL) {
+    const urlValue = url.valueOf() as typeof url;
     try {
       // This will trigger an exception if its an external link string
-      history.replaceState(undefined, "", url);
-      this.history.splice(this.history.length, 1, url);
+      history.replaceState(undefined, "", urlValue);
+      this.history.splice(this.history.length, 1, urlValue);
     } catch (ex) {
       console.error(ex);
-      const href = typeof url === "object" && "href" in url ? url.href : url;
+      const href = typeof urlValue === "object" && "href" in urlValue ? urlValue.href : urlValue;
       window.location.href = href;
     }
-    this.notify(url);
+    this.notify(urlValue);
   }
 
   push(url: string | URL) {
+    const urlValue = url.valueOf() as typeof url;
     try {
       // This will trigger an exception if its an string
-      history.pushState(undefined, "", url);
-      this.history.push(url);
+      history.pushState(undefined, "", urlValue);
+      this.history.push(urlValue);
     } catch (ex) {
       console.error(ex);
-      const href = typeof url === "object" && "href" in url ? url.href : url;
+      const href = typeof urlValue === "object" && "href" in urlValue ? urlValue.href : urlValue;
       window.location.href = href;
     }
-    this.notify(url);
+    this.notify(urlValue);
   }
 
   matches(url: string, flexible = false) {
+    const urlValue = url.valueOf() as typeof url;
     if (window.URLPattern) {
       const p = new window.URLPattern({
-        pathname: `${url}*`,
+        pathname: `${urlValue}*`,
         baseURL: location.origin,
         search: "*",
         hash: "*",
       });
       return p.test(location.href);
     }
-    const urlPaths = url.split("/").filter((x) => x !== "");
+    const urlPaths = urlValue.split("/").filter((x) => x !== "");
     let locationPaths = location.pathname.split("/").filter((x) => x !== "");
     if (flexible) {
       locationPaths = locationPaths.slice(0, urlPaths.length);

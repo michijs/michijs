@@ -262,7 +262,6 @@ A component consists of the following properties:
 
 If the extends field is not provided an [Autonomous custom element](https://developers.google.com/web/fundamentals/web-components/customelements#shadowdom) will be created.
 
-## Hooks
 
 ## How this works?
 
@@ -270,11 +269,28 @@ If the extends field is not provided an [Autonomous custom element](https://deve
 
 ### Operators
 
+## Hooks
+
+### Basic hooks
+#### useObserve
+
+#### usePureFunction
+
+#### useComputedObserve
+#### useStringTemplate
+
+### Route management hooks
+#### useHash
+#### useSearchParams
+
+### Storage hooks
+#### useIndexedDB
+#### useStorage
 ### CSS hooks
 To use css we provide functions to create Constructable Stylesheets.
 __Our stylesheets can also subscribe to observables.__
 
-### useStyleSheet
+#### useStyleSheet
 Allows to create a Constructable Stylesheet with a CSSObject
 ```js
 export const counterStyle = useStyleSheet({
@@ -288,7 +304,7 @@ export const counterStyle = useStyleSheet({
   }
 });
 ```
-### css
+#### css
 Allows to create a Constructable Stylesheet with a Template String.
 [Recomended extension for VSCode](https://marketplace.visualstudio.com/items?itemName=paulmolluzzo.convert-css-in-js).
 
@@ -306,7 +322,7 @@ export const counterStyle = css`
 `
 ```
 
-### CSS module scripts
+## CSS module scripts
 We do not provide support for this functionality yet as ESBuild does not support it yet. You can read how it works [here](https://web.dev/css-module-scripts/)
 <!-- ```js
 import sheet from './styles.css' assert { type: 'css' };
@@ -315,12 +331,15 @@ import sheet from './styles.css' assert { type: 'css' };
 ## Components
 
 ### If
+Conditional rendering component. This is the only way to do it dynamically.
 
 ### List
 
 ### Title
+Title component for dynamically updating the document's title.
 
 ### Redirect
+Redirect component for navigating to a different URL or location.
 
 ### Host
 Allows to set attributes and event listeners to the host element itself.
@@ -337,7 +356,7 @@ It allows to:
 - Validate and assign values to forms
 
 ### AsyncComponent
-Create a component whose content will load after the promise ends. In the meantime you can choose to show a load component or not show anything.
+Asynchronously renders a component after the promise ends. In the meantime you can choose to show a load component or not show anything.
 
 ### Link
 Provides the ability to move around the web page without reloading the page. It uses the same attributes as an anchor tag but also allows the use of URL objects. Uses the HistoryManager.push method.
@@ -453,17 +472,11 @@ This will generate an element like:
 The intention of using a custom routing tool is to avoid the use of strings to represent the urls and to use modern apis that allow the use of the URL object itself. It also allows to separate the components of the routes which allows a cleaner code.
 
 ```js
-const Redirect = () => {
-  HistoryManager.push(urls.syncRoute())
-  // Will generate and go to this url: /sync-route
-  return <></>
-}
-
 //Parent routes
 export const [urls, Router] = registerRoutes({
   syncRoute: <div>Hello World</div>,
   //Redirect route
-  '/': <Redirect />,
+  '/': <Redirect to={url} />,
 });
 
 //Child routes

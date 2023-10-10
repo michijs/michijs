@@ -55,8 +55,7 @@ export function createCustomElement<
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
-    implements MichiCustomElement
-  {
+    implements MichiCustomElement {
     $michi: MichiCustomElement["$michi"] = {
       store: useObserve({
         ...attributes,
@@ -87,12 +86,6 @@ export function createCustomElement<
       return getRootNode(this).querySelector(
         selector,
       ) as unknown as T extends new () => any ? InstanceType<T> : T;
-    }
-    renderCallback() {
-      const newChildren = create(this.render?.(), {
-        contextElement: this,
-      });
-      getMountPoint(this).append(newChildren);
     }
     get idGen() {
       if (!this.$michi.idGen) {
@@ -227,7 +220,12 @@ export function createCustomElement<
       setReflectedAttributes(this, MichiCustomElementResult.observedAttributes);
       if (!this.$michi.alreadyRendered) {
         this.willMount?.();
-        this.renderCallback();
+        if (this.render) {
+          const newChildren = create(this.render(), {
+            contextElement: this,
+          });
+          getMountPoint(this).append(newChildren);
+        }
         this.$michi.alreadyRendered = true;
         this.didMount?.();
       }

@@ -8,16 +8,23 @@ import {
   SingleJSXElement,
 } from "../types";
 
+// Define a type for the return value of promises, which can be a JSX element, a function component, or a DOM element.
 type PromiseReturnType = JSX.Element | FC | (new (...args: any[]) => Element);
 
+// Define props for the AsyncComponent.
 type AsyncComponentProps<T> = ExtendableComponentWithoutChildren<T> & {
+  // The promise that resolves to the component to render asynchronously.
   promise:
     | Promise<PromiseReturnType>
     | (() => Promise<PromiseReturnType>)
     | (() => Promise<{ default: PromiseReturnType }>);
+  // An optional loading component to display while the async component is loading.
   loadingComponent?: JSX.Element;
 };
 
+/**
+ * Asynchronously renders a component after the promise ends. In the meantime you can choose to show a load component or not show anything.
+ */
 export const AsyncComponent = <const T = FC>(
   { as: asTag, promise, loadingComponent, ...attrs }: AsyncComponentProps<T>,
   options: CreateOptions,
@@ -29,8 +36,10 @@ export const AsyncComponent = <const T = FC>(
       } as unknown as SingleJSXElement) as ChildNode & ParentNode)
     : new VirtualFragment();
 
+  // If a loading component is provided, append it to the element.
   if (loadingComponent) el.append(create(loadingComponent, options));
 
+  // Function to render the component when the promise resolves.
   const render = (
     promiseResult: PromiseReturnType | { default: PromiseReturnType },
   ) => {
@@ -42,6 +51,7 @@ export const AsyncComponent = <const T = FC>(
         ? promiseResult.default
         : promiseResult;
 
+    // Create and replace the element with the resolved component.
     el = create(
       Res && typeof Res === "function" ? jsx(Res) : Res,
       options,
@@ -49,7 +59,9 @@ export const AsyncComponent = <const T = FC>(
     oldEl.replaceWith(el);
   };
 
+  // Execute the promise and render the component when it resolves.
   (typeof promise === "function" ? promise() : promise).then(render);
 
+  // Return the rendered element.
   return el.valueOf() as Node;
 };
