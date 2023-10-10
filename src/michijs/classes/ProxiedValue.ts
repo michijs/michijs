@@ -34,8 +34,7 @@ export class ProxiedValue<T> extends Observable<T> {
   }
 
   public toObservableString(): ObservableType<string> {
-    // @ts-ignore
-    return useComputedObserve(() => this.$value?.toString?.(), [this]);
+    return useComputedObserve(() => this.toString(), [this]);
   }
 
   public toBoolean() {
@@ -61,6 +60,10 @@ export class ProxiedValue<T> extends Observable<T> {
   }
   protected [Symbol.toStringTag]() {
     return this.toString();
+  }
+  protected toString() {
+    // @ts-ignore
+    return this.$value.toString();
   }
 
   shouldCheckForChanges() {

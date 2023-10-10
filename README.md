@@ -262,39 +262,22 @@ A component consists of the following properties:
 
 If the extends field is not provided an [Autonomous custom element](https://developers.google.com/web/fundamentals/web-components/customelements#shadowdom) will be created.
 
-## store structure
-A store consists of the following properties:
-<table>
-  <thead>
-    <tr>
-      <th>Property</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>state</td>
-      <td>Allows to define the store state.</td>
-    </tr>
-    <tr>
-      <td>transactions</td>
-      <td>Transactions are functions that notify changes at the end of the transaction.</td>
-    </tr>
-  </tbody>
-</table>
+## Hooks
 
-stores use proxies to listen for changes in their state, in addition, they are observable.
-Each component has an store to listen for changes in its state.
+## How this works?
 
+### Static vs dynamic - The observables world
 
-## CSS
+### Operators
+
+### CSS hooks
 To use css we provide functions to create Constructable Stylesheets.
 __Our stylesheets can also subscribe to observables.__
 
-### createStyleSheet
+### useStyleSheet
 Allows to create a Constructable Stylesheet with a CSSObject
 ```js
-export const counterStyle = createStyleSheet({
+export const counterStyle = useStyleSheet({
   ':host': {
     display: 'flex',
     flexDirection: 'row'
@@ -330,6 +313,15 @@ import sheet from './styles.css' assert { type: 'css' };
 ``` -->
 
 ## Components
+
+### If
+
+### List
+
+### Title
+
+### Redirect
+
 ### Host
 Allows to set attributes and event listeners to the host element itself.
 
@@ -353,9 +345,6 @@ Provides the ability to move around the web page without reloading the page. It 
 ## Custom element methods
 ### child
 Allows to get a child element from the host with the selector
-
-### rerender
-Forces the element to re-render
 
 ### idGen
 Create unique IDs with a discernible key
@@ -392,52 +381,30 @@ el.setAttribute('class', 'test')
 In this way the jsx syntax of MichiJS is more similar to html.
 
 ## Lists
-There are 3 ways to create a list
-### Using map
-It's the usual way to create lists in jsx.
+There are 2 ways to create a list
+### The static way - Using map
+It's the way to create static lists from an array object. Since the result will be static, it will reflect the state of a variable when it is rendered. Useful for read-only lists.
 ```jsx
 const arrayTest = [0, 1, 2];
 
-arrayTest.map(item => <div key={item}>{item}</div>)
+arrayTest.map(item => <div>{item}</div>)
 ```
 This will generate an element like:
 
 ```html
-<michi-list>
   <div>0</div>
   <div>1</div>
   <div>2</div>
-</michi-list>
 ```
-Why create the michi-list element? This is the way to avoid using Virtual DOM. Because the algorithm is dumb, it needs a way to remember that element is a list.
 
-### Using List component
-It's similar to using maps. But it allows to use different container than michi-list.
+### The dynamic way - Using List component
+It is a component that avoids using dom diff algorithms to render dynamic lists. This allows it to have a performance close to vanilla js. An operation on the data implies an operation on the associated elements. 
 ```jsx
-const arrayTest = [0, 1, 2];
+const arrayTest = useObserve([0, 1, 2]);
 
 <List 
   as="span"
   data={arrayTest}
-  renderItem={item => <div key={item}>{item}</div>}
-/>
-```
-This will generate an element like:
-
-```html
-<span>
-  <div>0</div>
-  <div>1</div>
-  <div>2</div>
-</span>
-```
-### Using ElementList
-Is a proxy that allows you to avoid using dom diff algorithms to render lists. This allows it to have a performance close to vanilla js. An operation on the data implies an operation on the associated elements.
-```jsx
-const arrayTest = new ElementList(0, 1, 2);
-
-<arrayTest.List 
-  as="span"
   renderItem={item => <div>{item}</div>}
 />
 ```
@@ -458,45 +425,26 @@ This will generate an element like:
       <th></th>
       <th>Map</th>
       <th>List component</th>
-      <th>ElementList</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>Performance</td>
-      <td>Diff algorithm order</td>
-      <td>Diff algorithm order</td>
-      <td>Close to vanilla</td>
+      <td colspan="2">Close to vanilla</td>
     </tr>
     <tr>
       <td>Container</td>
-      <td>michi-list</td>
-      <td>michi-list or any other element</td>
-      <td>michi-list or any other element</td>
+      <td colspan="2">Virtual fragment or any other element</td>
     </tr>
     <tr>
-      <td>Keys</td>
-      <td>Required</td>
-      <td>Required</td>
-      <td>Not required</td>
-    </tr>
-    <tr>
-      <td>Index</td>
-      <td>Yes</td>
-      <td>Yes</td>
-      <td>No</td>
-    </tr>
-    <tr>
-      <td>Transactions allowed</td>
-      <td>Yes</td>
-      <td>Yes</td>
-      <td>No</td>
+      <td>Data</td>
+      <td>Static</td>
+      <td>Dynamic</td>
     </tr>
     <tr>
       <td>Updates</td>
-      <td>The entire component</td>
-      <td>The entire component</td>
-      <td>Just the list itself</td>
+      <td>No</td>
+      <td>Only when an operator is triggered on the list or its elements</td>
     </tr>
   </tbody>
 </table>
@@ -512,20 +460,14 @@ const Redirect = () => {
 }
 
 //Parent routes
-export const { urls, Router, pages } = registerRoutes({
-  syncRoute: {
-    /**The component to display */
-    component: <div>Hello World</div>,
-    title: 'Sync title'
-  },
+export const [urls, Router] = registerRoutes({
+  syncRoute: <div>Hello World</div>,
   //Redirect route
-  '/': {
-    component: <Redirect />
-  },
+  '/': <Redirect />,
 });
 
 //Child routes
-export const { urls: urlsChild, Router: RouterChild, pages: pagesChild } = registerRoutes({
+export const [urlsChild, RouterChild] = registerRoutes({
   // Async route
   asyncChildRoute: {
     searchParams: {
@@ -548,17 +490,24 @@ urlsChild.asyncChildRoute({ searchParams: { searchParam1: 'param 1', searchParam
 ```
 Router and RouterChild are components that represent the mount points of each registered route.
 
-The "pages" function is a utility to create asynchronous components that includes the search params and component hashes with the types that were defined when the route was registered
 ```js
-export const AsyncChildExample = pagesChild.asyncChildRoute(({ searchParams, hash }) => (
+const AsyncChildExample: FC = () => {
+    const searchParams = useSearchParams<{
+      searchParam1: string, 
+      searchParam2: number
+    }>();
+    const hash = useHash<'#hash1'| '#hash2'>();
+    return (
     <>
       {/* Will show the value of searchParam1 */}
       <div>{searchParams.searchParam1}</div>
       {/* Will show true if the hash is #hash1 */}
       <div>{hash['#hash1']}</div>
     </>
-  );
-);
+    );
+}
+
+export default AsyncChildExample
 ```
 
 ## I18n
@@ -583,8 +532,6 @@ export const MyComponent = createCustomElement('my-component', {
   }
 });
 ```
-
-
 
 ## Limitations
 ### Observable objects

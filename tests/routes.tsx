@@ -1,3 +1,4 @@
+import { Redirect } from "@michijs/michijs/michijs/components/Redirect";
 import { createRouter, wait } from "../src";
 import { AsyncComponent } from "../src/michijs/components/AsyncComponent";
 import { Main } from "./pages/Main";
@@ -35,7 +36,7 @@ export const [asyncTestsUrls, AsyncTestsRouter] = createRouter(
         promise={async () => (await import("./SimpleCounter")).SimpleCounter}
       />
     ),
-    test3: <div>test</div>,
+    test3: <Redirect to="/">test</Redirect>,
   },
   urls.asyncTests,
 );

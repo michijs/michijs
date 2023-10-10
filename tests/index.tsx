@@ -54,6 +54,7 @@ createCustomElement("root-test-element", {
 // Finish map and set
 // Update docs about operators and observers
 // Fix A11y tests
+// Create redirect component and update readme
 
 // documentTransition test
 // const titulo1 = document.createElement('h1');

@@ -21,24 +21,27 @@ export const If = <const T = FC>(
 ) => {
   const el = asTag
     ? (create({
-        jsxTag: asTag,
-        attrs,
-      } as unknown as SingleJSXElement) as ChildNode & ParentNode)
+      jsxTag: asTag,
+      attrs,
+    } as unknown as SingleJSXElement) as ChildNode & ParentNode)
     : new VirtualFragment();
 
-  let cachedThen: Node[] | undefined;
-  let cachedElse: Node[] | undefined;
+  let cachedThen: DocumentFragment | undefined;
+  let cachedElse: DocumentFragment | undefined;
 
   bindObservable(condition, (newValue) => {
-    const newCache =
-      el.childNodes.length > 0 ? Array.from(el.childNodes) : undefined;
+    const newCache = Array.from(el.childNodes);
     if (newValue) {
-      cachedElse = newCache;
-      if (cachedThen) el.replaceChildren(...cachedThen);
+      const fragment = new DocumentFragment();
+      fragment.append(...newCache)
+      cachedElse = fragment;
+      if (cachedThen) el.replaceChildren(cachedThen);
       else if (then) el.replaceChildren(create(then, options));
     } else {
-      cachedThen = newCache;
-      if (cachedElse) el.replaceChildren(...cachedElse);
+      const fragment = new DocumentFragment();
+      fragment.append(...newCache)
+      cachedThen = fragment;
+      if (cachedElse) el.replaceChildren(cachedElse);
       else if (elseComponent)
         el.replaceChildren(create(elseComponent, options));
     }

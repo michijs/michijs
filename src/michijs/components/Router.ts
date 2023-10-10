@@ -21,11 +21,11 @@ export const Router = <const T = FC>(
 ) => {
   const el = asTag
     ? (create({
-        jsxTag: asTag,
-        attrs,
-      } as unknown as SingleJSXElement) as ChildNode & ParentNode)
+      jsxTag: asTag,
+      attrs,
+    } as unknown as SingleJSXElement) as ChildNode & ParentNode)
     : new VirtualFragment();
-  const cache: Record<string, Node[]> = {};
+  const cache: Record<string, DocumentFragment> = {};
 
   const matchedRoute = useComputedObserve(() => {
     return Object.keys(routes).find((key) =>
@@ -35,12 +35,15 @@ export const Router = <const T = FC>(
   let currentRoute: string | undefined = matchedRoute.valueOf();
 
   bindObservable(matchedRoute, (newMatchedRoute) => {
-    const newCache =
-      el.childNodes.length > 0 ? Array.from(el.childNodes) : undefined;
-    if (currentRoute && newCache) cache[currentRoute] = newCache;
+    const newCache = Array.from(el.childNodes);
+    if (currentRoute) {
+      const fragment = new DocumentFragment();
+      fragment.append(...newCache)
+      cache[currentRoute] = fragment;
+    }
 
     if (newMatchedRoute) {
-      if (cache[newMatchedRoute]) el.replaceChildren(...cache[newMatchedRoute]);
+      if (cache[newMatchedRoute]) el.replaceChildren(cache[newMatchedRoute]);
       else {
         const component = routes[newMatchedRoute];
         el.replaceChildren(create(component, options));
