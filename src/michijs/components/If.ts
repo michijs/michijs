@@ -28,9 +28,9 @@ export const If = <const T = FC>(
   // Create an element or a virtual fragment depending on the 'asTag' prop.
   const el = asTag
     ? (create({
-      jsxTag: asTag,
-      attrs,
-    } as unknown as SingleJSXElement) as ChildNode & ParentNode)
+        jsxTag: asTag,
+        attrs,
+      } as unknown as SingleJSXElement) as ChildNode & ParentNode)
     : new VirtualFragment();
 
   let cachedThen: DocumentFragment | undefined;
@@ -38,7 +38,9 @@ export const If = <const T = FC>(
 
   // Bind the observable 'condition' to monitor changes.
   bindObservable(condition, (newValue) => {
-    const newCache = el.childNodes.length ? Array.from(el.childNodes) : undefined;
+    const newCache = el.childNodes.length
+      ? Array.from(el.childNodes)
+      : undefined;
     if (newValue) {
       if (newCache) {
         const fragment = new DocumentFragment();

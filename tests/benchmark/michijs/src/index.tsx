@@ -2,7 +2,7 @@ import {
   ObservableType,
   createCustomElement,
   useObserve,
-  List
+  List,
 } from "../../../../src";
 
 function _random(max: number) {
