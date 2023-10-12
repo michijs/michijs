@@ -30,6 +30,20 @@ describe("Performance tests - MichiJS", () => {
       new Map<string, Map<Result, number>>([
         [new Date().getTime().toString(), await results],
         [
+          "1.1.7",
+          new Map([
+            ["create1000Rows", 195.06],
+            ["replaceAllRows", 123.76],
+            ["partialUpdate", 76.27],
+            ["selectRow", 1438.36],
+            ["swapRows", 36.6],
+            ["removeRow", 1373.27],
+            ["createManyRows", 1150.83],
+            ["appendRowsToLargeTable", 246.86],
+            ["clearRows", 42.68],
+          ]),
+        ],
+        [
           "1.0.0",
           new Map([
             ["create1000Rows", 207.09],

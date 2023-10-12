@@ -2,16 +2,27 @@
 
 exports[`Performance tests - MichiJS clear rows: MichiJS Benchmarks 1`] = `
 Map {
-  "1676042064533" => Map {
-    "create1000Rows" => 207.09,
-    "replaceAllRows" => 185.54,
-    "partialUpdate" => 44.55,
-    "selectRow" => 40.72,
-    "swapRows" => 23.92,
-    "removeRow" => 49.16,
-    "createManyRows" => 1639.74,
-    "appendRowsToLargeTable" => 267.65,
-    "clearRows" => 42.65,
+  "1697146962419" => Map {
+    "create1000Rows" => 195.06,
+    "replaceAllRows" => 123.76,
+    "partialUpdate" => 76.27,
+    "selectRow" => 1438.36,
+    "swapRows" => 36.6,
+    "removeRow" => 1373.27,
+    "createManyRows" => 1150.83,
+    "appendRowsToLargeTable" => 246.86,
+    "clearRows" => 42.68,
+  },
+  "1.1.7" => Map {
+    "create1000Rows" => 195.06,
+    "replaceAllRows" => 123.76,
+    "partialUpdate" => 76.27,
+    "selectRow" => 1438.36,
+    "swapRows" => 36.6,
+    "removeRow" => 1373.27,
+    "createManyRows" => 1150.83,
+    "appendRowsToLargeTable" => 246.86,
+    "clearRows" => 42.68,
   },
   "1.0.0" => Map {
     "create1000Rows" => 207.09,
