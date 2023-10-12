@@ -4,6 +4,8 @@ import { ProxiedArray } from "../../classes";
 import {
   customObjectDelete,
   customObjectGet,
+  customObjectGetOwnPropertyDescriptor,
+  customObjectOwnKeys,
   customObjectSet,
 } from "./observeCommonObject";
 
@@ -27,6 +29,10 @@ export function observeArray<T extends Array<unknown>>(
   const proxy = new Proxy(newObservable, {
     set: customObjectSet(newInitialObservers),
     deleteProperty: customObjectDelete,
+    ownKeys: customObjectOwnKeys,
+    getOwnPropertyDescriptor(target, prop) {
+      return prop !== 'length' ? customObjectGetOwnPropertyDescriptor(target, prop) : Reflect.getOwnPropertyDescriptor(target, prop);
+    },
     get(target, p, receiver) {
       const castedP = p as unknown as keyof ObservableArray<T>;
       if (typeof castedP === "string" && mutableProperties.has(castedP)) {

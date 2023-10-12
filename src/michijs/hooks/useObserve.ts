@@ -3,7 +3,7 @@ import { observeArray } from "./useObserve/observeArray";
 import { observeCommonObject } from "./useObserve/observeCommonObject";
 import { observeDate } from "./useObserve/observeDate";
 import { observeMap } from "./useObserve/observeMap";
-import { observeSet } from "./useObserve/observeSet";
+// import { observeSet } from "./useObserve/observeSet";
 
 export function useObserve<T>(
   item?: T,
@@ -23,8 +23,8 @@ export function useObserve<T>(
       ) as unknown as ObservableType<T>;
     else if (item instanceof Map)
       return observeMap(item, initialObservers) as unknown as ObservableType<T>;
-    else if (item instanceof Set)
-      return observeSet(item, initialObservers) as unknown as ObservableType<T>;
+    // else if (item instanceof Set)
+    //   return observeSet(item, initialObservers) as unknown as ObservableType<T>;
     // console.error(`The object with path "${props.propertyPath}" cannot be observed ${item}`)
   }
   return observeCommonObject<T>(

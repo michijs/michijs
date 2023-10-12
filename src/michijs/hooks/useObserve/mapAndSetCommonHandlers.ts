@@ -3,7 +3,9 @@ import { ProxiedValue } from "../../classes/ProxiedValue";
 
 export const customMapAndSetClear = (
   target: ProxiedValue<
-    Map<unknown, ObservableType<unknown>> | Set<ObservableType<unknown>>
+    Map<any, any>
+  > | ProxiedValue<
+    Set<any>
   >,
   clearFn: Map<any, any>["clear"] | Set<any>["clear"],
 ): Map<any, any>["clear"] | Set<any>["clear"] => {
@@ -11,20 +13,17 @@ export const customMapAndSetClear = (
     if (target.shouldCheckForChanges()) {
       if (target.$value.size !== 0) {
         clearFn();
-        target.notify(target.$value);
+        target.notifyCurrentValue();
       }
-    } else {
+    } else
       clearFn();
-      //TODO: Should send each index?
-      target.notify(target.$value);
-    }
   };
 };
 
 export const customMapAndSetDelete = (
   target: ProxiedValue<
-    Map<unknown, ObservableType<unknown>> | Set<ObservableType<unknown>>
-  >,
+    Map<any, any>
+  > | ProxiedValue<Set<any>>,
   deleteFn:
     | Map<unknown, ObservableType<unknown>>["delete"]
     | Set<ObservableType<unknown>>["delete"],
@@ -34,8 +33,7 @@ export const customMapAndSetDelete = (
   //In Map is key, in Set is value
   return function (key) {
     const result = deleteFn(key);
-    if (result) target.notify(target.$value);
-    //TODO: ?
+    if (result) target.notifyCurrentValue();
     return result;
   };
 };

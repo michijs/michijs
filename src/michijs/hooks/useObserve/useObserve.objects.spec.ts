@@ -1,4 +1,4 @@
-import { AnyObject, ObservableObject } from "../../types";
+import { AnyObject, ObservableObject, ObservableType } from "../../types";
 import { useObserve } from "..";
 
 const exampleValue = 1;
@@ -8,7 +8,7 @@ const mockCallback = jest.fn((x) => x);
 const objectTests = (initialValue: () => AnyObject | unknown[]) => {
   describe("object tests", () => {
     let nonProxiedObject;
-    let object;
+    let object: ObservableType<any>;
     beforeEach(() => {
       nonProxiedObject = undefined;
       nonProxiedObject = initialValue();
@@ -55,6 +55,21 @@ const objectTests = (initialValue: () => AnyObject | unknown[]) => {
       delete nonProxiedObject[0];
       expect(mockCallback).toBeCalledTimes(0);
     });
+    it("JSON versions of the objects should be the same", () => {
+      object[0] = exampleValue;
+      nonProxiedObject[0] = exampleValue;
+      expect(JSON.stringify(object)).toStrictEqual(JSON.stringify(nonProxiedObject));
+    });
+    it("keys of the objects should be the same", () => {
+      object[0] = exampleValue;
+      nonProxiedObject[0] = exampleValue;
+      expect(Object.keys(object)).toStrictEqual(Object.keys(nonProxiedObject));
+    });
+    it("entries of the objects should be the same", () => {
+      object[0] = exampleValue;
+      nonProxiedObject[0] = exampleValue;
+      expect(Object.entries(object)).toStrictEqual(Object.entries(nonProxiedObject));
+    });
 
     it("should return proper type", () => {
       expect(object.typeof?.()).toStrictEqual("object");
@@ -75,58 +90,54 @@ describe("Observe tests", () => {
   describe("When observing Arrays", () => {
     objectTests(() => []);
   });
-  // describe("When observing Maps", () => {
-  //   let nonProxiedMap: Map<any, any>;
-  //   let map: Map<any, any>;
-  //   beforeEach(() => {
-  //     nonProxiedMap = new Map();
-  //     map = useObserve({
-  //       item: new Map(),
-  //       onChange: mockCallback,
-  //       shouldValidatePropertyChange: () => true,
-  //       propertyPath: "",
-  //     });
-  //   });
-  //   it("Setting the same value two times must call its callback just one time", () => {
-  //     map[0] = exampleValue;
-  //     map[0] = exampleValue;
-  //     nonProxiedMap[0] = exampleValue;
-  //     expect(mockCallback).toBeCalledTimes(1);
-  //   });
-  //   it("Setting the same value two times must call its callback just one time (using set method)", () => {
-  //     map.set(0, exampleValue);
-  //     map.set(0, exampleValue);
-  //     nonProxiedMap.set(0, exampleValue);
-  //     expect(mockCallback).toBeCalledTimes(1);
-  //   });
-  //   it("Deleting an existing index should call the callback", () => {
-  //     map.set(0, exampleValue);
-  //     nonProxiedMap.set(0, exampleValue);
-  //     map.delete(0);
-  //     nonProxiedMap.delete(0);
-  //     expect(mockCallback).toBeCalledTimes(2);
-  //   });
-  //   it("Deleting an non-existent index should not call the callback", () => {
-  //     map.delete(0);
-  //     nonProxiedMap.delete(0);
-  //     expect(mockCallback).toBeCalledTimes(0);
-  //   });
-  //   it("Clearing a map with items should call the callback", () => {
-  //     map.set(0, exampleValue);
-  //     nonProxiedMap.set(0, exampleValue);
-  //     map.clear();
-  //     nonProxiedMap.clear();
-  //     expect(mockCallback).toBeCalledTimes(2);
-  //   });
-  //   it("Clearing a map without items should not call the callback", () => {
-  //     map.clear();
-  //     nonProxiedMap.clear();
-  //     expect(mockCallback).toBeCalledTimes(0);
-  //   });
-  //   afterEach(() => {
-  //     expect(Array.from(map)).toEqual(Array.from(nonProxiedMap));
-  //   });
-  // });
+  describe("When observing Maps", () => {
+    let nonProxiedMap: Map<any, any>;
+    let map: ObservableType<Map<any, any>>;
+    beforeEach(() => {
+      nonProxiedMap = new Map();
+      map = useObserve(new Map());
+      map.subscribe?.(mockCallback)
+    });
+    it("Setting the same value two times must call its callback just one time", () => {
+      map[0] = exampleValue;
+      map[0] = exampleValue;
+      nonProxiedMap[0] = exampleValue;
+      expect(mockCallback).toBeCalledTimes(1);
+    });
+    it("Setting the same value two times must call its callback just one time (using set method)", () => {
+      map.set(0, exampleValue);
+      map.set(0, exampleValue);
+      nonProxiedMap.set(0, exampleValue);
+      expect(mockCallback).toBeCalledTimes(1);
+    });
+    it("Deleting an existing index should call the callback", () => {
+      map.set(0, exampleValue);
+      nonProxiedMap.set(0, exampleValue);
+      map.delete(0);
+      nonProxiedMap.delete(0);
+      expect(mockCallback).toBeCalledTimes(2);
+    });
+    it("Deleting an non-existent index should not call the callback", () => {
+      map.delete(0);
+      nonProxiedMap.delete(0);
+      expect(mockCallback).toBeCalledTimes(0);
+    });
+    it("Clearing a map with items should call the callback", () => {
+      map.set(0, exampleValue);
+      nonProxiedMap.set(0, exampleValue);
+      map.clear();
+      nonProxiedMap.clear();
+      expect(mockCallback).toBeCalledTimes(2);
+    });
+    it("Clearing a map without items should not call the callback", () => {
+      map.clear();
+      nonProxiedMap.clear();
+      expect(mockCallback).toBeCalledTimes(0);
+    });
+    afterEach(() => {
+      expect(Array.from(map)).toEqual(Array.from(nonProxiedMap));
+    });
+  });
   // describe("When observing Sets", () => {
   //   let nonProxiedSet: Set<any>;
   //   let set: Set<any>;
