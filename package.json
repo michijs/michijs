@@ -43,13 +43,14 @@
     "start-benchmark-vanilla": "michi-server --start --env=TESTING_VANILLA",
     "benchmark-michijs": "set NODE_ENV=TESTING && jest --updateSnapshot --unhandled-rejections=strict --selectProjects=benchmark-michijs",
     "benchmark-vanilla": "set NODE_ENV=TESTING_VANILLA && jest --updateSnapshot --unhandled-rejections=strict --selectProjects=benchmark-vanilla",
+    "benchmark": "npm run benchmark-michijs && npm run benchmark-vanilla",
     "coverage": "jest --no-cache --collect-coverage --selectProjects=library-tests",
     "test-tsc": "tsc --noEmit --skipLibCheck",
     "test-tsc-w": "tsc --noEmit --skipLibCheck -w",
     "test": "jest --no-cache --selectProjects=library-tests",
     "test-w": "jest --watch --no-cache --selectProjects=library-tests",
     "usnap": "jest --updateSnapshot --unhandled-rejections=strict --selectProjects=library-tests",
-    "run-all-tests": "npm run test-tsc && npm run test && npm run benchmark-michijs && npm run benchmark-vanilla"
+    "run-all-tests": "npm run test-tsc && npm run test && npm run benchmark"
   },
   "keywords": [
     "web-components",
@@ -59,13 +60,13 @@
   ],
   "devDependencies": {
     "@michijs/dev-server": "0.5.6",
-    "@reduxjs/toolkit": "1.9.6",
+    "@reduxjs/toolkit": "1.9.7",
     "@types/jest": "29.5.5",
     "esbuild-jest-transform": "1.1.1",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
     "jest-puppeteer": "9.0.1",
-    "puppeteer": "21.3.6",
+    "puppeteer": "21.3.8",
     "redux": "4.2.1",
     "ts-node": "10.9.1",
     "typescript": "5.2.2"
