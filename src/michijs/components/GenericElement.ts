@@ -5,19 +5,18 @@ import { createCustomElement } from "../customElements";
 
 const styles = new CSSStyleSheet();
 // Jest fix
-if (styles.replaceSync)
-  styles.replaceSync(':host{display: none}');
+if (styles.replaceSync) styles.replaceSync(":host{display: none}");
 
 export const GenericElement = createCustomElement("michi-generic-element", {
   lifecycle: {
     connected() {
-      this.connected(true)
+      this.connected(true);
     },
   },
   adoptedStyleSheets: [styles],
   // Brokes unit tests
   // adoptedStyleSheets: [useStyleSheet({ ':host': { display: 'none' } })],
   events: {
-    connected: new EventDispatcher<boolean>()
+    connected: new EventDispatcher<boolean>(),
   },
 });

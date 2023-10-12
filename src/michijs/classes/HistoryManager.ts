@@ -26,7 +26,10 @@ class HistoryManagerSingleton extends Observable<string | URL> {
       this.history.splice(this.history.length, 1, urlValue);
     } catch (ex) {
       console.error(ex);
-      const href = typeof urlValue === "object" && "href" in urlValue ? urlValue.href : urlValue;
+      const href =
+        typeof urlValue === "object" && "href" in urlValue
+          ? urlValue.href
+          : urlValue;
       window.location.href = href;
     }
     this.notify(urlValue);
@@ -40,7 +43,10 @@ class HistoryManagerSingleton extends Observable<string | URL> {
       this.history.push(urlValue);
     } catch (ex) {
       console.error(ex);
-      const href = typeof urlValue === "object" && "href" in urlValue ? urlValue.href : urlValue;
+      const href =
+        typeof urlValue === "object" && "href" in urlValue
+          ? urlValue.href
+          : urlValue;
       window.location.href = href;
     }
     this.notify(urlValue);

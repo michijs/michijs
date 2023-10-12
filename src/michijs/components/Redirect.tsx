@@ -14,9 +14,9 @@ export interface RedirectProps {
 export const Redirect: FC<RedirectProps> = ({ to }) => (
   <GenericElement
     onconnected={async () => {
-      const toValue = to.valueOf() as typeof to
-      await wait(0)
-      HistoryManager.push(typeof toValue === 'function' ? toValue() : toValue)
+      const toValue = to.valueOf() as typeof to;
+      await wait(0);
+      HistoryManager.push(typeof toValue === "function" ? toValue() : toValue);
     }}
   />
-)
+);

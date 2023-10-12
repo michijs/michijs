@@ -21,9 +21,9 @@ export const Router = <const T = FC>(
 ) => {
   const el = asTag
     ? (create({
-      jsxTag: asTag,
-      attrs,
-    } as unknown as SingleJSXElement) as ChildNode & ParentNode)
+        jsxTag: asTag,
+        attrs,
+      } as unknown as SingleJSXElement) as ChildNode & ParentNode)
     : new VirtualFragment();
   const cache: Record<string, DocumentFragment> = {};
 
@@ -35,10 +35,12 @@ export const Router = <const T = FC>(
   let currentRoute: string | undefined = matchedRoute.valueOf();
 
   bindObservable(matchedRoute, (newMatchedRoute) => {
-    const newCache = el.childNodes.length ? Array.from(el.childNodes) : undefined;
+    const newCache = el.childNodes.length
+      ? Array.from(el.childNodes)
+      : undefined;
     if (currentRoute && newCache) {
       const fragment = new DocumentFragment();
-      fragment.append(...newCache)
+      fragment.append(...newCache);
       cache[currentRoute] = fragment;
     }
 
