@@ -40,7 +40,7 @@ describe("Performance tests - MichiJS", () => {
             ["removeRow", 1058.56],
             ["createManyRows", 962.07],
             ["appendRowsToLargeTable", 177.95],
-            ["clearRows", 30.7]
+            ["clearRows", 30.7],
           ]),
         ],
         [
