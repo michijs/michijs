@@ -34,25 +34,35 @@ export const observeMap = <E, T extends Map<any, E>>(
             : targetProperty;
         switch (property) {
           case "clear": {
-            return customMapAndSetClear(target as unknown as ProxiedValue<Map<any, E>>, bindedTargetProperty);
+            return customMapAndSetClear(
+              target as unknown as ProxiedValue<Map<any, E>>,
+              bindedTargetProperty,
+            );
           }
           case "set": {
             return function (key, newValue) {
-              const hasOldValue =  target.$value.has(key);
-              if(hasOldValue){
+              const hasOldValue = target.$value.has(key);
+              if (hasOldValue) {
                 const oldValue = target.$value.get(key);
-                return setObservableValue(oldValue, newValue, newInitialObservers)
+                return setObservableValue(
+                  oldValue,
+                  newValue,
+                  newInitialObservers,
+                );
               }
               const observedItem = useObserve<object>(
                 newValue,
                 newInitialObservers,
               );
-              observedItem.notifyCurrentValue?.()
+              observedItem.notifyCurrentValue?.();
               return bindedTargetProperty(key, observedItem);
             };
           }
           case "delete": {
-            return customMapAndSetDelete(target as unknown as ProxiedValue<Map<any, E>>, bindedTargetProperty);
+            return customMapAndSetDelete(
+              target as unknown as ProxiedValue<Map<any, E>>,
+              bindedTargetProperty,
+            );
           }
           // case 'subscribe': {
           //   return (callback) => props.subscribeCallback?.(props.propertyPath, callback);

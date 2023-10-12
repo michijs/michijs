@@ -2,11 +2,7 @@ import { ObservableType } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 
 export const customMapAndSetClear = (
-  target: ProxiedValue<
-    Map<any, any>
-  > | ProxiedValue<
-    Set<any>
-  >,
+  target: ProxiedValue<Map<any, any>> | ProxiedValue<Set<any>>,
   clearFn: Map<any, any>["clear"] | Set<any>["clear"],
 ): Map<any, any>["clear"] | Set<any>["clear"] => {
   return function () {
@@ -15,15 +11,12 @@ export const customMapAndSetClear = (
         clearFn();
         target.notifyCurrentValue();
       }
-    } else
-      clearFn();
+    } else clearFn();
   };
 };
 
 export const customMapAndSetDelete = (
-  target: ProxiedValue<
-    Map<any, any>
-  > | ProxiedValue<Set<any>>,
+  target: ProxiedValue<Map<any, any>> | ProxiedValue<Set<any>>,
   deleteFn:
     | Map<unknown, ObservableType<unknown>>["delete"]
     | Set<ObservableType<unknown>>["delete"],

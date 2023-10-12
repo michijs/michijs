@@ -58,7 +58,9 @@ const objectTests = (initialValue: () => AnyObject | unknown[]) => {
     it("JSON versions of the objects should be the same", () => {
       object[0] = exampleValue;
       nonProxiedObject[0] = exampleValue;
-      expect(JSON.stringify(object)).toStrictEqual(JSON.stringify(nonProxiedObject));
+      expect(JSON.stringify(object)).toStrictEqual(
+        JSON.stringify(nonProxiedObject),
+      );
     });
     it("keys of the objects should be the same", () => {
       object[0] = exampleValue;
@@ -68,7 +70,9 @@ const objectTests = (initialValue: () => AnyObject | unknown[]) => {
     it("entries of the objects should be the same", () => {
       object[0] = exampleValue;
       nonProxiedObject[0] = exampleValue;
-      expect(Object.entries(object)).toStrictEqual(Object.entries(nonProxiedObject));
+      expect(Object.entries(object)).toStrictEqual(
+        Object.entries(nonProxiedObject),
+      );
     });
 
     it("should return proper type", () => {
@@ -96,7 +100,7 @@ describe("Observe tests", () => {
     beforeEach(() => {
       nonProxiedMap = new Map();
       map = useObserve(new Map());
-      map.subscribe?.(mockCallback)
+      map.subscribe?.(mockCallback);
     });
     it("Setting the same value two times must call its callback just one time", () => {
       map[0] = exampleValue;

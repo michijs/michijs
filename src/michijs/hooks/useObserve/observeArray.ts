@@ -31,7 +31,9 @@ export function observeArray<T extends Array<unknown>>(
     deleteProperty: customObjectDelete,
     ownKeys: customObjectOwnKeys,
     getOwnPropertyDescriptor(target, prop) {
-      return prop !== 'length' ? customObjectGetOwnPropertyDescriptor(target, prop) : Reflect.getOwnPropertyDescriptor(target, prop);
+      return prop !== "length"
+        ? customObjectGetOwnPropertyDescriptor(target, prop)
+        : Reflect.getOwnPropertyDescriptor(target, prop);
     },
     get(target, p, receiver) {
       const castedP = p as unknown as keyof ObservableArray<T>;

@@ -65,16 +65,19 @@ export const customObjectGet =
     return proxy()[p];
   };
 
-export const customObjectOwnKeys: CommonObjectProxyHandler<any>["ownKeys"] = (target) => {
-  return Reflect.ownKeys(target.$value as object)
-}
-export const customObjectGetOwnPropertyDescriptor: CommonObjectProxyHandler<any>["getOwnPropertyDescriptor"] = (target, prop) => {
-  return {
-    ...Reflect.getOwnPropertyDescriptor(target, prop),
-    enumerable: true,
-    configurable: true
+export const customObjectOwnKeys: CommonObjectProxyHandler<any>["ownKeys"] = (
+  target,
+) => {
+  return Reflect.ownKeys(target.$value as object);
+};
+export const customObjectGetOwnPropertyDescriptor: CommonObjectProxyHandler<any>["getOwnPropertyDescriptor"] =
+  (target, prop) => {
+    return {
+      ...Reflect.getOwnPropertyDescriptor(target, prop),
+      enumerable: true,
+      configurable: true,
+    };
   };
-}
 
 export function observeCommonObject<T extends unknown>(
   item: T,
