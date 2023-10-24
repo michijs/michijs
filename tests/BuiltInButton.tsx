@@ -9,10 +9,10 @@ export const BuiltInButton = createCustomElement("built-in-button", {
   reflectedAttributes: {
     counter: 0,
   },
-  computedStyleSheet(){
+  computedStyleSheet() {
     return {
-      margin: useComputedObserve(() => `${this.counter}px`, [this.counter])
-    }
+      margin: useComputedObserve(() => `${this.counter}px`, [this.counter]),
+    };
   },
   adoptedStyleSheets: [buttonStyle],
   render() {

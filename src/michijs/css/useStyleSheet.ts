@@ -20,7 +20,10 @@ export function cssObjectToText(cssObject: CSSObject) {
 export function useStyleSheet(cssObject: CSSObject) {
   const styleSheet = new CSSStyleSheet();
   const observables = getObservables(cssObject);
-  const stringResult = useComputedObserve(() => cssObjectToText(cssObject), observables);
+  const stringResult = useComputedObserve(
+    () => cssObjectToText(cssObject),
+    observables,
+  );
 
   bindObservable(stringResult, (formattedObject) => {
     // Jest fix

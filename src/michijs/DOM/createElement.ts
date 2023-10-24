@@ -3,7 +3,7 @@ import { setProperties } from "./attributes/setProperties";
 
 export function createElement<
   const T extends string,
-  A extends GetElementProps<T> | JSX.IntrinsicElements['div'],
+  A extends GetElementProps<T> | JSX.IntrinsicElements["div"],
   E extends T extends keyof HTMLElementTagNameMap
     ? HTMLElementTagNameMap[T]
     : T extends keyof SVGElementTagNameMap

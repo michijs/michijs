@@ -5,7 +5,12 @@ import {
   customMapAndSetClear,
   customMapAndSetDelete,
 } from "./mapAndSetCommonHandlers";
-import { customObjectDelete, customObjectGetOwnPropertyDescriptor, customObjectOwnKeys, customObjectSet } from "./observeCommonObject";
+import {
+  customObjectDelete,
+  customObjectGetOwnPropertyDescriptor,
+  customObjectOwnKeys,
+  customObjectSet,
+} from "./observeCommonObject";
 import { setObservableValue } from "../../utils";
 
 export const observeMap = <E, T extends Map<any, E>>(

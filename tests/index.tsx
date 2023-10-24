@@ -35,9 +35,9 @@ createCustomElement("root-test-element", {
           </mfrac>
         </math>
         <List
-          as='div'
+          as="div"
           data={this.arrayTest}
-          renderItem={item => <div onclick={this.onClickArray}>{item}</div>}
+          renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}
         />
         <ColorSelector />
         <div onclick={this.onClickArray}>{this.arrayTest}</div>

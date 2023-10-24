@@ -1,6 +1,9 @@
 import { ObservableType, Subscription } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
-import { customObjectGetOwnPropertyDescriptor, customObjectOwnKeys } from "./observeCommonObject";
+import {
+  customObjectGetOwnPropertyDescriptor,
+  customObjectOwnKeys,
+} from "./observeCommonObject";
 
 export function observeDate<T extends Date>(
   item: T,

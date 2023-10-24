@@ -5,7 +5,12 @@ import {
   customMapAndSetClear,
   customMapAndSetDelete,
 } from "./mapAndSetCommonHandlers";
-import { customObjectDelete, customObjectGetOwnPropertyDescriptor, customObjectOwnKeys, customObjectSet } from "./observeCommonObject";
+import {
+  customObjectDelete,
+  customObjectGetOwnPropertyDescriptor,
+  customObjectOwnKeys,
+  customObjectSet,
+} from "./observeCommonObject";
 
 export const observeSet = <E, T extends Set<E>>(
   item: T,
@@ -25,7 +30,10 @@ export const observeSet = <E, T extends Set<E>>(
     get: (target, property) => {
       if (property in target) return Reflect.get(target, property);
 
-      const targetProperty = Reflect.get(target.$value, property === 'add' ? 'set' : property);
+      const targetProperty = Reflect.get(
+        target.$value,
+        property === "add" ? "set" : property,
+      );
       const bindedTargetProperty =
         typeof targetProperty === "function"
           ? (targetProperty as Function).bind(target.$value)
@@ -35,7 +43,10 @@ export const observeSet = <E, T extends Set<E>>(
       }
       switch (property) {
         case "clear": {
-          return customMapAndSetClear(target as unknown as ProxiedValue<Set<E>>, bindedTargetProperty);
+          return customMapAndSetClear(
+            target as unknown as ProxiedValue<Set<E>>,
+            bindedTargetProperty,
+          );
         }
         case "add": {
           return function (newValue) {
@@ -64,5 +75,5 @@ export const observeSet = <E, T extends Set<E>>(
     getOwnPropertyDescriptor: customObjectGetOwnPropertyDescriptor,
     deleteProperty: customObjectDelete,
   });
-  return proxy
+  return proxy;
 };

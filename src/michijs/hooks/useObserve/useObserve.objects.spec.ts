@@ -151,7 +151,7 @@ describe("Observe tests", () => {
     beforeEach(() => {
       nonProxiedSet = new Set();
       set = useObserve(new Set());
-      set.subscribe?.(mockCallback)
+      set.subscribe?.(mockCallback);
     });
     it("Setting the same value two times must call its callback just one time", () => {
       set[0] = exampleValue;
