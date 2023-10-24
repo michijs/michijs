@@ -153,21 +153,21 @@ export type RequiredKeys<T> = {
 export type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>;
 
 // End Auxiliar Types
-export interface ObserverCallback<T> {
-  (value: T): void;
+export interface Subscription<T> {
+  (signal: T): void;
 }
-export interface CompatibleObserverCallback<T> {
+export interface CompatibleSubscription<T> {
   // its optional to keep compatibility with others observers like redux
-  (value?: T): void;
+  (signal?: T): void;
 }
 
 export interface ObservableLike<T = any> {
-  subscribe?(observer: ObserverCallback<T>): void;
-  unsubscribe?(observer: ObserverCallback<T>): void;
+  subscribe?(observer: Subscription<T>): void;
+  unsubscribe?(observer: Subscription<T>): void;
 }
 export interface CompatibleObservableLike<T = any> {
-  subscribe(observer: CompatibleObserverCallback<T>): void;
-  unsubscribe?(observer: CompatibleObserverCallback<T>): void;
+  subscribe(observer: CompatibleSubscription<T>): void;
+  unsubscribe?(observer: CompatibleSubscription<T>): void;
 }
 
 export interface MichiProperties
@@ -398,10 +398,10 @@ export interface MichiElementOptions {
    */
   computedStyleSheet?: Function;
   // computedStyleSheet?(): CSSObject;
-  /**Allows to define CSS variables. CSS variables changes does not trigger a rerender*/
+  /**Allows to define CSS variables.*/
   cssVariables?: CssVariablesType;
   /**
-   * Allows to define reflected CSS variables and follows the Kebab case. CSS variables changes does not trigger a rerender
+   * Allows to define reflected CSS variables and follows the Kebab case.
    * A reflected CSS variable cannot be initialized with a true value
    * @link https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr
    */

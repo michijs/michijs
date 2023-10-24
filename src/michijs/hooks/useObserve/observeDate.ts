@@ -1,9 +1,10 @@
-import { ObservableType, ObserverCallback } from "../../types";
+import { ObservableType, Subscription } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
+import { customObjectGetOwnPropertyDescriptor, customObjectOwnKeys } from "./observeCommonObject";
 
 export function observeDate<T extends Date>(
   item: T,
-  initialObservers?: ObserverCallback<T>[],
+  initialObservers?: Subscription<T>[],
 ) {
   let clone;
   try {
@@ -13,6 +14,8 @@ export function observeDate<T extends Date>(
   }
   const newObservable = new ProxiedValue<T>(clone, initialObservers);
   return new Proxy(newObservable, {
+    ownKeys: customObjectOwnKeys,
+    getOwnPropertyDescriptor: customObjectGetOwnPropertyDescriptor,
     get(target, property) {
       if (property in target) return Reflect.get(target, property);
       else if (target.$value) {

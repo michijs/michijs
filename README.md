@@ -154,11 +154,11 @@ A component consists of the following properties:
     </tr>
     <tr>
       <td>cssVariables</td>
-      <td colspan="3">Allows to define CSS variables. CSS variables changes does not trigger a rerender.</td>
+      <td colspan="3">Allows to define CSS variables.</td>
     </tr>
     <tr>
       <td>reflectedCssVariables</td>
-      <td colspan="3">Allows to define reflected CSS variables and follows the Kebab case. CSS variables changes does not trigger a rerender. A reflected CSS variable cannot be initialized with a true value</td>
+      <td colspan="3">Allows to define reflected CSS variables and follows the Kebab case. A reflected CSS variable cannot be initialized with a true value</td>
     </tr>
     <tr>
       <td>computedStyleSheet</td>

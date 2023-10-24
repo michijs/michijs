@@ -202,7 +202,8 @@ export function createCustomElement<
 
           const updateStylesheetCallback = () => {
             Object.entries(callback()).forEach(([key, value]) => {
-              setStyleProperty(this, key, value);
+              const formattedKey = formatToKebabCase(key);
+              setStyleProperty(this, formattedKey, value);
             });
           };
           updateStylesheetCallback();

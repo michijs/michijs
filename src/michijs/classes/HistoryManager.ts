@@ -1,10 +1,10 @@
-import { ObserverCallback } from "../types";
+import { Subscription } from "../types";
 import { Observable } from "./Observable";
 
 class HistoryManagerSingleton extends Observable<string | URL> {
   readonly history: (string | URL)[] = [location.pathname];
 
-  constructor(initialObservers?: ObserverCallback<string | URL>[]) {
+  constructor(initialObservers?: Subscription<string | URL>[]) {
     super(initialObservers);
     window.addEventListener("popstate", () => this.notify(location.href));
   }

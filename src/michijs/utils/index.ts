@@ -6,3 +6,4 @@ export { addStylesheetsToDocumentOrShadowRoot } from "./addStylesheetsToDocument
 export { wait } from "./wait";
 export { bindObservable } from "./bindObservable";
 export { setObservableValue } from "./setObservableValue";
+export { pick } from "./pick";

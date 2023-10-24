@@ -1,4 +1,4 @@
-import { createCustomElement, Host } from "../src";
+import { createCustomElement, Host, useComputedObserve } from "../src";
 import { buttonStyle } from "./BuiltInButton.css";
 
 export const BuiltInButton = createCustomElement("built-in-button", {
@@ -8,6 +8,11 @@ export const BuiltInButton = createCustomElement("built-in-button", {
   },
   reflectedAttributes: {
     counter: 0,
+  },
+  computedStyleSheet(){
+    return {
+      margin: useComputedObserve(() => `${this.counter}px`, [this.counter])
+    }
   },
   adoptedStyleSheets: [buttonStyle],
   render() {

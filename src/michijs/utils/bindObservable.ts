@@ -1,9 +1,9 @@
 import { isObservableType } from "../typeWards/isObservableType";
-import { ObserverCallback } from "../types";
+import { Subscription } from "../types";
 
 export const bindObservable = <T>(
   observable: T,
-  callback: ObserverCallback<T>,
+  callback: Subscription<T>,
 ) => {
   if (isObservableType(observable)) {
     observable.subscribe?.(callback);

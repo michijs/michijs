@@ -2,7 +2,7 @@ import {
   CreateOptions,
   ExtendableComponentWithoutChildren,
   FC,
-  ObserverCallback,
+  Subscription,
   ProxiedValue,
   SingleJSXElement,
   ProxiedArrayInterface,
@@ -17,7 +17,7 @@ export class ProxiedArray<V>
   implements ProxiedArrayInterface<V>
 {
   private targets = new Array<Target<V>>();
-  constructor(initialData: V[], initialObservers?: ObserverCallback<V[]>[]) {
+  constructor(initialData: V[], initialObservers?: Subscription<V[]>[]) {
     super(initialData, initialObservers);
   }
   List = <const E = FC>(

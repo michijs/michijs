@@ -8,7 +8,8 @@ export function useStringTemplate(
 ) {
   return useComputedObserve(() => {
     return templateStringsArray.raw.reduce((previousValue, currentValue, i) => {
-      return `${previousValue}${currentValue}${props[i]?.valueOf() ?? ""}`;
+      const val = props[i];
+      return `${previousValue}${currentValue}${val ? val.valueOf() : ''}`;
       // The accumulator takes the first value if you don't pass a value as the second argument:
     }, "");
   }, props.filter((x) =>

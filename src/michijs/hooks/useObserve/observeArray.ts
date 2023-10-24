@@ -1,5 +1,5 @@
 import { useObserve } from "../useObserve";
-import { ObservableArray, ObservableType, ObserverCallback } from "../../types";
+import { ObservableArray, ObservableType, Subscription } from "../../types";
 import { ProxiedArray } from "../../classes";
 import {
   customObjectDelete,
@@ -13,7 +13,7 @@ const mutableProperties = new Set(["push", "$replace"]);
 
 export function observeArray<T extends Array<unknown>>(
   item: T,
-  initialObservers: ObserverCallback<T>[] = [],
+  initialObservers: Subscription<T>[] = [],
 ) {
   const newInitialObservers = [
     ...initialObservers,

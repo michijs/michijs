@@ -1,11 +1,11 @@
 import { useObserve } from "../..";
-import { ObserverCallback } from "../types";
+import { Subscription } from "../types";
 
 // <T extends ObservableType<any>>
 export function setObservableValue<T extends object>(
   object1: T,
   object2: any,
-  initialObservers?: ObserverCallback<T>[],
+  initialObservers?: Subscription<T>[],
 ): boolean {
   const object1Value = object1?.valueOf();
   const object2Value = object2?.valueOf();

@@ -1,5 +1,5 @@
 import { useObserve } from "../useObserve";
-import { ObservableType, ObserverCallback } from "../../types";
+import { ObservableType, Subscription } from "../../types";
 import { ProxiedValue } from "../../classes";
 import { setObservableValue } from "../../utils";
 
@@ -9,7 +9,7 @@ type CommonObjectProxyHandler<T extends object> = Required<
 
 export const customObjectSet =
   <T>(
-    initialObservers: ObserverCallback<T>[],
+    initialObservers: Subscription<T>[],
   ): CommonObjectProxyHandler<any>["set"] =>
   (target, property, newValue, receiver) => {
     if (property in target)
@@ -81,7 +81,7 @@ export const customObjectGetOwnPropertyDescriptor: CommonObjectProxyHandler<any>
 
 export function observeCommonObject<T extends unknown>(
   item: T,
-  initialObservers: ObserverCallback<T>[] = [],
+  initialObservers: Subscription<T>[] = [],
 ): ObservableType<T> {
   const newInitialObservers = [
     ...initialObservers,

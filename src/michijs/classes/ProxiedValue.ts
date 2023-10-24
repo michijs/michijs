@@ -1,5 +1,5 @@
 import { hasToJSON } from "../typeWards/hasToJSON";
-import type { ObserverCallback, ObservableType } from "../types";
+import type { Subscription, ObservableType } from "../types";
 import { deepEqual } from "../utils";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { Observable } from "./Observable";
@@ -7,7 +7,7 @@ import { Observable } from "./Observable";
 export class ProxiedValue<T> extends Observable<T> {
   private $privateValue: T;
 
-  constructor(initialValue?: T, initialObservers?: ObserverCallback<T>[]) {
+  constructor(initialValue?: T, initialObservers?: Subscription<T>[]) {
     super(initialObservers);
     this.$privateValue = initialValue!;
   }

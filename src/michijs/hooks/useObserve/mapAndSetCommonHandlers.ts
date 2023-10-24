@@ -25,7 +25,7 @@ export const customMapAndSetDelete = (
   | Set<ObservableType<unknown>>["delete"] => {
   //In Map is key, in Set is value
   return function (key) {
-    const result = deleteFn(key);
+    const result = deleteFn(key?.valueOf?.());
     if (result) target.notifyCurrentValue();
     return result;
   };

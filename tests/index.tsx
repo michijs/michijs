@@ -1,4 +1,4 @@
-import { createCustomElement, Host } from "../src";
+import { createCustomElement, Host, List } from "../src";
 import { ColorSelector } from "./ColorSelector";
 import { Router } from "./routes";
 // import sheet from './a.css' assert { type: 'css' };
@@ -34,27 +34,17 @@ createCustomElement("root-test-element", {
             </msqrt>
           </mfrac>
         </math>
-        {/* <List
+        <List
           as='div'
           data={this.arrayTest}
-          renderItem={item => <div key={item} onclick={this.onClickArray}>{item}</div>}
-        /> */}
+          renderItem={item => <div onclick={this.onClickArray}>{item}</div>}
+        />
         <ColorSelector />
         <div onclick={this.onClickArray}>{this.arrayTest}</div>
-        {/* <this.arrayTest.List
-          renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}
-        /> */}
       </Host>
     );
   },
 });
-
-// TODO:
-// Fix List beign undefined not allowed as jsx
-// Finish map and set
-// Update docs about operators and observers
-// Fix A11y tests
-// Create redirect component and update readme
 
 // documentTransition test
 // const titulo1 = document.createElement('h1');
