@@ -6,16 +6,17 @@ const stylesheet = cssObjectToText({
   div: {
     [cssVariables.test]: defaultValues.test,
     backgroundColor: cssVariables.test.var(),
-    ':not([test-attribute])': {
-      color: 'red'
+    ":not([test-attribute])": {
+      color: "red",
     },
     "@media (max-width: 600px)": {
       color: "blue",
-    }
+    },
   },
 });
 
-const expectedResult = "div{--test:green;background-color:var(--test);&:not([test-attribute]){color:red;}@media (max-width: 600px){color:blue;}}";
+const expectedResult =
+  "div{--test:green;background-color:var(--test);&:not([test-attribute]){color:red;}@media (max-width: 600px){color:blue;}}";
 
 describe("useStyleSheet", () => {
   it("should return the expected css variables text", () => {
