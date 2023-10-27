@@ -9,7 +9,8 @@ function getProxyGetter<T>(parent = "-") {
         if (Symbol.toPrimitive === p) return () => parent;
         else if (p === "var") {
           return (defaultValue) =>
-            `var(${parent}${defaultValue !== undefined ? `,${defaultValue}` : ""
+            `var(${parent}${
+              defaultValue !== undefined ? `,${defaultValue}` : ""
             })`;
           // When having a variable called like a function its broken
           // } else if (parent[p]) {
@@ -19,16 +20,16 @@ function getProxyGetter<T>(parent = "-") {
           //     return parent[p]
         }
         if (p === "valueOf") return () => parent;
-        else if(p !== 'subscribe')
-          return getProxyGetter(
-            `${parent}-${formatToKebabCase(p.toString())}`,
-          );
+        else if (p !== "subscribe")
+          return getProxyGetter(`${parent}-${formatToKebabCase(p.toString())}`);
       },
     },
   ) as CssDeclaration<T>;
 }
 
-export function useCssVariablesDeclaration<T extends AnyObject>(): CssDeclaration<T> {
+export function useCssVariablesDeclaration<
+  T extends AnyObject,
+>(): CssDeclaration<T> {
   return getProxyGetter<T>();
 }
 
