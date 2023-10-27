@@ -30,8 +30,14 @@ function getProxyGetter<T>(defaultValues: T, parent = "-") {
   ) as CssDeclaration<T>;
 }
 
+export function useCssVariablesDeclaration<T extends AnyObject>(
+  defaultValues: T,
+): CssDeclaration<T> {
+  return getProxyGetter(defaultValues);
+}
+
 export function useCssVariables<T extends AnyObject>(
   defaultValues: T,
 ): [CssDeclaration<T>, T] {
-  return [getProxyGetter(defaultValues), defaultValues];
+  return [useCssVariablesDeclaration<T>(defaultValues), defaultValues];
 }
