@@ -1,7 +1,7 @@
 import { CssDeclaration, AnyObject } from "../types";
 import { formatToKebabCase } from "../utils";
 
-function getProxyGetter<T>(defaultValues: T, parent = "-") {
+function getProxyGetter<T>(parent = "-") {
   return new Proxy(
     {},
     {
@@ -9,8 +9,7 @@ function getProxyGetter<T>(defaultValues: T, parent = "-") {
         if (Symbol.toPrimitive === p) return () => parent;
         else if (p === "var") {
           return (defaultValue) =>
-            `var(${parent}${
-              defaultValue !== undefined ? `,${defaultValue}` : ""
+            `var(${parent}${defaultValue !== undefined ? `,${defaultValue}` : ""
             })`;
           // When having a variable called like a function its broken
           // } else if (parent[p]) {
@@ -20,9 +19,8 @@ function getProxyGetter<T>(defaultValues: T, parent = "-") {
           //     return parent[p]
         }
         if (p === "valueOf") return () => parent;
-        else if (defaultValues[p])
+        else
           return getProxyGetter(
-            defaultValues[p],
             `${parent}-${formatToKebabCase(p.toString())}`,
           );
       },
@@ -30,14 +28,12 @@ function getProxyGetter<T>(defaultValues: T, parent = "-") {
   ) as CssDeclaration<T>;
 }
 
-export function useCssVariablesDeclaration<T extends AnyObject>(
-  defaultValues: T,
-): CssDeclaration<T> {
-  return getProxyGetter(defaultValues);
+export function useCssVariablesDeclaration<T extends AnyObject>(): CssDeclaration<T> {
+  return getProxyGetter<T>();
 }
 
 export function useCssVariables<T extends AnyObject>(
   defaultValues: T,
 ): [CssDeclaration<T>, T] {
-  return [useCssVariablesDeclaration<T>(defaultValues), defaultValues];
+  return [getProxyGetter<T>(), defaultValues];
 }
