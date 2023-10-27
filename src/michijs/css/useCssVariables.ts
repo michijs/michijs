@@ -19,7 +19,7 @@ function getProxyGetter<T>(parent = "-") {
           //     return parent[p]
         }
         if (p === "valueOf") return () => parent;
-        else
+        else if(p !== 'subscribe')
           return getProxyGetter(
             `${parent}-${formatToKebabCase(p.toString())}`,
           );
