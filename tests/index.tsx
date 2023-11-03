@@ -21,7 +21,6 @@ createCustomElement("root-test-element", {
       // this.arrayTest = [6, 3, 2, 1, 0]
     },
   },
-  fakeRoot: false,
   render() {
     return (
       <Host>

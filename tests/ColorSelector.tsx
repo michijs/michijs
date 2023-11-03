@@ -16,6 +16,7 @@ export const ColorSelector = createCustomElement("color-selector", {
   reflectedCssVariables: {
     color: "#ff0000" as `#${string}`,
   },
+  shadow: false,
   computedStyleSheet() {
     return {
       color: "white",

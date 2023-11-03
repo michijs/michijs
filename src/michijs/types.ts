@@ -3,8 +3,7 @@ import type {
   CSSProperties,
   GlobalEvents,
 } from "@michijs/htmltype";
-import type { EventDispatcher, ProxiedValue } from "./classes";
-import type { idGenerator } from "./hooks";
+import type { EventDispatcher, ProxiedValue, MappedIdGenerator } from "./classes";
 import type { MichiAttributes } from "./h/MichiAttributes";
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
@@ -190,7 +189,7 @@ export interface MichiProperties
     alreadyRendered: boolean;
     shadowRoot?: ShadowRoot;
     styles: HTMLStyleElement[];
-    idGen?: ReturnType<typeof idGenerator>["getId"];
+    idGen?: MappedIdGenerator["getId"];
     internals?: ElementInternals;
   };
   render?(): JSX.Element;
@@ -199,7 +198,7 @@ export interface MichiProperties
     selector: string,
   ): T extends new () => HTMLElement ? InstanceType<T> : T;
   /**Create unique IDs with a discernible key */
-  readonly idGen: ReturnType<typeof idGenerator>["getId"];
+  readonly idGen: MappedIdGenerator["getId"];
   readonly name: string | null;
   readonly type: string;
 }
@@ -252,7 +251,9 @@ export type ObservableType<T> = T extends Array<infer V>
 export interface ObservableArray<T> extends Array<T>, Partial<ProxiedArrayInterface<T>> {
 }
 export interface ObservableMap<K, V> extends Map<K, V>, Partial<ProxiedValue<Map<K, V>>> { }
-export interface ObservableSet<V> extends Set<V>, Partial<ProxiedValue<Set<V>>> { }
+export interface ObservableSet<V> extends Set<V>, Partial<ProxiedValue<Set<V>>> { 
+}
+
 export type ObservableObject<T> = {
   [K in keyof T]: ObservableType<T[K]>;
 } & T & Partial<ProxiedValue<T>>;

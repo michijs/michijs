@@ -1,4 +1,5 @@
-import { idGenerator, useComputedObserve, useObserve } from "../hooks";
+import { useComputedObserve, useObserve } from "../hooks";
+import { IdGenerator, MappedIdGenerator } from '../classes'
 import type {
   MichiCustomElement,
   CustomElementTag,
@@ -8,8 +9,6 @@ import type {
 } from "../types";
 import {
   formatToKebabCase,
-  bindObservable,
-  getObservables,
   addStylesheetsToDocumentOrShadowRoot,
   deepEqual,
 } from "../utils";
@@ -23,8 +22,9 @@ import { getMountPoint } from "../DOM/getMountPoint";
 import { defineReflectedAttributes } from "./properties/defineReflectedAttributes";
 import { useStyleSheet, convertCssObjectToCssVariablesObject } from "../css";
 import type { CSSProperties } from "@michijs/htmltype";
-import { setStyleProperty } from "../DOM/attributes/setStyleProperty";
 import { create } from "../DOMDiff";
+
+let classesIdGenerator: undefined | IdGenerator;
 
 export function createCustomElement<
   O extends MichiElementOptions,
@@ -55,8 +55,7 @@ export function createCustomElement<
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
-    implements MichiCustomElement
-  {
+    implements MichiCustomElement {
     $michi: MichiCustomElement["$michi"] = {
       store: useObserve({
         ...attributes,
@@ -90,9 +89,39 @@ export function createCustomElement<
     }
     get idGen() {
       if (!this.$michi.idGen) {
-        this.$michi.idGen = idGenerator().getId;
+        const idGen = new MappedIdGenerator();
+        this.$michi.idGen = idGen.getId;
       }
       return this.$michi.idGen;
+    }
+    addStylesheets(selector: string, target: DocumentOrShadowRoot) {
+      if (cssVariables || reflectedCssVariables) {
+        const allCssVariables = Object.keys(cssVariables ?? {})
+          .concat(Object.keys(reflectedCssVariables ?? {}))
+          .reduce((previousValue, x) => {
+            previousValue[x] = this[x];
+            return previousValue;
+          }, {});
+
+        const parsedCssVariables = useComputedObserve(
+          () => convertCssObjectToCssVariablesObject(allCssVariables),
+          Object.values(allCssVariables),
+        );
+        const styleSheet = useStyleSheet({
+          [selector]: parsedCssVariables,
+        });
+        addStylesheetsToDocumentOrShadowRoot(target, styleSheet);
+      }
+      if (computedStyleSheet) {
+        const callback: () => CSSProperties = computedStyleSheet.bind(this);
+        const styleSheet = useStyleSheet({ [selector]: callback() });
+        addStylesheetsToDocumentOrShadowRoot(target, styleSheet);
+      }
+      if (adoptedStyleSheets)
+        addStylesheetsToDocumentOrShadowRoot(
+          target,
+          ...adoptedStyleSheets,
+        );
     }
     constructor() {
       super();
@@ -105,33 +134,7 @@ export function createCustomElement<
       if (shadow) {
         const attachedShadow = this.attachShadow(shadow);
         this.$michi.shadowRoot = attachedShadow;
-        if (cssVariables || reflectedCssVariables) {
-          const allCssVariables = Object.keys(cssVariables ?? {})
-            .concat(Object.keys(reflectedCssVariables ?? {}))
-            .reduce((previousValue, x) => {
-              previousValue[x] = this[x];
-              return previousValue;
-            }, {});
-
-          const parsedCssVariables = useComputedObserve(
-            () => convertCssObjectToCssVariablesObject(allCssVariables),
-            Object.values(allCssVariables),
-          );
-          const styleSheet = useStyleSheet({
-            ":host": parsedCssVariables,
-          });
-          addStylesheetsToDocumentOrShadowRoot(attachedShadow, styleSheet);
-        }
-        if (computedStyleSheet) {
-          const callback: () => CSSProperties = computedStyleSheet.bind(this);
-          const styleSheet = useStyleSheet({ ":host": callback() });
-          addStylesheetsToDocumentOrShadowRoot(attachedShadow, styleSheet);
-        }
-        if (adoptedStyleSheets)
-          addStylesheetsToDocumentOrShadowRoot(
-            attachedShadow,
-            ...adoptedStyleSheets,
-          );
+        this.addStylesheets(':host', attachedShadow)
       }
       if (lifecycle)
         Object.entries(lifecycle).forEach(
@@ -188,35 +191,12 @@ export function createCustomElement<
 
     connectedCallback() {
       if (!this.$michi.shadowRoot) {
-        if (cssVariables || reflectedCssVariables) {
-          Object.keys(cssVariables ?? {})
-            .concat(Object.keys(reflectedCssVariables ?? {}))
-            .forEach((key) => {
-              bindObservable(this.$michi.store[key], (value) => {
-                setStyleProperty(this, `--${key}`, value);
-              });
-            });
-        }
-        if (computedStyleSheet) {
-          const callback: () => CSSProperties = computedStyleSheet.bind(this);
-
-          const updateStylesheetCallback = () => {
-            Object.entries(callback()).forEach(([key, value]) => {
-              const formattedKey = formatToKebabCase(key);
-              setStyleProperty(this, formattedKey, value);
-            });
-          };
-          updateStylesheetCallback();
-          useComputedObserve(
-            updateStylesheetCallback,
-            getObservables(callback()),
-          );
-        }
-        if (adoptedStyleSheets)
-          addStylesheetsToDocumentOrShadowRoot(
-            this.getRootNode() as unknown as DocumentOrShadowRoot,
-            ...adoptedStyleSheets,
-          );
+        if (!classesIdGenerator)
+          classesIdGenerator = new IdGenerator();
+        const newClassName = `michijs-${classesIdGenerator.generateId(1)}`;
+        this.addStylesheets(`.${newClassName}`, this.getRootNode() as unknown as DocumentOrShadowRoot)
+        if (cssVariables || reflectedCssVariables || computedStyleSheet || adoptedStyleSheets)
+          this.classList.add(newClassName)
       }
       this.connected?.();
       setReflectedAttributes(this, MichiCustomElementResult.observedAttributes);

@@ -30,7 +30,7 @@ export class ProxiedValue<T> extends Observable<T> {
 
   // Avoids typescript errors
   protected valueOf() {
-    return this.$value;
+    return typeof this.$value !== 'object' ? this.$value: JSON.parse(JSON.stringify(this.$value));
   }
 
   public toObservableString(): ObservableType<string> {
