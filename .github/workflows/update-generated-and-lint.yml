@@ -1,4 +1,4 @@
-name: "Update generated and lint"
+name: "Update generated"
 
 on: [push, workflow_dispatch]
 
@@ -6,45 +6,25 @@ jobs:
   submit-changes: 
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          # We must fetch at least the immediate parents so that if this is
-          # a pull request then we can checkout the head.
-          fetch-depth: 2
-
-        # Setup Node.js environment
-      - name: Set up Node.js 16.17.0
-        uses: actions/setup-node@v4
-        with:
-          node-version: 16.17.0
-          # Important!
-          registry-url: 'https://registry.npmjs.org'
-          always-auth: true
-
-      - name: Install dependencies
-        run: npm install
-
-      # Execute task
-      - name: Execute task
-        run: npm run generate-types
+      - name: Execute script
+        uses: michijs/.github/.github/actions/execute-script@main
+        with: 
+          command: "generate-types"
       # Configure Git
       - name: Git configuration
-        run: |
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "GitHub Actions"
+        uses: michijs/.github/.github/actions/set-git-config-github-actions@main
+
+      - name: Run formatter
+        uses: michijs/.github/.github/actions/lint@main
+
       # Commit changes
       - name: Commit changes
         run: |
           git add .
           git commit -m 'chore: updated generated types' || echo "No changes to commit"
       # Push repository changes
-      - name: Push changes to repository
-        run: git push origin || true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  lint:
-    uses: michijs/.github/.github/workflows/lint.yml@main
-    name: "Run lint"
-    needs: submit-changes
-    secrets: inherit
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.8.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ env.BRANCH_NAME }}
