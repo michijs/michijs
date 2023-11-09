@@ -9,7 +9,7 @@ jobs:
       - name: Execute script
         uses: michijs/.github/.github/actions/execute-script@main
         with: 
-          command: "generate-types"
+          script-name: "generate-types"
       # Configure Git
       - name: Git configuration
         uses: michijs/.github/.github/actions/set-git-config-github-actions@main
