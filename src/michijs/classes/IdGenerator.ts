@@ -15,8 +15,8 @@ export class IdGenerator {
 
     do {
       uint32 = cryptoObj.getRandomValues(new Uint32Array(length)).join("-");
-    } while (this.ids.has(uint32))
+    } while (this.ids.has(uint32));
 
     return uint32;
-  };
+  }
 }

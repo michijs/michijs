@@ -1,5 +1,5 @@
 import { useComputedObserve, useObserve } from "../hooks";
-import { IdGenerator, MappedIdGenerator } from '../classes'
+import { IdGenerator, MappedIdGenerator } from "../classes";
 import type {
   MichiCustomElement,
   CustomElementTag,
@@ -55,7 +55,8 @@ export function createCustomElement<
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
-    implements MichiCustomElement {
+    implements MichiCustomElement
+  {
     $michi: MichiCustomElement["$michi"] = {
       store: useObserve({
         ...attributes,
@@ -118,10 +119,7 @@ export function createCustomElement<
         addStylesheetsToDocumentOrShadowRoot(target, styleSheet);
       }
       if (adoptedStyleSheets)
-        addStylesheetsToDocumentOrShadowRoot(
-          target,
-          ...adoptedStyleSheets,
-        );
+        addStylesheetsToDocumentOrShadowRoot(target, ...adoptedStyleSheets);
     }
     constructor() {
       super();
@@ -134,7 +132,7 @@ export function createCustomElement<
       if (shadow) {
         const attachedShadow = this.attachShadow(shadow);
         this.$michi.shadowRoot = attachedShadow;
-        this.addStylesheets(':host', attachedShadow)
+        this.addStylesheets(":host", attachedShadow);
       }
       if (lifecycle)
         Object.entries(lifecycle).forEach(
@@ -191,12 +189,19 @@ export function createCustomElement<
 
     connectedCallback() {
       if (!this.$michi.shadowRoot) {
-        if (!classesIdGenerator)
-          classesIdGenerator = new IdGenerator();
+        if (!classesIdGenerator) classesIdGenerator = new IdGenerator();
         const newClassName = `michijs-${classesIdGenerator.generateId(1)}`;
-        this.addStylesheets(`.${newClassName}`, this.getRootNode() as unknown as DocumentOrShadowRoot)
-        if (cssVariables || reflectedCssVariables || computedStyleSheet || adoptedStyleSheets)
-          this.classList.add(newClassName)
+        this.addStylesheets(
+          `.${newClassName}`,
+          this.getRootNode() as unknown as DocumentOrShadowRoot,
+        );
+        if (
+          cssVariables ||
+          reflectedCssVariables ||
+          computedStyleSheet ||
+          adoptedStyleSheets
+        )
+          this.classList.add(newClassName);
       }
       this.connected?.();
       setReflectedAttributes(this, MichiCustomElementResult.observedAttributes);
