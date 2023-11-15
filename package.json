@@ -33,6 +33,7 @@
     "url": "https://opencollective.com/michijs"
   },
   "description": "Typescript library to build web components",
+  "trustedDependencies": ["puppeteer"],
   "scripts": {
     "start": "michi-server --start",
     "dist": "michi-server --dist",
