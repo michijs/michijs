@@ -1,0 +1,9 @@
+name: "Lint"
+
+on: [push, workflow_dispatch]
+
+jobs:
+  call-workflow:
+    uses: michijs/.github/.github/workflows/lint.yml@main
+    name: "Run lint"
+    secrets: inherit

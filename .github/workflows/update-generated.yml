@@ -1,0 +1,30 @@
+name: "Update generated"
+
+on: [push, workflow_dispatch]
+
+jobs:
+  submit-changes: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute script
+        uses: michijs/.github/.github/actions/execute-script@main
+        with: 
+          script-name: "generate-types"
+      # Configure Git
+      - name: Git configuration
+        uses: michijs/.github/.github/actions/set-git-config-github-actions@main
+
+      - name: Run formatter
+        uses: michijs/.github/.github/actions/lint@main
+
+      # Commit changes
+      - name: Commit changes
+        uses: michijs/.github/.github/actions/commit-if-changes@main
+        with:
+          message: "Updated generated types"
+      # Push repository changes
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.8.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
