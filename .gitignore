@@ -2,6 +2,7 @@ dist/
 !www/favicon.ico
 www/
 build/
+bun.lockb
 
 *~
 *.sw[mnpcod]
