@@ -79,7 +79,7 @@ export const customObjectGetOwnPropertyDescriptor: CommonObjectProxyHandler<any>
     };
   };
 
-export function observeCommonObject<T extends unknown>(
+export function observeCommonObject<T>(
   item: T,
   initialObservers: Subscription<T>[] = [],
 ): ObservableType<T> {
