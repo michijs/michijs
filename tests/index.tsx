@@ -45,14 +45,14 @@ createCustomElement("root-test-element", {
   },
 });
 
-const a = new Proxy(Function,{
+const a = new Proxy(Function, {
   apply: (target, thisArg, args) => console.log(args),
-  get(target, p){
+  get(target, p) {
     console.log(target, p);
-  }
-})
+  },
+});
 
-console.log(a())
+console.log(a());
 
 // documentTransition test
 // const titulo1 = document.createElement('h1');

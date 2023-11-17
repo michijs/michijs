@@ -46,12 +46,11 @@ export function create(
           else return create(jsx.jsxTag(jsx.attrs, options), options);
         }
         return createObject(jsx, options);
-      }
-      else return jsx as Node;
+      } else return jsx as Node;
     } else if (isObservableType(jsx))
       return createObservableTextElement(
         jsx as unknown as ObservableNonNullablePrimitiveType,
-      )
+      );
     return createTextElement(jsx);
   }
   return createTextElement(jsx);

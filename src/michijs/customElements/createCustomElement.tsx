@@ -189,8 +189,7 @@ export function createCustomElement<
 
     connectedCallback() {
       if (!this.$michi.shadowRoot) {
-        if (!classesIdGenerator)
-          classesIdGenerator = new IdGenerator();
+        if (!classesIdGenerator) classesIdGenerator = new IdGenerator();
         // TODO: find a way to reuse the stylesheets probably saving them
         const newClassName = `michijs-${classesIdGenerator.generateId(1)}`;
         this.addStylesheets(

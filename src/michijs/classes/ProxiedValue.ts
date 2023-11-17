@@ -1,10 +1,17 @@
 import { hasToJSON } from "../typeWards/hasToJSON";
-import type { Subscription, ObservableType, ProxiedValueInterface } from "../types";
+import type {
+  Subscription,
+  ObservableType,
+  ProxiedValueInterface,
+} from "../types";
 import { deepEqual } from "../utils";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { Observable } from "./Observable";
 
-export class ProxiedValue<T> extends Observable<T> implements ProxiedValueInterface<T> {
+export class ProxiedValue<T>
+  extends Observable<T>
+  implements ProxiedValueInterface<T>
+{
   private $privateValue: T;
 
   constructor(initialValue?: T, initialObservers?: Subscription<T>[]) {

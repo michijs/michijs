@@ -1,5 +1,9 @@
 import { useObserve } from "../useObserve";
-import { ProxiedArrayInterface, ObservableType, Subscription } from "../../types";
+import {
+  ProxiedArrayInterface,
+  ObservableType,
+  Subscription,
+} from "../../types";
 import { ProxiedArray } from "../../classes";
 import {
   customObjectApply,
