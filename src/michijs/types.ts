@@ -206,7 +206,7 @@ export interface MichiProperties
 export interface MichiCustomElement extends HTMLElement, MichiProperties { }
 
 
-export interface ProxiedArrayInterface<V> extends ProxiedValue<V[]> {
+export interface ProxiedArrayInterface<V> extends ProxiedValueInterface<V[]> {
   /**
    * Removes all the list elements
    */
@@ -223,7 +223,7 @@ export interface ProxiedArrayInterface<V> extends ProxiedValue<V[]> {
    * Swaps two items
    */
   $swap(indexA: number, indexB: number);
-  
+
   /**
    * Is a proxy that allows you to avoid using dom diff algorithms to render lists.
    * This allows it to have a performance close to vanilla js.
@@ -237,26 +237,51 @@ export interface ProxiedArrayInterface<V> extends ProxiedValue<V[]> {
   ): Node
 };
 
+type Typeof = "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+
+export interface ProxiedValueInterface<T> extends ObservableLike<T> {
+  $value: T;
+  notifyCurrentValue(): void;
+  toObservableString(): ObservableType<string>;
+  toBoolean(): boolean;
+  toString(): string;
+  not(): boolean;
+  shouldCheckForChanges(): boolean;
+  is(anotherValue: unknown): boolean;
+  typeof(): Typeof;
+}
+
+interface ObservableGettersAndSetters<T> {
+  (newValue: T): void,
+  (): T,
+}
+
+export interface ProxiedValueInterfaceWithGettersAndSetters<T> extends ProxiedValueInterface<T>, ObservableGettersAndSetters<T> {
+}
+export interface ProxiedArrayInterfaceWithGettersAndSetters<T> extends ProxiedArrayInterface<T>, ObservableGettersAndSetters<T> {
+}
+
 // Needs to be partial to allow asignation operation
-export type ObservableType<T> = T extends Array<infer V>
-  ? ObservableArray<ObservableType<V>>
+export type ObservableType<T> = T extends Function ? T :
+  T extends Array<infer V>
+  ? ObservableArray<V>
   : T extends Map<infer K, infer V>
-  ? ObservableMap<K, ObservableType<V>>
+  ? ObservableMap<K, V>
   : T extends Set<infer V>
-  ? ObservableSet<ObservableType<V>>
+  ? ObservableSet<V>
   : T extends object
   ? ObservableObject<T>
-  : T & Partial<ProxiedValue<T>>;
-
-export interface ObservableArray<T> extends Array<T>, Partial<ProxiedArrayInterface<T>> {
-}
-export interface ObservableMap<K, V> extends Map<K, V>, Partial<ProxiedValue<Map<K, V>>> { }
-export interface ObservableSet<V> extends Set<V>, Partial<ProxiedValue<Set<V>>> { 
-}
+  : ProxiedValueInterfaceWithGettersAndSetters<T>;
 
 export type ObservableObject<T> = {
   [K in keyof T]: ObservableType<T[K]>;
-} & T & Partial<ProxiedValue<T>>;
+} & ProxiedValueInterfaceWithGettersAndSetters<T>;
+
+export interface ObservableArray<T> extends Array<ObservableType<T>>, ProxiedArrayInterface<T> {
+}
+export interface ObservableMap<K, V> extends Map<K, ObservableType<V>>, ProxiedValueInterfaceWithGettersAndSetters<Map<K, V>> { }
+export interface ObservableSet<V> extends Set<ObservableType<V>>, ProxiedValueInterfaceWithGettersAndSetters<Set<V>> {
+}
 
 export type ObservableNonNullablePrimitiveType = ObservableType<
   NonNullablePrimitiveType

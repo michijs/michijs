@@ -1,7 +1,8 @@
 import { useObserve } from "../useObserve";
-import { ObservableArray, ObservableType, Subscription } from "../../types";
+import { ProxiedArrayInterface, ObservableType, Subscription } from "../../types";
 import { ProxiedArray } from "../../classes";
 import {
+  customObjectApply,
   customObjectDelete,
   customObjectGet,
   customObjectGetOwnPropertyDescriptor,
@@ -30,13 +31,14 @@ export function observeArray<T extends Array<unknown>>(
     set: customObjectSet(newInitialObservers),
     deleteProperty: customObjectDelete,
     ownKeys: customObjectOwnKeys,
+    apply: customObjectApply(newInitialObservers),
     getOwnPropertyDescriptor(target, prop) {
       return prop !== "length"
         ? customObjectGetOwnPropertyDescriptor(target, prop)
         : Reflect.getOwnPropertyDescriptor(target, prop);
     },
     get(target, p, receiver) {
-      const castedP = p as unknown as keyof ObservableArray<T>;
+      const castedP = p as unknown as keyof ProxiedArrayInterface<T>;
       if (typeof castedP === "string" && mutableProperties.has(castedP)) {
         const targetProperty = Reflect.get(target, p);
         return function (...args: T[]) {

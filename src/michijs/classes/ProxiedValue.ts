@@ -1,10 +1,10 @@
 import { hasToJSON } from "../typeWards/hasToJSON";
-import type { Subscription, ObservableType } from "../types";
+import type { Subscription, ObservableType, ProxiedValueInterface } from "../types";
 import { deepEqual } from "../utils";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { Observable } from "./Observable";
 
-export class ProxiedValue<T> extends Observable<T> {
+export class ProxiedValue<T> extends Observable<T> implements ProxiedValueInterface<T> {
   private $privateValue: T;
 
   constructor(initialValue?: T, initialObservers?: Subscription<T>[]) {
@@ -63,7 +63,7 @@ export class ProxiedValue<T> extends Observable<T> {
   protected [Symbol.toStringTag]() {
     return this.toString();
   }
-  protected toString() {
+  toString(): string {
     // @ts-ignore
     return this.$value.toString();
   }

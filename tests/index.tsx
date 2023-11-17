@@ -45,6 +45,15 @@ createCustomElement("root-test-element", {
   },
 });
 
+const a = new Proxy(Function,{
+  apply: (target, thisArg, args) => console.log(args),
+  get(target, p){
+    console.log(target, p);
+  }
+})
+
+console.log(a())
+
 // documentTransition test
 // const titulo1 = document.createElement('h1');
 // titulo1.textContent = 'hola 1'
