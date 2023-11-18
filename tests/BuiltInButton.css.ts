@@ -3,7 +3,7 @@ import { useStyleSheet } from "../src";
 export const buttonStyle = useStyleSheet({
   'button[is="built-in-button"]': {
     display: "block",
-    backgroundColor: "orange",
+    backgroundColor: "darkred",
     width: "fit-content",
     height: "fit-content",
     minWidth: "40px",

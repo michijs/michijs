@@ -14,7 +14,7 @@ import {
   customObjectSet,
 } from "./observeCommonObject";
 
-const mutableProperties = new Set(["push", "$replace"]);
+const mutableNewItemsProperties = new Set<keyof InstanceType<typeof ProxiedArray>>(["push", "$replace", 'unshift']);
 
 export function observeArray<T extends Array<unknown>>(
   item: T,
@@ -43,7 +43,7 @@ export function observeArray<T extends Array<unknown>>(
     },
     get(target, p, receiver) {
       const castedP = p as unknown as keyof ProxiedArrayInterface<T>;
-      if (typeof castedP === "string" && mutableProperties.has(castedP)) {
+      if (typeof castedP === "string" && mutableNewItemsProperties.has(castedP)) {
         const targetProperty = Reflect.get(target, p);
         return function (...args: T[]) {
           const proxiedArray = args.map((value) =>

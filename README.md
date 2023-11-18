@@ -64,7 +64,7 @@ export const MyCounter = createCustomElement('my-counter', {
   },
   adoptedStyleSheets: [counterStyle],
   render() {
-    this.count.subscribe?.(this.countChanged)
+    this.count.subscribe(this.countChanged)
 
     return (
       <>
@@ -422,9 +422,8 @@ It is a component that avoids using dom diff algorithms to render dynamic lists.
 ```jsx
 const arrayTest = useObserve([0, 1, 2]);
 
-<List 
+<arrayTest.List 
   as="span"
-  data={arrayTest}
   renderItem={item => <div>{item}</div>}
 />
 ```

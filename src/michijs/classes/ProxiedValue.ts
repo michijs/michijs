@@ -36,7 +36,8 @@ export class ProxiedValue<T>
   }
 
   // Avoids typescript errors
-  protected valueOf() {
+  valueOf() {
+    //TODO: this is not working for maps, dates and sets
     return typeof this.$value !== "object"
       ? this.$value
       : JSON.parse(JSON.stringify(this.$value));

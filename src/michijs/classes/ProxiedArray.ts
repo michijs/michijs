@@ -6,6 +6,7 @@ import {
   ProxiedValue,
   SingleJSXElement,
   ProxiedArrayInterface,
+  MutableArrayProperties,
 } from "../..";
 import { create } from "../DOMDiff";
 // import { ListElement } from "../components/FragmentAndList";
@@ -14,7 +15,7 @@ import { VirtualFragment } from "./VirtualFragment";
 
 export class ProxiedArray<V>
   extends ProxiedValue<V[]>
-  implements ProxiedArrayInterface<V>
+  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties>
 {
   private targets = new Array<Target<V>>();
   constructor(initialData: V[], initialObservers?: Subscription<V[]>[]) {

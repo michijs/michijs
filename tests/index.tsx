@@ -1,4 +1,4 @@
-import { createCustomElement, Host, List } from "../src";
+import { createCustomElement, Host } from "../src";
 import { ColorSelector } from "./ColorSelector";
 import { Router } from "./routes";
 // import sheet from './a.css' assert { type: 'css' };
@@ -6,7 +6,7 @@ import { Router } from "./routes";
 
 createCustomElement("root-test-element", {
   reflectedAttributes: {
-    // arrayTest: new ElementList(0, 1, 2, 3, 4, 5, 6),
+    count: 1,
     arrayTest: [0, 1, 2, 3, 4, 5],
   },
   shadow: false,
@@ -33,9 +33,8 @@ createCustomElement("root-test-element", {
             </msqrt>
           </mfrac>
         </math>
-        <List
+        <this.arrayTest.List
           as="div"
-          data={this.arrayTest}
           renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}
         />
         <ColorSelector />
@@ -44,15 +43,6 @@ createCustomElement("root-test-element", {
     );
   },
 });
-
-const a = new Proxy(Function, {
-  apply: (target, thisArg, args) => console.log(args),
-  get(target, p) {
-    console.log(target, p);
-  },
-});
-
-console.log(a());
 
 // documentTransition test
 // const titulo1 = document.createElement('h1');

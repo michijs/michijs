@@ -6,4 +6,3 @@ export { Link } from "./Link";
 export { Fragment } from "./Fragment";
 export { Title } from "./Title";
 export { Redirect } from "./Redirect";
-export { List } from "./List";

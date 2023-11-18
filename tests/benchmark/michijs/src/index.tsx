@@ -2,7 +2,6 @@ import {
   ObservableType,
   createCustomElement,
   useObserve,
-  List,
 } from "../../../../src";
 
 function _random(max: number) {
@@ -97,7 +96,7 @@ const select = (row: ObservableType<Row>) => {
   if (selectedItem) selectedItem.selected = undefined;
   selectedItem = row;
 };
-const deleteItem = (id: number) =>
+const deleteItem = (id: ObservableType<number>) =>
   rows.$remove?.(rows.findIndex((x) => x.id === id));
 const swapRows = () => rows.$swap?.(1, 998);
 
@@ -108,9 +107,8 @@ export const Table = createCustomElement("michi-table", {
   },
   render() {
     return (
-      <List
+      <rows.List
         as="tbody"
-        data={rows}
         _={{ id: "tbody" }}
         renderItem={(row) => (
           <tr class={row.selected}>

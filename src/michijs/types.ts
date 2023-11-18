@@ -3,7 +3,7 @@ import type {
   CSSProperties,
   GlobalEvents,
 } from "@michijs/htmltype";
-import type { EventDispatcher, ProxiedValue, MappedIdGenerator } from "./classes";
+import type { EventDispatcher, MappedIdGenerator } from "./classes";
 import type { MichiAttributes } from "./h/MichiAttributes";
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
@@ -161,8 +161,8 @@ export interface CompatibleSubscription<T> {
 }
 
 export interface ObservableLike<T = any> {
-  subscribe?(observer: Subscription<T>): void;
-  unsubscribe?(observer: Subscription<T>): void;
+  subscribe(observer: Subscription<T>): void;
+  unsubscribe(observer: Subscription<T>): void;
 }
 export interface CompatibleObservableLike<T = any> {
   subscribe(observer: CompatibleSubscription<T>): void;
@@ -205,8 +205,7 @@ export interface MichiProperties
 
 export interface MichiCustomElement extends HTMLElement, MichiProperties { }
 
-
-export interface ProxiedArrayInterface<V> extends ProxiedValueInterface<V[]> {
+export interface ProxiedArrayInterface<SV, RV = ObservableType<SV>> extends ProxiedValueInterface<RV[]> {
   /**
    * Removes all the list elements
    */
@@ -214,7 +213,7 @@ export interface ProxiedArrayInterface<V> extends ProxiedValueInterface<V[]> {
   /**
    * Replace all the list elements
    */
-  $replace(...items: V[]): number;
+  $replace(...items: (SV | RV)[]): number;
   /**
    * Removes an item
    */
@@ -231,7 +230,7 @@ export interface ProxiedArrayInterface<V> extends ProxiedValueInterface<V[]> {
    */
   List<const E = FC>(
     props: ExtendableComponentWithoutChildren<E> & {
-      renderItem: FC<V>;
+      renderItem: FC<RV>;
     },
     context: CreateOptions
   ): Node
@@ -239,8 +238,9 @@ export interface ProxiedArrayInterface<V> extends ProxiedValueInterface<V[]> {
 
 type Typeof = "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 
-export interface ProxiedValueInterface<T> extends ObservableLike<T> {
-  $value: T;
+export interface ProxiedValueInterface<RV> extends ObservableLike<RV> {
+  get $value(): RV;
+  set $value(newValue: RV);
   notifyCurrentValue(): void;
   toObservableString(): ObservableType<string>;
   toBoolean(): boolean;
@@ -249,20 +249,21 @@ export interface ProxiedValueInterface<T> extends ObservableLike<T> {
   shouldCheckForChanges(): boolean;
   is(anotherValue: unknown): boolean;
   typeof(): Typeof;
+  valueOf(): RV;
 }
 
-interface ObservableGettersAndSetters<T> {
-  (newValue: T): void,
-  (): T,
+interface ObservableGettersAndSetters<SV, RV> {
+  (newValue: RV | SV): void,
+  (): RV,
 }
 
-export interface ProxiedValueInterfaceWithGettersAndSetters<T> extends ProxiedValueInterface<T>, ObservableGettersAndSetters<T> {
+export interface ObservableValue<RV> extends ProxiedValueInterface<RV>, ObservableGettersAndSetters<RV, RV> {
 }
-export interface ProxiedArrayInterfaceWithGettersAndSetters<T> extends ProxiedArrayInterface<T>, ObservableGettersAndSetters<T> {
-}
+
+type GetPrimitiveTypeClass<T> = T extends boolean ? Boolean : T extends number ? Number : T extends string ? String : T extends bigint ? BigInt : T extends symbol ? Symbol : ObservableValue<T>;
 
 // Needs to be partial to allow asignation operation
-export type ObservableType<T> = T extends Function ? T :
+export type ObservableType<T> = T extends Function ? T & { notifyCurrentValue: undefined } :
   T extends Array<infer V>
   ? ObservableArray<V>
   : T extends Map<infer K, infer V>
@@ -271,16 +272,26 @@ export type ObservableType<T> = T extends Function ? T :
   ? ObservableSet<V>
   : T extends object
   ? ObservableObject<T>
-  : ProxiedValueInterfaceWithGettersAndSetters<T>;
+  : (ObservableValue<T> & GetPrimitiveTypeClass<T>);
 
 export type ObservableObject<T> = {
   [K in keyof T]: ObservableType<T[K]>;
-} & ProxiedValueInterfaceWithGettersAndSetters<T>;
+} & ObservableValue<T>;
 
-export interface ObservableArray<T> extends Array<ObservableType<T>>, ProxiedArrayInterface<T> {
+export type MutableArrayNewItemsProperties = 'push' | 'unshift';
+export type MutableMapNewItemsProperties = 'set';
+export type MutableSetNewItemsProperties = 'add';
+export type MutableSetDeleteItemsProperties = 'delete';
+export type MutableArrayProperties = MutableArrayNewItemsProperties | 'shift' | 'reverse' | 'pop';
+
+export interface ReadWriteArray<SV, RV> extends Pick<Array<RV | SV>, MutableArrayNewItemsProperties>, Omit<Array<RV>, MutableArrayNewItemsProperties> { }
+export interface ReadWriteMap<K, SV, RV> extends Pick<Map<K, RV | SV>, MutableMapNewItemsProperties>, Omit<Map<K, RV>, MutableMapNewItemsProperties> { }
+export interface ReadWriteSet<SV, RV> extends Pick<Set<SV>, MutableSetDeleteItemsProperties>, Pick<Set<RV | SV>, MutableSetNewItemsProperties>, Omit<Set<RV>, MutableSetNewItemsProperties | MutableSetDeleteItemsProperties> { }
+
+export interface ObservableArray<SV, RV = ObservableType<SV>> extends ReadWriteArray<SV, RV>, ProxiedArrayInterface<SV, RV>, ObservableGettersAndSetters<SV[], RV[]> {
 }
-export interface ObservableMap<K, V> extends Map<K, ObservableType<V>>, ProxiedValueInterfaceWithGettersAndSetters<Map<K, V>> { }
-export interface ObservableSet<V> extends Set<ObservableType<V>>, ProxiedValueInterfaceWithGettersAndSetters<Set<V>> {
+export interface ObservableMap<K, SV, RV = ObservableType<SV>> extends ReadWriteMap<K, SV, RV>, ObservableValue<Map<K, SV>> { }
+export interface ObservableSet<SV, RV = ObservableType<SV>> extends ReadWriteSet<SV, RV>, ObservableValue<Set<SV>> {
 }
 
 export type ObservableNonNullablePrimitiveType = ObservableType<
@@ -356,7 +367,7 @@ export type CSSProperty =
   | undefined
   | null;
 export interface CSSObject {
-  [key: string]: CSSProperty;
+  [key: string]: CSSProperty | ObservableType<CSSProperty>;
 }
 
 export type CustomElementTag = `${string}-${string}`;

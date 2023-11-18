@@ -28,8 +28,8 @@ export function useStorage<T extends object>(
     ),
   );
 
-  Object.entries(newObservable.valueOf()).forEach(([key, value]) => {
-    value?.subscribe?.((newValue) => {
+  Object.entries(newObservable).forEach(([key, value]) => {
+    value?.subscribe((newValue) => {
       storage.setItem(key, JSON.stringify(newValue));
     });
   });

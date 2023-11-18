@@ -16,10 +16,10 @@ export const A11YCounter = createCustomElement("a11y-counter", {
   },
   methods: {
     decrementCount() {
-      if (!this.matches(":disabled")) this.value--;
+      if (!this.matches(":disabled")) this.value(this.value() - 1);
     },
     incrementCount() {
-      if (!this.matches(":disabled")) this.value++;
+      if (!this.matches(":disabled")) this.value(this.value() + 1);
     },
   },
   lifecycle: {
@@ -45,16 +45,16 @@ export const A11YCounter = createCustomElement("a11y-counter", {
   },
   adoptedStyleSheets: [counterStyle],
   render() {
-    this.value.subscribe?.(this.countChanged);
-    this.count.subscribe?.(() => (this.value = this.count));
+    this.value.subscribe(this.countChanged);
+    this.count.subscribe(() => (this.value = this.count));
     const errorMessage = useComputedObserve(
-      () => (this.value > 0 ? undefined : "Value should be greater than 0"),
+      () => (this.value() > 0 ? undefined : "Value should be greater than 0"),
       [this.value],
     );
     return (
       <ElementInternals
-        ariaValueText={this.value.toObservableString?.()}
-        formValue={this.value.toObservableString?.()}
+        ariaValueText={this.value.toObservableString()}
+        formValue={this.value.toObservableString()}
         errorMessage={errorMessage}
       >
         <button type="button" onpointerup={this.decrementCount}>

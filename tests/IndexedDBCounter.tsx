@@ -27,10 +27,10 @@ const count = useAsyncComputedObserve(
 );
 
 function decrementCount() {
-  storedCount.counter?.put({ count: count - 1, id: 1 });
+  storedCount.counter?.put({ count: count() - 1, id: 1 });
 }
 function incrementCount() {
-  storedCount.counter?.put({ count: count + 1, id: 1 });
+  storedCount.counter?.put({ count: count() + 1, id: 1 });
 }
 
 export const IndexedDBCounter = createCustomElement("indexed-db-counter", {
@@ -39,7 +39,7 @@ export const IndexedDBCounter = createCustomElement("indexed-db-counter", {
   },
   adoptedStyleSheets: [counterStyle],
   render() {
-    count.subscribe?.(this.countChanged);
+    count.subscribe(this.countChanged);
 
     return (
       <Host count={count}>

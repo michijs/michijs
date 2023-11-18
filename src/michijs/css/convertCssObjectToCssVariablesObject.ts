@@ -1,13 +1,13 @@
-import { CSSObject } from "../types";
+import { CSSObject, CSSProperty } from "../types";
 import { valueIsCSSObject } from "../typeWards/valueIsCSSObject";
 
 export const convertCssObjectToCssVariablesObject = (
   cssObject: CSSObject,
   properties: string[] = [],
 ): CSSObject => {
+  const notObservableCssObject = JSON.parse(JSON.stringify(cssObject))
   let obj = {};
-  Object.keys(cssObject.valueOf()).forEach((key) => {
-    const value = cssObject[key];
+  Object.entries<CSSProperty>(notObservableCssObject).forEach(([key, value]) => {
     if (valueIsCSSObject(value))
       obj = {
         ...obj,
