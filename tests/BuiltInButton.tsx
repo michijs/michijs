@@ -16,6 +16,10 @@ export const BuiltInButton = createCustomElement("built-in-button", {
   },
   adoptedStyleSheets: [buttonStyle],
   render() {
-    return <Host onpointerup={() => this.counter(this.counter() + 1)}>{this.counter}</Host>;
+    return (
+      <Host onpointerup={() => this.counter(this.counter() + 1)}>
+        {this.counter}
+      </Host>
+    );
   },
 });

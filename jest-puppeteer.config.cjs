@@ -8,7 +8,7 @@ else command = "npm run start-benchmark-vanilla";
 module.exports = {
   launch: {
     dumpio: true,
-    headless: 'new',
+    headless: "new",
     product: "chrome",
   },
   server: {
