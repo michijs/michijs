@@ -4,15 +4,17 @@ import { setAttribute } from "../DOM/attributes/setAttribute";
 import { isMichiCustomElement } from "../typeWards/isMichiCustomElement";
 import { bindObservable } from "../utils";
 
-export type ElementInternalsProps = ObservableLikeObjectWithChildren<{
-  /**Form controls usually expose a "value" property */
-  formValue?: Parameters<ElementInternals["setFormValue"]>[0];
-  /**A validation message to show */
-  errorMessage?: Parameters<ElementInternals["setValidity"]>[1];
-  validityStateFlags?: ValidityStateFlags;
-  tabIndex?: number;
-  role?: AllAttributes["role"];
-} & Partial<ARIAMixin>>;
+export type ElementInternalsProps = ObservableLikeObjectWithChildren<
+  {
+    /**Form controls usually expose a "value" property */
+    formValue?: Parameters<ElementInternals["setFormValue"]>[0];
+    /**A validation message to show */
+    errorMessage?: Parameters<ElementInternals["setValidity"]>[1];
+    validityStateFlags?: ValidityStateFlags;
+    tabIndex?: number;
+    role?: AllAttributes["role"];
+  } & Partial<ARIAMixin>
+>;
 
 /**
  * It allows to:
