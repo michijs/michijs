@@ -3,7 +3,7 @@ import {
   SVGEvents,
   MathMLEvents,
   WindowEvents,
-} from "@michijs/htmltype";
+} from "../generated/htmlType";
 import { Observable } from "./Observable";
 
 type AllEvents<T extends EventTarget> = GlobalEvents<T> &

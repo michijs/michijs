@@ -71,10 +71,11 @@
     "puppeteer": "21.4.1",
     "redux": "4.2.1",
     "ts-node": "10.9.1",
+    "@michijs/htmltype": "0.2.9",
     "typescript": "5.2.2"
   },
   "peerDependencies": {
-    "@michijs/htmltype": "^0.2.3"
+    "csstype": "^3.1.2"
   },
   "jest": {
     "testTimeout": 30000,

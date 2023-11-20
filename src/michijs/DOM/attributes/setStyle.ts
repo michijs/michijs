@@ -1,4 +1,4 @@
-import type { CSSProperties } from "@michijs/htmltype";
+import type { CSSProperties } from "../../generated/htmlType";
 import { setStyleProperty } from "./setStyleProperty";
 import { formatToKebabCase } from "../../utils";
 import { bindObservable } from "../../utils";

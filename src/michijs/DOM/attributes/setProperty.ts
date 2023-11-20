@@ -4,7 +4,7 @@ import { setAttribute } from "./setAttribute";
 import { compareAttributes } from "./compareAttributes";
 import { bindFunction } from "../../utils/bindFunction";
 import { bindObservable } from "../../utils";
-import type { CSSProperties } from "@michijs/htmltype";
+import type { CSSProperties } from "../../generated/htmlType";
 
 export function setProperty(
   el: Element,

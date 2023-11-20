@@ -1,19 +1,18 @@
-import type { AllAttributes } from "@michijs/htmltype";
-import type { FC } from "../types";
+import type { AllAttributes } from "../generated/htmlType";
+import type { FC, ObservableLikeObjectWithChildren } from "../types";
 import { setAttribute } from "../DOM/attributes/setAttribute";
 import { isMichiCustomElement } from "../typeWards/isMichiCustomElement";
 import { bindObservable } from "../utils";
 
-export type ElementInternalsProps = {
+export type ElementInternalsProps = ObservableLikeObjectWithChildren<{
   /**Form controls usually expose a "value" property */
   formValue?: Parameters<ElementInternals["setFormValue"]>[0];
   /**A validation message to show */
   errorMessage?: Parameters<ElementInternals["setValidity"]>[1];
   validityStateFlags?: ValidityStateFlags;
   tabIndex?: number;
-  children?: JSX.Element;
   role?: AllAttributes["role"];
-} & Partial<ARIAMixin>;
+} & Partial<ARIAMixin>>;
 
 /**
  * It allows to:

@@ -2,9 +2,8 @@ import type {
   HTMLElements,
   CSSProperties,
   GlobalEvents,
-} from "@michijs/htmltype";
+} from "./generated/htmlType";
 import type { EventDispatcher, MappedIdGenerator } from "./classes";
-import type { MichiAttributes } from "./h/MichiAttributes";
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 export type CSSVar<T extends string> = KebabCase<T> & {
@@ -143,6 +142,11 @@ export type DelimiterCase<
   >
   : Value;
 
+export interface MichiAttributes<E> {
+  children?: JSX.Element;
+  _?: Partial<PickWritable<E>>;
+}
+
 export type KebabCase<Value> = DelimiterCase<Value, "-">;
 
 export type RequiredKeys<T> = {
@@ -160,11 +164,17 @@ export interface CompatibleSubscription<T> {
   (signal?: T): void;
 }
 
-export interface ObservableLike<T = any> {
+export type ObservableLikeObject<T> = T extends object ? {
+  [k in keyof T]: ObservableLikeObject<T[k]>
+}: ObservableLike<T> | T
+export type ObservableLikeObjectWithChildren<T, C = JSX.Element> = ObservableLikeObject<T> & {
+  children?: C;
+}
+export interface ObservableLike<T> {
   subscribe(observer: Subscription<T>): void;
   unsubscribe(observer: Subscription<T>): void;
 }
-export interface CompatibleObservableLike<T = any> {
+export interface CompatibleObservableLike<T> {
   subscribe(observer: CompatibleSubscription<T>): void;
   unsubscribe?(observer: CompatibleSubscription<T>): void;
 }
@@ -253,7 +263,7 @@ export interface ProxiedValueInterface<RV> extends ObservableLike<RV> {
 }
 
 interface ObservableGettersAndSetters<SV, RV> {
-  (newValue: RV | SV): void,
+  (newValue: SV | RV): void;
   (): RV,
 }
 
@@ -505,10 +515,10 @@ type MichiElementProps<
   S extends HTMLElement,
   Attrs = {
     [k in
-    keyof O["reflectedAttributes"]as KebabCase<k>]: O["reflectedAttributes"][k];
+    keyof O["reflectedAttributes"]as KebabCase<k>]?: O["reflectedAttributes"][k] | ObservableLike<O["reflectedAttributes"][k]>;
   } & {
     [k in
-    keyof O["reflectedCssVariables"]as KebabCase<k>]: O["reflectedCssVariables"][k];
+    keyof O["reflectedCssVariables"]as KebabCase<k>]?: O["reflectedCssVariables"][k] | ObservableLike<O["reflectedCssVariables"][k]>;
   } & {
     [k in
     keyof O["events"]as k extends string
@@ -516,10 +526,10 @@ type MichiElementProps<
     : never]?: O["events"][k] extends EventDispatcher<infer D>
     ? (ev: CustomEvent<D>) => unknown
     : never;
-  } & { name: string } & GlobalEvents<S>,
+  } & { name?: string } & GlobalEvents<S>,
 > = MichiAttributes<S> &
   Omit<ExtendsAttributes<O["extends"]>, keyof Attrs> &
-  Partial<Attrs>;
+  Attrs;
 
 export interface MichiElementClass<
   O extends MichiElementOptions,

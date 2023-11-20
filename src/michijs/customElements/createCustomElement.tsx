@@ -21,7 +21,7 @@ import { getAttributeValue } from "../DOM/attributes/getAttributeValue";
 import { getMountPoint } from "../DOM/getMountPoint";
 import { defineReflectedAttributes } from "./properties/defineReflectedAttributes";
 import { useStyleSheet, convertCssObjectToCssVariablesObject } from "../css";
-import type { CSSProperties } from "@michijs/htmltype";
+import type { CSSProperties } from "../generated/htmlType";
 import { create } from "../DOMDiff";
 
 let classesIdGenerator: undefined | IdGenerator;

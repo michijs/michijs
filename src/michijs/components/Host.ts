@@ -1,4 +1,4 @@
-import type { HTMLElements } from "@michijs/htmltype";
+import type { HTMLElements } from "../generated/htmlType";
 import type { AnyObject, FC } from "../types";
 import { setProperties } from "../DOM/attributes/setProperties";
 

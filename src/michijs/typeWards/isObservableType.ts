@@ -5,5 +5,5 @@ export function isObservableType<T>(
   // @ts-ignore
 ): jsx is ObservableLike<T> {
   // in does not work with primitive types
-  return !!(jsx as ObservableLike).subscribe;
+  return !!(jsx as ObservableLike<T>).subscribe;
 }
