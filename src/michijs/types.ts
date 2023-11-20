@@ -270,7 +270,7 @@ interface ObservableGettersAndSetters<SV, RV> {
 export interface ObservableValue<RV> extends ProxiedValueInterface<RV>, ObservableGettersAndSetters<RV, RV> {
 }
 
-type GetPrimitiveTypeClass<T> = T extends boolean ? Boolean : T extends number ? Number : T extends string ? String : T extends bigint ? BigInt : T extends symbol ? Symbol : ObservableValue<T>;
+type GetPrimitiveTypeClass<T> = T extends boolean ? boolean : T extends number ? number : T extends string ? string : T extends bigint ? bigint : T extends symbol ? symbol : ObservableValue<T>;
 
 // Needs to be partial to allow asignation operation
 export type ObservableType<T> = T extends Function ? T & { notifyCurrentValue: undefined } :
@@ -618,7 +618,7 @@ export interface CreateCustomElementStaticResult<
   formAssociated: FOA;
 }
 
-export type GetElementProps<El extends any> = El extends {
+export type GetElementProps<El> = El extends {
   new(arg: infer T): any;
 }
   ? T
