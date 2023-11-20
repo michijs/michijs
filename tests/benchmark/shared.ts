@@ -115,7 +115,7 @@ export async function makePerformanceTests(page: () => Page) {
     const rowToDeleteId = await getRowId(tableBody[996]);
     await saveResult("removeRow", async () => await deleteRow(996));
     const newTable = await getTableBody();
-    
+
     for (let i = 0; i < newTable.length; i++) {
       const rowId = await getRowId(newTable[i]);
       expect(rowId !== rowToDeleteId).toBeTruthy();
