@@ -5,15 +5,17 @@ import { isMichiCustomElement } from "../typeWards/isMichiCustomElement";
 import { bindObservable, getObservables, unproxify } from "../utils";
 import { useWatch } from "../hooks/useWatch";
 
-export type ElementInternalsProps = ObservableTypeObjectWithChildren<{
-  /**Form controls usually expose a "value" property */
-  formValue?: Parameters<ElementInternals["setFormValue"]>[0];
-  /**A validation message to show */
-  errorMessage?: Parameters<ElementInternals["setValidity"]>[1];
-  validityStateFlags?: ValidityStateFlags;
-  tabIndex?: number;
-  role?: AllAttributes["role"];
-} & Partial<ARIAMixin>>;
+export type ElementInternalsProps = ObservableTypeObjectWithChildren<
+  {
+    /**Form controls usually expose a "value" property */
+    formValue?: Parameters<ElementInternals["setFormValue"]>[0];
+    /**A validation message to show */
+    errorMessage?: Parameters<ElementInternals["setValidity"]>[1];
+    validityStateFlags?: ValidityStateFlags;
+    tabIndex?: number;
+    role?: AllAttributes["role"];
+  } & Partial<ARIAMixin>
+>;
 
 /**
  * It allows to:
@@ -39,8 +41,11 @@ export const ElementInternals: FC<ElementInternalsProps> = (
         const unproxiedErrorMessage = unproxify(errorMessage);
         const unproxiedValidityStateFlags = unproxify(validityStateFlags);
         if (unproxiedErrorMessage)
-        self.$michi.internals!.setValidity(unproxiedValidityStateFlags, unproxiedErrorMessage);
-      }, getObservables([validityStateFlags, errorMessage]))
+          self.$michi.internals!.setValidity(
+            unproxiedValidityStateFlags,
+            unproxiedErrorMessage,
+          );
+      }, getObservables([validityStateFlags, errorMessage]));
 
     if (formValue)
       bindObservable(formValue, (newValue) => {

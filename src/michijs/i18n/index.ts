@@ -17,7 +17,10 @@ export class I18n<K extends string> extends Observable<K> {
   private _currentLanguage: K | undefined;
   private isUsingSystemLanguage = true;
 
-  constructor(language?: ObservableTypeObject<K | null>, initialObservers?: Subscription<K>[]) {
+  constructor(
+    language?: ObservableTypeObject<K | null>,
+    initialObservers?: Subscription<K>[],
+  ) {
     super(initialObservers);
     if (language) {
       bindObservable(language, (newValue) => this.setLanguage(newValue as K));
