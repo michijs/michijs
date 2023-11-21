@@ -32,7 +32,8 @@ export class ProxiedValue<T>
   }
 
   notifyCurrentValue() {
-    this.notify(this.valueOf());
+    if (this.shouldCheckForChanges())
+      this.notify(this.valueOf());
   }
 
   // @ts-ignore

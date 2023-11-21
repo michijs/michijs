@@ -4,7 +4,7 @@ import { ObservableValue, ProxiedValueInterface } from "../types";
  * Converts any proxy into a common value
  */
 export function unproxify<T, Y = T extends ObservableValue<infer Z, unknown> ? Z : T>(val: T): Y {
-  const item = (val as ProxiedValueInterface<T, T>).$value ?? val as T;
+  const item = (val as ProxiedValueInterface<T, T>)?.$value ?? val as T;
   if (item && typeof item === "object") {
     if (item instanceof Array) return item.map(unproxify) as Y
     if (item instanceof Date) {
