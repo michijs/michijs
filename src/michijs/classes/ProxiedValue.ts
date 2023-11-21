@@ -4,13 +4,13 @@ import type {
   ObservableType,
   ProxiedValueInterface,
 } from "../types";
-import { deepEqual } from "../utils";
+import { deepEqual, unproxify } from "../utils";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { Observable } from "./Observable";
 
 export class ProxiedValue<T>
   extends Observable<T>
-  implements ProxiedValueInterface<T>
+  implements ProxiedValueInterface<T, T>
 {
   private $privateValue: T;
 
@@ -32,15 +32,12 @@ export class ProxiedValue<T>
   }
 
   notifyCurrentValue() {
-    this.notify(this.$value);
+    this.notify(this.valueOf());
   }
 
-  // Avoids typescript errors
+  // @ts-ignore
   valueOf() {
-    //TODO: this is not working for maps, dates and sets
-    return typeof this.$value !== "object"
-      ? this.$value
-      : JSON.parse(JSON.stringify(this.$value));
+    return unproxify(this.$value);
   }
 
   public toObservableString(): ObservableType<string> {
@@ -81,7 +78,7 @@ export class ProxiedValue<T>
   }
 
   typeof() {
-    return typeof this.valueOf();
+    return typeof this.$value;
   }
 
   // Only for jest

@@ -8,7 +8,7 @@ const SearchParamsAndHash = () => {
   }>();
   const hash = useHash<"#hashTest">();
   const hashTestText = useComputedObserve(() => {
-    return `hash test is ${!!hash["#hashTest"]?.valueOf()}`;
+    return `hash test is ${hash["#hashTest"].toBoolean()}`;
   }, [hash]);
 
   return (
@@ -16,7 +16,7 @@ const SearchParamsAndHash = () => {
       <Title>Search params and hash tests</Title>
       <button
         onclick={() => {
-          hash["#hashTest"] = !hash["#hashTest"]?.valueOf();
+          hash["#hashTest"](hash["#hashTest"].not());
           console.log(hash);
         }}
       >
@@ -25,7 +25,7 @@ const SearchParamsAndHash = () => {
       <SimpleCounter
         count={searchParams.counterParam}
         oncountchanged={(newValue) => {
-          searchParams.counterParam = newValue.detail;
+          searchParams.counterParam(newValue.detail);
         }}
       />
       <div>{searchParams.textParam}</div>

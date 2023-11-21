@@ -23,7 +23,7 @@ const I18nTests = createCustomElement("i18n-tests", {
   methods: {
     onChangeLanguage(ev: TypedEvent<HTMLSelectElement>) {
       if (ev.target) {
-        const newValue = ev.target.value as "es";
+        const newValue = ev.target.value as SupportedLanguages;
         lang(newValue);
       }
     },

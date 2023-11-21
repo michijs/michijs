@@ -1,6 +1,6 @@
 import { Observable } from "../classes";
 import { useObserve } from "../hooks";
-import { ObservableLikeObject, ObservableType, Subscription } from "../types";
+import { ObservableTypeObject, ObservableType, Subscription } from "../types";
 import { bindObservable } from "../utils";
 import { setObservableValue } from "../utils/setObservableValue";
 
@@ -17,7 +17,7 @@ export class I18n<K extends string> extends Observable<K> {
   private _currentLanguage: K | undefined;
   private isUsingSystemLanguage = true;
 
-  constructor(language?: ObservableLikeObject<K | null>, initialObservers?: Subscription<K>[]) {
+  constructor(language?: ObservableTypeObject<K | null>, initialObservers?: Subscription<K>[]) {
     super(initialObservers);
     if (language) {
       bindObservable(language, (newValue) => this.setLanguage(newValue as K));

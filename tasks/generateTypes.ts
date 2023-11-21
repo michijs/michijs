@@ -81,7 +81,7 @@ generateTypes({
     valueSetsTransformer(valueSets) {
       valueSets.attributes.forEach(attribute => {
         attribute.values?.push({
-          name: `ObservableLike<${attribute.values.map(x => x.name).join(' | ')}>`
+          name: `ObservableLike<${attribute.values.map(x => x.name).concat('undefined').join(' | ')}>`
         })
       })
     },

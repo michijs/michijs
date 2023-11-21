@@ -164,10 +164,10 @@ export interface CompatibleSubscription<T> {
   (signal?: T): void;
 }
 
-export type ObservableLikeObject<T> = T extends object ? {
-  [k in keyof T]: ObservableLikeObject<T[k]>
-}: ObservableLike<T> | T
-export type ObservableLikeObjectWithChildren<T, C = JSX.Element> = ObservableLikeObject<T> & {
+export type ObservableTypeObject<T> = [T] extends [object] ? {
+  [k in keyof T]: ObservableTypeObject<T[k]>
+}: ObservableType<T> | T
+export type ObservableTypeObjectWithChildren<T, C = JSX.Element> = ObservableTypeObject<T> & {
   children?: C;
 }
 export interface ObservableLike<T> {
@@ -215,7 +215,7 @@ export interface MichiProperties
 
 export interface MichiCustomElement extends HTMLElement, MichiProperties { }
 
-export interface ProxiedArrayInterface<SV, RV = ObservableType<SV>> extends ProxiedValueInterface<RV[]> {
+export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>> extends ProxiedValueInterface<RV[], SV[]> {
   /**
    * Removes all the list elements
    */
@@ -240,7 +240,7 @@ export interface ProxiedArrayInterface<SV, RV = ObservableType<SV>> extends Prox
    */
   List<const E = FC>(
     props: ExtendableComponentWithoutChildren<E> & {
-      renderItem: FC<RV>;
+      renderItem: FC<SV>;
     },
     context: CreateOptions
   ): Node
@@ -248,9 +248,9 @@ export interface ProxiedArrayInterface<SV, RV = ObservableType<SV>> extends Prox
 
 type Typeof = "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 
-export interface ProxiedValueInterface<RV> extends ObservableLike<RV> {
-  get $value(): RV;
-  set $value(newValue: RV);
+export interface ProxiedValueInterface<RV, SV> extends ObservableLike<SV> {
+  get $value(): SV;
+  set $value(newValue: SV | RV);
   notifyCurrentValue(): void;
   toObservableString(): ObservableType<string>;
   toBoolean(): boolean;
@@ -262,46 +262,46 @@ export interface ProxiedValueInterface<RV> extends ObservableLike<RV> {
   valueOf(): RV;
 }
 
-interface ObservableGettersAndSetters<SV, RV> {
+interface ObservableGettersAndSetters<RV, SV> {
   (newValue: SV | RV): void;
   (): RV,
 }
 
-export interface ObservableValue<RV> extends ProxiedValueInterface<RV>, ObservableGettersAndSetters<RV, RV> {
+export interface ObservableValue<RV, SV> extends ProxiedValueInterface<RV, SV>, ObservableGettersAndSetters<RV, SV> {
 }
 
-type GetPrimitiveTypeClass<T> = T extends boolean ? Boolean : T extends number ? Number : T extends string ? String : T extends bigint ? BigInt : T extends symbol ? Symbol : ObservableValue<T>;
+type GetPrimitiveTypeClass<T> = T extends boolean ? Boolean : T extends number ? Number : T extends string ? String : T extends bigint ? BigInt : T extends symbol ? Symbol : ObservableValue<T, T>;
 
 // Needs to be partial to allow asignation operation
-export type ObservableType<T> = T extends Function ? T & { notifyCurrentValue: undefined } :
-  T extends Array<infer V>
+export type ObservableType<T> = [T] extends [Function] ? T & { notifyCurrentValue: undefined } :
+  [T] extends [Array<infer V>]
   ? ObservableArray<V>
-  : T extends Map<infer K, infer V>
+  : [T] extends [Map<infer K, infer V>]
   ? ObservableMap<K, V>
-  : T extends Set<infer V>
+  : [T] extends [Set<infer V>]
   ? ObservableSet<V>
-  : T extends object
+  : [T] extends [object]
   ? ObservableObject<T>
-  : (ObservableValue<T> & GetPrimitiveTypeClass<T>);
+  : (ObservableValue<T,T> & GetPrimitiveTypeClass<T>);
 
-export type ObservableObject<T> = {
-  [K in keyof T]: ObservableType<T[K]>;
-} & ObservableValue<T>;
+export type ObservableObject<RV, SV = {
+  [K in keyof RV]: ObservableType<RV[K]>;
+}> = SV & ObservableValue<RV, SV>;
 
 export type MutableArrayNewItemsProperties = 'push' | 'unshift';
 export type MutableMapNewItemsProperties = 'set';
-export type MutableSetNewItemsProperties = 'add';
-export type MutableSetDeleteItemsProperties = 'delete';
+export type MutableSetNewDeleteItemsProperties = 'add' | 'delete';
 export type MutableArrayProperties = MutableArrayNewItemsProperties | 'shift' | 'reverse' | 'pop';
 
-export interface ReadWriteArray<SV, RV> extends Pick<Array<RV | SV>, MutableArrayNewItemsProperties>, Omit<Array<RV>, MutableArrayNewItemsProperties> { }
-export interface ReadWriteMap<K, SV, RV> extends Pick<Map<K, RV | SV>, MutableMapNewItemsProperties>, Omit<Map<K, RV>, MutableMapNewItemsProperties> { }
-export interface ReadWriteSet<SV, RV> extends Pick<Set<SV>, MutableSetDeleteItemsProperties>, Pick<Set<RV | SV>, MutableSetNewItemsProperties>, Omit<Set<RV>, MutableSetNewItemsProperties | MutableSetDeleteItemsProperties> { }
+export interface ReadWriteArray<RV, SV> extends Pick<Array<RV | SV>, MutableArrayNewItemsProperties>, Omit<Array<SV>, MutableArrayNewItemsProperties> { }
+export interface ReadWriteMap<K, RV, SV> extends Pick<Map<K, RV | SV>, MutableMapNewItemsProperties>, Omit<Map<K, SV>, MutableMapNewItemsProperties> { }
+export interface ReadWriteSet<RV, SV> extends Pick<Set<RV | SV>, MutableSetNewDeleteItemsProperties>, Omit<Set<SV>, MutableSetNewDeleteItemsProperties> { }
 
-export interface ObservableArray<SV, RV = ObservableType<SV>> extends ReadWriteArray<SV, RV>, ProxiedArrayInterface<SV, RV>, ObservableGettersAndSetters<SV[], RV[]> {
+export interface ObservableArray<RV, SV = ObservableType<RV>> extends ReadWriteArray<RV, SV>, ProxiedArrayInterface<RV, SV>, ObservableGettersAndSetters<RV[], SV[]> {
 }
-export interface ObservableMap<K, SV, RV = ObservableType<SV>> extends ReadWriteMap<K, SV, RV>, ObservableValue<Map<K, SV>> { }
-export interface ObservableSet<SV, RV = ObservableType<SV>> extends ReadWriteSet<SV, RV>, ObservableValue<Set<SV>> {
+// TODO: we dont support common interfaces yet
+export interface ObservableMap<K, RV, SV = ObservableType<RV>> extends ReadWriteMap<K, RV, SV>, ObservableValue<Map<K, SV>, Map<K, SV>> { }
+export interface ObservableSet<RV, SV = ObservableType<RV>> extends ReadWriteSet<RV, SV>, ObservableValue<Set<SV>, Set<SV>> {
 }
 
 export type ObservableNonNullablePrimitiveType = ObservableType<

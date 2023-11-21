@@ -7,3 +7,4 @@ export { wait } from "./wait";
 export { bindObservable } from "./bindObservable";
 export { setObservableValue } from "./setObservableValue";
 export { pick } from "./pick";
+export { unproxify } from "./unproxify";

@@ -19,7 +19,7 @@ export function setObservableValue<T extends object>(
     return Reflect.set(
       object1,
       "$value",
-      useObserve(object2, initialObservers).$value,
+      useObserve<Object>(object2, initialObservers as Subscription<Object>[]).$value,
     );
   }
   switch (type) {
@@ -43,7 +43,7 @@ export function setObservableValue<T extends object>(
         return Reflect.set(
           object1,
           "$value",
-          useObserve(object2, initialObservers).$value,
+          useObserve<Object>(object2, initialObservers as Subscription<Object>[]).$value,
         );
       }
     }

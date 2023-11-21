@@ -1,10 +1,11 @@
-import { ObservableType, CompatibleObservableLike } from "../types";
+import { ObservableType } from "../types";
 import { useObserve } from "./useObserve";
 import { setObservableValue } from "../utils";
+import { useWatch, useWatchDeps } from "./useWatch";
 
 export function useComputedObserve<T>(
   callback: () => T,
-  deps: Partial<CompatibleObservableLike<any>>[],
+  deps: useWatchDeps,
   options?: {
     onBeforeUpdate?(): void;
     onAfterUpdate?(): void;
@@ -18,7 +19,7 @@ export function useComputedObserve<T>(
     options?.onAfterUpdate?.();
   };
 
-  deps.forEach((x) => x.subscribe?.(listener));
+  useWatch(listener, deps)
 
   return newObservable;
 }

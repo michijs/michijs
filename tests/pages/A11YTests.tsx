@@ -24,8 +24,9 @@ const A11yTests = () => {
         <button
           type="button"
           onpointerup={() => {
-            searchParams.disableFieldset =
-              !searchParams.disableFieldset.valueOf();
+            searchParams.disableFieldset(
+              searchParams.disableFieldset.not()
+            );
           }}
         >
           Toggle fieldset

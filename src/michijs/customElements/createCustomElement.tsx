@@ -6,6 +6,7 @@ import type {
   MichiElementOptions,
   MichiElementClass,
   MichiElementSelf,
+  CSSObject,
 } from "../types";
 import {
   formatToKebabCase,
@@ -107,7 +108,7 @@ export function createCustomElement<
         const parsedCssVariables = useComputedObserve(
           () => convertCssObjectToCssVariablesObject(allCssVariables),
           Object.values(allCssVariables),
-        );
+        ) as CSSObject;
         const styleSheet = useStyleSheet({
           [selector]: parsedCssVariables,
         });

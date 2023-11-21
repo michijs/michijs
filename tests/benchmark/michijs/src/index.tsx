@@ -87,11 +87,15 @@ const runLots = () => rows.$replace?.(...buildData(10000));
 const add = () => rows.push(...buildData());
 const update = () => {
   for (let i = 0; i < rows.length; i += 10) {
+    // Will be solved on https://github.com/microsoft/TypeScript/issues/43826
+    // @ts-ignore
     rows[i].label += " !!!";
   }
 };
 const clear = () => rows.$clear?.();
 const select = (row: ObservableType<Row>) => {
+  // Will be solved on https://github.com/microsoft/TypeScript/issues/43826
+  // @ts-ignore
   row.selected = "danger";
   if (selectedItem) selectedItem.selected = undefined;
   selectedItem = row;

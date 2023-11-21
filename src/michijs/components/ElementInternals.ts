@@ -1,10 +1,11 @@
 import type { AllAttributes } from "../generated/htmlType";
-import type { FC, ObservableLikeObjectWithChildren } from "../types";
+import type { FC, ObservableTypeObjectWithChildren } from "../types";
 import { setAttribute } from "../DOM/attributes/setAttribute";
 import { isMichiCustomElement } from "../typeWards/isMichiCustomElement";
-import { bindObservable } from "../utils";
+import { bindObservable, getObservables, unproxify } from "../utils";
+import { useWatch } from "../hooks/useWatch";
 
-export type ElementInternalsProps = ObservableLikeObjectWithChildren<{
+export type ElementInternalsProps = ObservableTypeObjectWithChildren<{
   /**Form controls usually expose a "value" property */
   formValue?: Parameters<ElementInternals["setFormValue"]>[0];
   /**A validation message to show */
@@ -34,15 +35,16 @@ export const ElementInternals: FC<ElementInternalsProps> = (
   const self = options?.contextElement;
   if (self && isMichiCustomElement(self) && self.$michi.internals) {
     if (errorMessage)
-      bindObservable(errorMessage, (newValue) => {
-        if (newValue)
-          self.$michi.internals!.setValidity?.(validityStateFlags, newValue);
-        else self.$michi.internals!.setValidity?.({});
-      });
+      useWatch(() => {
+        const unproxiedErrorMessage = unproxify(errorMessage);
+        const unproxiedValidityStateFlags = unproxify(validityStateFlags);
+        if (unproxiedErrorMessage)
+        self.$michi.internals!.setValidity(unproxiedValidityStateFlags, unproxiedErrorMessage);
+      }, getObservables([validityStateFlags, errorMessage]))
 
     if (formValue)
       bindObservable(formValue, (newValue) => {
-        self.$michi.internals!.setFormValue?.(
+        self.$michi.internals!.setFormValue(
           newValue as Parameters<ElementInternals["setFormValue"]>[0],
         );
       });

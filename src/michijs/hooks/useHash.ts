@@ -16,7 +16,7 @@ const Hash = useComputedObserve(
 );
 
 export const useHash = <T extends string = string>() =>
-  Hash as ObservableType<Partial<Record<T, boolean>>>;
+  Hash as ObservableType<Record<T, boolean>>;
 
 Hash.subscribe?.((newValue) => {
   const [newHash] = newValue
