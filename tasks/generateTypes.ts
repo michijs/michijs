@@ -89,9 +89,12 @@ generateTypes({
     valueSetsTransformer(valueSets) {
       valueSets.attributes.forEach((attribute) => {
         attribute.values?.push({
-          name: `ObservableLike<${attribute.values.map(x => x.name).concat('undefined').join(' | ')}>`
-        })
-      })
+          name: `ObservableLike<${attribute.values
+            .map((x) => x.name)
+            .concat("undefined")
+            .join(" | ")}>`,
+        });
+      });
     },
     valueSetsAdditionalImports: [
       'import { ObservableLike } from "../../../types"',

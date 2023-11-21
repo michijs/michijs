@@ -19,7 +19,7 @@ export function useComputedObserve<T>(
     options?.onAfterUpdate?.();
   };
 
-  useWatch(listener, deps)
+  useWatch(listener, deps);
 
   return newObservable;
 }
