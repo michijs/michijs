@@ -3,11 +3,16 @@ import {
   supportedMathMLElements,
   supportedSVGElements,
 } from "@michijs/htmltype/supported";
+import { generateTypes } from "@michijs/htmltype/bin";
 import {
-  generateTypes
-} from "@michijs/htmltype/bin";
-import { writeFileSync, rmSync, cpSync, readdirSync, stat, renameSync } from "fs";
-import path from 'path'
+  writeFileSync,
+  rmSync,
+  cpSync,
+  readdirSync,
+  stat,
+  renameSync,
+} from "fs";
+import path from "path";
 
 const elements = new Map<
   string,
@@ -46,10 +51,10 @@ supportedSVGElements.forEach((x) => {
 
 function renameFiles(directory) {
   // Read the contents of the directory
-  const files = readdirSync(directory)
+  const files = readdirSync(directory);
 
   // Iterate through each file in the directory
-  files.forEach(file => {
+  files.forEach((file) => {
     const filePath = path.join(directory, file);
 
     // Check if it's a directory
@@ -62,9 +67,9 @@ function renameFiles(directory) {
       if (stats.isDirectory()) {
         // If it's a directory, recursively call the function
         renameFiles(filePath);
-      } else if (file.endsWith('.d.ts')) {
+      } else if (file.endsWith(".d.ts")) {
         // If it's a .d.ts file, rename it to .ts
-        const newFilePath = path.join(directory, file.replace('.d.ts', '.ts'));
+        const newFilePath = path.join(directory, file.replace(".d.ts", ".ts"));
 
         renameSync(filePath, newFilePath);
       }
@@ -72,38 +77,44 @@ function renameFiles(directory) {
   });
 }
 
-cpSync('./node_modules/@michijs/htmltype/dist', 'src/michijs/generated/htmlType', { force: true, recursive: true });
-renameFiles("src/michijs/generated/htmlType")
-
+cpSync(
+  "./node_modules/@michijs/htmltype/dist",
+  "src/michijs/generated/htmlType",
+  { force: true, recursive: true },
+);
+renameFiles("src/michijs/generated/htmlType");
 
 generateTypes({
   generateAttributesAndValueSetsProps: {
     valueSetsTransformer(valueSets) {
-      valueSets.attributes.forEach(attribute => {
+      valueSets.attributes.forEach((attribute) => {
         attribute.values?.push({
           name: `ObservableLike<${attribute.values.map(x => x.name).concat('undefined').join(' | ')}>`
         })
       })
     },
-    valueSetsAdditionalImports: ['import { ObservableLike } from "../../../types"']
+    valueSetsAdditionalImports: [
+      'import { ObservableLike } from "../../../types"',
+    ],
   },
   typesFactoryProps: {
-    "generatedPath": 'src/michijs/generated/htmlType/generated'
+    generatedPath: "src/michijs/generated/htmlType/generated",
   },
   elements: {
     additionalImports: ['import { MichiAttributes } from "../../../types"'],
     additionalExtends: (el, elementInterface) => [
       `MichiAttributes<I["${el}"] extends Element ? I["${el}"]: ${elementInterface}>`,
-    ]
-  }
+    ],
+  },
 });
 
 try {
   rmSync("./src/michijs/generated/JSX.ts", { recursive: true, force: true });
-}catch{}
+} catch {}
 
-const interfaceOverrideElements = Array.from(elements)
-  .filter(([_name, x]) => x.elementInterfaces.length > 1);
+const interfaceOverrideElements = Array.from(elements).filter(
+  ([_name, x]) => x.elementInterfaces.length > 1,
+);
 
 writeFileSync(
   "./src/michijs/generated/JSX.ts",
@@ -112,8 +123,8 @@ writeFileSync(
 
   interface ElementsInterfaceOverride {
     ${interfaceOverrideElements
-    .map(([name, x]) => `${name}: ${x.elementInterfaces.join(" & ")}`)
-    .join(",\n")}
+      .map(([name, x]) => `${name}: ${x.elementInterfaces.join(" & ")}`)
+      .join(",\n")}
   }
   type HTMLElements = HTMLElementsHTMLType<ElementsInterfaceOverride>;
   type SVGElements = SVGElementsHTMLType<ElementsInterfaceOverride>;
@@ -129,14 +140,9 @@ writeFileSync(
       // }
       interface IntrinsicElements extends HTMLElements, MathMLElements, SVGElements {
         ${interfaceOverrideElements
-    .sort()
-    .map(
-      ([key, { attributes }]) =>
-        `${key}: ${attributes.join(
-          " & ",
-        )};`,
-    )
-    .join("\n")}
+          .sort()
+          .map(([key, { attributes }]) => `${key}: ${attributes.join(" & ")};`)
+          .join("\n")}
       }
     }
   }`,

@@ -1,4 +1,10 @@
-import { createCustomElement, I18n, Title, useStorage, type TypedEvent } from "../../src";
+import {
+  createCustomElement,
+  I18n,
+  Title,
+  useStorage,
+  type TypedEvent,
+} from "../../src";
 import en from "./i18nTests/en.json";
 
 type SupportedLanguages = "es" | "en";
