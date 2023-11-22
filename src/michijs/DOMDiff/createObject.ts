@@ -4,7 +4,7 @@ import { CreateOptions, ObjectJSXElement } from "../types";
 import { create } from "./create";
 
 export const createObject = (jsx: ObjectJSXElement, options: CreateOptions) => {
-  let isSVG = options.isSVG || jsx.jsxTag === RootTags.SVG;
+  const isSVG = options.isSVG || jsx.jsxTag === RootTags.SVG;
   let isMATHML;
   let el: Element;
   const { children, ...attrs } = jsx.attrs;
