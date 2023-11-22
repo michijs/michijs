@@ -9,7 +9,8 @@ import {
   rmSync,
   cpSync,
   readdirSync,
-  stat,
+  statSync,
+  readFileSync,
   renameSync,
 } from "fs";
 import path from "path";
@@ -58,22 +59,24 @@ function renameFiles(directory) {
     const filePath = path.join(directory, file);
 
     // Check if it's a directory
-    stat(filePath, (err, stats) => {
-      if (err) {
-        console.error(`Error stating file ${filePath}: ${err}`);
-        return;
-      }
+    const stats = statSync(filePath)
+    if (stats.isDirectory()) {
+      // If it's a directory, recursively call the function
+      renameFiles(filePath);
+    } else if (file.endsWith(".d.ts")) {
+      // If it's a .d.ts file, rename it to .ts
+      const newFilePath = path.join(directory, file.replace(".d.ts", ".ts"));
+      renameSync(filePath, newFilePath);
 
-      if (stats.isDirectory()) {
-        // If it's a directory, recursively call the function
-        renameFiles(filePath);
-      } else if (file.endsWith(".d.ts")) {
-        // If it's a .d.ts file, rename it to .ts
-        const newFilePath = path.join(directory, file.replace(".d.ts", ".ts"));
+      // Read the contents of the file
+      const fileContent = readFileSync(newFilePath, 'utf-8');
 
-        renameSync(filePath, newFilePath);
-      }
-    });
+      // Remove the line "export {};"
+      const modifiedContent = fileContent.replace(/export\s*\{\s*\};\n/, '');
+
+      // Write the modified content back to the file
+      writeFileSync(newFilePath, modifiedContent);
+    }
   });
 }
 
@@ -113,7 +116,7 @@ generateTypes({
 
 try {
   rmSync("./src/michijs/generated/JSX.ts", { recursive: true, force: true });
-} catch {}
+} catch { }
 
 const interfaceOverrideElements = Array.from(elements).filter(
   ([_name, x]) => x.elementInterfaces.length > 1,
@@ -126,8 +129,8 @@ writeFileSync(
 
   interface ElementsInterfaceOverride {
     ${interfaceOverrideElements
-      .map(([name, x]) => `${name}: ${x.elementInterfaces.join(" & ")}`)
-      .join(",\n")}
+    .map(([name, x]) => `${name}: ${x.elementInterfaces.join(" & ")}`)
+    .join(",\n")}
   }
   type HTMLElements = HTMLElementsHTMLType<ElementsInterfaceOverride>;
   type SVGElements = SVGElementsHTMLType<ElementsInterfaceOverride>;
@@ -143,9 +146,9 @@ writeFileSync(
       // }
       interface IntrinsicElements extends HTMLElements, MathMLElements, SVGElements {
         ${interfaceOverrideElements
-          .sort()
-          .map(([key, { attributes }]) => `${key}: ${attributes.join(" & ")};`)
-          .join("\n")}
+    .sort()
+    .map(([key, { attributes }]) => `${key}: ${attributes.join(" & ")};`)
+    .join("\n")}
       }
     }
   }`,
