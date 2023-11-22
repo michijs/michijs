@@ -105,7 +105,7 @@ export const customObjectApply: <T>(
     return target.valueOf();
   };
 
-export function observeCommonObject<T extends unknown>(
+export function observeCommonObject<T>(
   item: T,
   initialObservers: Subscription<T>[] = [],
 ): ObservableType<T> {

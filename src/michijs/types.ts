@@ -618,7 +618,7 @@ export interface CreateCustomElementStaticResult<
   formAssociated: FOA;
 }
 
-export type GetElementProps<El extends any> = El extends {
+export type GetElementProps<El> = El extends {
   new(arg: infer T): any;
 }
   ? T
