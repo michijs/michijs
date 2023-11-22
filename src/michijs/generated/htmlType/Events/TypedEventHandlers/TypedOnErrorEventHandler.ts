@@ -10,3 +10,4 @@ interface TypedOnErrorEventHandlerNonNull<T> {
 }
 export type TypedOnErrorEventHandler<T> =
   TypedOnErrorEventHandlerNonNull<T> | null;
+export {};
