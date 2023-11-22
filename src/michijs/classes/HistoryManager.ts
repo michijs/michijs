@@ -1,4 +1,5 @@
-import { Subscription } from "../types";
+import { ObservableProps, Subscription } from "../types";
+import { unproxify } from "../utils";
 import { Observable } from "./Observable";
 
 class HistoryManagerSingleton extends Observable<string | URL> {
@@ -9,7 +10,7 @@ class HistoryManagerSingleton extends Observable<string | URL> {
     window.addEventListener("popstate", () => this.notify(location.href));
   }
 
-  back(fallbackUrl: string | URL) {
+  back(fallbackUrl: ObservableProps<string | URL>) {
     if (this.history.length > 0) {
       history.back();
       const url = this.history.pop();
@@ -18,8 +19,8 @@ class HistoryManagerSingleton extends Observable<string | URL> {
     } else return this.replaceCurrentUrl(fallbackUrl);
   }
 
-  replaceCurrentUrl(url: string | URL) {
-    const urlValue = url.valueOf() as typeof url;
+  replaceCurrentUrl(url: ObservableProps<string | URL>) {
+    const urlValue = unproxify(url);
     try {
       // This will trigger an exception if its an external link string
       history.replaceState(undefined, "", urlValue);
@@ -35,8 +36,8 @@ class HistoryManagerSingleton extends Observable<string | URL> {
     this.notify(urlValue);
   }
 
-  push(url: string | URL) {
-    const urlValue = url.valueOf() as typeof url;
+  push(url: ObservableProps<string | URL>) {
+    const urlValue = unproxify(url);
     try {
       // This will trigger an exception if its an string
       history.pushState(undefined, "", urlValue);
@@ -52,8 +53,8 @@ class HistoryManagerSingleton extends Observable<string | URL> {
     this.notify(urlValue);
   }
 
-  matches(url: string, flexible = false) {
-    const urlValue = url.valueOf() as typeof url;
+  matches(url: ObservableProps<string>, flexible = false) {
+    const urlValue = url.valueOf();
     if (window.URLPattern) {
       const p = new window.URLPattern({
         pathname: `${urlValue}*`,

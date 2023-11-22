@@ -1,6 +1,6 @@
 import { Observable } from "../classes";
 import { useObserve } from "../hooks";
-import { ObservableTypeObject, ObservableType, Subscription } from "../types";
+import { ObservableProps, ObservableType, Subscription } from "../types";
 import { bindObservable } from "../utils";
 import { setObservableValue } from "../utils/setObservableValue";
 
@@ -18,7 +18,7 @@ export class I18n<K extends string> extends Observable<K> {
   private isUsingSystemLanguage = true;
 
   constructor(
-    language?: ObservableTypeObject<K | null>,
+    language?: ObservableProps<K | null>,
     initialObservers?: Subscription<K>[],
   ) {
     super(initialObservers);

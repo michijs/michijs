@@ -5,13 +5,13 @@ import {
   CreateOptions,
   ExtendableComponentWithoutChildren,
   FC,
-  ObservableLike,
+  ObservableProps,
   SingleJSXElement,
 } from "../types";
 
 type IfProps<T> = ExtendableComponentWithoutChildren<T> & {
   /** The condition to evaluate for rendering content. */
-  condition: ObservableLike<any>;
+  condition: ObservableProps<any>;
   /** The content to render when the condition is truthy. */
   then?: JSX.Element;
   /** The content to render when the condition is falsy. */

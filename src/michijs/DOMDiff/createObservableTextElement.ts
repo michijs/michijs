@@ -4,7 +4,7 @@ import { createTextElement } from "./createTextElement";
 export const createObservableTextElement = (
   jsx: ObservableNonNullablePrimitiveType,
 ) => {
-  const textNode = createTextElement(jsx.valueOf());
+  const textNode = createTextElement(jsx.$value);
   jsx.subscribe?.(
     (newValue) =>
       (textNode.textContent =

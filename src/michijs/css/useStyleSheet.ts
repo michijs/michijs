@@ -1,14 +1,15 @@
 import { useComputedObserve } from "../hooks";
 import type { CSSObject } from "../types";
-import { formatToKebabCase, getObservables, bindObservable } from "../utils";
+import { formatToKebabCase, getObservables, bindObservable, unproxify } from "../utils";
 
 export function cssObjectToText(
   cssObject: CSSObject,
   isChild?: boolean,
 ): string {
-  const formattedObject = Object.entries(cssObject).reduce(
+  const unproxifiedCssObject = unproxify(cssObject)
+  const formattedObject = Object.entries(unproxifiedCssObject).reduce(
     (previousValue, [key, value]) => {
-      const valueIsObject = typeof value?.valueOf() === "object";
+      const valueIsObject = typeof value === "object";
       const newKey = formatToKebabCase(
         isChild && !key.startsWith("@") && valueIsObject ? `&${key}` : key,
       );

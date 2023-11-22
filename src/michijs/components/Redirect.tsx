@@ -1,11 +1,11 @@
 import { HistoryManager } from "../classes";
-import { FC } from "../types";
-import { wait } from "../utils";
+import { FC, ObservableProps } from "../types";
+import { unproxify, wait } from "../utils";
 import { GenericElement } from "./GenericElement";
 
 export interface RedirectProps {
   /**The target URL or location. */
-  to: URL | string | (() => URL | string);
+  to: ObservableProps<URL | string | (() => URL | string)>;
 }
 
 /**
@@ -14,7 +14,7 @@ export interface RedirectProps {
 export const Redirect: FC<RedirectProps> = ({ to }) => (
   <GenericElement
     onconnected={async () => {
-      const toValue = to.valueOf() as typeof to;
+      const toValue = unproxify(to);
       await wait(0);
       HistoryManager.push(typeof toValue === "function" ? toValue() : toValue);
     }}

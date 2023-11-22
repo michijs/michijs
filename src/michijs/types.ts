@@ -164,10 +164,10 @@ export interface CompatibleSubscription<T> {
   (signal?: T): void;
 }
 
-export type ObservableTypeObject<T> = [T] extends [object] ? {
-  [k in keyof T]: ObservableTypeObject<T[k]>
-}: ObservableType<T> | T
-export type ObservableTypeObjectWithChildren<T, C = JSX.Element> = ObservableTypeObject<T> & {
+export type ObservableProps<T> = [T] extends [object] ? {
+  [k in keyof T]: ObservableProps<T[k]>
+} | T: ObservableType<T> | T
+export type ObservablePropsWithChildren<T, C = JSX.Element> = ObservableProps<T> & {
   children?: C;
 }
 export interface ObservableLike<T> {
@@ -260,6 +260,7 @@ export interface ProxiedValueInterface<RV, SV> extends ObservableLike<SV> {
   is(anotherValue: unknown): boolean;
   typeof(): Typeof;
   valueOf(): RV;
+  unproxify(): RV;
 }
 
 interface ObservableGettersAndSetters<RV, SV> {

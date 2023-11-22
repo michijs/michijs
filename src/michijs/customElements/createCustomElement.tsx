@@ -54,17 +54,19 @@ export function createCustomElement<
 
   if (events) Object.entries(events).forEach(([key, value]) => value.init(key));
 
+  const storeInit = {
+    ...attributes,
+    ...reflectedAttributes,
+    ...cssVariables,
+    ...reflectedCssVariables,
+  }
+
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
     implements MichiCustomElement
   {
     $michi: MichiCustomElement["$michi"] = {
-      store: useObserve({
-        ...attributes,
-        ...reflectedAttributes,
-        ...cssVariables,
-        ...reflectedCssVariables,
-      }),
+      store: useObserve(storeInit),
       alreadyRendered: false,
       styles: [],
       idGen: undefined,
@@ -125,7 +127,7 @@ export function createCustomElement<
     constructor() {
       super();
 
-      for (const key in this.$michi.store.valueOf() as object) {
+      for (const key in storeInit) {
         definePropertyFromObservable(this, key, this.$michi.store);
       }
       defineReflectedAttributes(this, this.$michi.store, reflectedCssVariables);

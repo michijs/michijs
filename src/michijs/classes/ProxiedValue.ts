@@ -37,7 +37,11 @@ export class ProxiedValue<T>
   }
 
   // @ts-ignore
-  valueOf() {
+  valueOf(): T {
+    // if (typeof this.$value === 'object') {
+    //   console.log('pase', this.$value)
+    //   throw this.$value
+    // }
     return unproxify(this.$value);
   }
 
@@ -72,6 +76,9 @@ export class ProxiedValue<T>
   toString(): string {
     // @ts-ignore
     return this.$value.toString();
+  }
+  unproxify() {
+    return this.valueOf();
   }
 
   shouldCheckForChanges() {

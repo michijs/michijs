@@ -1,10 +1,10 @@
-import type { FC } from "../types";
+import type { FC, ObservableProps } from "../types";
 import { HistoryManager } from "../classes";
 import { jsx } from "../h";
 
-type LinkProps = {
+type LinkProps = ObservableProps<{
   url: URL | string;
-} & JSX.IntrinsicElements["a"];
+}> & JSX.IntrinsicElements["a"];
 
 /**Provides the ability to move around the web page without reloading the page. It uses the same attributes as an anchor tag but also allows the use of URL objects. Uses the HistoryManager.push method. */
 export const Link: FC<LinkProps> = ({ url, ...attrs }, options) => {

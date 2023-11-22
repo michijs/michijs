@@ -1,11 +1,11 @@
 import type { AllAttributes } from "../generated/htmlType";
-import type { FC, ObservableTypeObjectWithChildren } from "../types";
+import type { FC, ObservablePropsWithChildren } from "../types";
 import { setAttribute } from "../DOM/attributes/setAttribute";
 import { isMichiCustomElement } from "../typeWards/isMichiCustomElement";
 import { bindObservable, getObservables, unproxify } from "../utils";
 import { useWatch } from "../hooks/useWatch";
 
-export type ElementInternalsProps = ObservableTypeObjectWithChildren<
+export type ElementInternalsProps = ObservablePropsWithChildren<
   {
     /**Form controls usually expose a "value" property */
     formValue?: Parameters<ElementInternals["setFormValue"]>[0];
