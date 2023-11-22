@@ -7,7 +7,8 @@ export function unproxify<
   T,
   Y = T extends ObservableValue<infer Z, unknown> ? Z : T,
 >(val: T): Y {
-  const item = (val as ProxiedValueInterface<T, T> | undefined)?.$value ?? (val as T);
+  const item =
+    (val as ProxiedValueInterface<T, T> | undefined)?.$value ?? (val as T);
   if (item && typeof item === "object") {
     if (item instanceof Array) return item.map(unproxify) as Y;
     if (item instanceof Date) {
