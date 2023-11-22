@@ -1,12 +1,17 @@
 import { useComputedObserve } from "../hooks";
 import type { CSSObject } from "../types";
-import { formatToKebabCase, getObservables, bindObservable, unproxify } from "../utils";
+import {
+  formatToKebabCase,
+  getObservables,
+  bindObservable,
+  unproxify,
+} from "../utils";
 
 export function cssObjectToText(
   cssObject: CSSObject,
   isChild?: boolean,
 ): string {
-  const unproxifiedCssObject = unproxify(cssObject)
+  const unproxifiedCssObject = unproxify(cssObject);
   const formattedObject = Object.entries(unproxifiedCssObject).reduce(
     (previousValue, [key, value]) => {
       const valueIsObject = typeof value === "object";

@@ -59,7 +59,7 @@ export function createCustomElement<
     ...reflectedAttributes,
     ...cssVariables,
     ...reflectedCssVariables,
-  }
+  };
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
