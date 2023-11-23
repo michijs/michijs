@@ -24,7 +24,7 @@ jobs:
           message: "Updated generated types"
       # Push repository changes
       - name: Push changes
-        uses: ad-m/github-push-action@v0.8.0
+        uses: michijs/.github/.github/actions/pull-and-push@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
