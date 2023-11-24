@@ -117,7 +117,9 @@ export function observeCommonObject<T>(
   ];
   const newObservable = new ProxiedValue<T>(
     item && Object.getPrototypeOf(item) === Object.prototype
-      ? cloneCommonObject(item, value => useObserve<any>(value, newInitialObservers))
+      ? cloneCommonObject(item, (value) =>
+          useObserve<any>(value, newInitialObservers),
+        )
       : item,
     initialObservers,
   );
