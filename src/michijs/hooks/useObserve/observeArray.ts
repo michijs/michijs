@@ -13,6 +13,7 @@ import {
   customObjectOwnKeys,
   customObjectSet,
 } from "./observeCommonObject";
+import { cloneArray } from "../../utils";
 
 const mutableNewItemsProperties = new Set<
   keyof InstanceType<typeof ProxiedArray>
@@ -28,7 +29,7 @@ export function observeArray<T extends Array<unknown>>(
       newObservable.notifyCurrentValue();
     },
   ];
-  const proxiedArray = item.map((value) =>
+  const proxiedArray = cloneArray(item, (value) =>
     useObserve<any>(value, newInitialObservers),
   );
 

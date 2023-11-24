@@ -4,17 +4,13 @@ import {
   customObjectGetOwnPropertyDescriptor,
   customObjectOwnKeys,
 } from "./observeCommonObject";
+import { cloneDate } from "../../utils";
 
 export function observeDate<T extends Date>(
   item: T,
   initialObservers?: Subscription<T>[],
 ) {
-  let clone;
-  try {
-    clone = structuredClone(item);
-  } catch {
-    clone = new Date(item);
-  }
+  const clone = cloneDate(item);
   const newObservable = new ProxiedValue<T>(clone, initialObservers);
   return new Proxy(newObservable, {
     ownKeys: customObjectOwnKeys,

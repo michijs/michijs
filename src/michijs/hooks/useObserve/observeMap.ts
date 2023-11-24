@@ -11,7 +11,7 @@ import {
   customObjectOwnKeys,
   customObjectSet,
 } from "./observeCommonObject";
-import { setObservableValue } from "../../utils";
+import { cloneMap, setObservableValue } from "../../utils";
 
 export const observeMap = <E, T extends Map<any, E>>(
   item: T,
@@ -21,11 +21,7 @@ export const observeMap = <E, T extends Map<any, E>>(
     ...initialObservers,
     () => newObservable.notifyCurrentValue(),
   ];
-  const proxiedMap = new Map<unknown, ObservableType<E>>();
-  item.forEach((value, key) =>
-    proxiedMap.set(key, useObserve(value, newInitialObservers)),
-  );
-
+  const proxiedMap = cloneMap(item, value => useObserve(value, newInitialObservers))
   const newObservable = new ProxiedValue<T>(proxiedMap as T, initialObservers);
   return new Proxy(newObservable, {
     set: customObjectSet(newInitialObservers),

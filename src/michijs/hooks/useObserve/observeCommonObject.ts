@@ -1,7 +1,7 @@
 import { useObserve } from "../useObserve";
 import { ObservableType, Subscription } from "../../types";
 import { ProxiedValue } from "../../classes";
-import { setObservableValue } from "../../utils";
+import { cloneCommonObject, setObservableValue } from "../../utils";
 
 type CommonObjectProxyHandler<T extends object> = Required<
   ProxyHandler<ProxiedValue<T>>
@@ -117,11 +117,7 @@ export function observeCommonObject<T>(
   ];
   const newObservable = new ProxiedValue<T>(
     item && Object.getPrototypeOf(item) === Object.prototype
-      ? (Object.entries(item).reduce((previousValue, [key, value]) => {
-          const observedItem = useObserve<any>(value, newInitialObservers);
-          previousValue[key] = observedItem;
-          return previousValue;
-        }, {}) as T)
+      ? cloneCommonObject(item, value => useObserve<any>(value, newInitialObservers))
       : item,
     initialObservers,
   );

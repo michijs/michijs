@@ -1,5 +1,5 @@
 import { useObserve } from "../useObserve";
-import { ObservableType, Subscription } from "../../types";
+import { Subscription } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 import {
   customMapAndSetClear,
@@ -11,6 +11,7 @@ import {
   customObjectOwnKeys,
   customObjectSet,
 } from "./observeCommonObject";
+import { cloneMap } from "../../utils";
 
 export const observeSet = <E, T extends Set<E>>(
   item: T,
@@ -20,10 +21,7 @@ export const observeSet = <E, T extends Set<E>>(
     ...initialObservers,
     () => newObservable.notifyCurrentValue(),
   ];
-  const proxiedSet = new Map<E, ObservableType<E>>();
-  item.forEach((value) => {
-    proxiedSet.set(value, useObserve(value, newInitialObservers));
-  });
+  const proxiedSet = cloneMap(item, value => useObserve(value, newInitialObservers))
   const newObservable = new ProxiedValue(proxiedSet);
   const proxy = new Proxy(newObservable, {
     set: customObjectSet(newInitialObservers),
