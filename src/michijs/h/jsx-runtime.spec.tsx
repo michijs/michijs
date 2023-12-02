@@ -29,9 +29,7 @@ const objectJSXResultWithTwoChildren: ObjectJSXElement = {
   attrs: { ...testAttrs, children: [testChild, testChild] },
 };
 
-const DivProxy = (attrs: JSX.IntrinsicElements["div"]) => (
-  <div {...attrs} />
-);
+const DivProxy = (attrs: JSX.IntrinsicElements["div"]) => <div {...attrs} />;
 const FunctionJSXResult: FunctionJSXElement = {
   jsxTag: DivProxy,
   attrs: testAttrs,
