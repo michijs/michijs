@@ -1,4 +1,4 @@
-import { Link, Title } from "../../src";
+import { Link, Title } from "@michijs/michijs";
 import { urls } from "../routes";
 
 export const Main = () => (

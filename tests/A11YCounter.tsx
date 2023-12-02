@@ -3,7 +3,7 @@ import {
   EventDispatcher,
   ElementInternals,
   useComputedObserve,
-} from "../src";
+} from "@michijs/michijs";
 import { counterStyle } from "./shared/counterStyle";
 
 export const A11YCounter = createCustomElement("a11y-counter", {

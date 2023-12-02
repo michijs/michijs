@@ -1,4 +1,4 @@
-import { getFormData, useSearchParams, Title } from "../../src";
+import { getFormData, useSearchParams, Title } from "@michijs/michijs";
 import { A11YCounter } from "../A11YCounter";
 
 interface CustomForm {

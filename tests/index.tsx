@@ -1,4 +1,4 @@
-import { createCustomElement, Host } from "../src";
+import { createCustomElement, Host } from "@michijs/michijs";
 import { ColorSelector } from "./ColorSelector";
 import { Router } from "./routes";
 // import sheet from './a.css' assert { type: 'css' };

@@ -2,7 +2,7 @@ import {
   ObservableType,
   createCustomElement,
   useObserve,
-} from "../../../../src";
+} from "@michijs/michijs";
 
 function _random(max: number) {
   return Math.round(Math.random() * 1000) % max;

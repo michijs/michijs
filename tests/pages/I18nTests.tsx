@@ -4,7 +4,7 @@ import {
   Title,
   useStorage,
   type TypedEvent,
-} from "../../src";
+} from "@michijs/michijs";
 import en from "./i18nTests/en.json";
 
 type SupportedLanguages = "es" | "en";

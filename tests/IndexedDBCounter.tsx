@@ -4,7 +4,7 @@ import {
   useIndexedDB,
   createCustomElement,
   useAsyncComputedObserve,
-} from "../src";
+} from "@michijs/michijs";
 import { counterStyle } from "./shared/counterStyle";
 
 const storedCount = useIndexedDB<{

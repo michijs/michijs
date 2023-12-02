@@ -1,4 +1,4 @@
-import { host, useStyleSheet } from "../../src";
+import { host, useStyleSheet } from "@michijs/michijs";
 
 export const counterStyle = useStyleSheet({
   ...host({

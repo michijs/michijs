@@ -1,4 +1,4 @@
-import { useStyleSheet } from "../src";
+import { useStyleSheet } from "@michijs/michijs";
 
 export const buttonStyle = useStyleSheet({
   'button[is="built-in-button"]': {

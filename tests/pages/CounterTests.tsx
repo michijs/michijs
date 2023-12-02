@@ -1,4 +1,4 @@
-import { Title } from "../../src";
+import { Title } from "@michijs/michijs";
 import { BuiltInButton } from "../BuiltInButton";
 import { CounterWithReduxStore } from "../CounterWithReduxStore";
 import { SimpleCounter } from "../SimpleCounter";

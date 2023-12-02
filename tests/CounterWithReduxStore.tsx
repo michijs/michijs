@@ -3,7 +3,7 @@ import {
   Host,
   EventDispatcher,
   useComputedObserve,
-} from "../src";
+} from "@michijs/michijs";
 import { counterStyle } from "./shared/counterStyle";
 import { decrement, increment } from "./shared/redux/CounterSlice";
 import { store } from "./shared/redux/store";

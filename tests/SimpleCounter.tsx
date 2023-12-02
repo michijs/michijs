@@ -1,4 +1,4 @@
-import { createCustomElement, EventDispatcher } from "../src";
+import { createCustomElement, EventDispatcher } from "@michijs/michijs";
 import { counterStyle } from "./shared/counterStyle";
 
 export const SimpleCounter = createCustomElement("simple-counter", {

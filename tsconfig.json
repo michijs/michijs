@@ -27,7 +27,10 @@
     "paths": {
       "@michijs/michijs/*": [
         "./src/*"
-      ]
+      ],
+      "@michijs/michijs": [
+        "./src/index"
+      ],
     }
   },
   "include": [

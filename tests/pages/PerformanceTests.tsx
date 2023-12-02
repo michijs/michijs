@@ -1,4 +1,4 @@
-import { FC, Title } from "../../src";
+import { FC, Title } from "@michijs/michijs";
 import { TableManager, Table } from "../benchmark/michijs/src/index";
 
 const PerformanceTests: FC = () => (

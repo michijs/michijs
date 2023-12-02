@@ -1,6 +1,4 @@
-import { Redirect } from "@michijs/michijs/michijs/components/Redirect";
-import { createRouter, wait } from "../src";
-import { AsyncComponent } from "../src/michijs/components/AsyncComponent";
+import { createRouter, wait, Redirect, AsyncComponent } from "@michijs/michijs";
 import { Main } from "./pages/Main";
 
 export const [urls, Router] = createRouter({
