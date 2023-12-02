@@ -21,7 +21,9 @@ export const observeSet = <E, T extends Set<E>>(
     ...initialObservers,
     () => newObservable.notifyCurrentValue(),
   ];
-  const proxiedSet = cloneMap(item, value => useObserve(value, newInitialObservers))
+  const proxiedSet = cloneMap(item, (value) =>
+    useObserve(value, newInitialObservers),
+  );
   const newObservable = new ProxiedValue(proxiedSet);
   const proxy = new Proxy(newObservable, {
     set: customObjectSet(newInitialObservers),
