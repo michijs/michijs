@@ -435,7 +435,6 @@ export type OptionalRecord<K extends keyof any, T> = {
   [P in K]?: T;
 };
 
-// I need to use object to avoid infinite loop in KeysAndKeysOf
 export type AttributesType = OptionalRecord<string, PrimitiveType | AnyObject>;
 // Removed because overcomplicates types on definition of components
 // export type ReflectedAttributesType = Record<PropertyKey, Exclude<PrimitiveType, true> | AnyObject>;
@@ -519,16 +518,6 @@ export interface MichiElementOptions {
    * false //on Customized built-in elements
    */
   shadow?: false | ShadowRootInit;
-  // observe?: {
-  //   [k in KeysAndKeysOf<RA>]?: () => void;
-  // } & {
-  //   [k in KeysAndKeysOf<A>]?: () => void;
-  // } & {
-  //   [k in KeysAndKeysOf<C>]?: () => void;
-  // } & {
-  //   [k in KeysAndKeysOf<RC>]?: () => void;
-  // } & (S extends EmptyObject ? { [k in keyof S]?: () => void } : EmptyObject);
-
   /**Contains all lifecycle methods.*/
   lifecycle?: Lifecycle & LifecycleInternals;
   // lifecycle?: Lifecycle<FRA & FRC> &
@@ -607,11 +596,6 @@ export interface Lifecycle {
     newValue: unknown,
     oldValue: unknown,
   ): void;
-  // willReceiveAttribute?<WRAN extends keyof FRA>(
-  //   name: WRAN,
-  //   newValue: FRA[WRAN],
-  //   oldValue: FRA[WRAN],
-  // ): void;
 }
 
 type FormStateRestoreCallbackMode = "restore" | "autocomplete";
