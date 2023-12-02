@@ -5,7 +5,7 @@ export const customMapAndSetClear = (
   target: ProxiedValue<Map<any, any>> | ProxiedValue<Set<any>>,
   clearFn: Map<any, any>["clear"] | Set<any>["clear"],
 ): Map<any, any>["clear"] | Set<any>["clear"] => {
-  return function () {
+  return () => {
     if (target.shouldCheckForChanges()) {
       if (target.$value.size !== 0) {
         clearFn();
@@ -24,7 +24,7 @@ export const customMapAndSetDelete = (
   | Map<unknown, ObservableType<unknown>>["delete"]
   | Set<ObservableType<unknown>>["delete"] => {
   //In Map is key, in Set is value
-  return function (key) {
+  return (key) => {
     const result = deleteFn(key?.valueOf?.());
     if (result) target.notifyCurrentValue();
     return result;

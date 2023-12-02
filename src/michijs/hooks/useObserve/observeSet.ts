@@ -49,7 +49,7 @@ export const observeSet = <E, T extends Set<E>>(
           );
         }
         case "add": {
-          return function (newValue) {
+          return (newValue) => {
             const newValueOf = newValue?.valueOf?.();
             const hasOldValue = target.$value.has(newValueOf);
             if (!hasOldValue) {

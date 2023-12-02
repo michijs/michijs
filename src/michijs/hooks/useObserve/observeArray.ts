@@ -51,7 +51,7 @@ export function observeArray<T extends Array<unknown>>(
         mutableNewItemsProperties.has(castedP)
       ) {
         const targetProperty = Reflect.get(target, p);
-        return function (...args: T[]) {
+        return (...args: T[]) => {
           const proxiedArray = args.map((value) =>
             useObserve<any>(value, newInitialObservers),
           );

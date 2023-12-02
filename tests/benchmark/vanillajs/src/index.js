@@ -132,7 +132,7 @@ class Store {
   }
 }
 
-var getParentId = function (elem) {
+var getParentId = (elem) => {
   while (elem) {
     if (elem.tagName === "TR") {
       return elem.data_id;
