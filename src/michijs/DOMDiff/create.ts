@@ -32,7 +32,6 @@ export function create(
         options,
       );
     else if (isNotAPrimitiveJSX(jsx)) {
-      // TODO: New primitive types are object. Error
       if ("jsxTag" in jsx) {
         //Fix for non-jsx objects
         // Solves undefined Fragment caused by some compilers
