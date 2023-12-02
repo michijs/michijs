@@ -23,7 +23,7 @@ export class ProxiedValue<T>
     if (this.shouldCheckForChanges()) {
       if (!deepEqual(newValue, this.$privateValue)) {
         this.$privateValue = newValue;
-        this.notify(newValue);
+        this.notifyCurrentValue();
       }
     } else this.$privateValue = newValue;
   }
@@ -41,7 +41,7 @@ export class ProxiedValue<T>
     //   console.log('pase', this.$value)
     //   throw this.$value
     // }
-    return unproxify(this.$value);
+    return unproxify(this.$value) as T;
   }
 
   public toObservableString(): ObservableType<string> {

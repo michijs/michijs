@@ -41,11 +41,15 @@ export class I18n<K extends string> extends Observable<K> {
     this.isUsingSystemLanguage = false;
   }
 
-  async createTranslation<T>(
+  createTranslation<T>(
     translation: Translation<K, T>,
-  ): Promise<ObservableType<T>> {
-    const currentTranslation = await this.getCurrentTranslation(translation);
-    const observable = useObserve<T>(currentTranslation);
+  ): ObservableType<T> {
+    const currentTranslationPromise = this.getCurrentTranslation(translation);
+    const observable = useObserve<T>({} as T);
+    currentTranslationPromise.then(currentTranslation => {
+      setObservableValue(observable, currentTranslation);
+    })
+
     const translationItem: TranslationItem<K, T> = {
       translation,
       observable,

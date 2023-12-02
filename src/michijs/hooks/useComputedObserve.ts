@@ -3,7 +3,7 @@ import { useObserve } from "./useObserve";
 import { setObservableValue } from "../utils";
 import { useWatch, useWatchDeps } from "./useWatch";
 
-export function useComputedObserve<T>(
+export function useComputedObserve<const T>(
   callback: () => T,
   deps: useWatchDeps,
   options?: {

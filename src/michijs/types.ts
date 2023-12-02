@@ -166,7 +166,7 @@ export interface CompatibleSubscription<T> {
 
 export type ObservableProps<T> = [T] extends [object] ? {
   [k in keyof T]: ObservableProps<T[k]>
-} | T: ObservableType<T> | T
+} | T : ObservableLike<T> | T
 export type ObservablePropsWithChildren<T, C = JSX.Element> = ObservableProps<T> & {
   children?: C;
 }
@@ -238,15 +238,16 @@ export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>> extends Prox
    * This allows it to have a performance close to vanilla js.
    * An operation on the data implies an operation on the associated elements.
    */
-  List<const E = FC>(
+  List<const E = NonProxiedFC>(
     props: ExtendableComponentWithoutChildren<E> & {
-      renderItem: FC<SV>;
+      renderItem: NonProxiedFC<SV>;
     },
     context: CreateOptions
   ): Node
 };
 
 type Typeof = "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+
 
 export interface ProxiedValueInterface<RV, SV> extends ObservableLike<SV> {
   get $value(): SV;
@@ -259,8 +260,8 @@ export interface ProxiedValueInterface<RV, SV> extends ObservableLike<SV> {
   shouldCheckForChanges(): boolean;
   is(anotherValue: unknown): boolean;
   typeof(): Typeof;
-  valueOf(): RV;
   unproxify(): RV;
+  valueOf(): RV;
 }
 
 interface ObservableGettersAndSetters<RV, SV> {
@@ -268,22 +269,51 @@ interface ObservableGettersAndSetters<RV, SV> {
   (): RV,
 }
 
-export interface ObservableValue<RV, SV> extends ProxiedValueInterface<RV, SV>, ObservableGettersAndSetters<RV, SV> {
+export interface ObservableValue<RV, SV = RV> extends ProxiedValueInterface<RV, SV>, ObservableGettersAndSetters<RV, SV> {
 }
 
-type GetPrimitiveTypeClass<T> = T extends boolean ? Boolean : T extends number ? Number : T extends string ? String : T extends bigint ? BigInt : T extends symbol ? Symbol : ObservableValue<T, T>;
+export interface PrimitiveObservableValue<RV> extends ObservableValue<RV, RV> {
+
+}
+
+type GetPrimitiveTypeClass<T> = T extends boolean ? Boolean : T extends number ? Number : T extends string ? String : T extends bigint ? BigInt : T extends symbol ? Symbol : {};
+
+type isInWindow<V> = ConditionalKeys<typeof window, V> extends never ? false : true;
+
+export type IsAny<T> = 0 extends 1 & T ? true : false;
+
+type areExactSame<A, B> = A extends B ? (B extends A ? true : false) : false
+
+export type ConditionalKeys<Base, Condition> = NonNullable<
+  // Wrap in `NonNullable` to strip away the `undefined` type from the produced union.
+  {
+    // Map through all the keys of the given base type.
+    [Key in keyof Base]:
+    // Pick only keys with types extending the given `Condition` type.
+    Base[Key] extends abstract new (...args: any) => any ?
+    (IsAny<Base[Key]> extends true ? never : areExactSame<InstanceType<Base[Key]>, Condition> extends true ? Key : never)
+    : never
+
+    // Convert the produced object into a union type of the keys which passed the conditional test.
+  }[keyof Base]
+>;
 
 // Needs to be partial to allow asignation operation
-export type ObservableType<T> = [T] extends [Function] ? T & { notifyCurrentValue: undefined } :
+export type ObservableType<T> = [T] extends ObservableLike<unknown> ? [T] :
+  [T] extends [Function] ? T & { notifyCurrentValue: undefined } :
   [T] extends [Array<infer V>]
   ? ObservableArray<V>
   : [T] extends [Map<infer K, infer V>]
   ? ObservableMap<K, V>
   : [T] extends [Set<infer V>]
   ? ObservableSet<V>
+  : [T] extends [Date]
+  ? PrimitiveObservableValue<T> & Date
   : [T] extends [object]
-  ? ObservableObject<T>
-  : (ObservableValue<T,T> & GetPrimitiveTypeClass<T>);
+  ? isInWindow<T> extends true ? PrimitiveObservableValue<T> & T : ObservableObject<T>
+  : (PrimitiveObservableValue<T> & GetPrimitiveTypeClass<T>);
+
+export type Unproxify<T> = T extends ObservableLike<infer Y> ? Y : T
 
 export type ObservableObject<RV, SV = {
   [K in keyof RV]: ObservableType<RV[K]>;
@@ -355,11 +385,27 @@ export type SingleJSXElement =
   | ArrayJSXElement
   | DOMElementJSXElement
   | Node
+  | ObservableLike<unknown>
 // | {};
 export type ArrayJSXElement = SingleJSXElement[];
 
-export interface FC<T = {}, S extends Element = Element, C = CreateOptions<S>> {
+export type PickIfExists<T, K extends keyof any> = (T extends { [L in K]?: unknown } ? Pick<T, K> : {});
+
+type Impossible<K extends keyof any> = {
+  [P in K]: never;
+};
+
+export type NoExtraProperties<T, U extends T = T> = U & Impossible<Exclude<keyof U, keyof T>>;
+
+export type FCProps<T = {}> = { [k in keyof T]: k extends 'children' ? T[k] : ObservableType<T[k]> };
+
+export interface NonProxiedFC<T = {}, S extends Element = Element, C = CreateOptions<S>> {
   (attrs: T, context?: C): SingleJSXElement;
+}
+export interface FC<T = {}, S extends Element = Element, C = CreateOptions<S>> {
+  (attrs: FCProps<T>, context?: C): SingleJSXElement;
+}
+export interface FCC<T = {}, S extends Element = Element, C = CreateOptions<S>> extends FC<T & { children?: JSX.Element }, S, C> {
 }
 
 export type PropertyKey = string | number | symbol;
@@ -516,10 +562,10 @@ type MichiElementProps<
   S extends HTMLElement,
   Attrs = {
     [k in
-    keyof O["reflectedAttributes"]as KebabCase<k>]?: O["reflectedAttributes"][k] | ObservableLike<O["reflectedAttributes"][k]>;
+    keyof O["reflectedAttributes"]as KebabCase<k>]?: ObservableProps<O["reflectedAttributes"][k]>;
   } & {
     [k in
-    keyof O["reflectedCssVariables"]as KebabCase<k>]?: O["reflectedCssVariables"][k] | ObservableLike<O["reflectedCssVariables"][k]>;
+    keyof O["reflectedCssVariables"]as KebabCase<k>]?: ObservableProps<O["reflectedCssVariables"][k]>;
   } & {
     [k in
     keyof O["events"]as k extends string

@@ -7,6 +7,7 @@ import type {
   MichiElementClass,
   MichiElementSelf,
   CSSObject,
+  NoExtraProperties,
 } from "../types";
 import {
   formatToKebabCase,
@@ -32,7 +33,7 @@ export function createCustomElement<
   S extends HTMLElement = MichiElementSelf<O>,
 >(
   tag: CustomElementTag,
-  elementOptions?: O & ThisType<S>,
+  elementOptions?: NoExtraProperties<MichiElementOptions, O> & ThisType<S>,
 ): MichiElementClass<O, S> {
   const {
     events,

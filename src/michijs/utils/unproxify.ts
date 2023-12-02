@@ -1,4 +1,4 @@
-import { ObservableValue, ProxiedValueInterface } from "../types";
+import { ProxiedValueInterface, Unproxify } from "../types";
 import { cloneArray, cloneCommonObject, cloneDate, cloneMap, cloneSet } from "./clone";
 
 /**
@@ -6,20 +6,19 @@ import { cloneArray, cloneCommonObject, cloneDate, cloneMap, cloneSet } from "./
  */
 export function unproxify<
   T,
-  Y = T extends ObservableValue<infer Z, unknown> ? Z : T,
->(val: T): Y {
+>(val: T): Unproxify<T> {
   const item =
     (val as ProxiedValueInterface<T, T> | undefined)?.$value ?? (val as T);
   if (item && typeof item === "object") {
-    if (item instanceof Array) return cloneArray(item, unproxify) as Y;
+    if (item instanceof Array) return cloneArray(item, unproxify) as Unproxify<T>;
     if (item instanceof Date)
-      return cloneDate(item) as Y
+      return cloneDate(item) as Unproxify<T>
     if (item instanceof Map) 
-      return cloneMap(item, unproxify) as Y
+      return cloneMap(item, unproxify) as Unproxify<T>
     if (item instanceof Set)
-      return cloneSet(item, unproxify) as Y
+      return cloneSet(item, unproxify) as Unproxify<T>
     if (Object.getPrototypeOf(item) === Object.prototype)
-      return cloneCommonObject(item, unproxify) as Y;
+      return cloneCommonObject(item, unproxify) as Unproxify<T>;
   }
-  return item as unknown as Y;
+  return item as Unproxify<T>;
 }

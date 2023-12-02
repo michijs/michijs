@@ -1,17 +1,17 @@
 import { HistoryManager } from "../classes";
-import { FC, ObservableProps } from "../types";
+import { createFunctionalComponent } from "../customElements";
 import { unproxify, wait } from "../utils";
 import { GenericElement } from "./GenericElement";
 
 export interface RedirectProps {
   /**The target URL or location. */
-  to: ObservableProps<URL | string | (() => URL | string)>;
+  to: URL | string | (() => URL | string);
 }
 
 /**
  * Redirect component for navigating to a different URL or location.
  **/
-export const Redirect: FC<RedirectProps> = ({ to }) => (
+export const Redirect = createFunctionalComponent<RedirectProps>(({ to }) => (
   <GenericElement
     onconnected={async () => {
       const toValue = unproxify(to);
@@ -19,4 +19,4 @@ export const Redirect: FC<RedirectProps> = ({ to }) => (
       HistoryManager.push(typeof toValue === "function" ? toValue() : toValue);
     }}
   />
-);
+));

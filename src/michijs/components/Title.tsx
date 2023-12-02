@@ -1,4 +1,3 @@
-import { FC } from "../types";
 import { GenericElement } from "./GenericElement";
 
 export interface TitleProps {
@@ -7,7 +6,7 @@ export interface TitleProps {
 /**
  * Title component for dynamically updating the document's title.
  */
-export const Title: FC<TitleProps> = ({ children }) => (
+export const Title = ({ children }: TitleProps) => (
   <GenericElement
     onconnected={async () => {
       if (children) document.title = children;

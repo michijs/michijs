@@ -20,7 +20,7 @@ const { lang } = useStorage({
 
 const translator = new I18n<SupportedLanguages>(lang);
 
-const t = await translator.createTranslation({
+const t = translator.createTranslation({
   es: () => import("./i18nTests/es.json"),
   en,
 });

@@ -54,7 +54,7 @@ class HistoryManagerSingleton extends Observable<string | URL> {
   }
 
   matches(url: ObservableProps<string>, flexible = false) {
-    const urlValue = url.valueOf();
+    const urlValue = unproxify(url);
     if (window.URLPattern) {
       const p = new window.URLPattern({
         pathname: `${urlValue}*`,

@@ -1,4 +1,4 @@
-import { AnyObject, ObservableObject, ObservableType } from "../../types";
+import { AnyObject, ObservableType, PrimitiveObservableValue } from "../../types";
 import { useObserve } from "..";
 
 const exampleValue = 1;
@@ -198,7 +198,7 @@ describe("Observe tests", () => {
   });
   describe("When observing Dates", () => {
     let nonProxiedDate: Date;
-    let date: ObservableObject<Date>;
+    let date: PrimitiveObservableValue<Date> & Date;
     beforeEach(() => {
       nonProxiedDate = new Date();
       date = useObserve(new Date());

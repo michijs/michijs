@@ -1,11 +1,11 @@
 import type { AllAttributes } from "../generated/htmlType";
-import type { FC, ObservablePropsWithChildren } from "../types";
 import { setAttribute } from "../DOM/attributes/setAttribute";
 import { isMichiCustomElement } from "../typeWards/isMichiCustomElement";
 import { bindObservable, getObservables, unproxify } from "../utils";
 import { useWatch } from "../hooks/useWatch";
+import { createFunctionalComponentWithChildren } from "../customElements/createFunctionalComponentWithChildren";
 
-export type ElementInternalsProps = ObservablePropsWithChildren<
+export type ElementInternalsProps =
   {
     /**Form controls usually expose a "value" property */
     formValue?: Parameters<ElementInternals["setFormValue"]>[0];
@@ -14,8 +14,7 @@ export type ElementInternalsProps = ObservablePropsWithChildren<
     validityStateFlags?: ValidityStateFlags;
     tabIndex?: number;
     role?: AllAttributes["role"];
-  } & Partial<ARIAMixin>
->;
+  } & Partial<ARIAMixin>;
 
 /**
  * It allows to:
@@ -23,7 +22,7 @@ export type ElementInternalsProps = ObservablePropsWithChildren<
  * - Access element internals
  * - Validate and assign values to forms
  */
-export const ElementInternals: FC<ElementInternalsProps> = (
+export const ElementInternals = createFunctionalComponentWithChildren<ElementInternalsProps>((
   {
     children,
     errorMessage,
@@ -73,4 +72,4 @@ export const ElementInternals: FC<ElementInternalsProps> = (
     });
   }
   return children;
-};
+});

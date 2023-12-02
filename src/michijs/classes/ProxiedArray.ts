@@ -1,12 +1,12 @@
 import {
   CreateOptions,
   ExtendableComponentWithoutChildren,
-  FC,
   Subscription,
   ProxiedValue,
   SingleJSXElement,
   ProxiedArrayInterface,
   MutableArrayProperties,
+  NonProxiedFC,
 } from "../..";
 import { create } from "../DOMDiff";
 // import { ListElement } from "../components/FragmentAndList";
@@ -21,24 +21,28 @@ export class ProxiedArray<V>
   constructor(initialData: V[], initialObservers?: Subscription<V[]>[]) {
     super(initialData, initialObservers);
   }
-  List = <const E = FC>(
+  List = <const E = NonProxiedFC>(
     {
       as: asTag,
       renderItem,
       ...attrs
     }: ExtendableComponentWithoutChildren<E> & {
-      renderItem: FC<V>;
+      renderItem: NonProxiedFC<V>;
     },
     context: CreateOptions,
   ): Node => {
     const el = asTag
       ? (create({
-          jsxTag: asTag,
-          attrs,
-        } as SingleJSXElement) as ParentNode)
+        jsxTag: asTag,
+        attrs,
+      } as SingleJSXElement) as ParentNode)
       : new VirtualFragment();
 
-    this.targets.push(new Target(el, renderItem, context));
+    const newTarget = new Target(el, renderItem, context);
+
+    this.targets.push(newTarget);
+
+    newTarget.appendItems(...this.$value);
 
     return el as Node;
   };
