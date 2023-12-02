@@ -21,7 +21,7 @@ export function observeDate<T extends Date>(
         const targetProperty = Reflect.get(target.$value, property);
         if (typeof property === "string") {
           if (property.startsWith("set")) {
-            return function (...args) {
+            return (...args) => {
               const oldValue = target.$value.getTime();
               const result = (targetProperty as Function).apply(
                 target.$value,
