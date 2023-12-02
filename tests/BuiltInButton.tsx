@@ -1,4 +1,8 @@
-import { createCustomElement, Host, useComputedObserve } from "@michijs/michijs";
+import {
+  createCustomElement,
+  Host,
+  useComputedObserve,
+} from "@michijs/michijs";
 import { buttonStyle } from "./BuiltInButton.css";
 
 export const BuiltInButton = createCustomElement("built-in-button", {

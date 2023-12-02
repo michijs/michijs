@@ -1,4 +1,9 @@
-import { Host, useStorage, EventDispatcher, customElement } from "@michijs/michijs";
+import {
+  Host,
+  useStorage,
+  EventDispatcher,
+  customElement,
+} from "@michijs/michijs";
 import { counterStyle } from "./shared/counterStyle";
 
 const { count } = useStorage({
