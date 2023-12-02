@@ -5,16 +5,15 @@ import { bindObservable, getObservables, unproxify } from "../utils";
 import { useWatch } from "../hooks/useWatch";
 import { createFunctionalComponentWithChildren } from "../customElements/createFunctionalComponentWithChildren";
 
-export type ElementInternalsProps =
-  {
-    /**Form controls usually expose a "value" property */
-    formValue?: Parameters<ElementInternals["setFormValue"]>[0];
-    /**A validation message to show */
-    errorMessage?: Parameters<ElementInternals["setValidity"]>[1];
-    validityStateFlags?: ValidityStateFlags;
-    tabIndex?: number;
-    role?: AllAttributes["role"];
-  } & Partial<ARIAMixin>;
+export type ElementInternalsProps = {
+  /**Form controls usually expose a "value" property */
+  formValue?: Parameters<ElementInternals["setFormValue"]>[0];
+  /**A validation message to show */
+  errorMessage?: Parameters<ElementInternals["setValidity"]>[1];
+  validityStateFlags?: ValidityStateFlags;
+  tabIndex?: number;
+  role?: AllAttributes["role"];
+} & Partial<ARIAMixin>;
 
 /**
  * It allows to:

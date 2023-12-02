@@ -33,9 +33,9 @@ export class ProxiedArray<V>
   ): Node => {
     const el = asTag
       ? (create({
-        jsxTag: asTag,
-        attrs,
-      } as SingleJSXElement) as ParentNode)
+          jsxTag: asTag,
+          attrs,
+        } as SingleJSXElement) as ParentNode)
       : new VirtualFragment();
 
     const newTarget = new Target(el, renderItem, context);

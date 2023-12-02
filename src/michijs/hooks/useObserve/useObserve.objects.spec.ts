@@ -1,4 +1,8 @@
-import { AnyObject, ObservableType, PrimitiveObservableValue } from "../../types";
+import {
+  AnyObject,
+  ObservableType,
+  PrimitiveObservableValue,
+} from "../../types";
 import { useObserve } from "..";
 
 const exampleValue = 1;
