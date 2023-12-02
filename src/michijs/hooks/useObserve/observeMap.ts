@@ -42,7 +42,7 @@ export const observeMap = <E, T extends Map<any, E>>(
           );
         }
         case "set": {
-          return function (key, newValue) {
+          return (key, newValue) => {
             const hasOldValue = target.$value.has(key);
             if (hasOldValue) {
               const oldValue = target.$value.get(key);
