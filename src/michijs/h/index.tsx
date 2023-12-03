@@ -1,11 +1,9 @@
 import { Fragment } from "../components";
-import { Key } from "../types";
 
-function jsx(jsxTag, attrs: Record<string, unknown> = {}, key?: Key) {
+function jsx(jsxTag, attrs: Record<string, unknown> = {}) {
   return {
     jsxTag,
-    attrs,
-    key,
+    attrs
   };
 }
 

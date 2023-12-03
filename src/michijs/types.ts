@@ -35,12 +35,7 @@ type WritableKeys<T> = {
     P
   >;
 }[keyof T];
-type NonUndefined<A> = A extends undefined ? never : A;
-export type NonFunctionKeys<T extends object> = {
-  [K in keyof T]-?: NonUndefined<T[K]> extends Function ? never : K;
-}[keyof T];
 export type PickWritable<E> = Pick<E, WritableKeys<E>>;
-export type PickNonFunction<E extends object> = Pick<E, NonFunctionKeys<E>>;
 
 // export type LowerCaseCharacters = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z';
 export type UpperCaseCharacters =
@@ -176,7 +171,6 @@ export interface ObservableLike<T> {
 }
 export interface CompatibleObservableLike<T> {
   subscribe(observer: CompatibleSubscription<T>): void;
-  unsubscribe?(observer: CompatibleSubscription<T>): void;
 }
 
 export interface MichiProperties
@@ -198,9 +192,14 @@ export interface MichiProperties
     store: ObservableType<AttributesType>;
     alreadyRendered: boolean;
     shadowRoot?: ShadowRoot;
-    styles: HTMLStyleElement[];
+    styles: {
+      className?: string,
+      cssVariables?: CSSStyleSheet,
+      computedStyleSheet?: CSSStyleSheet
+    };
     idGen?: MappedIdGenerator["getId"];
     internals?: ElementInternals;
+    
   };
   render?(): JSX.Element;
   /**Allows to get a child element from the host with the selector */
@@ -359,23 +358,17 @@ export type DeepReadonly<T> = T extends (infer R)[]
   ? DeepReadonlyObject<T>
   : T;
 
-export type Key = number | string;
-
-
 export interface CommonJSXAttrs<T> {
   attrs: Record<string, any> & { children?: SingleJSXElement[] | SingleJSXElement };
   jsxTag: T;
 }
-export type FragmentJSXElement = CommonJSXAttrs<null | undefined>;
-export type IterableJSX = {
-  key: number | string;
-} & CommonJSXAttrs<Element>;
-export type ObjectJSXElement = CommonJSXAttrs<string>;
-export type DOMElementJSXElement = CommonJSXAttrs<ParentNode>;
-export type FunctionJSXElement = CommonJSXAttrs<FC<any>>;
-export type ClassJSXElement = CommonJSXAttrs<
+export interface FragmentJSXElement extends CommonJSXAttrs<null | undefined>{};
+export interface ObjectJSXElement extends CommonJSXAttrs<string>{};
+export interface DOMElementJSXElement extends CommonJSXAttrs<ParentNode>{};
+export interface FunctionJSXElement extends CommonJSXAttrs<FC<any>>{};
+export interface ClassJSXElement extends CommonJSXAttrs<
   (new (...args: any[]) => Element) & { tag: string; extends?: string }
->;
+>{};
 export type SingleJSXElement =
   | PrimitiveType
   | ObjectJSXElement
@@ -409,12 +402,6 @@ export interface FCC<T = {}, S extends Element = Element, C = CreateOptions<S>> 
 }
 
 export type PropertyKey = string | number | symbol;
-export interface ChangeFunction {
-  (propertyPath?: string): void;
-}
-export interface ValidatePropertyChangeFunction {
-  (propertyPath?: string): boolean;
-}
 
 export type CSSProperty =
   | CSSObject
@@ -575,6 +562,7 @@ export interface MichiElementClass<
   readonly tag: string;
   readonly extends?: string;
   readonly observedAttributes: Readonly<string[]>;
+  readonly elementOptions: O;
   formAssociated: boolean;
 }
 export interface Lifecycle {
@@ -636,19 +624,6 @@ export interface ElementFactory {
   ): ChildNode | ParentNode;
 }
 
-export interface CreateCustomElementStaticResult<
-  FRC extends Object,
-  FRA extends Object,
-  FOA extends boolean,
-  TA extends CustomElementTag,
-  EXTA extends ExtendableElements,
-> {
-  readonly tag: TA;
-  readonly extends?: EXTA;
-  readonly observedAttributes: Readonly<Array<keyof FRA & keyof FRC>>;
-  formAssociated: FOA;
-}
-
 export type GetElementProps<El> = El extends {
   new(arg: infer T): any;
 }
@@ -658,8 +633,6 @@ export type GetElementProps<El> = El extends {
   : El extends keyof JSX.IntrinsicElements
   ? JSX.IntrinsicElements[El]
   : never;
-
-export type EventListenerMap = Map<string, EventListener>;
 
 export interface CreateOptions<E extends Element = Element> {
   readonly isSVG?: boolean;

@@ -1,7 +1,6 @@
 import { createCustomElement } from "../customElements/createCustomElement";
 import { Fragment } from "../components/Fragment";
 import type {
-  FC,
   FragmentJSXElement,
   FunctionJSXElement,
   ObjectJSXElement,
@@ -45,34 +44,32 @@ const ClassJSXResult = {
 
 describe("jsx-runtime tests", () => {
   it("Fragment result", () => {
-    const fragment = jsx(Fragment, { children: undefined }, undefined);
+    const fragment = jsx(Fragment, { children: undefined });
     expect(fragment.jsxTag).toEqual(fragmentResult.jsxTag);
   });
   it("Object JSX result", () => {
     expect(
       jsx(
         objectJSXResult.jsxTag,
-        { ...testAttrs, children: testChild },
-        undefined,
+        { ...testAttrs, children: testChild }
       ),
     ).toEqual(objectJSXResult);
   });
   it("Function JSX result", () => {
     expect(
-      jsx(DivProxy, { ...testAttrs, children: testChild }, undefined),
+      jsx(DivProxy, { ...testAttrs, children: testChild }),
     ).toEqual(FunctionJSXResult);
   });
   it("Class JSX result", () => {
     expect(
-      jsx(TestCustomElement, { ...testAttrs, children: testChild }, undefined),
+      jsx(TestCustomElement, { ...testAttrs, children: testChild }),
     ).toEqual(ClassJSXResult);
   });
   it("Multiple children JSX result", () => {
     expect(
       jsx(
         objectJSXResult.jsxTag,
-        { ...testAttrs, children: [testChild, testChild] },
-        undefined,
+        { ...testAttrs, children: [testChild, testChild] }
       ),
     ).toEqual(objectJSXResultWithTwoChildren);
   });
