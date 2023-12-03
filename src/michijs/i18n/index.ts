@@ -9,7 +9,7 @@ export type Translation<K extends string, T> = {
 };
 export interface TranslationItem<K extends string, T> {
   translation: Translation<K, T>;
-  observable: ObservableType<T>;
+  observable: ObservableType<Partial<T>>;
 }
 
 export class I18n<K extends string> extends Observable<K> {
@@ -41,9 +41,9 @@ export class I18n<K extends string> extends Observable<K> {
     this.isUsingSystemLanguage = false;
   }
 
-  createTranslation<T>(translation: Translation<K, T>): ObservableType<T> {
+  createTranslation<T>(translation: Translation<K, T>): ObservableType<Partial<T>> {
     const currentTranslationPromise = this.getCurrentTranslation(translation);
-    const observable = useObserve<T>({} as T);
+    const observable = useObserve<Partial<T>>({});
     currentTranslationPromise.then((currentTranslation) => {
       setObservableValue(observable, currentTranslation);
     });

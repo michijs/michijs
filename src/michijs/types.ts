@@ -199,7 +199,7 @@ export interface MichiProperties
     };
     idGen?: MappedIdGenerator["getId"];
     internals?: ElementInternals;
-    
+
   };
   render?(): JSX.Element;
   /**Allows to get a child element from the host with the selector */
@@ -290,8 +290,10 @@ export type ConditionalKeys<Base, Condition> = NonNullable<
     [Key in keyof Base]:
     // Pick only keys with types extending the given `Condition` type.
     Base[Key] extends abstract new (...args: any) => any ?
-    (IsAny<Base[Key]> extends true ? never : areExactSame<InstanceType<Base[Key]>, Condition> extends true ? Key : never)
-    : never
+    (Condition extends { prototype: any } ?
+      (IsAny<Base[Key]> extends true ? never : areExactSame<InstanceType<Base[Key]>, Condition> extends true ? Key : never)
+      : never
+    ) : never
 
     // Convert the produced object into a union type of the keys which passed the conditional test.
   }[keyof Base]
@@ -362,13 +364,13 @@ export interface CommonJSXAttrs<T> {
   attrs: Record<string, any> & { children?: SingleJSXElement[] | SingleJSXElement };
   jsxTag: T;
 }
-export interface FragmentJSXElement extends CommonJSXAttrs<null | undefined>{};
-export interface ObjectJSXElement extends CommonJSXAttrs<string>{};
-export interface DOMElementJSXElement extends CommonJSXAttrs<ParentNode>{};
-export interface FunctionJSXElement extends CommonJSXAttrs<FC<any>>{};
+export interface FragmentJSXElement extends CommonJSXAttrs<null | undefined> { };
+export interface ObjectJSXElement extends CommonJSXAttrs<string> { };
+export interface DOMElementJSXElement extends CommonJSXAttrs<ParentNode> { };
+export interface FunctionJSXElement extends CommonJSXAttrs<FC<any>> { };
 export interface ClassJSXElement extends CommonJSXAttrs<
   (new (...args: any[]) => Element) & { tag: string; extends?: string }
->{};
+> { };
 export type SingleJSXElement =
   | PrimitiveType
   | ObjectJSXElement
