@@ -49,16 +49,13 @@ describe("jsx-runtime tests", () => {
   });
   it("Object JSX result", () => {
     expect(
-      jsx(
-        objectJSXResult.jsxTag,
-        { ...testAttrs, children: testChild }
-      ),
+      jsx(objectJSXResult.jsxTag, { ...testAttrs, children: testChild }),
     ).toEqual(objectJSXResult);
   });
   it("Function JSX result", () => {
-    expect(
-      jsx(DivProxy, { ...testAttrs, children: testChild }),
-    ).toEqual(FunctionJSXResult);
+    expect(jsx(DivProxy, { ...testAttrs, children: testChild })).toEqual(
+      FunctionJSXResult,
+    );
   });
   it("Class JSX result", () => {
     expect(
@@ -67,10 +64,10 @@ describe("jsx-runtime tests", () => {
   });
   it("Multiple children JSX result", () => {
     expect(
-      jsx(
-        objectJSXResult.jsxTag,
-        { ...testAttrs, children: [testChild, testChild] }
-      ),
+      jsx(objectJSXResult.jsxTag, {
+        ...testAttrs,
+        children: [testChild, testChild],
+      }),
     ).toEqual(objectJSXResultWithTwoChildren);
   });
 });
