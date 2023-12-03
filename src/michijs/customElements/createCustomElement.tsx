@@ -63,7 +63,8 @@ export function createCustomElement<
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
-    implements MichiCustomElement {
+    implements MichiCustomElement
+  {
     $michi: MichiCustomElement["$michi"] = {
       store: useObserve(storeInit),
       alreadyRendered: false,
@@ -91,7 +92,7 @@ export function createCustomElement<
       ) as unknown as T extends new () => any ? InstanceType<T> : T;
     }
     get idGen() {
-      this.$michi.idGen ??= new MappedIdGenerator().getId
+      this.$michi.idGen ??= new MappedIdGenerator().getId;
       return this.$michi.idGen;
     }
     addStylesheets(selector: string, target: DocumentOrShadowRoot) {
@@ -109,14 +110,20 @@ export function createCustomElement<
         ) as CSSObject;
         this.$michi.styles.cssVariables ??= useStyleSheet({
           [selector]: parsedCssVariables,
-        })
-        addStylesheetsToDocumentOrShadowRoot(target, this.$michi.styles.cssVariables);
+        });
+        addStylesheetsToDocumentOrShadowRoot(
+          target,
+          this.$michi.styles.cssVariables,
+        );
       }
       if (computedStyleSheet) {
         this.$michi.styles.computedStyleSheet ??= useStyleSheet({
           [selector]: computedStyleSheet.bind(this)(),
-        })
-        addStylesheetsToDocumentOrShadowRoot(target, this.$michi.styles.computedStyleSheet);
+        });
+        addStylesheetsToDocumentOrShadowRoot(
+          target,
+          this.$michi.styles.computedStyleSheet,
+        );
       }
       if (adoptedStyleSheets)
         addStylesheetsToDocumentOrShadowRoot(target, ...adoptedStyleSheets);
@@ -188,15 +195,17 @@ export function createCustomElement<
     }
 
     connectedCallback() {
-      if (!this.$michi.shadowRoot && (
-        cssVariables ||
-        reflectedCssVariables ||
-        computedStyleSheet ||
-        adoptedStyleSheets
-      )
+      if (
+        !this.$michi.shadowRoot &&
+        (cssVariables ||
+          reflectedCssVariables ||
+          computedStyleSheet ||
+          adoptedStyleSheets)
       ) {
         classesIdGenerator ??= new IdGenerator();
-        this.$michi.styles.className ??= `michijs-${classesIdGenerator.generateId(1)}`;
+        this.$michi.styles.className ??= `michijs-${classesIdGenerator.generateId(
+          1,
+        )}`;
         this.addStylesheets(
           `.${this.$michi.styles.className}`,
           this.getRootNode() as unknown as DocumentOrShadowRoot,
@@ -229,7 +238,7 @@ export function createCustomElement<
     // Identify the element as a form-associated custom element
     static formAssociated = formAssociated;
 
-    static elementOptions = elementOptions
+    static elementOptions = elementOptions;
 
     // Lifecycle
     formAssociatedCallback(form) {
