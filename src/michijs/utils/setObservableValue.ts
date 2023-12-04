@@ -29,7 +29,7 @@ export function setObservableValue<T extends object>(
     }
     case "object": {
       if (object1Value || object2Value) {
-        const castedObject1 = (object1 as ProxiedValue<unknown>);
+        const castedObject1 = object1 as ProxiedValue<unknown>;
         castedObject1.startTransaction();
         if (Array.isArray(object1Value)) {
           // TODO: check
@@ -40,7 +40,7 @@ export function setObservableValue<T extends object>(
             object1[key] = object2Value[key];
           }
         }
-        castedObject1.endTransaction()
+        castedObject1.endTransaction();
         return true;
         // TODO: add set / map etc
       } else {

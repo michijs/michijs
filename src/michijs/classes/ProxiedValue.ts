@@ -37,9 +37,8 @@ export class ProxiedValue<T>
     if (this.shouldNotify()) {
       if (this.$transactionInProgress)
         this.$triedToNotifyDuringTransaction = true;
-      else
-        this.notify(this.valueOf())
-    };
+      else this.notify(this.valueOf());
+    }
   }
 
   startTransaction() {
@@ -50,7 +49,7 @@ export class ProxiedValue<T>
     this.$transactionInProgress = false;
     if (this.$triedToNotifyDuringTransaction) {
       this.$triedToNotifyDuringTransaction = false;
-      this.notifyCurrentValue()
+      this.notifyCurrentValue();
     }
   }
 
