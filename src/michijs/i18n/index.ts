@@ -41,7 +41,9 @@ export class I18n<K extends string> extends Observable<K> {
     this.isUsingSystemLanguage = false;
   }
 
-  createTranslation<T>(translation: Translation<K, T>): ObservableType<Partial<T>> {
+  createTranslation<T>(
+    translation: Translation<K, T>,
+  ): ObservableType<Partial<T>> {
     const currentTranslationPromise = this.getCurrentTranslation(translation);
     const observable = useObserve<Partial<T>>({});
     currentTranslationPromise.then((currentTranslation) => {
