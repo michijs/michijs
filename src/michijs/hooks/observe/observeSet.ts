@@ -27,7 +27,7 @@ export const observeSet = <T extends Set<unknown>>(props: ObserveProps<T>) => {
           return customMapAndSetClear(props, target, bindedTargetProperty);
         }
         case "add": {
-          return function (newValue) {
+          return (newValue) => {
             const newPropertyPath = `${props.propertyPath}.${newValue}`;
             const notifyChange =
               props.shouldValidatePropertyChange(newPropertyPath) &&

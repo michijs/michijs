@@ -6,13 +6,10 @@ import {
 import { createCustomElement } from "./createCustomElement";
 
 export function customElement(tag: TemplateStringsArray) {
-  return function <
+  return <
     O extends MichiElementOptions,
     S extends HTMLElement = MichiElementSelf<O>,
-  >(elementOptions: O & ThisType<S>) {
-    return createCustomElement<O, S>(
-      tag[0] as CustomElementTag,
-      elementOptions,
-    );
-  };
+  >(
+    elementOptions: O & ThisType<S>,
+  ) => createCustomElement<O, S>(tag[0] as CustomElementTag, elementOptions);
 }

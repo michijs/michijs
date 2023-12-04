@@ -34,7 +34,7 @@ export const observeMap = <T extends Map<unknown, unknown>>(
           return customMapAndSetClear(props, target, bindedTargetProperty);
         }
         case "set": {
-          return function (key, newValue) {
+          return (key, newValue) => {
             const newPropertyPath = `${props.propertyPath}.${key}`;
             const notifyChange =
               props.shouldValidatePropertyChange(newPropertyPath) &&

@@ -8,7 +8,7 @@ export const customMapAndSetClear = (
   target: Map<any, any> | Set<any>,
   clearFn: Map<any, any>["clear"] | Set<any>["clear"],
 ): Map<any, any>["clear"] | Set<any>["clear"] => {
-  return function () {
+  return () => {
     const notifyChange = target.size !== 0;
     const result = clearFn();
     if (notifyChange) onChange(propertyPath); //TODO: Should send each index?
@@ -22,7 +22,7 @@ export const customMapAndSetDelete = (
   deleteFn: Map<any, any>["delete"] | Set<any>["delete"],
 ): Map<any, any>["delete"] | Set<any>["delete"] => {
   //In Map is key, in Set is value
-  return function (key) {
+  return (key) => {
     const newPropertyPath = `${propertyPath}.${key}`;
     const notifyChange =
       shouldValidatePropertyChange(newPropertyPath) && target.has(key);

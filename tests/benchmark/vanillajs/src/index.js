@@ -132,7 +132,7 @@ class Store {
   }
 }
 
-var getParentId = function (elem) {
+var getParentId = (elem) => {
   while (elem) {
     if (elem.tagName === "TR") {
       return elem.data_id;
@@ -190,14 +190,14 @@ class Main {
         this.swapRows();
       } else if (e.target.matches(".remove")) {
         e.preventDefault();
-        let id = getParentId(e.target);
-        let idx = this.findIdx(id);
+        const id = getParentId(e.target);
+        const idx = this.findIdx(id);
         //console.log("delete",idx);
         this.delete(idx);
       } else if (e.target.matches(".lbl")) {
         e.preventDefault();
-        let id = getParentId(e.target);
-        let idx = this.findIdx(id);
+        const id = getParentId(e.target);
+        const idx = this.findIdx(id);
         //console.log("select",idx);
         this.select(idx);
       }
@@ -243,8 +243,8 @@ class Main {
     this.selectedRow.className = "danger";
   }
   recreateSelection() {
-    let old_selection = this.store.selected;
-    let sel_idx = this.store.data.findIndex((d) => d.id === old_selection);
+    const old_selection = this.store.selected;
+    const sel_idx = this.store.data.findIndex((d) => d.id === old_selection);
     if (sel_idx >= 0) {
       this.store.select(this.data[sel_idx].id);
       this.selectedRow = this.rows[sel_idx];
@@ -311,7 +311,7 @@ class Main {
       this.tbody.insertBefore(this.rows[998], this.rows[2]);
       this.tbody.insertBefore(this.rows[1], this.rows[999]);
 
-      let tmp = this.rows[998];
+      const tmp = this.rows[998];
       this.rows[998] = this.rows[1];
       this.rows[1] = tmp;
     }
@@ -346,7 +346,7 @@ class Main {
       data = this.data,
       tbody = this.tbody;
     for (let i = rows.length; i < s_data.length; i++) {
-      let tr = this.createRow(s_data[i]);
+      const tr = this.createRow(s_data[i]);
       rows[i] = tr;
       data[i] = s_data[i];
       tbody.appendChild(tr);
