@@ -5,8 +5,8 @@ export function createElement<
   E extends T extends keyof HTMLElementTagNameMap
     ? HTMLElementTagNameMap[T]
     : T extends keyof SVGElementTagNameMap
-    ? SVGElementTagNameMap[T]
-    : HTMLElement,
+      ? SVGElementTagNameMap[T]
+      : HTMLElement,
 >(
   tagName: T,
   attributes?: JSX.IntrinsicElements[T],
