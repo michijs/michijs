@@ -5,6 +5,7 @@ import { compareAttributes } from "./compareAttributes";
 import { bindFunction } from "../../utils/bindFunction";
 import { bindObservable } from "../../utils";
 import type { CSSProperties } from "../../generated/htmlType";
+import { isMichiCustomElement } from "../../typeWards/isMichiCustomElement";
 
 export function setProperty(
   el: Element,
@@ -23,6 +24,12 @@ export function setProperty(
     el.addEventListener(eventName, bindedEvent);
   } else if (name === "style" && typeof newValue === "object")
     setStyle(el, newValue as CSSProperties);
+  if (name === "class" && isMichiCustomElement(el) && el.$michi.styles.className)
+    bindObservable(newValue, (newValue) => {
+      const newValueWithClassName = `${newValue} ${el.$michi.styles.className}`;
+      if (!compareAttributes(el, name, newValueWithClassName))
+        setAttribute(el, name, newValueWithClassName);
+    });
   else {
     bindObservable(newValue, (newValue) => {
       if (!compareAttributes(el, name, newValue))
