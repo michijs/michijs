@@ -83,18 +83,18 @@ export type SplitIncludingDelimiters<
 > = Source extends ""
   ? []
   : Source extends `${infer FirstPart}${Delimiter}${infer SecondPart}`
-  ? Source extends `${FirstPart}${infer UsedDelimiter}${SecondPart}`
-    ? UsedDelimiter extends Delimiter
-      ? Source extends `${infer FirstPart}${UsedDelimiter}${infer SecondPart}`
-        ? [
-            ...SplitIncludingDelimiters<FirstPart, Delimiter>,
-            UsedDelimiter,
-            ...SplitIncludingDelimiters<SecondPart, Delimiter>,
-          ]
+    ? Source extends `${FirstPart}${infer UsedDelimiter}${SecondPart}`
+      ? UsedDelimiter extends Delimiter
+        ? Source extends `${infer FirstPart}${UsedDelimiter}${infer SecondPart}`
+          ? [
+              ...SplitIncludingDelimiters<FirstPart, Delimiter>,
+              UsedDelimiter,
+              ...SplitIncludingDelimiters<SecondPart, Delimiter>,
+            ]
+          : never
         : never
       : never
-    : never
-  : [Source];
+    : [Source];
 
 type StringPartToDelimiterCase<
   StringPart extends string,
@@ -104,8 +104,8 @@ type StringPartToDelimiterCase<
 > = StringPart extends UsedWordSeparators
   ? Delimiter
   : StringPart extends UsedUpperCaseCharacters
-  ? `${Delimiter}${Lowercase<StringPart>}`
-  : StringPart;
+    ? `${Delimiter}${Lowercase<StringPart>}`
+    : StringPart;
 
 type StringArrayToDelimiterCase<
   Parts extends any[],
@@ -210,10 +210,10 @@ type DeepReadonlyObject<T> = {
 export type DeepReadonly<T> = T extends (infer R)[]
   ? DeepReadonlyArray<R>
   : T extends Function
-  ? T
-  : T extends object
-  ? DeepReadonlyObject<T>
-  : T;
+    ? T
+    : T extends object
+      ? DeepReadonlyObject<T>
+      : T;
 
 export type Key = number | string;
 
@@ -439,16 +439,13 @@ type MichiElementProps<
   O extends MichiElementOptions,
   S extends HTMLElement,
   Attrs = {
-    [k in
-      keyof O["reflectedAttributes"] as KebabCase<k>]: O["reflectedAttributes"][k];
+    [k in keyof O["reflectedAttributes"] as KebabCase<k>]: O["reflectedAttributes"][k];
   } & {
-    [k in
-      keyof O["reflectedCssVariables"] as KebabCase<k>]: O["reflectedCssVariables"][k];
+    [k in keyof O["reflectedCssVariables"] as KebabCase<k>]: O["reflectedCssVariables"][k];
   } & {
-    [k in
-      keyof O["events"] as k extends string
-        ? `on${Lowercase<k>}`
-        : never]?: O["events"][k] extends EventDispatcher<infer D>
+    [k in keyof O["events"] as k extends string
+      ? `on${Lowercase<k>}`
+      : never]?: O["events"][k] extends EventDispatcher<infer D>
       ? (ev: CustomEvent<D>) => unknown
       : never;
   } & { name: string } & GlobalEvents<S>,
@@ -567,10 +564,10 @@ export type GetElementProps<El extends any> = El extends {
 }
   ? T
   : El extends (...args: any) => any
-  ? Parameters<El>[0]
-  : El extends keyof JSX.IntrinsicElements
-  ? JSX.IntrinsicElements[El]
-  : never;
+    ? Parameters<El>[0]
+    : El extends keyof JSX.IntrinsicElements
+      ? JSX.IntrinsicElements[El]
+      : never;
 
 export type EventListenerMap = Map<string, EventListener>;
 
