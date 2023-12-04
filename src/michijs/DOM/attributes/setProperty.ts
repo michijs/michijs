@@ -24,7 +24,11 @@ export function setProperty(
     el.addEventListener(eventName, bindedEvent);
   } else if (name === "style" && typeof newValue === "object")
     setStyle(el, newValue as CSSProperties);
-  if (name === "class" && isMichiCustomElement(el) && el.$michi.styles.className)
+  if (
+    name === "class" &&
+    isMichiCustomElement(el) &&
+    el.$michi.styles.className
+  )
     bindObservable(newValue, (newValue) => {
       const newValueWithClassName = `${newValue} ${el.$michi.styles.className}`;
       if (!compareAttributes(el, name, newValueWithClassName))
