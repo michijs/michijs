@@ -63,8 +63,7 @@ export function createCustomElement<
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
-    implements MichiCustomElement
-  {
+    implements MichiCustomElement {
     $michi: MichiCustomElement["$michi"] = {
       store: useObserve(storeInit),
       alreadyRendered: false,
@@ -214,8 +213,8 @@ export function createCustomElement<
           this.classList.add(this.$michi.styles.className);
       }
       this.connected?.();
-      setReflectedAttributes(this, MichiCustomElementResult.observedAttributes);
       if (!this.$michi.alreadyRendered) {
+        setReflectedAttributes(this, MichiCustomElementResult.observedAttributes);
         this.willMount?.();
         if (this.render) {
           const newChildren = create(this.render(), {

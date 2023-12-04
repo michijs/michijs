@@ -1,4 +1,4 @@
-import { useObserve } from "../..";
+import { ProxiedValue, useObserve } from "../..";
 import { Subscription } from "../types";
 
 // <T extends ObservableType<any>>
@@ -29,6 +29,8 @@ export function setObservableValue<T extends object>(
     }
     case "object": {
       if (object1Value || object2Value) {
+        const castedObject1 = (object1 as ProxiedValue<unknown>);
+        castedObject1.startTransaction();
         if (Array.isArray(object1Value)) {
           // TODO: check
           (object2Value as unknown as []).length = object2Value.length;
@@ -38,6 +40,7 @@ export function setObservableValue<T extends object>(
             object1[key] = object2Value[key];
           }
         }
+        castedObject1.endTransaction()
         return true;
         // TODO: add set / map etc
       } else {

@@ -13,6 +13,8 @@ export class ProxiedValue<T>
   implements ProxiedValueInterface<T, T>
 {
   private $privateValue: T;
+  private $transactionInProgress = false;
+  private $triedToNotifyDuringTransaction = false;
 
   constructor(initialValue?: T, initialObservers?: Subscription<T>[]) {
     super(initialObservers);
@@ -20,7 +22,7 @@ export class ProxiedValue<T>
   }
 
   set $value(newValue: T) {
-    if (this.shouldCheckForChanges()) {
+    if (this.shouldNotify()) {
       if (!deepEqual(newValue, this.$privateValue)) {
         this.$privateValue = newValue;
         this.notifyCurrentValue();
@@ -32,7 +34,24 @@ export class ProxiedValue<T>
   }
 
   notifyCurrentValue() {
-    if (this.shouldCheckForChanges()) this.notify(this.valueOf());
+    if (this.shouldNotify()) {
+      if (this.$transactionInProgress)
+        this.$triedToNotifyDuringTransaction = true;
+      else
+        this.notify(this.valueOf())
+    };
+  }
+
+  startTransaction() {
+    this.$transactionInProgress = true;
+  }
+
+  endTransaction() {
+    this.$transactionInProgress = false;
+    if (this.$triedToNotifyDuringTransaction) {
+      this.$triedToNotifyDuringTransaction = false;
+      this.notifyCurrentValue()
+    }
   }
 
   // @ts-ignore
@@ -80,7 +99,7 @@ export class ProxiedValue<T>
     return this.valueOf();
   }
 
-  shouldCheckForChanges() {
+  shouldNotify() {
     return !!this.observers;
   }
 

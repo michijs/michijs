@@ -111,9 +111,7 @@ export function observeCommonObject<T>(
 ): ObservableType<T> {
   const newInitialObservers = [
     ...initialObservers,
-    () => {
-      newObservable.notifyCurrentValue();
-    },
+    () => newObservable.notifyCurrentValue(),
   ];
   const newObservable = new ProxiedValue<T>(
     item && Object.getPrototypeOf(item) === Object.prototype

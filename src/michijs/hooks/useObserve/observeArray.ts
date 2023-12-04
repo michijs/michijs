@@ -25,9 +25,7 @@ export function observeArray<T extends Array<unknown>>(
 ) {
   const newInitialObservers = [
     ...initialObservers,
-    () => {
-      newObservable.notifyCurrentValue();
-    },
+    () => newObservable.notifyCurrentValue(),
   ];
   const proxiedArray = cloneArray(item, (value) =>
     useObserve<any>(value, newInitialObservers),

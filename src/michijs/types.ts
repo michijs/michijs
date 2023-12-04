@@ -256,7 +256,7 @@ export interface ProxiedValueInterface<RV, SV> extends ObservableLike<SV> {
   toBoolean(): boolean;
   toString(): string;
   not(): boolean;
-  shouldCheckForChanges(): boolean;
+  shouldNotify(): boolean;
   is(anotherValue: unknown): boolean;
   typeof(): Typeof;
   unproxify(): RV;

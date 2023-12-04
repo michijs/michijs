@@ -6,7 +6,7 @@ export const customMapAndSetClear = (
   clearFn: Map<any, any>["clear"] | Set<any>["clear"],
 ): Map<any, any>["clear"] | Set<any>["clear"] => {
   return () => {
-    if (target.shouldCheckForChanges()) {
+    if (target.shouldNotify()) {
       if (target.$value.size !== 0) {
         clearFn();
         target.notifyCurrentValue();
