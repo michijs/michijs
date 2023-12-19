@@ -1,9 +1,10 @@
-import { useComputedObserve, useObserve } from ".";
+import { useObserve } from ".";
 import { setObservableValue } from "../utils";
+import { useWatch, useWatchDeps } from "./useWatch";
 
 export function useAsyncComputedObserve<T>(
   callback: () => Promise<T>,
-  deps: Parameters<typeof useComputedObserve<T>>[1],
+  deps: useWatchDeps,
   initialValue: T,
 ) {
   const newObservable = useObserve(initialValue);
@@ -15,6 +16,7 @@ export function useAsyncComputedObserve<T>(
   };
   listener();
 
-  deps.forEach((x) => x.subscribe?.(listener));
+  useWatch(listener, deps)
+  
   return newObservable;
 }

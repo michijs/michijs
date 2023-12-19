@@ -10,13 +10,13 @@ if (styles.replaceSync) styles.replaceSync(":host{display: none}");
 export const GenericElement = createCustomElement("michi-generic-element", {
   lifecycle: {
     connected() {
-      this.connected(true);
+      this.elementConnected(this);
     },
   },
-  adoptedStyleSheets: [styles],
+  adoptedStyleSheets: { styles },
   // Brokes unit tests
   // adoptedStyleSheets: [useStyleSheet({ ':host': { display: 'none' } })],
   events: {
-    connected: new EventDispatcher<boolean>(),
+    elementConnected: new EventDispatcher<HTMLElement>(),
   },
 });

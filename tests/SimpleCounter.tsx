@@ -16,7 +16,7 @@ export const SimpleCounter = createCustomElement("simple-counter", {
   events: {
     countChanged: new EventDispatcher<number>(),
   },
-  adoptedStyleSheets: [counterStyle],
+  adoptedStyleSheets: { counterStyle },
   render() {
     this.count.subscribe(this.countChanged);
     return (

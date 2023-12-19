@@ -13,7 +13,7 @@ export interface RedirectProps {
  **/
 export const Redirect = createFunctionalComponent<RedirectProps>(({ to }) => (
   <GenericElement
-    onconnected={async () => {
+    onelementconnected={async () => {
       const toValue = unproxify(to);
       await wait(0);
       HistoryManager.push(typeof toValue === "function" ? toValue() : toValue);

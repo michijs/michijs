@@ -36,7 +36,7 @@ export function observeArray<T extends Array<unknown>>(
     set: customObjectSet(newInitialObservers),
     deleteProperty: customObjectDelete,
     ownKeys: customObjectOwnKeys,
-    apply: customObjectApply(newInitialObservers),
+    apply: customObjectApply(() => proxy, newInitialObservers),
     getOwnPropertyDescriptor(target, prop) {
       return prop !== "length"
         ? customObjectGetOwnPropertyDescriptor(target, prop)

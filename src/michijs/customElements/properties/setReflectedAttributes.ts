@@ -5,7 +5,8 @@ export function setReflectedAttributes(
   self: MichiCustomElement,
   observedAttributes: string[],
 ) {
-  observedAttributes.forEach((formattedPropertyKey) =>
-    setAttribute(self, formattedPropertyKey, self[formattedPropertyKey]),
-  );
+  observedAttributes.forEach((formattedPropertyKey) => {
+    if (!self.hasAttribute(formattedPropertyKey))
+      setAttribute(self, formattedPropertyKey, self[formattedPropertyKey])
+  });
 }

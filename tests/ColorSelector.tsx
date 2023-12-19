@@ -26,7 +26,7 @@ export const ColorSelector = createCustomElement("color-selector", {
       ),
     };
   },
-  adoptedStyleSheets: [style],
+  adoptedStyleSheets: { style },
   render() {
     return (
       <span>

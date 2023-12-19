@@ -18,7 +18,7 @@ export const BuiltInButton = createCustomElement("built-in-button", {
       margin: useComputedObserve(() => `${this.counter}px`, [this.counter]),
     };
   },
-  adoptedStyleSheets: [buttonStyle],
+  adoptedStyleSheets: { buttonStyle },
   render() {
     return (
       <Host onpointerup={() => this.counter(this.counter() + 1)}>

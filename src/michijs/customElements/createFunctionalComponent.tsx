@@ -1,13 +1,13 @@
 import { useObserve } from "../hooks";
 import { isObservableType } from "../typeWards/isObservableType";
-import { AnyObject, CreateOptions, FC, ObservableProps } from "../types";
+import { AnyObject, CreateOptions, FC, ObservableOrConst } from "../types";
 import { unproxify } from "../utils";
 
 export function createFunctionalComponent<
   T extends AnyObject,
   S extends Element = Element,
   C = CreateOptions<S>,
->(callback: FC<T, S, C>): (props: ObservableProps<T>) => JSX.Element {
+>(callback: FC<T, S, C>): (props: ObservableOrConst<T>) => JSX.Element {
   return ((props) => {
     const newProps = Object.entries(props).reduce(
       (previousValue, [key, value]) => {
@@ -21,5 +21,5 @@ export function createFunctionalComponent<
       {},
     );
     return callback(newProps as any);
-  }) as (props: ObservableProps<T>) => JSX.Element;
+  }) ;
 }

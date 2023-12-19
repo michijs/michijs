@@ -1,15 +1,27 @@
+import { createFunctionalComponent } from "../customElements";
+import { bindObservable } from "../utils";
 import { GenericElement } from "./GenericElement";
 
 export interface TitleProps {
-  children: string;
+  children: string | undefined;
 }
 /**
  * Title component for dynamically updating the document's title.
  */
-export const Title = ({ children }: TitleProps) => (
-  <GenericElement
-    onconnected={async () => {
-      if (children) document.title = children;
-    }}
-  />
-);
+export const Title = createFunctionalComponent<TitleProps>(({ children }) => {
+  let el: HTMLElement | undefined = undefined;
+  const updateTitleCallback = (newValue?: string) => {
+    if (el?.isConnected && newValue)
+      document.title = newValue
+  }
+
+  // bindObservable(children, updateTitleCallback)
+  return (
+    <GenericElement
+      onelementconnected={async (elEvent) => {
+        el = elEvent.detail;
+        updateTitleCallback(children)
+      }}
+    />
+  )
+})

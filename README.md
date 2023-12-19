@@ -51,30 +51,33 @@ New components can be created using the `jsx/tsx` extension, such as `MyCounter.
 import { createCustomElement, EventDispatcher } from "@michijs/michijs";
 import { counterStyle } from "./counterStyle";
 
-export const MyCounter = createCustomElement('my-counter', {
+export const SimpleCounter = createCustomElement("simple-counter", {
   reflectedAttributes: {
-    count: 0
+    count: 0,
   },
   methods: {
-    decrementCount() { this.count-- },
-    incrementCount() { this.count++ },
+    decrementCount() {
+      this.count(this.count() - 1);
+    },
+    incrementCount() {
+      this.count(this.count() + 1);
+    },
   },
   events: {
-    countChanged: new EventDispatcher<number>()
+    countChanged: new EventDispatcher<number>(),
   },
-  adoptedStyleSheets: [counterStyle],
+  adoptedStyleSheets: { counterStyle },
   render() {
-    this.count.subscribe(this.countChanged)
-
+    this.count.subscribe(this.countChanged);
     return (
       <>
         <button onpointerup={this.decrementCount}>-</button>
         <span>{this.count}</span>
         <button onpointerup={this.incrementCount}>+</button>
       </>
-    )
-  }
-})
+    );
+  },
+});
 ```
 
 Note: the `.tsx` extension is required, as this is the standard for TypeScript classes that use JSX.

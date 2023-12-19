@@ -37,7 +37,7 @@ export const IndexedDBCounter = createCustomElement("indexed-db-counter", {
   events: {
     countChanged: new EventDispatcher<number>(),
   },
-  adoptedStyleSheets: [counterStyle],
+  adoptedStyleSheets: { counterStyle },
   render() {
     count.subscribe(this.countChanged);
 

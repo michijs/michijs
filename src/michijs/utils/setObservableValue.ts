@@ -14,7 +14,8 @@ export function setObservableValue<T extends object>(
     return true;
 
   const type = typeof object1Value;
-  const areDifferentTypes = type !== typeof object2Value;
+  const typeObject2 = typeof object2Value;
+  const areDifferentTypes = type !== typeObject2;
   if (areDifferentTypes) {
     return Reflect.set(
       object1,

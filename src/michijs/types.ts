@@ -6,19 +6,19 @@ import type {
 import type { EventDispatcher, MappedIdGenerator } from "./classes";
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
-export type CSSVar<T extends string> = KebabCase<T> & {
-  var<V extends undefined | string | number = undefined>(
+export interface CSSVar<T extends string> {
+  <V extends undefined | string | number = undefined>(
     defaultValue?: V,
   ): `var(${KebabCase<T>}${V extends undefined ? "" : `,${V}`})`;
 };
 export type CssDeclaration<
   T extends object | unknown,
   PK extends string = "-",
-> = T extends object
-  ? {
+> = IsAny<T> extends true
+  ? any
+  : T extends object ? {
     [k in StringKeyOf<T>]: CssDeclaration<T[k], `${PK}-${k}`>;
-  }
-  : CSSVar<PK>;
+  } & CSSVar<PK> & string : CSSVar<PK> & string;
 type IfEquals<X, Y, A = X, B = never> = (<T>() => T extends X ? 1 : 2) extends <
   T,
 >() => T extends Y ? 1 : 2
@@ -137,9 +137,17 @@ export type DelimiterCase<
   >
   : Value;
 
-export interface MichiAttributes<E> {
+export interface MichiAttributes<E, A extends AttributesType = {}> {
   children?: JSX.Element;
-  _?: Partial<PickWritable<E>>;
+  _?:
+  (
+    {
+      [k in Exclude<WritableKeys<E>, keyof A>]?: E[k]
+    }
+    | {
+      [k in keyof A]?: ObservableOrConst<A[k]>
+    }
+  );
 }
 
 export type KebabCase<Value> = DelimiterCase<Value, "-">;
@@ -154,23 +162,23 @@ export type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>;
 export interface Subscription<T> {
   (signal: T): void;
 }
-export interface CompatibleSubscription<T> {
+export interface CompatibleSubscription {
   // its optional to keep compatibility with others observers like redux
-  (signal?: T): void;
+  (): void;
 }
 
-export type ObservableProps<T> = [T] extends [object] ? {
-  [k in keyof T]: ObservableProps<T[k]>
+export type ObservableOrConst<T> = [T] extends [object] ? {
+  [k in keyof T]: ObservableOrConst<T[k]>
 } | T : ObservableLike<T> | T
-export type ObservablePropsWithChildren<T, C = JSX.Element> = ObservableProps<T> & {
+export type ObservableOrConstWithChildren<T, C = JSX.Element> = ObservableOrConst<T> & {
   children?: C;
 }
 export interface ObservableLike<T> {
   subscribe(observer: Subscription<T>): void;
   unsubscribe(observer: Subscription<T>): void;
 }
-export interface CompatibleObservableLike<T> {
-  subscribe(observer: CompatibleSubscription<T>): void;
+export interface CompatibleObservableLike {
+  subscribe(observer: CompatibleSubscription): void;
 }
 
 export interface MichiProperties
@@ -277,33 +285,21 @@ export interface PrimitiveObservableValue<RV> extends ObservableValue<RV, RV> {
 
 type GetPrimitiveTypeClass<T> = T extends boolean ? Boolean : T extends number ? Number : T extends string ? String : T extends bigint ? BigInt : T extends symbol ? Symbol : {};
 
-type isInWindow<V> = ConditionalKeys<typeof window, V> extends never ? false : true;
+type ExtendsObject<V extends object> = (
+  V extends { prototype: any } ? false :
+  V extends new (...args: any) => any ? (
+    InstanceType<V> extends { prototype: any } ? false : true
+  ) : V extends Element ? false: true);
 
 export type IsAny<T> = 0 extends 1 & T ? true : false;
 
-type areExactSame<A, B> = A extends B ? (B extends A ? true : false) : false
-
-export type ConditionalKeys<Base, Condition> = NonNullable<
-  // Wrap in `NonNullable` to strip away the `undefined` type from the produced union.
-  {
-    // Map through all the keys of the given base type.
-    [Key in keyof Base]:
-    // Pick only keys with types extending the given `Condition` type.
-    Base[Key] extends abstract new (...args: any) => any ?
-    (Condition extends { prototype: any } ?
-      (IsAny<Base[Key]> extends true ? never : areExactSame<InstanceType<Base[Key]>, Condition> extends true ? Key : never)
-      : never
-    ) : never
-
-    // Convert the produced object into a union type of the keys which passed the conditional test.
-  }[keyof Base]
->;
-
 // Needs to be partial to allow asignation operation
-export type ObservableType<T> = [T] extends ObservableLike<unknown> ? [T] :
-  [T] extends [Function] ? T & { notifyCurrentValue: undefined } :
-  [T] extends [Array<infer V>]
+export type ObservableType<T> = IsAny<T> extends true ? any :
+  [T] extends ObservableLike<unknown> ? [T]
+  : [T] extends [Array<infer V>]
   ? ObservableArray<V>
+  : [T] extends [Function]
+  ? PrimitiveObservableValue<T> & T
   : [T] extends [Map<infer K, infer V>]
   ? ObservableMap<K, V>
   : [T] extends [Set<infer V>]
@@ -311,10 +307,15 @@ export type ObservableType<T> = [T] extends ObservableLike<unknown> ? [T] :
   : [T] extends [Date]
   ? PrimitiveObservableValue<T> & Date
   : [T] extends [object]
-  ? isInWindow<T> extends true ? PrimitiveObservableValue<T> & T : ObservableObject<T>
+  ? ExtendsObject<T> extends true ? ObservableObject<T> : PrimitiveObservableValue<T> & T
   : (PrimitiveObservableValue<T> & GetPrimitiveTypeClass<T>);
 
-export type Unproxify<T> = T extends ObservableLike<infer Y> ? Y : T
+export type Unproxify<T> = IsAny<T> extends true ? any
+  : (
+    T extends ObservableLike<infer Y> ?
+    ([Y] extends [object] ? { [k in keyof Y]: Unproxify<Y[k]> } : Y)
+    : T
+  )
 
 export type ObservableObject<RV, SV = {
   [K in keyof RV]: ObservableType<RV[K]>;
@@ -450,7 +451,7 @@ export type CustomElementEvents<E extends EventsType | undefined> = Readonly<{
   : any;
 }>;
 
-export interface ExtendsObject<T extends ExtendableElements = "div"> {
+export interface ExtendsType<T extends ExtendableElements = "div"> {
   /**The tag to extend */
   tag: T;
   /**The class you want to extend */
@@ -498,7 +499,7 @@ export interface MichiElementOptions {
    * Remember that you need to use Shadow DOM to be able to use Constructable Stylesheets. In case your component doesn't support this feature, it will return a style tag.
    * @link https://developers.google.com/web/updates/2019/02/constructable-stylesheets
    */
-  adoptedStyleSheets?: CSSStyleSheet[];
+  adoptedStyleSheets?: Record<string, CSSStyleSheet | ((tag: string) => CSSStyleSheet)>;
   /**
    * Allows you to add a Shadow DOM. By default, it uses open mode on Autonomous Custom elements and does not use Shadow DOM on Customized built-in elements. Only the following elements are allowed to use Shadow DOM.
    * @link https://dom.spec.whatwg.org/#dom-element-attachshadow
@@ -513,12 +514,12 @@ export interface MichiElementOptions {
   // (FOA extends true ? LifecycleInternals : {});
 
   /**Allows to create a Customized built-in element */
-  extends?: ExtendsObject<ExtendableElements>;
+  extends?: ExtendsType<ExtendableElements>;
 }
 
 export type ExtendsAttributes<
-  O extends ExtendsObject<ExtendableElements> | undefined,
-> = O extends ExtendsObject<infer T> ? HTMLElements[T] : HTMLElements["div"];
+  O extends ExtendsType<ExtendableElements> | undefined,
+> = O extends ExtendsType<infer T> ? HTMLElements[T] : HTMLElements["div"];
 
 export type MichiElementSelf<O extends MichiElementOptions> = ObservableType<O["attributes"] &
   O["reflectedAttributes"] &
@@ -540,10 +541,10 @@ type MichiElementProps<
   S extends HTMLElement,
   Attrs = {
     [k in
-    keyof O["reflectedAttributes"]as KebabCase<k>]?: ObservableProps<O["reflectedAttributes"][k]>;
+    keyof O["reflectedAttributes"]as KebabCase<k>]?: ObservableOrConst<O["reflectedAttributes"][k]>;
   } & {
     [k in
-    keyof O["reflectedCssVariables"]as KebabCase<k>]?: ObservableProps<O["reflectedCssVariables"][k]>;
+    keyof O["reflectedCssVariables"]as KebabCase<k>]?: ObservableOrConst<O["reflectedCssVariables"][k]>;
   } & {
     [k in
     keyof O["events"]as k extends string
@@ -552,7 +553,7 @@ type MichiElementProps<
     ? (ev: CustomEvent<D>) => unknown
     : never;
   } & { name?: string } & GlobalEvents<S>,
-> = MichiAttributes<S> &
+> = MichiAttributes<S, O["attributes"] & {}> &
   Omit<ExtendsAttributes<O["extends"]>, keyof Attrs> &
   Attrs;
 
@@ -565,6 +566,8 @@ export interface MichiElementClass<
   readonly extends?: string;
   readonly observedAttributes: Readonly<string[]>;
   readonly elementOptions: O;
+  readonly cssSelector: string;
+  readonly internalCssSelector: string;
   formAssociated: boolean;
 }
 export interface Lifecycle {

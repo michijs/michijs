@@ -1,4 +1,4 @@
-import { ObservableProps, Subscription } from "../types";
+import { ObservableOrConst, Subscription } from "../types";
 import { unproxify } from "../utils";
 import { Observable } from "./Observable";
 
@@ -10,7 +10,7 @@ class HistoryManagerSingleton extends Observable<string | URL> {
     window.addEventListener("popstate", () => this.notify(location.href));
   }
 
-  back(fallbackUrl: ObservableProps<string | URL>) {
+  back(fallbackUrl: ObservableOrConst<string | URL>) {
     if (this.history.length > 0) {
       history.back();
       const url = this.history.pop();
@@ -19,7 +19,7 @@ class HistoryManagerSingleton extends Observable<string | URL> {
     } else return this.replaceCurrentUrl(fallbackUrl);
   }
 
-  replaceCurrentUrl(url: ObservableProps<string | URL>) {
+  replaceCurrentUrl(url: ObservableOrConst<string | URL>) {
     const urlValue = unproxify(url);
     try {
       // This will trigger an exception if its an external link string
@@ -36,7 +36,7 @@ class HistoryManagerSingleton extends Observable<string | URL> {
     this.notify(urlValue);
   }
 
-  push(url: ObservableProps<string | URL>) {
+  push(url: ObservableOrConst<string | URL>) {
     const urlValue = unproxify(url);
     try {
       // This will trigger an exception if its an string
@@ -53,11 +53,12 @@ class HistoryManagerSingleton extends Observable<string | URL> {
     this.notify(urlValue);
   }
 
-  matches(url: ObservableProps<string>, flexible = false) {
+  matches(url: ObservableOrConst<string>, flexible = false) {
     const urlValue = unproxify(url);
     if (window.URLPattern) {
+
       const p = new window.URLPattern({
-        pathname: `${urlValue}*`,
+        pathname: `${urlValue.endsWith('/') ? urlValue.slice(-1, 1) : urlValue}*`,
         baseURL: location.origin,
         search: "*",
         hash: "*",

@@ -4,7 +4,7 @@ import { useCssVariables } from "./useCssVariables";
 const [cssVariables, defaultValues] = useCssVariables({ test: "green" });
 const stylesheet = useStringTemplate`div{${cssVariables.test}:${
   defaultValues.test
-};background:${cssVariables.test.var()}}`;
+};background:${cssVariables.test()}}`;
 
 const expectedResult = "div{--test:green;background:var(--test)}";
 

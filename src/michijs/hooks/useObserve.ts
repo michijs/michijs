@@ -35,8 +35,7 @@ export function useObserve<T>(
           initialObservers,
         ) as unknown as ObservableType<T>;
       // console.error(`The object with path "${props.propertyPath}" cannot be observed ${item}`)
-    } else if (typeofItem === "function")
-      return item as unknown as ObservableType<T>;
+    }
   }
   return observeCommonObject<T>(
     item as T,

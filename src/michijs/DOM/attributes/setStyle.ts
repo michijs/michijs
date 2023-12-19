@@ -7,9 +7,6 @@ export function setStyle(
   element: Element | HTMLElement,
   cssObject: CSSProperties,
 ) {
-  // if (supportsAdoptingStyleSheets && self) {
-  //   AdoptedStyle({ id: self.id }, [createStyleSheet(cssObject, [`#${id}`])], self);
-  // } else {
   if (cssObject && "style" in element) {
     Object.entries(cssObject).forEach(([key, value]) => {
       const formattedKey = formatToKebabCase(key);
@@ -19,9 +16,4 @@ export function setStyle(
       );
     });
   }
-  // TODO: check if its possible
-  // else {
-  //   setAttribute(element, "style", cssObject);
-  // }
-  // }
 }

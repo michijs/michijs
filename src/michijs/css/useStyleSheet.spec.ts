@@ -5,7 +5,7 @@ const [cssVariables, defaultValues] = useCssVariables({ test: "green" });
 const stylesheet = cssObjectToText({
   div: {
     [cssVariables.test]: defaultValues.test,
-    backgroundColor: cssVariables.test.var(),
+    backgroundColor: cssVariables.test(),
     ":not([test-attribute])": {
       color: "red",
     },

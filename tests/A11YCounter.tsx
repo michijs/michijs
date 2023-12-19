@@ -43,7 +43,7 @@ export const A11YCounter = createCustomElement("a11y-counter", {
   events: {
     countChanged: new EventDispatcher<number>(),
   },
-  adoptedStyleSheets: [counterStyle],
+  adoptedStyleSheets: { counterStyle },
   render() {
     this.value.subscribe(this.countChanged);
     this.count.subscribe(() => (this.value = this.count));

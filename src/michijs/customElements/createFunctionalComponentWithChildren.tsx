@@ -1,7 +1,7 @@
 import {
   CreateOptions,
   FCC,
-  ObservablePropsWithChildren,
+  ObservableOrConstWithChildren,
   AnyObject,
 } from "../types";
 import { createFunctionalComponent } from "./createFunctionalComponent";
@@ -12,6 +12,6 @@ export function createFunctionalComponentWithChildren<
   C = CreateOptions<S>,
 >(
   callback: FCC<T, S, C>,
-): (props: ObservablePropsWithChildren<T>) => JSX.Element {
+): (props: ObservableOrConstWithChildren<T>) => JSX.Element {
   return createFunctionalComponent(callback);
 }

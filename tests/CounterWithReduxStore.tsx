@@ -21,7 +21,7 @@ export const CounterWithReduxStore = createCustomElement(
     events: {
       countChanged: new EventDispatcher<number>(),
     },
-    adoptedStyleSheets: [counterStyle],
+    adoptedStyleSheets: { counterStyle },
     render() {
       const count = useComputedObserve(
         () => store.getState().counterStore.count,

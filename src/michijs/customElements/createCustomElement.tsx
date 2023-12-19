@@ -12,7 +12,6 @@ import type {
 import {
   formatToKebabCase,
   addStylesheetsToDocumentOrShadowRoot,
-  deepEqual,
 } from "../utils";
 import { defineEvent } from "./properties/defineEvent";
 import { definePropertyFromObservable } from "./properties/definePropertyFromObservable";
@@ -63,8 +62,7 @@ export function createCustomElement<
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
-    implements MichiCustomElement
-  {
+    implements MichiCustomElement {
     $michi: MichiCustomElement["$michi"] = {
       store: useObserve(storeInit),
       alreadyRendered: false,
@@ -126,7 +124,7 @@ export function createCustomElement<
         );
       }
       if (adoptedStyleSheets)
-        addStylesheetsToDocumentOrShadowRoot(target, ...adoptedStyleSheets);
+        addStylesheetsToDocumentOrShadowRoot(target, ...Object.values(adoptedStyleSheets).map(x => typeof x === 'function' ? x(MichiCustomElementResult.cssSelector): x));
     }
     constructor() {
       super();
@@ -163,21 +161,10 @@ export function createCustomElement<
     }
 
     attributeChangedCallback(name: string, oldValue, newValue) {
-      if (newValue != oldValue) {
+      if (newValue !== oldValue) {
         const parsedNewValue = getAttributeValue(newValue);
         this.willReceiveAttribute?.(name, parsedNewValue, this[name]);
-        let oldValueCopy;
-        try {
-          oldValueCopy = JSON.parse(JSON.stringify(this[name]));
-        } catch {
-          oldValueCopy = this[name];
-        }
-        if (
-          parsedNewValue != oldValueCopy &&
-          !deepEqual(oldValueCopy, parsedNewValue)
-        )
-          //Prevents type changes - ex: changing from oldValue="text" to newValue=123 on reflected attributes
-          this[name] = parsedNewValue;
+        this[name](parsedNewValue)
       }
     }
 
@@ -202,16 +189,20 @@ export function createCustomElement<
           computedStyleSheet ||
           adoptedStyleSheets)
       ) {
-        classesIdGenerator ??= new IdGenerator();
-        this.$michi.styles.className ??= `michijs-${classesIdGenerator.generateId(
-          1,
-        )}`;
+        if (cssVariables ||
+          reflectedCssVariables ||
+          computedStyleSheet) {
+          classesIdGenerator ??= new IdGenerator();
+          this.$michi.styles.className ??= `michijs-${classesIdGenerator.generateId(
+            1,
+          )}`;
+          if (!this.classList.contains(this.$michi.styles.className))
+            this.classList.add(this.$michi.styles.className);
+        }
         this.addStylesheets(
           `.${this.$michi.styles.className}`,
           this.getRootNode() as unknown as DocumentOrShadowRoot,
         );
-        if (!this.classList.contains(this.$michi.styles.className))
-          this.classList.add(this.$michi.styles.className);
       }
       this.connected?.();
       if (!this.$michi.alreadyRendered) {
@@ -242,6 +233,8 @@ export function createCustomElement<
     static formAssociated = formAssociated;
 
     static elementOptions = elementOptions;
+    static cssSelector = elementOptions?.extends ? `${elementOptions.extends.tag}[is="${tag}"]`: tag;
+    static internalCssSelector = elementOptions?.extends ? this.cssSelector: ':host';
 
     // Lifecycle
     formAssociatedCallback(form) {

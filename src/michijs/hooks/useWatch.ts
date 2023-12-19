@@ -1,10 +1,8 @@
-import { CompatibleObservableLike } from "../types";
-
-export type useWatchDeps = CompatibleObservableLike<any>[];
+export type useWatchDeps = any[];
 
 export function useWatch<T>(
   callback: () => T,
-  deps: Partial<CompatibleObservableLike<any>>[],
+  deps: useWatchDeps,
 ): void {
-  deps.forEach((x) => x.subscribe?.(callback));
+  deps.forEach((x) => x?.subscribe?.(callback));
 }

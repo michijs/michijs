@@ -15,11 +15,12 @@ export function cssObjectToText(
   const formattedObject = Object.entries(unproxifiedCssObject).reduce(
     (previousValue, [key, value]) => {
       const valueIsObject = typeof value === "object";
+      const isQuery = key.startsWith("@");
       const newKey = formatToKebabCase(
-        isChild && !key.startsWith("@") && valueIsObject ? `&${key}` : key,
+        isChild && !isQuery && valueIsObject ? `&${key}` : key,
       );
       const newValue = valueIsObject
-        ? `{${cssObjectToText(value as CSSObject, true)}}`
+        ? `{${cssObjectToText(value as CSSObject, isChild || !isQuery)}}`
         : `:${value?.toString()};`;
       return `${previousValue}${newKey}${newValue}`;
     },

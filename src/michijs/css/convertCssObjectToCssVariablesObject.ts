@@ -1,10 +1,11 @@
-import { CSSObject, CSSProperty } from "../types";
+import { CSSProperty } from "../types";
 import { valueIsCSSObject } from "../typeWards/valueIsCSSObject";
+import { formatToKebabCase } from "../utils";
 
 export const convertCssObjectToCssVariablesObject = (
-  cssObject: CSSObject,
+  cssObject: CSSProperty,
   properties: string[] = [],
-): CSSObject => {
+): Record<string, string> => {
   const notObservableCssObject = JSON.parse(JSON.stringify(cssObject));
   let obj = {};
   Object.entries<CSSProperty>(notObservableCssObject).forEach(
@@ -19,7 +20,7 @@ export const convertCssObjectToCssVariablesObject = (
         };
       else
         obj[
-          `--${properties.length > 0 ? `${properties.join("-")}-` : ""}${key}`
+          formatToKebabCase(`--${properties.length > 0 ? `${properties.join("-")}-` : ""}${key}`)
         ] = value;
     },
   );
