@@ -1,8 +1,7 @@
 export function deepEqual(object1: any, object2: any): boolean {
   const object1Value = object1?.valueOf();
   const object2Value = object2?.valueOf();
-  if (object1Value === object2Value)
-    return true;
+  if (object1Value === object2Value) return true;
 
   const type = typeof object1Value;
   const areDifferentTypes = type !== typeof object2Value;
@@ -17,8 +16,7 @@ export function deepEqual(object1: any, object2: any): boolean {
     }
     case "object": {
       // One is null
-      if (object1Value === null || object2Value === null)
-        return false
+      if (object1Value === null || object2Value === null) return false;
 
       // TODO: add set / map etc
       if (Array.isArray(object1Value)) {
@@ -27,13 +25,12 @@ export function deepEqual(object1: any, object2: any): boolean {
           (value, index) => !deepEqual(value, object2Value[index]),
         );
       } else {
-        if (Object.keys(object1Value).length !== Object.keys(object2Value).length)
-          return false
+        if (
+          Object.keys(object1Value).length !== Object.keys(object2Value).length
+        )
+          return false;
         for (const key in { ...object1Value, ...object2Value }) {
-          if (
-            !deepEqual(object1Value[key], object2Value[key])
-          )
-            return false;
+          if (!deepEqual(object1Value[key], object2Value[key])) return false;
         }
       }
       return true;

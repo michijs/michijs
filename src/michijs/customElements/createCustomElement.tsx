@@ -62,7 +62,8 @@ export function createCustomElement<
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
-    implements MichiCustomElement {
+    implements MichiCustomElement
+  {
     $michi: MichiCustomElement["$michi"] = {
       store: useObserve(storeInit),
       alreadyRendered: false,
@@ -124,7 +125,14 @@ export function createCustomElement<
         );
       }
       if (adoptedStyleSheets)
-        addStylesheetsToDocumentOrShadowRoot(target, ...Object.values(adoptedStyleSheets).map(x => typeof x === 'function' ? x(MichiCustomElementResult.cssSelector): x));
+        addStylesheetsToDocumentOrShadowRoot(
+          target,
+          ...Object.values(adoptedStyleSheets).map((x) =>
+            typeof x === "function"
+              ? x(MichiCustomElementResult.cssSelector)
+              : x,
+          ),
+        );
     }
     constructor() {
       super();
@@ -164,7 +172,7 @@ export function createCustomElement<
       if (newValue !== oldValue) {
         const parsedNewValue = getAttributeValue(newValue);
         this.willReceiveAttribute?.(name, parsedNewValue, this[name]);
-        this[name](parsedNewValue)
+        this[name](parsedNewValue);
       }
     }
 
@@ -189,9 +197,7 @@ export function createCustomElement<
           computedStyleSheet ||
           adoptedStyleSheets)
       ) {
-        if (cssVariables ||
-          reflectedCssVariables ||
-          computedStyleSheet) {
+        if (cssVariables || reflectedCssVariables || computedStyleSheet) {
           classesIdGenerator ??= new IdGenerator();
           this.$michi.styles.className ??= `michijs-${classesIdGenerator.generateId(
             1,
@@ -233,8 +239,12 @@ export function createCustomElement<
     static formAssociated = formAssociated;
 
     static elementOptions = elementOptions;
-    static cssSelector = elementOptions?.extends ? `${elementOptions.extends.tag}[is="${tag}"]`: tag;
-    static internalCssSelector = elementOptions?.extends ? this.cssSelector: ':host';
+    static cssSelector = elementOptions?.extends
+      ? `${elementOptions.extends.tag}[is="${tag}"]`
+      : tag;
+    static internalCssSelector = elementOptions?.extends
+      ? this.cssSelector
+      : ":host";
 
     // Lifecycle
     formAssociatedCallback(form) {

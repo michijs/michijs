@@ -8,7 +8,7 @@ export function createFunctionalComponent<
   S extends Element = Element,
   C = CreateOptions<S>,
 >(callback: FC<T, S, C>): (props: ObservableOrConst<T>) => JSX.Element {
-  return ((props) => {
+  return (props) => {
     const newProps = Object.entries(props).reduce(
       (previousValue, [key, value]) => {
         if (key === "children") previousValue[key] = value;
@@ -21,5 +21,5 @@ export function createFunctionalComponent<
       {},
     );
     return callback(newProps as any);
-  }) ;
+  };
 }

@@ -56,9 +56,10 @@ class HistoryManagerSingleton extends Observable<string | URL> {
   matches(url: ObservableOrConst<string>, flexible = false) {
     const urlValue = unproxify(url);
     if (window.URLPattern) {
-
       const p = new window.URLPattern({
-        pathname: `${urlValue.endsWith('/') ? urlValue.slice(-1, 1) : urlValue}*`,
+        pathname: `${
+          urlValue.endsWith("/") ? urlValue.slice(-1, 1) : urlValue
+        }*`,
         baseURL: location.origin,
         search: "*",
         hash: "*",

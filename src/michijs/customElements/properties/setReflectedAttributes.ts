@@ -7,6 +7,6 @@ export function setReflectedAttributes(
 ) {
   observedAttributes.forEach((formattedPropertyKey) => {
     if (!self.hasAttribute(formattedPropertyKey))
-      setAttribute(self, formattedPropertyKey, self[formattedPropertyKey])
+      setAttribute(self, formattedPropertyKey, self[formattedPropertyKey]);
   });
 }
