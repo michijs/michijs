@@ -15,8 +15,11 @@ export const Link = createFunctionalComponent<LinkProps>(
   ({ url, ...attrs }, options) => {
     const finalUrl = useComputedObserve(() => {
       const unproxifiedUrl = url();
-      const finalUnproxifiedUrl = typeof unproxifiedUrl === 'function' ? unproxifiedUrl(): unproxifiedUrl
-      return finalUnproxifiedUrl
+      const finalUnproxifiedUrl =
+        typeof unproxifiedUrl === "function"
+          ? unproxifiedUrl()
+          : unproxifiedUrl;
+      return finalUnproxifiedUrl;
     }, [url]);
     const href = useComputedObserve(() => {
       const unproxifiedUrl = finalUrl();

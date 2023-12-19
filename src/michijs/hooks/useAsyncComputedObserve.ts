@@ -16,7 +16,7 @@ export function useAsyncComputedObserve<T>(
   };
   listener();
 
-  useWatch(listener, deps)
-  
+  useWatch(listener, deps);
+
   return newObservable;
 }

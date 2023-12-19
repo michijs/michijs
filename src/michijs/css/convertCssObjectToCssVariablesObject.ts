@@ -20,7 +20,11 @@ export const convertCssObjectToCssVariablesObject = (
         };
       else
         obj[
-          formatToKebabCase(`--${properties.length > 0 ? `${properties.join("-")}-` : ""}${key}`)
+          formatToKebabCase(
+            `--${
+              properties.length > 0 ? `${properties.join("-")}-` : ""
+            }${key}`,
+          )
         ] = value;
     },
   );
