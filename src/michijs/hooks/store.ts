@@ -5,7 +5,7 @@ import { observable } from "./observable";
 export function store<
   T extends object = EmptyObject,
   Y extends Record<string | symbol, Function> = EmptyObject,
->(props: StoreProps<T, Y>): Store<T, Y> {
+>(this: any, props: StoreProps<T, Y>): Store<T, Y> {
   const { notify, ...observableProps } = observable<string[]>();
   const proxiedState = observe<T>({
     item: props.state,
