@@ -9,7 +9,12 @@ import {
 } from "../types";
 
 // Define a type for the return value of promises, which can be a JSX element, a function component, or a DOM element.
-type PromiseReturnType = JSX.Element | CreateFCResult | (new (...args: any[]) => Element);
+type PromiseReturnType =
+  | JSX.Element
+  | CreateFCResult
+  | (new (
+      ...args: any[]
+    ) => Element);
 
 // Define props for the AsyncComponent.
 type AsyncComponentProps<T> = ExtendableComponentWithoutChildren<T> & {
