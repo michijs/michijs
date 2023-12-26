@@ -294,21 +294,21 @@ type ExtendsObject<V extends object> = (
 export type IsAny<T> = 0 extends 1 & T ? true : false;
 
 // Needs to be partial to allow asignation operation
-export type ObservableType<T> = IsAny<T> extends true ? any :
-  [T] extends ObservableLike<unknown> ? [T]
+export type ObservableType<Y, T = NonNullable<Y>> = IsAny<T> extends true ? any :
+  [T] extends ObservableLike<unknown> ? [Y]
   : [T] extends [Array<infer V>]
   ? ObservableArray<V>
   : [T] extends [Function]
-  ? PrimitiveObservableValue<T> & T
+  ? PrimitiveObservableValue<Y> & Y
   : [T] extends [Map<infer K, infer V>]
   ? ObservableMap<K, V>
   : [T] extends [Set<infer V>]
   ? ObservableSet<V>
   : [T] extends [Date]
-  ? PrimitiveObservableValue<T> & Date
+  ? PrimitiveObservableValue<Y> & Date
   : [T] extends [object]
-  ? ExtendsObject<T> extends true ? ObservableObject<T> : PrimitiveObservableValue<T> & T
-  : (PrimitiveObservableValue<T> & GetPrimitiveTypeClass<T>);
+  ? ExtendsObject<T> extends true ? ObservableObject<Y> : PrimitiveObservableValue<Y> & T
+  : (PrimitiveObservableValue<Y> & GetPrimitiveTypeClass<T>);
 
 export type Unproxify<T> = IsAny<T> extends true ? any
   : (
@@ -368,7 +368,7 @@ export interface CommonJSXAttrs<T> {
 export interface FragmentJSXElement extends CommonJSXAttrs<null | undefined> { };
 export interface ObjectJSXElement extends CommonJSXAttrs<string> { };
 export interface DOMElementJSXElement extends CommonJSXAttrs<ParentNode> { };
-export interface FunctionJSXElement extends CommonJSXAttrs<FC<any>> { };
+export interface FunctionJSXElement extends CommonJSXAttrs<CreateFCResult<any>> { };
 export interface ClassJSXElement extends CommonJSXAttrs<
   (new (...args: any[]) => Element) & { tag: string; extends?: string }
 > { };
@@ -398,8 +398,13 @@ export type FCProps<T = {}> = { [k in keyof T]: k extends 'children' ? T[k] : Ob
 export interface NonProxiedFC<T = {}, S extends Element = Element, C = CreateOptions<S>> {
   (attrs: T, context?: C): SingleJSXElement;
 }
-export interface FC<T = {}, S extends Element = Element, C = CreateOptions<S>> {
+export interface CreateFCResult<T = {}, S extends Element = Element, C = CreateOptions<S>> {
   (attrs: FCProps<T>, context?: C): SingleJSXElement;
+}
+export interface CreateFCCResult<T = {}, S extends Element = Element, C = CreateOptions<S>> extends CreateFCResult<T & { children?: JSX.Element }, S, C> {
+}
+export interface FC<T = {}, S extends Element = Element, C = CreateOptions<S>> {
+  (attrs: T, context?: C): SingleJSXElement;
 }
 export interface FCC<T = {}, S extends Element = Element, C = CreateOptions<S>> extends FC<T & { children?: JSX.Element }, S, C> {
 }

@@ -4,12 +4,12 @@ import { VirtualFragment } from "../classes";
 import {
   CreateOptions,
   ExtendableComponentWithoutChildren,
-  FC,
+  CreateFCResult,
   SingleJSXElement,
 } from "../types";
 
 // Define a type for the return value of promises, which can be a JSX element, a function component, or a DOM element.
-type PromiseReturnType = JSX.Element | FC | (new (...args: any[]) => Element);
+type PromiseReturnType = JSX.Element | CreateFCResult | (new (...args: any[]) => Element);
 
 // Define props for the AsyncComponent.
 type AsyncComponentProps<T> = ExtendableComponentWithoutChildren<T> & {
@@ -25,7 +25,7 @@ type AsyncComponentProps<T> = ExtendableComponentWithoutChildren<T> & {
 /**
  * Asynchronously renders a component after the promise ends. In the meantime you can choose to show a load component or not show anything.
  */
-export const AsyncComponent = <const T = FC>(
+export const AsyncComponent = <const T = CreateFCResult>(
   { as: asTag, promise, loadingComponent, ...attrs }: AsyncComponentProps<T>,
   options: CreateOptions,
 ) => {

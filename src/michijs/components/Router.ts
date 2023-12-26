@@ -3,7 +3,7 @@ import { urlFn } from "../routing/createRouter";
 import {
   CreateOptions,
   ExtendableComponentWithoutChildren,
-  FC,
+  CreateFCResult,
   SingleJSXElement,
 } from "../types";
 import { HistoryManager, useComputedObserve, create } from "../..";
@@ -15,7 +15,7 @@ export type RouterProps<T> = ExtendableComponentWithoutChildren<T> & {
   parentRoute?: UrlFunction<any, any>;
 };
 
-export const Router = <const T = FC>(
+export const Router = <const T = CreateFCResult>(
   { as: asTag, routes, parentRoute, ...attrs }: RouterProps<T>,
   options: CreateOptions,
 ) => {

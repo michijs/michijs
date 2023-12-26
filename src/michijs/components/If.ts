@@ -4,7 +4,7 @@ import { bindObservable } from "../utils";
 import {
   CreateOptions,
   ExtendableComponentWithoutChildren,
-  FC,
+  CreateFCResult,
   ObservableOrConst,
   SingleJSXElement,
 } from "../types";
@@ -21,7 +21,7 @@ type IfProps<T> = ExtendableComponentWithoutChildren<T> & {
 /**
  * Conditional rendering component. This is the only way to do it dynamically.
  */
-export const If = <const T = FC>(
+export const If = <const T = CreateFCResult>(
   { as: asTag, condition, then, else: elseComponent, ...attrs }: IfProps<T>,
   options: CreateOptions,
 ) => {

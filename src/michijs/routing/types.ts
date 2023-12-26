@@ -1,5 +1,5 @@
 import { Router } from "../components/Router";
-import { FC, GetElementProps } from "../types";
+import { CreateFCResult, GetElementProps } from "../types";
 
 export type SearchParams = Record<string, unknown> | undefined;
 export type Hash = `#${string}` | "" | undefined;
@@ -29,5 +29,5 @@ export type CreateRouterResult<R extends Record<string, JSX.Element>> = [
   {
     [k in keyof R]: UrlFunction;
   },
-  FC<Omit<GetElementProps<typeof Router>, "routes" | "parentRoute">>,
+  CreateFCResult<Omit<GetElementProps<typeof Router>, "routes" | "parentRoute">>,
 ];
