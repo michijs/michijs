@@ -137,15 +137,12 @@ export type DelimiterCase<
   >
   : Value;
 
-export interface MichiAttributes<E, A extends AttributesType = {}> {
+export interface MichiAttributes<E> {
   children?: JSX.Element;
   _?:
   (
     {
-      [k in Exclude<WritableKeys<E>, keyof A>]?: E[k]
-    }
-    | {
-      [k in keyof A]?: ObservableOrConst<A[k]>
+      [k in WritableKeys<E>]?: ObservableOrConst<E[k]>
     }
   );
 }
@@ -167,7 +164,7 @@ export interface CompatibleSubscription {
   (): void;
 }
 
-export type ObservableOrConst<T> = [T] extends [object] ? {
+export type ObservableOrConst<Y, T = Unproxify<Y>> = [T] extends [object] ? {
   [k in keyof T]: ObservableOrConst<T[k]>
 } | T : ObservableLike<T> | T
 export type ObservableOrConstWithChildren<T, C = JSX.Element> = ObservableOrConst<T> & {
@@ -558,7 +555,7 @@ type MichiElementProps<
     ? (ev: CustomEvent<D>) => unknown
     : never;
   } & { name?: string } & GlobalEvents<S>,
-> = MichiAttributes<S, O["attributes"] & {}> &
+> = MichiAttributes<S> &
   Omit<ExtendsAttributes<O["extends"]>, keyof Attrs> &
   Attrs;
 
