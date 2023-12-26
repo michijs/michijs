@@ -29,5 +29,7 @@ export type CreateRouterResult<R extends Record<string, JSX.Element>> = [
   {
     [k in keyof R]: UrlFunction;
   },
-  CreateFCResult<Omit<GetElementProps<typeof Router>, "routes" | "parentRoute">>,
+  CreateFCResult<
+    Omit<GetElementProps<typeof Router>, "routes" | "parentRoute">
+  >,
 ];
