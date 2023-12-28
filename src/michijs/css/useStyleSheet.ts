@@ -41,6 +41,10 @@ export function useStyleSheet(cssObject: CSSObject) {
   bindObservable(stringResult, (formattedObject) => {
     // Jest fix
     if (styleSheet.replaceSync) styleSheet.replaceSync(formattedObject);
+
+    const result = styleSheet.cssRules.item(0)?.cssText;
+    if ((result?.length ?? 0) < formattedObject.length)
+      console.error(`Error on stylesheet: ${formattedObject}`)
   });
 
   return styleSheet;
