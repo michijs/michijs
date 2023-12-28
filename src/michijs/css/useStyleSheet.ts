@@ -44,7 +44,7 @@ export function useStyleSheet(cssObject: CSSObject) {
 
     const result = styleSheet.cssRules.item(0)?.cssText;
     if ((result?.length ?? 0) < formattedObject.length)
-      console.error(`Error on stylesheet: ${formattedObject}`)
+      console.error(`Error on stylesheet: ${formattedObject}`);
   });
 
   return styleSheet;
