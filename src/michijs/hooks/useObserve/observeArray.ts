@@ -31,7 +31,7 @@ export function observeArray<T extends Array<unknown>>(
     useObserve<any>(value, newInitialObservers),
   );
 
-  const newObservable = new ProxiedArray<unknown>(proxiedArray);
+  const newObservable = new ProxiedArray<T>(proxiedArray);
   const proxy = new Proxy(newObservable, {
     set: customObjectSet(newInitialObservers),
     deleteProperty: customObjectDelete,
@@ -56,7 +56,7 @@ export function observeArray<T extends Array<unknown>>(
           const result = targetProperty.apply(target, proxiedArray);
           return result;
         };
-      } else return customObjectGet(() => proxy)(target, p, receiver);
+      } else return customObjectGet(newInitialObservers)(target, p, receiver);
     },
   });
 

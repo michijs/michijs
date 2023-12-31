@@ -40,6 +40,7 @@ export const ElementInternals = createFunctionalComponentWithChildren<ElementInt
         const unproxiedValidityStateFlags = unproxify(validityStateFlags);
         if (unproxiedErrorMessage)
           self.$michi.internals!.setValidity(
+        // @ts-ignore
             unproxiedValidityStateFlags,
             unproxiedErrorMessage,
           );
