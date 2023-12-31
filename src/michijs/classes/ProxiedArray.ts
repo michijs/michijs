@@ -9,7 +9,6 @@ import {
   NonProxiedFC,
 } from "../..";
 import { create } from "../DOMDiff";
-// import { ListElement } from "../components/FragmentAndList";
 import { Target } from "./Target";
 import { VirtualFragment } from "./VirtualFragment";
 
@@ -44,7 +43,7 @@ export class ProxiedArray<V>
 
     newTarget.appendItems(...this.$value);
 
-    return el as Node;
+    return el.valueOf() as Node;
   };
 
   $clear() {
