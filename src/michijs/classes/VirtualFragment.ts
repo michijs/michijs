@@ -86,7 +86,7 @@ export class VirtualFragment
     return childNodes;
   }
   get firstChild() {
-    const nextSibling = this.endItem.nextSibling;
+    const nextSibling = this.startItem.nextSibling;
     return nextSibling !== this.endItem ? nextSibling : null;
   }
   get innerHTML() {
