@@ -10,6 +10,7 @@ import {
   customObjectDelete,
   customObjectGet,
   customObjectGetOwnPropertyDescriptor,
+  customObjectHas,
   customObjectOwnKeys,
   customObjectSet,
 } from "./observeCommonObject";
@@ -42,6 +43,8 @@ export function observeArray<T extends Array<unknown>>(
         ? customObjectGetOwnPropertyDescriptor(target, prop)
         : Reflect.getOwnPropertyDescriptor(target, prop);
     },
+    // Fixes calling iterable methods like forEach
+    has: customObjectHas,
     get(target, p, receiver) {
       const castedP = p as unknown as keyof ProxiedArrayInterface<T>;
       if (
@@ -60,5 +63,5 @@ export function observeArray<T extends Array<unknown>>(
     },
   });
 
-  return proxy as ObservableType<T>;
+  return proxy as unknown as ObservableType<T>;
 }
