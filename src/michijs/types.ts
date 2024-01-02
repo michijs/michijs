@@ -18,7 +18,7 @@ export type CssDeclaration<
   ? any
   : T extends object ? {
     [k in StringKeyOf<T>]: CssDeclaration<T[k], `${PK}-${k}`>;
-  } & CSSVar<PK> & string : CSSVar<PK> & string;
+  } : CSSVar<PK> & string;
 type IfEquals<X, Y, A = X, B = never> = (<T>() => T extends X ? 1 : 2) extends <
   T,
 >() => T extends Y ? 1 : 2

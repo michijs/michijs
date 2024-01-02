@@ -1,5 +1,4 @@
 export { useStyleSheet } from "./useStyleSheet";
-export { useCssVariables, useCssVariablesDeclaration } from "./useCssVariables";
+export { useCssVariables } from "./useCssVariables";
 export { css } from "./css";
-export * from "./utils";
 export { convertCssObjectToCssVariablesObject } from "./convertCssObjectToCssVariablesObject";
