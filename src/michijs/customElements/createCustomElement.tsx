@@ -242,7 +242,7 @@ export function createCustomElement<
     static cssSelector = elementOptions?.extends
       ? `${elementOptions.extends.tag}[is="${tag}"]`
       : tag;
-    static internalCssSelector = elementOptions?.extends
+    static internalCssSelector = elementOptions?.extends && !elementOptions?.shadow
       ? this.cssSelector
       : ":host";
 
