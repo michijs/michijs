@@ -129,7 +129,7 @@ export function createCustomElement<
           target,
           ...Object.values(adoptedStyleSheets).map((x) =>
             typeof x === "function"
-              ? x(MichiCustomElementResult.cssSelector)
+              ? x(MichiCustomElementResult.internalCssSelector)
               : x,
           ),
         );
