@@ -13,16 +13,16 @@ const stylesheet = cssObjectToText({
       color: "blue",
     },
   },
-  ':host': {
+  ":host": {
     "@media (max-width: 600px)": {
-      ' a': {
+      " a": {
         color: "green",
-      }
+      },
     },
-    '([hidden])': {
-      display: 'none'
-    }
-  }
+    "([hidden])": {
+      display: "none",
+    },
+  },
 });
 
 const expectedResult =
