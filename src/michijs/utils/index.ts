@@ -8,4 +8,5 @@ export { bindObservable } from "./bindObservable";
 export { setObservableValue } from "./setObservableValue";
 export { pick } from "./pick";
 export { unproxify } from "./unproxify";
+export { isNil } from "./isNil";
 export * from "./clone";
