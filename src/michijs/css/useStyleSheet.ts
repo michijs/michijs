@@ -5,6 +5,7 @@ import {
   getObservables,
   bindObservable,
   unproxify,
+  isNil,
 } from "../utils";
 
 const hostSelectors = [":host", ":host-context"];
@@ -18,7 +19,7 @@ export const hostToText = (
   const thisRunObjectSelector = {};
   const otherRunsSelectors = Object.entries(unproxifiedCssObject).reduce(
     (previousValue, [key, value]) => {
-      if (value) {
+      if (!isNil(value)) {
         const valueIsObject = typeof value === "object";
         const newKey = formatToKebabCase(key);
         const isQueryResult = isQuery(newKey);
