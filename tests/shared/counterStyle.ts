@@ -1,7 +1,7 @@
 import { useStyleSheet } from "@michijs/michijs";
 
 export const counterStyle = useStyleSheet({
-  ':host': {
+  ":host": {
     "(:disabled)": {
       backgroundColor: "gray",
     },
