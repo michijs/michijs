@@ -242,9 +242,7 @@ export function createCustomElement<
     static cssSelector = elementOptions?.extends
       ? `${elementOptions.extends.tag}[is="${tag}"]`
       : tag;
-    static internalCssSelector = shadow
-      ? ":host"
-      : this.cssSelector;
+    static internalCssSelector = shadow ? ":host" : this.cssSelector;
 
     // Lifecycle
     formAssociatedCallback(form) {
