@@ -1,7 +1,7 @@
-import { host, useStyleSheet } from "@michijs/michijs";
+import { useStyleSheet } from "@michijs/michijs";
 
 export const counterStyle = useStyleSheet({
-  ...host({
+  ":host": {
     "(:disabled)": {
       backgroundColor: "gray",
     },
@@ -13,7 +13,7 @@ export const counterStyle = useStyleSheet({
     "@media (max-width: 600px)": {
       color: "blue",
     },
-  }),
+  },
   span: {
     minWidth: "60px",
     textAlign: "center",

@@ -129,7 +129,7 @@ export function createCustomElement<
           target,
           ...Object.values(adoptedStyleSheets).map((x) =>
             typeof x === "function"
-              ? x(MichiCustomElementResult.cssSelector)
+              ? x(MichiCustomElementResult.internalCssSelector)
               : x,
           ),
         );
@@ -242,9 +242,7 @@ export function createCustomElement<
     static cssSelector = elementOptions?.extends
       ? `${elementOptions.extends.tag}[is="${tag}"]`
       : tag;
-    static internalCssSelector = elementOptions?.extends
-      ? this.cssSelector
-      : ":host";
+    static internalCssSelector = shadow ? ":host" : this.cssSelector;
 
     // Lifecycle
     formAssociatedCallback(form) {
