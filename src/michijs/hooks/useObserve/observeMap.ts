@@ -56,8 +56,9 @@ export const observeMap = <E, T extends Map<any, E>>(
               newValue,
               newInitialObservers,
             );
+            const result = bindedTargetProperty(key, observedItem);
             observedItem.notifyCurrentValue?.();
-            return bindedTargetProperty(key, observedItem);
+            return result;
           };
         }
         case "delete": {
