@@ -1,5 +1,10 @@
 import { useComputedObserve, useObserve } from "../hooks";
-import type { AnyObject, CSSObject, UseStyleSheet, UseStyleSheetCallback } from "../types";
+import type {
+  AnyObject,
+  CSSObject,
+  UseStyleSheet,
+  UseStyleSheetCallback,
+} from "../types";
 import {
   formatToKebabCase,
   getObservables,
