@@ -123,7 +123,7 @@ export const useStyleSheet = ((
       if (!styleSheet) {
         const cssVariables = useCssVariables<AnyObject>();
         styleSheet = styleSheetFromCSSObject(
-          () => cssObject({ tags: Array.from(tags).join(","), cssVariables }),
+          () => cssObject(Array.from(tags).join(","), cssVariables),
           [tags],
         );
       }

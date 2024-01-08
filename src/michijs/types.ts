@@ -647,13 +647,8 @@ export interface CreateOptions<E extends Element = Element> {
   readonly contextElement?: E;
 }
 
-
-export interface UseStyleSheetProps<T> {
-  tags: string,
-  cssVariables: CssVariablesObject<T>
-}
 export interface UseStyleSheetCallback<T> {
-  (props: UseStyleSheetProps<T>): CSSObject
+  (tags: string, cssVariables: CssVariablesObject<T>): CSSObject
 }
 
 export interface UseStyleSheet {
