@@ -8,5 +8,5 @@ export const buttonStyle = useStyleSheet(({ tags }) => ({
     height: "fit-content",
     minWidth: "40px",
     minHeight: "40px",
-  }
-}))
+  },
+}));
