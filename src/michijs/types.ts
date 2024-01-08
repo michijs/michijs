@@ -11,13 +11,13 @@ export interface CSSVar<T extends string> {
     defaultValue?: V,
   ): `var(${KebabCase<T>}${V extends undefined ? "" : `,${V}`})`;
 };
-export type CssDeclaration<
+export type CssVariablesObject<
   T extends object | unknown,
   PK extends string = "-",
 > = IsAny<T> extends true
   ? any
   : T extends object ? {
-    [k in StringKeyOf<T>]: CssDeclaration<T[k], `${PK}-${k}`>;
+    [k in StringKeyOf<T>]: CssVariablesObject<T[k], `${PK}-${k}`>;
   } : CSSVar<PK> & string;
 type IfEquals<X, Y, A = X, B = never> = (<T>() => T extends X ? 1 : 2) extends <
   T,

@@ -1,5 +1,5 @@
-import { useComputedObserve } from "../hooks";
-import type { CSSObject } from "../types";
+import { useComputedObserve, useObserve } from "../hooks";
+import type { AnyObject, CSSObject, CssVariablesObject } from "../types";
 import {
   formatToKebabCase,
   getObservables,
@@ -7,6 +7,7 @@ import {
   unproxify,
   isNil,
 } from "../utils";
+import { useCssVariables } from "./useCssVariables";
 
 const hostSelectors = [":host", ":host-context"];
 
@@ -47,11 +48,11 @@ export const hostToText = (
   const thisRunSelector =
     thisRunObjectSelectorEntries.length > 0
       ? `${parentSelector}{${thisRunObjectSelectorEntries.reduce(
-          (previousValue, [key, value]) => {
-            return `${previousValue}${key}:${value};`;
-          },
-          "",
-        )}}`
+        (previousValue, [key, value]) => {
+          return `${previousValue}${key}:${value};`;
+        },
+        "",
+      )}}`
       : "";
 
   return `${otherRunsSelectors}${thisRunSelector}`;
@@ -77,9 +78,9 @@ export function cssObjectToText(
         );
         const newValue = valueIsObject
           ? `{${cssObjectToText(
-              value as CSSObject,
-              isChild || !isQueryResult,
-            )}}`
+            value as CSSObject,
+            isChild || !isQueryResult,
+          )}}`
           : `:${value?.toString()};`;
         return `${previousValue}${newKey}${newValue}`;
       }
@@ -89,19 +90,51 @@ export function cssObjectToText(
   return `${formattedObject}${hostRules}`;
 }
 
-/**Allows to create a Constructable Stylesheet with a CSSObject */
-export function useStyleSheet(cssObject: CSSObject) {
+const styleSheetFromCSSObject = (
+  getCSSObject: () => CSSObject,
+  additionalObservers: any[] = [],
+) => {
   const styleSheet = new CSSStyleSheet();
-  const observables = getObservables(cssObject);
+  const observables = getObservables(getCSSObject());
   const stringResult = useComputedObserve(
-    () => cssObjectToText(cssObject),
-    observables,
+    () => cssObjectToText(getCSSObject()),
+    [...observables, ...additionalObservers],
   );
-
   bindObservable(stringResult, (formattedObject) => {
     // Jest fix
     if (styleSheet.replaceSync) styleSheet.replaceSync(formattedObject);
   });
-
   return styleSheet;
+};
+interface UseStyleSheetProps<T> {
+  tags: string,
+  cssVariables: CssVariablesObject<T>
 }
+interface UseStyleSheetCallback<T> {
+  (props: UseStyleSheetProps<T>): CSSObject
+}
+
+interface UseStyleSheet {
+  <T>(props: UseStyleSheetCallback<T>): ((tag: string) => CSSStyleSheet);
+  (props: CSSObject): CSSStyleSheet
+}
+
+/**Allows to create a Constructable Stylesheet with a CSSObject */
+export const useStyleSheet = ((cssObject: UseStyleSheetCallback<AnyObject> | CSSObject) => {
+  if (typeof cssObject === "function") {
+    const tags = useObserve(new Set<string>());
+    let styleSheet;
+    return ((tag) => {
+      tags.add(tag);
+      if (!styleSheet) {
+        const cssVariables = useCssVariables<AnyObject>();
+        styleSheet = styleSheetFromCSSObject(
+          () => cssObject({ tags: Array.from(tags).join(","), cssVariables }),
+          [tags],
+        );
+      }
+      return styleSheet as ((tag: string) => CSSStyleSheet);
+    });
+  } else
+    return styleSheetFromCSSObject(() => cssObject);
+}) as UseStyleSheet;

@@ -5,7 +5,6 @@ import { isFunctionOrClassJSXElement } from "../typeWards/isFunctionOrClassJSXEl
 import {
   CreateOptions,
   DOMElementJSXElement,
-  NonNullablePrimitiveType,
   ObservableNonNullablePrimitiveType,
   SingleJSXElement,
 } from "../types";

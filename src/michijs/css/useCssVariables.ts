@@ -1,8 +1,8 @@
-import { CssDeclaration, AnyObject } from "../types";
+import { CssVariablesObject, AnyObject } from "../types";
 import { formatToKebabCase } from "../utils";
 
 function getProxyGetter<T>(parent = "-") {
-  return new Proxy(Function as unknown as CssDeclaration<T>, {
+  return new Proxy(Function as unknown as CssVariablesObject<T>, {
     apply(_, _2, args) {
       const defaultValue = args[0];
       return `var(${parent}${
@@ -15,9 +15,9 @@ function getProxyGetter<T>(parent = "-") {
       else if (p !== "subscribe")
         return getProxyGetter(`${parent}-${formatToKebabCase(p.toString())}`);
     },
-  }) as CssDeclaration<T>;
+  }) as CssVariablesObject<T>;
 }
 
-export function useCssVariables<T extends AnyObject>(): CssDeclaration<T> {
+export function useCssVariables<T extends AnyObject>(): CssVariablesObject<T> {
   return getProxyGetter<T>();
 }
