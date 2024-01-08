@@ -48,11 +48,11 @@ export const hostToText = (
   const thisRunSelector =
     thisRunObjectSelectorEntries.length > 0
       ? `${parentSelector}{${thisRunObjectSelectorEntries.reduce(
-        (previousValue, [key, value]) => {
-          return `${previousValue}${key}:${value};`;
-        },
-        "",
-      )}}`
+          (previousValue, [key, value]) => {
+            return `${previousValue}${key}:${value};`;
+          },
+          "",
+        )}}`
       : "";
 
   return `${otherRunsSelectors}${thisRunSelector}`;
@@ -78,9 +78,9 @@ export function cssObjectToText(
         );
         const newValue = valueIsObject
           ? `{${cssObjectToText(
-            value as CSSObject,
-            isChild || !isQueryResult,
-          )}}`
+              value as CSSObject,
+              isChild || !isQueryResult,
+            )}}`
           : `:${value?.toString()};`;
         return `${previousValue}${newKey}${newValue}`;
       }
@@ -107,24 +107,26 @@ const styleSheetFromCSSObject = (
   return styleSheet;
 };
 interface UseStyleSheetProps<T> {
-  tags: string,
-  cssVariables: CssVariablesObject<T>
+  tags: string;
+  cssVariables: CssVariablesObject<T>;
 }
 interface UseStyleSheetCallback<T> {
-  (props: UseStyleSheetProps<T>): CSSObject
+  (props: UseStyleSheetProps<T>): CSSObject;
 }
 
 interface UseStyleSheet {
-  <T>(props: UseStyleSheetCallback<T>): ((tag: string) => CSSStyleSheet);
-  (props: CSSObject): CSSStyleSheet
+  <T>(props: UseStyleSheetCallback<T>): (tag: string) => CSSStyleSheet;
+  (props: CSSObject): CSSStyleSheet;
 }
 
 /**Allows to create a Constructable Stylesheet with a CSSObject */
-export const useStyleSheet = ((cssObject: UseStyleSheetCallback<AnyObject> | CSSObject) => {
+export const useStyleSheet = ((
+  cssObject: UseStyleSheetCallback<AnyObject> | CSSObject,
+) => {
   if (typeof cssObject === "function") {
     const tags = useObserve(new Set<string>());
     let styleSheet;
-    return ((tag) => {
+    return (tag) => {
       tags.add(tag);
       if (!styleSheet) {
         const cssVariables = useCssVariables<AnyObject>();
@@ -133,8 +135,7 @@ export const useStyleSheet = ((cssObject: UseStyleSheetCallback<AnyObject> | CSS
           [tags],
         );
       }
-      return styleSheet as ((tag: string) => CSSStyleSheet);
-    });
-  } else
-    return styleSheetFromCSSObject(() => cssObject);
+      return styleSheet as (tag: string) => CSSStyleSheet;
+    };
+  } else return styleSheetFromCSSObject(() => cssObject);
 }) as UseStyleSheet;
