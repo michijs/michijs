@@ -1,6 +1,6 @@
 import { useStyleSheet } from "@michijs/michijs";
 
-export const buttonStyle = useStyleSheet(({ tags }) => ({
+export const buttonStyle = useStyleSheet(( tags ) => ({
   [tags]: {
     display: "block",
     backgroundColor: "darkred",
