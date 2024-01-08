@@ -647,6 +647,21 @@ export interface CreateOptions<E extends Element = Element> {
   readonly contextElement?: E;
 }
 
+
+export interface UseStyleSheetProps<T> {
+  tags: string,
+  cssVariables: CssVariablesObject<T>
+}
+export interface UseStyleSheetCallback<T> {
+  (props: UseStyleSheetProps<T>): CSSObject
+}
+
+export interface UseStyleSheet {
+  <T>(props: UseStyleSheetCallback<T>): ((tag: string) => CSSStyleSheet);
+  (props: CSSObject): CSSStyleSheet
+}
+
+
 declare global {
   interface Window {
     msCrypto?: Crypto;

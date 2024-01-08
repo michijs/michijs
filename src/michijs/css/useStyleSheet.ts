@@ -1,5 +1,5 @@
 import { useComputedObserve, useObserve } from "../hooks";
-import type { AnyObject, CSSObject, CssVariablesObject } from "../types";
+import type { AnyObject, CSSObject, UseStyleSheet, UseStyleSheetCallback } from "../types";
 import {
   formatToKebabCase,
   getObservables,
@@ -106,19 +106,6 @@ const styleSheetFromCSSObject = (
   });
   return styleSheet;
 };
-interface UseStyleSheetProps<T> {
-  tags: string,
-  cssVariables: CssVariablesObject<T>
-}
-interface UseStyleSheetCallback<T> {
-  (props: UseStyleSheetProps<T>): CSSObject
-}
-
-interface UseStyleSheet {
-  <T>(props: UseStyleSheetCallback<T>): ((tag: string) => CSSStyleSheet);
-  (props: CSSObject): CSSStyleSheet
-}
-
 /**Allows to create a Constructable Stylesheet with a CSSObject */
 export const useStyleSheet = ((cssObject: UseStyleSheetCallback<AnyObject> | CSSObject) => {
   if (typeof cssObject === "function") {
