@@ -292,11 +292,9 @@ export function createCustomElement<
     connectedCallback() {
       if (!this.$michi.shadowRoot) {
         if (cssVariables || reflectedCssVariables) {
-          Object.entries(this.$michi.cssStore.state).forEach(
-            ([key, value]) => {
-              setStyleProperty(this, `--${key}`, value);
-            },
-          );
+          Object.entries(this.$michi.cssStore.state).forEach(([key, value]) => {
+            setStyleProperty(this, `--${key}`, value);
+          });
 
           this.$michi.cssStore.subscribe((propertiesThatChanged) => {
             propertiesThatChanged?.forEach((key) => {
