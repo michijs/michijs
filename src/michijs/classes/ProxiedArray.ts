@@ -32,9 +32,9 @@ export class ProxiedArray<V>
   ): Node => {
     const el = asTag
       ? (create({
-        jsxTag: asTag,
-        attrs,
-      } as SingleJSXElement) as ParentNode)
+          jsxTag: asTag,
+          attrs,
+        } as SingleJSXElement) as ParentNode)
       : new VirtualFragment();
 
     const newTarget = new Target(el, renderItem, context);
@@ -122,8 +122,8 @@ export class ProxiedArray<V>
     // The easiest way to do it is to sort original array and replace old items with new ones
     const result = this.$value.sort(compareFn);
     this.targets.forEach((target) => {
-      target.clear()
-      target.appendItems(...result)
+      target.clear();
+      target.appendItems(...result);
     });
     return result;
   }
@@ -131,7 +131,9 @@ export class ProxiedArray<V>
     if (start === 0 && deleteCount >= this.$value.length)
       this.$replace(...items);
     else {
-      this.targets.forEach(target => target.splice(start, deleteCount, ...items));
+      this.targets.forEach((target) =>
+        target.splice(start, deleteCount, ...items),
+      );
       this.$value.splice(start, deleteCount, ...items);
     }
     return this.$value;
