@@ -246,7 +246,7 @@ export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>> extends Prox
     props: ExtendableComponentWithoutChildren<E> & {
       renderItem: NonProxiedFC<SV>;
     },
-    context: CreateOptions
+    context?: CreateOptions
   ): Node
 };
 
@@ -318,7 +318,7 @@ export type ObservableObject<RV, SV = {
   [K in keyof RV]: ObservableType<RV[K]>;
 }> = SV & ObservableValue<RV, SV>;
 
-export type MutableArrayNewItemsProperties = 'push' | 'unshift';
+export type MutableArrayNewItemsProperties = 'push' | 'unshift' | 'fill' | 'splice';
 export type MutableMapNewItemsProperties = 'set';
 export type MutableSetNewDeleteItemsProperties = 'add' | 'delete';
 export type MutableArrayProperties = MutableArrayNewItemsProperties | 'shift' | 'reverse' | 'pop';

@@ -28,13 +28,13 @@ export class ProxiedArray<V>
     }: ExtendableComponentWithoutChildren<E> & {
       renderItem: NonProxiedFC<V>;
     },
-    context: CreateOptions,
+    context?: CreateOptions,
   ): Node => {
     const el = asTag
       ? (create({
-          jsxTag: asTag,
-          attrs,
-        } as SingleJSXElement) as ParentNode)
+        jsxTag: asTag,
+        attrs,
+      } as SingleJSXElement) as ParentNode)
       : new VirtualFragment();
 
     const newTarget = new Target(el, renderItem, context);
@@ -112,32 +112,28 @@ export class ProxiedArray<V>
     this.notifyCurrentValue();
     return result;
   }
-
-  // sort(compareFn?: (a: T, b: T) => number): this {
-  //     throw new Error('Method not implemented.');
-  // }
-  /**
-   * Removes elements from an array and, if necessary, inserts new elements in their place.
-   * Only positive values allowed
-   */
-  // splice(start: number, deleteCount: number, ...items: T[]) {
-  //   if (start >= 0 && deleteCount >= 0)
-  //     if (start === 0 && deleteCount >= this.data.length)
-  //       this.clear();
-  //     else {
-  //       this.targets.forEach(target => {
-  //         let item = target.element.childNodes.item(start),
-  //           count = 0;
-  //         while (item && count < deleteCount) {
-  //           const nextSibling = item.nextSibling;
-  //           item.remove();
-  //           item = nextSibling;
-  //           count++;
-  //         }
-  //         if (items.length > 0)
-  //           target.insertItemsAt(start, ...items);
-  //       });
-  //       this.data.splice(start, deleteCount, ...items);
-  //     }
-  // }
+  fill(item: V, start?: number, end?: number) {
+    this.targets.forEach((target) => target.fill(item, start, end));
+    const result = this.$value.fill(item, start, end);
+    this.notifyCurrentValue();
+    return result;
+  }
+  sort(compareFn?: (a: V, b: V) => number) {
+    // The easiest way to do it is to sort original array and replace old items with new ones
+    const result = this.$value.sort(compareFn);
+    this.targets.forEach((target) => {
+      target.clear()
+      target.appendItems(...result)
+    });
+    return result;
+  }
+  splice(start: number, deleteCount: number = 0, ...items: V[]) {
+    if (start === 0 && deleteCount >= this.$value.length)
+      this.$replace(...items);
+    else {
+      this.targets.forEach(target => target.splice(start, deleteCount, ...items));
+      this.$value.splice(start, deleteCount, ...items);
+    }
+    return this.$value;
+  }
 }

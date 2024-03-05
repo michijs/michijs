@@ -6,8 +6,8 @@ export class Target<V> {
   constructor(
     private element: VirtualFragment | ParentNode,
     private renderItem: NonProxiedFC<V>,
-    private options: CreateOptions,
-  ) {}
+    private options?: CreateOptions,
+  ) { }
 
   clear() {
     this.element.textContent = "";
@@ -108,5 +108,46 @@ export class Target<V> {
   insertChildNodesAt(i: number, ...childNodes: Node[]) {
     if (i === 0) this.element.prepend(...childNodes);
     else this.element.childNodes[i - 1].after(...childNodes);
+  }
+  splice(start: number, deleteCount: number, ...items: V[]) {
+    const len = this.element.childNodes.length
+    const relativeStart = start >> 0;
+    let k =
+      relativeStart < 0
+        ? Math.max(len + relativeStart, 0)
+        : Math.min(relativeStart, len);
+
+    let item: ChildNode | null = this.element.childNodes.item(k),
+      count = 0;
+    while (item && count < deleteCount) {
+      const nextSibling = item.nextSibling;
+      item.remove();
+      item = nextSibling;
+      count++;
+    }
+    if (items.length > 0)
+      this.insertItemsAt(k, ...items);
+  }
+  fill(value: V, start: number = 0, end?: number) {
+    const len = this.element.childNodes.length
+    const relativeStart = start >> 0;
+
+    let k =
+      relativeStart < 0
+        ? Math.max(len + relativeStart, 0)
+        : Math.min(relativeStart, len);
+
+    const relativeEnd = end === undefined ? len : end >> 0;
+
+    const final =
+      relativeEnd < 0
+        ? Math.max(len + relativeEnd, 0)
+        : Math.min(relativeEnd, len);
+
+    while (k < final) {
+      this.remove(k);
+      this.insertItemsAt(k, value)
+      k++;
+    }
   }
 }

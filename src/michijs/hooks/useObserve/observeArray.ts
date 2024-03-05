@@ -46,20 +46,32 @@ export function observeArray<T extends Array<unknown>>(
     // Fixes calling iterable methods like forEach
     has: customObjectHas,
     get(target, p, receiver) {
-      const castedP = p as unknown as keyof ProxiedArrayInterface<T>;
-      if (
-        typeof castedP === "string" &&
-        mutableNewItemsProperties.has(castedP)
-      ) {
-        const targetProperty = Reflect.get(target, p);
-        return (...args: T[]) => {
-          const proxiedArray = args.map((value) =>
-            useObserve<any>(value, newInitialObservers),
-          );
-          const result = targetProperty.apply(target, proxiedArray);
-          return result;
-        };
-      } else return customObjectGet(newInitialObservers)(target, p, receiver);
+      const castedP = p as unknown as keyof InstanceType<typeof ProxiedArray>;
+      if (typeof castedP === "string") {
+        if (mutableNewItemsProperties.has(castedP)) {
+          const targetProperty = Reflect.get(target, p) as Function;
+          return (...args: T[]) => {
+            const proxiedArray = args.map((value) =>
+              useObserve<any>(value, newInitialObservers),
+            );
+            const result = targetProperty.apply(target, proxiedArray);
+            return result;
+          };
+        } else if (castedP === 'fill') {
+          const targetProperty = Reflect.get(target, p) as Function;
+          return (value, start, end) => {
+            const result = targetProperty.apply(target, [useObserve<any>(value, newInitialObservers),start,end]);
+            return result;
+          };
+        } else if (castedP === 'splice') {
+          const targetProperty = Reflect.get(target, p) as Function;
+          return (start, deleteCount, ...items) => {
+            const result = targetProperty.apply(target, [start, deleteCount, ...items.map(x => useObserve<any>(x, newInitialObservers))]);
+            return result;
+          };
+        }
+      }
+      return customObjectGet(newInitialObservers)(target, p, receiver);
     },
   });
 
