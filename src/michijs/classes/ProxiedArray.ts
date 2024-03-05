@@ -127,7 +127,7 @@ export class ProxiedArray<V>
     });
     return result;
   }
-  splice(start: number, deleteCount: number = 0, ...items: V[]) {
+  splice(start: number, deleteCount = 0, ...items: V[]) {
     if (start === 0 && deleteCount >= this.$value.length)
       this.$replace(...items);
     else {

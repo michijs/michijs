@@ -112,7 +112,7 @@ export class Target<V> {
   splice(start: number, deleteCount: number, ...items: V[]) {
     const len = this.element.childNodes.length;
     const relativeStart = start >> 0;
-    let k =
+    const k =
       relativeStart < 0
         ? Math.max(len + relativeStart, 0)
         : Math.min(relativeStart, len);
@@ -127,7 +127,7 @@ export class Target<V> {
     }
     if (items.length > 0) this.insertItemsAt(k, ...items);
   }
-  fill(value: V, start: number = 0, end?: number) {
+  fill(value: V, start = 0, end?: number) {
     const len = this.element.childNodes.length;
     const relativeStart = start >> 0;
 
