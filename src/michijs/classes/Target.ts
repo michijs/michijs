@@ -7,7 +7,7 @@ export class Target<V> {
     private element: VirtualFragment | ParentNode,
     private renderItem: NonProxiedFC<V>,
     private options?: CreateOptions,
-  ) { }
+  ) {}
 
   clear() {
     this.element.textContent = "";
@@ -110,7 +110,7 @@ export class Target<V> {
     else this.element.childNodes[i - 1].after(...childNodes);
   }
   splice(start: number, deleteCount: number, ...items: V[]) {
-    const len = this.element.childNodes.length
+    const len = this.element.childNodes.length;
     const relativeStart = start >> 0;
     let k =
       relativeStart < 0
@@ -125,11 +125,10 @@ export class Target<V> {
       item = nextSibling;
       count++;
     }
-    if (items.length > 0)
-      this.insertItemsAt(k, ...items);
+    if (items.length > 0) this.insertItemsAt(k, ...items);
   }
   fill(value: V, start: number = 0, end?: number) {
-    const len = this.element.childNodes.length
+    const len = this.element.childNodes.length;
     const relativeStart = start >> 0;
 
     let k =
@@ -146,7 +145,7 @@ export class Target<V> {
 
     while (k < final) {
       this.remove(k);
-      this.insertItemsAt(k, value)
+      this.insertItemsAt(k, value);
       k++;
     }
   }

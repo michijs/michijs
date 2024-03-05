@@ -57,16 +57,24 @@ export function observeArray<T extends Array<unknown>>(
             const result = targetProperty.apply(target, proxiedArray);
             return result;
           };
-        } else if (castedP === 'fill') {
+        } else if (castedP === "fill") {
           const targetProperty = Reflect.get(target, p) as Function;
           return (value, start, end) => {
-            const result = targetProperty.apply(target, [useObserve<any>(value, newInitialObservers),start,end]);
+            const result = targetProperty.apply(target, [
+              useObserve<any>(value, newInitialObservers),
+              start,
+              end,
+            ]);
             return result;
           };
-        } else if (castedP === 'splice') {
+        } else if (castedP === "splice") {
           const targetProperty = Reflect.get(target, p) as Function;
           return (start, deleteCount, ...items) => {
-            const result = targetProperty.apply(target, [start, deleteCount, ...items.map(x => useObserve<any>(x, newInitialObservers))]);
+            const result = targetProperty.apply(target, [
+              start,
+              deleteCount,
+              ...items.map((x) => useObserve<any>(x, newInitialObservers)),
+            ]);
             return result;
           };
         }
