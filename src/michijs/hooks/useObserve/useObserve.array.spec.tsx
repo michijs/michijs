@@ -51,11 +51,11 @@ describe("Observe array tests", () => {
     expectResult([exampleValue2]);
   });
   it("Sort function should work for array and the node as expected", () => {
-    array.push(5, 4, 3, 6);
+    array.push(5, 4, 3, 6, 9, 8);
     array.sort();
-    expectResult([1, 3, 4, 5, 6]);
+    expectResult([1, 3, 4, 5, 6, 8, 9]);
     array.sort((a, b) => b() - a());
-    expectResult([6, 5, 4, 3, 1]);
+    expectResult([9, 8, 6, 5, 4, 3, 1]);
   });
   it("Splice function should work for array and the node as expected", () => {
     array.push(2, 8, 4, 5, 6);
