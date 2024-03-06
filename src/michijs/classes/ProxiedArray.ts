@@ -32,9 +32,9 @@ export class ProxiedArray<V>
   ): Node => {
     const el = asTag
       ? (create({
-        jsxTag: asTag,
-        attrs,
-      } as SingleJSXElement) as ParentNode)
+          jsxTag: asTag,
+          attrs,
+        } as SingleJSXElement) as ParentNode)
       : new VirtualFragment();
 
     const newTarget = new Target(el, renderItem, context);
@@ -121,21 +121,24 @@ export class ProxiedArray<V>
   sort(compareFn?: (a: V, b: V) => number) {
     const arrayCopy = [...this.$value];
     const result = this.$value.sort(compareFn);
-    const indexesArray = arrayCopy.reduce((previousValue, currentValue, currentIndex) => {
-      const newIndex = result.indexOf(currentValue);
-      // To avoid repeated indexes
-      if (newIndex > currentIndex) {
-        previousValue.push({
-          currentIndex,
-          newIndex
-        })
-      }
-      return previousValue;
-    }, new Array<{ currentIndex: number, newIndex: number }>());
+    const indexesArray = arrayCopy.reduce(
+      (previousValue, currentValue, currentIndex) => {
+        const newIndex = result.indexOf(currentValue);
+        // To avoid repeated indexes
+        if (newIndex > currentIndex) {
+          previousValue.push({
+            currentIndex,
+            newIndex,
+          });
+        }
+        return previousValue;
+      },
+      new Array<{ currentIndex: number; newIndex: number }>(),
+    );
     this.targets.forEach((target) => {
-      indexesArray.forEach(({currentIndex, newIndex}) => {
-        target.swap(currentIndex, newIndex)
-      })
+      indexesArray.forEach(({ currentIndex, newIndex }) => {
+        target.swap(currentIndex, newIndex);
+      });
     });
     return result;
   }
