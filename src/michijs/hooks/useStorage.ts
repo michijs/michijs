@@ -1,5 +1,5 @@
 import { ObservableFromEventListener } from "../classes";
-import { ObservableType } from "../types";
+import type { ObservableType } from "../types";
 import { useObserve } from "./useObserve";
 
 export function useStorage<T extends object>(
