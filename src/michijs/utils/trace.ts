@@ -1,7 +1,7 @@
 export const trace = (message?: unknown) => {
   try {
-    throw new Error(message);
+    throw new Error();
   } catch (ex) {
-    console.log(ex);
+    console.log(message, ex);
   }
 };
