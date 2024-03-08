@@ -1,5 +1,5 @@
 import { setAttributes } from "../../DOM/attributes/setAttributes";
-import {
+import type {
   AnyObject,
   MichiCustomElement,
   ReflectedAttributesType,

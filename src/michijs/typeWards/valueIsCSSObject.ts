@@ -1,4 +1,4 @@
-import { CSSObject, CSSProperty } from "../types";
+import type { CSSObject, CSSProperty } from "../types";
 
 export function valueIsCSSObject(value: CSSProperty): value is CSSObject {
   // @ts-ignore

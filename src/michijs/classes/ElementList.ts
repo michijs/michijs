@@ -1,4 +1,4 @@
-import { DeepReadonly, GetElementProps, ObjectJSXElement } from "../..";
+import type { DeepReadonly, GetElementProps, ObjectJSXElement } from "../..";
 import { ListElement } from "../components/FragmentAndList";
 import { ListAttrs } from "../components/List";
 import { Target } from "./Target";
