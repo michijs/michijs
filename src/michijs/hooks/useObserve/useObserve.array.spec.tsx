@@ -70,7 +70,7 @@ describe("Observe array tests", () => {
     expectResult([1, 2, 3, 4, 5, 30]);
   });
   it("setObservableValue function should work for array and the node as expected", () => {
-    const result = [2, 8, 4, 5, 6]
+    const result = [2, 8, 4, 5, 6];
     setObservableValue(array, result);
     expectResult(result);
   });

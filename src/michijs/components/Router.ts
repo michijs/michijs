@@ -23,9 +23,9 @@ export const Router = <const T = CreateFCResult>(
 ) => {
   const el = asTag
     ? (create({
-      jsxTag: asTag,
-      attrs,
-    } as unknown as SingleJSXElement) as ChildNode & ParentNode)
+        jsxTag: asTag,
+        attrs,
+      } as unknown as SingleJSXElement) as ChildNode & ParentNode)
     : new VirtualFragment();
   const cache: Record<string, DocumentFragment> = {};
 
@@ -43,8 +43,7 @@ export const Router = <const T = CreateFCResult>(
     if (currentRoute && newCache) {
       const fragment = new DocumentFragment();
       fragment.append(...newCache);
-      if (enableCache)
-        cache[currentRoute] = fragment;
+      if (enableCache) cache[currentRoute] = fragment;
     }
 
     if (newMatchedRoute) {
