@@ -6,11 +6,9 @@ import type {
 import type { EventDispatcher, MappedIdGenerator } from "./classes";
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
-export interface CSSVar<T extends string> {
-  <V extends undefined | string | number = undefined>(
-    defaultValue?: V,
-  ): `var(${KebabCase<T>}${V extends undefined ? "" : `,${V}`})`;
-}
+export type CSSVar = <V extends undefined | string | number = undefined>(
+  defaultValue?: V,
+) => `var(${KebabCase<T>}${V extends undefined ? "" : `,${V}`})`;
 export type CssVariablesObject<
   T extends object | unknown,
   PK extends string = "-",
@@ -157,12 +155,8 @@ export type RequiredKeys<T> = {
 export type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>;
 
 // End Auxiliar Types
-export interface Subscription<T> {
-  (signal: T): void;
-}
-export interface RefSubscription<T, E> {
-  (signal: T, el: E): void;
-}
+export type Subscription = (signal: T) => void;
+export type RefSubscription = (signal: T, el: E) => void;
 export interface CompatibleSubscription {
   // its optional to keep compatibility with others observers like redux
   (): void;
@@ -461,28 +455,17 @@ export type FCProps<T = {}> = {
   [k in keyof T]: k extends "children" ? T[k] : ObservableType<T[k]>;
 };
 
-export interface NonProxiedFC<
-  T = {},
-  S extends Element = Element,
-  C = CreateOptions<S>,
-> {
-  (attrs: T, context?: C): SingleJSXElement;
-}
-export interface CreateFCResult<
-  T = {},
-  S extends Element = Element,
-  C = CreateOptions<S>,
-> {
-  (attrs: FCProps<T>, context?: C): SingleJSXElement;
-}
+export type NonProxiedFC = (attrs: T, context?: C) => SingleJSXElement;
+export type CreateFCResult = (
+  attrs: FCProps<T>,
+  context?: C,
+) => SingleJSXElement;
 export interface CreateFCCResult<
   T = {},
   S extends Element = Element,
   C = CreateOptions<S>,
 > extends CreateFCResult<T & { children?: JSX.Element }, S, C> {}
-export interface FC<T = {}, S extends Element = Element, C = CreateOptions<S>> {
-  (attrs: T, context?: C): SingleJSXElement;
-}
+export type FC = (attrs: T, context?: C) => SingleJSXElement;
 export interface FCC<T = {}, S extends Element = Element, C = CreateOptions<S>>
   extends FC<T & { children?: JSX.Element }, S, C> {}
 
@@ -733,9 +716,10 @@ export interface CreateOptions<E extends Element = Element> {
   readonly contextElement?: E;
 }
 
-export interface UseStyleSheetCallback<T> {
-  (tags: string, cssVariables: CssVariablesObject<T>): CSSObject;
-}
+export type UseStyleSheetCallback = (
+  tags: string,
+  cssVariables: CssVariablesObject<T>,
+) => CSSObject;
 
 export interface UseStyleSheet {
   <T>(props: UseStyleSheetCallback<T>): (tag: string) => CSSStyleSheet;
