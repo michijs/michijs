@@ -268,6 +268,23 @@ If the extends field is not provided an [Autonomous custom element](https://deve
 
 
 ## How this works?
+### The problem with stores
+Libraries traditional approach is usually based on stores.
+```mermaid
+graph TD;
+    subgraph Store
+    A["Property A"]
+    B["Property B"]
+    C["Property C"]
+    end
+    Store --> D["Component D"];
+    Store --> E["Component E"];
+    Store --> F["Component F"];
+    Store --> G["Component G"];
+```
+The problem is, any update on the store will trigger an update on a component even if the property that changed store has no relation to the component. Every tag / attribute / etc will need to be checked for changes in every rerender.
+
+### Observers / Signals
  Observers are a behavioral design pattern that defines a one-to-many dependency between objects. When the observable / subject undergoes a change in state, all its dependents (observers / subscribers) are notified and updated automatically with a signal.
 ```mermaid
 sequenceDiagram
@@ -282,12 +299,19 @@ sequenceDiagram
     Value-->>Proxy: Sends a clone of the value
     Proxy->>Subscriber: Notifies with a signal (new value)
 ```
-The normal approach of libraries is usually based on stores.
+
+This approach allows for a much more granular update. Instead of updating an entire component, you can update html elements, attributes, or a simple text node and still maintain the principle of a single source of truth
 ```mermaid
 graph TD;
-    Store --> ComponentA["Component A"];
-    Store --> ComponentB["Component B"];
-    Store --> ComponentC["Component C"];
+    subgraph Observable
+    A["Property A"]
+    B["Property B"]
+    C["Property C"]
+    end
+    A --> D["Attribute D"];
+    A --> E["Text node E"];
+    B --> F["Another observable F"];
+    C --> G["Text node G"];
 ```
 
 ### Static vs dynamic - The observables world
