@@ -17,7 +17,9 @@ export const defineReflectedAttributes = (
     for (const key in reflectedAttributes) {
       const standarizedAttributeName = formatToKebabCase(key);
       // Setting the specific element initial value
-      observable[key] = getAttributeValue(self.getAttribute(standarizedAttributeName))
+      observable[key] = getAttributeValue(
+        self.getAttribute(standarizedAttributeName),
+      );
       if (key !== standarizedAttributeName)
         definePropertyFromObservable(
           self,

@@ -14,8 +14,8 @@ createCustomElement("root-test-element", {
   },
   shadow: false,
   methods: {
-    toggleShowExample(){
-      this.showExample(this.showExample.not())
+    toggleShowExample() {
+      this.showExample(this.showExample.not());
     },
     onClickArray() {
       this.arrayTest.push(7, 8);
@@ -39,7 +39,11 @@ createCustomElement("root-test-element", {
             </msqrt>
           </mfrac>
         </math>
-        <If as="div" condition={this.showExample} then={<div onclick={this.onClickArray}>{this.arrayTest}</div>}/>
+        <If
+          as="div"
+          condition={this.showExample}
+          then={<div onclick={this.onClickArray}>{this.arrayTest}</div>}
+        />
         <this.arrayTest.List
           as="div"
           renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}

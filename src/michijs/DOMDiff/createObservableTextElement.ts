@@ -6,10 +6,14 @@ export const createObservableTextElement = (
   jsx: ObservableNonNullablePrimitiveType,
 ) => {
   const textNode = createTextElement(jsx.$value);
-  overrideCallbackWithRef(textNode, jsx, (newValue, el) =>
-  (el.textContent =
-    (typeof newValue === "object"
-      ? JSON.stringify(newValue)
-      : newValue?.toString()) ?? ""))
+  overrideCallbackWithRef(
+    textNode,
+    jsx,
+    (newValue, el) =>
+      (el.textContent =
+        (typeof newValue === "object"
+          ? JSON.stringify(newValue)
+          : newValue?.toString()) ?? ""),
+  );
   return textNode;
 };
