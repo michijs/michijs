@@ -24,15 +24,22 @@ type IfProps<T> = ExtendableComponentWithoutChildren<T> & {
  * Conditional rendering component. This is the only way to do it dynamically.
  */
 export const If = <const T = CreateFCResult>(
-  { as: asTag, condition, then, else: elseComponent, enableCache, ...attrs }: IfProps<T>,
+  {
+    as: asTag,
+    condition,
+    then,
+    else: elseComponent,
+    enableCache,
+    ...attrs
+  }: IfProps<T>,
   options: CreateOptions,
 ) => {
   // Create an element or a virtual fragment depending on the 'asTag' prop.
   const el = asTag
     ? (create({
-      jsxTag: asTag,
-      attrs,
-    } as unknown as SingleJSXElement) as ChildNode & ParentNode)
+        jsxTag: asTag,
+        attrs,
+      } as unknown as SingleJSXElement) as ChildNode & ParentNode)
     : new VirtualFragment();
 
   let cachedThen: DocumentFragment | undefined;
@@ -47,8 +54,7 @@ export const If = <const T = CreateFCResult>(
       if (newCache) {
         const fragment = new DocumentFragment();
         fragment.append(...newCache);
-        if (enableCache)
-          cachedElse = fragment;
+        if (enableCache) cachedElse = fragment;
       }
       if (cachedThen) el.replaceChildren(cachedThen);
       else if (then) el.replaceChildren(create(then, options));
@@ -56,8 +62,7 @@ export const If = <const T = CreateFCResult>(
       if (newCache) {
         const fragment = new DocumentFragment();
         fragment.append(...newCache);
-        if (enableCache)
-          cachedThen = fragment;
+        if (enableCache) cachedThen = fragment;
       }
       if (cachedElse) el.replaceChildren(cachedElse);
       else if (elseComponent)

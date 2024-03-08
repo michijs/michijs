@@ -15,9 +15,11 @@ export function setProperty(
   // priority to properties and events
   if (name === "_")
     Object.entries(newValue).forEach(([propertyName, value]) =>
-      bindObservableToRef(value, el, (newValue, el) => 
-        el[propertyName] = newValue
-      )
+      bindObservableToRef(
+        value,
+        el,
+        (newValue, el) => (el[propertyName] = newValue),
+      ),
     );
   else if (name.startsWith("on")) {
     const eventName = name.slice(2) as keyof ElementEventMap;
@@ -34,7 +36,8 @@ export function setProperty(
       const newValueWithClassName = `${newValue} ${el.$michi.styles.className}`;
       setAttribute(el, name, newValueWithClassName);
     });
-  else bindObservableToRef(newValue, el, (newValue, el) => 
-    setAttribute(el, name, newValue)
-  );
+  else
+    bindObservableToRef(newValue, el, (newValue, el) =>
+      setAttribute(el, name, newValue),
+    );
 }

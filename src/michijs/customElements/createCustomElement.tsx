@@ -62,7 +62,8 @@ export function createCustomElement<
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
-    implements MichiCustomElement {
+    implements MichiCustomElement
+  {
     $michi: MichiCustomElement["$michi"] = {
       store: useObserve(storeInit),
       alreadyRendered: false,
@@ -215,7 +216,7 @@ export function createCustomElement<
           const standarizedAttributeName = formatToKebabCase(key);
           setProperty(this, standarizedAttributeName, this[key], {
             contextElement: this,
-          })
+          });
         }
         this.willMount?.();
         if (this.render) {

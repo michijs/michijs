@@ -37,10 +37,13 @@ export const ElementInternals =
       const self = options?.contextElement;
       if (self && isMichiCustomElement(self) && self.$michi.internals) {
         if (errorMessage) {
-          const errorObservable = useComputedObserve(() => ({
-            errorMessage,
-            validityStateFlags,
-          }), getObservables([validityStateFlags, errorMessage]))
+          const errorObservable = useComputedObserve(
+            () => ({
+              errorMessage,
+              validityStateFlags,
+            }),
+            getObservables([validityStateFlags, errorMessage]),
+          );
 
           bindObservableToRef(errorObservable, self, (newValue, self) => {
             self.$michi.internals!.setValidity(
@@ -66,7 +69,11 @@ export const ElementInternals =
                 (newValue, self) => (self.$michi.internals![key] = newValue),
               );
             else if (key in self)
-              bindObservableToRef(value, self, (newValue, self) => (self[key] = newValue));
+              bindObservableToRef(
+                value,
+                self,
+                (newValue, self) => (self[key] = newValue),
+              );
             // Some browsers still dont support internals
             else {
               const formattedKey = key.toLowerCase().replace("aria", "aria-");
