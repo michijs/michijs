@@ -1,7 +1,6 @@
 import type { CSSProperties } from "../../generated/htmlType";
 import { setStyleProperty } from "./setStyleProperty";
-import { formatToKebabCase } from "../../utils";
-import { bindObservable } from "../../utils";
+import { bindObservableToRef, formatToKebabCase } from "../../utils";
 
 export function setStyle(
   element: Element | HTMLElement,
@@ -11,7 +10,7 @@ export function setStyle(
     Object.entries(cssObject).forEach(([key, value]) => {
       const formattedKey = formatToKebabCase(key);
       // Manual Update is faster than Object.assign
-      bindObservable(value, (newValue) =>
+      bindObservableToRef(value, element, (newValue, element) =>
         setStyleProperty(element, formattedKey, newValue),
       );
     });

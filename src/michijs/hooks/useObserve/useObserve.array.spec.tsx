@@ -1,5 +1,6 @@
 import type { ObservableType } from "../../types";
 import { useObserve } from "..";
+import { setObservableValue } from "../../utils";
 
 const exampleValue = 1;
 const exampleValue2 = 2;
@@ -67,5 +68,10 @@ describe("Observe array tests", () => {
     expectResult([1, 25, 2, 3, 4, 5, 30]);
     array.splice(1, 1);
     expectResult([1, 2, 3, 4, 5, 30]);
+  });
+  it("setObservableValue function should work for array and the node as expected", () => {
+    const result = [2, 8, 4, 5, 6]
+    setObservableValue(array, result);
+    expectResult(result);
   });
 });

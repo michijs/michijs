@@ -268,8 +268,30 @@ If the extends field is not provided an [Autonomous custom element](https://deve
 
 
 ## How this works?
+ Observers are a behavioral design pattern that defines a one-to-many dependency between objects. When the observable / subject undergoes a change in state, all its dependents (observers / subscribers) are notified and updated automatically with a signal.
+```mermaid
+sequenceDiagram
+    box black Observable
+    participant Value
+    participant Proxy
+    end
+    Subscriber->>Proxy: Subscribes to
+    Environment->>Proxy: Request to change a value
+    Proxy-->>Value: Value is diferent?
+    Value-->>Value: Yes! Update
+    Value-->>Proxy: Sends a clone of the value
+    Proxy->>Subscriber: Notifies with a signal (new value)
+```
+The normal approach of libraries is usually based on stores.
+```mermaid
+graph TD;
+    Store --> ComponentA["Component A"];
+    Store --> ComponentB["Component B"];
+    Store --> ComponentC["Component C"];
+```
 
 ### Static vs dynamic - The observables world
+
 
 ### Operators
 

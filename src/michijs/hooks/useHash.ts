@@ -18,7 +18,7 @@ const Hash = useComputedObserve(
 export const useHash = <T extends string = string>() =>
   Hash as ObservableType<Record<T, boolean>>;
 
-Hash.subscribe?.((newValue) => {
+Hash.subscribe((newValue) => {
   const [newHash] = newValue
     ? Object.entries(newValue).find(([_, value]) => value.valueOf()) ?? [""]
     : [""];

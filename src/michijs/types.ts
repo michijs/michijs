@@ -160,6 +160,9 @@ export type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>;
 export interface Subscription<T> {
   (signal: T): void;
 }
+export interface RefSubscription<T, E> {
+  (signal: T, el: E): void;
+}
 export interface CompatibleSubscription {
   // its optional to keep compatibility with others observers like redux
   (): void;

@@ -37,7 +37,7 @@ export function useSearchParams<
   return SearchParams as unknown as ObservableType<T>;
 }
 
-SearchParams.subscribe?.((newValue) => {
+SearchParams.subscribe((newValue) => {
   // Prevents pushing new urls while updating search params
   if (!isUpdating) {
     const newUrl = new URL(location.href);

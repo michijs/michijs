@@ -1,3 +1,4 @@
+import { getAttributeValue } from "../../DOM/attributes/getAttributeValue";
 import { setProperty } from "../../DOM/attributes/setProperty";
 import {
   MichiCustomElement,
@@ -15,6 +16,8 @@ export const defineReflectedAttributes = (
   if (reflectedAttributes)
     for (const key in reflectedAttributes) {
       const standarizedAttributeName = formatToKebabCase(key);
+      // Setting the specific element initial value
+      observable[key] = getAttributeValue(self.getAttribute(standarizedAttributeName))
       if (key !== standarizedAttributeName)
         definePropertyFromObservable(
           self,
@@ -22,10 +25,5 @@ export const defineReflectedAttributes = (
           observable,
           key,
         );
-      observable[key].subscribe?.((newValue) =>
-        setProperty(self, standarizedAttributeName, newValue, {
-          contextElement: self,
-        }),
-      );
     }
 };

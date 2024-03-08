@@ -1,6 +1,6 @@
 import { useStringTemplate } from "../hooks/useStringTemplate";
 import { ObservableType } from "../types";
-import { bindObservable } from "../utils";
+import { bindObservableToRef } from "../utils";
 
 /**
  * Allows to create a Constructable Stylesheet with a Template String.
@@ -13,7 +13,7 @@ export function css(
 ) {
   const template = useStringTemplate(cssObject, ...props);
   const styleSheet = new CSSStyleSheet();
-  bindObservable(template, (newValue) => {
+  bindObservableToRef(template, styleSheet, (newValue, styleSheet) => {
     // Jest fix
     if (styleSheet.replaceSync) styleSheet.replaceSync(newValue);
   });

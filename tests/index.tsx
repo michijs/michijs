@@ -1,4 +1,4 @@
-import { createCustomElement, Host } from "@michijs/michijs";
+import { createCustomElement, Host, If, useObserve } from "@michijs/michijs";
 import { ColorSelector } from "./ColorSelector";
 import { Router } from "./routes";
 // import sheet from './a.css' assert { type: 'css' };
@@ -9,8 +9,14 @@ createCustomElement("root-test-element", {
     count: 1,
     arrayTest: [0, 1, 2, 3, 4, 5],
   },
+  attributes: {
+    showExample: true as boolean,
+  },
   shadow: false,
   methods: {
+    toggleShowExample(){
+      this.showExample(this.showExample.not())
+    },
     onClickArray() {
       this.arrayTest.push(7, 8);
       // this.arrayTest = [0, 1, 2, 3, 6]
@@ -25,7 +31,7 @@ createCustomElement("root-test-element", {
     return (
       <Host>
         <Router />
-        <math display="block">
+        <math display="block" onclick={this.toggleShowExample}>
           <mfrac>
             <mn>{this.arrayTest.length}</mn>
             <msqrt>
@@ -33,12 +39,12 @@ createCustomElement("root-test-element", {
             </msqrt>
           </mfrac>
         </math>
+        <If as="div" condition={this.showExample} then={<div onclick={this.onClickArray}>{this.arrayTest}</div>}/>
         <this.arrayTest.List
           as="div"
           renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}
         />
         <ColorSelector />
-        <div onclick={this.onClickArray}>{this.arrayTest}</div>
       </Host>
     );
   },

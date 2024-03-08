@@ -18,7 +18,7 @@ const objectTests = (initialValue: () => AnyObject | unknown[]) => {
       nonProxiedObject = initialValue();
       object = undefined;
       object = useObserve(initialValue());
-      object.subscribe?.(mockCallback);
+      object.subscribe(mockCallback);
     });
     it("Setting the same value two times must call its callback just one time", () => {
       object[0] = exampleValue;
@@ -104,7 +104,7 @@ describe("Observe tests", () => {
     beforeEach(() => {
       nonProxiedMap = new Map();
       map = useObserve(new Map());
-      map.subscribe?.(mockCallback);
+      map.subscribe(mockCallback);
     });
     it("Setting the same value two times must call its callback just one time", () => {
       map[0] = exampleValue;
@@ -155,7 +155,7 @@ describe("Observe tests", () => {
     beforeEach(() => {
       nonProxiedSet = new Set<number>();
       set = useObserve(new Set<number>());
-      set.subscribe?.(mockCallback);
+      set.subscribe(mockCallback);
     });
     it("Setting the same value two times must call its callback just one time", () => {
       set[0] = exampleValue;
@@ -206,7 +206,7 @@ describe("Observe tests", () => {
     beforeEach(() => {
       nonProxiedDate = new Date();
       date = useObserve(new Date());
-      date.subscribe?.(mockCallback);
+      date.subscribe(mockCallback);
     });
     it("Setting the same value two times must call its callback just one time", () => {
       const newExampleValue = date.getTime() + 1;

@@ -13,17 +13,19 @@ import { bindObservable } from "../utils";
 export type RouterProps<T> = ExtendableComponentWithoutChildren<T> & {
   routes: Record<string, JSX.Element>;
   parentRoute?: UrlFunction<any, any>;
+  /** Allows to caché then / else components. */
+  enableCache?: boolean;
 };
 
 export const Router = <const T = CreateFCResult>(
-  { as: asTag, routes, parentRoute, ...attrs }: RouterProps<T>,
+  { as: asTag, routes, parentRoute, enableCache, ...attrs }: RouterProps<T>,
   options: CreateOptions,
 ) => {
   const el = asTag
     ? (create({
-        jsxTag: asTag,
-        attrs,
-      } as unknown as SingleJSXElement) as ChildNode & ParentNode)
+      jsxTag: asTag,
+      attrs,
+    } as unknown as SingleJSXElement) as ChildNode & ParentNode)
     : new VirtualFragment();
   const cache: Record<string, DocumentFragment> = {};
 
@@ -41,7 +43,8 @@ export const Router = <const T = CreateFCResult>(
     if (currentRoute && newCache) {
       const fragment = new DocumentFragment();
       fragment.append(...newCache);
-      cache[currentRoute] = fragment;
+      if (enableCache)
+        cache[currentRoute] = fragment;
     }
 
     if (newMatchedRoute) {

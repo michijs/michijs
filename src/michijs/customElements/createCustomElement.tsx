@@ -15,7 +15,6 @@ import {
 } from "../utils";
 import { defineEvent } from "./properties/defineEvent";
 import { definePropertyFromObservable } from "./properties/definePropertyFromObservable";
-import { setReflectedAttributes } from "./properties/setReflectedAttributes";
 import { defineMethod } from "./properties/defineMethod";
 import { getRootNode } from "../DOM/getRootNode";
 import { getAttributeValue } from "../DOM/attributes/getAttributeValue";
@@ -23,6 +22,7 @@ import { getMountPoint } from "../DOM/getMountPoint";
 import { defineReflectedAttributes } from "./properties/defineReflectedAttributes";
 import { useStyleSheet, convertCssObjectToCssVariablesObject } from "../css";
 import { create } from "../DOMDiff";
+import { setProperty } from "../DOM/attributes/setProperty";
 
 let classesIdGenerator: undefined | IdGenerator;
 
@@ -62,8 +62,7 @@ export function createCustomElement<
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
-    implements MichiCustomElement
-  {
+    implements MichiCustomElement {
     $michi: MichiCustomElement["$michi"] = {
       store: useObserve(storeInit),
       alreadyRendered: false,
@@ -169,7 +168,7 @@ export function createCustomElement<
     }
 
     attributeChangedCallback(name: string, oldValue, newValue) {
-      if (newValue !== oldValue) {
+      if (this.$michi.alreadyRendered && newValue !== oldValue) {
         const parsedNewValue = getAttributeValue(newValue);
         this.willReceiveAttribute?.(name, parsedNewValue, this[name]);
         this[name](parsedNewValue);
@@ -212,10 +211,12 @@ export function createCustomElement<
       }
       this.connected?.();
       if (!this.$michi.alreadyRendered) {
-        setReflectedAttributes(
-          this,
-          MichiCustomElementResult.observedAttributes,
-        );
+        for (const key in reflectedAttributes) {
+          const standarizedAttributeName = formatToKebabCase(key);
+          setProperty(this, standarizedAttributeName, this[key], {
+            contextElement: this,
+          })
+        }
         this.willMount?.();
         if (this.render) {
           const newChildren = create(this.render(), {

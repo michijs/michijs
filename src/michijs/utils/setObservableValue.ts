@@ -1,4 +1,4 @@
-import { ProxiedValue, useObserve } from "../..";
+import { ProxiedArray, ProxiedValue, useObserve } from "../..";
 import { Subscription } from "../types";
 
 // <T extends ObservableType<any>>
@@ -32,15 +32,24 @@ export function setObservableValue<T extends object>(
       if (object1Value || object2Value) {
         const castedObject1 = object1 as ProxiedValue<unknown>;
         castedObject1.startTransaction();
-        if (Array.isArray(object1Value)) {
-          // TODO: check
-          (object2Value as unknown as []).length = object2Value.length;
-          object2Value.forEach((x, i) => (object1[i] = x));
-        } else {
+        if (object1 instanceof ProxiedArray && Array.isArray(object2Value)) {
+          object1.$replace(...object2Value.map(x => useObserve<Object>(
+            x,
+            initialObservers as Subscription<Object>[],
+          )))
+        } else if (Object.getPrototypeOf(object1Value) === Object.prototype)
           for (const key in { ...object1Value, ...object2Value }) {
             object1[key] = object2Value[key];
           }
-        }
+        else
+          Reflect.set(
+            object1,
+            "$value",
+            useObserve<Object>(
+              object2,
+              initialObservers as Subscription<Object>[],
+            ).$value,
+          );
         castedObject1.endTransaction();
         return true;
         // TODO: add set / map etc
