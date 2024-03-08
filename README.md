@@ -288,7 +288,7 @@ The problem is, any update on the store will trigger an update on a component ev
  Observers are a behavioral design pattern that defines a one-to-many dependency between objects. When the observable / subject undergoes a change in state, all its dependents (observers / subscribers) are notified and updated automatically with a signal.
 ```mermaid
 sequenceDiagram
-    box black Observable
+    box rgb(71,73,73) Observable
     participant Value
     participant Proxy
     end
