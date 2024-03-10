@@ -1,4 +1,4 @@
-import { ChangeFunction, ValidatePropertyChangeFunction } from "../types";
+import type { ChangeFunction, ValidatePropertyChangeFunction } from "../types";
 import { observeArray } from "./observe/observeArray";
 import { observeCommonObject } from "./observe/observeCommonObject";
 import { observeDate } from "./observe/observeDate";

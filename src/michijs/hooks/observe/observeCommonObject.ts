@@ -1,5 +1,9 @@
 import { deepEqual } from "../../utils/deepEqual";
-import { observe, ObserveHandlerProps, ObserveProps } from "../observe";
+import {
+  observe,
+  type ObserveHandlerProps,
+  type ObserveProps,
+} from "../observe";
 
 export const customObjectSet = (
   props: ObserveHandlerProps,

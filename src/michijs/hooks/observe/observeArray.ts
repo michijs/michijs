@@ -1,4 +1,4 @@
-import { observe, ObserveProps } from "../observe";
+import { observe, type ObserveProps } from "../observe";
 import { customObjectDelete, customObjectSet } from "./observeCommonObject";
 
 export function observeArray<T extends Array<unknown>>({
