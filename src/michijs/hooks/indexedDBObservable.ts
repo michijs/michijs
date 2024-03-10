@@ -1,4 +1,4 @@
-import { AnyObject, ObservableLike } from "../types";
+import type { AnyObject, ObservableLike } from "../types";
 import { observable } from "./observable";
 
 interface TypedIDBObjectStoreParameters<T extends AnyObject>

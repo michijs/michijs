@@ -1,6 +1,11 @@
 import { createCustomElement } from "../customElements/createCustomElement";
 import { sharedUrlObservable } from "../routing/utils/sharedUrlObservable";
-import { AsyncRoute, Route, SyncRoute, UrlFunction } from "../routing/types";
+import type {
+  AsyncRoute,
+  Route,
+  SyncRoute,
+  UrlFunction,
+} from "../routing/types";
 import { hash, searchParams } from "../routing";
 import { urlFn } from "../routing/createRouter";
 import { h } from "../h";
