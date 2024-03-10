@@ -3,10 +3,10 @@ import type {
   CSSProperties,
   GlobalEvents,
 } from "@michijs/htmltype";
-import { EventDispatcher } from "./classes";
-import { idGenerator } from "./hooks";
-import { Fragment } from "./components";
-import { MichiAttributes } from "./h/MichiAttributes";
+import type { EventDispatcher } from "./classes";
+import type { idGenerator } from "./hooks";
+import type { Fragment } from "./components";
+import type { MichiAttributes } from "./h/MichiAttributes";
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 export type CSSVar<T extends string> = KebabCase<T> & {
@@ -147,9 +147,7 @@ export type RequiredKeys<T> = {
 export type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>;
 
 // End Auxiliar Types
-export interface ObserverCallback<T> {
-  (value?: T): void;
-}
+export type ObserverCallback = (value?: T) => void;
 
 export interface ObservableLike<T = any> {
   subscribe(observer: ObserverCallback<T>): void;
@@ -249,17 +247,11 @@ export type SingleJSXElement =
 export type ArrayJSXElement = SingleJSXElement[];
 // export type PureObjectJSXElement = { tag: string } & Omit<CommonJSXAttrs,'children'> & {children: (PureObjectJSXElement | string)[]};
 
-export interface FC<T = {}, S = Element> {
-  (attrs: T, self?: S | null): JSX.Element;
-}
+export type FC = (attrs: T, self?: S | null) => JSX.Element;
 
 export type PropertyKey = string | number | symbol;
-export interface ChangeFunction {
-  (propertyPath?: string): void;
-}
-export interface ValidatePropertyChangeFunction {
-  (propertyPath?: string): boolean;
-}
+export type ChangeFunction = (propertyPath?: string) => void;
+export type ValidatePropertyChangeFunction = (propertyPath?: string) => boolean;
 
 export type CSSProperty =
   | CSSObject

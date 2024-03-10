@@ -1,4 +1,4 @@
-import { ObservableLike } from "../types";
+import type { ObservableLike } from "../types";
 import { observable } from "./observable";
 import { observe } from "./observe";
 
