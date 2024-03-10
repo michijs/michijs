@@ -1,7 +1,6 @@
 <div align="center">
   <img width="500px" src="https://raw.githubusercontent.com/michijs/art/main/logo-with-background-strait.png">
-
-  A Vainilla Library for Web Components
+  <p>A Vainilla Library for Web Components</p>
 </div>
 
   [![Open in Visual Studio Code][open-in-vscode]][open-in-vscode-url] 
@@ -36,8 +35,8 @@
 | Supports Custom Built-in elements | ✅ | ❌ | ❌ | ✅ | ✅ |
 | Can be used with different frameworks right out of the box | ✅ | ❌ | ✅ | ⭕ | ✅ |
 | ✅ = implemented
-⭕ = partially implemented
-❌ = not implemented
+| ⭕ = partially implemented
+| ❌ = not implemented
 
 ## Getting Started
 
