@@ -1,7 +1,8 @@
 <div align="center">
-  <img width="500px" src="https://raw.githubusercontent.com/michijs/art/main/logo-with-background-strait.png"></img>
+  <img width="500px" src="https://raw.githubusercontent.com/michijs/art/main/logo-with-background-strait.png">
+  <p>A Vainilla Library for Web Components</p>
+</div>
 
-  ### A Vainilla Library for Web Components
   [![Open in Visual Studio Code][open-in-vscode]][open-in-vscode-url] 
   ![npm][version] 
   [![license][github-license]][github-license-url] 
@@ -10,9 +11,9 @@
   ![npm][minzipped-size]
   [![CodeQL](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml)
   [![Tests](https://github.com/michijs/michijs/actions/workflows/tests.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/tests.yml)
-</div>
 
 ## Why "MichiJS?"
+
 |  | MichiJS  |  React  |  StencilJS  | SvelteJS | VanillaJS |
 |--|--|--|--|--|--|
 | Prefer real DOM over virtual DOM | ✅ | ❌ | ❌ | ✅ | ✅ |
@@ -34,8 +35,8 @@
 | Supports Custom Built-in elements | ✅ | ❌ | ❌ | ✅ | ✅ |
 | Can be used with different frameworks right out of the box | ✅ | ❌ | ✅ | ⭕ | ✅ |
 | ✅ = implemented
-⭕ = partially implemented
-❌ = not implemented
+| ⭕ = partially implemented
+| ❌ = not implemented
 
 ## Getting Started
 
