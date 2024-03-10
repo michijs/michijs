@@ -283,10 +283,17 @@ graph TD;
     Store --> F["Component F"];
     Store --> G["Component G"];
 ```
-The problem is, any update on the store will trigger an update on a component even if the property that changed store has no relation to the component. Every tag / attribute / etc will need to be checked for changes in every rerender.
+This approach brings two major issues:
+- Any update on the store will trigger an update on a component even if the property that changed store has no relation to the component. Every tag / attribute / etc will need to be checked for changes in every rerender.
+- There is now way to set static properties in a dinamic environment. Take this React example:
+```tsx
+  const [value, setValue] = useState(0);
+```
+
 
 ### Observers / Signals
  Observers are a behavioral design pattern that defines a one-to-many dependency between objects. When the observable / subject undergoes a change in state, all its dependents (observers / subscribers) are notified and updated automatically with a signal.
+
 ```mermaid
 sequenceDiagram
     box rgb(71,73,73) Observable
@@ -301,7 +308,8 @@ sequenceDiagram
     Proxy->>Subscriber: Notifies with a signal (new value)
 ```
 
-This approach allows for a much more granular update. Instead of updating an entire component, you can update html elements, attributes, or a simple text node and still maintain the principle of a single source of truth
+This approach allows for a much more granular update. Instead of updating an entire component, you can update html elements, attributes, or a simple text node and still maintain the principle of a single source of truth.
+
 ```mermaid
 graph TD;
     subgraph Observable
@@ -315,8 +323,77 @@ graph TD;
     C --> G["Text node G"];
 ```
 
-### Static vs dynamic - The observables world
+### Rendering - Static vs dynamic
+Taking the above into account, the rendering process changes drastically. Instead of rendering the entire component with each change, __we render the component only once and the changes are managed through the observables__.
 
+For example:
+
+```tsx
+import { createCustomElement, useComputedObserve } from "@michijs/michijs";
+
+createCustomElement("test-component", {
+  reflectedAttributes: {
+    valueA: 0,
+    valueB: 1,
+  },
+  methods: {
+    incrementValueB() {
+      this.valueB(this.valueB() + 1);
+    },
+  },
+  render() {
+    const sum = useComputedObserve(() => this.valueA() + this.valueB(), [this.valueA, this.valueB])
+    return (
+      <>
+        <button onpointerup={this.incrementValueB}>Increment B</button>
+        {/* Renders 0, but is static */}
+        <span>{this.valueA()}</span>
+        {/* Renders 1, but is dinamic and will change when clicking on the button */}
+        <span>{this.valueB}</span>
+        {/* Renders 1, but is static */}
+        <span>{this.valueA() + this.valueB()}</span>
+        {/* Renders 1, but is dinamic and will change when clicking on the button */}
+        <span>{sum}</span>
+      </>
+    );
+  },
+});
+```
+
+In this example there are four different cases:
+
+1. Getting a clone of the value, without binding the observable to the element; In this case we only get a number, not an observable, so the result is static.
+```tsx
+        {/* Renders 0, but is static */}
+        <span>{this.valueA()}</span>
+```
+
+2. Getting a clone of the value, binding the observable to the element; In this case we use an observable, so the result is dinamic.
+```tsx
+        {/* Renders 1, but is dinamic and will change when clicking on the button */}
+        <span>{this.valueB}</span>
+```
+
+3. Getting a clone of the value, binding the observable to the element; In this case we use an observable, so the result is dinamic.
+```tsx
+        {/* Renders 1, but is static */}
+        <span>{this.valueA() + this.valueB()}</span>
+```
+
+
+```tsx
+        <span>{this.valueA}</span>
+        {/* Renders 1 */}
+        <span>{this.valueB}</span>
+        {/* Renders 1, but is static */}
+        <span>{this.valueA() + this.valueB()}</span>
+        {/* Renders 1, but is dinamic and will change when clicking on the button */}
+        <span>{sum}</span>
+      </>
+    );
+  },
+});
+```
 
 ### Operators
 
