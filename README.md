@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="500px" src="https://raw.githubusercontent.com/michijs/art/main/logo-with-background-strait.png"></img>
+  <img width="500px" src="https://raw.githubusercontent.com/michijs/art/main/logo-with-background-strait.png">
 
   ### A Vainilla Library for Web Components
   [![Open in Visual Studio Code][open-in-vscode]][open-in-vscode-url] 
