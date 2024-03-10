@@ -1,7 +1,9 @@
 <div align="center">
   <img width="500px" src="https://raw.githubusercontent.com/michijs/art/main/logo-with-background-strait.png">
 
-  ### A Vainilla Library for Web Components
+  A Vainilla Library for Web Components
+</div>
+
   [![Open in Visual Studio Code][open-in-vscode]][open-in-vscode-url] 
   ![npm][version] 
   [![license][github-license]][github-license-url] 
@@ -10,9 +12,9 @@
   ![npm][minzipped-size]
   [![CodeQL](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml)
   [![Tests](https://github.com/michijs/michijs/actions/workflows/tests.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/tests.yml)
-</div>
 
 ## Why "MichiJS?"
+
 |  | MichiJS  |  React  |  StencilJS  | SvelteJS | VanillaJS |
 |--|--|--|--|--|--|
 | Prefer real DOM over virtual DOM | ✅ | ❌ | ❌ | ✅ | ✅ |
