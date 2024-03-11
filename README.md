@@ -452,9 +452,6 @@ export const counterStyle = css`
 
 ## CSS module scripts
 We do not provide support for this functionality yet as ESBuild does not support it yet. You can read how it works [here](https://web.dev/css-module-scripts/)
-<!-- ```js
-import sheet from './styles.css' assert { type: 'css' };
-``` -->
 
 ## Components
 
