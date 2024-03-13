@@ -1,7 +1,7 @@
 import { create } from "../DOMDiff";
 import { jsx } from "../h";
 import { VirtualFragment } from "../classes";
-import {
+import type {
   CreateOptions,
   ExtendableComponentWithoutChildren,
   CreateFCResult,
