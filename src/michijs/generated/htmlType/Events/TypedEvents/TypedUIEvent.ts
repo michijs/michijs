@@ -1,4 +1,4 @@
-import { TypedEvent } from "./TypedEvent";
+import type { TypedEvent } from "./TypedEvent";
 /** Simple user interface events. */
 export interface TypedUIEvent<T> extends TypedEvent<T> {
   readonly detail: number;
