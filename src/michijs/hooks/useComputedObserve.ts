@@ -1,7 +1,7 @@
-import { ObservableType } from "../types";
+import type { ObservableType } from "../types";
 import { useObserve } from "./useObserve";
 import { setObservableValue } from "../utils";
-import { useWatch, useWatchDeps } from "./useWatch";
+import { useWatch, type useWatchDeps } from "./useWatch";
 
 export function useComputedObserve<const T>(
   callback: () => T,
