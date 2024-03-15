@@ -1,4 +1,4 @@
-import { ClassJSXElement, FunctionJSXElement } from "../types";
+import type { ClassJSXElement, FunctionJSXElement } from "../types";
 
 export function isClassJSXElement(
   param: FunctionJSXElement | ClassJSXElement,
