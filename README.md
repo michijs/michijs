@@ -601,7 +601,7 @@ The intention of using a custom routing tool is to avoid the use of strings to r
 export const [urls, Router] = registerRoutes({
   syncRoute: <div>Hello World</div>,
   //Redirect route
-  '/': <Redirect to={url} />,
+  '/': <Redirect to={url} />
 });
 
 //Child routes
