@@ -1,5 +1,5 @@
 import { useStringTemplate } from "../hooks/useStringTemplate";
-import { ObservableType } from "../types";
+import type { ObservableType } from "../types";
 import { bindObservableToRef } from "../utils";
 
 /**
