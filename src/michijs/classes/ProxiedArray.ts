@@ -1,12 +1,12 @@
 import {
-  CreateOptions,
-  ExtendableComponentWithoutChildren,
-  Subscription,
+  type CreateOptions,
+  type ExtendableComponentWithoutChildren,
+  type Subscription,
   ProxiedValue,
-  SingleJSXElement,
-  ProxiedArrayInterface,
-  MutableArrayProperties,
-  NonProxiedFC,
+  type SingleJSXElement,
+  type ProxiedArrayInterface,
+  type MutableArrayProperties,
+  type NonProxiedFC,
 } from "../..";
 import { create } from "../DOMDiff";
 import { Target } from "./Target";
@@ -142,7 +142,7 @@ export class ProxiedArray<V>
     });
     return result;
   }
-  splice(start: number, deleteCount: number = 0, ...items: V[]) {
+  splice(start: number, deleteCount = 0, ...items: V[]) {
     if (start === 0 && deleteCount >= this.$value.length)
       this.$replace(...items);
     else {

@@ -1,4 +1,4 @@
-import { Browser, launch, Page } from "puppeteer";
+import { type Browser, launch, type Page } from "puppeteer";
 import { makePerformanceTests } from "./shared";
 
 describe("Performance tests - vanilla-js", () => {
