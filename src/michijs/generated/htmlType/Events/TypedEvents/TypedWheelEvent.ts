@@ -1,4 +1,4 @@
-import { TypedMouseEvent } from "./TypedMouseEvent";
+import type { TypedMouseEvent } from "./TypedMouseEvent";
 export interface TypedWheelEvent<T> extends TypedMouseEvent<T> {
   readonly deltaMode: number;
   readonly deltaX: number;
