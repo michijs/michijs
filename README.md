@@ -10,7 +10,7 @@
   ![npm][minzipped-size]
   [![CodeQL](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml)
   [![Tests](https://github.com/michijs/michijs/actions/workflows/tests.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/tests.yml)
-  
+
 </div>
 
 ## Why "MichiJS?"
@@ -421,7 +421,7 @@ __Our stylesheets can also subscribe to observables.__
 
 #### useStyleSheet
 Allows to create a Constructable Stylesheet with a CSSObject
-```js
+```tsx
 export const counterStyle = useStyleSheet({
   ':host': {
     display: 'flex',
@@ -437,7 +437,7 @@ export const counterStyle = useStyleSheet({
 Allows to create a Constructable Stylesheet with a Template String.
 [Recomended extension for VSCode](https://marketplace.visualstudio.com/items?itemName=paulmolluzzo.convert-css-in-js).
 
-```js
+```tsx
 export const counterStyle = css`
   :host {
       display: flex;
@@ -500,23 +500,23 @@ Usually, if you want to get an html like this:
 <div class='test'></div>
 ```
 In React / Stencil / etc you should write a jsx like this:
-```jsx
+```tsx
 () => <div className='test'></div>
 ```
 And eventually code like this would be executed:
-```js
+```tsx
 const el = document.createElement('div');
 el.className = 'test';
 ```
 In MichiJS you have the freedom to use both attributes and properties and the result will be the same:
-```jsx
+```tsx
 // Using properties
 () => <div _={{className: 'test'}}></div>
 // Using attributes
 () => <div class='test'></div>
 ```
 And eventually code like this would be executed:
-```js
+```tsx
 const el = document.createElement('div');
 // Using properties
 el.className = 'test';
@@ -529,7 +529,7 @@ In this way the jsx syntax of MichiJS is more similar to html.
 There are 2 ways to create a list
 ### The static way - Using map
 It's the way to create static lists from an array object. Since the result will be static, it will reflect the state of a variable when it is rendered. Useful for read-only lists.
-```jsx
+```tsx
 const arrayTest = [0, 1, 2];
 
 arrayTest.map(item => <div>{item}</div>)
@@ -544,7 +544,7 @@ This will generate an element like:
 
 ### The dynamic way - Using List component
 It is a component that avoids using dom diff algorithms to render dynamic lists. This allows it to have a performance close to vanilla js. An operation on the data implies an operation on the associated elements. 
-```jsx
+```tsx
 const arrayTest = useObserve([0, 1, 2]);
 
 <arrayTest.List 
@@ -596,7 +596,7 @@ This will generate an element like:
 ## Routing
 The intention of using a custom routing tool is to avoid the use of strings to represent the urls and to use modern apis that allow the use of the URL object itself. It also allows to separate the components of the routes which allows a cleaner code.
 
-```js
+```tsx
 //Parent routes
 export const [urls, Router] = registerRoutes({
   syncRoute: <div>Hello World</div>,
@@ -628,7 +628,7 @@ urlsChild.asyncChildRoute({ searchParams: { searchParam1: 'param 1', searchParam
 ```
 Router and RouterChild are components that represent the mount points of each registered route.
 
-```js
+```tsx
 const AsyncChildExample: FC = () => {
     const searchParams = useSearchParams<{
       searchParam1: string, 
@@ -650,7 +650,7 @@ export default AsyncChildExample
 
 ## I18n
 It is supported by using a custom store
-```js
+```tsx
 const translator = new I18n<'es' | 'en'>(localStorage.getItem('lang'));
 
 const store = translator.createTranslation({
