@@ -1,0 +1,280 @@
+:root {
+  --text-color: #D4D4D4;
+  --background-color: #0D1117;
+  --error-text-color: #F44747;
+  --error-background-color: #ac4142;
+  --comment-color: #6A9955;
+  --accent: #EBBF4AD0;
+  --keyword-color: var(--accent);
+  --string-color: #CE9178;
+  --number-color: #B5CEA8;
+  --variable-color: var(--accent);
+}
+
+.highlight {
+  color: var(--text-color);
+
+  table {
+      td {
+          padding: 5px;
+      }
+      pre {
+          margin: 0;
+      }
+  }
+
+  .w {
+      color: var(--text-color);
+  }
+
+  .err {
+      color: var(--error-text-color);
+      background-color: var(--error-background-color);
+  }
+
+  .c,
+  .cd,
+  .cm,
+  .c1,
+  .cs {
+      color: var(--comment-color);
+  }
+
+  .cp,
+  .o,
+  .ow {
+      color: var(--number-color);
+  }
+
+  .p,
+  .pi {
+      color: var(--text-color);
+  }
+
+  .gi {
+      color: var(--variable-color);
+  }
+
+  .gd {
+      color: var(--error-background-color);
+  }
+
+  .gh {
+      color: #6a9fb5;
+      font-weight: bold;
+  }
+
+  .k,
+  .kn,
+  .kp,
+  .kr,
+  .kv {
+      color: var(--keyword-color);
+  }
+
+  .kc,
+  .kt,
+  .kd {
+      color: var(--number-color);
+  }
+
+  .s,
+  .sb,
+  .sc,
+  .sd,
+  .s2,
+  .sh,
+  .sx,
+  .s1 {
+      color: var(--string-color);
+  }
+
+  .sr {
+      color: var(--string-color);
+  }
+
+  .si,
+  .se {
+      color: var(--error-text-color);
+  }
+
+  .nt,
+  .nn,
+  .nc,
+  .no {
+      color: var(--number-color);
+  }
+
+  .na {
+      color: var(--variable-color);
+  }
+
+  .m,
+  .mf,
+  .mh,
+  .mi,
+  .il,
+  .mo,
+  .mb,
+  .mx {
+      color: var(--string-color);
+  }
+
+  .ss {
+      color: var(--string-color);
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--background-color);
+  color: var(--text-color);
+  font-size: 16px;
+  line-height: 1.5;
+  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+
+  .container {
+      width: 90%;
+      max-width: 1000px;
+      margin: 0 auto;
+  }
+
+  section {
+      display: block;
+      margin: 0 0 20px 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+      margin: 0 0 20px;
+  }
+
+  li {
+      line-height: 1.4;
+  }
+
+  header {
+      background: rgba(0, 0, 0, 0.1);
+      width: 100%;
+      border-bottom: 1px dashed var(--accent);
+      padding: 20px 0;
+      margin: 0 0 40px 0;
+  }
+
+  header h1 {
+      font-size: 30px;
+      line-height: 1.5;
+      margin: 0 0 0 -40px;
+      font-weight: bold;
+      font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+      color: var(--accent);
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(181, 232, 83, 0.1), 0 0 10px rgba(181, 232, 83, 0.1);
+      letter-spacing: -1px;
+      -webkit-font-smoothing: antialiased;
+
+      &:before {
+          content: "./ ";
+          font-size: 24px;
+      }
+  }
+
+  header h2 {
+      font-size: 18px;
+      font-weight: 300;
+      color: #666;
+  }
+
+  #downloads .btn {
+      display: inline-block;
+      text-align: center;
+      margin: 0;
+  }
+
+  #main_content {
+      width:100%;
+      -webkit-font-smoothing:antialiased;
+  }
+
+  section img {
+      max-width: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+      font-weight: normal;
+      font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+      color: var(--accent);
+      letter-spacing: -0.03em;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(181, 232, 83, 0.1), 0 0 10px rgba(181, 232, 83, 0.1);
+  }
+
+  #main_content h1 {
+      font-size: 30px;
+  }
+
+  #main_content h2 {
+      font-size: 24px;
+  }
+
+  #main_content h3 {
+      font-size: 18px;
+  }
+
+  #main_content h4 {
+      font-size: 14px;
+  }
+
+  #main_content h5 {
+      font-size: 12px;
+      text-transform: uppercase;
+      margin: 0 0 5px 0;
+  }
+
+  #main_content h6 {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #999;
+      margin: 0 0 5px 0;
+  }
+
+  dt {
+      font-style: italic;
+      font-weight: bold;
+  }
+
+  ::marker {
+    content: "> "
+  }
+
+  blockquote {
+      color: #aaa;
+      padding-left: 10px;
+      border-left: 1px dotted #666;
+  }
+
+  pre {
+      background: rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 10px;
+      font-size: 16px;
+      color: var(--text-color);
+      border-radius: 2px;
+      word-wrap: normal;
+      overflow: auto;
+      overflow-y: hidden;
+  }
+
+  code.highlighter-rouge {
+      background: rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+}
