@@ -1,5 +1,5 @@
-import { ProxiedArray, ProxiedValue, useObserve } from "../..";
-import { Subscription } from "../types";
+import { ProxiedArray, type ProxiedValue, useObserve } from "../..";
+import type { Subscription } from "../types";
 
 // <T extends ObservableType<any>>
 export function setObservableValue<T extends object>(
