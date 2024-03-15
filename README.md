@@ -1,7 +1,6 @@
 <div align="center">
   <img width="500px" src="https://raw.githubusercontent.com/michijs/art/main/logo-with-background-strait.png">
   <p>A Vainilla Library for Web Components</p>
-</div>
 
   [![Open in Visual Studio Code][open-in-vscode]][open-in-vscode-url] 
   ![npm][version] 
@@ -11,6 +10,8 @@
   ![npm][minzipped-size]
   [![CodeQL](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml)
   [![Tests](https://github.com/michijs/michijs/actions/workflows/tests.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/tests.yml)
+  
+</div>
 
 ## Why "MichiJS?"
 
