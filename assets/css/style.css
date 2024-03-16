@@ -144,7 +144,7 @@ body {
 
   main {
     word-wrap: break-word;
-    width: 90%;
+    width: calc(100% - 16px);
     max-width: 1000px;
     margin: 35px auto;
   }
