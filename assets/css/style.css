@@ -15,6 +15,12 @@ img, table {
   max-width: 100%;
 }
 
+table {
+  width: max-content;
+  overflow: auto;
+  display: block;
+}
+
 tr:nth-child(2n) {
   background-color: #161b22;
 }
@@ -139,7 +145,7 @@ body {
   main {
     width: 90%;
     max-width: 1000px;
-    margin: 0 auto;
+    margin: 35px auto;
   }
 
   h1,
