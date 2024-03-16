@@ -1,4 +1,4 @@
-import { ValueSets } from "./ValueSets";
+import type { ValueSets } from "./ValueSets";
 export interface AllAttributes {
   /**
    * This attribute contains a short abbreviated description of the cell's content. Some user-agents, such as speech readers, may present this description before the content itself.

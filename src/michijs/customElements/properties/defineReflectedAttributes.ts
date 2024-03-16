@@ -1,6 +1,6 @@
 import { getAttributeValue } from "../../DOM/attributes/getAttributeValue";
 import { setProperty } from "../../DOM/attributes/setProperty";
-import {
+import type {
   MichiCustomElement,
   ObservableType,
   ReflectedAttributesType,

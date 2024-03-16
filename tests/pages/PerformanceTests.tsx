@@ -1,4 +1,4 @@
-import { CreateFCResult, Title } from "@michijs/michijs";
+import { type CreateFCResult, Title } from "@michijs/michijs";
 import { TableManager, Table } from "../benchmark/michijs/src/index";
 
 const PerformanceTests: CreateFCResult = () => (
