@@ -95,21 +95,22 @@
       color: var(--error-text-color);
   }
 
-  .nt,
-  .nn,
-  .nc,
-  .no {
+  .mi {
       color: var(--number-color);
   }
 
+  .nt,
+  .nn,
+  .nc,
+  .no,
   .na {
       color: var(--variable-color);
   }
 
+  .dl,
   .m,
   .mf,
   .mh,
-  .mi,
   .il,
   .mo,
   .mb,
