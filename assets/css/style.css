@@ -57,6 +57,8 @@
       font-weight: bold;
   }
 
+  .si,
+  .se,
   .cp,
   .o,
   .ow,
@@ -84,11 +86,6 @@
 
   .sr {
       color: var(--string-color);
-  }
-
-  .si,
-  .se {
-      color: var(--error-text-color);
   }
 
   .mi {
