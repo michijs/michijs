@@ -1,4 +1,4 @@
-import { ObservableLike } from "../types";
+import type { ObservableLike } from "../types";
 
 export function isObservableType<T>(
   jsx: T,
