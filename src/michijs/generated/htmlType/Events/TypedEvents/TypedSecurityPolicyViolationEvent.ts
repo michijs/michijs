@@ -1,4 +1,4 @@
-import { TypedEvent } from "./TypedEvent";
+import type { TypedEvent } from "./TypedEvent";
 export interface TypedSecurityPolicyViolationEvent<T> extends TypedEvent<T> {
   readonly blockedURI: string;
   readonly columnNumber: number;
