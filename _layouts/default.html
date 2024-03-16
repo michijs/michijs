@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,15 +15,18 @@
   <link rel="alternate icon" type="image/x-icon"
     href="https://raw.githubusercontent.com/michijs/art/main/logo-with-background-square.png">
   <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
   {% seo %}
   <title>{{ page.title }}</title>
 </head>
 
 <body>
-  <main class="container">
-    <article id="main_content">
-      {{ content }}
-    </article>
+  <main>
+    {{ content }}
   </main>
 </body>
 
