@@ -39,13 +39,6 @@
   .cs {
       color: var(--comment-color);
   }
-
-  .cp,
-  .o,
-  .ow {
-      color: var(--number-color);
-  }
-
   .p,
   .pi {
       color: var(--text-color);
@@ -64,6 +57,9 @@
       font-weight: bold;
   }
 
+  .cp,
+  .o,
+  .ow,
   .k,
   .kn,
   .kp,
