@@ -95,8 +95,7 @@
   .nt,
   .nn,
   .nc,
-  .no,
-  .na {
+  .no {
       color: var(--variable-color);
   }
 
