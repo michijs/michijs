@@ -1,5 +1,5 @@
-import { TypedOnErrorEventHandler } from "./TypedEventHandlers/TypedOnErrorEventHandler";
-import {
+import type { TypedOnErrorEventHandler } from "./TypedEventHandlers/TypedOnErrorEventHandler";
+import type {
   TypedAnimationEvent,
   TypedDragEvent,
   TypedEvent,
@@ -16,7 +16,7 @@ import {
   TypedUIEvent,
   TypedSecurityPolicyViolationEvent,
 } from "./TypedEvents";
-import { TypedInputEvent } from "./TypedEvents/TypedInputEvent";
+import type { TypedInputEvent } from "./TypedEvents/TypedInputEvent";
 export interface GlobalEvents<T extends EventTarget> {
   /**
    * Fires when the user aborts the download.
