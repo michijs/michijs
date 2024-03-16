@@ -68,14 +68,11 @@
   .kn,
   .kp,
   .kr,
-  .kv {
-      color: var(--keyword-color);
-  }
-
   .kc,
   .kt,
-  .kd {
-      color: var(--number-color);
+  .kd,
+  .kv {
+      color: var(--keyword-color);
   }
 
   .s,
