@@ -1,4 +1,4 @@
-import { ObservableNonNullablePrimitiveType } from "../types";
+import type { ObservableNonNullablePrimitiveType } from "../types";
 import { overrideCallbackWithRef } from "../utils/overrideCallbackWithRef";
 import { createTextElement } from "./createTextElement";
 
