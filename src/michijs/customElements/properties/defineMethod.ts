@@ -1,4 +1,4 @@
-import { MichiCustomElement } from "../../types";
+import type { MichiCustomElement } from "../../types";
 
 export function defineMethod(
   self: MichiCustomElement,
