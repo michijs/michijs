@@ -11,6 +11,14 @@
   --variable-color: var(--accent);
 }
 
+aside {
+  width: 240px;
+  position: sticky;
+  ol {
+    list-style: none;
+  }
+}
+
 img, table {
   max-width: 100%;
 }
@@ -147,79 +155,79 @@ body {
     width: calc(100% - 16px);
     max-width: 1000px;
     margin: 35px auto;
-  }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin: 24px 0;
-  }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin: 24px 0;
+    }
 
-  li {
-    line-height: 1.4;
-  }
+    li {
+      line-height: 1.4;
+    }
 
-  h1 {
-    font-size: 30px;
-  }
+    h1 {
+      font-size: 30px;
+    }
 
-  h2 {
-    font-size: 24px;
-  }
+    h2 {
+      font-size: 24px;
+    }
 
-  h3 {
-    font-size: 18px;
-  }
+    h3 {
+      font-size: 18px;
+    }
 
-  h4 {
-    font-size: 14px;
-  }
+    h4 {
+      font-size: 14px;
+    }
 
-  h5 {
-    font-size: 12px;
-    text-transform: uppercase;
-    margin: 0 0 5px 0;
-  }
+    h5 {
+      font-size: 12px;
+      text-transform: uppercase;
+      margin: 0 0 5px 0;
+    }
 
-  h6 {
-    font-size: 12px;
-    text-transform: uppercase;
-    color: #999;
-    margin: 0 0 5px 0;
-  }
+    h6 {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #999;
+      margin: 0 0 5px 0;
+    }
 
-  dt {
-    font-style: italic;
-    font-weight: bold;
-  }
+    dt {
+      font-style: italic;
+      font-weight: bold;
+    }
 
-  ::marker {
-    content: "> "
-  }
+    ::marker {
+      content: "> "
+    }
 
-  blockquote {
-    color: #aaa;
-    padding-left: 10px;
-    border-left: 1px dotted #666;
-  }
+    blockquote {
+      color: #aaa;
+      padding-left: 10px;
+      border-left: 1px dotted #666;
+    }
 
-  pre {
-    background: rgba(0, 0, 0, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    padding: 10px;
-    font-size: 16px;
-    color: var(--text-color);
-    border-radius: 2px;
-    word-wrap: normal;
-    overflow: auto;
-    overflow-y: hidden;
-  }
+    pre {
+      background: rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 10px;
+      font-size: 16px;
+      color: var(--text-color);
+      border-radius: 2px;
+      word-wrap: normal;
+      overflow: auto;
+      overflow-y: hidden;
+    }
 
-  code.highlighter-rouge {
-    background: rgba(0, 0, 0, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    code.highlighter-rouge {
+      background: rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
   }
 }
