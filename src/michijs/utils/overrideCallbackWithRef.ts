@@ -1,4 +1,4 @@
-import { ObservableLike, RefSubscription, Subscription } from "../types";
+import type { ObservableLike, RefSubscription, Subscription } from "../types";
 
 export const overrideCallbackWithRef = <
   Y,
