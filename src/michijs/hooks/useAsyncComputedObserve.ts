@@ -1,6 +1,6 @@
 import { useObserve } from ".";
 import { setObservableValue } from "../utils";
-import { useWatch, useWatchDeps } from "./useWatch";
+import { useWatch, type useWatchDeps } from "./useWatch";
 
 export function useAsyncComputedObserve<T>(
   callback: () => Promise<T>,
