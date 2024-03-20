@@ -288,15 +288,15 @@ This approach brings two major issues:
 - Any update on the store will trigger an update on a component even if the property that changed store has no relation to the component. Every tag / attribute / etc will need to be checked for changes in every rerender.
 - There is now way to set static properties in a dinamic environment. Take this React example:
 ```tsx
-  const [value, setValue] = useState(0);
-  <input type="number" value={value} onChange={(e) => setValue(e.target.value)}>
+const [value, setValue] = useState(0);
+<input type="number" value={value} onChange={(e) => setValue(e.target.value)}>
 ```
 In this example value is updated every time input changes; which, by definition, is wrong. Why? Because value *"Specifies the default value"*. This means that the value does not need to be updated after the first render, since it has no effect. *"But React says that you can use defaultValue!"* Yes, but it's not the standard way to do it and it's one of the most common mistakes most React developers make. All this, for not using the platform.
 
 With Michijs the solution is:
 ```tsx
-  const value = useObserve(0);
-  <input type="number" value={value()} onchange={(e) => value(e.target.value)}>
+const value = useObserve(0);
+<input type="number" value={value()} onchange={(e) => value(e.target.value)}>
 ```
 
 ### Observers / Signals
