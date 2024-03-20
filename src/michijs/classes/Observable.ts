@@ -1,4 +1,4 @@
-import { ObservableLike, Subscription } from "../types";
+import type { ObservableLike, Subscription } from "../types";
 
 export class Observable<T> extends Function implements ObservableLike<T> {
   // Intentional explicit null value - it breaks proxy otherwise
