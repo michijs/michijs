@@ -270,7 +270,7 @@ If the extends field is not provided an [Autonomous custom element](https://deve
 
 
 ## How this works?
-### The problem with stores
+### The problem with stores - the traditional approach
 Libraries traditional approach is usually based on stores.
 ```mermaid
 graph TD;
@@ -289,8 +289,15 @@ This approach brings two major issues:
 - There is now way to set static properties in a dinamic environment. Take this React example:
 ```tsx
   const [value, setValue] = useState(0);
+  <input type="number" value={value} onChange={(e) => setValue(e.target.value)}>
 ```
+In this example value is updated every time input changes; which, by definition, is wrong. Why? Because value *"Specifies the default value"*. This means that the value does not need to be updated after the first render, since it has no effect. *"But React says that you can use defaultValue!"* Yes, but it's not the standard way to do it and it's one of the most common mistakes most React developers make. All this, for not using the platform.
 
+With Michijs the solution is:
+```tsx
+  const value = useObserve(0);
+  <input type="number" value={value()} onchange={(e) => value(e.target.value)}>
+```
 
 ### Observers / Signals
  Observers are a behavioral design pattern that defines a one-to-many dependency between objects. When the observable / subject undergoes a change in state, all its dependents (observers / subscribers) are notified and updated automatically with a signal.
@@ -381,13 +388,8 @@ In this example there are four different cases:
         <span>{this.valueA() + this.valueB()}</span>
 ```
 
-
+2. Getting a clone of the value, binding the observable to the element; In this case we use a computed observable, which is an observable, so the result is dinamic.
 ```tsx
-        <span>{this.valueA}</span>
-        {/* Renders 1 */}
-        <span>{this.valueB}</span>
-        {/* Renders 1, but is static */}
-        <span>{this.valueA() + this.valueB()}</span>
         {/* Renders 1, but is dinamic and will change when clicking on the button */}
         <span>{sum}</span>
       </>
