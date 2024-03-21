@@ -16,7 +16,7 @@ export const usePureFunction = <T>(
 
   const listener = () => (outdated = true);
 
-  useWatch(listener, deps)
+  useWatch(listener, deps);
 
   return () => {
     if (outdated) {
