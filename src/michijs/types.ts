@@ -353,7 +353,8 @@ export type ObservableType<Y, T = NonNullable<Y>> = IsAny<T> extends true
                 ? ExtendsObject<T> extends true
                   ? ObservableObject<Y>
                   : PrimitiveObservableValue<Y> & T
-                : PrimitiveObservableValue<GetPrimitiveType<Y>> & GetPrimitiveTypeClass<T>;
+                : PrimitiveObservableValue<GetPrimitiveType<Y>> &
+                    GetPrimitiveTypeClass<T>;
 
 export type Unproxify<T> = IsAny<T> extends true
   ? any
