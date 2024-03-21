@@ -10,7 +10,7 @@ createCustomElement("root-test-element", {
     arrayTest: [0, 1, 2, 3, 4, 5],
   },
   attributes: {
-    showExample: true as boolean,
+    showExample: true,
   },
   shadow: false,
   methods: {

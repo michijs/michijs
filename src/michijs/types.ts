@@ -308,6 +308,17 @@ type GetPrimitiveTypeClass<T> = T extends boolean
         : T extends symbol
           ? Symbol
           : {};
+type GetPrimitiveType<T> = T extends boolean
+  ? boolean
+  : T extends number
+    ? number
+    : T extends string
+      ? string
+      : T extends bigint
+        ? bigint
+        : T extends symbol
+          ? symbol
+          : {};
 
 type ExtendsObject<V extends object> = V extends { prototype: any }
   ? false
@@ -342,7 +353,7 @@ export type ObservableType<Y, T = NonNullable<Y>> = IsAny<T> extends true
                 ? ExtendsObject<T> extends true
                   ? ObservableObject<Y>
                   : PrimitiveObservableValue<Y> & T
-                : PrimitiveObservableValue<Y> & GetPrimitiveTypeClass<T>;
+                : PrimitiveObservableValue<GetPrimitiveType<Y>> & GetPrimitiveTypeClass<T>;
 
 export type Unproxify<T> = IsAny<T> extends true
   ? any
