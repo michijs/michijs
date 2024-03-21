@@ -1,6 +1,6 @@
 import { Observable } from "../classes";
 import { useObserve } from "../hooks";
-import { ObservableOrConst, ObservableType, Subscription } from "../types";
+import type { ObservableOrConst, ObservableType, Subscription } from "../types";
 import { bindObservable } from "../utils";
 import { setObservableValue } from "../utils/setObservableValue";
 
