@@ -12,14 +12,14 @@ export interface TranslationItem<K extends string, T> {
   observable: ObservableType<Partial<T>>;
 }
 
-export class I18n<K extends string> extends Observable<K> {
+export class I18n<K extends string = string> extends Observable<K> {
   private translations = new Array<TranslationItem<K, any>>();
   private _currentLanguage: K | undefined;
   private isUsingSystemLanguage = true;
 
   constructor(
-    language?: ObservableOrConst<K | null>,
-    initialObservers?: Subscription<K>[],
+    language?: ObservableOrConst<string | null>,
+    initialObservers?: Subscription<string>[],
   ) {
     super(initialObservers);
     if (language) {

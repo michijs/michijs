@@ -15,6 +15,10 @@ const Hash = useComputedObserve(
   [HistoryManager],
 );
 
+/**
+ * It is designed to manage the hash portion of the URL. Provides a way to manage and observe changes in the hash portion of the URL, ensuring synchronization between the hash value and the observable state.
+ * @returns The Hash observable with the specified type T, ensuring that it returns an observable with keys of type T and boolean values.
+ */
 export const useHash = <T extends string = string>() =>
   Hash as ObservableType<Record<T, boolean>>;
 

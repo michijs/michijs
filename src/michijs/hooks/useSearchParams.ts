@@ -2,7 +2,6 @@ import { useComputedObserve } from "./useComputedObserve";
 import { HistoryManager } from "../classes";
 import { setSearchParam } from "../routing/utils/setSearchParam";
 import { ObservableType } from "../types";
-// // import { setSearchParam } from "../routing/utils/setSearchParam";
 
 export const getSearchParamsValue = () => {
   const initialSearchParamsValue: Record<string, unknown> = {};
@@ -31,6 +30,10 @@ const SearchParams = useComputedObserve(
   },
 );
 
+/**
+ * It facilitates the management and observation of search parameters in the URL, providing a reactive way to handle changes and update the URL accordingly.
+ * @returns A new observable
+ */
 export function useSearchParams<
   T extends Record<string, unknown> = Record<string, unknown>,
 >(): ObservableType<T> {
@@ -47,12 +50,3 @@ SearchParams.subscribe((newValue) => {
     if (location.href !== newUrl.href) HistoryManager.push(newUrl);
   }
 });
-
-// Object.entries(SearchParams).forEach(([key, value]) => {
-//   value?.subscribe?.((newValue) => {
-//     const newUrl = new URL(location.href);
-//     const splittedKey = key.split(".")[1];
-//     setSearchParam(newUrl, splittedKey, newValue);
-//     HistoryManager.push(newUrl);
-//   })
-// })

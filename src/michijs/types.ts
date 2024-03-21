@@ -318,7 +318,7 @@ type GetPrimitiveType<T> = T extends boolean
         ? bigint
         : T extends symbol
           ? symbol
-          : {};
+          : T;
 
 type ExtendsObject<V extends object> = V extends { prototype: any }
   ? false

@@ -2,6 +2,12 @@ import { ObservableFromEventListener } from "../classes";
 import { ObservableType } from "../types";
 import { useObserve } from "./useObserve";
 
+/**
+ * Allows for observing changes in an object and synchronizing it with the browser's storage (such as localStorage).
+ * @param item The object to be observed and synchronized with storage.
+ * @param storage The storage object to be used (defaults to localStorage if not provided)
+ * @returns A new observable
+ */
 export function useStorage<T extends object>(
   item: T,
   storage: Storage = localStorage,

@@ -4,8 +4,13 @@ import { observeCommonObject } from "./useObserve/observeCommonObject";
 import { observeDate } from "./useObserve/observeDate";
 import { observeMap } from "./useObserve/observeMap";
 import { observeSet } from "./useObserve/observeSet";
-// import { observeSet } from "./useObserve/observeSet";
 
+/**
+ * Responsible for observing changes on different types of values.
+ * @param item The value to be observed.
+ * @param initialObservers An array of initial observers of type Subscription<T>.
+ * @returns A new observable
+ */
 export function useObserve<T>(
   item?: T,
   initialObservers?: Subscription<T>[],

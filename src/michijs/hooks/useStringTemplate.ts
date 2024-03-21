@@ -1,7 +1,12 @@
-import { isObservableType } from "../typeWards/isObservableType";
 import { ObservableType } from "../types";
 import { useComputedObserve } from "./useComputedObserve";
 
+/**
+ * It is used to create a string template by interpolating dynamic values.
+ * @param templateStringsArray An array of strings representing the template literals.
+ * @param props An array of dynamic values that will be interpolated into the template.
+ * @returns A new observable
+ */
 export function useStringTemplate(
   templateStringsArray: TemplateStringsArray,
   ...props: (ObservableType<string | number> | string | number)[]
@@ -17,8 +22,6 @@ export function useStringTemplate(
         "",
       );
     },
-    props.filter((x) => isObservableType(x)) as ObservableType<
-      string | number
-    >[],
+    props,
   );
 }

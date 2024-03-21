@@ -99,6 +99,13 @@ function initDb<T extends AnyObject>(
   });
 }
 
+/**
+ * It sets up event listeners for changes in the IndexedDB database. It returns a Proxy object that intercepts property accesses and performs corresponding IndexedDB operations. IndexedDB operations are performed asynchronously and return Promises.
+ * @param name Specifies the name of the IndexedDB database to be used or created.
+ * @param objectsStore Is a generic type that describes the structure of the object stores. It's defined as an object where each key represents the name of a property in the stored objects, and the value represents the configuration options for that property.
+ * @param version specifies the version number of the IndexedDB database. If the database with the specified name already exists and its version is lower than the provided version, it will perform any necessary upgrades.
+ * @returns A Proxy object that intercepts property accesses and performs corresponding IndexedDB operations.
+ */
 export function useIndexedDB<T extends AnyObject>(
   name: string,
   objectsStore: ObjectStore<T>,

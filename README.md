@@ -45,6 +45,7 @@ You can use [this template](https://github.com/michijs/michijs-template) or you 
   
 ## Creating components
 
+### Your first custom element
 MichiJS custom elements are plain objects.
 
 New components can be created using the `jsx/tsx` extension, such as `MyCounter.tsx`.
@@ -98,39 +99,8 @@ import Counter from '../Counter';
 
 <Counter oncountchanged={(ev) => console.log(`New count value: ${ev.detail}`)} />
 ```
-<!-- 
-## How this works? 
-When you update an item, the library looks for your changes and only updates the attributes / children / etc that really changed.
 
-### But... Wait, DOM elements shouldn't be unique?
-  
-In this case I am going to quote Eric Bidelman, a Google engineer on [this topic](https://developers.google.com/web/fundamentals/web-components/shadowdom):
-*For example, when you use a new HTML id/class, there's no telling if it will conflict with an existing name used by the page.*
-That is to say that while it is inside the Shadow DOM you should not worry about if your ID is repeated with one outside the Shadow DOM.
-
-### Why not use keys like React?
-Searching with IDs is so much faster than searching by queryselector. You can look at [this topic](https://measurethat.net/Embed?id=99697) and [this another](http://vanilla-js.com)
-
-### But... What if I don't want to use Shadow DOM?
-You can use our id generator to create unique IDs for each element in your component with a discernible key. 
-```tsx
-render() {
-    return (
-        <>
-            <style id={this.idGen('style')}>{style}</style>
-            <button id={this.idGen('decrement-count')} onpointerup={this.decrementCount}>-<button>
-        </>
-    );
-}
-```
-The result will be like this:
-
-```html
-<style id="093dc6b7-315d-43c1-86ef-fcd49130ea32"></style>
-<button id="c8d61264-45ee-42ce-9f74-1d76402d1f48">-</button>
-``` -->
-
-## Component structure
+### Component structure
 A component consists of the following properties:
 
 <table>
@@ -296,6 +266,7 @@ In this example value is updated every time input changes; which, by definition,
 With Michijs the solution is:
 ```tsx
 const value = useObserve(0);
+
 <input type="number" value={value()} onchange={(e) => value(e.target.value)}>
 ```
 
@@ -368,55 +339,97 @@ createCustomElement("test-component", {
 });
 ```
 
-In this example there are four different cases:
-
-1. Getting a clone of the value, without binding the observable to the element; In this case we only get a number, not an observable, so the result is static.
-```tsx
-        {/* Renders 0, but is static */}
-        <span>{this.valueA()}</span>
-```
-
-2. Getting a clone of the value, binding the observable to the element; In this case we use an observable, so the result is dinamic.
-```tsx
-        {/* Renders 1, but is dinamic and will change when clicking on the button */}
-        <span>{this.valueB}</span>
-```
-
-3. Getting a clone of the value, binding the observable to the element; In this case we use an observable, so the result is dinamic.
-```tsx
-        {/* Renders 1, but is static */}
-        <span>{this.valueA() + this.valueB()}</span>
-```
-
-2. Getting a clone of the value, binding the observable to the element; In this case we use a computed observable, which is an observable, so the result is dinamic.
-```tsx
-        {/* Renders 1, but is dinamic and will change when clicking on the button */}
-        <span>{sum}</span>
-      </>
-    );
-  },
-});
-```
-
 ### Operators
+We support most operators without explicitly calling the getter of the observable.
+
+```tsx
+  const a = useObserve(0);
+  // Valid Javascript - Not valid Typescript
+  const b = a + 1;
+```
+This is valid Javascript but is [not valid in Typescript yet](https://github.com/microsoft/TypeScript/issues/43826).
+
+```tsx
+  const a = useObserve("Hello");
+  // Valid
+  const b = a + " World";
+```
+
+We do not support boolean operators since proxies are objects:
+```tsx
+  const a = useObserve(false);
+  // Valid - Returns 2
+  const b = a() ? 1: 2;
+  // Valid but wrong usage - Returns 1 since "a" is an object
+  const b = a ? 1: 2;
+```
 
 ## Hooks
+There are several differences between our hooks and traditional ones:
+- Can be used in various contexts, including top-level script code, functional components, and custom hooks. This flexibility allows developers to encapsulate logic and state management using hooks in different parts of their application.
+- Most of them returns observables.
+
+The ability to use hooks outside of component code can be beneficial for managing application-wide state, setting up global side effects, or encapsulating reusable logic in utility functions or modules.
+It provides more flexibility in organizing code and separates concerns by allowing developers to centralize state management and side effects in hooks that can be reused across components or accessed from different parts of the application.
 
 ### Basic hooks
 #### useObserve
+Responsible for observing changes on different types of values. Takes two arguments:
+- item: The value to be observed.
+- initialObservers: An array of initial observers of type Subscription<T>.
+This is the most basic hook and it is the basis of the entire component structure.
 
 #### usePureFunction
+It is used to create a memoized function that encapsulates the result of the provided callback function and updates it only when any of the dependencies change. Takes two arguments:
+- callback: A function that returns a value of type T.
+- deps: An array of dependencies that the callback function depends on.
 
 #### useComputedObserve
+It is used for synchronously computing a value and observing its changes. Takes three arguments:
+- callback: A function that returns a promise of type T.
+- deps: Dependencies to watch for changes.
+- options: An optional object that may contain onBeforeUpdate and onAfterUpdate callback functions.
+
+#### useAsyncComputedObserve
+It is used for asynchronously computing a value and observing its changes. Takes three arguments:
+- callback: A function that returns a promise of type T.
+- deps: Dependencies to watch for changes.
+- initialValue: Initial value of type T.
+
 #### useStringTemplate
+It is used to create a string template by interpolating dynamic values.
+```tsx
+  const a = useObserve(3);
+  // Returns an observable with initial value 'Test 3' and subscribed to a
+  const b = useStringTemplate`Test ${a}`;
+```
+
+#### useWatch
+A simple mechanism for watching dependencies and invoking a callback when any of them change. Takes two parameters:
+- callback: A function that returns a value of type T. This is the function that will be invoked when any dependency changes.
+- deps: An array of dependencies to watch for changes.
 
 ### Route management hooks
 #### useHash
+It is designed to manage the hash portion of the URL. Provides a way to manage and observe changes in the hash portion of the URL, ensuring synchronization between the hash value and the observable state.
+
+Returns the Hash observable with the specified type T, ensuring that it returns an observable with keys of type T and boolean values.
+
 #### useSearchParams
+It facilitates the management and observation of search parameters in the URL, providing a reactive way to handle changes and update the URL accordingly.
 
 ### Storage hooks
-#### useIndexedDB
 #### useStorage
+Allows for observing changes in an object and synchronizing it with the browser's storage (such as localStorage). Takes two parameters:
+- item: The object to be observed and synchronized with storage.
+- storage: The storage object to be used (defaults to localStorage if not provided)
+
+#### useIndexedDB
+It sets up event listeners for changes in the IndexedDB database. It returns a Proxy object that intercepts property accesses and performs corresponding IndexedDB operations. IndexedDB operations are performed asynchronously and return Promises. Takes three arguments:
+- name Specifies the name of the IndexedDB database to be used or created.
+- objectsStore Is a generic type that describes the structure of the object stores. It's defined as an object where each key represents the name of a property in the stored objects, and the value represents the configuration options for that property.
+- version specifies the version number of the IndexedDB database. If the database with the specified name already exists and its version is lower than the provided version, it will perform any necessary upgrades.
+
 ### CSS hooks
 To use css we provide functions to create Constructable Stylesheets.
 __Our stylesheets can also subscribe to observables.__
@@ -460,8 +473,6 @@ We do not provide support for this functionality yet as ESBuild does not support
 
 ### If
 Conditional rendering component. This is the only way to do it dynamically.
-
-### List
 
 ### Title
 Title component for dynamically updating the document's title.
@@ -609,24 +620,23 @@ export const [urls, Router] = registerRoutes({
 //Child routes
 export const [urlsChild, RouterChild] = registerRoutes({
   // Async route
-  asyncChildRoute: {
-    searchParams: {
-      searchParam1: String, 
-      searchParam2: Number
-    },
-    hash: ['#hash1', '#hash2']
-    /** The promise to wait */
-    promise: async () => (await import('./AsyncChildExample')).AsyncChildExample,
-    /**The title of the page */
-    title: 'Async Page title'
-    /**The component to display while the promise is loading */
-    loadingComponent: <span>Loading...</span>
-  },
+  asyncChildRoute: (
+    <AsyncComponent
+      promise={async () => (await import('./AsyncChildExample')).AsyncChildExample}
+      loadingComponent={<span>loading...</span>}
+    />
+  ),
   //The parent route
 }, urls.syncRoute);
 
-urlsChild.asyncChildRoute({ searchParams: { searchParam1: 'param 1', searchParam2: 2}, hash: '#hash1' })
 // Will generate this url: /sync-route/async-child-route?searchParam1=param+1&searchParam2=2#hash1
+const generatedUrl = urlsChild.asyncChildRoute({ 
+  searchParams: { 
+    searchParam1: 'param 1', 
+    searchParam2: 2
+  }, 
+  hash: '#hash1' 
+})
 ```
 Router and RouterChild are components that represent the mount points of each registered route.
 
@@ -638,12 +648,12 @@ const AsyncChildExample: FC = () => {
     }>();
     const hash = useHash<'#hash1'| '#hash2'>();
     return (
-    <>
-      {/* Will show the value of searchParam1 */}
-      <div>{searchParams.searchParam1}</div>
-      {/* Will show true if the hash is #hash1 */}
-      <div>{hash['#hash1']}</div>
-    </>
+      <>
+        {/* Will show the value of searchParam1 */}
+        <div>{searchParams.searchParam1}</div>
+        {/* Will show true if the hash is #hash1 */}
+        <div>{hash['#hash1']}</div>
+      </>
     );
 }
 
@@ -655,16 +665,12 @@ It is supported by using a custom store
 ```tsx
 const translator = new I18n<'es' | 'en'>(localStorage.getItem('lang'));
 
-const store = translator.createTranslation({
+const t = translator.createTranslation({
   es: () => import('./translations/es.json'),
   en
 });
-const t = store.state.t;
 
 export const MyComponent = createCustomElement('my-component', {
-  subscribeTo: {
-    store
-  },
   render() {
     return (
       <span>{t.hello}</span>

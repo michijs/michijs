@@ -2,6 +2,13 @@ import { useObserve } from ".";
 import { setObservableValue } from "../utils";
 import { useWatch, useWatchDeps } from "./useWatch";
 
+/**
+ * It is used for asynchronously computing a value and observing its changes.
+ * @param callback A function that returns a promise of type T.
+ * @param deps Dependencies to watch for changes.
+ * @param initialValue Initial value of type T.
+ * @returns A new observable
+ */
 export function useAsyncComputedObserve<T>(
   callback: () => Promise<T>,
   deps: useWatchDeps,
