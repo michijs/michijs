@@ -1,4 +1,4 @@
-import { ObservableLike, ObserverCallback } from "../types";
+import type { ObservableLike, ObserverCallback } from "../types";
 
 type OnSubscribe = (length: number) => void;
 export function observable<T = unknown>(

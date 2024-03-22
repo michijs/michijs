@@ -1,4 +1,4 @@
-import { ObserveHandlerProps } from "../observe";
+import type { ObserveHandlerProps } from "../observe";
 
 export const customMapAndSetClear = (
   {

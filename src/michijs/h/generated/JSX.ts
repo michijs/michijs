@@ -1,10 +1,10 @@
-import {
+import type {
   HTMLElements as HTMLElementsHTMLType,
   MathMLElements,
   SVGElements as SVGElementsHTMLType,
 } from "@michijs/htmltype";
-import { MichiAttributes } from "../MichiAttributes";
-import { SingleJSXElement } from "../../types";
+import type { MichiAttributes } from "../MichiAttributes";
+import type { SingleJSXElement } from "../../types";
 
 interface ElementsInterfaceOverride {
   title: HTMLElementTagNameMap["title"] & SVGElementTagNameMap["title"];

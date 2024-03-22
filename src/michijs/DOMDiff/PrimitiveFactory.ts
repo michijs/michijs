@@ -1,4 +1,4 @@
-import { ElementFactory, NonNullablePrimitiveType } from "../..";
+import type { ElementFactory, NonNullablePrimitiveType } from "../..";
 
 export const PrimitiveFactory: Required<ElementFactory> = {
   compare(el: Element): boolean {
