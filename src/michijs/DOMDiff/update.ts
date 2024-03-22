@@ -1,4 +1,4 @@
-import { SingleJSXElement } from "../..";
+import type { SingleJSXElement } from "../..";
 import { getElementFactory } from "./getElementFactory";
 
 export const update = (

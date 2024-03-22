@@ -1,5 +1,5 @@
 import { idGenerator, store } from "../hooks";
-import {
+import type {
   Store,
   AttributesType,
   CSSObject,
