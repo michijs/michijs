@@ -1,6 +1,6 @@
-import { UrlFunction } from "../routing/types";
+import type { UrlFunction } from "../routing/types";
 import { urlFn } from "../routing/createRouter";
-import {
+import type {
   CreateOptions,
   ExtendableComponentWithoutChildren,
   CreateFCResult,

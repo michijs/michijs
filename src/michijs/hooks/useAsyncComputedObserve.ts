@@ -1,6 +1,6 @@
 import { useObserve } from ".";
 import { setObservableValue } from "../utils";
-import { useWatch, useWatchDeps } from "./useWatch";
+import { useWatch, type useWatchDeps } from "./useWatch";
 
 /**
  * It is used for asynchronously computing a value and observing its changes.
