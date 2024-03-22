@@ -33,7 +33,7 @@ jobs:
   Deploy-docs:
     name: "Deploy docs"
     runs-on: ubuntu-latest
-    if: startsWith(github.event.inputs.release-type, 'pre')
+    if: startsWith(github.event.inputs.release-type, 'pre') != true
     needs: call-workflow
     steps: 
       - name: "Call github script"
