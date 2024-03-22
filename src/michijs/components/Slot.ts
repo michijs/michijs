@@ -1,6 +1,6 @@
 import type { HTMLElements } from "../generated/htmlType";
 import { isMichiCustomElement } from "../typeWards/isMichiCustomElement";
-import { FC } from "../types";
+import type { FC } from "../types";
 
 type SlotProps = HTMLElements["slot"];
 
