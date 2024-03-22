@@ -1,4 +1,4 @@
-import { ObservableType } from "../types";
+import type { ObservableType } from "../types";
 import { useComputedObserve } from "./useComputedObserve";
 
 /**
