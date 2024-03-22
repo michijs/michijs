@@ -1,4 +1,4 @@
-import { ObservableOrConst, Subscription } from "../types";
+import type { ObservableOrConst, Subscription } from "../types";
 import { unproxify } from "../utils";
 import { Observable } from "./Observable";
 
