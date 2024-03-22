@@ -9,9 +9,8 @@ export const Slot: FC<SlotProps> = ({ children, ...attrs }, options) => {
   const self = options?.contextElement;
   if (self && isMichiCustomElement(self))
     if (attrs.name) {
-      // self.slot 
+      // self.slot
     } else {
-
     }
 
   return null;
