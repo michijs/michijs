@@ -1,4 +1,4 @@
-import { TypedClipboardEvent } from "./TypedEvents/TypedClipboardEvent";
+import type { TypedClipboardEvent } from "./TypedEvents/TypedClipboardEvent";
 export interface TypedDocumentAndElementEventHandlers<T> {
   oncopy?(ev: TypedClipboardEvent<T>): unknown;
   oncut?(ev: TypedClipboardEvent<T>): unknown;

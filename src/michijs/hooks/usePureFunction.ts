@@ -1,5 +1,5 @@
 import { ProxiedValue } from "../classes";
-import { useWatch, useWatchDeps } from "./useWatch";
+import { useWatch, type useWatchDeps } from "./useWatch";
 
 /**
  * It is used to create a memoized function that encapsulates the result of the provided callback function and updates it only when any of the dependencies change.
