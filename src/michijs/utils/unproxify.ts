@@ -1,4 +1,4 @@
-import { ProxiedValueInterface, Unproxify } from "../types";
+import type { ProxiedValueInterface, Unproxify } from "../types";
 import {
   cloneArray,
   cloneCommonObject,
