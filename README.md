@@ -301,6 +301,7 @@ graph TD;
     B --> F["Another observable F"];
     C --> G["Text node G"];
 ```
+When a node is garbage collected in the next update will be unsubscribed.
 
 ### Rendering - Static vs dynamic
 Taking the above into account, the rendering process changes drastically. Instead of rendering the entire component with each change, __we render the component only once and the changes are managed through the observables__.
@@ -687,6 +688,7 @@ Because some objects are not proxy compatible we limit the observable objects to
 - Maps
 - Sets
 - Any object whose prototype is Object
+But we still support assignments to such objects
 
 ## Polyfills
 If you REALLY need polyfills i recommend you to read this topics:
