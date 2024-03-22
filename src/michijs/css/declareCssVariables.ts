@@ -1,4 +1,4 @@
-import { CssDeclaration, AnyObject } from "../types";
+import type { CssDeclaration, AnyObject } from "../types";
 import { formatToKebabCase } from "../utils";
 
 export function declareCssVariables<T extends AnyObject>(

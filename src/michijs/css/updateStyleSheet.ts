@@ -1,5 +1,5 @@
 import type { CSSProperties } from "@michijs/htmltype";
-import { CSSObject } from "../types";
+import type { CSSObject } from "../types";
 import { ruleListFromCssObject } from "./ruleListFromCssObject";
 
 // Cannot extend or use proxy with CSSStyleSheet :(

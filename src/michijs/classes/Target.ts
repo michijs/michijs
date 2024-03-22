@@ -1,6 +1,6 @@
 import { create } from "../DOMDiff";
 import { update } from "../DOMDiff/update";
-import { RenderFunction } from "./ElementList";
+import type { RenderFunction } from "./ElementList";
 
 export class Target<V> {
   private template: ChildNode | ParentNode;

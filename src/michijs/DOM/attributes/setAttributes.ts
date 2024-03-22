@@ -1,5 +1,5 @@
 import type { CSSProperties } from "@michijs/htmltype";
-import { AnyObject, EventListenerMap } from "../../types";
+import type { AnyObject, EventListenerMap } from "../../types";
 import { deepEqual } from "../../utils/deepEqual";
 import { setStyle } from "./setStyle";
 import { setAttribute } from "./setAttribute";

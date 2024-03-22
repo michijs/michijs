@@ -1,4 +1,4 @@
-import { MichiCustomElement } from "../types";
+import type { MichiCustomElement } from "../types";
 import { update } from "./update";
 import { create } from "./create";
 import { forEachChildren } from "./forEachChildren";

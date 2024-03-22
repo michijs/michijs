@@ -1,5 +1,5 @@
 import { deepEqual } from "../../utils/deepEqual";
-import { observe, ObserveProps } from "../observe";
+import { observe, type ObserveProps } from "../observe";
 import {
   customMapAndSetClear,
   customMapAndSetDelete,
