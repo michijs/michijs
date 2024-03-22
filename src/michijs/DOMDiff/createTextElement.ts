@@ -1,4 +1,4 @@
-import { PrimitiveType } from "../types";
+import type { PrimitiveType } from "../types";
 
 export const createTextElement = (jsx: PrimitiveType | {}) =>
   document.createTextNode(
