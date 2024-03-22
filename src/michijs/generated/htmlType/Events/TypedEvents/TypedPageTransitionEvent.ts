@@ -1,4 +1,4 @@
-import { TypedEvent } from "./TypedEvent";
+import type { TypedEvent } from "./TypedEvent";
 export interface TypedPageTransitionEvent<T> extends TypedEvent<T> {
   /**
    * For the pageshow event, returns false if the page is newly being loaded (and the load event will fire). Otherwise, returns true.

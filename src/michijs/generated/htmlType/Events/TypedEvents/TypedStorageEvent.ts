@@ -1,4 +1,4 @@
-import { TypedEvent } from "./TypedEvent";
+import type { TypedEvent } from "./TypedEvent";
 /** A StorageEvent is sent to a window when a storage area it has access to is changed within the context of another document. */
 export interface TypedStorageEvent<T> extends TypedEvent<T> {
   /**
