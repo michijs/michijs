@@ -1,6 +1,6 @@
 import { useComputedObserve } from "./useComputedObserve";
 import { HistoryManager } from "../classes";
-import { ObservableType } from "../types";
+import type { ObservableType } from "../types";
 
 // hashchange does not work properly
 // const hashListener = new ObservableFromEventListener(window, 'hashchange')

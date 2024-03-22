@@ -1,4 +1,4 @@
-import { TypedUIEvent } from "./TypedUIEvent";
+import type { TypedUIEvent } from "./TypedUIEvent";
 export interface TypedTouchEvent<T> extends TypedUIEvent<T> {
   readonly altKey: boolean;
   readonly changedTouches: TouchList;
