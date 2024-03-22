@@ -1,4 +1,4 @@
-import { TypedUIEvent } from "./TypedUIEvent";
+import type { TypedUIEvent } from "./TypedUIEvent";
 /** KeyboardEvent objects describe a user interaction with the keyboard; each event describes a single interaction between the user and a key (or combination of a key with modifier keys) on the keyboard. */
 export interface TypedKeyboardEvent<T> extends TypedUIEvent<T> {
   readonly altKey: boolean;
