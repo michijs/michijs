@@ -40,8 +40,8 @@ jobs:
         with:
           script: |
             await github.rest.actions.createWorkflowDispatch({
-              'michijs',
-              'michijs',
-              'workflows/update-docs.yml',
-              'master',
+              owner: 'michijs',
+              repo: 'michijs-docs',
+              workflow_id: 'update-docs',
+              ref: 'master'
             });
