@@ -16,6 +16,8 @@ export function createFunctionalComponent<
   callback: CreateFCResult<T, S, C>,
 ): (props: ObservableOrConst<T>) => JSX.Element {
   return (props) => {
+    // TODO: Not sure why ts compiler is complaining here
+    // @ts-ignore
     const newProps = Object.entries(props).reduce(
       (previousValue, [key, value]) => {
         if (key === "children") previousValue[key] = value;

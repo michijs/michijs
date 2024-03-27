@@ -1,5 +1,4 @@
 import { createFunctionalComponent } from "../customElements";
-import { bindObservable } from "../utils";
 import { GenericElement } from "./GenericElement";
 
 export interface TitleProps {
