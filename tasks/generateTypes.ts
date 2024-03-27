@@ -100,14 +100,14 @@ generateTypes({
       });
     },
     valueSetsAdditionalImports: [
-      'import { ObservableLike } from "../../../types"',
+      'import type { ObservableLike } from "../../../types"',
     ],
   },
   typesFactoryProps: {
     generatedPath: "src/michijs/generated/htmlType/generated",
   },
   elements: {
-    additionalImports: ['import { MichiAttributes } from "../../../types"'],
+    additionalImports: ['import type { MichiAttributes } from "../../../types"'],
     additionalExtends: (el, elementInterface) => [
       `MichiAttributes<I["${el}"] extends Element ? I["${el}"]: ${elementInterface}>`,
     ],
@@ -124,8 +124,8 @@ const interfaceOverrideElements = Array.from(elements).filter(
 
 writeFileSync(
   "./src/michijs/generated/JSX.ts",
-  ` import { HTMLElements as HTMLElementsHTMLType, MathMLElements, SVGElements as SVGElementsHTMLType } from "./htmlType";
-  import { SingleJSXElement } from '../types';
+  ` import type { HTMLElements as HTMLElementsHTMLType, MathMLElements, SVGElements as SVGElementsHTMLType } from "./htmlType";
+  import type { SingleJSXElement } from '../types';
 
   interface ElementsInterfaceOverride {
     ${interfaceOverrideElements
