@@ -12,7 +12,7 @@ export const BuiltInButton = createCustomElement("built-in-button", {
   },
   reflectedAttributes: {
     counter: 0,
-    type: 'button'
+    type: "button",
   },
   computedStyleSheet() {
     return {
