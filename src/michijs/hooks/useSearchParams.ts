@@ -1,7 +1,7 @@
 import { useComputedObserve } from "./useComputedObserve";
 import { HistoryManager } from "../classes";
 import { setSearchParam } from "../routing/utils/setSearchParam";
-import { ObservableType } from "../types";
+import type { ObservableType } from "../types";
 
 export const getSearchParamsValue = () => {
   const initialSearchParamsValue: Record<string, unknown> = {};

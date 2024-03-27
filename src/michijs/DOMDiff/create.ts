@@ -2,7 +2,7 @@ import { isClassJSXElement } from "../typeWards/isClassJSXElement";
 import { isDOMOrFragmentElement } from "../typeWards/isDOMOrFragmentElement";
 import { isNotAPrimitiveJSX } from "../typeWards/isNotAPrimitiveJSX";
 import { isFunctionOrClassJSXElement } from "../typeWards/isFunctionOrClassJSXElement";
-import {
+import type {
   CreateOptions,
   DOMElementJSXElement,
   ObservableNonNullablePrimitiveType,
