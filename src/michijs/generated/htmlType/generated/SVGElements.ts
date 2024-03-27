@@ -2,8 +2,8 @@
 // HTML Data Version 1.1
 import type { AllAttributes } from "./AllAttributes";
 import type { ValueSets } from "./ValueSets";
-import { SVGEvents } from "../Events";
-import { DataGlobalAttributes } from "../DataGlobalAttributes";
+import type { SVGEvents } from "../Events";
+import type { DataGlobalAttributes } from "../DataGlobalAttributes";
 import type { MichiAttributes } from "../../../types";
 interface GlobalAttributes
   extends Pick<
