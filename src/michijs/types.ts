@@ -170,7 +170,7 @@ export type ObservableOrConst<Y, T = Unproxify<Y>> = [T] extends [object]
           [k in keyof T]: ObservableOrConst<T[k]>;
         }
       | T
-  : ObservableLike<T> | T;
+  : ObservableLike<GetPrimitiveType<T>> | GetPrimitiveType<T>;
 export type ObservableOrConstWithChildren<
   T,
   C = JSX.Element,
