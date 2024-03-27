@@ -1,6 +1,6 @@
 import { setProperties } from "../DOM/attributes/setProperties";
 import { Namespaces, RootTags } from "../constants/namespaces";
-import { CreateOptions, ObjectJSXElement } from "../types";
+import type { CreateOptions, ObjectJSXElement } from "../types";
 import { create } from "./create";
 
 export const createObject = (jsx: ObjectJSXElement, options: CreateOptions) => {
