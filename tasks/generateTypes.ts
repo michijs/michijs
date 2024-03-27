@@ -107,7 +107,9 @@ generateTypes({
     generatedPath: "src/michijs/generated/htmlType/generated",
   },
   elements: {
-    additionalImports: ['import type { MichiAttributes } from "../../../types"'],
+    additionalImports: [
+      'import type { MichiAttributes } from "../../../types"',
+    ],
     additionalExtends: (el, elementInterface) => [
       `MichiAttributes<I["${el}"] extends Element ? I["${el}"]: ${elementInterface}>`,
     ],
