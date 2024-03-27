@@ -1,4 +1,4 @@
-import { AnyObject, CreateOptions } from "../../types";
+import type { AnyObject, CreateOptions } from "../../types";
 import { setProperty } from "./setProperty";
 
 export function setProperties(

@@ -1,7 +1,7 @@
 import { create } from "../DOMDiff";
 import { VirtualFragment } from "../classes";
 import { bindObservable } from "../utils";
-import {
+import type {
   CreateOptions,
   ExtendableComponentWithoutChildren,
   CreateFCResult,

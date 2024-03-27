@@ -1,7 +1,7 @@
 import { setProperties } from "../DOM/attributes/setProperties";
 import { isElement } from "../typeWards/isElement";
 import { create } from "./create";
-import { CreateOptions, DOMElementJSXElement } from "../types";
+import type { CreateOptions, DOMElementJSXElement } from "../types";
 
 export const createDOMElement = (
   jsx: DOMElementJSXElement,

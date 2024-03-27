@@ -1,5 +1,5 @@
 import { isObservableType } from "../typeWards/isObservableType";
-import { ObservableLike, Subscription } from "../types";
+import type { ObservableLike, Subscription } from "../types";
 
 export const bindObservable = <T>(
   observable: T,

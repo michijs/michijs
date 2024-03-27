@@ -1,5 +1,5 @@
 import { useObserve } from "../useObserve";
-import { Subscription } from "../../types";
+import type { Subscription } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 import {
   customMapAndSetClear,

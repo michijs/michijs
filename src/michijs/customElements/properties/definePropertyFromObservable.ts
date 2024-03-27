@@ -1,4 +1,4 @@
-import { MichiCustomElement, ObservableType } from "../../types";
+import type { MichiCustomElement, ObservableType } from "../../types";
 
 export function definePropertyFromObservable(
   self: MichiCustomElement,

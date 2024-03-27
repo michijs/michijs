@@ -1,8 +1,8 @@
 import { useObserve } from "../useObserve";
 import {
   ProxiedArrayInterface,
-  ObservableType,
-  Subscription,
+  type ObservableType,
+  type Subscription,
 } from "../../types";
 import { ProxiedArray } from "../../classes";
 import {

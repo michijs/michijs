@@ -1,5 +1,5 @@
 import type { CSSProperties } from "../types";
-import { ObservableLike } from "../../../types";
+import type { ObservableLike } from "../../../types";
 export interface ValueSets {
   41?: "ltr" | "rtl" | ObservableLike<"ltr" | "rtl" | undefined>;
   42?: "block" | "inline" | ObservableLike<"block" | "inline" | undefined>;

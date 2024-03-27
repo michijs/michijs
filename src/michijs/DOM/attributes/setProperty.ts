@@ -1,4 +1,4 @@
-import { CreateOptions } from "../../types";
+import type { CreateOptions } from "../../types";
 import { setStyle } from "./setStyle";
 import { setAttribute } from "./setAttribute";
 import { bindFunction } from "../../utils/bindFunction";

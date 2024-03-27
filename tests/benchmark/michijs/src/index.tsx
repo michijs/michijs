@@ -1,5 +1,5 @@
 import {
-  ObservableType,
+  type ObservableType,
   createCustomElement,
   useObserve,
 } from "@michijs/michijs";

@@ -1,5 +1,5 @@
-import { ObservableType } from "../../types";
-import { ProxiedValue } from "../../classes/ProxiedValue";
+import type { ObservableType } from "../../types";
+import type { ProxiedValue } from "../../classes/ProxiedValue";
 
 export const customMapAndSetClear = (
   target: ProxiedValue<Map<any, any>> | ProxiedValue<Set<any>>,

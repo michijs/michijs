@@ -1,5 +1,5 @@
 import { isObservableType } from "../typeWards/isObservableType";
-import { ObservableLike, RefSubscription } from "../types";
+import type { ObservableLike, RefSubscription } from "../types";
 import { overrideCallbackWithRef } from "./overrideCallbackWithRef";
 
 export const bindObservableToRef = <T, E extends WeakKey>(

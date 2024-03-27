@@ -1,6 +1,6 @@
 import { useObserve } from "../hooks";
 import { isObservableType } from "../typeWards/isObservableType";
-import {
+import type {
   AnyObject,
   CreateOptions,
   CreateFCResult,

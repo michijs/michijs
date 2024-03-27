@@ -1,4 +1,4 @@
-import { ObservableType, Subscription } from "../types";
+import type { ObservableType, Subscription } from "../types";
 import { observeArray } from "./useObserve/observeArray";
 import { observeCommonObject } from "./useObserve/observeCommonObject";
 import { observeDate } from "./useObserve/observeDate";

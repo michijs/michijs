@@ -1,4 +1,4 @@
-import { CreateOptions, GetElementProps } from "../types";
+import type { CreateOptions, GetElementProps } from "../types";
 import { setProperties } from "./attributes/setProperties";
 
 export function createElement<

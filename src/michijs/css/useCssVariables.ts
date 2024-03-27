@@ -1,4 +1,4 @@
-import { CssVariablesObject, AnyObject } from "../types";
+import type { CssVariablesObject, AnyObject } from "../types";
 import { formatToKebabCase } from "../utils";
 
 function getProxyGetter<T>(parent = "-") {
