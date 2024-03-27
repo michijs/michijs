@@ -1,9 +1,9 @@
-import type {
+import {
   HTMLElements as HTMLElementsHTMLType,
   MathMLElements,
   SVGElements as SVGElementsHTMLType,
 } from "./htmlType";
-import type { SingleJSXElement } from "../types";
+import { SingleJSXElement } from "../types";
 
 interface ElementsInterfaceOverride {
   title: HTMLElementTagNameMap["title"] & SVGElementTagNameMap["title"];
