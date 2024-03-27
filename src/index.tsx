@@ -1,6 +1,4 @@
-import "./michijs/prototypeAddons";
-export { h } from "./michijs/h";
-export { jsx, jsxs, jsxDEV, Fragment } from "./michijs/h/jsx-runtime";
+export * from "./michijs/h";
 export * from "./michijs/constants";
 export * from "./michijs/components";
 export * from "./michijs/classes";
@@ -10,7 +8,8 @@ export * from "./michijs/types";
 export * from "./michijs/DOM";
 export * from "./michijs/DOMDiff";
 export * from "./michijs/i18n";
-import "./michijs/h/generated/JSX";
+export * from "./michijs/generated/htmlType";
+import "./michijs/generated/JSX";
 export * from "./michijs/customElements";
 export * from "./michijs/css";
 export * from "./michijs/utils";

@@ -30,3 +30,20 @@ jobs:
       release-type: ${{ github.event.inputs.release-type }}
       release-notes: ${{ github.event.inputs.release-notes }}
     secrets: inherit
+  Deploy-docs:
+    name: "Deploy docs"
+    runs-on: ubuntu-latest
+    if: startsWith(github.event.inputs.release-type, 'pre') != true
+    needs: call-workflow
+    steps: 
+      - name: "Call github script"
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.PAT }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'update-docs.yml',
+              ref: 'master'
+            });

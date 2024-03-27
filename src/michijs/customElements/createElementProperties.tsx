@@ -1,4 +1,4 @@
-import { MichiElementOptions, MichiElementSelf } from "../types";
+import type { MichiElementOptions, MichiElementSelf } from "../types";
 
 export function createElementProperties<
   O extends MichiElementOptions,

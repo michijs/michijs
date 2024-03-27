@@ -1,12 +1,12 @@
-import { createStyleSheet } from "../src";
+import { useStyleSheet } from "@michijs/michijs";
 
-export const buttonStyle = createStyleSheet({
-  'button[is="built-in-button"]': {
+export const buttonStyle = useStyleSheet((tags) => ({
+  [tags]: {
     display: "block",
-    backgroundColor: "orange",
+    backgroundColor: "darkred",
     width: "fit-content",
     height: "fit-content",
     minWidth: "40px",
     minHeight: "40px",
   },
-});
+}));

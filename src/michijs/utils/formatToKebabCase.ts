@@ -1,10 +1,5 @@
-import { KebabCase } from "../types";
-
-export function formatToKebabCase<T extends string>(variable: T): KebabCase<T> {
-  const formattedVariable = variable.replace(
-    /[A-Z]/g,
-    (m) => `-${m.toLowerCase()}`,
+export function formatToKebabCase(variable: string): string {
+  return variable.replace(/[A-Z]/g, (m, index) =>
+    index === 0 ? m.toLowerCase() : `-${m.toLowerCase()}`,
   );
-
-  return formattedVariable as KebabCase<T>;
 }

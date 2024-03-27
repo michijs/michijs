@@ -1,41 +1,23 @@
 import { create } from "../DOMDiff";
-import { update } from "../DOMDiff/update";
-import { RenderFunction } from "./ElementList";
+import type { CreateOptions, NonProxiedFC } from "../types";
+import type { VirtualFragment } from "./VirtualFragment";
 
 export class Target<V> {
-  private template: ChildNode | ParentNode;
-
   constructor(
-    private element: ParentNode,
-    private renderItem: RenderFunction<V>,
-    private isSVG?: boolean,
-    private isMATHML?: boolean,
-    private context?: Element,
+    private element: VirtualFragment | ParentNode,
+    private renderItem: NonProxiedFC<V>,
+    private options?: CreateOptions,
   ) {}
-
-  private getTemplate(value: V) {
-    return (
-      this.template ??
-      create(this.renderItem(value), this.isSVG, this.isMATHML, this.context)
-    );
-  }
-
-  private create(...items: V[]): ChildNode[] {
-    if (items.length > 0) {
-      const template = this.getTemplate(items[0]);
-      return items.map((item) => this.createSingleItem(item, template));
-    }
-    return [];
-  }
-
-  createSingleItem(item: V, template = this.getTemplate(item)): ChildNode {
-    const el = template.cloneNode(true) as ChildNode;
-    update(el, this.renderItem(item), this.isSVG, this.isMATHML, this.context);
-    return el;
-  }
 
   clear() {
     this.element.textContent = "";
+  }
+
+  createSingleItem(value: V) {
+    return create(this.renderItem(value), this.options);
+  }
+  create(...value: V[]) {
+    return value.map((x) => this.createSingleItem(x));
   }
 
   replace(...items: V[]) {
@@ -49,20 +31,6 @@ export class Target<V> {
     el.replaceWith(newNode);
   }
 
-  update(index: number, value: V) {
-    update(
-      this.element.childNodes.item(index),
-      this.renderItem(value),
-      this.isSVG,
-      this.isMATHML,
-      this.context,
-    );
-  }
-
-  updateNode(el: ChildNode, value: V) {
-    update(el, this.renderItem(value), this.isSVG, this.isMATHML, this.context);
-  }
-
   pop() {
     this.element.lastChild?.remove();
   }
@@ -72,7 +40,7 @@ export class Target<V> {
   }
 
   remove(index: number) {
-    this.element.childNodes.item(index)?.remove();
+    this.element.childNodes[index]?.remove();
   }
 
   insertItemsAt(i: number, ...items: V[]) {
@@ -100,8 +68,8 @@ export class Target<V> {
   }
 
   swap(indexA: number, indexB: number) {
-    const elA = this.element.childNodes.item(indexA);
-    const elB = this.element.childNodes.item(indexB);
+    const elA = this.element.childNodes[indexA];
+    const elB = this.element.childNodes[indexB];
     if (elA && elB) {
       const previousSiblingA = elA.previousSibling;
       if (previousSiblingA) {
@@ -137,8 +105,48 @@ export class Target<V> {
     // });
   }
 
-  insertChildNodesAt(i: number, ...childNodes: ChildNode[]) {
+  insertChildNodesAt(i: number, ...childNodes: Node[]) {
     if (i === 0) this.element.prepend(...childNodes);
-    else this.element.childNodes.item(i - 1).after(...childNodes);
+    else this.element.childNodes[i - 1].after(...childNodes);
+  }
+  splice(start: number, deleteCount: number, ...items: V[]) {
+    const len = this.element.childNodes.length;
+    const relativeStart = start >> 0;
+    const k =
+      relativeStart < 0
+        ? Math.max(len + relativeStart, 0)
+        : Math.min(relativeStart, len);
+
+    let item: ChildNode | null = this.element.childNodes.item(k),
+      count = 0;
+    while (item && count < deleteCount) {
+      const nextSibling = item.nextSibling;
+      item.remove();
+      item = nextSibling;
+      count++;
+    }
+    if (items.length > 0) this.insertItemsAt(k, ...items);
+  }
+  fill(value: V, start = 0, end?: number) {
+    const len = this.element.childNodes.length;
+    const relativeStart = start >> 0;
+
+    let k =
+      relativeStart < 0
+        ? Math.max(len + relativeStart, 0)
+        : Math.min(relativeStart, len);
+
+    const relativeEnd = end === undefined ? len : end >> 0;
+
+    const final =
+      relativeEnd < 0
+        ? Math.max(len + relativeEnd, 0)
+        : Math.min(relativeEnd, len);
+
+    while (k < final) {
+      this.remove(k);
+      this.insertItemsAt(k, value);
+      k++;
+    }
   }
 }

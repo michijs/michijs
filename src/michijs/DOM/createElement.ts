@@ -1,7 +1,9 @@
-import { setAttributes } from "./attributes/setAttributes";
+import type { CreateOptions, GetElementProps } from "../types";
+import { setProperties } from "./attributes/setProperties";
 
 export function createElement<
-  T extends keyof JSX.IntrinsicElements,
+  const T extends string,
+  A extends GetElementProps<T> | JSX.IntrinsicElements["div"],
   E extends T extends keyof HTMLElementTagNameMap
     ? HTMLElementTagNameMap[T]
     : T extends keyof SVGElementTagNameMap
@@ -9,11 +11,11 @@ export function createElement<
       : HTMLElement,
 >(
   tagName: T,
-  attributes?: JSX.IntrinsicElements[T],
-  options?: ElementCreationOptions,
+  attributes?: A,
+  options?: ElementCreationOptions & CreateOptions,
 ) {
   const el = document.createElement(tagName, options);
-  if (attributes) setAttributes(el, attributes);
+  if (attributes) setProperties(el, attributes, options);
 
-  return el as unknown as E & (new (props?: JSX.IntrinsicElements[T]) => E);
+  return el as unknown as E & ((props?: A) => E);
 }

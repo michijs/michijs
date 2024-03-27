@@ -1,4 +1,4 @@
-import type { TypedEvent } from "@michijs/htmltype";
+import type { TypedEvent } from "../generated/htmlType";
 
 export const getFormData = <T>(
   formOrEvent: TypedEvent<HTMLFormElement> | HTMLFormElement,
