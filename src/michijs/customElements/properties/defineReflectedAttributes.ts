@@ -16,7 +16,7 @@ export const defineReflectedAttributes = (
   if (reflectedAttributes)
     for (const key in reflectedAttributes) {
       const standarizedAttributeName = formatToKebabCase(key);
-      // Setting the specific element initial value
+      // Setting the specific element initial value -- only happens if attribute was set on html
       if (self.hasAttribute(standarizedAttributeName))
         observable[key] = getAttributeValue(
           self.getAttribute(standarizedAttributeName),

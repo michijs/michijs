@@ -62,8 +62,7 @@ export function createCustomElement<
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
-    implements MichiCustomElement
-  {
+    implements MichiCustomElement {
     $michi: MichiCustomElement["$michi"] = {
       store: useObserve(storeInit),
       alreadyRendered: false,
@@ -169,7 +168,8 @@ export function createCustomElement<
     }
 
     attributeChangedCallback(name: string, oldValue, newValue) {
-      if (this.$michi.alreadyRendered && newValue !== oldValue) {
+      // Running this even in the initial render because attributes can be setted before connected
+      if (newValue !== oldValue) {
         const parsedNewValue = getAttributeValue(newValue);
         this.willReceiveAttribute?.(name, parsedNewValue, this[name]);
         this[name](parsedNewValue);
@@ -212,7 +212,7 @@ export function createCustomElement<
       }
       this.connected?.();
       if (!this.$michi.alreadyRendered) {
-        for (const key in reflectedAttributes) {
+        for (const key in { ...reflectedAttributes, ...reflectedCssVariables }) {
           const standarizedAttributeName = formatToKebabCase(key);
           setProperty(this, standarizedAttributeName, this[key], {
             contextElement: this,
