@@ -40,20 +40,20 @@
     "start": "michi-server --start",
     "dist": "michi-server --dist",
     "build": "michi-server --build",
-    "link": "michi-server --dist && npm link --force && tsc -w -p dist.tsconfig.json",
+    "link": "michi-server --dist && bun link --force && tsc -w -p dist.tsconfig.json",
     "generate-types": "ts-node --project tasks.tsconfig.json ./tasks/generateTypes.ts",
     "start-benchmark-michijs": "michi-server --start --env=TESTING",
     "start-benchmark-vanilla": "michi-server --start --env=TESTING_VANILLA",
     "benchmark-michijs": "cross-env NODE_ENV=TESTING jest --updateSnapshot --no-cache --unhandled-rejections=strict --selectProjects=benchmark-michijs",
     "benchmark-vanilla": "cross-env NODE_ENV=TESTING_VANILLA jest --updateSnapshot --no-cache --unhandled-rejections=strict --selectProjects=benchmark-vanilla",
-    "benchmark": "npm run benchmark-michijs && npm run benchmark-vanilla",
+    "benchmark": "bun run benchmark-michijs && bun run benchmark-vanilla",
     "coverage": "jest --no-cache --collect-coverage --selectProjects=library-tests",
     "test-tsc": "tsc --noEmit --skipLibCheck",
     "test-tsc-w": "tsc --noEmit --skipLibCheck -w",
     "test": "jest --no-cache --selectProjects=library-tests",
     "test-w": "jest --watch --no-cache --selectProjects=library-tests",
     "usnap": "jest --updateSnapshot --unhandled-rejections=strict --selectProjects=library-tests",
-    "run-all-tests": "npm run test-tsc && npm run test && npm run benchmark"
+    "run-all-tests": "bun run test-tsc && bun run test && bun run benchmark"
   },
   "keywords": [
     "web-components",
