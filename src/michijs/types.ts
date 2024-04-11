@@ -164,13 +164,7 @@ export interface CompatibleSubscription {
   (): void;
 }
 
-export type ObservableOrConst<Y, T = Unproxify<Y>> = [T] extends [object]
-  ?
-      | {
-          [k in keyof T]: ObservableOrConst<T[k]>;
-        }
-      | T
-  : ObservableLike<GetPrimitiveType<T>> | GetPrimitiveType<T>;
+export type ObservableOrConst<T> = ObservableLike<T> | T;
 export type ObservableOrConstWithChildren<
   T,
   C = JSX.Element,
@@ -501,7 +495,7 @@ export type CSSProperty =
   | undefined
   | null;
 export interface CSSObject {
-  [key: string]: CSSProperty | ObservableType<CSSProperty>;
+  [key: string]: ObservableOrConst<CSSProperty>;
 }
 
 export type CustomElementTag = `${string}-${string}`;
@@ -633,11 +627,11 @@ type MichiElementProps<
   S extends HTMLElement,
   Attrs = {
     [k in keyof O["reflectedAttributes"] as KebabCase<k>]?: ObservableOrConst<
-      O["reflectedAttributes"][k]
+    GetPrimitiveType<O["reflectedAttributes"][k]>
     >;
   } & {
     [k in keyof O["reflectedCssVariables"] as KebabCase<k>]?: ObservableOrConst<
-      O["reflectedCssVariables"][k]
+      GetPrimitiveType<O["reflectedCssVariables"][k]>
     >;
   } & {
     [k in keyof O["events"] as k extends string

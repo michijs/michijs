@@ -1,13 +1,13 @@
-import { CSSProperties } from "../..";
-import { IdGenerator } from "../classes";
+import { IdGenerator } from "../classes/IdGenerator";
 import type {
   CSSObject
 } from "../types";
+import type { CSSProperties } from '../generated/htmlType'
 
 type TransitionKeyframes =
   | ({
-      [k in keyof Omit<CSSProperties, "offset">]?: CSSProperties[k][];
-    } & { offset?: number[] })
+    [k in keyof Omit<CSSProperties, "offset">]?: CSSProperties[k][];
+  } & { offset?: number[] })
   | (Omit<CSSProperties, "offset"> & { offset?: number })[];
 
 const idGenerator = new IdGenerator();
@@ -83,7 +83,7 @@ export const useAnimation = (
     options.disablePrefersReducedMotion
       ? result
       : {
-          "@media (prefers-reduced-motion: no-preference)": result,
-        },
+        "@media (prefers-reduced-motion: no-preference)": result,
+      },
   ];
 };

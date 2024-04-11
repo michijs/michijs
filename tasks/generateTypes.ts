@@ -91,16 +91,16 @@ generateTypes({
   generateAttributesAndValueSetsProps: {
     valueSetsTransformer(valueSets) {
       valueSets.attributes.forEach((attribute) => {
-        attribute.values?.push({
-          name: `ObservableLike<${attribute.values
+        attribute.values = [{
+          name: `ObservableOrConst<${attribute.values
             .map((x) => x.name)
             .concat("undefined")
             .join(" | ")}>`,
-        });
+        }];
       });
     },
     valueSetsAdditionalImports: [
-      'import type { ObservableLike } from "../../../types"',
+      'import type { ObservableOrConst } from "../../../types"',
     ],
   },
   typesFactoryProps: {
