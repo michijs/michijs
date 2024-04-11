@@ -1,8 +1,6 @@
 import { CSSProperties } from "../..";
 import { IdGenerator } from "../classes";
-import type {
-  CSSObject
-} from "../types";
+import type { CSSObject } from "../types";
 
 type TransitionKeyframes =
   | ({
