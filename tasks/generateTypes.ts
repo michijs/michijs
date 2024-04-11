@@ -91,12 +91,14 @@ generateTypes({
   generateAttributesAndValueSetsProps: {
     valueSetsTransformer(valueSets) {
       valueSets.attributes.forEach((attribute) => {
-        attribute.values = [{
-          name: `ObservableOrConst<${attribute.values
-            .map((x) => x.name)
-            .concat("undefined")
-            .join(" | ")}>`,
-        }];
+        attribute.values = [
+          {
+            name: `ObservableOrConst<${attribute.values
+              .map((x) => x.name)
+              .concat("undefined")
+              .join(" | ")}>`,
+          },
+        ];
       });
     },
     valueSetsAdditionalImports: [
