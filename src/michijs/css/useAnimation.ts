@@ -71,17 +71,18 @@ export const useAnimation = (
       [`@keyframes ${keyframeId}`]: keyframesCssObject,
     },
     {
-      "@media (prefers-reduced-motion: no-preference)": removeNullableFromObject({
-        willChange: properties.filter((x) => x !== "offset").join(","),
-        animationName: keyframeId,
-        animationDelay: options.delay ? `${options.delay}ms` : options.delay,
-        animationDirection: options.direction,
-        animationDuration: options.duration?.toString(),
-        animationTimingFunction: options.easing,
-        animationFillMode: options.fill,
-        animationIterationCount: options.iterations,
-        ...keyframesCssObject["100.00%"],
-      }),
-    }
+      "@media (prefers-reduced-motion: no-preference)":
+        removeNullableFromObject({
+          willChange: properties.filter((x) => x !== "offset").join(","),
+          animationName: keyframeId,
+          animationDelay: options.delay ? `${options.delay}ms` : options.delay,
+          animationDirection: options.direction,
+          animationDuration: options.duration?.toString(),
+          animationTimingFunction: options.easing,
+          animationFillMode: options.fill,
+          animationIterationCount: options.iterations,
+          ...keyframesCssObject["100.00%"],
+        }),
+    },
   ];
 };

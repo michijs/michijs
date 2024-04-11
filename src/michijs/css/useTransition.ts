@@ -43,6 +43,6 @@ export const useTransition = ({
       transitionTimingFunction: timingFunction,
       transitionDelay: delay,
       transitionBehavior: "allow-discrete",
-    })
+    }),
   };
 };

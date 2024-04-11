@@ -14,7 +14,7 @@ import {
 } from "../utils";
 import { useCssVariables } from "./useCssVariables";
 
-const pseudoSelectors = [":host", ":host-context", '::'];
+const pseudoSelectors = [":host", ":host-context", "::"];
 
 const isQuery = (key: string) => key.startsWith("@");
 
@@ -73,7 +73,10 @@ export function cssObjectToText(
     (previousValue, [key, value]) => {
       // & its not working for host
       if (pseudoSelectors.find((x) => key.startsWith(x))) {
-        hostRules = `${hostRules}${pseudoSelectorToText(value as CSSObject, key)}`;
+        hostRules = `${hostRules}${pseudoSelectorToText(
+          value as CSSObject,
+          key,
+        )}`;
         return previousValue;
       } else {
         const valueIsObject = typeof value === "object";
