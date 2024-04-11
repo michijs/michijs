@@ -1,6 +1,4 @@
-import type {
-  CSSObject,
-} from "../types";
+import type { CSSObject } from "../types";
 
 interface Transition {
   property: string[];

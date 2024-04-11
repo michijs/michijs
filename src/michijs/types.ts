@@ -627,7 +627,7 @@ type MichiElementProps<
   S extends HTMLElement,
   Attrs = {
     [k in keyof O["reflectedAttributes"] as KebabCase<k>]?: ObservableOrConst<
-    GetPrimitiveType<O["reflectedAttributes"][k]>
+      GetPrimitiveType<O["reflectedAttributes"][k]>
     >;
   } & {
     [k in keyof O["reflectedCssVariables"] as KebabCase<k>]?: ObservableOrConst<
