@@ -165,10 +165,13 @@ export interface CompatibleSubscription {
 }
 
 export type ObservableOrConst<T> = ObservableLike<T> | T;
-export type ObservableOrConstWithChildren<
+export type CreateFunctionalComponentProps<
+  T
+> = {[k in keyof T]: ObservableOrConst<T[k]>};
+export type CreateFunctionalComponentWithChildrenProps<
   T,
   C = JSX.Element,
-> = ObservableOrConst<T> & {
+> = CreateFunctionalComponentProps<T> & {
   children?: C;
 };
 export interface ObservableLike<T> {
