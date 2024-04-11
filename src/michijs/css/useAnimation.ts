@@ -1,7 +1,11 @@
 import { IdGenerator } from "../classes/IdGenerator";
 import type { CSSObject } from "../types";
 import type { CSSProperties } from "../generated/htmlType";
+import { removeNullableFromObject } from "../utils";
 
+/**
+ * Represents keyframes for CSS animations.
+ */
 type TransitionKeyframes =
   | ({
       [k in keyof Omit<CSSProperties, "offset">]?: CSSProperties[k][];
@@ -17,14 +21,18 @@ const getOffset = (i: number, length: number, offset?: number) =>
   `${(
     (offset ?? (i === 0 ? 0 : i === length - 1 ? 1 : i / length - 1)) * 100
   ).toFixed(2)}%`;
-
+/**
+ * Generates CSS keyframes and animation properties based on the provided keyframes and options.
+ * @param keyframes - The keyframes for the animation.
+ * @param options - Options for the animation.
+ * @returns An array containing CSS keyframes and animation properties.
+ */
 export const useAnimation = (
   keyframes: TransitionKeyframes,
   options: Pick<
     KeyframeAnimationOptions,
     "id" | "delay" | "direction" | "duration" | "easing" | "fill"
   > & {
-    disablePrefersReducedMotion?: boolean;
     iterations?: "infinite" | number;
   },
 ): [CSSObject, CSSObject] => {
@@ -58,30 +66,22 @@ export const useAnimation = (
     });
   }
 
-  const result = Object.entries({
-    willChange: properties.filter((x) => x !== "offset").join(","),
-    animationName: keyframeId,
-    animationDelay: options.delay ? `${options.delay}ms` : options.delay,
-    animationDirection: options.direction,
-    animationDuration: options.duration?.toString(),
-    animationTimingFunction: options.easing,
-    animationFillMode: options.fill,
-    animationIterationCount: options.iterations,
-    ...keyframesCssObject["100.00%"],
-  }).reduce((previousValue, [key, value]) => {
-    if (value !== undefined) previousValue[key] = value;
-
-    return previousValue;
-  }, {});
-
   return [
     {
       [`@keyframes ${keyframeId}`]: keyframesCssObject,
     },
-    options.disablePrefersReducedMotion
-      ? result
-      : {
-          "@media (prefers-reduced-motion: no-preference)": result,
-        },
+    {
+      "@media (prefers-reduced-motion: no-preference)": removeNullableFromObject({
+        willChange: properties.filter((x) => x !== "offset").join(","),
+        animationName: keyframeId,
+        animationDelay: options.delay ? `${options.delay}ms` : options.delay,
+        animationDirection: options.direction,
+        animationDuration: options.duration?.toString(),
+        animationTimingFunction: options.easing,
+        animationFillMode: options.fill,
+        animationIterationCount: options.iterations,
+        ...keyframesCssObject["100.00%"],
+      }),
+    }
   ];
 };

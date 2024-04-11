@@ -14,11 +14,11 @@ import {
 } from "../utils";
 import { useCssVariables } from "./useCssVariables";
 
-const hostSelectors = [":host", ":host-context"];
+const pseudoSelectors = [":host", ":host-context", '::'];
 
 const isQuery = (key: string) => key.startsWith("@");
 
-export const hostToText = (
+export const pseudoSelectorToText = (
   unproxifiedCssObject: CSSObject,
   parentSelector = "",
 ): string => {
@@ -37,7 +37,7 @@ export const hostToText = (
               },
             })}`;
           else
-            return `${previousValue}${hostToText(
+            return `${previousValue}${pseudoSelectorToText(
               value as CSSObject,
               `${parentSelector}${newKey}`,
             )}`;
@@ -72,8 +72,8 @@ export function cssObjectToText(
   const formattedObject = Object.entries(unproxifiedCssObject).reduce(
     (previousValue, [key, value]) => {
       // & its not working for host
-      if (hostSelectors.find((x) => key.startsWith(x))) {
-        hostRules = `${hostRules}${hostToText(value as CSSObject, key)}`;
+      if (pseudoSelectors.find((x) => key.startsWith(x))) {
+        hostRules = `${hostRules}${pseudoSelectorToText(value as CSSObject, key)}`;
         return previousValue;
       } else {
         const valueIsObject = typeof value === "object";

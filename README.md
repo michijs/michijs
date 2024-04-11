@@ -467,6 +467,57 @@ export const counterStyle = css`
 `
 ```
 
+#### useAnimation
+Generates CSS keyframes and animation properties based on the provided keyframes and options.
+```tsx
+const hiddenState = {
+  opacity: 0,
+} satisfies CSSProperties;
+const shownState = {
+  opacity: 1,
+} satisfies CSSProperties;
+
+const [hideKeyframe, hideProperties] = useAnimation([shownState, hiddenState], {
+  duration: '2s',
+  fill: 'forwards'
+});
+const [showKeyframe, showProperties] = useAnimation([hiddenState, shownState], {
+  duration: '1s',
+  fill: 'forwards'
+});
+
+export const dialogStyle = useStyleSheet((tag) => ({
+  ...showKeyframe,
+  ...hideKeyframe,
+  [tag]: {
+    ...hideProperties,
+    display: 'flex',
+    flexDirection: 'row',
+    '[open]': showProperties
+  },
+}));
+```
+#### useTransition
+Hook to generate CSS transition properties based on the provided configuration.
+```tsx
+const opacityTransition = useTransition({
+  property: ["opacity"],
+  duration: "1s",
+});
+
+export const dialogStyle = useStyleSheet((tag) => ({
+  [tag]: {
+    ...opacityTransition,
+    display: 'flex',
+    flexDirection: 'row',
+    opacity: 0,
+    '[open]': {
+      opacity: 1
+    }
+  },
+}));
+```
+
 #### CSS module scripts
 We do not provide support for this functionality yet as ESBuild does not support it yet. You can read how it works [here](https://web.dev/css-module-scripts/)
 
