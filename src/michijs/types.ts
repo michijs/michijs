@@ -165,9 +165,9 @@ export interface CompatibleSubscription {
 }
 
 export type ObservableOrConst<T> = ObservableLike<T> | T;
-export type CreateFunctionalComponentProps<
-  T
-> = {[k in keyof T]: ObservableOrConst<T[k]>};
+export type CreateFunctionalComponentProps<T> = {
+  [k in keyof T]: ObservableOrConst<T[k]>;
+};
 export type CreateFunctionalComponentWithChildrenProps<
   T,
   C = JSX.Element,
