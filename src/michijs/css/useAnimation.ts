@@ -1,4 +1,4 @@
-import { CSSProperties } from "../..";
+import type { CSSProperties } from "../..";
 import { IdGenerator } from "../classes";
 import type { CSSObject } from "../types";
 
