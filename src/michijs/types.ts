@@ -144,7 +144,8 @@ export type DelimiterCase<
 export interface MichiAttributes<E> {
   children?: JSX.Element;
   _?: {
-    [k in WritableKeys<E>]?: ObservableOrConst<E[k]>;
+    // TODO: find why it is failing
+    [k in WritableKeys<E>]?: Omit<ObservableOrConst<Unproxify<E[k]>>, 'valueOf'>;
   };
 }
 

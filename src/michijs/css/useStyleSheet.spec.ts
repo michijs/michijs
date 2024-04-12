@@ -12,6 +12,12 @@ const stylesheet = cssObjectToText({
     "@media (max-width: 600px)": {
       color: "blue",
     },
+    '::before': {
+      "@media (prefers-reduced-motion: no-preference)": {
+        opacity: 1
+      },
+      opacity: 0
+    }
   },
   ":host": {
     "@media (max-width: 600px)": {
@@ -26,7 +32,7 @@ const stylesheet = cssObjectToText({
 });
 
 const expectedResult =
-  "div{--test:green;background-color:var(--test);&:not([test-attribute]){color:red;}@media (max-width: 600px){color:blue;}}@media (max-width: 600px){:host a{color:green;}}:host([hidden]){display:none;}";
+  "div{--test:green;background-color:var(--test);&:not([test-attribute]){color:red;}@media (max-width: 600px){color:blue;}@media (prefers-reduced-motion: no-preference){::before{opacity:1;}}::before{opacity:0;}}@media (max-width: 600px){:host a{color:green;}}:host([hidden]){display:none;}";
 
 describe("useStyleSheet", () => {
   it("should return the expected css variables text", () => {
