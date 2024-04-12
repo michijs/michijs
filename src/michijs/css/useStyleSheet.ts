@@ -14,11 +14,11 @@ import {
 } from "../utils";
 import { useCssVariables } from "./useCssVariables";
 
-const pseudoSelectors = [":host", ":host-context", "::"];
+const hostSelectors = [":host", ":host-context"];
 
 const isQuery = (key: string) => key.startsWith("@");
 
-export const pseudoSelectorToText = (
+export const hostToText = (
   unproxifiedCssObject: CSSObject,
   parentSelector = "",
 ): string => {
@@ -37,7 +37,7 @@ export const pseudoSelectorToText = (
               },
             })}`;
           else
-            return `${previousValue}${pseudoSelectorToText(
+            return `${previousValue}${hostToText(
               value as CSSObject,
               `${parentSelector}${newKey}`,
             )}`;
@@ -53,11 +53,11 @@ export const pseudoSelectorToText = (
   const thisRunSelector =
     thisRunObjectSelectorEntries.length > 0
       ? `${parentSelector}{${thisRunObjectSelectorEntries.reduce(
-          (previousValue, [key, value]) => {
-            return `${previousValue}${key}:${value};`;
-          },
-          "",
-        )}}`
+        (previousValue, [key, value]) => {
+          return `${previousValue}${key}:${value};`;
+        },
+        "",
+      )}}`
       : "";
 
   return `${otherRunsSelectors}${thisRunSelector}`;
@@ -65,17 +65,17 @@ export const pseudoSelectorToText = (
 
 export function cssObjectToText(
   cssObject: CSSObject,
-  isChild?: boolean,
+  isChild?: boolean
 ): string {
   const unproxifiedCssObject = unproxify(cssObject);
   let hostRules = "";
   const formattedObject = Object.entries(unproxifiedCssObject).reduce(
     (previousValue, [key, value]) => {
       // & its not working for host
-      if (pseudoSelectors.find((x) => key.startsWith(x))) {
-        hostRules = `${hostRules}${pseudoSelectorToText(
+      if (hostSelectors.find((x) => key.startsWith(x))) {
+        hostRules = `${hostRules}${hostToText(
           value as CSSObject,
-          key,
+          key
         )}`;
         return previousValue;
       } else {
@@ -84,19 +84,42 @@ export function cssObjectToText(
         const newKey = formatToKebabCase(
           isChild && !isQueryResult && valueIsObject ? `&${key}` : key,
         );
-        const newValue = valueIsObject
-          ? `{${cssObjectToText(
-              value as CSSObject,
-              isChild || !isQueryResult,
-            )}}`
-          : `:${value?.toString()};`;
-        return `${previousValue}${newKey}${newValue}`;
+        let newValue;
+        let queries = '';
+
+        if (valueIsObject) {
+          let valueToStringify;
+          // Preudo selectors doesnt support @media inside
+          if (key.startsWith('::')) {
+            valueToStringify = {}
+            // Separate media from the rest
+            Object.entries(value as CSSObject).forEach(([key, value]) => {
+              if (key.startsWith('@'))
+                queries += `${key}{${newKey}{${cssObjectToText(
+                  value as CSSObject,
+                  isChild || !isQueryResult,
+                )}}}`
+              else
+                valueToStringify[key] = value
+            })
+          } else
+            valueToStringify = value
+
+          newValue = `{${cssObjectToText(
+            valueToStringify as CSSObject,
+            isChild || !isQueryResult,
+          )}}`
+        } else
+          newValue = `:${value?.toString()};`
+          
+        return `${previousValue}${queries}${newKey}${newValue}`;
       }
     },
     "",
   );
   return `${formattedObject}${hostRules}`;
 }
+
 
 const styleSheetFromCSSObject = (
   getCSSObject: () => CSSObject,

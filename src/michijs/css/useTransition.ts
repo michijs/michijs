@@ -1,5 +1,5 @@
 import { CSSObject } from "../types";
-import { removeNullableFromObject } from "../utils";
+import { formatToKebabCase, removeNullableFromObject } from "../utils";
 
 /**
  * Represents transition properties for CSS animations.

@@ -1,7 +1,7 @@
 import { IdGenerator } from "../classes/IdGenerator";
 import type { CSSObject } from "../types";
 import type { CSSProperties } from "../generated/htmlType";
-import { removeNullableFromObject } from "../utils";
+import { formatToKebabCase, removeNullableFromObject } from "../utils";
 
 /**
  * Represents keyframes for CSS animations.
@@ -73,7 +73,7 @@ export const useAnimation = (
     {
       "@media (prefers-reduced-motion: no-preference)":
         removeNullableFromObject({
-          willChange: properties.filter((x) => x !== "offset").join(","),
+          willChange: properties.filter((x) => x !== "offset").map(x => formatToKebabCase(x)).join(","),
           animationName: keyframeId,
           animationDelay: options.delay ? `${options.delay}ms` : options.delay,
           animationDirection: options.direction,
