@@ -8,8 +8,8 @@ import { formatToKebabCase, removeNullableFromObject } from "../utils";
  */
 type TransitionKeyframes =
   | ({
-      [k in keyof Omit<CSSProperties, "offset">]?: CSSProperties[k][];
-    } & { offset?: number[] })
+    [k in keyof Omit<CSSProperties, "offset">]?: CSSProperties[k][];
+  } & { offset?: number[] })
   | (Omit<CSSProperties, "offset"> & { offset?: number })[];
 
 const idGenerator = new IdGenerator();
@@ -71,9 +71,10 @@ export const useAnimation = (
       [`@keyframes ${keyframeId}`]: keyframesCssObject,
     },
     {
+      ...keyframesCssObject["100.00%"],
+      willChange: properties.filter((x) => x !== "offset").map(x => formatToKebabCase(x)).join(","),
       "@media (prefers-reduced-motion: no-preference)":
         removeNullableFromObject({
-          willChange: properties.filter((x) => x !== "offset").map(x => formatToKebabCase(x)).join(","),
           animationName: keyframeId,
           animationDelay: options.delay ? `${options.delay}ms` : options.delay,
           animationDirection: options.direction,
@@ -81,7 +82,6 @@ export const useAnimation = (
           animationTimingFunction: options.easing,
           animationFillMode: options.fill,
           animationIterationCount: options.iterations,
-          ...keyframesCssObject["100.00%"],
         }),
     },
   ];

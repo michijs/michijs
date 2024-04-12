@@ -36,8 +36,8 @@ export const useTransition = ({
 }: Transition): CSSObject => {
   const properties = property.join(", ");
   return {
+    willChange: properties,
     "@media (prefers-reduced-motion: no-preference)": removeNullableFromObject({
-      willChange: properties,
       transitionProperty: properties,
       transitionDuration: duration,
       transitionTimingFunction: timingFunction,
