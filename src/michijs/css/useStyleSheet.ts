@@ -53,11 +53,11 @@ export const hostToText = (
   const thisRunSelector =
     thisRunObjectSelectorEntries.length > 0
       ? `${parentSelector}{${thisRunObjectSelectorEntries.reduce(
-        (previousValue, [key, value]) => {
-          return `${previousValue}${key}:${value};`;
-        },
-        "",
-      )}}`
+          (previousValue, [key, value]) => {
+            return `${previousValue}${key}:${value};`;
+          },
+          "",
+        )}}`
       : "";
 
   return `${otherRunsSelectors}${thisRunSelector}`;
@@ -65,7 +65,7 @@ export const hostToText = (
 
 export function cssObjectToText(
   cssObject: CSSObject,
-  isChild?: boolean
+  isChild?: boolean,
 ): string {
   const unproxifiedCssObject = unproxify(cssObject);
   let hostRules = "";
@@ -73,10 +73,7 @@ export function cssObjectToText(
     (previousValue, [key, value]) => {
       // & its not working for host
       if (hostSelectors.find((x) => key.startsWith(x))) {
-        hostRules = `${hostRules}${hostToText(
-          value as CSSObject,
-          key
-        )}`;
+        hostRules = `${hostRules}${hostToText(value as CSSObject, key)}`;
         return previousValue;
       } else {
         const valueIsObject = typeof value === "object";
@@ -85,33 +82,30 @@ export function cssObjectToText(
           isChild && !isQueryResult && valueIsObject ? `&${key}` : key,
         );
         let newValue;
-        let queries = '';
+        let queries = "";
 
         if (valueIsObject) {
           let valueToStringify;
           // Preudo selectors doesnt support @media inside
-          if (key.startsWith('::')) {
-            valueToStringify = {}
+          if (key.startsWith("::")) {
+            valueToStringify = {};
             // Separate media from the rest
             Object.entries(value as CSSObject).forEach(([key, value]) => {
-              if (key.startsWith('@'))
+              if (key.startsWith("@"))
                 queries += `${key}{${newKey}{${cssObjectToText(
                   value as CSSObject,
                   isChild || !isQueryResult,
-                )}}}`
-              else
-                valueToStringify[key] = value
-            })
-          } else
-            valueToStringify = value
+                )}}}`;
+              else valueToStringify[key] = value;
+            });
+          } else valueToStringify = value;
 
           newValue = `{${cssObjectToText(
             valueToStringify as CSSObject,
             isChild || !isQueryResult,
-          )}}`
-        } else
-          newValue = `:${value?.toString()};`
-          
+          )}}`;
+        } else newValue = `:${value?.toString()};`;
+
         return `${previousValue}${queries}${newKey}${newValue}`;
       }
     },
@@ -119,7 +113,6 @@ export function cssObjectToText(
   );
   return `${formattedObject}${hostRules}`;
 }
-
 
 const styleSheetFromCSSObject = (
   getCSSObject: () => CSSObject,

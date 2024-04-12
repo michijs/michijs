@@ -73,7 +73,10 @@ export const useAnimation = (
     {
       "@media (prefers-reduced-motion: no-preference)":
         removeNullableFromObject({
-          willChange: properties.filter((x) => x !== "offset").map(x => formatToKebabCase(x)).join(","),
+          willChange: properties
+            .filter((x) => x !== "offset")
+            .map((x) => formatToKebabCase(x))
+            .join(","),
           animationName: keyframeId,
           animationDelay: options.delay ? `${options.delay}ms` : options.delay,
           animationDirection: options.direction,
