@@ -87,7 +87,7 @@ export function cssObjectToText(
         if (valueIsObject) {
           let valueToStringify;
           // Preudo selectors doesnt support @media inside
-          if (key.startsWith("::")) {
+          if (key.includes("::")) {
             valueToStringify = {};
             // Separate media from the rest
             Object.entries(value as CSSObject).forEach(([key, value]) => {
