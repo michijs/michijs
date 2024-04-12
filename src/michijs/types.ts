@@ -145,7 +145,10 @@ export interface MichiAttributes<E> {
   children?: JSX.Element;
   _?: {
     // TODO: find why it is failing
-    [k in WritableKeys<E>]?: Omit<ObservableOrConst<Unproxify<E[k]>>, 'valueOf'>;
+    [k in WritableKeys<E>]?: Omit<
+      ObservableOrConst<Unproxify<E[k]>>,
+      "valueOf"
+    >;
   };
 }
 

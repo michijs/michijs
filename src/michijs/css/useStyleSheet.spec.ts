@@ -12,12 +12,12 @@ const stylesheet = cssObjectToText({
     "@media (max-width: 600px)": {
       color: "blue",
     },
-    '::before': {
+    "::before": {
       "@media (prefers-reduced-motion: no-preference)": {
-        opacity: 1
+        opacity: 1,
       },
-      opacity: 0
-    }
+      opacity: 0,
+    },
   },
   ":host": {
     "@media (max-width: 600px)": {
