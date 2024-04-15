@@ -21,7 +21,11 @@ const SearchParamsAndHash = () => {
       <Title>Search params and hash tests</Title>
       <button
         onclick={() => {
-          hash["#hashTest"](hash["#hashTest"].not());
+          // Just to test '#'
+          if (hash["#hashTest"]())
+            hash[""](true);
+          else
+            hash["#hashTest"](hash["#hashTest"].not());
           console.log(hash);
         }}
       >

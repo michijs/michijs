@@ -9,8 +9,8 @@ const Hash = useComputedObserve(
   () =>
     !!location.hash
       ? {
-          [location.hash]: true,
-        }
+        [location.hash]: true,
+      }
       : {},
   [HistoryManager],
 );
@@ -23,10 +23,13 @@ export const useHash = <T extends string = string>() =>
   Hash as ObservableType<Record<T, boolean>>;
 
 Hash.subscribe((newValue) => {
-  const [newHash] = newValue
-    ? Object.entries(newValue).find(([_, value]) => value.valueOf()) ?? [""]
-    : [""];
-  const newUrl = new URL(location.href);
-  newUrl.hash = newHash;
-  if (location.hash !== newUrl.hash) HistoryManager.push(newUrl);
+  let hashes = Object.entries(newValue).filter(([_, value]) => value.valueOf());
+  if (hashes.length > 1) {
+    Hash[location.hash](false);
+  } else {
+    const [newHash] = hashes[0] ?? [''];
+    const newUrl = new URL(location.href);
+    newUrl.hash = newHash;
+    if (location.hash !== newUrl.hash) HistoryManager.push(newUrl);
+  }
 });

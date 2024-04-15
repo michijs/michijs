@@ -7,8 +7,9 @@ export function setObservableValue<T extends object>(
   object2: any,
   initialObservers?: Subscription<T>[],
 ): boolean {
-  const object1Value = object1?.valueOf();
-  const object2Value = object2?.valueOf();
+  // null?.valueOf() is undefined - bug
+  const object1Value = object1 ? object1.valueOf() : object1;
+  const object2Value = object2 ? object2.valueOf() : object2;
 
   if (object1Value === object2Value || object1Value == object2Value)
     return true;
@@ -29,33 +30,29 @@ export function setObservableValue<T extends object>(
       return Reflect.set(object1, "$value", object2Value);
     }
     case "object": {
-      if (object1Value || object2Value) {
-        const castedObject1 = object1 as ProxiedValue<unknown>;
-        castedObject1.startTransaction();
-        if (object1 instanceof ProxiedArray && Array.isArray(object2Value)) {
-          object1.$replace(
-            ...object2Value.map((x) =>
-              useObserve<Object>(x, initialObservers as Subscription<Object>[]),
-            ),
-          );
-        } else if (Object.getPrototypeOf(object1Value) === Object.prototype)
-          for (const key in { ...object1Value, ...object2Value }) {
-            object1[key] = object2Value[key];
-          }
-        else
-          Reflect.set(
-            object1,
-            "$value",
-            useObserve<Object>(
-              object2,
-              initialObservers as Subscription<Object>[],
-            ).$value,
-          );
-        castedObject1.endTransaction();
-        return true;
-        // TODO: add set / map etc
-      } else {
-        return Reflect.set(
+      if (object1Value === null || object2Value === null) return Reflect.set(
+        object1,
+        "$value",
+        useObserve<Object>(
+          object2,
+          initialObservers as Subscription<Object>[],
+        ).$value,
+      );
+
+      const castedObject1 = object1 as ProxiedValue<unknown>;
+      castedObject1.startTransaction();
+      if (object1 instanceof ProxiedArray && Array.isArray(object2Value)) {
+        object1.$replace(
+          ...object2Value.map((x) =>
+            useObserve<Object>(x, initialObservers as Subscription<Object>[]),
+          ),
+        );
+      } else if (Object.getPrototypeOf(object1Value) === Object.prototype)
+        for (const key in { ...object1Value, ...object2Value }) {
+          object1[key] = object2Value[key];
+        }
+      else
+        Reflect.set(
           object1,
           "$value",
           useObserve<Object>(
@@ -63,7 +60,10 @@ export function setObservableValue<T extends object>(
             initialObservers as Subscription<Object>[],
           ).$value,
         );
-      }
+      castedObject1.endTransaction();
+      return true;
+      // TODO: add set / map etc
+
     }
     default: {
       return Reflect.set(object1, "$value", object2Value);

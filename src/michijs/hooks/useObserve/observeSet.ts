@@ -58,6 +58,7 @@ export const observeSet = <E, T extends Set<E>>(
                 newInitialObservers,
               );
               bindedTargetProperty(newValueOf, observedItem);
+              // @ts-ignore
               observedItem.notifyCurrentValue?.();
             }
             return proxy;

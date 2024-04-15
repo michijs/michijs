@@ -1,7 +1,7 @@
 import type {
   AnyObject,
-  ObservableType,
-  PrimitiveObservableValue,
+  ObservableComplexObject,
+  ObservableType
 } from "../../types";
 import { useObserve } from "..";
 
@@ -202,7 +202,7 @@ describe("Observe tests", () => {
   });
   describe("When observing Dates", () => {
     let nonProxiedDate: Date;
-    let date: PrimitiveObservableValue<Date> & Date;
+    let date: ObservableType<Date>;
     beforeEach(() => {
       nonProxiedDate = new Date();
       date = useObserve(new Date());
@@ -219,6 +219,31 @@ describe("Observe tests", () => {
       expect(date.getTime()).toEqual(nonProxiedDate.getTime());
       expect(Object.keys(date)).toEqual(Object.keys(nonProxiedDate));
       expect(Object.values(date)).toEqual(Object.values(nonProxiedDate));
+    });
+  });
+  describe("When observing objects with nullable fields", () => {
+    let object = useObserve<{
+      test: {
+        test2: undefined | number
+      } | null
+    } | undefined>(undefined);
+    it("Getting test doesnt throw exception", () => {
+      expect(() => object.test.test2).not.toThrow()
+      expect(object.test.test2()).toBe(undefined)
+      expect(object()).toStrictEqual({ test: { test2: undefined } })
+      object.test.test2(1)
+      expect(object()).toStrictEqual({ test: { test2: 1 } })
+      object.test(null)
+      expect(object()).toStrictEqual({ test: null })
+      object.test({ test2: undefined })
+      expect(object()).toStrictEqual({ test: { test2: undefined } })
+    });
+  });
+  describe("When observing Complex objects", () => {
+    const obj = useObserve<ObservableComplexObject<File>>(new File([''], 'test') as unknown as ObservableComplexObject<File>)
+
+    it("Getting the value should return same instance type", () => {
+      expect(obj() instanceof File).toBe(true)
     });
   });
 });
