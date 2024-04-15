@@ -146,7 +146,7 @@ export interface MichiAttributes<E> {
   _?: {
     // TODO: find why it is failing
     [k in WritableKeys<E>]?: Omit<
-      ObservableOrConst<Unproxify<E[k]>>,
+      ObservableOrConst<Unproxify<E[k]> | undefined>,
       "valueOf"
     >;
   };
@@ -651,11 +651,11 @@ type MichiElementProps<
   S extends HTMLElement,
   Attrs = {
     [k in keyof O["reflectedAttributes"] as KebabCase<k>]?: ObservableOrConst<
-      GetPrimitiveType<O["reflectedAttributes"][k]>
+      GetPrimitiveType<O["reflectedAttributes"][k]> | undefined
     >;
   } & {
     [k in keyof O["reflectedCssVariables"] as KebabCase<k>]?: ObservableOrConst<
-      GetPrimitiveType<O["reflectedCssVariables"][k]>
+      GetPrimitiveType<O["reflectedCssVariables"][k]> | undefined
     >;
   } & {
     [k in keyof O["events"] as k extends string
