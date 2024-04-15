@@ -12,7 +12,7 @@ import {
  * Converts any proxy into a common value
  */
 export function unproxify<T>(val: T): Unproxify<T> {
-  const item = val instanceof ProxiedValue ? val.$value : val as T
+  const item = val instanceof ProxiedValue ? val.$value : (val as T);
   if (item && typeof item === "object") {
     if (item instanceof Array)
       return cloneArray(item, unproxify) as Unproxify<T>;
@@ -21,8 +21,7 @@ export function unproxify<T>(val: T): Unproxify<T> {
     if (item instanceof Set) return cloneSet(item, unproxify) as Unproxify<T>;
     if (Object.getPrototypeOf(item) === Object.prototype)
       return cloneCommonObject(item, unproxify) as Unproxify<T>;
-    else
-      return item as Unproxify<T>;
+    else return item as Unproxify<T>;
   }
   return item as Unproxify<T>;
 }

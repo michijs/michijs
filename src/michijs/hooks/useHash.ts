@@ -9,8 +9,8 @@ const Hash = useComputedObserve(
   () =>
     !!location.hash
       ? {
-        [location.hash]: true,
-      }
+          [location.hash]: true,
+        }
       : {},
   [HistoryManager],
 );
@@ -27,7 +27,7 @@ Hash.subscribe((newValue) => {
   if (hashes.length > 1) {
     Hash[location.hash](false);
   } else {
-    const [newHash] = hashes[0] ?? [''];
+    const [newHash] = hashes[0] ?? [""];
     const newUrl = new URL(location.href);
     newUrl.hash = newHash;
     if (location.hash !== newUrl.hash) HistoryManager.push(newUrl);

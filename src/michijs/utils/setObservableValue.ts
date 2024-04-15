@@ -30,14 +30,15 @@ export function setObservableValue<T extends object>(
       return Reflect.set(object1, "$value", object2Value);
     }
     case "object": {
-      if (object1Value === null || object2Value === null) return Reflect.set(
-        object1,
-        "$value",
-        useObserve<Object>(
-          object2,
-          initialObservers as Subscription<Object>[],
-        ).$value,
-      );
+      if (object1Value === null || object2Value === null)
+        return Reflect.set(
+          object1,
+          "$value",
+          useObserve<Object>(
+            object2,
+            initialObservers as Subscription<Object>[],
+          ).$value,
+        );
 
       const castedObject1 = object1 as ProxiedValue<unknown>;
       castedObject1.startTransaction();
@@ -63,7 +64,6 @@ export function setObservableValue<T extends object>(
       castedObject1.endTransaction();
       return true;
       // TODO: add set / map etc
-
     }
     default: {
       return Reflect.set(object1, "$value", object2Value);

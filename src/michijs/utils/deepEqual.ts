@@ -1,8 +1,8 @@
 export function deepEqual(object1: any, object2: any): boolean {
   // null?.valueOf() is undefined - bug
-  const object1Value = object1 ? object1.valueOf(): object1;
-  const object2Value = object2 ? object2.valueOf(): object2;
-  
+  const object1Value = object1 ? object1.valueOf() : object1;
+  const object2Value = object2 ? object2.valueOf() : object2;
+
   if (object1Value === object2Value) return true;
 
   const type = typeof object1Value;
