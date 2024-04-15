@@ -23,7 +23,9 @@ export const useHash = <T extends string = string>() =>
   Hash as ObservableType<Record<T, boolean>>;
 
 Hash.subscribe((newValue) => {
-  let hashes = Object.entries(newValue).filter(([_, value]) => value.valueOf());
+  const hashes = Object.entries(newValue).filter(([_, value]) =>
+    value.valueOf(),
+  );
   if (hashes.length > 1) {
     Hash[location.hash](false);
   } else {
