@@ -222,7 +222,7 @@ describe("Observe tests", () => {
     });
   });
   describe("When observing objects with nullable fields", () => {
-    let object = useObserve<
+    const object = useObserve<
       | {
           test: {
             test2: undefined | number;
