@@ -1,4 +1,5 @@
 export { ProxiedValue } from "./ProxiedValue";
+export { CookieStorage } from "./CookieStorage";
 export { EventDispatcher } from "./EventDispatcher";
 export { ProxiedArray } from "./ProxiedArray";
 export { Observable } from "./Observable";

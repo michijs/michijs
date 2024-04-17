@@ -1,4 +1,4 @@
-import { ProxiedValue } from "../classes";
+import { ProxiedValue } from "../..";
 import type { Unproxify } from "../types";
 import {
   cloneArray,

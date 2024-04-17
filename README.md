@@ -425,6 +425,9 @@ Allows for observing changes in an object and synchronizing it with the browser'
 - item: The object to be observed and synchronized with storage.
 - storage: The storage object to be used (defaults to localStorage if not provided)
 
+> [!TIP]
+> If you want to use cookies we provide a class that acts like an storage called CookieStorage
+
 #### useIndexedDB
 It sets up event listeners for changes in the IndexedDB database. It returns a Proxy object that intercepts property accesses and performs corresponding IndexedDB operations. IndexedDB operations are performed asynchronously and return Promises. Takes three arguments:
 - name Specifies the name of the IndexedDB database to be used or created.

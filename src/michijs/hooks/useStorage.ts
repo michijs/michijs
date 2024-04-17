@@ -1,4 +1,4 @@
-import { ObservableFromEventListener } from "../classes";
+import { CookieStorage, ObservableFromEventListener } from "../..";
 import type { ObservableType } from "../types";
 import { useObserve } from "./useObserve";
 
@@ -40,12 +40,20 @@ export function useStorage<T extends object>(
     });
   });
 
-  const windowObservable = new ObservableFromEventListener(window, "storage");
+  if (storage instanceof CookieStorage) {
+    CookieStorage.cookieStoreObservable.subscribe((ev) => {
+      Object.keys(item).filter(e => ev.includes(e)).forEach((key) => {
+        newObservable[key] = getStorageValue(key);
+      })
+    })
+  } else {
+    const windowObservable = new ObservableFromEventListener(window, "storage");
 
-  windowObservable.subscribe((ev) => {
-    if (ev?.key && Object.keys(item).includes(ev.key))
-      newObservable[ev.key] = getStorageValue(ev.key);
-  });
+    windowObservable.subscribe((ev) => {
+      if (ev?.key && ev.storageArea === storage && Object.keys(item).includes(ev.key))
+        newObservable[ev.key] = getStorageValue(ev.key);
+    });
+  }
 
   return newObservable;
 }
