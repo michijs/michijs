@@ -30,6 +30,7 @@ const cookieStoreObservable = new Observable<string[]>();
 if (window.cookieStore) {
   // @ts-ignore
   const cookieStoreChange = new ObservableFromEventListener(
+    // @ts-ignore
     cookieStore,
     "change",
   );
@@ -40,7 +41,9 @@ if (window.cookieStore) {
       mainCookieStorage = getCookies();
       // @ts-ignore
       cookieStoreObservable.notify([
+        // @ts-ignore
         ...e.changed.map((x) => x.name),
+        // @ts-ignore
         ...e.deleted.map((x) => x.name),
       ]);
     }
@@ -58,8 +61,11 @@ export class CookieStorage implements Storage {
 
   constructor(setOptions?: CookieStorageConstructor) {
     this.setOptions = Object.entries(setOptions ?? {})
-      .map(([key, value]) => `;${formatToKebabCase(key)}=${value}`)
-      .join("");
+      .reduce((previousValue, [key, value]) => {
+        if (value)
+          previousValue += `;${formatToKebabCase(key)}=${value}`;
+        return previousValue;
+      }, '');
   }
   clear(): void {
     Object.keys(mainCookieStorage).forEach((x) => this.removeItem(x));
