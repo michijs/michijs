@@ -341,6 +341,7 @@ createCustomElement("test-component", {
 ```
 
 ### Operators
+Since all observables are objects, operators works in a different way.
 We support most operators without explicitly calling the getter of the observable.
 
 ```tsx
@@ -425,7 +426,7 @@ Allows for observing changes in an object and synchronizing it with the browser'
 - item: The object to be observed and synchronized with storage.
 - storage: The storage object to be used (defaults to localStorage if not provided)
 
-> [!TIP]
+<!-- > [!TIP] -->
 > If you want to use cookies we provide a class that acts like an storage called CookieStorage
 
 #### useIndexedDB
@@ -742,7 +743,16 @@ Because some objects are not proxy compatible we limit the observable objects to
 - Maps
 - Sets
 - Any object whose prototype is Object
-But we still support assignments to such objects
+
+However, we still support assignments to such complex objects in that case you will have to cast those ones with ObservableComplexObject.
+
+```tsx
+  const observable = useObserve({
+    file: new File([''], 'test') as unknown as ObservableComplexObject<File>
+  })
+```
+
+This is because Typescript doesnt provide any tool to know if a type is part of the global namespace.
 
 ## Polyfills
 If you REALLY need polyfills i recommend you to read this topics:
