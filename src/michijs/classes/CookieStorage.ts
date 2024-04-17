@@ -59,12 +59,13 @@ export class CookieStorage implements Storage {
   }
 
   constructor(setOptions?: CookieStorageConstructor) {
-    this.setOptions = Object.entries(setOptions ?? {})
-      .reduce((previousValue, [key, value]) => {
-        if (value)
-          previousValue += `;${formatToKebabCase(key)}=${value}`;
+    this.setOptions = Object.entries(setOptions ?? {}).reduce(
+      (previousValue, [key, value]) => {
+        if (value) previousValue += `;${formatToKebabCase(key)}=${value}`;
         return previousValue;
-      }, '');
+      },
+      "",
+    );
   }
   clear(): void {
     Object.keys(mainCookieStorage).forEach((x) => this.removeItem(x));
