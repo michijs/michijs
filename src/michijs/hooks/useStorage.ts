@@ -42,15 +42,21 @@ export function useStorage<T extends object>(
 
   if (storage instanceof CookieStorage) {
     CookieStorage.cookieStoreObservable.subscribe((ev) => {
-      Object.keys(item).filter(e => ev.includes(e)).forEach((key) => {
-        newObservable[key] = getStorageValue(key);
-      })
-    })
+      Object.keys(item)
+        .filter((e) => ev.includes(e))
+        .forEach((key) => {
+          newObservable[key] = getStorageValue(key);
+        });
+    });
   } else {
     const windowObservable = new ObservableFromEventListener(window, "storage");
 
     windowObservable.subscribe((ev) => {
-      if (ev?.key && ev.storageArea === storage && Object.keys(item).includes(ev.key))
+      if (
+        ev?.key &&
+        ev.storageArea === storage &&
+        Object.keys(item).includes(ev.key)
+      )
         newObservable[ev.key] = getStorageValue(ev.key);
     });
   }
