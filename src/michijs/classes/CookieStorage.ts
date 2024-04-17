@@ -49,7 +49,6 @@ if (window.cookieStore) {
     }
   });
 }
-// const dispatchStorageEvent =
 
 export class CookieStorage implements Storage {
   static cookieStoreObservable = cookieStoreObservable;
