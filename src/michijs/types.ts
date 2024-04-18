@@ -352,7 +352,7 @@ export type ObservableType<Y, T = NonNullable<Y>> = IsAny<T> extends true
               ? PrimitiveObservableValue<Y> & Date
               : [T] extends [object]
                 ? // ? ExtendsObject<T> extends true
-                  ObservableObject<T>
+                  ObservableObject<Y>
                 : // : ObservableComplexObject<Y>
                   PrimitiveObservableValue<GetPrimitiveType<Y>> &
                     GetPrimitiveTypeClass<T>;
