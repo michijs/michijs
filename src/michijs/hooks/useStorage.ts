@@ -20,8 +20,7 @@ export function useStorage<T extends object>(
       } catch {
         return localStorageValue;
       }
-    else
-      return item[key];
+    else return item[key];
   }
   const newObservable = useObserve<T>(
     Object.keys(item).reduce(
