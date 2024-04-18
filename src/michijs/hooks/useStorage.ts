@@ -14,15 +14,14 @@ export function useStorage<T extends object>(
 ): ObservableType<T> {
   function getStorageValue(key: string) {
     const localStorageValue = storage.getItem(key);
-    if (localStorageValue) {
+    if (localStorageValue)
       try {
         return JSON.parse(localStorageValue);
       } catch {
-        return item[key];
+        return localStorageValue;
       }
-    } else {
+    else
       return item[key];
-    }
   }
   const newObservable = useObserve<T>(
     Object.keys(item).reduce(
