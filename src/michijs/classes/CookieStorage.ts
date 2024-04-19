@@ -83,13 +83,12 @@ export class CookieStorage implements Storage {
     delete mainCookieStorage[trimKey];
   }
   setItem(key: string, value: string): void {
-    if (value.length > 0) {
+    if (value?.length > 0) {
       const trimKey = key.trim();
       mainCookieStorage[trimKey] = value;
-      document.cookie = `${trimKey}=${encodeURIComponent(value)}${
-        this.setOptions
-      }`;
+      document.cookie = `${trimKey}=${encodeURIComponent(value)}${this.setOptions}`;
       currentCookies = document.cookie;
-    }
+    } else 
+      this.removeItem(key)
   }
 }
