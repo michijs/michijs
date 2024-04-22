@@ -19,7 +19,7 @@ export const Title = createFunctionalComponent<TitleProps>(({ children }) => {
 
         bindObservableToRef(children, new WeakRef(el), (newValue?: string) => {
           if (el?.isConnected && newValue) document.title = newValue;
-        })
+        });
       }}
     />
   );
