@@ -1,4 +1,5 @@
 import { createFunctionalComponent } from "../customElements";
+import { bindObservableToRef } from "../utils";
 import { GenericElement } from "./GenericElement";
 
 export interface TitleProps {
@@ -9,16 +10,16 @@ export interface TitleProps {
  */
 export const Title = createFunctionalComponent<TitleProps>(({ children }) => {
   let el: HTMLElement | undefined = undefined;
-  const updateTitleCallback = (newValue?: string) => {
-    if (el?.isConnected && newValue) document.title = newValue;
-  };
 
   // bindObservable(children, updateTitleCallback)
   return (
     <GenericElement
       onelementconnected={async (elEvent) => {
         el = elEvent.detail;
-        updateTitleCallback(children);
+
+        bindObservableToRef(children, new WeakRef(el), (newValue?: string) => {
+          if (el?.isConnected && newValue) document.title = newValue;
+        })
       }}
     />
   );
