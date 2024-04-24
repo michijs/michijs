@@ -1,5 +1,5 @@
 import { useObserve } from ".";
-import { ObservableType } from "../types";
+import type { ObservableType } from "../types";
 import { setObservableValue } from "../utils";
 import { useWatch, type useWatchDeps } from "./useWatch";
 
