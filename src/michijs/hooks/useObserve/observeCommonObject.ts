@@ -12,12 +12,7 @@ export const customObjectSet =
     initialObservers: Subscription<T>[],
   ): CommonObjectProxyHandler<any>["set"] =>
   (target, property, newValue, receiver) => {
-    if (["length", 'name'].includes(property as string) && target.$value?.[property]) return setObservableValue(
-      target.$value[property],
-      newValue,
-      initialObservers,
-    );
-    if (property in target)
+    if (!["length", 'name'].includes(property as string) && property in target)
       return Reflect.set(target, property, newValue, receiver);
     if (target.$value) {
       // const observedItem = observe<object>(newValue, initialObservers);
@@ -62,9 +57,9 @@ export const customObjectGet =
   ): CommonObjectProxyHandler<any>["get"] =>
   (target, p, receiver) => {
     // Because function already has length
-    if (["length", 'name'].includes(p as string) && target.$value?.[p]) return target.$value[p];
-    if (p in target) return Reflect.get(target, p, receiver);
-    else if (target.$value) {
+    if (!["length", 'name'].includes(p as string) && p in target) {
+      return Reflect.get(target, p, receiver);
+    } else if (target.$value) {
       if (typeof target.$value === "object")
         if (p in target.$value)
           return Reflect.get(target.$value, p, target.$value);

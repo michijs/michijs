@@ -398,6 +398,11 @@ It is used for asynchronously computing a value and observing its changes. Takes
 - deps: Dependencies to watch for changes.
 - initialValue: Initial value of type T.
 
+#### useAsyncObserve
+It is used for asynchronously computing a value and observing its changes without dependencies. Takes two arguments:
+- callback: A function that returns a promise of type T.
+- initialValue: Initial value of type T.
+
 #### useStringTemplate
 It is used to create a string template by interpolating dynamic values.
 ```tsx
