@@ -14,8 +14,18 @@ export function useAsyncComputedObserve<T, Y extends T>(
   callback: () => Promise<T>,
   deps: useWatchDeps,
   initialValue: Y,
-): ObservableType<T extends object ? Required<Pick<T, Y extends T ? keyof Y: keyof T>> & Omit<T, Y extends T ? keyof Y: keyof T>: Y> {
-  const newObservable = useObserve(initialValue as T extends object ? Required<Pick<T, Y extends T ? keyof Y: keyof T>> & Omit<T, Y extends T ? keyof Y: keyof T>: Y);
+): ObservableType<
+  T extends object
+    ? Required<Pick<T, Y extends T ? keyof Y : keyof T>> &
+        Omit<T, Y extends T ? keyof Y : keyof T>
+    : Y
+> {
+  const newObservable = useObserve(
+    initialValue as T extends object
+      ? Required<Pick<T, Y extends T ? keyof Y : keyof T>> &
+          Omit<T, Y extends T ? keyof Y : keyof T>
+      : Y,
+  );
 
   const listener = () => {
     callback().then((result) => {
