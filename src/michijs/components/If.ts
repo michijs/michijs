@@ -13,9 +13,9 @@ type IfProps<T> = ExtendableComponentWithoutChildren<T> & {
   /** The condition to evaluate for rendering content. */
   condition: ObservableOrConst<any>;
   /** The content to render when the condition is truthy. */
-  then?: JSX.Element;
+  then?: JSX.Element | (() => JSX.Element);
   /** The content to render when the condition is falsy. */
-  else?: JSX.Element;
+  else?: JSX.Element | (() => JSX.Element);
   /** Allows to caché then / else components. */
   enableCache?: boolean;
 };
@@ -57,7 +57,7 @@ export const If = <const T = CreateFCResult>(
         if (enableCache) cachedElse = fragment;
       }
       if (cachedThen) el.replaceChildren(cachedThen);
-      else if (then) el.replaceChildren(create(then, options));
+      else if (then) el.replaceChildren(create(typeof then === 'function' ? then(): then, options));
     } else {
       if (newCache) {
         const fragment = new DocumentFragment();
@@ -66,7 +66,7 @@ export const If = <const T = CreateFCResult>(
       }
       if (cachedElse) el.replaceChildren(cachedElse);
       else if (elseComponent)
-        el.replaceChildren(create(elseComponent, options));
+        el.replaceChildren(create(typeof elseComponent === 'function' ? elseComponent(): elseComponent, options));
     }
   });
 

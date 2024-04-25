@@ -334,6 +334,35 @@ type GetPrimitiveType<T> = T extends boolean
 
 export type IsAny<T> = 0 extends 1 & T ? true : false;
 
+
+/**
+ * Interface representing the result of a fetch operation.
+ * @template R Type of the expected response data.
+ */
+export interface FetchResult<R> {
+  /**
+   * The parsed JSON response data.
+   */
+  result?: R | undefined;
+  /**
+   * Error encountered during the fetch operation.
+   */
+  error?: Error;
+  /**
+   * HTTP status code of the response.
+   */
+  status?: number;
+  /**
+   * Response headers.
+   */
+  headers?: Headers;
+  /**
+   * Indicates whether the fetch operation is currently loading.
+   */
+  loading: boolean;
+}
+
+
 // Needs to be partial to allow asignation operation
 export type ObservableType<Y, T = NonNullable<Y>> = IsAny<T> extends true
   ? any
@@ -343,7 +372,7 @@ export type ObservableType<Y, T = NonNullable<Y>> = IsAny<T> extends true
     : [T] extends [Array<infer V>]
       ? ObservableArray<V>
       : [T] extends [Function]
-        ? PrimitiveObservableValue<Y> & Y
+        ? Y
         : [T] extends [Map<infer K, infer V>]
           ? ObservableMap<K, V>
           : [T] extends [Set<infer V>]

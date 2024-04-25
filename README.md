@@ -416,6 +416,12 @@ A simple mechanism for watching dependencies and invoking a callback when any of
 - callback: A function that returns a value of type T. This is the function that will be invoked when any dependency changes.
 - deps: An array of dependencies to watch for changes.
 
+#### useFetch
+Fetches data from a URL, parses the response as JSON and allows to manage the result as an observable. Takes three parameters:
+- input: The URL to fetch data from.
+- searchParams: Optional search parameters to append to the URL.
+- init: Optional request initialization options.
+
 ### Route management hooks
 #### useHash
 It is designed to manage the hash portion of the URL. Provides a way to manage and observe changes in the hash portion of the URL, ensuring synchronization between the hash value and the observable state.

@@ -16,7 +16,7 @@ export function useAsyncObserve<T, Y extends T>(
 
   const listener = () => {
     callback().then((result) => {
-      setObservableValue(newObservable, result);
+      setObservableValue(newObservable as object, result);
     });
   };
   listener();

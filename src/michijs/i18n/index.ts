@@ -54,7 +54,7 @@ export class I18n<K extends string = string> extends Observable<K> {
       translation,
       observable,
     };
-    this.translations.push(translationItem);
+    this.translations.push(translationItem as TranslationItem<K, any>);
     return observable;
   }
 

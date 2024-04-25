@@ -22,7 +22,7 @@ export function useComputedObserve<const T>(
 
   const listener = () => {
     options?.onBeforeUpdate?.();
-    setObservableValue(newObservable, callback());
+    setObservableValue(newObservable as object, callback());
     options?.onAfterUpdate?.();
   };
 
