@@ -57,7 +57,10 @@ export const If = <const T = CreateFCResult>(
         if (enableCache) cachedElse = fragment;
       }
       if (cachedThen) el.replaceChildren(cachedThen);
-      else if (then) el.replaceChildren(create(typeof then === 'function' ? then(): then, options));
+      else if (then)
+        el.replaceChildren(
+          create(typeof then === "function" ? then() : then, options),
+        );
     } else {
       if (newCache) {
         const fragment = new DocumentFragment();
@@ -66,7 +69,14 @@ export const If = <const T = CreateFCResult>(
       }
       if (cachedElse) el.replaceChildren(cachedElse);
       else if (elseComponent)
-        el.replaceChildren(create(typeof elseComponent === 'function' ? elseComponent(): elseComponent, options));
+        el.replaceChildren(
+          create(
+            typeof elseComponent === "function"
+              ? elseComponent()
+              : elseComponent,
+            options,
+          ),
+        );
     }
   });
 
