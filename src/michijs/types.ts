@@ -334,7 +334,6 @@ type GetPrimitiveType<T> = T extends boolean
 
 export type IsAny<T> = 0 extends 1 & T ? true : false;
 
-
 /**
  * Interface representing the result of a fetch operation.
  * @template R Type of the expected response data.
@@ -361,7 +360,6 @@ export interface FetchResult<R> {
    */
   loading: boolean;
 }
-
 
 // Needs to be partial to allow asignation operation
 export type ObservableType<Y, T = NonNullable<Y>> = IsAny<T> extends true
