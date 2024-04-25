@@ -1,5 +1,5 @@
-import { SearchParams } from "../routing/types";
-import { ObservableType, FetchResult } from "../types";
+import type { SearchParams } from "../routing/types";
+import type { ObservableType, FetchResult } from "../types";
 import { useAsyncObserve } from "./useAsyncObserve";
 
 /**
