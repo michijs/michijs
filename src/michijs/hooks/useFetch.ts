@@ -2,8 +2,8 @@ import type { SearchParams } from "../routing/types";
 import type { ObservableType, FetchResult, AnyObject } from "../types";
 import { useAsyncObserve } from "./useAsyncObserve";
 
-interface RequestInitUseFetch<B> extends Omit<RequestInit, 'body'> {
-  body?: B
+interface RequestInitUseFetch<B> extends Omit<RequestInit, "body"> {
+  body?: B;
 }
 
 /**
@@ -16,7 +16,11 @@ interface RequestInitUseFetch<B> extends Omit<RequestInit, 'body'> {
  * @template R Type of the expected response data.
  * @template S Type of the optional search parameters.
  */
-export const useFetch = <R, S extends SearchParams = undefined, B extends AnyObject | undefined | string = undefined>(
+export const useFetch = <
+  R,
+  S extends SearchParams = undefined,
+  B extends AnyObject | undefined | string = undefined,
+>(
   input: string,
   searchParams?: S,
   init?: RequestInitUseFetch<B>,
@@ -30,7 +34,13 @@ export const useFetch = <R, S extends SearchParams = undefined, B extends AnyObj
   const result = useAsyncObserve<FetchResult<R>, { loading: true }>(
     async () => {
       try {
-        const response = await fetch(url, {...init, body: typeof init?.body === 'object' ? JSON.stringify(init.body): init?.body});
+        const response = await fetch(url, {
+          ...init,
+          body:
+            typeof init?.body === "object"
+              ? JSON.stringify(init.body)
+              : init?.body,
+        });
 
         if (!response.ok) {
           return {

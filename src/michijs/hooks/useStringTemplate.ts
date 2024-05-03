@@ -9,7 +9,7 @@ import { useComputedObserve } from "./useComputedObserve";
  */
 export function useStringTemplate(
   templateStringsArray: TemplateStringsArray,
-  ...props: (ObservableOrConst<string | number | undefined>)[]
+  ...props: ObservableOrConst<string | number | undefined>[]
 ) {
   return useComputedObserve(() => {
     return templateStringsArray.raw.reduce((previousValue, currentValue, i) => {
