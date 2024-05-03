@@ -1,4 +1,4 @@
-import type { ObservableType } from "../types";
+import type { ObservableOrConst } from "../types";
 import { useComputedObserve } from "./useComputedObserve";
 
 /**
@@ -9,12 +9,12 @@ import { useComputedObserve } from "./useComputedObserve";
  */
 export function useStringTemplate(
   templateStringsArray: TemplateStringsArray,
-  ...props: (ObservableType<string | number> | string | number)[]
+  ...props: (ObservableOrConst<string | number | undefined>)[]
 ) {
   return useComputedObserve(() => {
     return templateStringsArray.raw.reduce((previousValue, currentValue, i) => {
       const val = props[i];
-      return `${previousValue}${currentValue}${val ? val.valueOf() : ""}`;
+      return `${previousValue}${currentValue}${val ? val.valueOf() ?? "" : ""}`;
       // The accumulator takes the first value if you don't pass a value as the second argument:
     }, "");
   }, props);
