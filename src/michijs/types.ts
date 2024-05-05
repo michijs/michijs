@@ -170,7 +170,7 @@ export interface CompatibleSubscription {
 
 export type ObservableOrConst<T> = ObservableLike<T> | T;
 export type CreateFunctionalComponentProps<T> = {
-  [k in keyof T]: k extends 'children' ? T[k] : ObservableOrConst<T[k]>;
+  [k in keyof T]: k extends "children" ? T[k] : ObservableOrConst<T[k]>;
 };
 export interface ObservableLike<T> {
   subscribe(observer: Subscription<T>): void;
