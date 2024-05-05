@@ -25,7 +25,7 @@ export const useFetch = <
   searchParams?: S,
   init?: RequestInitUseFetch<B>,
 ): ObservableType<FetchResult<R>> => {
-  const url = new URL(input);
+  const url = new URL(input, input.startsWith('/') ? location.origin: undefined);
   if (searchParams)
     Object.entries(searchParams).forEach(([key, value]) => {
       if (value) url.searchParams.append(key, value.toString());
