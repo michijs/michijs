@@ -170,13 +170,7 @@ export interface CompatibleSubscription {
 
 export type ObservableOrConst<T> = ObservableLike<T> | T;
 export type CreateFunctionalComponentProps<T> = {
-  [k in keyof T]: ObservableOrConst<T[k]>;
-};
-export type CreateFunctionalComponentWithChildrenProps<
-  T,
-  C = JSX.Element,
-> = CreateFunctionalComponentProps<T> & {
-  children?: C;
+  [k in keyof T]: k extends 'children' ? T[k] : ObservableOrConst<T[k]>;
 };
 export interface ObservableLike<T> {
   subscribe(observer: Subscription<T>): void;
@@ -250,9 +244,9 @@ export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>>
    * This allows it to have a performance close to vanilla js.
    * An operation on the data implies an operation on the associated elements.
    */
-  List<const E = NonProxiedFC>(
+  List<const E = FC>(
     props: ExtendableComponentWithoutChildren<E> & {
-      renderItem: NonProxiedFC<SV>;
+      renderItem: FC<SV>;
     },
     context?: CreateOptions,
   ): Node;
@@ -514,21 +508,12 @@ export type FCProps<T = {}> = {
   [k in keyof T]: k extends "children" ? T[k] : ObservableType<T[k]>;
 };
 
-export type NonProxiedFC<
-  T = {},
-  S extends Element = Element,
-  C = CreateOptions<S>,
-> = (attrs: T, context?: C) => SingleJSXElement;
 export type CreateFCResult<
   T = {},
   S extends Element = Element,
   C = CreateOptions<S>,
 > = (attrs: FCProps<T>, context?: C) => SingleJSXElement;
-export interface CreateFCCResult<
-  T = {},
-  S extends Element = Element,
-  C = CreateOptions<S>,
-> extends CreateFCResult<T & { children?: JSX.Element }, S, C> {}
+
 export type FC<T = {}, S extends Element = Element, C = CreateOptions<S>> = (
   attrs: T,
   context?: C,

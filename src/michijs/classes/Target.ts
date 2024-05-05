@@ -1,11 +1,11 @@
 import { create } from "../DOMDiff";
-import type { CreateOptions, NonProxiedFC } from "../types";
+import type { CreateOptions, FC } from "../types";
 import type { VirtualFragment } from "./VirtualFragment";
 
 export class Target<V> {
   constructor(
     private element: VirtualFragment | ParentNode,
-    private renderItem: NonProxiedFC<V>,
+    private renderItem: FC<V>,
     private options?: CreateOptions,
   ) {}
 

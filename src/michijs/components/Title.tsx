@@ -1,9 +1,10 @@
 import { createFunctionalComponent } from "../customElements";
+import { ObservableOrConst } from "../types";
 import { bindObservableToRef } from "../utils";
 import { GenericElement } from "./GenericElement";
 
 export interface TitleProps {
-  children: string | undefined;
+  children: ObservableOrConst<string | undefined>;
 }
 /**
  * Title component for dynamically updating the document's title.

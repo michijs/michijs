@@ -2,7 +2,7 @@ import type { AllAttributes } from "../generated/htmlType";
 import { setAttribute } from "../DOM/attributes/setAttribute";
 import { isMichiCustomElement } from "../typeWards/isMichiCustomElement";
 import { bindObservableToRef, getObservables, unproxify } from "../utils";
-import { createFunctionalComponentWithChildren } from "../customElements/createFunctionalComponentWithChildren";
+import { createFunctionalComponent } from "../customElements/createFunctionalComponent";
 import { useComputedObserve } from "../hooks";
 
 export type ElementInternalsProps = {
@@ -13,6 +13,7 @@ export type ElementInternalsProps = {
   validityStateFlags?: ValidityStateFlags;
   tabIndex?: number;
   role?: AllAttributes["role"];
+  children?: JSX.Element
 } & Partial<ARIAMixin>;
 
 /**
@@ -22,7 +23,7 @@ export type ElementInternalsProps = {
  * - Validate and assign values to forms
  */
 export const ElementInternals =
-  createFunctionalComponentWithChildren<ElementInternalsProps>(
+  createFunctionalComponent<ElementInternalsProps>(
     (
       {
         children,

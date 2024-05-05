@@ -6,7 +6,7 @@ import {
   type SingleJSXElement,
   type ProxiedArrayInterface,
   type MutableArrayProperties,
-  type NonProxiedFC,
+  type FC,
 } from "../..";
 import { create } from "../DOMDiff";
 import { Target } from "./Target";
@@ -20,13 +20,13 @@ export class ProxiedArray<V>
   constructor(initialData: V[], initialObservers?: Subscription<V[]>[]) {
     super(initialData, initialObservers);
   }
-  List = <const E = NonProxiedFC>(
+  List = <const E = FC>(
     {
       as: asTag,
       renderItem,
       ...attrs
     }: ExtendableComponentWithoutChildren<E> & {
-      renderItem: NonProxiedFC<V>;
+      renderItem: FC<V>;
     },
     context?: CreateOptions,
   ): Node => {
