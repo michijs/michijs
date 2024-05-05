@@ -328,6 +328,10 @@ type GetPrimitiveType<T> = T extends boolean
 
 export type IsAny<T> = 0 extends 1 & T ? true : false;
 
+export interface RequestInitUseFetch<B> extends Omit<RequestInit, "body"> {
+  body?: B;
+}
+
 /**
  * Interface representing the result of a fetch operation.
  * @template R Type of the expected response data.

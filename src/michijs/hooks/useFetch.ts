@@ -1,10 +1,6 @@
 import type { SearchParams } from "../routing/types";
-import type { ObservableType, FetchResult, AnyObject } from "../types";
+import type { ObservableType, FetchResult, AnyObject, RequestInitUseFetch } from "../types";
 import { useAsyncObserve } from "./useAsyncObserve";
-
-interface RequestInitUseFetch<B> extends Omit<RequestInit, "body"> {
-  body?: B;
-}
 
 /**
  * Fetches data from a URL, parses the response as JSON and allows to manage the result as an observable.
