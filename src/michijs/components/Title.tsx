@@ -1,5 +1,5 @@
 import { createFunctionalComponent } from "../customElements";
-import { ObservableOrConst } from "../types";
+import type { ObservableOrConst } from "../types";
 import { bindObservableToRef } from "../utils";
 import { GenericElement } from "./GenericElement";
 
