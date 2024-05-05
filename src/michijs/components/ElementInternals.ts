@@ -13,7 +13,7 @@ export type ElementInternalsProps = {
   validityStateFlags?: ValidityStateFlags;
   tabIndex?: number;
   role?: AllAttributes["role"];
-  children?: JSX.Element
+  children?: JSX.Element;
 } & Partial<ARIAMixin>;
 
 /**
