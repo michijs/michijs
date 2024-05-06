@@ -1,6 +1,5 @@
 import { useObserve } from ".";
 import type { ObservableType } from "../types";
-import { setObservableValue } from "../utils";
 import { useWatch, type useWatchDeps } from "./useWatch";
 
 /**
@@ -29,7 +28,7 @@ export function useAsyncComputedObserve<T, Y extends T>(
 
   const listener = () => {
     callback().then((result) => {
-      setObservableValue(newObservable as object, result);
+      (newObservable as ObservableType<object>)(result as object);
     });
   };
   listener();

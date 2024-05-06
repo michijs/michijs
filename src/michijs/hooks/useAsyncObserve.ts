@@ -1,6 +1,5 @@
 import { useObserve } from ".";
 import type { ObservableType } from "../types";
-import { setObservableValue } from "../utils";
 
 /**
  * It is used for asynchronously computing a value and observing its changes without dependencies.
@@ -26,7 +25,7 @@ export function useAsyncObserve<T, Y extends T>(
 
   const listener = () => {
     callback().then((result) => {
-      setObservableValue(newObservable as object, result);
+      (newObservable as ObservableType<object>)(result as object);
     });
   };
   listener();

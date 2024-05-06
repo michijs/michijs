@@ -1,6 +1,5 @@
 import type { ObservableType } from "../types";
 import { useObserve } from "./useObserve";
-import { setObservableValue } from "../utils";
 import { useWatch, type useWatchDeps } from "./useWatch";
 
 /**
@@ -18,11 +17,11 @@ export function useComputedObserve<const T>(
     onAfterUpdate?(): void;
   },
 ): ObservableType<T> {
-  const newObservable = useObserve(callback());
+  const newObservable = useObserve<T>(callback());
 
   const listener = () => {
     options?.onBeforeUpdate?.();
-    setObservableValue(newObservable as object, callback());
+    (newObservable as ObservableType<object>)(callback() as object)
     options?.onAfterUpdate?.();
   };
 
