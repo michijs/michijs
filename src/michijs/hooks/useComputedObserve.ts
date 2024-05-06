@@ -21,7 +21,7 @@ export function useComputedObserve<const T>(
 
   const listener = () => {
     options?.onBeforeUpdate?.();
-    (newObservable as ObservableType<object>)(callback() as object)
+    (newObservable as ObservableType<object>)(callback() as object);
     options?.onAfterUpdate?.();
   };
 
