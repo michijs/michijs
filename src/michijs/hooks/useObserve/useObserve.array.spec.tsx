@@ -70,7 +70,7 @@ describe("Observe array tests", () => {
   });
   it("set function should work for array and the node as expected", () => {
     const result = [2, 8, 4, 5, 6];
-    array(result)
+    array(result);
     expectResult(result);
   });
 });

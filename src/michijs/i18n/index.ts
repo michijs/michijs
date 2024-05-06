@@ -93,7 +93,7 @@ export class I18n<K extends string = string> extends Observable<K> {
           const currentTranslation = await this.getCurrentTranslation(
             x.translation,
           );
-          x.observable(currentTranslation)
+          x.observable(currentTranslation);
         }),
       );
       // Then notify
