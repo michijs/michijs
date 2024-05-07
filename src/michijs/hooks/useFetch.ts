@@ -32,7 +32,7 @@ export const useFetch = <
   B extends AnyObject | undefined | string = undefined,
 >(
   input: string,
-  searchParams?: {[k in keyof S]: ObservableOrConst<S[k]>},
+  searchParams?: { [k in keyof S]: ObservableOrConst<S[k]> },
   init?: RequestInitUseFetch<ObservableOrConst<B>>,
   deps?: useWatchDeps,
   options?: UseFetchOptions,
