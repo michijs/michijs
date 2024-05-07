@@ -387,21 +387,11 @@ It is used to create a memoized function that encapsulates the result of the pro
 - deps: An array of dependencies that the callback function depends on.
 
 #### useComputedObserve
-It is used for synchronously computing a value and observing its changes. Takes three arguments:
+It is used for computing a value and observing its changes. Takes three arguments:
 - callback: A function that returns a promise of type T.
 - deps: Dependencies to watch for changes.
-- options: An optional object that may contain onBeforeUpdate and onAfterUpdate callback functions.
-
-#### useAsyncComputedObserve
-It is used for asynchronously computing a value and observing its changes. Takes three arguments:
-- callback: A function that returns a promise of type T.
-- deps: Dependencies to watch for changes.
-- initialValue: Initial value of type T.
-
-#### useAsyncObserve
-It is used for asynchronously computing a value and observing its changes without dependencies. Takes two arguments:
-- callback: A function that returns a promise of type T.
-- initialValue: Initial value of type T.
+- initialValue: Initial value of type T. Useful if the callback is a promise
+- options: Optional object that may contain onBeforeUpdate and onAfterUpdate callback functions.
 
 #### useStringTemplate
 It is used to create a string template by interpolating dynamic values.
@@ -414,13 +404,15 @@ It is used to create a string template by interpolating dynamic values.
 #### useWatch
 A simple mechanism for watching dependencies and invoking a callback when any of them change. Takes two parameters:
 - callback: A function that returns a value of type T. This is the function that will be invoked when any dependency changes.
-- deps: An array of dependencies to watch for changes.
+- deps: Optional array of dependencies to watch for changes.
 
 #### useFetch
 Fetches data from a URL, parses the response as JSON and allows to manage the result as an observable. Takes three parameters:
 - input: The URL to fetch data from.
 - searchParams: Optional search parameters to append to the URL.
 - init: Optional request initialization options.
+- deps: Optional array of dependencies to watch for changes.
+- options: Optional object that may contain shouldWaitToFetch callback function
 
 ### Route management hooks
 #### useHash

@@ -1,7 +1,5 @@
 export { useObserve } from "./useObserve";
 export { useComputedObserve } from "./useComputedObserve";
-export { useAsyncObserve } from "./useAsyncObserve";
-export { useAsyncComputedObserve } from "./useAsyncComputedObserve";
 export { useFetch } from "./useFetch";
 export { useHash } from "./useHash";
 export { useStorage } from "./useStorage";
