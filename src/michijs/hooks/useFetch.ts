@@ -4,6 +4,7 @@ import type {
   FetchResult,
   AnyObject,
   RequestInitUseFetch,
+  UseFetchOptions,
 } from "../types";
 import { useComputedObserve } from "./useComputedObserve";
 import { useWatchDeps } from "./useWatch";
@@ -33,9 +34,7 @@ export const useFetch = <
   searchParams?: S,
   init?: RequestInitUseFetch<B>,
   deps?: useWatchDeps,
-  options?: {
-    shouldWaitToFetch?(): boolean;
-  },
+  options?: UseFetchOptions,
 ): ObservableType<FetchResult<R>> => {
   const url = new URL(
     input,

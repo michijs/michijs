@@ -1,5 +1,5 @@
 import { useObserve } from ".";
-import type { ObservableType } from "../types";
+import type { ObservableType, UseComputedObserveOptions } from "../types";
 import { useWatch, useWatchDeps } from "./useWatch";
 
 /**
@@ -14,10 +14,7 @@ export function useComputedObserve<T, Y extends T>(
   callback: () => Promise<T> | T,
   deps?: useWatchDeps,
   initialValue?: Y,
-  options?: {
-    onBeforeUpdate?(): void;
-    onAfterUpdate?(): void;
-  },
+  options?: UseComputedObserveOptions,
 ): ObservableType<
   typeof callback extends Promise<T>
     ? T
