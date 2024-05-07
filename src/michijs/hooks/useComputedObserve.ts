@@ -19,22 +19,30 @@ export function useComputedObserve<T, Y extends T>(
     onAfterUpdate?(): void;
   },
 ): ObservableType<
-typeof callback extends Promise<T> ? T : (T extends object
-  ? Required<Pick<T, Y extends T ? keyof Y : keyof T>> &
-  Omit<T, Y extends T ? keyof Y : keyof T>
-  : Y)
+  typeof callback extends Promise<T>
+    ? T
+    : T extends object
+      ? Required<Pick<T, Y extends T ? keyof Y : keyof T>> &
+          Omit<T, Y extends T ? keyof Y : keyof T>
+      : Y
 > {
   const newObservable = useObserve(
-    initialValue as typeof callback extends Promise<T> ? T : (T extends object
-      ? Required<Pick<T, Y extends T ? keyof Y : keyof T>> &
-      Omit<T, Y extends T ? keyof Y : keyof T>
-      : Y)
+    initialValue as typeof callback extends Promise<T>
+      ? T
+      : T extends object
+        ? Required<Pick<T, Y extends T ? keyof Y : keyof T>> &
+            Omit<T, Y extends T ? keyof Y : keyof T>
+        : Y,
   );
 
   const listener = () => {
     options?.onBeforeUpdate?.();
     const callbackResult = callback();
-    callbackResult instanceof Promise ? callbackResult.then(x => (newObservable as ObservableType<object>)(x as object)): (newObservable as ObservableType<object>)(callbackResult as object)
+    callbackResult instanceof Promise
+      ? callbackResult.then((x) =>
+          (newObservable as ObservableType<object>)(x as object),
+        )
+      : (newObservable as ObservableType<object>)(callbackResult as object);
     options?.onAfterUpdate?.();
   };
   listener();

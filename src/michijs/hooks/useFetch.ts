@@ -34,7 +34,7 @@ export const useFetch = <
   init?: RequestInitUseFetch<B>,
   deps?: useWatchDeps,
   options?: {
-    shouldWaitToFetch?(): boolean
+    shouldWaitToFetch?(): boolean;
   },
 ): ObservableType<FetchResult<R>> => {
   const url = new URL(
@@ -79,8 +79,7 @@ export const useFetch = <
             loading: false,
           };
         }
-      } else
-        return initialFetchValue
+      } else return initialFetchValue;
     },
     deps,
     initialFetchValue,
