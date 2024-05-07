@@ -5,9 +5,10 @@ import type {
   AnyObject,
   RequestInitUseFetch,
   UseFetchOptions,
+  ObservableOrConst,
+  useWatchDeps,
 } from "../types";
 import { useComputedObserve } from "./useComputedObserve";
-import { useWatchDeps } from "./useWatch";
 
 const initialFetchValue = {
   loading: true,
@@ -31,24 +32,24 @@ export const useFetch = <
   B extends AnyObject | undefined | string = undefined,
 >(
   input: string,
-  searchParams?: S,
-  init?: RequestInitUseFetch<B>,
+  searchParams?: {[k in keyof S]: ObservableOrConst<S[k]>},
+  init?: RequestInitUseFetch<ObservableOrConst<B>>,
   deps?: useWatchDeps,
   options?: UseFetchOptions,
 ): ObservableType<FetchResult<R>> => {
-  const url = new URL(
-    input,
-    input.startsWith("/") ? location.origin : undefined,
-  );
-  if (searchParams)
-    Object.entries(searchParams).forEach(([key, value]) => {
-      if (value) url.searchParams.append(key, value.toString());
-    });
-
   const result = useComputedObserve<FetchResult<R>, typeof initialFetchValue>(
     async () => {
       if (!options?.shouldWaitToFetch?.()) {
         try {
+          const url = new URL(
+            input,
+            input.startsWith("/") ? location.origin : undefined,
+          );
+          if (searchParams)
+            Object.entries(searchParams).forEach(([key, value]) => {
+              if (value) url.searchParams.append(key, value.toString());
+            });
+
           const response = await fetch(url, {
             ...init,
             body:

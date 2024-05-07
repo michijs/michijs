@@ -1,4 +1,4 @@
-export type useWatchDeps = any[];
+import type { useWatchDeps } from "../types";
 
 /**
  * A simple mechanism for watching dependencies and invoking a callback when any of them change.

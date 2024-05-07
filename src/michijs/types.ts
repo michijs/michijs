@@ -332,12 +332,14 @@ export interface RequestInitUseFetch<B> extends Omit<RequestInit, "body"> {
   body?: B;
 }
 export interface UseFetchOptions {
-  shouldWaitToFetch?(): boolean;
+  shouldWaitToFetch?(): any;
 }
 export interface UseComputedObserveOptions {
   onBeforeUpdate?(): void;
   onAfterUpdate?(): void;
 }
+
+export type useWatchDeps = any[];
 
 /**
  * Interface representing the result of a fetch operation.
