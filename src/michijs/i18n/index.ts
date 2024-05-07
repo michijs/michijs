@@ -2,7 +2,6 @@ import { Observable } from "../classes";
 import { useObserve } from "../hooks";
 import type { ObservableOrConst, ObservableType, Subscription } from "../types";
 import { bindObservable } from "../utils";
-import { setObservableValue } from "../utils/setObservableValue";
 
 export type Translation<K extends string, T> = {
   [key in K]: T | (() => Promise<{ default: T }>) | (() => Promise<T>);
@@ -47,7 +46,7 @@ export class I18n<K extends string = string> extends Observable<K> {
     const currentTranslationPromise = this.getCurrentTranslation(translation);
     const observable = useObserve<Partial<T>>({});
     currentTranslationPromise.then((currentTranslation) => {
-      setObservableValue(observable, currentTranslation);
+      (observable as ObservableType<object>)(currentTranslation as object);
     });
 
     const translationItem: TranslationItem<K, T> = {
@@ -94,7 +93,7 @@ export class I18n<K extends string = string> extends Observable<K> {
           const currentTranslation = await this.getCurrentTranslation(
             x.translation,
           );
-          setObservableValue(x.observable, currentTranslation);
+          x.observable(currentTranslation);
         }),
       );
       // Then notify

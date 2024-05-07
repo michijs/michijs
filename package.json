@@ -2,7 +2,7 @@
   "name": "@michijs/michijs",
   "author": "Lucas M. Segurado",
   "license": "MIT",
-  "version": "2.0.0-beta.46",
+  "version": "2.0.0-beta.49",
   "files": [
     "dist/",
     "jsx-runtime/"
@@ -63,7 +63,7 @@
   ],
   "devDependencies": {
     "@michijs/dev-server": "0.5.14",
-    "@reduxjs/toolkit": "2.2.2",
+    "@reduxjs/toolkit": "1.9.7",
     "@types/jest": "29.5.12",
     "esbuild-jest-transform": "2.0.0",
     "jest": "29.7.0",

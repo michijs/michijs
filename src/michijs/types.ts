@@ -331,6 +331,15 @@ export type IsAny<T> = 0 extends 1 & T ? true : false;
 export interface RequestInitUseFetch<B> extends Omit<RequestInit, "body"> {
   body?: B;
 }
+export interface UseFetchOptions {
+  shouldWaitToFetch?(): any;
+}
+export interface UseComputedObserveOptions {
+  onBeforeUpdate?(): void;
+  onAfterUpdate?(): void;
+}
+
+export type useWatchDeps = any[];
 
 /**
  * Interface representing the result of a fetch operation.
