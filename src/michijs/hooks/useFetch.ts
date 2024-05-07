@@ -7,7 +7,7 @@ import type {
   UseFetchOptions,
 } from "../types";
 import { useComputedObserve } from "./useComputedObserve";
-import { useWatchDeps } from "./useWatch";
+import type { useWatchDeps } from "./useWatch";
 
 const initialFetchValue = {
   loading: true,
