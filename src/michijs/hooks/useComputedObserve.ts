@@ -1,6 +1,6 @@
 import { useObserve } from ".";
-import type { ObservableType, UseComputedObserveOptions } from "../types";
-import { useWatch, type useWatchDeps } from "./useWatch";
+import type { ObservableType, UseComputedObserveOptions, useWatchDeps } from "../types";
+import { useWatch } from "./useWatch";
 
 /**
  * It is used for computing a value and observing its changes.
