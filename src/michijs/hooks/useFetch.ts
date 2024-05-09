@@ -8,11 +8,7 @@ import type {
   ObservableOrConst,
   useWatchDeps,
 } from "../types";
-import { useComputedObserve } from "./useComputedObserve";
-
-const initialFetchValue = {
-  loading: true,
-} as const;
+import { usePromise } from "./usePromise";
 
 /**
  * Fetches data from a URL, parses the response as JSON and allows to manage the result as an observable.
@@ -37,53 +33,27 @@ export const useFetch = <
   deps?: useWatchDeps,
   options?: UseFetchOptions,
 ): ObservableType<FetchResult<R>> => {
-  const result = useComputedObserve<FetchResult<R>, typeof initialFetchValue>(
-    async () => {
-      if (!options?.shouldWaitToFetch?.()) {
-        try {
-          const url = new URL(
-            input,
-            input.startsWith("/") ? location.origin : undefined,
-          );
-          if (searchParams)
-            Object.entries(searchParams).forEach(([key, value]) => {
-              if (value) url.searchParams.append(key, value.toString());
-            });
+  return usePromise(async () => {
+    const url = new URL(
+      input,
+      input.startsWith("/") ? location.origin : undefined,
+    );
+    if (searchParams)
+      Object.entries(searchParams).forEach(([key, value]) => {
+        if (value) url.searchParams.append(key, value.toString());
+      });
 
-          const response = await fetch(url, {
-            ...init,
-            body:
-              typeof init?.body === "object"
-                ? JSON.stringify(init.body)
-                : init?.body,
-          });
+    const response = await fetch(url, {
+      ...init,
+      body:
+        typeof init?.body === "object"
+          ? JSON.stringify(init.body)
+          : init?.body,
+    });
 
-          if (!response.ok) {
-            return {
-              headers: response.headers,
-              status: response.status,
-              loading: false,
-              error: new Error(response.statusText),
-            };
-          }
-          const value = (await response.json()) as R;
-          return {
-            headers: response.headers,
-            status: response.status,
-            loading: false,
-            result: value,
-          };
-        } catch (ex) {
-          return {
-            error: new Error(ex),
-            loading: false,
-          };
-        }
-      } else return initialFetchValue;
-    },
-    deps,
-    initialFetchValue,
-  );
-
-  return result;
+    if (!response.ok)
+      throw response.statusText;
+    
+    return (await response.json()) as R;
+  }, deps, options)
 };

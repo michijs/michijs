@@ -331,8 +331,10 @@ export type IsAny<T> = 0 extends 1 & T ? true : false;
 export interface RequestInitUseFetch<B> extends Omit<RequestInit, "body"> {
   body?: B;
 }
-export interface UseFetchOptions {
-  shouldWaitToFetch?(): any;
+export interface UsePromiseOptions {
+  shouldWait?(): any;
+}
+export interface UseFetchOptions extends UsePromiseOptions {
 }
 export interface UseComputedObserveOptions {
   onBeforeUpdate?(): void;
@@ -345,23 +347,17 @@ export type useWatchDeps = any[];
  * Interface representing the result of a fetch operation.
  * @template R Type of the expected response data.
  */
-export interface FetchResult<R> {
+export interface FetchResult<R> extends PromiseResult<R> {
+}
+export interface PromiseResult<R> {
   /**
-   * The parsed JSON response data.
+   * The response data.
    */
   result?: R | undefined;
   /**
    * Error encountered during the fetch operation.
    */
   error?: Error;
-  /**
-   * HTTP status code of the response.
-   */
-  status?: number;
-  /**
-   * Response headers.
-   */
-  headers?: Headers;
   /**
    * Indicates whether the fetch operation is currently loading.
    */

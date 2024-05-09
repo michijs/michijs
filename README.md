@@ -414,6 +414,12 @@ Fetches data from a URL, parses the response as JSON and allows to manage the re
 - deps: Optional array of dependencies to watch for changes.
 - options: Optional object that may contain shouldWaitToFetch callback function
 
+#### usePromise
+Ues a promise and allows to manage the result as an observable.
+- promise: The operation.
+- deps: Dependencies to watch for changes.
+- options: An optional object that may contain shouldWait callback function.
+
 ### Route management hooks
 #### useHash
 It is designed to manage the hash portion of the URL. Provides a way to manage and observe changes in the hash portion of the URL, ensuring synchronization between the hash value and the observable state.
