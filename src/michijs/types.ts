@@ -334,8 +334,7 @@ export interface RequestInitUseFetch<B> extends Omit<RequestInit, "body"> {
 export interface UsePromiseOptions {
   shouldWait?(): any;
 }
-export interface UseFetchOptions extends UsePromiseOptions {
-}
+export interface UseFetchOptions extends UsePromiseOptions {}
 export interface UseComputedObserveOptions {
   onBeforeUpdate?(): void;
   onAfterUpdate?(): void;
@@ -347,8 +346,7 @@ export type useWatchDeps = any[];
  * Interface representing the result of a fetch operation.
  * @template R Type of the expected response data.
  */
-export interface FetchResult<R> extends PromiseResult<R> {
-}
+export interface FetchResult<R> extends PromiseResult<R> {}
 export interface PromiseResult<R> {
   /**
    * The response data.

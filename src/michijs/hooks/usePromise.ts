@@ -20,9 +20,7 @@ const initialPromiseValue = {
  * @returns An Observable that emits the result of the promise operation.
  * @template R Type of the expected response data.
  */
-export const usePromise = <
-  R,
->(
+export const usePromise = <R>(
   promise: () => Promise<R>,
   deps?: useWatchDeps,
   options?: UseFetchOptions,
@@ -33,7 +31,7 @@ export const usePromise = <
         try {
           return {
             loading: false,
-            ...await promise()
+            ...(await promise()),
           };
         } catch (ex) {
           return {
