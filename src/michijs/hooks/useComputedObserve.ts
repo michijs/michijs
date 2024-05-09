@@ -1,5 +1,9 @@
 import { useObserve } from ".";
-import type { ObservableType, UseComputedObserveOptions, useWatchDeps } from "../types";
+import type {
+  ObservableType,
+  UseComputedObserveOptions,
+  useWatchDeps,
+} from "../types";
 import { useWatch } from "./useWatch";
 
 /**
