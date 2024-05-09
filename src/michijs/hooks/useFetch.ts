@@ -33,27 +33,30 @@ export const useFetch = <
   deps?: useWatchDeps,
   options?: UseFetchOptions,
 ): ObservableType<FetchResult<R>> => {
-  return usePromise(async () => {
-    const url = new URL(
-      input,
-      input.startsWith("/") ? location.origin : undefined,
-    );
-    if (searchParams)
-      Object.entries(searchParams).forEach(([key, value]) => {
-        if (value) url.searchParams.append(key, value.toString());
+  return usePromise(
+    async () => {
+      const url = new URL(
+        input,
+        input.startsWith("/") ? location.origin : undefined,
+      );
+      if (searchParams)
+        Object.entries(searchParams).forEach(([key, value]) => {
+          if (value) url.searchParams.append(key, value.toString());
+        });
+
+      const response = await fetch(url, {
+        ...init,
+        body:
+          typeof init?.body === "object"
+            ? JSON.stringify(init.body)
+            : init?.body,
       });
 
-    const response = await fetch(url, {
-      ...init,
-      body:
-        typeof init?.body === "object"
-          ? JSON.stringify(init.body)
-          : init?.body,
-    });
+      if (!response.ok) throw response.statusText;
 
-    if (!response.ok)
-      throw response.statusText;
-    
-    return (await response.json()) as R;
-  }, deps, options)
+      return (await response.json()) as R;
+    },
+    deps,
+    options,
+  );
 };
