@@ -6,6 +6,7 @@ import type {
   PromiseResult,
 } from "../types";
 import { useComputedObserve } from "./useComputedObserve";
+import { useObserve } from "./useObserve";
 
 const initialPromiseValue = {
   loading: true,
@@ -25,6 +26,8 @@ export const usePromise = <R>(
   deps?: useWatchDeps,
   options?: UseFetchOptions,
 ): ObservableType<PromiseResult<R>> => {
+  const recalls = useObserve(0);
+  const recall = () => recalls(recalls() + 1);
   const result = useComputedObserve<FetchResult<R>, typeof initialPromiseValue>(
     async () => {
       if (!options?.shouldWait?.()) {
@@ -32,16 +35,18 @@ export const usePromise = <R>(
           return {
             loading: false,
             ...(await promise()),
+            recall
           };
         } catch (ex) {
           return {
             error: new Error(ex),
             loading: false,
+            recall
           };
         }
       } else return initialPromiseValue;
     },
-    deps,
+    [...(deps ?? []), recalls],
     initialPromiseValue,
   );
 
