@@ -1,5 +1,5 @@
 import { ProxiedValue } from "../classes";
-import { useWatchDeps } from "../types";
+import type { useWatchDeps } from "../types";
 import { useWatch } from "./useWatch";
 
 /**
