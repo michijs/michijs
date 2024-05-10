@@ -34,7 +34,7 @@ export const usePromise = <R>(
         try {
           return {
             loading: false,
-            result: (await promise()),
+            result: await promise(),
             recall,
           };
         } catch (ex) {
