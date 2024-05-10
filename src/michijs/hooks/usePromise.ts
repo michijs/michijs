@@ -35,13 +35,13 @@ export const usePromise = <R>(
           return {
             loading: false,
             ...(await promise()),
-            recall
+            recall,
           };
         } catch (ex) {
           return {
             error: new Error(ex),
             loading: false,
-            recall
+            recall,
           };
         }
       } else return initialPromiseValue;
