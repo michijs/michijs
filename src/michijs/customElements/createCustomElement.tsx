@@ -51,6 +51,17 @@ export function createCustomElement<
   const { class: classToExtend = HTMLElement, tag: extendsTag } =
     extendsObject ?? {};
 
+  const cssSelector = elementOptions?.extends
+  ? `${elementOptions.extends.tag}[is="${tag}"]`
+  : tag;
+  const internalCssSelector = shadow ? ":host" : cssSelector;
+
+  const mappedAdoptedStyleSheets = adoptedStyleSheets ? Object.values(adoptedStyleSheets).map((x) =>
+    typeof x === "function"
+      ? x(internalCssSelector)
+      : x,
+  ): undefined
+
   if (events) Object.entries(events).forEach(([key, value]) => value.init(key));
 
   const storeInit = {
@@ -94,7 +105,7 @@ export function createCustomElement<
       this.$michi.idGen ??= new MappedIdGenerator().getId;
       return this.$michi.idGen;
     }
-    addStylesheets(selector: string, target: DocumentOrShadowRoot) {
+    addInitialStyleSheets(selector: string, target: DocumentOrShadowRoot) {
       if (cssVariables || reflectedCssVariables) {
         const allCssVariables = Object.keys(cssVariables ?? {})
           .concat(Object.keys(reflectedCssVariables ?? {}))
@@ -116,22 +127,16 @@ export function createCustomElement<
         );
       }
       if (computedStyleSheet) {
-        this.$michi.styles.computedStyleSheet ??= useStyleSheet({
-          [selector]: computedStyleSheet.bind(this)(),
-        });
+        this.$michi.styles.computedStyleSheet ??= useStyleSheet(computedStyleSheet.bind(this)(selector) as CSSObject);
         addStylesheetsToDocumentOrShadowRoot(
           target,
           this.$michi.styles.computedStyleSheet,
         );
       }
-      if (adoptedStyleSheets)
+      if (mappedAdoptedStyleSheets)
         addStylesheetsToDocumentOrShadowRoot(
           target,
-          ...Object.values(adoptedStyleSheets).map((x) =>
-            typeof x === "function"
-              ? x(MichiCustomElementResult.internalCssSelector)
-              : x,
-          ),
+          ...mappedAdoptedStyleSheets,
         );
     }
     constructor() {
@@ -145,7 +150,7 @@ export function createCustomElement<
       if (shadow) {
         const attachedShadow = this.attachShadow(shadow);
         this.$michi.shadowRoot = attachedShadow;
-        this.addStylesheets(":host", attachedShadow);
+        this.addInitialStyleSheets(":host", attachedShadow);
       }
       if (lifecycle)
         Object.entries(lifecycle).forEach(
@@ -196,7 +201,7 @@ export function createCustomElement<
         (cssVariables ||
           reflectedCssVariables ||
           computedStyleSheet ||
-          adoptedStyleSheets)
+          mappedAdoptedStyleSheets)
       ) {
         if (cssVariables || reflectedCssVariables || computedStyleSheet) {
           classesIdGenerator ??= new IdGenerator();
@@ -206,7 +211,7 @@ export function createCustomElement<
           if (!this.classList.contains(this.$michi.styles.className))
             this.classList.add(this.$michi.styles.className);
         }
-        this.addStylesheets(
+        this.addInitialStyleSheets(
           `.${this.$michi.styles.className}`,
           this.getRootNode() as unknown as DocumentOrShadowRoot,
         );
@@ -245,10 +250,8 @@ export function createCustomElement<
     static formAssociated = formAssociated;
 
     static elementOptions = elementOptions;
-    static cssSelector = elementOptions?.extends
-      ? `${elementOptions.extends.tag}[is="${tag}"]`
-      : tag;
-    static internalCssSelector = shadow ? ":host" : this.cssSelector;
+    static cssSelector = cssSelector;
+    static internalCssSelector = internalCssSelector;
 
     // Lifecycle
     formAssociatedCallback(form) {

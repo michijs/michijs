@@ -1,3 +1,4 @@
+import { ProxiedValue } from "../classes";
 import { useComputedObserve, useObserve } from "../hooks";
 import type {
   AnyObject,
@@ -134,7 +135,7 @@ const styleSheetFromCSSObject = (
 export const useStyleSheet = ((
   cssObject: UseStyleSheetCallback<AnyObject> | CSSObject,
 ) => {
-  if (typeof cssObject === "function") {
+  if (typeof cssObject === "function" && !(cssObject instanceof ProxiedValue)) {
     const tags = useObserve(new Set<string>());
     let styleSheet;
     return (tag) => {
@@ -148,5 +149,5 @@ export const useStyleSheet = ((
       }
       return styleSheet as (tag: string) => CSSStyleSheet;
     };
-  } else return styleSheetFromCSSObject(() => cssObject);
+  } else return styleSheetFromCSSObject(() => cssObject as CSSObject);
 }) as UseStyleSheet;
