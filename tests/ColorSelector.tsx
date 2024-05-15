@@ -25,7 +25,7 @@ export const ColorSelector = createCustomElement("color-selector", {
           () => (this.color() === "#ff0000" ? '"red"' : '"not red"'),
           [this.color],
         ),
-      }
+      },
     };
   },
   adoptedStyleSheets: { style },

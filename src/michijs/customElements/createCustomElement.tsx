@@ -52,15 +52,15 @@ export function createCustomElement<
     extendsObject ?? {};
 
   const cssSelector = elementOptions?.extends
-  ? `${elementOptions.extends.tag}[is="${tag}"]`
-  : tag;
+    ? `${elementOptions.extends.tag}[is="${tag}"]`
+    : tag;
   const internalCssSelector = shadow ? ":host" : cssSelector;
 
-  const mappedAdoptedStyleSheets = adoptedStyleSheets ? Object.values(adoptedStyleSheets).map((x) =>
-    typeof x === "function"
-      ? x(internalCssSelector)
-      : x,
-  ): undefined
+  const mappedAdoptedStyleSheets = adoptedStyleSheets
+    ? Object.values(adoptedStyleSheets).map((x) =>
+        typeof x === "function" ? x(internalCssSelector) : x,
+      )
+    : undefined;
 
   if (events) Object.entries(events).forEach(([key, value]) => value.init(key));
 
@@ -127,7 +127,9 @@ export function createCustomElement<
         );
       }
       if (computedStyleSheet) {
-        this.$michi.styles.computedStyleSheet ??= useStyleSheet(computedStyleSheet.bind(this)(selector) as CSSObject);
+        this.$michi.styles.computedStyleSheet ??= useStyleSheet(
+          computedStyleSheet.bind(this)(selector) as CSSObject,
+        );
         addStylesheetsToDocumentOrShadowRoot(
           target,
           this.$michi.styles.computedStyleSheet,
