@@ -6,7 +6,7 @@ const trustedTypeObject = {
 
 export const trustedTypePolicy: typeof trustedTypeObject =
   // @ts-ignore
-  window.trustedTypes && trustedTypes.createPolicy ?
-    // @ts-ignore
-    trustedTypes.createPolicy("michijs", trustedTypeObject)
-    : trustedTypeObject
+  window.trustedTypes && trustedTypes.createPolicy
+    ? // @ts-ignore
+      trustedTypes.createPolicy("michijs", trustedTypeObject)
+    : trustedTypeObject;
