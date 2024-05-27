@@ -58,8 +58,8 @@ export function createCustomElement<
 
   const mappedAdoptedStyleSheets = adoptedStyleSheets
     ? Object.values(adoptedStyleSheets).map((x) =>
-        typeof x === "function" ? x(internalCssSelector) : x,
-      )
+      typeof x === "function" ? x(internalCssSelector) : x,
+    )
     : undefined;
 
   if (events) Object.entries(events).forEach(([key, value]) => value.init(key));
@@ -73,8 +73,7 @@ export function createCustomElement<
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
-    implements MichiCustomElement
-  {
+    implements MichiCustomElement {
     $michi: MichiCustomElement["$michi"] = {
       store: useObserve(storeInit),
       alreadyRendered: false,
@@ -314,4 +313,34 @@ export function createCustomElement<
   }
 
   return MichiCustomElementResult as any;
+}
+
+const extendedElements: Record<string, [CustomElementConstructor, string]> = {
+
+}
+
+const originalDefine = window.customElements.define;
+
+window.customElements.define = (name, constructor, options) => {
+  if (options?.extends) {
+    extendedElements[name] = [constructor, options.extends]
+  } else
+    originalDefine(name, constructor, options)
+}
+
+const originalCreateElement = document.createElement;
+
+document.createElement = (tagName: string, options?: ElementCreationOptions) => {
+  const newEl = originalCreateElement(tagName, options);
+
+  if (options?.is) {
+    Object.setPrototypeOf(newEl, extendedElements[options.is]);
+    // @ts-ignore
+    if (typeof newEl.connectedCallback === 'function') {
+      // @ts-ignore
+      newEl.connectedCallback();
+    }
+  }
+
+  return newEl
 }
