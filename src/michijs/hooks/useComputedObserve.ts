@@ -14,7 +14,7 @@ import { useWatch } from "./useWatch";
  * @param options An optional object that may contain onBeforeUpdate and onAfterUpdate callback functions.
  * @returns A new observable
  */
-export function useComputedObserve<T, Y extends T>(
+export function useComputedObserve<T, Y extends T = T>(
   callback: () => Promise<T> | T,
   deps?: useWatchDeps,
   initialValue?: Y,
