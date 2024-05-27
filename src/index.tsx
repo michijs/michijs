@@ -3,6 +3,7 @@ export * from "./michijs/constants";
 export * from "./michijs/components";
 export * from "./michijs/classes";
 export * from "./michijs/hooks";
+export * from "./michijs/trustedTypes";
 export * from "./michijs/routing";
 export * from "./michijs/types";
 export * from "./michijs/DOM";
