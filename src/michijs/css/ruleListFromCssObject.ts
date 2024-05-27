@@ -1,5 +1,5 @@
 import type { CSSProperties } from "@michijs/htmltype";
-import { CSSObject } from "../types";
+import type { CSSObject } from "../types";
 import { valueIsCSSObject } from "../typeWards/valueIsCSSObject";
 import { formatToKebabCase } from "../utils";
 

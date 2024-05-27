@@ -1,5 +1,5 @@
 import type { CSSProperties } from "@michijs/htmltype";
-import { CSSObject } from "../types";
+import type { CSSObject } from "../types";
 import { ruleListFromCssObject } from "./ruleListFromCssObject";
 
 /**Allows to create a Constructable Stylesheet with a CSSObject */

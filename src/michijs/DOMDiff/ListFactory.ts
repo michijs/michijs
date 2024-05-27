@@ -1,6 +1,6 @@
 import { Target } from "../classes/Target";
 import { ListElement } from "../components/FragmentAndList";
-import { ElementFactory, IterableJSX, MichiCustomElement } from "../types";
+import type { ElementFactory, IterableJSX, MichiCustomElement } from "../types";
 import { forEachChildren } from "./forEachChildren";
 import { update } from "./update";
 

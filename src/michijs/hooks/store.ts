@@ -1,5 +1,5 @@
 import { observe } from "./observe";
-import { StoreProps, Store, EmptyObject } from "../types";
+import type { StoreProps, Store, EmptyObject } from "../types";
 import { observable } from "./observable";
 
 export function store<

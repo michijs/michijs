@@ -1,4 +1,8 @@
-import { ElementFactory, MichiCustomElement, ObjectJSXElement } from "../..";
+import type {
+  ElementFactory,
+  MichiCustomElement,
+  ObjectJSXElement,
+} from "../..";
 import { setAttributes } from "../DOM/attributes/setAttributes";
 import { create } from "./create";
 import { updateChildren } from "./updateChildren";

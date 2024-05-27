@@ -1,5 +1,5 @@
 import { Fragment } from "../components";
-import { Key } from "../types";
+import type { Key } from "../types";
 
 function jsx(tag, { children, ...attrs }: Record<string, unknown>, key?: Key) {
   return {

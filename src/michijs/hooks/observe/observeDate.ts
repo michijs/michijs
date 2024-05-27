@@ -1,4 +1,4 @@
-import { ObserveProps } from "../observe";
+import type { ObserveProps } from "../observe";
 
 export const observeDate = <T extends Date>({
   item,

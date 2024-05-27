@@ -1,6 +1,6 @@
 import { createTarget, ListFactory } from "../DOMDiff/ListFactory";
 import { h } from "../h";
-import { GetElementProps, MichiCustomElement } from "../types";
+import type { GetElementProps, MichiCustomElement } from "../types";
 import { ListElement } from "./FragmentAndList";
 
 export type ListAttrs<Y, T = typeof ListElement> = {

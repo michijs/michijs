@@ -1,4 +1,4 @@
-import { KebabCase } from "../types";
+import type { KebabCase } from "../types";
 
 export function formatToKebabCase<T extends string>(variable: T): KebabCase<T> {
   const formattedVariable = variable.replace(

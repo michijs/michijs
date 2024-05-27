@@ -1,5 +1,5 @@
-import { Browser, launch, Page } from "puppeteer";
-import { makePerformanceTests, Result } from "./shared";
+import { type Browser, launch, type Page } from "puppeteer";
+import { makePerformanceTests, type Result } from "./shared";
 
 describe("Performance tests - MichiJS", () => {
   let browser: Browser;

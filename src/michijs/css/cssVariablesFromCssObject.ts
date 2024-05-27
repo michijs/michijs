@@ -1,4 +1,4 @@
-import { CSSObject } from "../types";
+import type { CSSObject } from "../types";
 import { valueIsCSSObject } from "../typeWards/valueIsCSSObject";
 
 export const cssVariablesFromCssObject = (

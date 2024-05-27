@@ -1,4 +1,4 @@
-import { AnyObject } from "../types";
+import type { AnyObject } from "../types";
 import { observe } from "./observe";
 
 const exampleValue = 1;
