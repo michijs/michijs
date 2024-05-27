@@ -1,7 +1,12 @@
 import { Router } from "../components/Router";
 import { h } from "../h";
 import { formatToKebabCase } from "../utils/formatToKebabCase";
-import { PagesFunction, CreateRouterResult, UrlFunction, Route } from "./types";
+import type {
+  PagesFunction,
+  CreateRouterResult,
+  UrlFunction,
+  Route,
+} from "./types";
 import { setSearchParam } from "./utils/setSearchParam";
 
 export const urlFn = (

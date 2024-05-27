@@ -1,5 +1,5 @@
-import { Router } from "../components/Router";
-import { FC, GetElementProps } from "../types";
+import type { Router } from "../components/Router";
+import type { FC, GetElementProps } from "../types";
 
 export type SearchParams = Record<string, (...args: any) => any> | undefined;
 export type Hash = [`#${string}` | ""] | undefined;

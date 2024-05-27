@@ -1,4 +1,4 @@
-import { ElementFactory } from "../..";
+import type { ElementFactory } from "../..";
 
 export const CommentFactory: ElementFactory = {
   compare(el: Element): boolean {
