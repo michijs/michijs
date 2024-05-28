@@ -31,7 +31,7 @@ createCustomElement("root-test-element", {
     return (
       <Host>
         <Router />
-        <math display="block" onclick={this.toggleShowExample}>
+        {/* <math display="block" onclick={this.toggleShowExample}>
           <mfrac>
             <mn>{this.arrayTest.length}</mn>
             <msqrt>
@@ -48,7 +48,7 @@ createCustomElement("root-test-element", {
           as="div"
           renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}
         />
-        <ColorSelector />
+        <ColorSelector /> */}
       </Host>
     );
   },

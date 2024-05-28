@@ -28,17 +28,24 @@ if (true) {
       Object.setPrototypeOf(newEl, customElement.prototype);
       newEl.setAttribute("is", customElementTag);
 
-      customElement.prototype.constructor.call(newEl)
+      // @ts-ignore
+      newEl.fakeConstructor()
+
+      
+      // Doesnt work properly because there is no way to know if its connected or not
+      setTimeout(() => {
+
       // @ts-ignore
       if (typeof newEl.connectedCallback === "function") {
         // @ts-ignore
         newEl.connectedCallback();
       }
+      }, 3000)
       if (
         // @ts-ignore
         typeof newEl.attributeChangedCallback === "function" &&
         // @ts-ignore
-        customElementPrototype.observedAttributes
+        customElement.observedAttributes
       ) {
         const observer = new MutationObserver((mutationList) => {
           mutationList.forEach((mutation) => {
@@ -56,7 +63,7 @@ if (true) {
         });
         observer.observe(newEl, {
           // @ts-ignore
-          attributeFilter: customElementPrototype.observedAttributes,
+          attributeFilter: customElement.observedAttributes,
           attributeOldValue: true,
         });
       }
