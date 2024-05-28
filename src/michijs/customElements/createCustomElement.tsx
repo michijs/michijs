@@ -144,7 +144,7 @@ export function createCustomElement<
         styles: {},
         idGen: undefined,
         internals: undefined,
-      }
+      };
 
       for (const key in storeInit) {
         definePropertyFromObservable(this, key, this.$michi.store);
