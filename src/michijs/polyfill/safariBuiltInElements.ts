@@ -1,11 +1,13 @@
 import { isSafari } from "../utils";
 
-console.log(isSafari)
+console.log(isSafari);
 if (true) {
   const extendedElements: Record<string, [CustomElementConstructor, string]> =
     {};
 
-  const originalDefine = window.customElements.define.bind(window.customElements);
+  const originalDefine = window.customElements.define.bind(
+    window.customElements,
+  );
 
   window.customElements.define = (name, constructor, options) => {
     if (options?.extends) {
@@ -22,9 +24,8 @@ if (true) {
     const newEl = originalCreateElement(tagName, options);
 
     if (options?.is) {
-      console.log(newEl)
-      const [customElement, customElementTag] =
-        extendedElements[options.is];
+      console.log(newEl);
+      const [customElement, customElementTag] = extendedElements[options.is];
       Object.setPrototypeOf(newEl, customElement.prototype);
       newEl.setAttribute("is", customElementTag);
 
