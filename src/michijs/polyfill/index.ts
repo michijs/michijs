@@ -1,1 +1,1 @@
-import './safariBuiltInElements'
+import "./safariBuiltInElements";

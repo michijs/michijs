@@ -58,8 +58,8 @@ export function createCustomElement<
 
   const mappedAdoptedStyleSheets = adoptedStyleSheets
     ? Object.values(adoptedStyleSheets).map((x) =>
-      typeof x === "function" ? x(internalCssSelector) : x,
-    )
+        typeof x === "function" ? x(internalCssSelector) : x,
+      )
     : undefined;
 
   if (events) Object.entries(events).forEach(([key, value]) => value.init(key));
@@ -73,7 +73,8 @@ export function createCustomElement<
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
-    implements MichiCustomElement {
+    implements MichiCustomElement
+  {
     $michi: MichiCustomElement["$michi"] = {
       store: useObserve(storeInit),
       alreadyRendered: false,
