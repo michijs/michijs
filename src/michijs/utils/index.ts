@@ -12,4 +12,5 @@ export { pick } from "./pick";
 export { unproxify } from "./unproxify";
 export { isNil } from "./isNil";
 export { removeNullableFromObject } from "./removeNullableFromObject";
+export { isSafari } from "./isSafari";
 export * from "./clone";
