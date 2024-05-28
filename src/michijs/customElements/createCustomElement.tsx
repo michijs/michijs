@@ -141,7 +141,7 @@ export function createCustomElement<
       this.fakeConstructor();
     }
 
-    fakeConstructor(){
+    fakeConstructor() {
       this.$michi = {
         store: useObserve(storeInit),
         alreadyRendered: false,

@@ -30,18 +30,16 @@ if (true) {
       newEl.setAttribute("is", customElementTag);
 
       // @ts-ignore
-      newEl.fakeConstructor()
+      newEl.fakeConstructor();
 
-      
       // Doesnt work properly because there is no way to know if its connected or not
       setTimeout(() => {
-
-      // @ts-ignore
-      if (typeof newEl.connectedCallback === "function") {
         // @ts-ignore
-        newEl.connectedCallback();
-      }
-      }, 3000)
+        if (typeof newEl.connectedCallback === "function") {
+          // @ts-ignore
+          newEl.connectedCallback();
+        }
+      }, 3000);
       if (
         // @ts-ignore
         typeof newEl.attributeChangedCallback === "function" &&
