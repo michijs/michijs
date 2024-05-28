@@ -1,10 +1,11 @@
 import { isSafari } from "../utils";
 
-if (isSafari) {
+console.log(isSafari)
+if (true) {
   const extendedElements: Record<string, [CustomElementConstructor, string]> =
     {};
 
-  const originalDefine = window.customElements.define;
+  const originalDefine = window.customElements.define.bind(window.customElements);
 
   window.customElements.define = (name, constructor, options) => {
     if (options?.extends) {
@@ -12,7 +13,7 @@ if (isSafari) {
     } else originalDefine(name, constructor, options);
   };
 
-  const originalCreateElement = document.createElement;
+  const originalCreateElement = document.createElement.bind(document);
 
   document.createElement = (
     tagName: string,
@@ -21,18 +22,22 @@ if (isSafari) {
     const newEl = originalCreateElement(tagName, options);
 
     if (options?.is) {
-      const [customElementPrototype, customElementTag] =
+      console.log(newEl)
+      const [customElement, customElementTag] =
         extendedElements[options.is];
-      Object.setPrototypeOf(newEl, customElementPrototype);
+      Object.setPrototypeOf(newEl, customElement.prototype);
       newEl.setAttribute("is", customElementTag);
+
+      customElement.prototype.constructor.call(newEl)
       // @ts-ignore
       if (typeof newEl.connectedCallback === "function") {
         // @ts-ignore
         newEl.connectedCallback();
       }
-      // @ts-ignore
       if (
+        // @ts-ignore
         typeof newEl.attributeChangedCallback === "function" &&
+        // @ts-ignore
         customElementPrototype.observedAttributes
       ) {
         const observer = new MutationObserver((mutationList) => {
@@ -43,6 +48,7 @@ if (isSafari) {
                 newEl.attributeChangedCallback(
                   mutation.attributeName,
                   mutation.oldValue,
+                  // @ts-ignore
                   mutation.target[mutation.attributeName],
                 );
             }

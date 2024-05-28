@@ -75,13 +75,7 @@ export function createCustomElement<
     extends (classToExtend as CustomElementConstructor)
     implements MichiCustomElement
   {
-    $michi: MichiCustomElement["$michi"] = {
-      store: useObserve(storeInit),
-      alreadyRendered: false,
-      styles: {},
-      idGen: undefined,
-      internals: undefined,
-    };
+    $michi: MichiCustomElement["$michi"];
     connected;
     willMount;
     willConstruct;
@@ -143,6 +137,14 @@ export function createCustomElement<
     }
     constructor() {
       super();
+
+      this.$michi = {
+        store: useObserve(storeInit),
+        alreadyRendered: false,
+        styles: {},
+        idGen: undefined,
+        internals: undefined,
+      }
 
       for (const key in storeInit) {
         definePropertyFromObservable(this, key, this.$michi.store);
