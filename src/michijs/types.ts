@@ -349,6 +349,10 @@ export type useWatchDeps = any[];
 export interface FetchResult<R> extends PromiseResult<R> {}
 export interface PromiseResult<R> {
   /**
+   * The promise
+   */
+  promise: Promise<R>;
+  /**
    * Call again the promise. Available after first call
    */
   recall?(): void;

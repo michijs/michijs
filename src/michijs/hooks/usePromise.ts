@@ -8,9 +8,6 @@ import type {
 import { useComputedObserve } from "./useComputedObserve";
 import { useObserve } from "./useObserve";
 
-const initialPromiseValue = {
-  loading: true,
-} as const;
 
 /**
  * Ues a promise and allows to manage the result as an observable.
@@ -26,6 +23,11 @@ export const usePromise = <R>(
   deps?: useWatchDeps,
   options?: UseFetchOptions,
 ): ObservableType<PromiseResult<R>> => {
+
+  const initialPromiseValue = {
+    loading: true,
+    promise: promise()
+  } as const;
   const recalls = useObserve(0);
   const recall = () => recalls(recalls() + 1);
   const result = useComputedObserve<FetchResult<R>, typeof initialPromiseValue>(
@@ -34,13 +36,15 @@ export const usePromise = <R>(
         try {
           return {
             loading: false,
-            result: await promise(),
+            result: await initialPromiseValue.promise,
+            promise: initialPromiseValue.promise,
             recall,
           };
         } catch (ex) {
           return {
             error: new Error(ex),
             loading: false,
+            promise: initialPromiseValue.promise,
             recall,
           };
         }
