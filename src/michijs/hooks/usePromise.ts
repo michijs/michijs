@@ -22,11 +22,10 @@ export const usePromise = <R>(
   deps?: useWatchDeps,
   options?: UseFetchOptions,
 ): ObservableType<PromiseResult<R>> => {
-
   let resolveOut: (value: R | PromiseLike<R>) => void;
-  const internalPromise = new Promise<R>(resolve => {
-    resolveOut = resolve
-  })
+  const internalPromise = new Promise<R>((resolve) => {
+    resolveOut = resolve;
+  });
   const initialPromiseValue = {
     loading: true,
     promise: internalPromise,
@@ -38,7 +37,7 @@ export const usePromise = <R>(
       if (!options?.shouldWait?.()) {
         try {
           const result = await promise();
-          resolveOut(result)
+          resolveOut(result);
           return {
             loading: false,
             result,
