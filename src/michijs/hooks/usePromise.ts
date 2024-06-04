@@ -22,9 +22,14 @@ export const usePromise = <R>(
   deps?: useWatchDeps,
   options?: UseFetchOptions,
 ): ObservableType<PromiseResult<R>> => {
+
+  let resolveOut: (value: R | PromiseLike<R>) => void;
+  const internalPromise = new Promise<R>(resolve => {
+    resolveOut = resolve
+  })
   const initialPromiseValue = {
     loading: true,
-    promise: promise(),
+    promise: internalPromise,
   } as const;
   const recalls = useObserve(0);
   const recall = () => recalls(recalls() + 1);
@@ -32,17 +37,19 @@ export const usePromise = <R>(
     async () => {
       if (!options?.shouldWait?.()) {
         try {
+          const result = await promise();
+          resolveOut(result)
           return {
             loading: false,
-            result: await initialPromiseValue.promise,
-            promise: initialPromiseValue.promise,
+            result,
+            promise: internalPromise,
             recall,
           };
         } catch (ex) {
           return {
             error: new Error(ex),
             loading: false,
-            promise: initialPromiseValue.promise,
+            promise: internalPromise,
             recall,
           };
         }
