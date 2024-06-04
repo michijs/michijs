@@ -46,6 +46,7 @@ export const usePromise = <R>(
             recall,
           };
         } catch (ex) {
+          console.error(ex)
           return {
             error: new Error(ex),
             loading: false,
