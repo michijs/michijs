@@ -8,7 +8,6 @@ import type {
 import { useComputedObserve } from "./useComputedObserve";
 import { useObserve } from "./useObserve";
 
-
 /**
  * Ues a promise and allows to manage the result as an observable.
  *
@@ -23,10 +22,9 @@ export const usePromise = <R>(
   deps?: useWatchDeps,
   options?: UseFetchOptions,
 ): ObservableType<PromiseResult<R>> => {
-
   const initialPromiseValue = {
     loading: true,
-    promise: promise()
+    promise: promise(),
   } as const;
   const recalls = useObserve(0);
   const recall = () => recalls(recalls() + 1);

@@ -18,9 +18,7 @@ const idGenerator = new IdGenerator();
 // const test2: TransitionKeyframes = { opacity: [1, 0.1, 0], offset: [0, .7] }
 
 const getOffset = (i: number, length: number, offset?: number) =>
-  `${(
-    (offset ?? (i === 0 ? 0 : i === length - 1 ? 1 : i / length - 1)) * 100
-  ).toFixed(2)}%`;
+  `${((offset ?? (i === 0 ? 0 : i === length - 1 ? 1 : i / length - 1)) * 100).toFixed(2)}%`;
 /**
  * Generates CSS keyframes and animation properties based on the provided keyframes and options.
  * @param keyframes - The keyframes for the animation.
