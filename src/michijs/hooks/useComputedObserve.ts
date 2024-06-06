@@ -1,4 +1,5 @@
 import { useObserve } from ".";
+import { ProxiedValue } from "../classes";
 import type {
   ObservableType,
   UseComputedObserveOptions,
@@ -37,6 +38,7 @@ export function useComputedObserve<T, Y extends T = T>(
   );
 
   const listener = () => {
+    ProxiedValue.startTransaction();
     options?.onBeforeUpdate?.();
     const callbackResult = callback();
     callbackResult instanceof Promise
@@ -45,6 +47,7 @@ export function useComputedObserve<T, Y extends T = T>(
         )
       : (newObservable as ObservableType<object>)(callbackResult as object);
     options?.onAfterUpdate?.();
+    ProxiedValue.endTransaction();
   };
   listener();
   useWatch(listener, deps);

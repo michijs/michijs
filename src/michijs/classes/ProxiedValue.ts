@@ -10,11 +10,24 @@ import { Observable } from "./Observable";
 
 export class ProxiedValue<T>
   extends Observable<T>
-  implements ProxiedValueInterface<T, T>
-{
+  implements ProxiedValueInterface<T, T> {
   private $privateValue: T;
-  private $transactionInProgress = false;
-  private $triedToNotifyDuringTransaction = false;
+
+  static transactionsInProgress = 0;
+  static valuesToNotifyOnTransactionFinish = new Set<InstanceType<typeof ProxiedValue<any>>>();
+  static startTransaction(){
+    this.transactionsInProgress++;
+  }
+  static endTransaction(){
+    if (this.transactionsInProgress === 1) {
+      this.valuesToNotifyOnTransactionFinish.forEach(x => {
+        x.forceNotifyCurrentValue()
+      });
+      this.valuesToNotifyOnTransactionFinish.clear();
+      // Intentionally at the end to avoid notifying twice
+    }
+    this.transactionsInProgress--;
+  }
 
   constructor(initialValue?: T, initialObservers?: Subscription<T>[]) {
     super(initialObservers);
@@ -35,22 +48,13 @@ export class ProxiedValue<T>
 
   notifyCurrentValue() {
     if (this.shouldNotify()) {
-      if (this.$transactionInProgress)
-        this.$triedToNotifyDuringTransaction = true;
+      if (ProxiedValue.transactionsInProgress > 0)
+        ProxiedValue.valuesToNotifyOnTransactionFinish.add(this);
       else this.notify(this.valueOf());
     }
   }
-
-  startTransaction() {
-    this.$transactionInProgress = true;
-  }
-
-  endTransaction() {
-    this.$transactionInProgress = false;
-    if (this.$triedToNotifyDuringTransaction) {
-      this.$triedToNotifyDuringTransaction = false;
-      this.notifyCurrentValue();
-    }
+  forceNotifyCurrentValue() {
+    this.notify(this.valueOf());
   }
 
   // @ts-ignore
