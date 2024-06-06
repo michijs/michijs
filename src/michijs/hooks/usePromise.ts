@@ -48,7 +48,7 @@ export const usePromise = <R>(
           };
         } catch (ex) {
           console.error(ex);
-          rejectOut(ex)
+          rejectOut(ex);
           return {
             error: new Error(ex),
             loading: false,
