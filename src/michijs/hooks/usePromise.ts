@@ -22,7 +22,7 @@ export const usePromise = <R>(
   promise: () => Promise<R>,
   deps?: useWatchDeps,
   options?: UsePromiseOptions,
-  computedObserveOptions?: UseComputedObserveOptions
+  computedObserveOptions?: UseComputedObserveOptions,
 ): ObservableType<PromiseResult<R>> => {
   let resolveOut: (value: R | PromiseLike<R>) => void;
   let rejectOut: (reason: any) => void;
@@ -62,7 +62,7 @@ export const usePromise = <R>(
     },
     [...(deps ?? []), recalls],
     initialPromiseValue,
-    computedObserveOptions
+    computedObserveOptions,
   );
 
   return result;
