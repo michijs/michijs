@@ -337,9 +337,11 @@ export type UseFetchCallback<
   S extends SearchParams = undefined,
   B extends AnyObject | undefined | string = undefined,
 > = () => {
-    input: string,
-    searchParams?: { [k in keyof S]: ObservableOrConst<S[k]> },
-  } & RequestInitUseFetch<B extends AnyObject ? { [k in keyof B]: ObservableOrConst<B[k]> }: B>
+  input: string;
+  searchParams?: { [k in keyof S]: ObservableOrConst<S[k]> };
+} & RequestInitUseFetch<
+  B extends AnyObject ? { [k in keyof B]: ObservableOrConst<B[k]> } : B
+>;
 
 export interface UsePromiseOptions {
   shouldWait?(): any;
