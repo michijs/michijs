@@ -330,7 +330,7 @@ type GetPrimitiveType<T> = T extends boolean
 export type IsAny<T> = 0 extends 1 & T ? true : false;
 
 export interface RequestInitUseFetch<B> extends Omit<RequestInit, "body"> {
-  body?: ObservableOrConst<B>;
+  body?: B;
 }
 
 export interface UseFetchCallback<
@@ -340,8 +340,7 @@ export interface UseFetchCallback<
   (): {
     input: string,
     searchParams?: { [k in keyof S]: ObservableOrConst<S[k]> },
-    init?: RequestInitUseFetch<ObservableOrConst<B>>
-  }
+  } & RequestInitUseFetch<ObservableOrConst<B>>
 }
 
 export interface UsePromiseOptions {

@@ -30,7 +30,7 @@ export const useFetch = <
   options?: UseFetchOptions,): ObservableType<FetchResult<R>> => {
   return usePromise(
     async () => {
-      const { input, searchParams, init } = callback();
+      const { input, searchParams, ...init } = callback();
       const url = new URL(
         input,
         input.startsWith("/") ? location.origin : undefined,
