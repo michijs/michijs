@@ -49,7 +49,7 @@ export const useFetch = <
             ? JSON.stringify(init.body)
             : init?.body,
       });
-      result.status(response.status)
+      result.status(response.status);
 
       if (!response.ok) throw response.statusText;
 
