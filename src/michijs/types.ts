@@ -359,7 +359,7 @@ export type useWatchDeps = any[];
  * @template R Type of the expected response data.
  */
 export interface FetchResult<R> extends PromiseResult<R> {
-  status?: number
+  status?: number;
 }
 export interface PromiseResult<R> {
   /**
