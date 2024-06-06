@@ -10,18 +10,21 @@ import { Observable } from "./Observable";
 
 export class ProxiedValue<T>
   extends Observable<T>
-  implements ProxiedValueInterface<T, T> {
+  implements ProxiedValueInterface<T, T>
+{
   private $privateValue: T;
 
   static transactionsInProgress = 0;
-  static valuesToNotifyOnTransactionFinish = new Set<InstanceType<typeof ProxiedValue<any>>>();
-  static startTransaction(){
+  static valuesToNotifyOnTransactionFinish = new Set<
+    InstanceType<typeof ProxiedValue<any>>
+  >();
+  static startTransaction() {
     this.transactionsInProgress++;
   }
-  static endTransaction(){
+  static endTransaction() {
     if (this.transactionsInProgress === 1) {
-      this.valuesToNotifyOnTransactionFinish.forEach(x => {
-        x.forceNotifyCurrentValue()
+      this.valuesToNotifyOnTransactionFinish.forEach((x) => {
+        x.forceNotifyCurrentValue();
       });
       this.valuesToNotifyOnTransactionFinish.clear();
       // Intentionally at the end to avoid notifying twice
