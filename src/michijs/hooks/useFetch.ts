@@ -1,3 +1,4 @@
+import { ProxiedValue } from "../classes";
 import type { SearchParams } from "../routing/types";
 import type {
   ObservableType,
@@ -30,6 +31,7 @@ export const useFetch = <
   deps?: useWatchDeps,
   options?: UseFetchOptions,
 ): ObservableType<FetchResult<R>> => {
+  let status;
   const result = usePromise(
     async () => {
       const { input, searchParams, ...init } = callback();
@@ -49,7 +51,7 @@ export const useFetch = <
             ? JSON.stringify(init.body)
             : init?.body,
       });
-      result.status(response.status);
+      status = response.status;
 
       if (!response.ok) throw response.statusText;
 
@@ -57,6 +59,15 @@ export const useFetch = <
     },
     deps,
     options,
+    {
+      onBeforeUpdate(){
+        ProxiedValue.startTransaction();
+      },
+      onAfterUpdate(){
+        result.status(status);
+        ProxiedValue.endTransaction();
+      }
+    }
   ) as ObservableType<FetchResult<R>>;
 
   return result;
