@@ -30,7 +30,7 @@ export const useFetch = <
   deps?: useWatchDeps,
   options?: UseFetchOptions,
 ): ObservableType<FetchResult<R>> => {
-  return usePromise(
+  const result = usePromise(
     async () => {
       const { input, searchParams, ...init } = callback();
       const url = new URL(
@@ -49,6 +49,7 @@ export const useFetch = <
             ? JSON.stringify(init.body)
             : init?.body,
       });
+      result.status(response.status)
 
       if (!response.ok) throw response.statusText;
 
@@ -56,5 +57,7 @@ export const useFetch = <
     },
     deps,
     options,
-  );
+  ) as ObservableType<FetchResult<R>>;
+
+  return result;
 };

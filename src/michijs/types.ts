@@ -358,7 +358,9 @@ export type useWatchDeps = any[];
  * Interface representing the result of a fetch operation.
  * @template R Type of the expected response data.
  */
-export interface FetchResult<R> extends PromiseResult<R> {}
+export interface FetchResult<R> extends PromiseResult<R> {
+  status?: number
+}
 export interface PromiseResult<R> {
   /**
    * The promise

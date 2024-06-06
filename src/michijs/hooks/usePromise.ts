@@ -23,8 +23,10 @@ export const usePromise = <R>(
   options?: UseFetchOptions,
 ): ObservableType<PromiseResult<R>> => {
   let resolveOut: (value: R | PromiseLike<R>) => void;
-  const internalPromise = new Promise<R>((resolve) => {
+  let rejectOut: (reason: any) => void;
+  const internalPromise = new Promise<R>((resolve, reject) => {
     resolveOut = resolve;
+    rejectOut = reject;
   });
   const initialPromiseValue = {
     loading: true,
@@ -46,6 +48,7 @@ export const usePromise = <R>(
           };
         } catch (ex) {
           console.error(ex);
+          rejectOut(ex)
           return {
             error: new Error(ex),
             loading: false,
