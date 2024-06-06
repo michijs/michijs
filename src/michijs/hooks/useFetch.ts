@@ -25,9 +25,11 @@ export const useFetch = <
   R,
   S extends SearchParams = undefined,
   B extends AnyObject | undefined | string = undefined,
->(callback: UseFetchCallback<S, B>,
+>(
+  callback: UseFetchCallback<S, B>,
   deps?: useWatchDeps,
-  options?: UseFetchOptions,): ObservableType<FetchResult<R>> => {
+  options?: UseFetchOptions,
+): ObservableType<FetchResult<R>> => {
   return usePromise(
     async () => {
       const { input, searchParams, init } = callback();

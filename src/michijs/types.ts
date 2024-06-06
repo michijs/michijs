@@ -338,10 +338,10 @@ export interface UseFetchCallback<
   B extends AnyObject | undefined | string = undefined,
 > {
   (): {
-    input: string,
-    searchParams?: { [k in keyof S]: ObservableOrConst<S[k]> },
-    init?: RequestInitUseFetch<ObservableOrConst<B>>
-  }
+    input: string;
+    searchParams?: { [k in keyof S]: ObservableOrConst<S[k]> };
+    init?: RequestInitUseFetch<ObservableOrConst<B>>;
+  };
 }
 
 export interface UsePromiseOptions {
