@@ -60,14 +60,14 @@ export const useFetch = <
     deps,
     options,
     {
-      onBeforeUpdate(){
+      onBeforeUpdate() {
         ProxiedValue.startTransaction();
       },
-      onAfterUpdate(){
+      onAfterUpdate() {
         result.status(status);
         ProxiedValue.endTransaction();
-      }
-    }
+      },
+    },
   ) as ObservableType<FetchResult<R>>;
 
   return result;
