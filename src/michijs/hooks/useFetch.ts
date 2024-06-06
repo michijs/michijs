@@ -3,10 +3,9 @@ import type {
   ObservableType,
   FetchResult,
   AnyObject,
-  RequestInitUseFetch,
   UseFetchOptions,
-  ObservableOrConst,
   useWatchDeps,
+  UseFetchCallback,
 } from "../types";
 import { usePromise } from "./usePromise";
 
@@ -26,15 +25,12 @@ export const useFetch = <
   R,
   S extends SearchParams = undefined,
   B extends AnyObject | undefined | string = undefined,
->(
-  input: string,
-  searchParams?: { [k in keyof S]: ObservableOrConst<S[k]> },
-  init?: RequestInitUseFetch<ObservableOrConst<B>>,
+>(callback: UseFetchCallback<S, B>,
   deps?: useWatchDeps,
-  options?: UseFetchOptions,
-): ObservableType<FetchResult<R>> => {
+  options?: UseFetchOptions,): ObservableType<FetchResult<R>> => {
   return usePromise(
     async () => {
+      const { input, searchParams, init } = callback();
       const url = new URL(
         input,
         input.startsWith("/") ? location.origin : undefined,
