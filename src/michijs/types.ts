@@ -4,7 +4,7 @@ import type {
   GlobalEvents,
 } from "./generated/htmlType";
 import type { EventDispatcher, MappedIdGenerator } from "./classes";
-import { SearchParams } from "./routing";
+import type { SearchParams } from "./routing";
 
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 export type CSSVar<T extends string> = <
@@ -333,16 +333,14 @@ export interface RequestInitUseFetch<B> extends Omit<RequestInit, "body"> {
   body?: ObservableOrConst<B>;
 }
 
-export interface UseFetchCallback<
+export type UseFetchCallback<
   S extends SearchParams = undefined,
   B extends AnyObject | undefined | string = undefined,
-> {
-  (): {
-    input: string;
-    searchParams?: { [k in keyof S]: ObservableOrConst<S[k]> };
-    init?: RequestInitUseFetch<ObservableOrConst<B>>;
-  };
-}
+> = () => {
+  input: string;
+  searchParams?: { [k in keyof S]: ObservableOrConst<S[k]> };
+  init?: RequestInitUseFetch<ObservableOrConst<B>>;
+};
 
 export interface UsePromiseOptions {
   shouldWait?(): any;
