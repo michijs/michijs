@@ -36,7 +36,9 @@ const SearchParams = useComputedObserve(
  * @returns A new observable
  */
 export function useSearchParams<
-  T extends Record<string, unknown> = Record<string, unknown>,
+  // Removed because it doesnt work with observables
+  // T extends Record<string, unknown> = Record<string, unknown>,
+  T = Record<string, unknown>,
 >(): ObservableType<T> {
   return SearchParams as unknown as ObservableType<T>;
 }
