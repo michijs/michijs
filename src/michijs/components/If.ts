@@ -45,7 +45,11 @@ export const If = <const T = CreateFCResult>(
   let cachedThen: DocumentFragment | undefined;
   let cachedElse: DocumentFragment | undefined;
 
-  const conditionAsBoolean = useComputedObserve(() => condition instanceof ProxiedValue ? condition.toBoolean(): condition, [condition])
+  const conditionAsBoolean = useComputedObserve(
+    () =>
+      condition instanceof ProxiedValue ? condition.toBoolean() : condition,
+    [condition],
+  );
 
   // Bind the observable 'condition' to monitor changes.
   bindObservable(conditionAsBoolean, (newValue) => {
