@@ -347,7 +347,7 @@ export interface UsePromiseOptions {
   shouldWait?(): any;
 }
 export interface UseFetchOptions<T> extends UsePromiseOptions {
-  transform?(value: T): T
+  transform?(value: T): T;
 }
 export interface UseComputedObserveOptions {
   onBeforeUpdate?(): void;
