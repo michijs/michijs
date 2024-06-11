@@ -14,8 +14,7 @@ import { VirtualFragment } from "./VirtualFragment";
 
 export class ProxiedArray<V>
   extends ProxiedValue<V[]>
-  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties>
-{
+  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties> {
   private targets = new Array<Target<V>>();
   constructor(initialData: V[], initialObservers?: Subscription<V[]>[]) {
     super(initialData, initialObservers);
@@ -32,9 +31,9 @@ export class ProxiedArray<V>
   ): Node => {
     const el = asTag
       ? (create({
-          jsxTag: asTag,
-          attrs,
-        } as SingleJSXElement) as ParentNode)
+        jsxTag: asTag,
+        attrs,
+      } as SingleJSXElement) as ParentNode)
       : new VirtualFragment();
 
     const newTarget = new Target(el, renderItem, context);
@@ -119,27 +118,29 @@ export class ProxiedArray<V>
     return result;
   }
   sort(compareFn?: (a: V, b: V) => number) {
-    const arrayCopy = [...this.$value];
     const result = this.$value.sort(compareFn);
-    const indexesArray = arrayCopy.reduce(
-      (previousValue, currentValue, currentIndex) => {
-        const newIndex = result.indexOf(currentValue);
-        // To avoid repeated indexes
-        if (newIndex > currentIndex) {
-          previousValue.push({
-            currentIndex,
-            newIndex,
-          });
-        }
-        return previousValue;
-      },
-      new Array<{ currentIndex: number; newIndex: number }>(),
-    );
-    this.targets.forEach((target) => {
-      indexesArray.forEach(({ currentIndex, newIndex }) => {
-        target.swap(currentIndex, newIndex);
+    if (this.targets.length > 0) {
+      const arrayCopy = [...this.$value];
+      const indexesArray = arrayCopy.reduce(
+        (previousValue, currentValue, currentIndex) => {
+          const newIndex = result.indexOf(currentValue);
+          // To avoid repeated indexes
+          if (newIndex > currentIndex) {
+            previousValue.push({
+              currentIndex,
+              newIndex,
+            });
+          }
+          return previousValue;
+        },
+        new Array<{ currentIndex: number; newIndex: number }>(),
+      );
+      this.targets.forEach((target) => {
+        indexesArray.forEach(({ currentIndex, newIndex }) => {
+          target.swap(currentIndex, newIndex);
+        });
       });
-    });
+    }
     return result;
   }
   splice(start: number, deleteCount = 0, ...items: V[]) {

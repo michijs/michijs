@@ -2,7 +2,6 @@ import { HistoryManager } from "../classes";
 import { jsx } from "../h";
 import { createFunctionalComponent } from "../customElements";
 import { useComputedObserve } from "../hooks";
-import { unproxify } from "../utils";
 
 type A = JSX.IntrinsicElements["a"];
 

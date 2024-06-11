@@ -346,7 +346,9 @@ export type UseFetchCallback<
 export interface UsePromiseOptions {
   shouldWait?(): any;
 }
-export interface UseFetchOptions extends UsePromiseOptions {}
+export interface UseFetchOptions<T> extends UsePromiseOptions {
+  transform?(value: T): T
+}
 export interface UseComputedObserveOptions {
   onBeforeUpdate?(): void;
   onAfterUpdate?(): void;
@@ -441,6 +443,7 @@ export type MutableArrayProperties =
   | MutableArrayNewItemsProperties
   | "shift"
   | "reverse"
+  | "sort"
   | "pop";
 
 export interface ReadWriteArray<RV, SV>

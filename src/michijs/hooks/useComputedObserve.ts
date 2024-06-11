@@ -1,5 +1,4 @@
 import { useObserve } from ".";
-import { ProxiedValue } from "../classes";
 import type {
   ObservableType,
   UseComputedObserveOptions,

@@ -29,7 +29,7 @@ export const useFetch = <
 >(
   callback: UseFetchCallback<S, B>,
   deps?: useWatchDeps,
-  options?: UseFetchOptions,
+  options?: UseFetchOptions<R>,
 ): ObservableType<FetchResult<R>> => {
   let status;
   const result = usePromise(
@@ -55,7 +55,8 @@ export const useFetch = <
 
       if (!response.ok) throw response.statusText;
 
-      return (await response.json()) as R;
+      const jsonResult = (await response.json()) as R;
+      return options?.transform?.(jsonResult) ?? jsonResult;
     },
     deps,
     options,
