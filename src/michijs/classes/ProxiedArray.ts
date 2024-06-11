@@ -118,9 +118,9 @@ export class ProxiedArray<V>
     return result;
   }
   sort(compareFn?: (a: V, b: V) => number) {
+    const arrayCopy = [...this.$value];
     const result = this.$value.sort(compareFn);
     if (this.targets.length > 0) {
-      const arrayCopy = [...this.$value];
       const indexesArray = arrayCopy.reduce(
         (previousValue, currentValue, currentIndex) => {
           const newIndex = result.indexOf(currentValue);
