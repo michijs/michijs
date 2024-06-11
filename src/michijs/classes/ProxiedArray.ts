@@ -14,7 +14,8 @@ import { VirtualFragment } from "./VirtualFragment";
 
 export class ProxiedArray<V>
   extends ProxiedValue<V[]>
-  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties> {
+  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties>
+{
   private targets = new Array<Target<V>>();
   constructor(initialData: V[], initialObservers?: Subscription<V[]>[]) {
     super(initialData, initialObservers);
@@ -31,9 +32,9 @@ export class ProxiedArray<V>
   ): Node => {
     const el = asTag
       ? (create({
-        jsxTag: asTag,
-        attrs,
-      } as SingleJSXElement) as ParentNode)
+          jsxTag: asTag,
+          attrs,
+        } as SingleJSXElement) as ParentNode)
       : new VirtualFragment();
 
     const newTarget = new Target(el, renderItem, context);
