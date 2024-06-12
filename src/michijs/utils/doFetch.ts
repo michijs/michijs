@@ -1,5 +1,5 @@
-import { SearchParams } from "../routing";
-import { AnyObject, DoFetchProps, UseFetchOptions } from "../types";
+import type { SearchParams } from "../routing";
+import type { AnyObject, DoFetchProps, UseFetchOptions } from "../types";
 
 export const doFetch = async <
   R,
