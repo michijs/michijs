@@ -30,8 +30,9 @@ export const useFetch = <
   callback: UseFetchCallback<S, B>,
   deps?: useWatchDeps,
   options?: UseFetchOptions<R>,
-): ObservableType<FetchResult<R>> => usePromise(
-  () => doFetch(callback(), options),
-  deps,
-  options,
-) as ObservableType<FetchResult<R>>;
+): ObservableType<FetchResult<R>> =>
+  usePromise(
+    () => doFetch(callback(), options),
+    deps,
+    options,
+  ) as ObservableType<FetchResult<R>>;
