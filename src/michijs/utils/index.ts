@@ -11,6 +11,7 @@ export { setObservableValue } from "./setObservableValue";
 export { pick } from "./pick";
 export { unproxify } from "./unproxify";
 export { isNil } from "./isNil";
+export { doFetch } from "./doFetch";
 export { removeNullableFromObject } from "./removeNullableFromObject";
 export * from "./getBrowser";
 export * from "./clone";

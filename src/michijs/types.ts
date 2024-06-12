@@ -333,15 +333,20 @@ export interface RequestInitUseFetch<B> extends Omit<RequestInit, "body"> {
   body?: B;
 }
 
+export interface DoFetchProps<
+S extends SearchParams = undefined,
+B extends AnyObject | undefined | string = undefined,
+> extends RequestInitUseFetch<
+B extends AnyObject ? { [k in keyof B]: ObservableOrConst<B[k]> } : B
+> {
+  input: string;
+  searchParams?: { [k in keyof S]: ObservableOrConst<S[k]> };
+}
+
 export type UseFetchCallback<
   S extends SearchParams = undefined,
   B extends AnyObject | undefined | string = undefined,
-> = () => {
-  input: string;
-  searchParams?: { [k in keyof S]: ObservableOrConst<S[k]> };
-} & RequestInitUseFetch<
-  B extends AnyObject ? { [k in keyof B]: ObservableOrConst<B[k]> } : B
->;
+> = () => DoFetchProps<S,B>;
 
 export interface UsePromiseOptions {
   shouldWait?(): any;
@@ -361,7 +366,6 @@ export type useWatchDeps = any[];
  * @template R Type of the expected response data.
  */
 export interface FetchResult<R> extends PromiseResult<R> {
-  status?: number;
 }
 export interface PromiseResult<R> {
   /**
