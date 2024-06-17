@@ -8,4 +8,5 @@ export { usePureFunction } from "./usePureFunction";
 export { useIndexedDB } from "./useIndexedDB";
 export { useSearchParams } from "./useSearchParams";
 export { useStringTemplate } from "./useStringTemplate";
+export { useTitle } from "./useTitle";
 export { useWatch } from "./useWatch";
