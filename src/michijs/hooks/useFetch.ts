@@ -4,9 +4,8 @@ import type {
   FetchResult,
   AnyObject,
   UseFetchOptions,
-  useWatchDeps,
   UseFetchCallback,
-  UseComputedObserveOptions,
+  usePromiseShouldWait,
 } from "../types";
 import { doFetch } from "../utils";
 import { usePromise } from "./usePromise";
@@ -29,13 +28,9 @@ export const useFetch = <
   B extends AnyObject | undefined | string = undefined,
 >(
   callback: UseFetchCallback<S, B>,
-  deps?: useWatchDeps,
-  options?: UseFetchOptions<R>,
-  computedObserveOptions?: UseComputedObserveOptions
-): ObservableType<FetchResult<R>> =>
-  usePromise(
-    () => doFetch(callback(), options),
-    deps,
-    options,
-    computedObserveOptions
-  ) as ObservableType<FetchResult<R>>;
+  shouldWait?: usePromiseShouldWait,
+  options?: UseFetchOptions<R>
+): ObservableType<FetchResult<R>> => usePromise(
+  async () => doFetch(await callback(), options),
+  shouldWait
+) as ObservableType<FetchResult<R>>;

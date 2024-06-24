@@ -8,6 +8,7 @@ const AsyncTests = () => (
     <Link url={asyncTestsUrls.test1()}>Link to test</Link>
     <Link url={asyncTestsUrls.test2()}>Link to test 2</Link>
     <Link url={asyncTestsUrls.test3()}>Link to test 3</Link>
+    <Link url={asyncTestsUrls.test4()}>Link to test 4</Link>
     <AsyncTestsRouter />
   </>
 );

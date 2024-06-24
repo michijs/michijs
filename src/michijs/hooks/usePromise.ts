@@ -1,13 +1,10 @@
 import type {
-  ObservableType,
-  FetchResult,
-  UsePromiseOptions,
-  useWatchDeps,
   PromiseResult,
-  UseComputedObserveOptions,
+  usePromiseShouldWait,
 } from "../types";
-import { useComputedObserve } from "./useComputedObserve";
+import { bindObservable } from "../utils";
 import { useObserve } from "./useObserve";
+import { useWatch } from "./useWatch";
 
 /**
  * Ues a promise and allows to manage the result as an observable.
@@ -20,50 +17,43 @@ import { useObserve } from "./useObserve";
  */
 export const usePromise = <R>(
   promise: () => Promise<R>,
-  deps?: useWatchDeps,
-  options?: UsePromiseOptions,
-  computedObserveOptions?: UseComputedObserveOptions,
-): ObservableType<PromiseResult<R>> => {
-  let resolveOut: (value: R | PromiseLike<R>) => void;
-  let rejectOut: (reason: any) => void;
-  const internalPromise = new Promise<R>((resolve, reject) => {
-    resolveOut = resolve;
-    rejectOut = reject;
-  });
-  const initialPromiseValue = {
-    loading: true,
-    promise: internalPromise,
-  } as const;
-  const recalls = useObserve(0);
-  const recall = () => recalls(recalls() + 1);
-  const result = useComputedObserve<FetchResult<R>, typeof initialPromiseValue>(
-    async () => {
-      if (!options?.shouldWait?.()) {
-        try {
-          const result = await promise();
-          resolveOut(result);
-          return {
-            loading: false,
-            result,
-            promise: internalPromise,
-            recall,
-          };
-        } catch (ex) {
-          console.error(ex);
-          rejectOut(ex);
-          return {
-            error: new Error(ex),
-            loading: false,
-            promise: internalPromise,
-            recall,
-          };
-        }
-      } else return initialPromiseValue;
-    },
-    [...(deps ?? []), recalls],
-    initialPromiseValue,
-    computedObserveOptions,
-  );
+  shouldWait?: usePromiseShouldWait
+): PromiseResult<R> => {
+
+  let internalPromiseWithResolvers = Promise.withResolvers<R>();
+
+  const result = {
+    promise: useObserve(internalPromiseWithResolvers.promise),
+    recall() {
+      internalPromiseWithResolvers = Promise.withResolvers<R>()
+      this.promise(internalPromiseWithResolvers.promise)
+    }
+  }
+
+  const tryToResolvePromiseCallback = async () => {
+    const promises = shouldWait?.map<Promise<any>>(x => x instanceof Promise ? x : x());
+    let readyToExecute = true;
+    if (promises) {
+      try {
+        // If some promise fails
+        await Promise.all(promises)
+      } catch {
+        readyToExecute = false
+      }
+    }
+    if (readyToExecute) {
+      try {
+        const promiseResult = await promise();
+        internalPromiseWithResolvers.resolve(promiseResult);
+      } catch (ex) {
+        internalPromiseWithResolvers.reject(ex);
+      }
+    }
+  }
+
+  bindObservable(result.promise, tryToResolvePromiseCallback)
+
+  useWatch(tryToResolvePromiseCallback, shouldWait)
 
   return result;
 };

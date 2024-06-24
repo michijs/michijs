@@ -169,6 +169,7 @@ export interface CompatibleSubscription {
   (): void;
 }
 
+export type ObservableTypeOrConst<T> = ObservableType<T> | T;
 export type ObservableOrConst<T> = ObservableLike<T> | T;
 export type CreateFunctionalComponentProps<T> = {
   [k in keyof T]: k extends "children" ? T[k] : ObservableOrConst<T[k]>;
@@ -343,15 +344,14 @@ export interface DoFetchProps<
   searchParams?: { [k in keyof S]: ObservableOrConst<S[k]> };
 }
 
+export type usePromiseShouldWait = ObservableTypeOrConst<Promise<any>>[];
+
 export type UseFetchCallback<
   S extends SearchParams = undefined,
   B extends AnyObject | undefined | string = undefined,
-> = () => DoFetchProps<S, B>;
+> = () => (DoFetchProps<S, B> | Promise<DoFetchProps<S, B>>);
 
-export interface UsePromiseOptions {
-  shouldWait?(): any;
-}
-export interface UseFetchOptions<T> extends UsePromiseOptions {
+export interface UseFetchOptions<T> {
   transform?(value: T): T;
 }
 export interface UseComputedObserveOptions {
@@ -370,23 +370,11 @@ export interface PromiseResult<R> {
   /**
    * The promise
    */
-  promise: Promise<R>;
+  promise: ObservableType<Promise<R>>;
   /**
    * Call again the promise. Available after first call
    */
   recall?(): void;
-  /**
-   * The result data.
-   */
-  result?: R | undefined;
-  /**
-   * Error encountered during the fetch operation.
-   */
-  error?: Error;
-  /**
-   * Indicates whether the fetch operation is currently loading.
-   */
-  loading: boolean;
 }
 
 // Needs to be partial to allow asignation operation
