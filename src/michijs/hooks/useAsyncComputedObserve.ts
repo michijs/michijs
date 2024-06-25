@@ -6,14 +6,12 @@ import type {
 } from "../types";
 import { useWatch } from "./useWatch";
 
-type UseAsyncComputedObserve = {
-  <T>(
-    callback: () => Promise<T>,
-    initialValue?: T,
-    deps?: useWatchDeps,
-    options?: UseComputedObserveOptions,
-  ): ObservableType<T>;
-};
+type UseAsyncComputedObserve = <T>(
+  callback: () => Promise<T>,
+  initialValue?: T,
+  deps?: useWatchDeps,
+  options?: UseComputedObserveOptions,
+) => ObservableType<T>;
 
 /**
  * It is used for computing a value and observing its changes.

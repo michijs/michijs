@@ -6,13 +6,11 @@ import type {
 } from "../types";
 import { useWatch } from "./useWatch";
 
-type UseComputedObserve = {
-  <T>(
-    callback: () => T,
-    deps?: useWatchDeps,
-    options?: UseComputedObserveOptions,
-  ): ObservableType<T>;
-};
+type UseComputedObserve = <T>(
+  callback: () => T,
+  deps?: useWatchDeps,
+  options?: UseComputedObserveOptions,
+) => ObservableType<T>;
 
 /**
  * It is used for computing a value and observing its changes.
