@@ -3,7 +3,7 @@ export class EventDispatcher<T> {
   private eventInit?: EventInit;
 
   constructor(eventInit?: EventInit) {
-    this.eventInit = eventInit
+    this.eventInit = eventInit;
   }
 
   public init(name: string): void {
