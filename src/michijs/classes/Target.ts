@@ -35,39 +35,39 @@ export class Target<V> {
     this.element.lastChild?.remove();
   }
 
-  shift() {
+  shift(): void {
     this.element.firstChild?.remove();
   }
 
-  remove(index: number) {
+  remove(index: number): void {
     this.element.childNodes[index]?.remove();
   }
 
-  insertItemsAt(i: number, ...items: V[]) {
+  insertItemsAt(i: number, ...items: V[]): void {
     const renderResult = this.create(...items);
 
     this.insertChildNodesAt(i, ...renderResult);
   }
 
-  prependItems(...items: V[]) {
+  prependItems(...items: V[]): void {
     const renderResult = this.create(...items);
 
     this.element.prepend(...renderResult);
   }
 
-  appendItems(...items: V[]) {
+  appendItems(...items: V[]): void {
     const renderResult = this.create(...items);
 
     this.element.append(...renderResult);
   }
 
-  reverse() {
+  reverse(): void {
     this.element.replaceChildren(
       ...Array.from(this.element.childNodes).reverse(),
     );
   }
 
-  swap(indexA: number, indexB: number) {
+  swap(indexA: number, indexB: number): void {
     const elA = this.element.childNodes[indexA];
     const elB = this.element.childNodes[indexB];
     if (elA && elB) {
@@ -105,11 +105,11 @@ export class Target<V> {
     // });
   }
 
-  insertChildNodesAt(i: number, ...childNodes: Node[]) {
+  insertChildNodesAt(i: number, ...childNodes: Node[]): void {
     if (i === 0) this.element.prepend(...childNodes);
     else this.element.childNodes[i - 1].after(...childNodes);
   }
-  splice(start: number, deleteCount: number, ...items: V[]) {
+  splice(start: number, deleteCount: number, ...items: V[]): void {
     const len = this.element.childNodes.length;
     const relativeStart = start >> 0;
     const k =
@@ -127,7 +127,7 @@ export class Target<V> {
     }
     if (items.length > 0) this.insertItemsAt(k, ...items);
   }
-  fill(value: V, start = 0, end?: number) {
+  fill(value: V, start = 0, end?: number): void {
     const len = this.element.childNodes.length;
     const relativeStart = start >> 0;
 

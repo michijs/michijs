@@ -5,7 +5,7 @@ export class VirtualChildNodes
   extends Array<ChildNode>
   implements NodeListOf<ChildNode>
 {
-  item(index: number) {
+  item(index: number): ChildNode {
     return this.at(index) ?? (null as unknown as ChildNode);
   }
   forEach(
@@ -69,11 +69,11 @@ export class VirtualFragment
     );
     this.append(...nodes);
   }
-  get lastChild() {
+  get lastChild(): ChildNode | null {
     const previousSibling = this.endItem.previousSibling;
     return previousSibling !== this.startItem ? previousSibling : null;
   }
-  get childNodes() {
+  get childNodes(): VirtualChildNodes {
     const childNodes = new VirtualChildNodes();
     forEachChildren(
       this.startItem.nextSibling,
@@ -85,7 +85,7 @@ export class VirtualFragment
 
     return childNodes;
   }
-  get firstChild() {
+  get firstChild(): ChildNode | null {
     const nextSibling = this.startItem.nextSibling;
     return nextSibling !== this.endItem ? nextSibling : null;
   }

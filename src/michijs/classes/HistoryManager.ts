@@ -10,7 +10,7 @@ class HistoryManagerSingleton extends Observable<string | URL> {
     window.addEventListener("popstate", () => this.notify(location.href));
   }
 
-  back(fallbackUrl: ObservableOrConst<string | URL>) {
+  back(fallbackUrl: ObservableOrConst<string | URL>): string | void | URL {
     if (this.history.length > 0) {
       history.back();
       const url = this.history.pop();

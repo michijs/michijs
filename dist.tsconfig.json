@@ -4,7 +4,6 @@
     "strictNullChecks": true,
     "strictBindCallApply": true,
     "resolveJsonModule": true,
-    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false,
     "declaration": true,
@@ -14,6 +13,7 @@
       "dom",
       "ESNext"
     ],
+    "isolatedModules": true,
     "outDir": "dist",
     "moduleResolution": "node",
     "module": "esnext",
