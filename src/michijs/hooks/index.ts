@@ -10,3 +10,4 @@ export { useSearchParams } from "./useSearchParams";
 export { useStringTemplate } from "./useStringTemplate";
 export { useTitle } from "./useTitle";
 export { useWatch } from "./useWatch";
+export { useAsyncComputedObserve } from "./useAsyncComputedObserve";

@@ -227,7 +227,7 @@ export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>>
   /**
    * Removes all the list elements
    */
-  $clear();
+  $clear(): void;
   /**
    * Replace all the list elements
    */

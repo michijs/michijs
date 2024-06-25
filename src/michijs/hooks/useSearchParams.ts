@@ -20,7 +20,6 @@ let isUpdating = false;
 const SearchParams = useComputedObserve(
   () => getSearchParamsValue(),
   [HistoryManager],
-  undefined,
   {
     onBeforeUpdate() {
       isUpdating = true;
