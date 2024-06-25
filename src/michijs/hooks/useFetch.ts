@@ -29,8 +29,9 @@ export const useFetch = <
 >(
   callback: UseFetchCallback<S, B>,
   shouldWait?: usePromiseShouldWait,
-  options?: UseFetchOptions<R>
-): ObservableType<FetchResult<R>> => usePromise(
-  async () => doFetch(await callback(), options),
-  shouldWait
-) as ObservableType<FetchResult<R>>;
+  options?: UseFetchOptions<R>,
+): ObservableType<FetchResult<R>> =>
+  usePromise(
+    async () => doFetch(await callback(), options),
+    shouldWait,
+  ) as ObservableType<FetchResult<R>>;

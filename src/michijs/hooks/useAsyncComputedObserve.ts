@@ -11,7 +11,7 @@ type UseAsyncComputedObserve = {
     callback: () => Promise<T>,
     initialValue?: T,
     deps?: useWatchDeps,
-    options?: UseComputedObserveOptions
+    options?: UseComputedObserveOptions,
   ): ObservableType<T>;
 };
 
@@ -39,4 +39,4 @@ export const useAsyncComputedObserve: UseAsyncComputedObserve = (
   useWatch(listener, deps);
 
   return newObservable;
-}
+};

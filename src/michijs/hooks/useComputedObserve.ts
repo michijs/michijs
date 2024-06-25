@@ -10,7 +10,7 @@ type UseComputedObserve = {
   <T>(
     callback: () => T,
     deps?: useWatchDeps,
-    options?: UseComputedObserveOptions
+    options?: UseComputedObserveOptions,
   ): ObservableType<T>;
 };
 
@@ -37,4 +37,4 @@ export const useComputedObserve: UseComputedObserve = (
   useWatch(listener, deps);
 
   return newObservable;
-}
+};

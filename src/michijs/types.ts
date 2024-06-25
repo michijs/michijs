@@ -349,7 +349,7 @@ export type usePromiseShouldWait = ObservableTypeOrConst<Promise<any>>[];
 export type UseFetchCallback<
   S extends SearchParams = undefined,
   B extends AnyObject | undefined | string = undefined,
-> = () => (DoFetchProps<S, B> | Promise<DoFetchProps<S, B>>);
+> = () => DoFetchProps<S, B> | Promise<DoFetchProps<S, B>>;
 
 export interface UseFetchOptions<T> {
   transform?(value: T): T;
