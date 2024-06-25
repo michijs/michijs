@@ -40,7 +40,7 @@ export const [asyncTestsUrls, AsyncTestsRouter] = createRouter(
           wait(3000);
           return 1;
         }}
-        then={res => res * 2}
+        then={(res) => res * 2}
       />
     ),
     test4: <Redirect to={urls["/"]()} />,
