@@ -13,13 +13,13 @@ class HistoryManagerSingleton extends Observable<string | URL> {
   back(fallbackUrl: ObservableOrConst<string | URL>): string | void | URL {
     if (this.history.length > 0) {
       history.back();
-      const url = this.history.pop();
+      const url = this.history.pop()!;
       this.notify(url);
       return url;
     } return this.replaceCurrentUrl(fallbackUrl);
   }
 
-  replaceCurrentUrl(url: ObservableOrConst<string | URL>) {
+  replaceCurrentUrl(url: ObservableOrConst<string | URL>): void {
     const urlValue = unproxify(url);
     try {
       // This will trigger an exception if its an external link string
@@ -36,7 +36,7 @@ class HistoryManagerSingleton extends Observable<string | URL> {
     this.notify(urlValue);
   }
 
-  push(url: ObservableOrConst<string | URL>) {
+  push(url: ObservableOrConst<string | URL>): void {
     const urlValue = unproxify(url);
     try {
       // This will trigger an exception if its an string
@@ -53,7 +53,7 @@ class HistoryManagerSingleton extends Observable<string | URL> {
     this.notify(urlValue);
   }
 
-  matches(url: ObservableOrConst<string>, flexible = false) {
+  matches(url: ObservableOrConst<string>, flexible = false): boolean {
     const urlValue = unproxify(url);
     if (window.URLPattern) {
       const p = new window.URLPattern({
@@ -81,4 +81,4 @@ class HistoryManagerSingleton extends Observable<string | URL> {
   }
 }
 
-export const HistoryManager = new HistoryManagerSingleton();
+export const HistoryManager: HistoryManagerSingleton = new HistoryManagerSingleton();

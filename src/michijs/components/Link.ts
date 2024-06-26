@@ -2,6 +2,7 @@ import { HistoryManager } from "../classes";
 import { jsx } from "../h";
 import { createFunctionalComponent } from "../customElements";
 import { useComputedObserve } from "../hooks";
+import type { CreateFunctionalComponent } from "../types";
 
 type A = JSX.IntrinsicElements["a"];
 
@@ -10,7 +11,7 @@ interface LinkProps extends A {
 }
 
 /**Provides the ability to move around the web page without reloading the page. It uses the same attributes as an anchor tag but also allows the use of URL objects. Uses the HistoryManager.push method. */
-export const Link = createFunctionalComponent<LinkProps>(
+export const Link: CreateFunctionalComponent<LinkProps> = createFunctionalComponent<LinkProps>(
   ({ url, ...attrs }, options) => {
     const finalUrl = useComputedObserve(() => {
       const unproxifiedUrl = url();

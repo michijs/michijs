@@ -3,35 +3,42 @@ import type { CreateOptions, FC } from "../types";
 import type { VirtualFragment } from "./VirtualFragment";
 
 export class Target<V> {
+  private element: VirtualFragment | ParentNode
+  private renderItem: FC<V>
+  private options?: CreateOptions
   constructor(
-    private element: VirtualFragment | ParentNode,
-    private renderItem: FC<V>,
-    private options?: CreateOptions,
-  ) {}
+    element: VirtualFragment | ParentNode,
+    renderItem: FC<V>,
+    options?: CreateOptions,
+  ) {
+    this.element = element;
+    this.renderItem = renderItem;
+    this.options = options;
+  }
 
-  clear() {
+  clear(): void {
     this.element.textContent = "";
   }
 
-  createSingleItem(value: V) {
+  createSingleItem(value: V): Node {
     return create(this.renderItem(value), this.options);
   }
-  create(...value: V[]) {
+  create(...value: V[]): Node[] {
     return value.map((x) => this.createSingleItem(x));
   }
 
-  replace(...items: V[]) {
+  replace(...items: V[]): void {
     // A little better than replaceChildren
     this.clear();
     this.appendItems(...items);
   }
 
-  replaceNode(el: ChildNode, value: V) {
+  replaceNode(el: ChildNode, value: V): void {
     const newNode = this.createSingleItem(value);
     el.replaceWith(newNode);
   }
 
-  pop() {
+  pop(): void {
     this.element.lastChild?.remove();
   }
 

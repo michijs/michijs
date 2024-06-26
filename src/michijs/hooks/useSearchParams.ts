@@ -3,7 +3,7 @@ import { HistoryManager } from "../classes";
 import { setSearchParam } from "../routing/utils/setSearchParam";
 import type { ObservableType } from "../types";
 
-export const getSearchParamsValue = () => {
+export const getSearchParamsValue = (): Record<string, unknown> => {
   const initialSearchParamsValue: Record<string, unknown> = {};
   new URLSearchParams(location.search).forEach((value, key) => {
     try {

@@ -1,6 +1,9 @@
 import { Fragment } from "../components";
 
-function jsx(jsxTag, attrs: Record<string, unknown> = {}) {
+function jsx(jsxTag: any, attrs: Record<string, unknown> = {}): {
+  jsxTag: any;
+  attrs: Record<string, unknown>;
+} {
   return {
     jsxTag,
     attrs,

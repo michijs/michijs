@@ -4,6 +4,7 @@ import { isMichiCustomElement } from "../typeWards/isMichiCustomElement";
 import { bindObservableToRef, getObservables, unproxify } from "../utils";
 import { createFunctionalComponent } from "../customElements/createFunctionalComponent";
 import { useComputedObserve } from "../hooks";
+import type { CreateFunctionalComponent } from "../types";
 
 export type ElementInternalsProps = {
   /**Form controls usually expose a "value" property */
@@ -22,7 +23,7 @@ export type ElementInternalsProps = {
  * - Access element internals
  * - Validate and assign values to forms
  */
-export const ElementInternals =
+export const ElementInternals: CreateFunctionalComponent<ElementInternalsProps> =
   createFunctionalComponent<ElementInternalsProps>(
     (
       {

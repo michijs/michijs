@@ -9,18 +9,18 @@ export class Observable<T> extends Function implements ObservableLike<T> {
     if (initialObservers) this.observers = new Set(initialObservers);
   }
 
-  notify(value) {
+  notify(value: T): void {
     this.observers?.forEach((observer) => {
       observer(value);
     });
   }
 
-  subscribe(observer: Subscription<T>) {
+  subscribe(observer: Subscription<T>): void {
     if (this.observers) this.observers.add(observer);
     else this.observers = new Set([observer]);
   }
 
-  unsubscribe(oldObserver: Subscription<T>) {
+  unsubscribe(oldObserver: Subscription<T>): void {
     this.observers?.delete(oldObserver);
   }
 }

@@ -1,6 +1,6 @@
 import { createFunctionalComponent } from "../customElements";
 import { useTitle } from "../hooks";
-import type { ObservableOrConst } from "../types";
+import type { CreateFunctionalComponent, ObservableOrConst } from "../types";
 import { bindObservableToRef } from "../utils";
 import { GenericElement } from "./GenericElement";
 
@@ -12,7 +12,7 @@ const title = useTitle();
 /**
  * Title component for dynamically updating the document's title.
  */
-export const Title = createFunctionalComponent<TitleProps>(({ children }) => {
+export const Title: CreateFunctionalComponent<TitleProps> = createFunctionalComponent<TitleProps>(({ children }) => {
   let el: HTMLElement | undefined = undefined;
 
   // bindObservable(children, updateTitleCallback)

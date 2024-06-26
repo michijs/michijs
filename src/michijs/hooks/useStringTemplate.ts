@@ -1,4 +1,4 @@
-import type { ObservableOrConst } from "../types";
+import type { ObservableOrConst, ObservableType } from "../types";
 import { useComputedObserve } from "./useComputedObserve";
 
 /**
@@ -10,7 +10,7 @@ import { useComputedObserve } from "./useComputedObserve";
 export function useStringTemplate(
   templateStringsArray: TemplateStringsArray,
   ...props: ObservableOrConst<string | number | undefined>[]
-) {
+): ObservableType<string> {
   return useComputedObserve(() => {
     return templateStringsArray.raw.reduce((previousValue, currentValue, i) => {
       const val = props[i];

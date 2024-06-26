@@ -6,7 +6,7 @@ import type { CreateOptions, DOMElementJSXElement } from "../types";
 export const createDOMElement = (
   jsx: DOMElementJSXElement,
   options: CreateOptions,
-) => {
+): ParentNode => {
   const { children, ...attrs } = jsx.attrs;
 
   if (children)

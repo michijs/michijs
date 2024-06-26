@@ -5,7 +5,7 @@ import { bindObservableToRef, formatToKebabCase } from "../../utils";
 export function setStyle(
   element: Element | HTMLElement,
   cssObject: CSSProperties,
-) {
+): void {
   if (cssObject && "style" in element) {
     Object.entries(cssObject).forEach(([key, value]) => {
       const formattedKey = formatToKebabCase(key);

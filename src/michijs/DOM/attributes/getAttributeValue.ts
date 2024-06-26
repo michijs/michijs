@@ -1,4 +1,4 @@
-export function getAttributeValue(value?: string | null) {
+export function getAttributeValue(value?: string | null): any {
   switch (true) {
     case value === "" || value === "true": {
       return true;

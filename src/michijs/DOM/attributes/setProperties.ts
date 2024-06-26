@@ -5,7 +5,7 @@ export function setProperties(
   el: Element,
   attributes: AnyObject,
   options?: CreateOptions,
-) {
+): void {
   Object.entries(attributes).forEach(([name, newValue]) =>
     setProperty(el, name, newValue, options),
   );

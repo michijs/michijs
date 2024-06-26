@@ -2,7 +2,7 @@ export function setAttribute(
   element: Element | HTMLElement,
   key: string,
   newValue: any,
-) {
+): void {
   const value = newValue?.valueOf();
   switch (true) {
     case value === null:

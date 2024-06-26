@@ -1,5 +1,6 @@
 import { HistoryManager } from "../classes";
 import { createFunctionalComponent } from "../customElements";
+import type { CreateFunctionalComponent } from "../types";
 import { unproxify, wait } from "../utils";
 import { GenericElement } from "./GenericElement";
 
@@ -11,7 +12,7 @@ export interface RedirectProps {
 /**
  * Redirect component for navigating to a different URL or location.
  **/
-export const Redirect = createFunctionalComponent<RedirectProps>(({ to }) => (
+export const Redirect: CreateFunctionalComponent<RedirectProps> = createFunctionalComponent<RedirectProps>(({ to }) => (
   <GenericElement
     onelementconnected={async () => {
       const toValue = unproxify(to);

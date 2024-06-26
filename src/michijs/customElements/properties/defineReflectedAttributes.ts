@@ -1,5 +1,4 @@
 import { getAttributeValue } from "../../DOM/attributes/getAttributeValue";
-import { setProperty } from "../../DOM/attributes/setProperty";
 import type {
   MichiCustomElement,
   ObservableType,
@@ -12,7 +11,7 @@ export const defineReflectedAttributes = (
   self: MichiCustomElement,
   observable: ObservableType<any>,
   reflectedAttributes?: ReflectedAttributesType,
-) => {
+): void => {
   if (reflectedAttributes)
     for (const key in reflectedAttributes) {
       const standarizedAttributeName = formatToKebabCase(key);

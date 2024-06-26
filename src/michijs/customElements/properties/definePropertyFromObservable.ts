@@ -5,7 +5,7 @@ export function definePropertyFromObservable(
   propertyKey: string,
   observable: ObservableType<any>,
   observableKey: string = propertyKey,
-) {
+): void {
   Object.defineProperty(self, propertyKey, {
     get() {
       return observable[observableKey];

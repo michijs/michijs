@@ -10,7 +10,7 @@ import { bindObservableToRef } from "../utils";
 export function css(
   cssObject: TemplateStringsArray,
   ...props: (ObservableType<string | number> | string | number)[]
-) {
+): CSSStyleSheet {
   const template = useStringTemplate(cssObject, ...props);
   const styleSheet = new CSSStyleSheet();
   bindObservableToRef(template, styleSheet, (newValue, styleSheet) => {
