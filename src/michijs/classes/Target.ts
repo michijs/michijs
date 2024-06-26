@@ -3,9 +3,9 @@ import type { CreateOptions, FC } from "../types";
 import type { VirtualFragment } from "./VirtualFragment";
 
 export class Target<V> {
-  private element: VirtualFragment | ParentNode
-  private renderItem: FC<V>
-  private options?: CreateOptions
+  private element: VirtualFragment | ParentNode;
+  private renderItem: FC<V>;
+  private options?: CreateOptions;
   constructor(
     element: VirtualFragment | ParentNode,
     renderItem: FC<V>,

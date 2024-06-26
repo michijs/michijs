@@ -24,11 +24,11 @@ export const customObjectSet =
         else oldValue(newValue);
         return true;
       }
-        const newItem = useObserve(newValue, initialObservers);
-        const result = Reflect.set(target.$value, property, newItem);
-        // @ts-ignore
-        newItem.notifyCurrentValue?.();
-        return result;
+      const newItem = useObserve(newValue, initialObservers);
+      const result = Reflect.set(target.$value, property, newItem);
+      // @ts-ignore
+      newItem.notifyCurrentValue?.();
+      return result;
     }
     return false;
   };
@@ -55,7 +55,8 @@ export const customObjectGet =
     // Because function already has length
     if (!["length", "name"].includes(p as string) && p in target) {
       return Reflect.get(target, p, receiver);
-    }if (target.$value) {
+    }
+    if (target.$value) {
       if (typeof target.$value === "object")
         if (p in target.$value)
           return Reflect.get(target.$value, p, target.$value);

@@ -1,9 +1,9 @@
-const returnParameter = (x: string): string => x
+const returnParameter = (x: string): string => x;
 
 interface TrustedTypeObject {
-  createHTML(x: string): string
-  createScript(x: string): string
-  createScriptURL(x: string): string
+  createHTML(x: string): string;
+  createScript(x: string): string;
+  createScriptURL(x: string): string;
 }
 
 const trustedTypeObject: TrustedTypeObject = {

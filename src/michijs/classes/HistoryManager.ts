@@ -16,7 +16,8 @@ class HistoryManagerSingleton extends Observable<string | URL> {
       const url = this.history.pop()!;
       this.notify(url);
       return url;
-    } return this.replaceCurrentUrl(fallbackUrl);
+    }
+    return this.replaceCurrentUrl(fallbackUrl);
   }
 
   replaceCurrentUrl(url: ObservableOrConst<string | URL>): void {
@@ -81,4 +82,5 @@ class HistoryManagerSingleton extends Observable<string | URL> {
   }
 }
 
-export const HistoryManager: HistoryManagerSingleton = new HistoryManagerSingleton();
+export const HistoryManager: HistoryManagerSingleton =
+  new HistoryManagerSingleton();

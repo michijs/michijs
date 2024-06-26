@@ -12,19 +12,24 @@ const title = useTitle();
 /**
  * Title component for dynamically updating the document's title.
  */
-export const Title: CreateFunctionalComponent<TitleProps> = createFunctionalComponent<TitleProps>(({ children }) => {
-  let el: HTMLElement | undefined = undefined;
+export const Title: CreateFunctionalComponent<TitleProps> =
+  createFunctionalComponent<TitleProps>(({ children }) => {
+    let el: HTMLElement | undefined = undefined;
 
-  // bindObservable(children, updateTitleCallback)
-  return (
-    <GenericElement
-      onelementconnected={async (elEvent) => {
-        el = elEvent.detail;
+    // bindObservable(children, updateTitleCallback)
+    return (
+      <GenericElement
+        onelementconnected={async (elEvent) => {
+          el = elEvent.detail;
 
-        bindObservableToRef(children, new WeakRef(el), (newValue?: string) => {
-          if (el?.isConnected && newValue) title(newValue);
-        });
-      }}
-    />
-  );
-});
+          bindObservableToRef(
+            children,
+            new WeakRef(el),
+            (newValue?: string) => {
+              if (el?.isConnected && newValue) title(newValue);
+            },
+          );
+        }}
+      />
+    );
+  });

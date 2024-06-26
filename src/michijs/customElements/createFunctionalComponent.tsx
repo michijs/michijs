@@ -12,9 +12,7 @@ export function createFunctionalComponent<
   T extends AnyObject,
   S extends Element = Element,
   C = CreateOptions<S>,
->(
-  callback: CreateFCResult<T, S, C>,
-): CreateFunctionalComponent<T> {
+>(callback: CreateFCResult<T, S, C>): CreateFunctionalComponent<T> {
   return (props) => {
     // TODO: Not sure why ts compiler is complaining here
     // @ts-ignore

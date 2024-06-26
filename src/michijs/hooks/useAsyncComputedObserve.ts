@@ -11,8 +11,9 @@ interface UseAsyncComputedObserve {
     callback: () => Promise<T>,
     initialValue?: T,
     deps?: useWatchDeps,
-    options?: UseComputedObserveOptions): ObservableType<T>
-};
+    options?: UseComputedObserveOptions,
+  ): ObservableType<T>;
+}
 
 /**
  * It is used for computing a value and observing its changes.

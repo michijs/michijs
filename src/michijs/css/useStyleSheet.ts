@@ -53,11 +53,11 @@ export const hostToText = (
   const thisRunSelector =
     thisRunObjectSelectorEntries.length > 0
       ? `${parentSelector}{${thisRunObjectSelectorEntries.reduce(
-        (previousValue, [key, value]) => {
-          return `${previousValue}${key}:${value};`;
-        },
-        "",
-      )}}`
+          (previousValue, [key, value]) => {
+            return `${previousValue}${key}:${value};`;
+          },
+          "",
+        )}}`
       : "";
 
   return `${otherRunsSelectors}${thisRunSelector}`;
@@ -147,5 +147,6 @@ export const useStyleSheet = ((
       }
       return styleSheet as (tag: string) => CSSStyleSheet;
     };
-  } return styleSheetFromCSSObject(() => cssObject as CSSObject);
+  }
+  return styleSheetFromCSSObject(() => cssObject as CSSObject);
 }) as UseStyleSheet;

@@ -12,7 +12,7 @@ interface UseComputedObserve {
     deps?: useWatchDeps,
     options?: UseComputedObserveOptions,
   ): ObservableType<T>;
-};
+}
 
 /**
  * It is used for computing a value and observing its changes.
