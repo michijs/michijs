@@ -26,14 +26,13 @@ export function deepEqual(object1: any, object2: any): boolean {
         return !object1Value.find(
           (value, index) => !deepEqual(value, object2Value[index]),
         );
-      } else {
-        if (
-          Object.keys(object1Value).length !== Object.keys(object2Value).length
-        )
-          return false;
-        for (const key in { ...object1Value, ...object2Value }) {
-          if (!deepEqual(object1Value[key], object2Value[key])) return false;
-        }
+      }
+      if (
+        Object.keys(object1Value).length !== Object.keys(object2Value).length
+      )
+        return false;
+      for (const key in { ...object1Value, ...object2Value }) {
+        if (!deepEqual(object1Value[key], object2Value[key])) return false;
       }
       return true;
     }

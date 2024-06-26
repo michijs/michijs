@@ -8,7 +8,7 @@ export const doFetch = async <
 >(
   { input, searchParams, ...init }: DoFetchProps<S, B>,
   options?: UseFetchOptions<R>,
-) => {
+): Promise<R> => {
   const url = new URL(
     input,
     input.startsWith("/") ? location.origin : undefined,

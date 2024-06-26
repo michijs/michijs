@@ -6,6 +6,15 @@ import type {
 import type { EventDispatcher, MappedIdGenerator } from "./classes";
 import type { SearchParams } from "./routing";
 
+export type Browser =
+  | "edge"
+  | "chrome"
+  | "firefox"
+  | "safari"
+  | "opera"
+  | "android"
+  | "iphone"
+  | "unknown";
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 export type CSSVar<T extends string> = <
   V extends undefined | string | number = undefined,

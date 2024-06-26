@@ -6,7 +6,7 @@ import type {
 } from "../types";
 import { useWatch } from "./useWatch";
 
-type UseComputedObserve = {
+interface UseComputedObserve {
   <T>(
     callback: () => T,
     deps?: useWatchDeps,

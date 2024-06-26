@@ -153,7 +153,7 @@ export function useIndexedDB<T extends AnyObject>(
                 const transaction = db.transaction(p, transactionMode);
                 resolve(transaction.objectStore(p)[method]);
               });
-            } else {
+            }
               return (...args) =>
                 new Promise(async (resolve, reject) => {
                   const db = await dbPromise;
@@ -176,7 +176,6 @@ export function useIndexedDB<T extends AnyObject>(
                     resolve(result);
                   }
                 });
-            }
           },
         },
       );

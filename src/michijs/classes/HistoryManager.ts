@@ -16,7 +16,7 @@ class HistoryManagerSingleton extends Observable<string | URL> {
       const url = this.history.pop();
       this.notify(url);
       return url;
-    } else return this.replaceCurrentUrl(fallbackUrl);
+    } return this.replaceCurrentUrl(fallbackUrl);
   }
 
   replaceCurrentUrl(url: ObservableOrConst<string | URL>) {

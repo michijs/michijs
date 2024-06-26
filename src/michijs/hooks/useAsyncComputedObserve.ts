@@ -6,13 +6,12 @@ import type {
 } from "../types";
 import { useWatch } from "./useWatch";
 
-type UseAsyncComputedObserve = {
+interface UseAsyncComputedObserve {
   <T>(
     callback: () => Promise<T>,
     initialValue?: T,
     deps?: useWatchDeps,
-    options?: UseComputedObserveOptions,
-  ): ObservableType<T>;
+    options?: UseComputedObserveOptions): ObservableType<T>
 };
 
 /**

@@ -1,4 +1,6 @@
-export const getBrowser = () => {
+import type { Browser } from "../types";
+
+export const getBrowser = (): Browser => {
   const { userAgent } = navigator;
 
   return userAgent.match(/edg/i)

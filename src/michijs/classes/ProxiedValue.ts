@@ -19,17 +19,17 @@ export class ProxiedValue<T>
     InstanceType<typeof ProxiedValue<any>>
   >();
   static startTransaction() {
-    this.transactionsInProgress++;
+    ProxiedValue.transactionsInProgress++;
   }
   static endTransaction() {
-    if (this.transactionsInProgress === 1) {
-      this.valuesToNotifyOnTransactionFinish.forEach((x) => {
+    if (ProxiedValue.transactionsInProgress === 1) {
+      ProxiedValue.valuesToNotifyOnTransactionFinish.forEach((x) => {
         x.forceNotifyCurrentValue();
       });
-      this.valuesToNotifyOnTransactionFinish.clear();
+      ProxiedValue.valuesToNotifyOnTransactionFinish.clear();
       // Intentionally at the end to avoid notifying twice
     }
-    this.transactionsInProgress--;
+    ProxiedValue.transactionsInProgress--;
   }
 
   constructor(initialValue?: T, initialObservers?: Subscription<T>[]) {

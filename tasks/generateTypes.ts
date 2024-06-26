@@ -12,8 +12,8 @@ import {
   statSync,
   readFileSync,
   renameSync,
-} from "fs";
-import path from "path";
+} from "node:fs";
+import path from "node:path";
 
 const elements = new Map<
   string,

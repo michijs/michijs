@@ -7,7 +7,7 @@ import type { ObservableType } from "../types";
 
 const Hash = useComputedObserve(
   () =>
-    !!location.hash
+    location.hash
       ? {
           [location.hash]: true,
         }

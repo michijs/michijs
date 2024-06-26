@@ -37,14 +37,13 @@ export const hostToText = (
                 [parentSelector]: value,
               },
             })}`;
-          else
-            return `${previousValue}${hostToText(
-              value as CSSObject,
-              `${parentSelector}${newKey}`,
-            )}`;
-        } else {
-          thisRunObjectSelector[newKey] = value;
+
+          return `${previousValue}${hostToText(
+            value as CSSObject,
+            `${parentSelector}${newKey}`,
+          )}`;
         }
+        thisRunObjectSelector[newKey] = value;
       }
       return previousValue;
     },
@@ -54,11 +53,11 @@ export const hostToText = (
   const thisRunSelector =
     thisRunObjectSelectorEntries.length > 0
       ? `${parentSelector}{${thisRunObjectSelectorEntries.reduce(
-          (previousValue, [key, value]) => {
-            return `${previousValue}${key}:${value};`;
-          },
-          "",
-        )}}`
+        (previousValue, [key, value]) => {
+          return `${previousValue}${key}:${value};`;
+        },
+        "",
+      )}}`
       : "";
 
   return `${otherRunsSelectors}${thisRunSelector}`;
@@ -76,39 +75,38 @@ export function cssObjectToText(
       if (hostSelectors.find((x) => key.startsWith(x))) {
         hostRules = `${hostRules}${hostToText(value as CSSObject, key)}`;
         return previousValue;
-      } else {
-        const valueIsObject = typeof value === "object";
-        const isQueryResult = isQuery(key);
-        const newKey = formatToKebabCase(
-          isChild && !isQueryResult && valueIsObject ? `&${key}` : key,
-        );
-        let newValue;
-        let queries = "";
-
-        if (valueIsObject) {
-          let valueToStringify;
-          // Preudo selectors doesnt support @media inside
-          if (key.includes("::")) {
-            valueToStringify = {};
-            // Separate media from the rest
-            Object.entries(value as CSSObject).forEach(([key, value]) => {
-              if (key.startsWith("@"))
-                queries += `${key}{${newKey}{${cssObjectToText(
-                  value as CSSObject,
-                  isChild || !isQueryResult,
-                )}}}`;
-              else valueToStringify[key] = value;
-            });
-          } else valueToStringify = value;
-
-          newValue = `{${cssObjectToText(
-            valueToStringify as CSSObject,
-            isChild || !isQueryResult,
-          )}}`;
-        } else newValue = `:${value?.toString()};`;
-
-        return `${previousValue}${queries}${newKey}${newValue}`;
       }
+      const valueIsObject = typeof value === "object";
+      const isQueryResult = isQuery(key);
+      const newKey = formatToKebabCase(
+        isChild && !isQueryResult && valueIsObject ? `&${key}` : key,
+      );
+      let newValue;
+      let queries = "";
+
+      if (valueIsObject) {
+        let valueToStringify;
+        // Preudo selectors doesnt support @media inside
+        if (key.includes("::")) {
+          valueToStringify = {};
+          // Separate media from the rest
+          Object.entries(value as CSSObject).forEach(([key, value]) => {
+            if (key.startsWith("@"))
+              queries += `${key}{${newKey}{${cssObjectToText(
+                value as CSSObject,
+                isChild || !isQueryResult,
+              )}}}`;
+            else valueToStringify[key] = value;
+          });
+        } else valueToStringify = value;
+
+        newValue = `{${cssObjectToText(
+          valueToStringify as CSSObject,
+          isChild || !isQueryResult,
+        )}}`;
+      } else newValue = `:${value?.toString()};`;
+
+      return `${previousValue}${queries}${newKey}${newValue}`;
     },
     "",
   );
@@ -149,5 +147,5 @@ export const useStyleSheet = ((
       }
       return styleSheet as (tag: string) => CSSStyleSheet;
     };
-  } else return styleSheetFromCSSObject(() => cssObject as CSSObject);
+  } return styleSheetFromCSSObject(() => cssObject as CSSObject);
 }) as UseStyleSheet;
