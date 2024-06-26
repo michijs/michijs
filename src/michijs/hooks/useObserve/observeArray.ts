@@ -1,8 +1,5 @@
 import { useObserve } from "../useObserve";
-import type {
-  ObservableType,
-  Subscription,
-} from "../../types";
+import type { ObservableType, Subscription } from "../../types";
 import { ProxiedArray } from "../../classes";
 import {
   customObjectApply,
@@ -56,7 +53,8 @@ export function observeArray<T extends Array<unknown>>(
             const result = targetProperty.apply(target, proxiedArray);
             return result;
           };
-        }if (castedP === "fill") {
+        }
+        if (castedP === "fill") {
           const targetProperty = Reflect.get(target, p) as Function;
           return (value, start, end) => {
             const result = targetProperty.apply(target, [
@@ -66,7 +64,8 @@ export function observeArray<T extends Array<unknown>>(
             ]);
             return result;
           };
-        }if (castedP === "splice") {
+        }
+        if (castedP === "splice") {
           const targetProperty = Reflect.get(target, p) as Function;
           return (start, deleteCount, ...items) => {
             const result = targetProperty.apply(target, [

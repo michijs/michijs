@@ -55,14 +55,14 @@ export class ProxiedArray<V>
     return items.length;
   }
 
-  $remove(index: number):number {
+  $remove(index: number): number {
     this.$value = this.$value.filter((_x, i) => i !== index);
     this.targets.forEach((target) => target.remove(index));
     this.notifyCurrentValue();
     return this.$value.length;
   }
 
-  $swap(indexA: number, indexB: number):void {
+  $swap(indexA: number, indexB: number): void {
     if (this.$value.length > indexA && this.$value.length > indexB) {
       this.targets.forEach((target) => target.swap(indexA, indexB));
       [this.$value[indexA], this.$value[indexB]] = [
@@ -89,7 +89,7 @@ export class ProxiedArray<V>
     this.notifyCurrentValue();
     return result;
   }
-  reverse():V[] {
+  reverse(): V[] {
     this.targets.forEach((target) => target.reverse());
     const result = this.$value.reverse();
 
@@ -108,13 +108,13 @@ export class ProxiedArray<V>
     this.notifyCurrentValue();
     return result;
   }
-  fill(item: V, start?: number, end?: number):V[] {
+  fill(item: V, start?: number, end?: number): V[] {
     this.targets.forEach((target) => target.fill(item, start, end));
     const result = this.$value.fill(item, start, end);
     this.notifyCurrentValue();
     return result;
   }
-  sort(compareFn?: (a: V, b: V) => number):V[] {
+  sort(compareFn?: (a: V, b: V) => number): V[] {
     const arrayCopy = [...this.$value];
     const result = this.$value.sort(compareFn);
     if (this.targets.length > 0) {

@@ -11,17 +11,22 @@ export interface TranslationItem<K extends string, T> {
   observable: ObservableType<Partial<T>>;
 }
 
-export class I18n<K extends string = string> extends ProxiedValue<K | undefined> {
+export class I18n<K extends string = string> extends ProxiedValue<
+  K | undefined
+> {
   private translations = new Array<TranslationItem<K, any>>();
   private get isUsingSystemLanguage() {
-    return this.$value === navigator.language
-  };
+    return this.$value === navigator.language;
+  }
 
   constructor(
     language?: ObservableOrConst<K | undefined>,
     initialObservers?: Subscription<K | undefined>[],
   ) {
-    super((unproxify(language) ?? navigator.language) as K | undefined, initialObservers);
+    super(
+      (unproxify(language) ?? navigator.language) as K | undefined,
+      initialObservers,
+    );
     if (language) {
       bindObservable(language, (newValue) => this.setLanguage(newValue as K));
     }
