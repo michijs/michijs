@@ -1,5 +1,5 @@
 interface Trace {
-  (message?: unknown): void
+  (message?: unknown): void;
 }
 
 export const trace: Trace = (message) => {

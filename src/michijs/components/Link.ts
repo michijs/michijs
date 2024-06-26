@@ -11,8 +11,8 @@ interface LinkProps extends A {
 }
 
 /**Provides the ability to move around the web page without reloading the page. It uses the same attributes as an anchor tag but also allows the use of URL objects. Uses the HistoryManager.push method. */
-export const Link: CreateFunctionalComponent<LinkProps> = createFunctionalComponent<LinkProps>(
-  ({ url, ...attrs }, options) => {
+export const Link: CreateFunctionalComponent<LinkProps> =
+  createFunctionalComponent<LinkProps>(({ url, ...attrs }, options) => {
     const finalUrl = useComputedObserve(() => {
       const unproxifiedUrl = url();
       const finalUnproxifiedUrl =
@@ -38,5 +38,4 @@ export const Link: CreateFunctionalComponent<LinkProps> = createFunctionalCompon
           attrs.onclick?.apply(options.contextElement, [e]);
       },
     });
-  },
-);
+  });

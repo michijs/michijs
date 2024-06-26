@@ -37,15 +37,18 @@ export function create(
         if (isDOMOrFragmentElement(jsx)) {
           jsx.jsxTag ??= document.createDocumentFragment();
           return createDOMElement(jsx as DOMElementJSXElement, options);
-        } if (isFunctionOrClassJSXElement(jsx)) {
+        }
+        if (isFunctionOrClassJSXElement(jsx)) {
           // Explicit casting because of tsc error
           if (isClassJSXElement(jsx))
             return createObject(classJSXToObjectJSXElement(jsx), options);
           return create(jsx.jsxTag(jsx.attrs, options), options);
         }
         return createObject(jsx, options);
-      } return jsx as Node;
-    } if (isObservableType(jsx))
+      }
+      return jsx as Node;
+    }
+    if (isObservableType(jsx))
       return createObservableTextElement(
         jsx as unknown as ObservableNonNullablePrimitiveType,
       );

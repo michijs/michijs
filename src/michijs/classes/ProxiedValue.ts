@@ -17,10 +17,8 @@ export class ProxiedValue<T>
 
   static transactionsInProgress = 0;
   static valuesToNotifyOnTransactionFinish: Set<
-  InstanceType<typeof ProxiedValue<any>>
-> = new Set<
     InstanceType<typeof ProxiedValue<any>>
-  >();
+  > = new Set<InstanceType<typeof ProxiedValue<any>>>();
   static startTransaction(): void {
     ProxiedValue.transactionsInProgress++;
   }
@@ -97,7 +95,7 @@ export class ProxiedValue<T>
   [Symbol.toPrimitive](): T {
     return this.valueOf();
   }
-  
+
   protected [Symbol.toStringTag](): string {
     return this.toString();
   }

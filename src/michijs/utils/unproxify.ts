@@ -14,8 +14,7 @@ import {
 export function unproxify<T>(val: T): Unproxify<T> {
   const item = val instanceof ProxiedValue ? val.$value : (val as T);
   if (item && typeof item === "object") {
-    if (Array.isArray(item))
-      return cloneArray(item, unproxify) as Unproxify<T>;
+    if (Array.isArray(item)) return cloneArray(item, unproxify) as Unproxify<T>;
     if (item instanceof Date) return cloneDate(item) as Unproxify<T>;
     if (item instanceof Map) return cloneMap(item, unproxify) as Unproxify<T>;
     if (item instanceof Set) return cloneSet(item, unproxify) as Unproxify<T>;

@@ -12,12 +12,15 @@ export interface RedirectProps {
 /**
  * Redirect component for navigating to a different URL or location.
  **/
-export const Redirect: CreateFunctionalComponent<RedirectProps> = createFunctionalComponent<RedirectProps>(({ to }) => (
-  <GenericElement
-    onelementconnected={async () => {
-      const toValue = unproxify(to);
-      await wait(0);
-      HistoryManager.push(typeof toValue === "function" ? toValue() : toValue);
-    }}
-  />
-));
+export const Redirect: CreateFunctionalComponent<RedirectProps> =
+  createFunctionalComponent<RedirectProps>(({ to }) => (
+    <GenericElement
+      onelementconnected={async () => {
+        const toValue = unproxify(to);
+        await wait(0);
+        HistoryManager.push(
+          typeof toValue === "function" ? toValue() : toValue,
+        );
+      }}
+    />
+  ));

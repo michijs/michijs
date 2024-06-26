@@ -183,7 +183,9 @@ export type ObservableOrConst<T> = ObservableLike<T> | T;
 export type CreateFunctionalComponentProps<T> = {
   [k in keyof T]: k extends "children" ? T[k] : ObservableOrConst<T[k]>;
 };
-export type CreateFunctionalComponent<T> = (props: CreateFunctionalComponentProps<T>) => SingleJSXElement;
+export type CreateFunctionalComponent<T> = (
+  props: CreateFunctionalComponentProps<T>,
+) => SingleJSXElement;
 export interface ObservableLike<T> {
   subscribe(observer: Subscription<T>): void;
   unsubscribe(observer: Subscription<T>): void;
@@ -264,7 +266,15 @@ export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>>
   ): Node;
 }
 
-export type Typeof = "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function";
+export type Typeof =
+  | "string"
+  | "number"
+  | "bigint"
+  | "boolean"
+  | "symbol"
+  | "undefined"
+  | "object"
+  | "function";
 
 export interface ProxiedValueInterface<RV, SV> extends ObservableLike<SV> {
   get $value(): SV;
