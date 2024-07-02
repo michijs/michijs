@@ -8,10 +8,10 @@
  * @param {Function} method
  */
 export function defineMethod(self, propertyKey, method) {
-    const bindedFunction = method.bind(self);
-    Object.defineProperty(self, propertyKey, {
-        get() {
-            return bindedFunction;
-        },
-    });
+  const bindedFunction = method.bind(self);
+  Object.defineProperty(self, propertyKey, {
+    get() {
+      return bindedFunction;
+    },
+  });
 }

@@ -7,10 +7,8 @@ import { useWatch } from "./useWatch";
  * @typedef {import('../types').useWatchDeps} useWatchDeps
  */
 
-
-
-/**
- * @typedef {object} UseComputedObserve
+/**
+ * @typedef {object} UseComputedObserve
  */
 
 /**
@@ -18,15 +16,15 @@ import { useWatch } from "./useWatch";
  * @returns {*} A new observable
  */
 export const useComputedObserve = (callback, deps, options) => {
-    const newObservable = useObserve(callback());
+  const newObservable = useObserve(callback());
 
-    const listener = () => {
-        const callbackResult = callback();
-        options?.onBeforeUpdate?.();
-        newObservable(callbackResult);
-        options?.onAfterUpdate?.();
-    };
-    useWatch(listener, deps);
+  const listener = () => {
+    const callbackResult = callback();
+    options?.onBeforeUpdate?.();
+    newObservable(callbackResult);
+    options?.onAfterUpdate?.();
+  };
+  useWatch(listener, deps);
 
-    return newObservable;
+  return newObservable;
 };

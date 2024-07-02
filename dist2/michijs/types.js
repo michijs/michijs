@@ -3,7 +3,7 @@
  * @typedef {import('./generated/htmlType').CSSProperties}
  * @typedef {import('./generated/htmlType').GlobalEvents}
  */
-export { }
+export {};
 
 /**
  * @typedef {import('./classes').EventDispatcher} EventDispatcher

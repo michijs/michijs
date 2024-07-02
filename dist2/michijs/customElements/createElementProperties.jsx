@@ -9,5 +9,5 @@
  * @returns {O}
  */
 export function createElementProperties(elementOptions) {
-    return elementOptions;
+  return elementOptions;
 }

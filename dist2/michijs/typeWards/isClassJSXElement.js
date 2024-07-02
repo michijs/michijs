@@ -8,5 +8,5 @@
  * @returns {param is ClassJSXElement}
  */
 export function isClassJSXElement(param) {
-    return "tag" in param.jsxTag.valueOf();
+  return "tag" in param.jsxTag.valueOf();
 }

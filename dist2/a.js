@@ -5,4 +5,4 @@
 /**
  * @type {Browser}
  */
-let a = 'android';
+let a = "android";

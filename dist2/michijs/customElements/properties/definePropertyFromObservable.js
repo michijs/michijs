@@ -9,13 +9,18 @@
  * @param {ObservableType<*>} observable
  * @param {string} [observableKey=propertyKey]
  */
-export function definePropertyFromObservable(self, propertyKey, observable, observableKey = propertyKey) {
-    Object.defineProperty(self, propertyKey, {
-        get() {
-            return observable[observableKey];
-        },
-        set(newValue) {
-            observable[observableKey] = newValue;
-        },
-    });
+export function definePropertyFromObservable(
+  self,
+  propertyKey,
+  observable,
+  observableKey = propertyKey,
+) {
+  Object.defineProperty(self, propertyKey, {
+    get() {
+      return observable[observableKey];
+    },
+    set(newValue) {
+      observable[observableKey] = newValue;
+    },
+  });
 }

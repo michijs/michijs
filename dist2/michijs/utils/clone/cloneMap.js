@@ -7,7 +7,7 @@
  * @returns {Map<?, E>}
  */
 export function cloneMap(item, transformItem) {
-    const newMap = new Map();
-    item.forEach((value, key) => newMap.set(key ?? value, transformItem(value)));
-    return newMap;
+  const newMap = new Map();
+  item.forEach((value, key) => newMap.set(key ?? value, transformItem(value)));
+  return newMap;
 }

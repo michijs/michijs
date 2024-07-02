@@ -19,13 +19,16 @@ import { createObject } from "../DOMDiff/createObject";
  * @returns {E & ((props?: A) => E)}
  */
 export function createElement(tagName, attributes, { is, ...options } = {}) {
-    const el = createObject({
-        jsxTag: tagName,
-        attrs: {
-            ...(attributes ?? {}),
-            is,
-        },
-    }, options);
+  const el = createObject(
+    {
+      jsxTag: tagName,
+      attrs: {
+        ...(attributes ?? {}),
+        is,
+      },
+    },
+    options,
+  );
 
-    return el;
+  return el;
 }

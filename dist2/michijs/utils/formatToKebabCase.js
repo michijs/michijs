@@ -3,5 +3,5 @@
  * @returns {string}
  */
 export function formatToKebabCase(variable) {
-    return variable.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
+  return variable.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
 }

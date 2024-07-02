@@ -6,10 +6,10 @@ import { Fragment } from "../components";
  * @returns {{ jsxTag: any; attrs: Record<string, unknown>; }}
  */
 function jsx(jsxTag, attrs = {}) {
-    return {
-        jsxTag,
-        attrs,
-    };
+  return {
+    jsxTag,
+    attrs,
+  };
 }
 
 export { jsx, jsx as jsxs, jsx as jsxDEV, Fragment };

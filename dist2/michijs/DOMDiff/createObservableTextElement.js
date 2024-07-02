@@ -10,10 +10,15 @@ import { createTextElement } from "./createTextElement";
  * @returns {Text}
  */
 export const createObservableTextElement = (jsx) => {
-    const textNode = createTextElement(jsx.$value);
-    overrideCallbackWithRef(textNode, jsx, (newValue, el) => (el.textContent =
+  const textNode = createTextElement(jsx.$value);
+  overrideCallbackWithRef(
+    textNode,
+    jsx,
+    (newValue, el) =>
+      (el.textContent =
         (typeof newValue === "object"
-            ? JSON.stringify(newValue)
-            : newValue?.toString()) ?? ""));
-    return textNode;
+          ? JSON.stringify(newValue)
+          : newValue?.toString()) ?? ""),
+  );
+  return textNode;
 };

@@ -9,8 +9,8 @@ import { setProperties } from "../DOM/attributes/setProperties";
  * @typedef {import('../types').FC} FC
  */
 
-/**
- * @typedef {HTMLElements["div"] & AnyObject} HostProps
+/**
+ * @typedef {HTMLElements["div"] & AnyObject} HostProps
  */
 
 /**
@@ -18,7 +18,7 @@ import { setProperties } from "../DOM/attributes/setProperties";
  * @returns {*}
  */
 export const Host = ({ children, ...attrs }, options) => {
-    if (attrs && options?.contextElement)
-        setProperties(options.contextElement, attrs, options);
-    return children;
+  if (attrs && options?.contextElement)
+    setProperties(options.contextElement, attrs, options);
+  return children;
 };

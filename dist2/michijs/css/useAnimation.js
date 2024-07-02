@@ -9,11 +9,9 @@ import { formatToKebabCase, removeNullableFromObject } from "../utils";
  * @typedef {import('../generated/htmlType').CSSProperties} CSSProperties
  */
 
-
-
 /**
- * Represents keyframes for CSS animations.
- * @typedef {| ({ [k in keyof Omit<CSSProperties, "offset">]?: CSSProperties[k][]; } & { offset?: number[] }) | (Omit<CSSProperties, "offset"> & { offset?: number })[]} TransitionKeyframes
+ * Represents keyframes for CSS animations.
+ * @typedef {| ({ [k in keyof Omit<CSSProperties, "offset">]?: CSSProperties[k][]; } & { offset?: number[] }) | (Omit<CSSProperties, "offset"> & { offset?: number })[]} TransitionKeyframes
  */
 
 const idGenerator = new IdGenerator();
@@ -27,7 +25,8 @@ const idGenerator = new IdGenerator();
  * @param {number} [offset]
  * @returns {string}
  */
-const getOffset = (i, length, offset) => `${((offset ?? (i === 0 ? 0 : i === length - 1 ? 1 : i / length - 1)) * 100).toFixed(2)}%`;
+const getOffset = (i, length, offset) =>
+  `${((offset ?? (i === 0 ? 0 : i === length - 1 ? 1 : i / length - 1)) * 100).toFixed(2)}%`;
 /**
  * Generates CSS keyframes and animation properties based on the provided keyframes and options.
  * @param {TransitionKeyframes} keyframes - The keyframes for the animation.
@@ -35,56 +34,56 @@ const getOffset = (i, length, offset) => `${((offset ?? (i === 0 ? 0 : i === len
  * @returns {[CSSObject, CSSObject]} An array containing CSS keyframes and animation properties.
  */
 export const useAnimation = (keyframes, options) => {
-    const keyframeId = options.id ?? `keyframe-${idGenerator.generateId(1)}`;
-    const keyframesIsArray = Array.isArray(keyframes);
-    const properties = keyframesIsArray
-        ? Array.from(new Set(keyframes.flatMap((x) => Object.keys(x))))
-        : Object.keys(keyframes);
-    const keyframesCssObject = {};
+  const keyframeId = options.id ?? `keyframe-${idGenerator.generateId(1)}`;
+  const keyframesIsArray = Array.isArray(keyframes);
+  const properties = keyframesIsArray
+    ? Array.from(new Set(keyframes.flatMap((x) => Object.keys(x))))
+    : Object.keys(keyframes);
+  const keyframesCssObject = {};
 
-    if (keyframesIsArray) {
-        keyframes.forEach((x, i) => {
-            const { offset, ...xWithoutOffset } = x;
-            const index = getOffset(i, keyframes.length, offset);
+  if (keyframesIsArray) {
+    keyframes.forEach((x, i) => {
+      const { offset, ...xWithoutOffset } = x;
+      const index = getOffset(i, keyframes.length, offset);
 
-            keyframesCssObject[index] = {
-                ...(keyframesCssObject[index] ?? {}),
-                ...xWithoutOffset,
-            };
-        });
-    }
-    else {
-        const { offset, ...keyframesWithoutOffset } = keyframes;
-        Object.entries(keyframesWithoutOffset).forEach(([key, value]) => {
-            value?.forEach((x, i) => {
-                const index = getOffset(i, value.length, offset?.[i]);
-                keyframesCssObject[index] = {
-                    ...(keyframesCssObject[index] ?? {}),
-                    [key]: x,
-                };
-            });
-        });
-    }
+      keyframesCssObject[index] = {
+        ...(keyframesCssObject[index] ?? {}),
+        ...xWithoutOffset,
+      };
+    });
+  } else {
+    const { offset, ...keyframesWithoutOffset } = keyframes;
+    Object.entries(keyframesWithoutOffset).forEach(([key, value]) => {
+      value?.forEach((x, i) => {
+        const index = getOffset(i, value.length, offset?.[i]);
+        keyframesCssObject[index] = {
+          ...(keyframesCssObject[index] ?? {}),
+          [key]: x,
+        };
+      });
+    });
+  }
 
-    return [
-        {
-            [`@keyframes ${keyframeId}`]: keyframesCssObject,
-        },
-        {
-            ...keyframesCssObject["100.00%"],
-            willChange: properties
-                .filter((x) => x !== "offset")
-                .map((x) => formatToKebabCase(x))
-                .join(","),
-            "@media (prefers-reduced-motion: no-preference)": removeNullableFromObject({
-                animationName: keyframeId,
-                animationDelay: options.delay ? `${options.delay}ms` : options.delay,
-                animationDirection: options.direction,
-                animationDuration: options.duration?.toString(),
-                animationTimingFunction: options.easing,
-                animationFillMode: options.fill,
-                animationIterationCount: options.iterations,
-            }),
-        },
-    ];
+  return [
+    {
+      [`@keyframes ${keyframeId}`]: keyframesCssObject,
+    },
+    {
+      ...keyframesCssObject["100.00%"],
+      willChange: properties
+        .filter((x) => x !== "offset")
+        .map((x) => formatToKebabCase(x))
+        .join(","),
+      "@media (prefers-reduced-motion: no-preference)":
+        removeNullableFromObject({
+          animationName: keyframeId,
+          animationDelay: options.delay ? `${options.delay}ms` : options.delay,
+          animationDirection: options.direction,
+          animationDuration: options.duration?.toString(),
+          animationTimingFunction: options.easing,
+          animationFillMode: options.fill,
+          animationIterationCount: options.iterations,
+        }),
+    },
+  ];
 };

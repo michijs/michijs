@@ -10,16 +10,15 @@ import { setSearchParam } from "../routing/utils/setSearchParam";
  * @returns {Record<string, ?>}
  */
 export const getSearchParamsValue = () => {
-    const initialSearchParamsValue = {};
-    new URLSearchParams(location.search).forEach((value, key) => {
-        try {
-            initialSearchParamsValue[key] = JSON.parse(value);
-        }
-        catch {
-            initialSearchParamsValue[key] = value;
-        }
-    });
-    return initialSearchParamsValue;
+  const initialSearchParamsValue = {};
+  new URLSearchParams(location.search).forEach((value, key) => {
+    try {
+      initialSearchParamsValue[key] = JSON.parse(value);
+    } catch {
+      initialSearchParamsValue[key] = value;
+    }
+  });
+  return initialSearchParamsValue;
 };
 
 /**
@@ -27,14 +26,18 @@ export const getSearchParamsValue = () => {
  */
 let isUpdating = false;
 
-const SearchParams = useComputedObserve(() => getSearchParamsValue(), [HistoryManager], {
+const SearchParams = useComputedObserve(
+  () => getSearchParamsValue(),
+  [HistoryManager],
+  {
     onBeforeUpdate() {
-        isUpdating = true;
+      isUpdating = true;
     },
     onAfterUpdate() {
-        isUpdating = false;
+      isUpdating = false;
     },
-});
+  },
+);
 
 /**
  * It facilitates the management and observation of search parameters in the URL, providing a reactive way to handle changes and update the URL accordingly.
@@ -42,17 +45,16 @@ const SearchParams = useComputedObserve(() => getSearchParamsValue(), [HistoryMa
  * @returns {ObservableType<T>} A new observable
  */
 export function useSearchParams() {
-    return SearchParams;
+  return SearchParams;
 }
 
 SearchParams.subscribe((newValue) => {
-    // Prevents pushing new urls while updating search params
-    if (!isUpdating) {
-        const newUrl = new URL(location.href);
-        Object.keys(newValue).forEach((x) => {
-            setSearchParam(newUrl, x, newValue[x]);
-        });
-        if (location.href !== newUrl.href)
-            HistoryManager.push(newUrl);
-    }
+  // Prevents pushing new urls while updating search params
+  if (!isUpdating) {
+    const newUrl = new URL(location.href);
+    Object.keys(newValue).forEach((x) => {
+      setSearchParam(newUrl, x, newValue[x]);
+    });
+    if (location.href !== newUrl.href) HistoryManager.push(newUrl);
+  }
 });

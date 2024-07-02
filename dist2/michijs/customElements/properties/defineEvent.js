@@ -12,9 +12,9 @@
  * @param {EventDispatcher<*>} eventDispatcher
  */
 export function defineEvent(self, propertyKey, eventDispatcher) {
-    Object.defineProperty(self, propertyKey, {
-        get() {
-            return (detail) => eventDispatcher.dispatch(self, detail);
-        },
-    });
+  Object.defineProperty(self, propertyKey, {
+    get() {
+      return (detail) => eventDispatcher.dispatch(self, detail);
+    },
+  });
 }

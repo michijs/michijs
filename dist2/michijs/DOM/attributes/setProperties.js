@@ -11,5 +11,7 @@ import { setProperty } from "./setProperty";
  * @param {CreateOptions} [options]
  */
 export function setProperties(el, attributes, options) {
-    Object.entries(attributes).forEach(([name, newValue]) => setProperty(el, name, newValue, options));
+  Object.entries(attributes).forEach(([name, newValue]) =>
+    setProperty(el, name, newValue, options),
+  );
 }

@@ -6,10 +6,10 @@
  * @returns {Pick<T, K>}
  */
 export function pick(obj, keys) {
-    const newObj = {};
-    keys.forEach((key) => {
-        newObj[key] = obj[key];
-    });
+  const newObj = {};
+  keys.forEach((key) => {
+    newObj[key] = obj[key];
+  });
 
-    return newObj;
+  return newObj;
 }

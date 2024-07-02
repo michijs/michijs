@@ -9,5 +9,5 @@ import { getShadowRoot } from "../utils/getShadowRoot";
  * @returns {Document | ShadowRoot}
  */
 export function getRootNode(self) {
-    return getShadowRoot(self) ?? self.getRootNode();
+  return getShadowRoot(self) ?? self.getRootNode();
 }

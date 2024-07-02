@@ -14,15 +14,13 @@
  * @returns {Subscription<Y>}
  */
 export const overrideCallbackWithRef = (val, observable, callback) => {
-    const ref = new WeakRef(val);
-    const overridenCallback = (signal) => {
-        const el = ref.deref();
+  const ref = new WeakRef(val);
+  const overridenCallback = (signal) => {
+    const el = ref.deref();
 
-        if (el)
-            callback(signal, el);
-        else
-            observable.unsubscribe(overridenCallback);
-    };
-    observable.subscribe(overridenCallback);
-    return overridenCallback;
+    if (el) callback(signal, el);
+    else observable.unsubscribe(overridenCallback);
+  };
+  observable.subscribe(overridenCallback);
+  return overridenCallback;
 };

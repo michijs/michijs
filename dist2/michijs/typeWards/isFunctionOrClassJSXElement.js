@@ -9,5 +9,5 @@
  * @returns {jsx is ClassJSXElement | FunctionJSXElement}
  */
 export function isFunctionOrClassJSXElement(jsx) {
-    return typeof jsx.jsxTag === "function";
+  return typeof jsx.jsxTag === "function";
 }

@@ -7,5 +7,5 @@
  * @returns {param is MichiCustomElement}
  */
 export function isMichiCustomElement(param) {
-    return "$michi" in param;
+  return "$michi" in param;
 }

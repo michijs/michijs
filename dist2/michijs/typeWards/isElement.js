@@ -3,5 +3,5 @@
  * @returns {el is Element}
  */
 export function isElement(el) {
-    return "setAttribute" in el;
+  return "setAttribute" in el;
 }

@@ -1,7 +1,7 @@
 /**
  * @typedef {import('../types').CSSProperties} CSSProperties
  */
-export {}
+export {};
 
 /**
  * @typedef {import('../../../types').ObservableOrConst} ObservableOrConst

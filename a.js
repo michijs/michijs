@@ -3,6 +3,4 @@
 /** @type {Browser?} */
 export const a = null;
 
-
-
-const thing = /** @type {!Element} */(document.querySelector('#my-element'));
+const thing = /** @type {!Element} */ (document.querySelector("#my-element"));

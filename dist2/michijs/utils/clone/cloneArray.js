@@ -7,5 +7,5 @@
  * @returns {E[]}
  */
 export function cloneArray(array, transformItem) {
-    return array.map(transformItem);
+  return array.map(transformItem);
 }

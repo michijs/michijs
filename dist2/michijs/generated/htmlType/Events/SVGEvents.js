@@ -10,7 +10,7 @@
  * @typedef {import('./TypedElementEvent').TypedElementEvent} TypedElementEvent
  */
 
-/**
- * @template {EventTarget} T
- * @typedef {object} SVGEvents
+/**
+ * @template {EventTarget} T
+ * @typedef {object} SVGEvents
  */

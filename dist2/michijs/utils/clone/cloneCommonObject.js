@@ -5,9 +5,9 @@
  * @returns {T}
  */
 export function cloneCommonObject(item, transformItem) {
-    return Object.entries(item).reduce((previousValue, [key, value]) => {
-        const observedItem = transformItem(value);
-        previousValue[key] = observedItem;
-        return previousValue;
-    }, {});
+  return Object.entries(item).reduce((previousValue, [key, value]) => {
+    const observedItem = transformItem(value);
+    previousValue[key] = observedItem;
+    return previousValue;
+  }, {});
 }

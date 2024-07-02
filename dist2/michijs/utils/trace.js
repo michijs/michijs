@@ -1,12 +1,11 @@
-/**
- * @typedef {object} Trace
+/**
+ * @typedef {object} Trace
  */
 
 export const trace = (message) => {
-    try {
-        throw new Error();
-    }
-    catch (ex) {
-        console.log(message, ex);
-    }
+  try {
+    throw new Error();
+  } catch (ex) {
+    console.log(message, ex);
+  }
 };
