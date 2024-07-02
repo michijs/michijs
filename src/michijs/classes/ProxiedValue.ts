@@ -36,6 +36,9 @@ export class ProxiedValue<T>
   constructor(initialValue?: T, initialObservers?: Subscription<T>[]) {
     super(initialObservers);
     this.$privateValue = initialValue!;
+    // To avoid issues with isolatedDeclarations
+    this[Symbol.toStringTag] = () => this.toString();
+    this[Symbol.toPrimitive] = () => this.valueOf()
   }
 
   set $value(newValue: T) {
@@ -91,14 +94,7 @@ export class ProxiedValue<T>
 
     return this.$value;
   }
-
-  [Symbol.toPrimitive](): T {
-    return this.valueOf();
-  }
-
-  protected [Symbol.toStringTag](): string {
-    return this.toString();
-  }
+  
   toString(): string {
     // @ts-ignore
     return this.$value.toString();

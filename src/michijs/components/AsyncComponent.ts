@@ -41,7 +41,7 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
     ...attrs
   }: AsyncComponentProps<P, T>,
   options: CreateOptions,
-) => {
+): Node => {
   let el = asTag
     ? (create({
         jsxTag: asTag,

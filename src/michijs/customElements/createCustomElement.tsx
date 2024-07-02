@@ -27,12 +27,11 @@ import { setProperty } from "../DOM/attributes/setProperty";
 let classesIdGenerator: undefined | IdGenerator;
 
 export function createCustomElement<
-  O extends MichiElementOptions,
-  S extends HTMLElement = MichiElementSelf<O>,
+  O extends MichiElementOptions
 >(
   tag: CustomElementTag,
-  elementOptions?: NoExtraProperties<MichiElementOptions, O> & ThisType<S>,
-): MichiElementClass<O, S> {
+  elementOptions?: NoExtraProperties<MichiElementOptions, O> & ThisType<MichiElementSelf<O>>,
+): MichiElementClass<O> {
   const {
     events,
     attributes,
