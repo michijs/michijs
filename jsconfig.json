@@ -5,7 +5,6 @@
     "strictBindCallApply": true,
     "resolveJsonModule": true,
     "allowJs": true,
-    "checkJs": true,
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false,
     "declaration": true,

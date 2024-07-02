@@ -4,5 +4,6 @@
   "explorer.fileNesting.patterns": {
     "package.json": "README.md,.gitignore, tsconfig.json, rome.json, *.tsconfig.json, LICENSE.md, package-lock.json, jest-puppeteer.config.cjs, michi.config.ts",
     "*.tsx": "$(capture).css, $(capture).css.ts, $(capture).html, $(capture).spec.ts, $(capture).spec.tsx",
-  }
+  },
+	"typescript.tsdk": "node_modules/typescript/lib"
 }
