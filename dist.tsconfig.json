@@ -4,7 +4,6 @@
     "strictNullChecks": true,
     "strictBindCallApply": true,
     "resolveJsonModule": true,
-    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false,
     "declaration": true,
@@ -12,18 +11,27 @@
     "noErrorTruncation": true,
     "lib": [
       "dom",
-      "es2020"
+      "ESNext"
     ],
+    "isolatedDeclarations": true,
+    "isolatedModules": true,
     "outDir": "dist",
-    "moduleResolution": "node16",
+    "moduleResolution": "node",
     "module": "esnext",
-    "target": "es2019",
+    "target": "esnext",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noImplicitThis": true,
-    "jsx": "react",
-    "jsxFactory": "h.createElement",
-    "jsxFragmentFactory": "h.Fragment"
+    "jsx": "react-jsx",
+    "jsxImportSource": "@michijs/michijs",
+    "paths": {
+      "@michijs/michijs/*": [
+        "./src/*"
+      ],
+      "@michijs/michijs": [
+        "./src/index"
+      ]
+    }
   },
   "include": [
     "src"

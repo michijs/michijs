@@ -14,12 +14,15 @@ jobs:
         uses: michijs/.github/.github/actions/execute-script@main
         with: 
           script-name: "generate-types"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       # Configure Git
       - name: Git configuration
         uses: michijs/.github/.github/actions/set-git-config-github-actions@main
 
       - name: Run formatter
         uses: michijs/.github/.github/actions/lint@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       # Commit changes
       - name: Commit changes

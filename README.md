@@ -1,7 +1,6 @@
 <div align="center">
   <img width="500px" src="https://raw.githubusercontent.com/michijs/art/main/logo-with-background-strait.png">
   <p>A Vainilla Library for Web Components</p>
-</div>
 
   [![Open in Visual Studio Code][open-in-vscode]][open-in-vscode-url] 
   ![npm][version] 
@@ -11,6 +10,8 @@
   ![npm][minzipped-size]
   [![CodeQL](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml)
   [![Tests](https://github.com/michijs/michijs/actions/workflows/tests.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/tests.yml)
+
+</div>
 
 ## Why "MichiJS?"
 
@@ -44,6 +45,7 @@ You can use [this template](https://github.com/michijs/michijs-template) or you 
   
 ## Creating components
 
+### Your first custom element
 MichiJS custom elements are plain objects.
 
 New components can be created using the `jsx/tsx` extension, such as `MyCounter.tsx`.
@@ -52,33 +54,33 @@ New components can be created using the `jsx/tsx` extension, such as `MyCounter.
 import { createCustomElement, EventDispatcher } from "@michijs/michijs";
 import { counterStyle } from "./counterStyle";
 
-export const MyCounter = createCustomElement('my-counter', {
+export const SimpleCounter = createCustomElement("simple-counter", {
   reflectedAttributes: {
-    count: 0
+    count: 0,
   },
   methods: {
-    decrementCount() { this.count-- },
-    incrementCount() { this.count++ },
+    decrementCount() {
+      this.count(this.count() - 1);
+    },
+    incrementCount() {
+      this.count(this.count() + 1);
+    },
   },
   events: {
-    countChanged: new EventDispatcher<number>()
+    countChanged: new EventDispatcher<number>(),
   },
-  adoptedStyleSheets: [counterStyle],
-  observe: {
-    count() {
-      this.countChanged(this.count)
-    }
-  },
+  adoptedStyleSheets: { counterStyle },
   render() {
+    this.count.subscribe(this.countChanged);
     return (
       <>
         <button onpointerup={this.decrementCount}>-</button>
         <span>{this.count}</span>
         <button onpointerup={this.incrementCount}>+</button>
       </>
-    )
-  }
-})
+    );
+  },
+});
 ```
 
 Note: the `.tsx` extension is required, as this is the standard for TypeScript classes that use JSX.
@@ -97,39 +99,8 @@ import Counter from '../Counter';
 
 <Counter oncountchanged={(ev) => console.log(`New count value: ${ev.detail}`)} />
 ```
-<!-- 
-## How this works? 
-When you update an item, the library looks for your changes and only updates the attributes / children / etc that really changed.
 
-### But... Wait, DOM elements shouldn't be unique?
-  
-In this case I am going to quote Eric Bidelman, a Google engineer on [this topic](https://developers.google.com/web/fundamentals/web-components/shadowdom):
-*For example, when you use a new HTML id/class, there's no telling if it will conflict with an existing name used by the page.*
-That is to say that while it is inside the Shadow DOM you should not worry about if your ID is repeated with one outside the Shadow DOM.
-
-### Why not use keys like React?
-Searching with IDs is so much faster than searching by queryselector. You can look at [this topic](https://measurethat.net/Embed?id=99697) and [this another](http://vanilla-js.com)
-
-### But... What if I don't want to use Shadow DOM?
-You can use our id generator to create unique IDs for each element in your component with a discernible key. 
-```tsx
-render() {
-    return (
-        <>
-            <style id={this.idGen('style')}>{style}</style>
-            <button id={this.idGen('decrement-count')} onpointerup={this.decrementCount}>-<button>
-        </>
-    );
-}
-```
-The result will be like this:
-
-```html
-<style id="093dc6b7-315d-43c1-86ef-fcd49130ea32"></style>
-<button id="c8d61264-45ee-42ce-9f74-1d76402d1f48">-</button>
-``` -->
-
-## Component structure
+### Component structure
 A component consists of the following properties:
 
 <table>
@@ -145,18 +116,9 @@ A component consists of the following properties:
       <td colspan="3">Allows to define attributes.</td>
     </tr>
     <tr>
-      <td>nonObservedAttributes</td>
-      <td colspan="3">Allows to define non observed attributes. This is useful for 
-      <a href="#observable-objects">complex objects that cannot be observed</a>.</td>
-    </tr>
-    <tr>
       <td>reflectedAttributes</td>
       <td colspan="3">Allows to define <a href="https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr">reflected attributes</a> and follows the Kebab case. A reflected attribute cannot be initialized with a true value
       </td>
-    </tr>
-    <tr>
-      <td>transactions</td>
-      <td colspan="3">Transactions are functions that notify changes at the end of the transaction.</td>
     </tr>
     <tr>
       <td>methods</td>
@@ -168,11 +130,11 @@ A component consists of the following properties:
     </tr>
     <tr>
       <td>cssVariables</td>
-      <td colspan="3">Allows to define CSS variables. CSS variables changes does not trigger a rerender.</td>
+      <td colspan="3">Allows to define CSS variables.</td>
     </tr>
     <tr>
       <td>reflectedCssVariables</td>
-      <td colspan="3">Allows to define reflected CSS variables and follows the Kebab case. CSS variables changes does not trigger a rerender. A reflected CSS variable cannot be initialized with a true value</td>
+      <td colspan="3">Allows to define reflected CSS variables and follows the Kebab case. A reflected CSS variable cannot be initialized with a true value</td>
     </tr>
     <tr>
       <td>computedStyleSheet</td>
@@ -183,13 +145,9 @@ A component consists of the following properties:
       <td colspan="3">Function that renders the component.</td>
     </tr>
     <tr>
-      <td>observe</td>
-      <td colspan="3">Contains methods with a name of an attribute / reflected attribute / css variables / observable like. Those methods are executed when a change has been made to their corresponding property.</td>
-    </tr>
-    <tr>
-      <td rowspan="16">lifecycle</td>
+      <td rowspan="14">lifecycle</td>
       <tr>
-        <td rowspan="10">Custom Element related</td>
+        <td rowspan="8">Custom Element related</td>
         <tr>
           <td>willConstruct</td>
           <td>This method is called at the start of constructor.</td>
@@ -209,14 +167,6 @@ A component consists of the following properties:
         <tr>
           <td>didMount</td>
           <td>This method is called after the component has mounted.</td>
-        </tr>
-        <tr>
-          <td>willUpdate</td>
-          <td>This method is called before re-rendering occurs.</td>
-        </tr>
-        <tr>
-          <td>didUpdate</td>
-          <td>This method is called after re-rendering occurs.</td>
         </tr>
         <tr>
           <td>willReceiveAttribute</td>
@@ -264,20 +214,12 @@ A component consists of the following properties:
       <td colspan="3">Allows you to define an <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events">event</a> to his parent and triggering it easily. It will be defined using Lower case. For example countChanged will be registered as countchanged.</td>
     </tr>
     <tr>
-      <td>subscribeTo</td>
-      <td colspan="3">Allows you to subscribe to an <a href="https://github.com/sindresorhus/type-fest/blob/main/source/observable-like.d.ts">observable like</a> (like a store). When the store emit an event, the custom element will be re-rendered.</td>
-    </tr>
-    <tr>
       <td>shadow</td>
       <td colspan="3">Allows you to add a Shadow DOM. By default, it uses open mode on Autonomous Custom elements and does not use Shadow DOM on Customized built-in elements. Only <a href="https://dom.spec.whatwg.org/#dom-element-attachshadow">this elements</a> are allowed to use Shadow DOM.</td>
     </tr>
     <tr>
       <td>formAssociated</td>
       <td colspan="3">This tells the browser to treat the element like a <a href="https://web.dev/more-capable-form-controls/">form control</a>.</td>
-    </tr>
-    <tr>
-      <td>fakeRoot</td>
-      <td colspan="3">Allows to create a fake root on the element. This is especially useful if you don't have shadow root. Since it allows you to add children from a parent node.</td>
     </tr>
     <tr>
       <td rowspan="3">extends</td>
@@ -296,37 +238,220 @@ A component consists of the following properties:
 
 If the extends field is not provided an [Autonomous custom element](https://developers.google.com/web/fundamentals/web-components/customelements#shadowdom) will be created.
 
-## store structure
-A store consists of the following properties:
-<table>
-  <thead>
-    <tr>
-      <th>Property</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>state</td>
-      <td>Allows to define the store state.</td>
-    </tr>
-    <tr>
-      <td>transactions</td>
-      <td>Transactions are functions that notify changes at the end of the transaction.</td>
-    </tr>
-  </tbody>
-</table>
 
-stores use proxies to listen for changes in their state, in addition, they are observable.
-Each component has an store to listen for changes in its state.
+## How this works?
+### The problem with stores - the traditional approach
+Libraries traditional approach is usually based on stores.
+```mermaid
+graph TD;
+    subgraph Store
+    A["Property A"]
+    B["Property B"]
+    C["Property C"]
+    end
+    Store --> D["Component D"];
+    Store --> E["Component E"];
+    Store --> F["Component F"];
+    Store --> G["Component G"];
+```
+This approach brings two major issues:
+- Any update on the store will trigger an update on a component even if the property that changed store has no relation to the component. Every tag / attribute / etc will need to be checked for changes in every rerender.
+- There is now way to set static properties in a dinamic environment. Take this React example:
+```tsx
+const [value, setValue] = useState(0);
+<input type="number" value={value} onChange={(e) => setValue(e.target.value)}>
+```
+In this example value is updated every time input changes; which, by definition, is wrong. Why? Because value *"Specifies the default value"*. This means that the value does not need to be updated after the first render, since it has no effect. *"But React says that you can use defaultValue!"* Yes, but it's not the standard way to do it and it's one of the most common mistakes most React developers make. All this, for not using the platform.
 
+With Michijs the solution is:
+```tsx
+const value = useObserve(0);
 
-## CSS
+<input type="number" value={value()} onchange={(e) => value(e.target.value)}>
+```
+
+### Observers / Signals
+ Observers are a behavioral design pattern that defines a one-to-many dependency between objects. When the observable / subject undergoes a change in state, all its dependents (observers / subscribers) are notified and updated automatically with a signal.
+
+```mermaid
+sequenceDiagram
+    box rgb(71,73,73) Observable
+    participant Value
+    participant Proxy
+    end
+    Subscriber->>Proxy: Subscribes to
+    Environment->>Proxy: Request to change a value
+    Proxy-->>Value: Value is diferent?
+    Value-->>Value: Yes! Update
+    Value-->>Proxy: Sends a clone of the value
+    Proxy->>Subscriber: Notifies with a signal (new value)
+```
+
+This approach allows for a much more granular update. Instead of updating an entire component, you can update html elements, attributes, or a simple text node and still maintain the principle of a single source of truth.
+
+```mermaid
+graph TD;
+    subgraph Observable
+    A["Property A"]
+    B["Property B"]
+    C["Property C"]
+    end
+    A --> D["Attribute D"];
+    A --> E["Text node E"];
+    B --> F["Another observable F"];
+    C --> G["Text node G"];
+```
+When a node is garbage collected in the next update will be unsubscribed.
+
+### Rendering - Static vs dynamic
+Taking the above into account, the rendering process changes drastically. Instead of rendering the entire component with each change, __we render the component only once and the changes are managed through the observables__.
+
+For example:
+
+```tsx
+import { createCustomElement, useComputedObserve } from "@michijs/michijs";
+
+createCustomElement("test-component", {
+  reflectedAttributes: {
+    valueA: 0,
+    valueB: 1,
+  },
+  methods: {
+    incrementValueB() {
+      this.valueB(this.valueB() + 1);
+    },
+  },
+  render() {
+    const sum = useComputedObserve(() => this.valueA() + this.valueB(), [this.valueA, this.valueB])
+    return (
+      <>
+        <button onpointerup={this.incrementValueB}>Increment B</button>
+        {/* Renders 0, but is static */}
+        <span>{this.valueA()}</span>
+        {/* Renders 1, but is dinamic and will change when clicking on the button */}
+        <span>{this.valueB}</span>
+        {/* Renders 1, but is static */}
+        <span>{this.valueA() + this.valueB()}</span>
+        {/* Renders 1, but is dinamic and will change when clicking on the button */}
+        <span>{sum}</span>
+      </>
+    );
+  },
+});
+```
+
+### Operators
+Since all observables are objects, operators works in a different way.
+We support most operators without explicitly calling the getter of the observable.
+
+```tsx
+  const a = useObserve(0);
+  // Valid Javascript - Not valid Typescript
+  const b = a + 1;
+```
+This is valid Javascript but is [not valid in Typescript yet](https://github.com/microsoft/TypeScript/issues/43826).
+
+```tsx
+  const a = useObserve("Hello");
+  // Valid
+  const b = a + " World";
+```
+
+We do not support boolean operators since proxies are objects:
+```tsx
+  const a = useObserve(false);
+  // Valid - Returns 2
+  const b = a() ? 1: 2;
+  // Valid but wrong usage - Returns 1 since "a" is an object
+  const b = a ? 1: 2;
+```
+
+## Hooks
+There are several differences between our hooks and traditional ones:
+- Can be used in various contexts, including top-level script code, functional components, and custom hooks. This flexibility allows developers to encapsulate logic and state management using hooks in different parts of their application.
+- Most of them returns observables.
+
+The ability to use hooks outside of component code can be beneficial for managing application-wide state, setting up global side effects, or encapsulating reusable logic in utility functions or modules.
+It provides more flexibility in organizing code and separates concerns by allowing developers to centralize state management and side effects in hooks that can be reused across components or accessed from different parts of the application.
+
+### Basic hooks
+#### useObserve
+Responsible for observing changes on different types of values. Takes two arguments:
+- item: The value to be observed.
+- initialObservers: An array of initial observers of type Subscription<T>.
+This is the most basic hook and it is the basis of the entire component structure.
+
+#### usePureFunction
+It is used to create a memoized function that encapsulates the result of the provided callback function and updates it only when any of the dependencies change. Takes two arguments:
+- callback: A function that returns a value of type T.
+- deps: An array of dependencies that the callback function depends on.
+
+#### useComputedObserve
+It is used for computing a value and observing its changes. Takes three arguments:
+- callback: A function that returns a promise of type T.
+- deps: Dependencies to watch for changes.
+- initialValue: Initial value of type T. Useful if the callback is a promise
+- options: Optional object that may contain onBeforeUpdate and onAfterUpdate callback functions.
+
+#### useStringTemplate
+It is used to create a string template by interpolating dynamic values.
+```tsx
+  const a = useObserve(3);
+  // Returns an observable with initial value 'Test 3' and subscribed to a
+  const b = useStringTemplate`Test ${a}`;
+```
+
+#### useWatch
+A simple mechanism for watching dependencies and invoking a callback when any of them change. Takes two parameters:
+- callback: A function that returns a value of type T. This is the function that will be invoked when any dependency changes.
+- deps: Optional array of dependencies to watch for changes.
+
+#### useFetch
+Fetches data from a URL, parses the response as JSON and allows to manage the result as an observable. Takes three parameters:
+- input: The URL to fetch data from.
+- searchParams: Optional search parameters to append to the URL.
+- init: Optional request initialization options.
+- deps: Optional array of dependencies to watch for changes.
+- options: Optional object that may contain shouldWaitToFetch callback function
+
+#### usePromise
+Ues a promise and allows to manage the result as an observable.
+- promise: The operation.
+- deps: Dependencies to watch for changes.
+- options: An optional object that may contain shouldWait callback function.
+
+### Route management hooks
+#### useHash
+It is designed to manage the hash portion of the URL. Provides a way to manage and observe changes in the hash portion of the URL, ensuring synchronization between the hash value and the observable state.
+
+Returns the Hash observable with the specified type T, ensuring that it returns an observable with keys of type T and boolean values.
+
+#### useSearchParams
+It facilitates the management and observation of search parameters in the URL, providing a reactive way to handle changes and update the URL accordingly.
+
+### Storage hooks
+#### useStorage
+Allows for observing changes in an object and synchronizing it with the browser's storage (such as localStorage). Takes two parameters:
+- item: The object to be observed and synchronized with storage.
+- storage: The storage object to be used (defaults to localStorage if not provided)
+
+<!-- > [!TIP] -->
+> If you want to use cookies we provide a class that acts like an storage called CookieStorage
+
+#### useIndexedDB
+It sets up event listeners for changes in the IndexedDB database. It returns a Proxy object that intercepts property accesses and performs corresponding IndexedDB operations. IndexedDB operations are performed asynchronously and return Promises. Takes three arguments:
+- name Specifies the name of the IndexedDB database to be used or created.
+- objectsStore Is a generic type that describes the structure of the object stores. It's defined as an object where each key represents the name of a property in the stored objects, and the value represents the configuration options for that property.
+- version specifies the version number of the IndexedDB database. If the database with the specified name already exists and its version is lower than the provided version, it will perform any necessary upgrades.
+
+### CSS hooks
 To use css we provide functions to create Constructable Stylesheets.
-### createStyleSheet
+__Our stylesheets can also subscribe to observables.__
+
+#### useStyleSheet
 Allows to create a Constructable Stylesheet with a CSSObject
-```js
-export const counterStyle = createStyleSheet({
+```tsx
+export const counterStyle = useStyleSheet({
   ':host': {
     display: 'flex',
     flexDirection: 'row'
@@ -337,11 +462,11 @@ export const counterStyle = createStyleSheet({
   }
 });
 ```
-### css
+#### css
 Allows to create a Constructable Stylesheet with a Template String.
 [Recomended extension for VSCode](https://marketplace.visualstudio.com/items?itemName=paulmolluzzo.convert-css-in-js).
 
-```js
+```tsx
 export const counterStyle = css`
   :host {
       display: flex;
@@ -355,21 +480,76 @@ export const counterStyle = css`
 `
 ```
 
-### CSS module scripts
+#### useAnimation
+Generates CSS keyframes and animation properties based on the provided keyframes and options.
+```tsx
+const hiddenState = {
+  opacity: 0,
+} satisfies CSSProperties;
+const shownState = {
+  opacity: 1,
+} satisfies CSSProperties;
+
+const [hideKeyframe, hideProperties] = useAnimation([shownState, hiddenState], {
+  duration: '2s',
+  fill: 'forwards'
+});
+const [showKeyframe, showProperties] = useAnimation([hiddenState, shownState], {
+  duration: '1s',
+  fill: 'forwards'
+});
+
+export const dialogStyle = useStyleSheet((tag) => ({
+  ...showKeyframe,
+  ...hideKeyframe,
+  [tag]: {
+    ...hideProperties,
+    display: 'flex',
+    flexDirection: 'row',
+    '[open]': showProperties
+  },
+}));
+```
+#### useTransition
+Hook to generate CSS transition properties based on the provided configuration.
+```tsx
+const opacityTransition = useTransition({
+  property: ["opacity"],
+  duration: "1s",
+});
+
+export const dialogStyle = useStyleSheet((tag) => ({
+  [tag]: {
+    ...opacityTransition,
+    display: 'flex',
+    flexDirection: 'row',
+    opacity: 0,
+    '[open]': {
+      opacity: 1
+    }
+  },
+}));
+```
+
+#### CSS module scripts
 We do not provide support for this functionality yet as ESBuild does not support it yet. You can read how it works [here](https://web.dev/css-module-scripts/)
-<!-- ```js
-import sheet from './styles.css' assert { type: 'css' };
-``` -->
 
 ## Components
+
+### If
+Conditional rendering component. This is the only way to do it dynamically.
+
+### Title
+Title component for dynamically updating the document's title.
+
+### Redirect
+Redirect component for navigating to a different URL or location.
+
 ### Host
 Allows to set attributes and event listeners to the host element itself.
 
-### List
-Creates a container component without styles with the tag "michi-list"
-
 ### Fragment
-Creates a container component without styles with the tag "michi-fragment"
+Creates a virtual node that wrapps elements
 
 ### ElementInternals
 *(Only available if formAssociated is true)*
@@ -380,17 +560,14 @@ It allows to:
 - Validate and assign values to forms
 
 ### AsyncComponent
-Create a component whose content will load after the promise ends. In the meantime you can choose to show a load component or not show anything.
+Asynchronously renders a component after the promise ends. In the meantime you can choose to show a load component or not show anything.
 
 ### Link
-Provides the ability to move around the web page without reloading the page. It uses the same attributes as an anchor tag but also allows the use of URL objects. Uses the goTo method.
+Provides the ability to move around the web page without reloading the page. It uses the same attributes as an anchor tag but also allows the use of URL objects. Uses the HistoryManager.push method.
 
 ## Custom element methods
 ### child
 Allows to get a child element from the host with the selector
-
-### rerender
-Forces the element to re-render
 
 ### idGen
 Create unique IDs with a discernible key
@@ -401,23 +578,23 @@ Usually, if you want to get an html like this:
 <div class='test'></div>
 ```
 In React / Stencil / etc you should write a jsx like this:
-```jsx
+```tsx
 () => <div className='test'></div>
 ```
 And eventually code like this would be executed:
-```js
+```tsx
 const el = document.createElement('div');
 el.className = 'test';
 ```
 In MichiJS you have the freedom to use both attributes and properties and the result will be the same:
-```jsx
+```tsx
 // Using properties
 () => <div _={{className: 'test'}}></div>
 // Using attributes
 () => <div class='test'></div>
 ```
 And eventually code like this would be executed:
-```js
+```tsx
 const el = document.createElement('div');
 // Using properties
 el.className = 'test';
@@ -426,61 +603,27 @@ el.setAttribute('class', 'test')
 ```
 In this way the jsx syntax of MichiJS is more similar to html.
 
-## Special attributes
-
-### $staticChildren
-Indicates that their children are created but not updated
-### $doNotTouchChildren
-Indicates that their Children are not created or updated. Element creation/update is delegated
-### $oncreated
-Callback that is called when the element is created
-### $onupdate
-Callback that is called when the element is updated
-
 ## Lists
-There are 3 ways to create a list
-### Using map
-It's the usual way to create lists in jsx.
-```jsx
+There are 2 ways to create a list
+### The static way - Using map
+It's the way to create static lists from an array object. Since the result will be static, it will reflect the state of a variable when it is rendered. Useful for read-only lists.
+```tsx
 const arrayTest = [0, 1, 2];
 
-arrayTest.map(item => <div key={item}>{item}</div>)
+arrayTest.map(item => <div>{item}</div>)
 ```
 This will generate an element like:
 
 ```html
-<michi-list>
   <div>0</div>
   <div>1</div>
   <div>2</div>
-</michi-list>
 ```
-Why create the michi-list element? This is the way to avoid using Virtual DOM. Because the algorithm is dumb, it needs a way to remember that element is a list.
 
-### Using List component
-It's similar to using maps. But it allows to use different container than michi-list.
-```jsx
-const arrayTest = [0, 1, 2];
-
-<List 
-  as="span"
-  data={arrayTest}
-  renderItem={item => <div key={item}>{item}</div>}
-/>
-```
-This will generate an element like:
-
-```html
-<span>
-  <div>0</div>
-  <div>1</div>
-  <div>2</div>
-</span>
-```
-### Using ElementList
-Is a proxy that allows you to avoid using dom diff algorithms to render lists. This allows it to have a performance close to vanilla js. An operation on the data implies an operation on the associated elements.
-```jsx
-const arrayTest = new ElementList(0, 1, 2);
+### The dynamic way - Using List component
+It is a component that avoids using dom diff algorithms to render dynamic lists. This allows it to have a performance close to vanilla js. An operation on the data implies an operation on the associated elements. 
+```tsx
+const arrayTest = useObserve([0, 1, 2]);
 
 <arrayTest.List 
   as="span"
@@ -504,45 +647,26 @@ This will generate an element like:
       <th></th>
       <th>Map</th>
       <th>List component</th>
-      <th>ElementList</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>Performance</td>
-      <td>Diff algorithm order</td>
-      <td>Diff algorithm order</td>
-      <td>Close to vanilla</td>
+      <td colspan="2">Close to vanilla</td>
     </tr>
     <tr>
       <td>Container</td>
-      <td>michi-list</td>
-      <td>michi-list or any other element</td>
-      <td>michi-list or any other element</td>
+      <td colspan="2">Virtual fragment or any other element</td>
     </tr>
     <tr>
-      <td>Keys</td>
-      <td>Required</td>
-      <td>Required</td>
-      <td>Not required</td>
-    </tr>
-    <tr>
-      <td>Index</td>
-      <td>Yes</td>
-      <td>Yes</td>
-      <td>No</td>
-    </tr>
-    <tr>
-      <td>Transactions allowed</td>
-      <td>Yes</td>
-      <td>Yes</td>
-      <td>No</td>
+      <td>Data</td>
+      <td>Static</td>
+      <td>Dynamic</td>
     </tr>
     <tr>
       <td>Updates</td>
-      <td>The entire component</td>
-      <td>The entire component</td>
-      <td>Just the list itself</td>
+      <td>No</td>
+      <td>Only when an operator is triggered on the list or its elements</td>
     </tr>
   </tbody>
 </table>
@@ -550,78 +674,68 @@ This will generate an element like:
 ## Routing
 The intention of using a custom routing tool is to avoid the use of strings to represent the urls and to use modern apis that allow the use of the URL object itself. It also allows to separate the components of the routes which allows a cleaner code.
 
-```js
-const Redirect = () => {
-  goTo(urls.syncRoute())
-  // Will generate and go to this url: /sync-route
-  return <></>
-}
-
+```tsx
 //Parent routes
-export const { urls, Router, pages } = registerRoutes({
-  syncRoute: {
-    /**The component to display */
-    component: <div>Hello World</div>,
-    title: 'Sync title'
-  },
+export const [urls, Router] = registerRoutes({
+  syncRoute: <div>Hello World</div>,
   //Redirect route
-  '/': {
-    component: <Redirect />
-  },
+  '/': <Redirect to={url} />
 });
 
 //Child routes
-export const { urls: urlsChild, Router: RouterChild, pages: pagesChild } = registerRoutes({
+export const [urlsChild, RouterChild] = registerRoutes({
   // Async route
-  asyncChildRoute: {
-    searchParams: {
-      searchParam1: String, 
-      searchParam2: Number
-    },
-    hash: ['#hash1', '#hash2']
-    /** The promise to wait */
-    promise: async () => (await import('./AsyncChildExample')).AsyncChildExample,
-    /**The title of the page */
-    title: 'Async Page title'
-    /**The component to display while the promise is loading */
-    loadingComponent: <span>Loading...</span>
-  },
+  asyncChildRoute: (
+    <AsyncComponent
+      promise={async () => (await import('./AsyncChildExample')).AsyncChildExample}
+      loadingComponent={<span>loading...</span>}
+    />
+  ),
   //The parent route
 }, urls.syncRoute);
 
-urlsChild.asyncChildRoute({ searchParams: { searchParam1: 'param 1', searchParam2: 2}, hash: '#hash1' })
 // Will generate this url: /sync-route/async-child-route?searchParam1=param+1&searchParam2=2#hash1
+const generatedUrl = urlsChild.asyncChildRoute({ 
+  searchParams: { 
+    searchParam1: 'param 1', 
+    searchParam2: 2
+  }, 
+  hash: '#hash1' 
+})
 ```
 Router and RouterChild are components that represent the mount points of each registered route.
 
-The "pages" function is a utility to create asynchronous components that includes the search params and component hashes with the types that were defined when the route was registered
-```js
-export const AsyncChildExample = pagesChild.asyncChildRoute(({ searchParams, hash }) => (
-    <>
-      {/* Will show the value of searchParam1 */}
-      <div>{searchParams.searchParam1}</div>
-      {/* Will show true if the hash is #hash1 */}
-      <div>{hash['#hash1']}</div>
-    </>
-  );
-);
+```tsx
+const AsyncChildExample: FC = () => {
+    const searchParams = useSearchParams<{
+      searchParam1: string, 
+      searchParam2: number
+    }>();
+    const hash = useHash<'#hash1'| '#hash2'>();
+    return (
+      <>
+        {/* Will show the value of searchParam1 */}
+        <div>{searchParams.searchParam1}</div>
+        {/* Will show true if the hash is #hash1 */}
+        <div>{hash['#hash1']}</div>
+      </>
+    );
+}
+
+export default AsyncChildExample
 ```
 
 ## I18n
 It is supported by using a custom store
-```js
+```tsx
 const translator = new I18n<'es' | 'en'>(localStorage.getItem('lang'));
 
-const store = translator.createTranslation({
+const t = translator.createTranslation({
   es: () => import('./translations/es.json'),
   en
 });
-const t = store.state.t;
 
 export const MyComponent = createCustomElement('my-component', {
-  subscribeTo: {
-    store
-  },
   render() {
     return (
       <span>{t.hello}</span>
@@ -629,8 +743,6 @@ export const MyComponent = createCustomElement('my-component', {
   }
 });
 ```
-
-
 
 ## Limitations
 ### Observable objects
@@ -640,6 +752,16 @@ Because some objects are not proxy compatible we limit the observable objects to
 - Maps
 - Sets
 - Any object whose prototype is Object
+
+However, we still support assignments to such complex objects in that case you will have to cast those ones with ObservableComplexObject.
+
+```tsx
+  const observable = useObserve({
+    file: new File([''], 'test') as unknown as ObservableComplexObject<File>
+  })
+```
+
+This is because Typescript doesnt provide any tool to know if a type is part of the global namespace.
 
 ## Polyfills
 If you REALLY need polyfills i recommend you to read this topics:

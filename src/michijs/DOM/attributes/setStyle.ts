@@ -1,22 +1,18 @@
-import type { CSSProperties } from "@michijs/htmltype";
-import { setAttribute } from "./setAttribute";
+import type { CSSProperties } from "../../generated/htmlType";
 import { setStyleProperty } from "./setStyleProperty";
+import { bindObservableToRef, formatToKebabCase } from "../../utils";
 
 export function setStyle(
   element: Element | HTMLElement,
   cssObject: CSSProperties,
-) {
-  // if (supportsAdoptingStyleSheets && self) {
-  //   AdoptedStyle({ id: self.id }, [createStyleSheet(cssObject, [`#${id}`])], self);
-  // } else {
-  element.removeAttribute("style");
+): void {
   if (cssObject && "style" in element) {
     Object.entries(cssObject).forEach(([key, value]) => {
+      const formattedKey = formatToKebabCase(key);
       // Manual Update is faster than Object.assign
-      setStyleProperty(element, key, value);
+      bindObservableToRef(value, element, (newValue, element) =>
+        setStyleProperty(element, formattedKey, newValue),
+      );
     });
-  } else {
-    setAttribute(element, "style", cssObject);
   }
-  // }
 }

@@ -1,12 +1,13 @@
-import { h } from "../../src";
+import { Title } from "@michijs/michijs";
 import { BuiltInButton } from "../BuiltInButton";
 import { CounterWithReduxStore } from "../CounterWithReduxStore";
 import { SimpleCounter } from "../SimpleCounter";
 import { StoredObservableCounter } from "../StoredObservableCounter";
 import { IndexedDBCounter } from "../IndexedDBCounter";
 
-export const CounterTests = () => (
+const CounterTests = () => (
   <>
+    <Title>Counter tests Page</Title>
     <h1> Simple counter</h1>
     <SimpleCounter
       oncountchanged={(ev) => {
@@ -27,3 +28,5 @@ export const CounterTests = () => (
     <BuiltInButton>Sample customized button</BuiltInButton>
   </>
 );
+
+export default CounterTests;

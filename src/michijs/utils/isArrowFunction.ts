@@ -1,3 +1,3 @@
-export function isArrowFunction(arrowFunction: Function) {
+export function isArrowFunction(arrowFunction: Function): boolean {
   return arrowFunction.toString().startsWith("(");
 }

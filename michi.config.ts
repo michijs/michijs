@@ -1,12 +1,12 @@
-import {
+import type {
   ServerConfig,
   ServerConfigFactory,
   DefaultEnvironment,
 } from "@michijs/dev-server";
 
-export const config: ServerConfigFactory<
-  "TESTING" | "TESTING_MAP" | DefaultEnvironment
-> = (environment) => {
+export const config: ServerConfigFactory<"TESTING" | DefaultEnvironment> = ({
+  environment,
+}) => {
   const defaultConfig: ServerConfig = {
     public: {
       path: "./tests/public",
@@ -30,11 +30,6 @@ export const config: ServerConfigFactory<
       defaultConfig.public!.path = "./tests/benchmark/michijs/public";
       defaultConfig.esbuildOptions.entryPoints = [
         "./tests/benchmark/michijs/src/index.tsx",
-      ];
-    } else if (environment === "TESTING_MAP") {
-      defaultConfig.public!.path = "./tests/benchmark/michijs-map/public";
-      defaultConfig.esbuildOptions.entryPoints = [
-        "./tests/benchmark/michijs-map/src/index.tsx",
       ];
     } else {
       defaultConfig.public!.path = "./tests/benchmark/vanillajs/public";

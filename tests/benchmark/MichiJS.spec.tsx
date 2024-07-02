@@ -1,5 +1,5 @@
-import { Browser, launch, Page } from "puppeteer";
-import { makePerformanceTests, Result } from "./shared";
+import { type Browser, launch, type Page } from "puppeteer";
+import { makePerformanceTests, type Result } from "./shared";
 
 describe("Performance tests - MichiJS", () => {
   let browser: Browser;
@@ -29,6 +29,20 @@ describe("Performance tests - MichiJS", () => {
     expect(
       new Map<string, Map<Result, number>>([
         [new Date().getTime().toString(), await results],
+        [
+          "2.0.0",
+          new Map([
+            ["create1000Rows", 143.36],
+            ["replaceAllRows", 109.16],
+            ["partialUpdate", 38.82],
+            ["selectRow", 1055.66],
+            ["swapRows", 19.53],
+            ["removeRow", 1058.56],
+            ["createManyRows", 962.07],
+            ["appendRowsToLargeTable", 177.95],
+            ["clearRows", 30.7],
+          ]),
+        ],
         [
           "1.1.7",
           new Map([
