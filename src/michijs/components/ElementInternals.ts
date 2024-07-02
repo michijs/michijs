@@ -6,20 +6,21 @@ import { createFunctionalComponent } from "../customElements/createFunctionalCom
 import { useComputedObserve } from "../hooks";
 import type { CreateFunctionalComponent } from "../types";
 
-export interface ElementInternalsProps extends Omit<Partial<ARIAMixin>, 'role'> {
+export interface ElementInternalsProps
+  extends Omit<Partial<ARIAMixin>, "role"> {
   /**
-   * Form controls usually expose a "value" property 
-  */
+   * Form controls usually expose a "value" property
+   */
   formValue?: Parameters<ElementInternals["setFormValue"]>[0];
   /**
    * A validation message to show
-  */
+   */
   errorMessage?: Parameters<ElementInternals["setValidity"]>[1];
   validityStateFlags?: ValidityStateFlags;
   tabIndex?: number;
   role?: AllAttributes["role"];
   children?: JSX.Element;
-};
+}
 
 /**
  * It allows to:
