@@ -19,4 +19,4 @@ export const GenericElement = createCustomElement("michi-generic-element", {
   events: {
     elementConnected: new EventDispatcher<HTMLElement>(),
   },
-})
+});
