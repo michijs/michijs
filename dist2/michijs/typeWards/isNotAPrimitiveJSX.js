@@ -13,5 +13,5 @@
  * @returns {jsx is | FunctionJSXElement | ClassJSXElement | ObjectJSXElement | FragmentJSXElement | DOMElementJSXElement | Node | ObservableNonNullablePrimitiveType}
  */
 export function isNotAPrimitiveJSX(jsx) {
-    return typeof jsx === "object";
+  return typeof jsx === "object";
 }

@@ -9,5 +9,5 @@ import { getShadowRoot } from "../utils/getShadowRoot";
  * @returns {ShadowRoot | MichiCustomElement}
  */
 export function getMountPoint(self) {
-    return getShadowRoot(self) ?? self;
+  return getShadowRoot(self) ?? self;
 }

@@ -6,10 +6,10 @@ import { create } from "../DOMDiff";
  * @returns {ParentNode}
  */
 export function renderSync(Component, mountPoint = document.body) {
-    mountPoint.textContent = "";
-    const renderResult = create(Component);
-    mountPoint.append(renderResult);
-    return mountPoint;
+  mountPoint.textContent = "";
+  const renderResult = create(Component);
+  mountPoint.append(renderResult);
+  return mountPoint;
 }
 
 /**
@@ -18,13 +18,12 @@ export function renderSync(Component, mountPoint = document.body) {
  * @returns {Promise<ParentNode>}
  */
 export async function render(Component, mountPoint) {
-    return new Promise((resolve) => {
-        if (document.readyState !== "complete")
-            document.addEventListener("readystatechange", () => {
-                if (document.readyState === "complete")
-                    resolve(renderSync(Component, mountPoint));
-            });
-        else
-            resolve(renderSync(Component, mountPoint));
-    });
+  return new Promise((resolve) => {
+    if (document.readyState !== "complete")
+      document.addEventListener("readystatechange", () => {
+        if (document.readyState === "complete")
+          resolve(renderSync(Component, mountPoint));
+      });
+    else resolve(renderSync(Component, mountPoint));
+  });
 }

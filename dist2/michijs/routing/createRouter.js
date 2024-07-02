@@ -8,28 +8,29 @@ import { setSearchParam } from "./utils/setSearchParam";
  * @typedef {import('./types').UrlFunction} UrlFunction
  */
 
-
-
 /**
  * @param {string} property
  * @param {UrlFunction} [parentRoute]
  * @returns {UrlFunction}
  */
 export const urlFn = (property, parentRoute) => {
-    return ({ searchParams, hash } = {}) => {
-        const parentRouteURL = parentRoute?.();
-        const baseURL = parentRouteURL
-            ? `${parentRouteURL.origin}${parentRouteURL.pathname}`
-            : location.origin;
-        const propertyName = formatToKebabCase(property.startsWith("/") ? property : `/${property}`);
-        const url = new URL(`${baseURL}${propertyName}`);
-        if (searchParams)
-            Object.entries(searchParams).forEach(([name, value]) => setSearchParam(url, name, value));
-        if (hash?.valueOf())
-            url.hash = hash.valueOf();
+  return ({ searchParams, hash } = {}) => {
+    const parentRouteURL = parentRoute?.();
+    const baseURL = parentRouteURL
+      ? `${parentRouteURL.origin}${parentRouteURL.pathname}`
+      : location.origin;
+    const propertyName = formatToKebabCase(
+      property.startsWith("/") ? property : `/${property}`,
+    );
+    const url = new URL(`${baseURL}${propertyName}`);
+    if (searchParams)
+      Object.entries(searchParams).forEach(([name, value]) =>
+        setSearchParam(url, name, value),
+      );
+    if (hash?.valueOf()) url.hash = hash.valueOf();
 
-        return url;
-    };
+    return url;
+  };
 };
 
 /**
@@ -39,17 +40,21 @@ export const urlFn = (property, parentRoute) => {
  * @returns {CreateRouterResult<R>}
  */
 export function createRouter(routes, parentRoute) {
-    const urls = new Proxy({}, {
-        get(_, property) {
-            return urlFn(property, parentRoute);
-        },
+  const urls = new Proxy(
+    {},
+    {
+      get(_, property) {
+        return urlFn(property, parentRoute);
+      },
+    },
+  );
+
+  const RouterProxy = (props) =>
+    jsx(Router, {
+      ...props,
+      routes,
+      parentRoute,
     });
 
-    const RouterProxy = (props) => jsx(Router, {
-        ...props,
-        routes,
-        parentRoute,
-    });
-
-    return [urls, RouterProxy];
+  return [urls, RouterProxy];
 }

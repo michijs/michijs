@@ -4,10 +4,9 @@
  * @returns {T}
  */
 export function cloneDate(date) {
-    try {
-        return structuredClone(date);
-    }
-    catch {
-        return new Date(date);
-    }
+  try {
+    return structuredClone(date);
+  } catch {
+    return new Date(date);
+  }
 }

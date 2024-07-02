@@ -5,12 +5,12 @@ import { removeNullableFromObject } from "../utils";
  */
 
 /**
- * Represents transition properties for CSS animations.
- * @typedef {object} Transition
- * @property {string[]} property The CSS properties to apply the transition to.
- * @property {string} [duration] The duration of the transition.
- * @property {string} [timingFunction] The timing function for the transition.
- * @property {string} [delay] The delay before the transition starts.
+ * Represents transition properties for CSS animations.
+ * @typedef {object} Transition
+ * @property {string[]} property The CSS properties to apply the transition to.
+ * @property {string} [duration] The duration of the transition.
+ * @property {string} [timingFunction] The timing function for the transition.
+ * @property {string} [delay] The delay before the transition starts.
  */
 
 /**
@@ -18,16 +18,21 @@ import { removeNullableFromObject } from "../utils";
  * @param {Transition}
  * @returns {CSSObject} The CSS properties for the transition.
  */
-export const useTransition = ({ property, duration, timingFunction, delay, }) => {
-    const properties = property.join(", ");
-    return {
-        willChange: properties,
-        "@media (prefers-reduced-motion: no-preference)": removeNullableFromObject({
-            transitionProperty: properties,
-            transitionDuration: duration,
-            transitionTimingFunction: timingFunction,
-            transitionDelay: delay,
-            transitionBehavior: "allow-discrete",
-        }),
-    };
+export const useTransition = ({
+  property,
+  duration,
+  timingFunction,
+  delay,
+}) => {
+  const properties = property.join(", ");
+  return {
+    willChange: properties,
+    "@media (prefers-reduced-motion: no-preference)": removeNullableFromObject({
+      transitionProperty: properties,
+      transitionDuration: duration,
+      transitionTimingFunction: timingFunction,
+      transitionDelay: delay,
+      transitionBehavior: "allow-discrete",
+    }),
+  };
 };

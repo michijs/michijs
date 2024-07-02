@@ -13,5 +13,5 @@ import { createCustomElement } from "./createCustomElement";
  * @returns {<O extends MichiElementOptions, S extends HTMLElement = MichiElementSelf<O>>(elementOptions: any) => MichiElementClass<O, S>}
  */
 export function customElement(tag) {
-    return (elementOptions) => createCustomElement(tag[0], elementOptions);
+  return (elementOptions) => createCustomElement(tag[0], elementOptions);
 }

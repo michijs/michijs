@@ -26,4 +26,5 @@ import { usePromise } from "./usePromise";
  * @param {UseFetchOptions<R>} [options] An optional object that may contain shouldWaitToFetch callback function.
  * @returns {ObservableType<FetchResult<R>>} An Observable that emits the result of the fetch operation.
  */
-export const useFetch = (callback, shouldWait, options) => usePromise(async () => doFetch(await callback(), options), shouldWait);
+export const useFetch = (callback, shouldWait, options) =>
+  usePromise(async () => doFetch(await callback(), options), shouldWait);

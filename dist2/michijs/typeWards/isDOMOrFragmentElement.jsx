@@ -11,5 +11,5 @@
  * @returns {jsx is DOMElementJSXElement | FragmentJSXElement}
  */
 export function isDOMOrFragmentElement(jsx) {
-    return !jsx.jsxTag || typeof jsx.jsxTag === "object";
+  return !jsx.jsxTag || typeof jsx.jsxTag === "object";
 }

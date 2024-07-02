@@ -10,7 +10,7 @@
  * @typedef {import('./TypedElementEvent').TypedElementEvent} TypedElementEvent
  */
 
-/**
- * @template {EventTarget} [T = MathMLElement]
- * @typedef {object} MathMLEvents
+/**
+ * @template {EventTarget} [T = MathMLElement]
+ * @typedef {object} MathMLEvents
  */

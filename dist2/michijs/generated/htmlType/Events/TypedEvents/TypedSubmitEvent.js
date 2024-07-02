@@ -2,7 +2,7 @@
  * @typedef {import('./TypedEvent').TypedEvent} TypedEvent
  */
 
-/**
- * @template T
- * @typedef {object} TypedSubmitEvent
+/**
+ * @template T
+ * @typedef {object} TypedSubmitEvent
  */

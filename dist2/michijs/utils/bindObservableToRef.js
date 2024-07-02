@@ -6,8 +6,6 @@ import { overrideCallbackWithRef } from "./overrideCallbackWithRef";
  * @typedef {import('../types').RefSubscription} RefSubscription
  */
 
-
-
 /**
  * @template T
  * @template {WeakKey} E
@@ -16,10 +14,8 @@ import { overrideCallbackWithRef } from "./overrideCallbackWithRef";
  * @param {RefSubscription<T extends ObservableLike<infer Y> ? Y : T, E>} callback
  */
 export const bindObservableToRef = (observable, el, callback) => {
-    if (isObservableType(observable)) {
-        const overridenCallback = overrideCallbackWithRef(el, observable, callback);
-        overridenCallback(observable.valueOf());
-    }
-    else
-        callback(observable, el);
+  if (isObservableType(observable)) {
+    const overridenCallback = overrideCallbackWithRef(el, observable, callback);
+    overridenCallback(observable.valueOf());
+  } else callback(observable, el);
 };

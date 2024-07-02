@@ -17,21 +17,23 @@
  * @returns {Promise<R>}
  */
 export const doFetch = async ({ input, searchParams, ...init }, options) => {
-    const url = new URL(input, input.startsWith("/") ? location.origin : undefined);
-    if (searchParams)
-        Object.entries(searchParams).forEach(([key, value]) => {
-            if (value)
-                url.searchParams.append(key, value.toString());
-        });
-
-    const response = await fetch(url, {
-        ...init,
-        body: typeof init?.body === "object" ? JSON.stringify(init.body) : init?.body,
+  const url = new URL(
+    input,
+    input.startsWith("/") ? location.origin : undefined,
+  );
+  if (searchParams)
+    Object.entries(searchParams).forEach(([key, value]) => {
+      if (value) url.searchParams.append(key, value.toString());
     });
 
-    if (!response.ok)
-        throw response.statusText;
+  const response = await fetch(url, {
+    ...init,
+    body:
+      typeof init?.body === "object" ? JSON.stringify(init.body) : init?.body,
+  });
 
-    const jsonResult = (await response.json());
-    return options?.transform?.(jsonResult) ?? jsonResult;
+  if (!response.ok) throw response.statusText;
+
+  const jsonResult = await response.json();
+  return options?.transform?.(jsonResult) ?? jsonResult;
 };

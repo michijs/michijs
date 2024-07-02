@@ -8,7 +8,7 @@
  * @returns {T}
  */
 export const getFormData = (formOrEvent) => {
-    const form = (formOrEvent instanceof Event ? formOrEvent.target : formOrEvent);
-    // @ts-ignore
-    return Object.fromEntries(new FormData(form));
+  const form = formOrEvent instanceof Event ? formOrEvent.target : formOrEvent;
+  // @ts-ignore
+  return Object.fromEntries(new FormData(form));
 };

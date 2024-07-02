@@ -9,5 +9,5 @@
  * @param {useWatchDeps} [deps] An array of dependencies to watch for changes.
  */
 export function useWatch(callback, deps) {
-    deps?.forEach((x) => x?.subscribe?.(callback));
+  deps?.forEach((x) => x?.subscribe?.(callback));
 }

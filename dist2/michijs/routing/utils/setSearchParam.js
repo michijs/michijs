@@ -6,11 +6,11 @@ import { isNil } from "../../utils";
  * @param {?} value
  */
 export const setSearchParam = (url, name, value) => {
-    const valueOf = value?.valueOf();
-    if (isNil(valueOf))
-        url.searchParams.delete(name);
-    else
-        url.searchParams.set(name, typeof valueOf === "object"
-            ? JSON.stringify(valueOf)
-            : valueOf);
+  const valueOf = value?.valueOf();
+  if (isNil(valueOf)) url.searchParams.delete(name);
+  else
+    url.searchParams.set(
+      name,
+      typeof valueOf === "object" ? JSON.stringify(valueOf) : valueOf,
+    );
 };

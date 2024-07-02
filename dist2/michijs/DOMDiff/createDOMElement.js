@@ -13,15 +13,13 @@ import { create } from "./create";
  * @returns {ParentNode}
  */
 export const createDOMElement = (jsx, options) => {
-    const { children, ...attrs } = jsx.attrs;
+  const { children, ...attrs } = jsx.attrs;
 
-    if (children)
-        if (Array.isArray(children))
-            jsx.jsxTag.append(...children.map((x) => create(x, options)));
-        else
-            jsx.jsxTag.append(create(children, options));
+  if (children)
+    if (Array.isArray(children))
+      jsx.jsxTag.append(...children.map((x) => create(x, options)));
+    else jsx.jsxTag.append(create(children, options));
 
-    if (isElement(jsx.jsxTag))
-        setProperties(jsx.jsxTag, attrs, options);
-    return jsx.jsxTag;
+  if (isElement(jsx.jsxTag)) setProperties(jsx.jsxTag, attrs, options);
+  return jsx.jsxTag;
 };

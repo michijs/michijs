@@ -12,5 +12,5 @@ observer.subscribe((newValue) => (document.title = newValue));
  * @returns {ObservableType<string>}
  */
 export function useTitle() {
-    return observer;
+  return observer;
 }

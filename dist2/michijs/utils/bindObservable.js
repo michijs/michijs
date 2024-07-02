@@ -11,10 +11,8 @@ import { isObservableType } from "../typeWards/isObservableType";
  * @param {Subscription<T extends ObservableLike<infer Y> ? Y : T>} callback
  */
 export const bindObservable = (observable, callback) => {
-    if (isObservableType(observable)) {
-        observable.subscribe(callback);
-        callback(observable.valueOf());
-    }
-    else
-        callback(observable);
+  if (isObservableType(observable)) {
+    observable.subscribe(callback);
+    callback(observable.valueOf());
+  } else callback(observable);
 };

@@ -7,17 +7,17 @@
  * @param {ClassJSXElement}
  * @returns {ObjectJSXElement}
  */
-export const classJSXToObjectJSXElement = ({ jsxTag, attrs, }) => {
-    if (jsxTag.extends)
-        return {
-            jsxTag: jsxTag.extends,
-            attrs: {
-                ...attrs,
-                is: jsxTag.tag,
-            },
-        };
+export const classJSXToObjectJSXElement = ({ jsxTag, attrs }) => {
+  if (jsxTag.extends)
     return {
-        jsxTag: jsxTag.tag,
-        attrs,
+      jsxTag: jsxTag.extends,
+      attrs: {
+        ...attrs,
+        is: jsxTag.tag,
+      },
     };
+  return {
+    jsxTag: jsxTag.tag,
+    attrs,
+  };
 };

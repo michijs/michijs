@@ -5,8 +5,6 @@ import { bindObservableToRef } from "../utils";
  * @typedef {import('../types').ObservableType} ObservableType
  */
 
-
-
 /**
  * Allows to create a Constructable Stylesheet with a Template String.
  * Recomended extension for VSCode:
@@ -16,12 +14,11 @@ import { bindObservableToRef } from "../utils";
  * @returns {CSSStyleSheet}
  */
 export function css(cssObject, ...props) {
-    const template = useStringTemplate(cssObject, ...props);
-    const styleSheet = new CSSStyleSheet();
-    bindObservableToRef(template, styleSheet, (newValue, styleSheet) => {
-        // Jest fix
-        if (styleSheet.replaceSync)
-            styleSheet.replaceSync(newValue);
-    });
-    return styleSheet;
+  const template = useStringTemplate(cssObject, ...props);
+  const styleSheet = new CSSStyleSheet();
+  bindObservableToRef(template, styleSheet, (newValue, styleSheet) => {
+    // Jest fix
+    if (styleSheet.replaceSync) styleSheet.replaceSync(newValue);
+  });
+  return styleSheet;
 }

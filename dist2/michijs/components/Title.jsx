@@ -7,13 +7,9 @@ import { GenericElement } from "./GenericElement";
  * @typedef {import('../types').ObservableOrConst} ObservableOrConst
  */
 
-
-
-
-
-/**
- * @typedef {object} TitleProps
- * @property {ObservableOrConst<string | undefined>} children
+/**
+ * @typedef {object} TitleProps
+ * @property {ObservableOrConst<string | undefined>} children
  */
 
 const title = useTitle();
@@ -22,15 +18,18 @@ const title = useTitle();
  * @returns {*}
  */
 export const Title = ({ children }) => {
-    let el = undefined;
+  let el = undefined;
 
-    // bindObservable(children, updateTitleCallback)
-    return (<GenericElement onelementconnected={async (elEvent) => {
-            el = elEvent.detail;
+  // bindObservable(children, updateTitleCallback)
+  return (
+    <GenericElement
+      onelementconnected={async (elEvent) => {
+        el = elEvent.detail;
 
-            bindObservableToRef(children, new WeakRef(el), (newValue) => {
-                if (el?.isConnected && newValue)
-                    title(newValue);
-            });
-        }}/>);
+        bindObservableToRef(children, new WeakRef(el), (newValue) => {
+          if (el?.isConnected && newValue) title(newValue);
+        });
+      }}
+    />
+  );
 };

@@ -8,15 +8,13 @@ import { unproxify } from "../utils";
  * @typedef {import('../types').ObservableOrConst} ObservableOrConst
  */
 
-
-
-/**
- * @typedef {object} LinkProps
- * @property {ObservableOrConst<URL | string | (() => URL | string)>} url
+/**
+ * @typedef {object} LinkProps
+ * @property {ObservableOrConst<URL | string | (() => URL | string)>} url
  */
 
-/**
- * @typedef {JSX.IntrinsicElements["a"]} A
+/**
+ * @typedef {JSX.IntrinsicElements["a"]} A
  */
 
 /**
@@ -24,28 +22,27 @@ import { unproxify } from "../utils";
  * @returns {*}
  */
 export const Link = ({ url, ...attrs }, options) => {
-    const finalUrl = useComputedObserve(() => {
-        const unproxifiedUrl = unproxify(url);
-        const finalUnproxifiedUrl = typeof unproxifiedUrl === "function"
-            ? unproxifiedUrl()
-            : unproxifiedUrl;
-        return finalUnproxifiedUrl;
-    }, [url]);
-    const href = useComputedObserve(() => {
-        const unproxifiedUrl = finalUrl();
-        return typeof unproxifiedUrl === "object" && "href" in unproxifiedUrl
-            ? unproxifiedUrl.href
-            : unproxifiedUrl;
-    }, [finalUrl]);
-    return jsx("a", {
-        ...attrs,
-        href,
-        onclick: (e) => {
-            e.preventDefault();
-            HistoryManager.push(finalUrl);
-            if (options?.contextElement)
-                // @ts-ignore
-                attrs.onclick?.apply(options.contextElement, [e]);
-        },
-    });
+  const finalUrl = useComputedObserve(() => {
+    const unproxifiedUrl = unproxify(url);
+    const finalUnproxifiedUrl =
+      typeof unproxifiedUrl === "function" ? unproxifiedUrl() : unproxifiedUrl;
+    return finalUnproxifiedUrl;
+  }, [url]);
+  const href = useComputedObserve(() => {
+    const unproxifiedUrl = finalUrl();
+    return typeof unproxifiedUrl === "object" && "href" in unproxifiedUrl
+      ? unproxifiedUrl.href
+      : unproxifiedUrl;
+  }, [finalUrl]);
+  return jsx("a", {
+    ...attrs,
+    href,
+    onclick: (e) => {
+      e.preventDefault();
+      HistoryManager.push(finalUrl);
+      if (options?.contextElement)
+        // @ts-ignore
+        attrs.onclick?.apply(options.contextElement, [e]);
+    },
+  });
 };
