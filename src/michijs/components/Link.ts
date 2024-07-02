@@ -15,9 +15,7 @@ export const Link: FC<LinkProps> = ({ url, ...attrs }, options) => {
   const finalUrl = useComputedObserve(() => {
     const unproxifiedUrl = unproxify(url);
     const finalUnproxifiedUrl =
-      typeof unproxifiedUrl === "function"
-        ? unproxifiedUrl()
-        : unproxifiedUrl;
+      typeof unproxifiedUrl === "function" ? unproxifiedUrl() : unproxifiedUrl;
     return finalUnproxifiedUrl;
   }, [url]);
   const href = useComputedObserve(() => {
