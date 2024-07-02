@@ -20,13 +20,9 @@ export const Title: FC<TitleProps> = ({ children }) => {
       onelementconnected={async (elEvent) => {
         el = elEvent.detail;
 
-        bindObservableToRef(
-          children,
-          new WeakRef(el),
-          (newValue?: string) => {
-            if (el?.isConnected && newValue) title(newValue);
-          },
-        );
+        bindObservableToRef(children, new WeakRef(el), (newValue?: string) => {
+          if (el?.isConnected && newValue) title(newValue);
+        });
       }}
     />
   );
