@@ -13,6 +13,6 @@ export function customElement(tag: TemplateStringsArray) {
     S extends HTMLElement = MichiElementSelf<O>,
   >(
     elementOptions: NoExtraProperties<MichiElementOptions, O> & ThisType<S>,
-  ): MichiElementClass<O, S> =>
-    createCustomElement<O, S>(tag[0] as CustomElementTag, elementOptions);
+  ): MichiElementClass<O> =>
+    createCustomElement<O>(tag[0] as CustomElementTag, elementOptions);
 }
