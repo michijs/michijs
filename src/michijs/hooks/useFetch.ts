@@ -30,7 +30,4 @@ export const useFetch = <
   shouldWait?: usePromiseShouldWait,
   options?: UseFetchOptions<R>,
 ): FetchResult<R> =>
-  usePromise(
-    async () => doFetch(await callback(), options),
-    shouldWait,
-  );
+  usePromise(async () => doFetch(await callback(), options), shouldWait);
