@@ -1,6 +1,5 @@
 import type { SearchParams } from "../routing/types";
 import type {
-  ObservableType,
   FetchResult,
   AnyObject,
   UseFetchOptions,
@@ -30,8 +29,8 @@ export const useFetch = <
   callback: UseFetchCallback<S, B>,
   shouldWait?: usePromiseShouldWait,
   options?: UseFetchOptions<R>,
-): ObservableType<FetchResult<R>> =>
+): FetchResult<R> =>
   usePromise(
     async () => doFetch(await callback(), options),
     shouldWait,
-  ) as ObservableType<FetchResult<R>>;
+  );

@@ -382,7 +382,7 @@ export interface PromiseResult<R> {
   /**
    * The promise
    */
-  promise: ObservableType<Promise<R>>;
+  promise: ObservableComplexObject<Promise<R>>;
   /**
    * Call again the promise. Available after first call
    */

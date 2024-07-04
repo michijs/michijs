@@ -53,5 +53,5 @@ export const usePromise = <R>(
 
   useWatch(tryToResolvePromiseCallback, shouldWait);
 
-  return result;
+  return result as unknown as PromiseResult<R>;
 };
