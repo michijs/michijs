@@ -17,37 +17,42 @@ export const usePromise = <R>(
   shouldWait?: usePromiseShouldWait,
 ): PromiseResult<R> => {
   let internalPromiseWithResolvers = Promise.withResolvers<R>();
+  let loading = false;
 
   const result = {
     promise: useObserve(internalPromiseWithResolvers.promise),
     async recall() {
-      await result.promise();
-      internalPromiseWithResolvers = Promise.withResolvers<R>();
-      result.promise(internalPromiseWithResolvers.promise);
+      if (!loading) {
+        try {
+          await result.promise();
+        } catch { }
+        internalPromiseWithResolvers = Promise.withResolvers<R>();
+        result.promise(internalPromiseWithResolvers.promise);
+      }
       await tryToResolvePromiseCallback();
     },
   };
 
   const tryToResolvePromiseCallback = async () => {
-    const promises = shouldWait?.map<Promise<any>>((x) =>
-      x instanceof Promise ? x : x(),
-    );
-    let readyToExecute = true;
-    if (promises) {
-      try {
+    loading = true;
+    const promises = shouldWait?.map((x) => x instanceof Promise ? x : x());
+    let finishedWaiting = true;
+    try {
+      if (promises) {
         // If some promise fails
-        await Promise.all(promises);
-      } catch {
-        readyToExecute = false;
+        try {
+          await Promise.all(promises);
+        }
+        catch { finishedWaiting = false; }
       }
-    }
-    if (readyToExecute) {
-      try {
+      if (finishedWaiting) {
+        loading = false;
         const promiseResult = await promise();
         internalPromiseWithResolvers.resolve(promiseResult);
-      } catch (ex) {
-        internalPromiseWithResolvers.reject(ex);
       }
+    }
+    catch (ex) {
+      internalPromiseWithResolvers.reject(ex);
     }
   };
 
