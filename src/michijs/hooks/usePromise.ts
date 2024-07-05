@@ -1,5 +1,4 @@
 import type { PromiseResult, usePromiseShouldWait } from "../types";
-import { bindObservable } from "../utils";
 import { useObserve } from "./useObserve";
 import { useWatch } from "./useWatch";
 
