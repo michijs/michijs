@@ -22,7 +22,7 @@ export const usePromise = <R>(
     promise: useObserve(internalPromiseWithResolvers.promise),
     recall() {
       internalPromiseWithResolvers = Promise.withResolvers<R>();
-      this.promise(internalPromiseWithResolvers.promise);
+      result.promise(internalPromiseWithResolvers.promise);
     },
   };
 

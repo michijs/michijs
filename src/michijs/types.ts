@@ -382,7 +382,7 @@ export interface PromiseResult<R> {
   /**
    * The promise
    */
-  promise: ObservableComplexObject<Promise<R>>;
+  promise: ObservableType<Promise<R>>;
   /**
    * Call again the promise. Available after first call
    */
@@ -397,20 +397,22 @@ export type ObservableType<Y, T = NonNullable<Y>> = IsAny<T> extends true
     ? Y
     : [T] extends [Array<infer V>]
       ? ObservableArray<V>
-      : [T] extends [Function]
-        ? Y
-        : [T] extends [Map<infer K, infer V>]
-          ? ObservableMap<K, V>
-          : [T] extends [Set<infer V>]
-            ? ObservableSet<V>
-            : [T] extends [Date]
-              ? PrimitiveObservableValue<Y> & Date
-              : [T] extends [object]
-                ? // ? ExtendsObject<T> extends true
-                  ObservableObject<Y>
-                : // : ObservableComplexObject<Y>
-                  PrimitiveObservableValue<GetPrimitiveType<Y>> &
-                    GetPrimitiveTypeClass<T>;
+      : [T] extends [Promise<infer V>]
+        ? ObservableComplexObject<Promise<V>>
+        : [T] extends [Function]
+          ? Y
+          : [T] extends [Map<infer K, infer V>]
+            ? ObservableMap<K, V>
+            : [T] extends [Set<infer V>]
+              ? ObservableSet<V>
+              : [T] extends [Date]
+                ? PrimitiveObservableValue<Y> & Date
+                : [T] extends [object]
+                  ? // ? ExtendsObject<T> extends true
+                    ObservableObject<Y>
+                  : // : ObservableComplexObject<Y>
+                    PrimitiveObservableValue<GetPrimitiveType<Y>> &
+                      GetPrimitiveTypeClass<T>;
 
 export type Unproxify<T> = IsAny<T> extends true
   ? any
