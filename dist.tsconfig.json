@@ -13,7 +13,7 @@
       "dom",
       "ESNext"
     ],
-    "isolatedDeclarations": true,
+    "isolatedDeclarations": false,
     "isolatedModules": true,
     "outDir": "dist",
     "moduleResolution": "node",
