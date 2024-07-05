@@ -25,7 +25,7 @@ export const usePromise = <R>(
       if (!loading) {
         try {
           await result.promise();
-        } catch { }
+        } catch {}
         internalPromiseWithResolvers = Promise.withResolvers<R>();
         result.promise(internalPromiseWithResolvers.promise);
       }
@@ -35,23 +35,23 @@ export const usePromise = <R>(
 
   const tryToResolvePromiseCallback = async () => {
     loading = true;
-    const promises = shouldWait?.map((x) => x instanceof Promise ? x : x());
+    const promises = shouldWait?.map((x) => (x instanceof Promise ? x : x()));
     let finishedWaiting = true;
     try {
       if (promises) {
         // If some promise fails
         try {
           await Promise.all(promises);
+        } catch {
+          finishedWaiting = false;
         }
-        catch { finishedWaiting = false; }
       }
       if (finishedWaiting) {
         loading = false;
         const promiseResult = await promise();
         internalPromiseWithResolvers.resolve(promiseResult);
       }
-    }
-    catch (ex) {
+    } catch (ex) {
       internalPromiseWithResolvers.reject(ex);
     }
   };
