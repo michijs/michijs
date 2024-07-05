@@ -20,9 +20,11 @@ export const usePromise = <R>(
 
   const result = {
     promise: useObserve(internalPromiseWithResolvers.promise),
-    recall() {
+    async recall() {
+      await result.promise();
       internalPromiseWithResolvers = Promise.withResolvers<R>();
       result.promise(internalPromiseWithResolvers.promise);
+      await tryToResolvePromiseCallback();
     },
   };
 
@@ -49,9 +51,9 @@ export const usePromise = <R>(
     }
   };
 
-  bindObservable(result.promise, tryToResolvePromiseCallback);
+  tryToResolvePromiseCallback()
 
-  useWatch(tryToResolvePromiseCallback, shouldWait);
+  useWatch(result.recall, shouldWait);
 
   return result as unknown as PromiseResult<R>;
 };

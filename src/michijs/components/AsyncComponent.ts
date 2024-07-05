@@ -42,7 +42,7 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
   }: AsyncComponentProps<P, T>,
   options: CreateOptions,
 ): Node => {
-  let el = asTag
+  const el = asTag
     ? (create({
         jsxTag: asTag,
         attrs,
@@ -54,7 +54,6 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
 
   // Function to render the component when the promise resolves.
   const render = (promiseResult: P) => {
-    const oldEl = el;
     const Res = (
       promiseResult &&
       typeof promiseResult === "object" &&
@@ -64,11 +63,10 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
     ) as JSX.Element;
 
     // Create and replace the element with the resolved component.
-    el = create(
+    el.replaceChildren(create(
       then ? then(Res as P) : Res && typeof Res === "function" ? jsx(Res) : Res,
       options,
-    ) as ChildNode & ParentNode;
-    oldEl.replaceWith(el);
+    ) as ChildNode & ParentNode);
   };
 
   // Execute the promise and render the component when it resolves.
