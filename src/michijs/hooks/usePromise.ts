@@ -51,7 +51,7 @@ export const usePromise = <R>(
     }
   };
 
-  tryToResolvePromiseCallback()
+  tryToResolvePromiseCallback();
 
   useWatch(result.recall, shouldWait);
 

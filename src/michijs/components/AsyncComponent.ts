@@ -63,10 +63,16 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
     ) as JSX.Element;
 
     // Create and replace the element with the resolved component.
-    el.replaceChildren(create(
-      then ? then(Res as P) : Res && typeof Res === "function" ? jsx(Res) : Res,
-      options,
-    ) as ChildNode & ParentNode);
+    el.replaceChildren(
+      create(
+        then
+          ? then(Res as P)
+          : Res && typeof Res === "function"
+            ? jsx(Res)
+            : Res,
+        options,
+      ) as ChildNode & ParentNode,
+    );
   };
 
   // Execute the promise and render the component when it resolves.
