@@ -2,6 +2,7 @@ export { deepEqual } from "./deepEqual";
 export { formatToKebabCase } from "./formatToKebabCase";
 export { getFormData } from "./getFormData";
 export { getObservables } from "./getObservables";
+export { getSearchParamsValue } from "./getSearchParamsValue";
 export { addStylesheetsToDocumentOrShadowRoot } from "./addStylesheetsToDocumentOrShadowRoot";
 export { wait } from "./wait";
 export { bindObservable } from "./bindObservable";

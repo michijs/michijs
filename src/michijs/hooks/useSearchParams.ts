@@ -2,18 +2,7 @@ import { useComputedObserve } from "./useComputedObserve";
 import { HistoryManager } from "../classes";
 import { setSearchParam } from "../routing/utils/setSearchParam";
 import type { ObservableType } from "../types";
-
-export const getSearchParamsValue = (): Record<string, unknown> => {
-  const initialSearchParamsValue: Record<string, unknown> = {};
-  new URLSearchParams(location.search).forEach((value, key) => {
-    try {
-      initialSearchParamsValue[key] = JSON.parse(value);
-    } catch {
-      initialSearchParamsValue[key] = value;
-    }
-  });
-  return initialSearchParamsValue;
-};
+import { getSearchParamsValue } from "../utils";
 
 let isUpdating = false;
 
