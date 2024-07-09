@@ -1,6 +1,8 @@
 import { AnyObject } from "../types";
 
-export const getSearchParamsValue = <T extends AnyObject = Record<string, unknown>>(): T => {
+export const getSearchParamsValue = <
+  T extends AnyObject = Record<string, unknown>,
+>(): T => {
   const initialSearchParamsValue: Record<string, unknown> = {};
   new URLSearchParams(location.search).forEach((value, key) => {
     try {
