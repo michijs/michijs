@@ -10,7 +10,7 @@ export type UrlFunction<
 > = (searchParamsAndHash?: {
   searchParams?: S;
   hash?: H;
-}) => URL;
+}) => string;
 
 // export type AsyncRoute = {
 //   // if typed properly the type of pages does not work
