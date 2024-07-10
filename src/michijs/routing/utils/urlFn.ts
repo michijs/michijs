@@ -1,5 +1,5 @@
 import { formatToKebabCase } from "../../utils";
-import { UrlFunction } from "../types";
+import type { UrlFunction } from "../types";
 import { setSearchParam } from "./setSearchParam";
 
 export const urlFn = (
