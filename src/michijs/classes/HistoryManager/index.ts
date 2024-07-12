@@ -3,7 +3,7 @@ import { ModernHistoryManager } from "./ModernHistoryManager";
 import { LegacyHistoryManager } from "./LegacyHistoryManager";
 
 // Doesnt work with esbuild
-const getHistoryManager = async (): Promise<HistoryManagerType> => {
+const getHistoryManager = (): HistoryManagerType => {
   if (window.navigation && window.URLPattern) {
     // const classToUse = (await import('./ModernHistoryManager')).ModernHistoryManager
     // return new classToUse();
@@ -15,4 +15,4 @@ const getHistoryManager = async (): Promise<HistoryManagerType> => {
   }
 };
 
-export const HistoryManager = await getHistoryManager();
+export const HistoryManager = getHistoryManager();
