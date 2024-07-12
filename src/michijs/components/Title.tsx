@@ -1,6 +1,6 @@
 import { useTitle } from "../hooks";
 import type { FC, ObservableOrConst } from "../types";
-import { bindObservableToRef } from "../utils";
+import { bindObservable } from "../utils";
 import { GenericElement } from "./GenericElement";
 
 export interface TitleProps {
@@ -19,9 +19,9 @@ export const Title: FC<TitleProps> = ({ children }) => {
     <GenericElement
       onelementconnected={async (elEvent) => {
         el = elEvent.detail;
-
-        bindObservableToRef(children, new WeakRef(el), (newValue?: string) => {
-          if (el?.isConnected && newValue) title(newValue);
+        bindObservable(children, (newValue) => {
+          if (el?.isConnected && newValue)
+            title(newValue);
         });
       }}
     />
