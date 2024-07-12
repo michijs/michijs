@@ -1,4 +1,4 @@
-import { AnyObject } from "../types";
+import type { AnyObject } from "../types";
 
 export const getSearchParamsValue = <
   T extends AnyObject = Record<string, unknown>,
