@@ -386,11 +386,17 @@ It is used to create a memoized function that encapsulates the result of the pro
 - callback: A function that returns a value of type T.
 - deps: An array of dependencies that the callback function depends on.
 
+#### useAsyncComputedObserve
+It is used for computing a value and observing its changes. Takes four arguments:
+- callback: A function that returns a promise of type T.
+- initialValue: Initial value of type T.
+- deps: Dependencies to watch for changes.
+- options: Optional object that may contain onBeforeUpdate and onAfterUpdate callback functions.
+
 #### useComputedObserve
 It is used for computing a value and observing its changes. Takes three arguments:
-- callback: A function that returns a promise of type T.
+- callback: A function that returns a value of type T.
 - deps: Dependencies to watch for changes.
-- initialValue: Initial value of type T. Useful if the callback is a promise
 - options: Optional object that may contain onBeforeUpdate and onAfterUpdate callback functions.
 
 #### useStringTemplate
@@ -408,17 +414,14 @@ A simple mechanism for watching dependencies and invoking a callback when any of
 
 #### useFetch
 Fetches data from a URL, parses the response as JSON and allows to manage the result as an observable. Takes three parameters:
-- input: The URL to fetch data from.
-- searchParams: Optional search parameters to append to the URL.
-- init: Optional request initialization options.
-- deps: Optional array of dependencies to watch for changes.
-- options: Optional object that may contain shouldWaitToFetch callback function
+- callback: The callback to get the options for the request
+- shouldWait: All the promises that should resolve before executing the promise.
+- options: Some additional options 
 
 #### usePromise
 Ues a promise and allows to manage the result as an observable.
-- promise: The operation.
-- deps: Dependencies to watch for changes.
-- options: An optional object that may contain shouldWait callback function.
+- callback: The operation.
+- shouldWait: All the promises that should resolve before executing the promise.
 
 ### Route management hooks
 #### useHash
@@ -428,6 +431,9 @@ Returns the Hash observable with the specified type T, ensuring that it returns 
 
 #### useSearchParams
 It facilitates the management and observation of search parameters in the URL, providing a reactive way to handle changes and update the URL accordingly.
+
+#### useTitle
+Allows to observe the document title. Do not use document.title use this hook instead
 
 ### Storage hooks
 #### useStorage
@@ -561,9 +567,6 @@ It allows to:
 
 ### AsyncComponent
 Asynchronously renders a component after the promise ends. In the meantime you can choose to show a load component or not show anything.
-
-### Link
-Provides the ability to move around the web page without reloading the page. It uses the same attributes as an anchor tag but also allows the use of URL objects. Uses the HistoryManager.push method.
 
 ## Custom element methods
 ### child

@@ -5,14 +5,13 @@ import { useWatch } from "./useWatch";
 /**
  * Ues a promise and allows to manage the result as an observable.
  *
- * @param promise The operation.
- * @param deps Dependencies to watch for changes.
- * @param options An optional object that may contain shouldWait callback function.
+ * @param callback The operation.
+ * @param shouldWait All the promises that should resolve before executing the promise.
  * @returns An Observable that emits the result of the promise operation.
  * @template R Type of the expected response data.
  */
 export const usePromise = <R>(
-  promise: () => Promise<R>,
+  callback: () => Promise<R>,
   shouldWait?: usePromiseShouldWait,
 ): PromiseResult<R> => {
   let internalPromiseWithResolvers = Promise.withResolvers<R>();
@@ -47,7 +46,7 @@ export const usePromise = <R>(
       }
       if (finishedWaiting) {
         loading = false;
-        const promiseResult = await promise();
+        const promiseResult = await callback();
         internalPromiseWithResolvers.resolve(promiseResult);
       }
     } catch (ex) {

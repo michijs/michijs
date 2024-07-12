@@ -12,14 +12,13 @@ import { usePromise } from "./usePromise";
 /**
  * Fetches data from a URL, parses the response as JSON and allows to manage the result as an observable.
  *
- * @param input The URL to fetch data from.
- * @param searchParams Optional search parameters to append to the URL.
- * @param init Optional request initialization options.
- * @param deps Dependencies to watch for changes.
- * @param options An optional object that may contain shouldWaitToFetch callback function.
+ * @param callback The callback to get the options for the request
+ * @param shouldWait All the promises that should resolve before executing the promise.
+ * @param options Some additional options 
  * @returns An Observable that emits the result of the fetch operation.
  * @template R Type of the expected response data.
  * @template S Type of the optional search parameters.
+ * @template B Type of the optional body.
  */
 export const useFetch = <
   R,

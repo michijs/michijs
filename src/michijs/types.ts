@@ -3,7 +3,7 @@ import type {
   CSSProperties,
   GlobalEvents,
 } from "./generated/htmlType";
-import type { EventDispatcher, MappedIdGenerator } from "./classes";
+import type { EventDispatcher, MappedIdGenerator, Observable } from "./classes";
 import type { SearchParams } from "./routing";
 
 export type Browser =
@@ -344,6 +344,14 @@ export type IsAny<T> = 0 extends 1 & T ? true : false;
 
 export interface RequestInitUseFetch<B> extends Omit<RequestInit, "body"> {
   body?: B;
+}
+
+export interface HistoryManagerType extends Observable<string | URL> {
+  canGoBack(fallbackUrl?: ObservableOrConst<string | URL>): boolean
+  back(fallbackUrl?: ObservableOrConst<string | URL>): void
+  replaceCurrentUrl(url: ObservableOrConst<string | URL>): void
+  push(url: ObservableOrConst<string | URL>): void,
+  matches(url: ObservableOrConst<string>): boolean
 }
 
 export interface DoFetchProps<

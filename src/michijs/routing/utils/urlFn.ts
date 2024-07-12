@@ -21,6 +21,6 @@ export const urlFn = (
       );
     if (hash?.valueOf()) url.hash = hash.valueOf();
 
-    return url.href;
+    return url;
   };
 };

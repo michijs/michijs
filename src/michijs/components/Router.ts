@@ -1,12 +1,11 @@
 import type { UrlFunction } from "../routing/types";
-import { urlFn } from "../routing/createRouter";
 import type {
   CreateOptions,
   ExtendableComponentWithoutChildren,
   CreateFCResult,
   SingleJSXElement,
 } from "../types";
-import { HistoryManager, useComputedObserve, create } from "../..";
+import { HistoryManager, useComputedObserve, create, urlFn } from "../..";
 import { VirtualFragment } from "../classes/VirtualFragment";
 import { bindObservable } from "../utils";
 
