@@ -1,18 +1,18 @@
 import type { CSSProperties } from "../types";
 import type { ObservableOrConst } from "../../../types";
 export interface ValueSets {
-  41?: ObservableOrConst<"ltr" | "rtl" | undefined>;
-  42?: ObservableOrConst<"block" | "inline" | undefined>;
-  43?: ObservableOrConst<"http://www.w3.org/1998/Math/MathML" | undefined>;
-  45?: ObservableOrConst<"none" | "sum" | undefined>;
-  46?: ObservableOrConst<"replace" | "sum" | undefined>;
-  47?: ObservableOrConst<"CSS" | "XML" | "auto" | undefined>;
-  48?: ObservableOrConst<"indefinite" | undefined>;
-  49?: ObservableOrConst<"always" | "whenNotActive" | "never" | undefined>;
-  50?: ObservableOrConst<
+  42?: ObservableOrConst<"ltr" | "rtl" | undefined>;
+  43?: ObservableOrConst<"block" | "inline" | undefined>;
+  44?: ObservableOrConst<"http://www.w3.org/1998/Math/MathML" | undefined>;
+  46?: ObservableOrConst<"none" | "sum" | undefined>;
+  47?: ObservableOrConst<"replace" | "sum" | undefined>;
+  48?: ObservableOrConst<"CSS" | "XML" | "auto" | undefined>;
+  49?: ObservableOrConst<"indefinite" | undefined>;
+  50?: ObservableOrConst<"always" | "whenNotActive" | "never" | undefined>;
+  51?: ObservableOrConst<
     "discrete" | "linear" | "paced" | "spline" | undefined
   >;
-  51?: ObservableOrConst<
+  52?: ObservableOrConst<
     | "none meet"
     | "none slice"
     | "xMinYMin meet"
@@ -35,7 +35,7 @@ export interface ValueSets {
     | "xMaxYMax slice"
     | undefined
   >;
-  52?: ObservableOrConst<
+  53?: ObservableOrConst<
     | "auto"
     | "baseline"
     | "before-edge"
@@ -51,13 +51,13 @@ export interface ValueSets {
     | "inherit"
     | undefined
   >;
-  53?: ObservableOrConst<"nonzero" | "evenodd" | "inherit" | undefined>;
-  54?: ObservableOrConst<"auto" | "sRGB" | "linearRGB" | "inherit" | undefined>;
-  55?: ObservableOrConst<"auto" | "sRGB" | "inherit" | undefined>;
-  56?: ObservableOrConst<
+  54?: ObservableOrConst<"nonzero" | "evenodd" | "inherit" | undefined>;
+  55?: ObservableOrConst<"auto" | "sRGB" | "linearRGB" | "inherit" | undefined>;
+  56?: ObservableOrConst<"auto" | "sRGB" | "inherit" | undefined>;
+  57?: ObservableOrConst<
     "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit" | undefined
   >;
-  57?: ObservableOrConst<
+  58?: ObservableOrConst<
     | "auto"
     | "crosshair"
     | "default"
@@ -76,8 +76,8 @@ export interface ValueSets {
     | "inherit"
     | undefined
   >;
-  58?: ObservableOrConst<"ltr" | "rtl" | "inherit" | undefined>;
-  59?: ObservableOrConst<
+  59?: ObservableOrConst<"ltr" | "rtl" | "inherit" | undefined>;
+  60?: ObservableOrConst<
     | "inline"
     | "block"
     | "list-item"
@@ -98,7 +98,7 @@ export interface ValueSets {
     | "inherit"
     | undefined
   >;
-  60?: ObservableOrConst<
+  61?: ObservableOrConst<
     | "auto"
     | "text-bottom"
     | "alphabetic"
@@ -110,7 +110,7 @@ export interface ValueSets {
     | "text-top"
     | undefined
   >;
-  61?: ObservableOrConst<
+  62?: ObservableOrConst<
     | "normal"
     | "wider"
     | "narrower"
@@ -125,7 +125,7 @@ export interface ValueSets {
     | "inherit"
     | undefined
   >;
-  62?: ObservableOrConst<
+  63?: ObservableOrConst<
     | "normal"
     | "bold"
     | "bolder"
@@ -142,11 +142,11 @@ export interface ValueSets {
     | "inherit"
     | undefined
   >;
-  63?: ObservableOrConst<
+  64?: ObservableOrConst<
     "auto" | "optimizeSpeed" | "optimizeQuality" | undefined
   >;
-  64?: ObservableOrConst<"visible" | "hidden" | "scroll" | "auto" | undefined>;
-  65?: ObservableOrConst<
+  65?: ObservableOrConst<"visible" | "hidden" | "scroll" | "auto" | undefined>;
+  66?: ObservableOrConst<
     | "visiblePainted"
     | "visibleFill"
     | "visibleStroke"
@@ -159,15 +159,15 @@ export interface ValueSets {
     | "inherit"
     | undefined
   >;
-  66?: ObservableOrConst<
+  67?: ObservableOrConst<
     "auto" | "optimizeSpeed" | "crispEdges" | "geometricPrecision" | undefined
   >;
-  67?: ObservableOrConst<"butt" | "round" | "square" | undefined>;
-  68?: ObservableOrConst<
+  68?: ObservableOrConst<"butt" | "round" | "square" | undefined>;
+  69?: ObservableOrConst<
     "miter" | "round" | "bevel" | "miter-clip" | "round" | undefined
   >;
-  69?: ObservableOrConst<"start" | "middle" | "end" | undefined>;
-  70?: ObservableOrConst<
+  70?: ObservableOrConst<"start" | "middle" | "end" | undefined>;
+  71?: ObservableOrConst<
     | "none"
     | "underline"
     | "overline"
@@ -176,7 +176,7 @@ export interface ValueSets {
     | "inherit"
     | undefined
   >;
-  71?: ObservableOrConst<
+  72?: ObservableOrConst<
     | "auto"
     | "optimizeSpeed"
     | "optimizeLegibility"
@@ -184,7 +184,7 @@ export interface ValueSets {
     | "inherit"
     | undefined
   >;
-  72?: ObservableOrConst<
+  73?: ObservableOrConst<
     | "none"
     | "non-scaling-stroke"
     | "non-scaling-size"
@@ -192,17 +192,17 @@ export interface ValueSets {
     | "fixed-position"
     | undefined
   >;
-  73?: ObservableOrConst<
+  74?: ObservableOrConst<
     "visible" | "hidden" | "collapse" | "inherit" | undefined
   >;
-  74?: ObservableOrConst<
+  75?: ObservableOrConst<
     "lr-tb" | "rl-tb" | "tb-rl" | "lr" | "rl" | "tb" | "inherit" | undefined
   >;
-  75?: ObservableOrConst<
+  76?: ObservableOrConst<
     "identity" | "table" | "discrete" | "linear" | "gamma" | undefined
   >;
-  76?: ObservableOrConst<"userSpaceOnUse" | "objectBoundingBox" | undefined>;
-  77?: ObservableOrConst<
+  77?: ObservableOrConst<"userSpaceOnUse" | "objectBoundingBox" | undefined>;
+  78?: ObservableOrConst<
     | "SourceGraphic"
     | "SourceAlpha"
     | "BackgroundImage"
@@ -211,15 +211,15 @@ export interface ValueSets {
     | "StrokePaint"
     | undefined
   >;
-  78?: ObservableOrConst<
+  79?: ObservableOrConst<
     "normal" | "multiply" | "screen" | "darken" | "lighten" | undefined
   >;
-  79?: ObservableOrConst<
+  80?: ObservableOrConst<
     "over" | "in" | "out" | "atop" | "xor" | "arithmetic" | undefined
   >;
-  80?: ObservableOrConst<"duplicate" | "wrap" | "none" | undefined>;
-  81?: ObservableOrConst<"R" | "G" | "B" | "A" | undefined>;
-  82?: ObservableOrConst<
+  81?: ObservableOrConst<"duplicate" | "wrap" | "none" | undefined>;
+  82?: ObservableOrConst<"R" | "G" | "B" | "A" | undefined>;
+  83?: ObservableOrConst<
     | "none"
     | "xMinYMin meet"
     | "xMinYMin slice"
@@ -241,14 +241,14 @@ export interface ValueSets {
     | "xMaxYMax slice"
     | undefined
   >;
-  83?: ObservableOrConst<"noStitch" | "stitch" | undefined>;
-  84?: ObservableOrConst<"fractalNoise" | "turbulence" | undefined>;
-  85?: ObservableOrConst<"pad" | "reflect" | "repeat" | undefined>;
-  86?: ObservableOrConst<"userSpaceOnUse" | "strokeWidth" | undefined>;
-  87?: ObservableOrConst<"http://www.w3.org/2000/svg" | undefined>;
-  88?: ObservableOrConst<"spacing" | "spacingAndGlyphs" | undefined>;
-  89?: ObservableOrConst<"alignt" | "stretch" | undefined>;
-  90?: ObservableOrConst<"auto" | "exact" | undefined>;
+  84?: ObservableOrConst<"noStitch" | "stitch" | undefined>;
+  85?: ObservableOrConst<"fractalNoise" | "turbulence" | undefined>;
+  86?: ObservableOrConst<"pad" | "reflect" | "repeat" | undefined>;
+  87?: ObservableOrConst<"userSpaceOnUse" | "strokeWidth" | undefined>;
+  88?: ObservableOrConst<"http://www.w3.org/2000/svg" | undefined>;
+  89?: ObservableOrConst<"spacing" | "spacingAndGlyphs" | undefined>;
+  90?: ObservableOrConst<"alignt" | "stretch" | undefined>;
+  91?: ObservableOrConst<"auto" | "exact" | undefined>;
   autocomplete?: ObservableOrConst<
     "inline" | "list" | "both" | "none" | undefined
   >;
@@ -287,6 +287,7 @@ export interface ValueSets {
     | "dialog"
     | undefined
   >;
+  href?: ObservableOrConst<URL | string | undefined>;
   im?: ObservableOrConst<
     | "verbatim"
     | "latin"

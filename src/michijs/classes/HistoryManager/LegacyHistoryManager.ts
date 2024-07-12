@@ -1,23 +1,59 @@
-import type { ObservableOrConst, Subscription } from "../types";
-import { unproxify } from "../utils";
-import { Observable } from "./Observable";
+import type {
+  HistoryManagerType,
+  ObservableOrConst,
+  Subscription,
+} from "../../types";
+import { unproxify } from "../../utils";
+import { Observable } from "../Observable";
+import { handleNavigation } from "./handleNavigation";
 
-class HistoryManagerSingleton extends Observable<string | URL> {
-  readonly history: (string | URL)[] = [location.pathname];
+export class LegacyHistoryManager
+  extends Observable<string | URL>
+  implements HistoryManagerType
+{
+  private readonly history: (string | URL)[] = [location.pathname];
 
   constructor(initialObservers?: Subscription<string | URL>[]) {
     super(initialObservers);
+    document.addEventListener("click", (e) => {
+      if (e.target instanceof HTMLAnchorElement) {
+        const downloadRequest =
+          e.target.download === "" ? null : e.target.download;
+        const href = e.target.href;
+        const canIntercept = new URL(href).origin === location.origin;
+        handleNavigation(
+          {
+            canIntercept,
+            downloadRequest,
+            navigationType: "push",
+          },
+          () => {
+            e.preventDefault();
+            this.push(href);
+          },
+        );
+      }
+    });
     window.addEventListener("popstate", () => this.notify(location.href));
   }
+  canGoBack(fallbackUrl?: ObservableOrConst<string | URL>): boolean {
+    if (this.history.length > 0) return true;
+    let matchesFallbackUrl: boolean = false;
+    if (fallbackUrl) {
+      const urlValue = unproxify(fallbackUrl);
+      const finalUrlValue = urlValue instanceof URL ? urlValue.href : urlValue;
+      matchesFallbackUrl = this.matches(finalUrlValue);
+    }
+    return matchesFallbackUrl;
+  }
 
-  back(fallbackUrl: ObservableOrConst<string | URL>): string | void | URL {
+  back(fallbackUrl: ObservableOrConst<string | URL>): void {
     if (this.history.length > 0) {
       history.back();
       const url = this.history.pop()!;
       this.notify(url);
-      return url;
     }
-    return this.replaceCurrentUrl(fallbackUrl);
+    this.replaceCurrentUrl(fallbackUrl);
   }
 
   replaceCurrentUrl(url: ObservableOrConst<string | URL>): void {
@@ -56,17 +92,6 @@ class HistoryManagerSingleton extends Observable<string | URL> {
 
   matches(url: ObservableOrConst<string>, flexible = false): boolean {
     const urlValue = unproxify(url);
-    if (window.URLPattern) {
-      const p = new window.URLPattern({
-        pathname: `${
-          urlValue.endsWith("/") ? urlValue.slice(-1, 1) : urlValue
-        }*`,
-        baseURL: location.origin,
-        search: "*",
-        hash: "*",
-      });
-      return p.test(location.href);
-    }
     const urlPaths = urlValue.split("/").filter((x) => x !== "");
     let locationPaths = location.pathname.split("/").filter((x) => x !== "");
     if (flexible) {
@@ -81,6 +106,3 @@ class HistoryManagerSingleton extends Observable<string | URL> {
     );
   }
 }
-
-export const HistoryManager: HistoryManagerSingleton =
-  new HistoryManagerSingleton();

@@ -33,7 +33,7 @@ export interface AllAttributes {
    * This attribute controls whether or not the animation is cumulative.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/accumulate} */
-  accumulate?: ValueSets["45"];
+  accumulate?: ValueSets["46"];
   /**
    * The URI of a program that processes the form information. This value can be overridden by a [`formaction`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-formaction) attribute on a [`<button>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button "The HTML <button> element represents a clickable button, which can be used in forms or anywhere in a document that needs simple, standard button functionality.") or [`<input>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input "The HTML <input> element is used to create interactive controls for web-based forms in order to accept data from the user; a wide variety of types of input data and control widgets are available, depending on the device and user agent.") element. */
   action?: ValueSets["default"];
@@ -41,7 +41,7 @@ export interface AllAttributes {
    * This attribute controls whether or not the animation is additive.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/additive} */
-  additive?: ValueSets["46"];
+  additive?: ValueSets["47"];
   /**
    * Sets the alignment of the rule on the page. If no value is specified, the default value is `left`. */
   align?: ValueSets["default"];
@@ -49,7 +49,7 @@ export interface AllAttributes {
    * The alignment-baseline attribute specifies how an object is aligned with respect to its parent. This property specifies which baseline of this element is to be aligned with the corresponding baseline of the parent. For example, this allows alphabetic baselines in Roman text to stay aligned across font size changes. It defaults to the baseline with the same name as the computed value of the alignment-baseline property.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/alignment-baseline} */
-  ["alignment-baseline"]?: ValueSets["52"];
+  ["alignment-baseline"]?: ValueSets["53"];
   /**
    * Color of text for hyperlinks when selected. _This method is non-conforming, use CSS [`color`](https://developer.mozilla.org/en-US/docs/Web/CSS/color "The color CSS property sets the foreground color value of an element's text and text decorations, and sets the currentcolor value.") property in conjunction with the [`:active`](https://developer.mozilla.org/en-US/docs/Web/CSS/:active "The :active CSS pseudo-class represents an element (such as a button) that is being activated by the user.") pseudo-class instead._ */
   alink?: ValueSets["default"];
@@ -337,7 +337,7 @@ export interface AllAttributes {
    * This attribute specifies the namespace in which the target attribute and its associated values are defined.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/attributeType} */
-  attributeType?: ValueSets["47"];
+  attributeType?: ValueSets["48"];
   /**
    * Controls whether and how text input is automatically capitalized as it is entered/edited by the user. It can have the following values:
    *
@@ -417,7 +417,7 @@ export interface AllAttributes {
    * This attribute specifies the interpolation mode for the animation. The default mode is linear, however if the attribute does not support linear interpolation (e.g. for strings), the calcMode attribute is ignored and discrete interpolation is used.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/calcMode} */
-  calcMode?: ValueSets["50"];
+  calcMode?: ValueSets["51"];
   /**
    * This attribute declares the page's character encoding. It must contain a [standard IANA MIME name for character encodings](https://www.iana.org/assignments/character-sets). Although the standard doesn't request a specific encoding, it suggests:
    *
@@ -461,12 +461,12 @@ export interface AllAttributes {
    * The clip-rule attribute only applies to graphics elements that are contained within a <clipPath> element. The clip-rule attribute basically works as the fill-rule attribute, except that it applies to <clipPath> definitions.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/clip-rule} */
-  ["clip-rule"]?: ValueSets["53"];
+  ["clip-rule"]?: ValueSets["54"];
   /**
    * Defines the coordinate system for the contents of the <clippath> element.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/clipPathUnits} */
-  clipPathUnits?: ValueSets["76"];
+  clipPathUnits?: ValueSets["77"];
   /**
    * The base path used to resolve relative URIs specified by **classid**, **data**, or **archive**. If not specified, the default is the base URI of the current document. */
   codebase?: ValueSets["default"];
@@ -480,22 +480,22 @@ export interface AllAttributes {
    * The color-interpolation attribute specifies the color space for gradient interpolations, color animations, and alpha compositing.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/color-interpolation} */
-  ["color-interpolation"]?: ValueSets["54"];
+  ["color-interpolation"]?: ValueSets["55"];
   /**
    * The color-interpolation-filters attribute specifies the color space for imaging operations performed via filter effects.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/color-interpolation-filters} */
-  ["color-interpolation-filters"]?: ValueSets["54"];
+  ["color-interpolation-filters"]?: ValueSets["55"];
   /**
    * The color-profile attribute is used to define which color profile a raster image included through the <image> element should use.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/color-profile} */
-  ["color-profile"]?: ValueSets["55"];
+  ["color-profile"]?: ValueSets["56"];
   /**
    * The color-rendering attribute provides a hint to the SVG user agent about how to optimize its color interpolation and compositing operations.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/color-rendering} */
-  ["color-rendering"]?: ValueSets["56"];
+  ["color-rendering"]?: ValueSets["57"];
   /**
    * Contains the _preferred_ count of characters that a line should have. It was a non-standard synonym of [`width`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/pre#attr-width). To achieve such an effect, use CSS [`width`](https://developer.mozilla.org/en-US/docs/Web/CSS/width "The width CSS property sets an element's width. By default it sets the width of the content area, but if box-sizing is set to border-box, it sets the width of the border area.") instead. */
   cols?: ValueSets["default"];
@@ -522,9 +522,7 @@ export interface AllAttributes {
    * [MDN Reference] {@link https://developer.mozilla.org/docs/Web/HTML/Global_attributes/contenteditable} */
   contenteditable?: ValueSets["default"];
   /**
-   * The `[**id**](#attr-id)` of a [`<menu>`](https://developer.mozilla.org/docs/Web/HTML/Element/menu "The HTML <menu> element represents a group of commands that a user can perform or activate. This includes both list menus, which might appear across the top of a screen, as well as context menus, such as those that might appear underneath a button after it has been clicked.") to use as the contextual menu for this element.
-   *
-   * [MDN Reference] {@link https://developer.mozilla.org/docs/Web/HTML/Global_attributes/contextmenu} */
+   * The `[**id**](#attr-id)` of a [`<menu>`](https://developer.mozilla.org/docs/Web/HTML/Element/menu "The HTML <menu> element represents a group of commands that a user can perform or activate. This includes both list menus, which might appear across the top of a screen, as well as context menus, such as those that might appear underneath a button after it has been clicked.") to use as the contextual menu for this element. */
   contextmenu?: ValueSets["default"];
   controls?: ValueSets["v"];
   coords?: ValueSets["default"];
@@ -548,7 +546,7 @@ export interface AllAttributes {
    * The cursor attribute specifies the mouse cursor displayed when the mouse pointer is over an element.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/cursor} */
-  cursor?: ValueSets["57"];
+  cursor?: ValueSets["58"];
   /**
    * For the <circle> and the <ellipse> element, this attribute define the x-axis coordinate of the center of the element. If the attribute is not specified, the effect is as if a value of "0" were specified.
    *
@@ -622,14 +620,14 @@ export interface AllAttributes {
    * The direction attribute specifies the base writing direction of text and the direction of embeddings and overrides (see unicode-bidi) for the Unicode bidirectional algorithm. For the direction attribute to have any effect on an element that does not by itself establish a new text chunk (such as a <tspan> element without absolute position adjustments due to x or y attributes), the unicode-bidi property's value must be embed or bidi-override.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/direction} */
-  direction?: ValueSets["58"];
+  direction?: ValueSets["59"];
   dirname?: ValueSets["default"];
   disabled?: ValueSets["v"];
   /**
    * Specifies the rendering mode. The values `block` and `inline` are allowed.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/MathML/Attribute} */
-  display?: ValueSets["42"];
+  display?: ValueSets["43"];
   /**
    * A `<boolean>` specifying whether to set the math-style to `normal` (if true) or `compact` (otherwise).
    *
@@ -644,7 +642,7 @@ export interface AllAttributes {
    * The dominant-baseline attribute is used to determine or re-determine a scaled-baseline-table. A scaled-baseline-table is a compound value with three components: a baseline-identifier for the dominant-baseline, a baseline-table and a baseline-table font-size. Some values of the property re-determine all three values; other only re-establish the baseline-table font-size. When the initial value, auto, would give an undesired result, this property can be used to explicitly set the desire scaled-baseline-table.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/dominant-baseline} */
-  ["dominant-baseline"]?: ValueSets["60"];
+  ["dominant-baseline"]?: ValueSets["61"];
   /**
    * This attribute instructs browsers to download a URL instead of navigating to it, so the user will be prompted to save it as a local file. If the attribute has a value, it is used as the pre-filled file name in the Save prompt (the user can still change the file name if they want). There are no restrictions on allowed values, though `/` and `\` are converted to underscores. Most file systems limit some punctuation in file names, and browsers will adjust the suggested name accordingly.
    *
@@ -689,7 +687,7 @@ export interface AllAttributes {
    * The edgeMode attribute determines how to extend the input image as necessary with color values so that the matrix operations can be applied when the kernel is positioned at or near the edge of the input image.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/edgeMode} */
-  edgeMode?: ValueSets["80"];
+  edgeMode?: ValueSets["81"];
   /**
    * The elevation attribute represent the direction angle for the light source from the XY plane towards the z axis, in degrees. Note the positive Z-axis points towards the viewer of the content.
    *
@@ -743,7 +741,7 @@ export interface AllAttributes {
    * The fill-rule attribute indicates how to determine what side of a path is inside a shape, to determine how the fill property paints the shape. For a simple, non-intersecting path, it is intuitively clear what region lies "inside"; however, for a more complex path, such as a path that intersects itself or where one subpath encloses another, the interpretation of "inside" is not so obvious.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/fill-rule} */
-  ["fill-rule"]?: ValueSets["53"];
+  ["fill-rule"]?: ValueSets["54"];
   /**
    * The filter attribute defines the filter effects define by the <filter> element that shall be applied to its element.
    *
@@ -753,7 +751,7 @@ export interface AllAttributes {
    * defines the coordinate system for the attributes x, y, width and height.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/filterUnits} */
-  filterUnits?: ValueSets["76"];
+  filterUnits?: ValueSets["77"];
   /**
    * The flood-color attribute indicates what color to use to flood the current filter primitive subregion defined through the <feflood> element. The keyword currentColor and ICC colors can be specified in the same manner as within a <paint> specification for the fill and stroke attributes.
    *
@@ -783,7 +781,7 @@ export interface AllAttributes {
    * The font-stretch attribute indicates the desired amount of condensing or expansion in the glyphs used to render the text.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/font-stretch} */
-  ["font-stretch"]?: ValueSets["61"];
+  ["font-stretch"]?: ValueSets["62"];
   /**
    * The font-style attribute specifies whether the text is to be rendered using a normal, italic or oblique face.
    *
@@ -798,7 +796,7 @@ export interface AllAttributes {
    * The font-weight attribute refers to the boldness or lightness of the glyphs used to render the text, relative to other fonts in the same font family.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/font-weight} */
-  ["font-weight"]?: ValueSets["62"];
+  ["font-weight"]?: ValueSets["63"];
   /**
    * The [`id`](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes#attr-id) of a [labelable](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Content_categories#Form_labelable) form-related element in the same document as the `<label>` element. The first element in the document with an `id` matching the value of the `for` attribute is the _labeled control_ for this label element, if it is a labelable element. If it is not labelable then the `for` attribute has no effect. If there are other elements which also match the `id` value, later in the document, they are not considered.
    *
@@ -841,7 +839,7 @@ export interface AllAttributes {
    * The gradientUnits attribute defines the coordinate system for attributes x1, y1, x2 and y2 on the <lineargradient> element or for attributes cx, cy, r, fx, and fy on the <radialgradient>.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/gradientUnits} */
-  gradientUnits?: ValueSets["76"];
+  gradientUnits?: ValueSets["77"];
   headers?: ValueSets["default"];
   /**
    * The intrinsic height of the image in pixels. */
@@ -856,7 +854,7 @@ export interface AllAttributes {
   high?: ValueSets["default"];
   /**
    * The base URL to be used throughout the document for relative URL addresses. If this attribute is specified, this element must come before any other elements with attributes whose values are URLs. Absolute and relative URLs are allowed. */
-  href?: ValueSets["default"];
+  href?: ValueSets["href"];
   /**
    * This attribute indicates the language of the linked resource. It is purely advisory. Allowed values are determined by [BCP47](https://www.ietf.org/rfc/bcp/bcp47.txt). Use this attribute only if the [`href`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attr-href) attribute is present. */
   hreflang?: ValueSets["default"];
@@ -895,7 +893,7 @@ export interface AllAttributes {
    * The image-rendering attribute provides a hint to the browser about how to make speed vs. quality tradeoffs as it performs image processing.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/image-rendering} */
-  ["image-rendering"]?: ValueSets["63"];
+  ["image-rendering"]?: ValueSets["64"];
   /**
    * Indicates the relative importance of the resource. Priority hints are delegated using the values: */
   importance?: ValueSets["default"];
@@ -903,12 +901,12 @@ export interface AllAttributes {
    * The in attribute identifies input for the given filter primitive.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/in} */
-  in?: ValueSets["77"];
+  in?: ValueSets["78"];
   /**
    * The in2 attribute identifies the second input for the given filter primitive. It works exactly like the in attribute.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/in2} */
-  in2?: ValueSets["77"];
+  in2?: ValueSets["78"];
   /**
    * Provides a hint to browsers as to the type of virtual keyboard configuration to use when editing this element or its contents. Used primarily on [`<input>`](https://developer.mozilla.org/docs/Web/HTML/Element/input "The HTML <input> element is used to create interactive controls for web-based forms in order to accept data from the user; a wide variety of types of input data and control widgets are available, depending on the device and user agent.") elements, but is usable on any element while in `[contenteditable](https://developer.mozilla.org/docs/Web/HTML/Global_attributes#attr-contenteditable)` mode.
    *
@@ -936,29 +934,19 @@ export interface AllAttributes {
    * **Note:** This attribute is allowed only if the `<img>` element is a descendant of an [`<a>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a "The HTML <a> element (or anchor element) creates a hyperlink to other web pages, files, locations within the same page, email addresses, or any other URL.") element with a valid [`href`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attr-href) attribute. */
   ismap?: ValueSets["v"];
   /**
-   * The unique, global identifier of an item.
-   *
-   * [MDN Reference] {@link https://developer.mozilla.org/docs/Web/HTML/Global_attributes/itemid} */
+   * The unique, global identifier of an item. */
   itemid?: ValueSets["default"];
   /**
-   * Used to add properties to an item. Every HTML element may have an `itemprop` attribute specified, where an `itemprop` consists of a name and value pair.
-   *
-   * [MDN Reference] {@link https://developer.mozilla.org/docs/Web/HTML/Global_attributes/itemprop} */
+   * Used to add properties to an item. Every HTML element may have an `itemprop` attribute specified, where an `itemprop` consists of a name and value pair. */
   itemprop?: ValueSets["default"];
   /**
-   * Properties that are not descendants of an element with the `itemscope` attribute can be associated with the item using an `itemref`. It provides a list of element ids (not `itemid`s) with additional properties elsewhere in the document.
-   *
-   * [MDN Reference] {@link https://developer.mozilla.org/docs/Web/HTML/Global_attributes/itemref} */
+   * Properties that are not descendants of an element with the `itemscope` attribute can be associated with the item using an `itemref`. It provides a list of element ids (not `itemid`s) with additional properties elsewhere in the document. */
   itemref?: ValueSets["default"];
   /**
-   * `itemscope` (usually) works along with `[itemtype](https://developer.mozilla.org/docs/Web/HTML/Global_attributes#attr-itemtype)` to specify that the HTML contained in a block is about a particular item. `itemscope` creates the Item and defines the scope of the `itemtype` associated with it. `itemtype` is a valid URL of a vocabulary (such as [schema.org](https://schema.org/)) that describes the item and its properties context.
-   *
-   * [MDN Reference] {@link https://developer.mozilla.org/docs/Web/HTML/Global_attributes/itemscope} */
+   * `itemscope` (usually) works along with `[itemtype](https://developer.mozilla.org/docs/Web/HTML/Global_attributes#attr-itemtype)` to specify that the HTML contained in a block is about a particular item. `itemscope` creates the Item and defines the scope of the `itemtype` associated with it. `itemtype` is a valid URL of a vocabulary (such as [schema.org](https://schema.org/)) that describes the item and its properties context. */
   itemscope?: ValueSets["v"];
   /**
-   * Specifies the URL of the vocabulary that will be used to define `itemprop`s (item properties) in the data structure. `[itemscope](https://developer.mozilla.org/docs/Web/HTML/Global_attributes#attr-itemscope)` is used to set the scope of where in the data structure the vocabulary set by `itemtype` will be active.
-   *
-   * [MDN Reference] {@link https://developer.mozilla.org/docs/Web/HTML/Global_attributes/itemtype} */
+   * Specifies the URL of the vocabulary that will be used to define `itemprop`s (item properties) in the data structure. `[itemscope](https://developer.mozilla.org/docs/Web/HTML/Global_attributes#attr-itemscope)` is used to set the scope of where in the data structure the vocabulary set by `itemtype` will be active. */
   itemtype?: ValueSets["default"];
   /**
    * The k1 attribute defines one of the value to be used within the the arithmetic operation of the <fecomposite> filter primitive. If this attribute is not set, its default value is 0.
@@ -1048,7 +1036,7 @@ export interface AllAttributes {
    * How the text is stretched or compressed to fit the width defined by the textLength attribute.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/lengthAdjust} */
-  lengthAdjust?: ValueSets["88"];
+  lengthAdjust?: ValueSets["89"];
   /**
    * The letter-spacing attribute specifies spacing behavior between text characters supplemental to any spacing due to the kerning attribute.
    *
@@ -1117,7 +1105,7 @@ export interface AllAttributes {
    * The markerUnits attribute defines the coordinate system for the attributes markerWidth, markerHeight and the contents of the <marker>.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/markerUnits} */
-  markerUnits?: ValueSets["86"];
+  markerUnits?: ValueSets["87"];
   /**
    * The markerWidth represents the width of the viewport into which the <marker> is to be fitted when it is rendered.
    *
@@ -1132,12 +1120,12 @@ export interface AllAttributes {
    * Defines the coordinate system for the contents of the <mask>.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/maskContentUnits} */
-  maskContentUnits?: ValueSets["76"];
+  maskContentUnits?: ValueSets["77"];
   /**
    * This attribute defines the coordinate system for attributes x, y, width and height on the <mask>.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/maskUnits} */
-  maskUnits?: ValueSets["76"];
+  maskUnits?: ValueSets["77"];
   /**
    * The logical class of token elements, which varies in typography.
    *
@@ -1179,7 +1167,7 @@ export interface AllAttributes {
    * The mode attribute defines the blending mode on the <feblend> filter primitive.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/mode} */
-  mode?: ValueSets["78"];
+  mode?: ValueSets["79"];
   /**
    * A `<boolean>` indicating whether attached under- and overscripts move to sub- and superscript positions when math-style is set to compact.
    *
@@ -1404,7 +1392,7 @@ export interface AllAttributes {
    * This Boolean attribute is set to indicate that the script should not be executed in browsers that support [ES2015 modules](https://hacks.mozilla.org/2015/08/es6-in-depth-modules/) — in effect, this can be used to serve fallback scripts to older browsers that do not support modular JavaScript code. */
   nomodule?: ValueSets["default"];
   /**
-   * A cryptographic nonce (number used once) used to whitelist inline styles in a [style-src Content-Security-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src). The server must generate a unique nonce value each time it transmits a policy. It is critical to provide a nonce that cannot be guessed as bypassing a resource’s policy is otherwise trivial. */
+   * A cryptographic nonce (number used once) used to allow inline styles in a [style-src Content-Security-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src). The server must generate a unique nonce value each time it transmits a policy. It is critical to provide a nonce that cannot be guessed as bypassing a resource’s policy is otherwise trivial. */
   nonce?: ValueSets["default"];
   /**
    * Sets the rule to have no shading. */
@@ -1432,7 +1420,7 @@ export interface AllAttributes {
    * The operator attribute as two meaning based on the context it's used.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/operator} */
-  operator?: ValueSets["79"];
+  operator?: ValueSets["80"];
   /**
    * This attribute indicates the optimal numeric value. It must be within the range (as defined by the `min` attribute and `max` attribute). When used with the `low` attribute and `high` attribute, it gives an indication where along the range is considered preferable. For example, if it is between the `min` attribute and the `low` attribute, then the lower range is considered preferred. */
   optimum?: ValueSets["default"];
@@ -1450,7 +1438,7 @@ export interface AllAttributes {
    * The overflow attribute has the same parameter values as defined for the css overflow property.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/overflow} */
-  overflow?: ValueSets["64"];
+  overflow?: ValueSets["65"];
   /**
    * A space-separated list of the part names of the element. Part names allows CSS to select and style specific elements in a shadow tree via the [`::part`](https://developer.mozilla.org/docs/Web/CSS/::part "The ::part CSS pseudo-element represents any element within a shadow tree that has a matching part attribute.") pseudo-element.
    *
@@ -1471,7 +1459,7 @@ export interface AllAttributes {
    * The patternContentUnits attribute defines the coordinate system for the contents of the <pattern>. Note that this attribute has no effect if attribute viewBox is specified on the <pattern> element.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/patternContentUnits} */
-  patternContentUnits?: ValueSets["76"];
+  patternContentUnits?: ValueSets["77"];
   /**
    * The patternTransform attribute contains the definition of an optional additional transformation from the pattern coordinate system onto the target coordinate system. This allows for things such as skewing the pattern tiles. This additional transformation matrix is post-multiplied to (i.e., inserted to the right of) any previously defined transformations, including the implicit transformation necessary to convert from object bounding box units to user space.
    *
@@ -1481,7 +1469,7 @@ export interface AllAttributes {
    * The patternUnits attribute defines the coordinate system for attributes x, y, width and height.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/patternUnits} */
-  patternUnits?: ValueSets["76"];
+  patternUnits?: ValueSets["77"];
   /**
    * Contains a space-separated list of URLs to which, when the hyperlink is followed, [`POST`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST "The HTTP POST method sends data to the server. The type of the body of the request is indicated by the Content-Type header.") requests with the body `PING` will be sent by the browser (in the background). Typically used for tracking. */
   ping?: ValueSets["default"];
@@ -1490,7 +1478,7 @@ export interface AllAttributes {
    * The pointer-events attribute allows authors to control whether or when an element may be the target of a mouse event. This attribute is used to specify under which circumstance (if any) a mouse event should go "through" an element and target whatever is "underneath" that element instead.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/pointer-events} */
-  ["pointer-events"]?: ValueSets["65"];
+  ["pointer-events"]?: ValueSets["66"];
   /**
    * The points attribute define a list of points required to draw a  <polyline> or <polygon> element.
    *
@@ -1522,12 +1510,12 @@ export interface AllAttributes {
    * In some cases, typically when using the viewBox attribute, it is desirable that the graphics stretch to fit non-uniformly to take up the entire viewport. In other cases, it is desirable that uniform scaling be used for the purposes of preserving the aspect ratio of the graphics.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/preserveAspectRatio} */
-  preserveAspectRatio?: ValueSets["82"];
+  preserveAspectRatio?: ValueSets["83"];
   /**
    * The primitiveUnits attribute specifies the coordinate system for the various length values within the filter primitives and for the attributes that define the filter primitive subregion.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/primitiveUnits} */
-  primitiveUnits?: ValueSets["76"];
+  primitiveUnits?: ValueSets["77"];
   /**
    * The URIs of one or more metadata profiles, separated by white space. */
   profile?: ValueSets["default"];
@@ -1575,18 +1563,18 @@ export interface AllAttributes {
    * This attribute specifies the total duration for repeat.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/repeatDur} */
-  repeatDur?: ValueSets["48"];
+  repeatDur?: ValueSets["49"];
   required?: ValueSets["v"];
   /**
    * This attribute indicates when animation can or can not restart.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/restart} */
-  restart?: ValueSets["49"];
+  restart?: ValueSets["50"];
   /**
    * The result attribute defines the assigned name for this filter primitive. If supplied, then graphics that result from processing this filter primitive can be referenced by an in attribute on a subsequent filter primitive within the same <filter> element. If no value is provided, the output will only be available for re-use as the implicit input into the next filter primitive if that filter primitive provides no value for its in attribute.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/result} */
-  result?: ValueSets["51"];
+  result?: ValueSets["52"];
   /**
    * This Boolean attribute specifies that the items of the list are specified in reversed order. */
   reversed?: ValueSets["v"];
@@ -1681,7 +1669,7 @@ export interface AllAttributes {
    * The creator of SVG content might want to provide a hint about what tradeoffs to make as the browser renders <path> element or basic shapes. The shape-rendering attribute provides these hints.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/shape-rendering} */
-  ["shape-rendering"]?: ValueSets["66"];
+  ["shape-rendering"]?: ValueSets["67"];
   /**
    * Sets the height, in pixels, of the rule. */
   size?: ValueSets["default"];
@@ -1703,7 +1691,7 @@ export interface AllAttributes {
    * How space between glyphs should be handled.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/spacing} */
-  spacing?: ValueSets["90"];
+  spacing?: ValueSets["91"];
   span?: ValueSets["default"];
   /**
    * The specularConstant attribute represents the ks value in the Phong lighting model. In SVG, this can be any non-negative number.
@@ -1727,7 +1715,7 @@ export interface AllAttributes {
    * The spreadMethod attribute determines how a shape is filled beyond the defined edges of a gradient.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/spreadMethod} */
-  spreadMethod?: ValueSets["85"];
+  spreadMethod?: ValueSets["86"];
   /**
    * The image URL. This attribute is mandatory for the `<img>` element. On browsers supporting `srcset`, `src` is treated like a candidate image with a pixel density descriptor `1x` unless an image with this pixel density descriptor is already defined in `srcset,` or unless `srcset` contains '`w`' descriptors. */
   src?: ValueSets["default"];
@@ -1769,7 +1757,7 @@ export interface AllAttributes {
    * The stitchTiles attribute defines how the Perlin tiles behave at the border.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stitchTiles} */
-  stitchTiles?: ValueSets["83"];
+  stitchTiles?: ValueSets["84"];
   /**
    * The stop-color attribute indicates what color to use at that gradient stop. The keyword currentColor and ICC colors can be specified in the same manner as within a <paint> specification for the fill and stroke attributes.
    *
@@ -1804,12 +1792,12 @@ export interface AllAttributes {
    * the stroke-linecap attribute specifies the shape to be used at the end of open subpaths when they are stroked.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stroke-linecap} */
-  ["stroke-linecap"]?: ValueSets["67"];
+  ["stroke-linecap"]?: ValueSets["68"];
   /**
    * the stroke-linejoin attribute specifies the shape to be used at the corners of paths or basic shapes when they are stroked.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stroke-linejoin} */
-  ["stroke-linejoin"]?: ValueSets["68"];
+  ["stroke-linejoin"]?: ValueSets["69"];
   /**
    * When two line segments meet at a sharp angle and miter joins have been specified for stroke-linejoin, it is possible for the miter to extend far beyond the thickness of the line stroking the path. The stroke-miterlimit imposes a limit on the ratio of the miter length to the stroke-width. When the limit is exceeded, the join is converted from a miter to a bevel.
    *
@@ -1886,17 +1874,17 @@ export interface AllAttributes {
    * The text-anchor attribute is used to align (start-, middle- or end-alignment) a string of text relative to a given point.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/text-anchor} */
-  ["text-anchor"]?: ValueSets["69"];
+  ["text-anchor"]?: ValueSets["70"];
   /**
    * The text-decoration attribute works exactly like the css text decoration property except that it's an attribute. See css text decoration for further information.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/text-decoration} */
-  ["text-decoration"]?: ValueSets["70"];
+  ["text-decoration"]?: ValueSets["71"];
   /**
    * The creator of SVG content might want to provide a hint about what tradeoffs to make as the browser renders text. The text-rendering attribute provides these hints.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/text-rendering} */
-  ["text-rendering"]?: ValueSets["71"];
+  ["text-rendering"]?: ValueSets["72"];
   /**
    * A width that the text should be scaled to fit.
    *
@@ -1962,7 +1950,7 @@ export interface AllAttributes {
    * The vector-effect property specifies the vector effect to use when drawing an object. Vector effects are applied before any of the other compositing operations, i.e. filters, masks and clips.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/vector-effect} */
-  ["vector-effect"]?: ValueSets["72"];
+  ["vector-effect"]?: ValueSets["73"];
   /**
    * Specifies the version of the HTML [Document Type Definition](https://developer.mozilla.org/en-US/docs/Glossary/DTD "Document Type Definition: In HTML, the doctype is the required "<!DOCTYPE html>" preamble found at the top of all documents. Its sole purpose is to prevent a browser from switching into so-called “quirks mode” when rendering a document; that is, the "<!DOCTYPE html>" doctype ensures that the browser makes a best-effort attempt at following the relevant specifications, rather than using a different rendering mode that is incompatible with some specifications.") that governs the current document. This attribute is not needed, because it is redundant with the version information in the document type declaration. */
   version?: ValueSets["default"];
@@ -1975,7 +1963,7 @@ export interface AllAttributes {
    * Depending on the value of attribute pointer-events, graphics elements which have their visibility attribute set to hidden still might receive events.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/visibility} */
-  visibility?: ValueSets["73"];
+  visibility?: ValueSets["74"];
   /**
    * Color of text for visited hypertext links. _This method is non-conforming, use CSS [`color`](https://developer.mozilla.org/en-US/docs/Web/CSS/color "The color CSS property sets the foreground color value of an element's text and text decorations, and sets the currentcolor value.") property in conjunction with the [`:visited`](https://developer.mozilla.org/en-US/docs/Web/CSS/:visited "The :visited CSS pseudo-class represents links that the user has already visited. For privacy reasons, the styles that can be modified using this selector are very limited.") pseudo-class instead._ */
   vlink?: ValueSets["default"];
@@ -1999,7 +1987,7 @@ export interface AllAttributes {
    * The writing-mode attribute specifies whether the initial inline-progression-direction for a <text> element shall be left-to-right, right-to-left, or top-to-bottom. The writing-mode attribute applies only to <text> elements; the attribute is ignored for <tspan>, <tref>, <altGlyph> and <textPath> sub-elements. (Note that the inline-progression-direction can change within a <text> element due to the Unicode bidirectional algorithm and properties direction and unicode-bidi.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/writing-mode} */
-  ["writing-mode"]?: ValueSets["74"];
+  ["writing-mode"]?: ValueSets["75"];
   /**
    * This attribute indicates an x-axis coordinate in the user coordinate system. The exact effect of this coordinate depend on each element. Most of the time, it represent the x-axis coordinate of the upper-left corner of the rectangular region of the reference element (see each individual element's documentation for exceptions).Its syntax is the same as that for <length>
    *
@@ -2019,7 +2007,7 @@ export interface AllAttributes {
    * For a <fedisplacementmap> filter primitive, The xChannelSelector attribute indicates which channel from in2 to use to displace the pixels in in along the x-axis. If attribute xChannelSelector is not specified, then the effect is as if a value of A were specified.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/xChannelSelector} */
-  xChannelSelector?: ValueSets["81"];
+  xChannelSelector?: ValueSets["82"];
   /**
    * Specifies the XML Namespace of the document. Default value is `"http://www.w3.org/1999/xhtml"`. This is required in documents parsed with XML parsers, and optional in text/html documents. */
   xmlns?: ValueSets["default"];
@@ -2042,7 +2030,7 @@ export interface AllAttributes {
    * For a <fedisplacementmap> filter primitive, The xChannelSelector attribute indicates which channel from in2 to use to displace the pixels in in along the y-axis. If attribute yChannelSelector is not specified, then the effect is as if a value of A were specified.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/yChannelSelector} */
-  yChannelSelector?: ValueSets["81"];
+  yChannelSelector?: ValueSets["82"];
   /**
    * The z attribute difine the location along the Z-axis for a light source in the coordinate system established by the primitiveUnits attribute on the <filter> element, assuming that, in the initial coordinate system, the positive Z-axis comes out towards the person viewing the content and assuming that one unit along the Z-axis equals on unit in X and Z.
    *

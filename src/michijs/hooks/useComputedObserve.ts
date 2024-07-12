@@ -16,7 +16,7 @@ interface UseComputedObserve {
 
 /**
  * It is used for computing a value and observing its changes.
- * @param callback A function that returns a promise of type T.
+ * @param callback A function that returns a value of type T.
  * @param deps Dependencies to watch for changes.
  * @param options An optional object that may contain onBeforeUpdate and onAfterUpdate callback functions.
  * @returns A new observable

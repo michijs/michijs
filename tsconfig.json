@@ -6,7 +6,7 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false,
-    "isolatedDeclarations": true,
+    "isolatedDeclarations": false,
     "declaration": true,
     "experimentalDecorators": true,
     "noErrorTruncation": true,

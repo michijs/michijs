@@ -1,16 +1,16 @@
-import { Link, Title } from "@michijs/michijs";
+import { Title } from "@michijs/michijs";
 import { urls } from "../routes";
 
 export const Main = () => (
   <>
     <Title>Main Page</Title>
-    <Link url={urls.counterTests()}>Counter tests</Link>
-    <Link url={urls.asyncTests()}>Async tests</Link>
-    <Link url={urls.performanceTests()}>Performance tests</Link>
-    <Link url={urls.i18nTests()}>I18n tests</Link>
-    <Link url={urls.a11yTests()}>A11Y tests</Link>
-    <Link
-      url={urls.searchParamsAndHash({
+    <a href={urls.counterTests()}>Counter tests</a>
+    <a href={urls.asyncTests()}>Async tests</a>
+    <a href={urls.performanceTests()}>Performance tests</a>
+    <a href={urls.i18nTests()}>I18n tests</a>
+    <a href={urls.a11yTests()}>A11Y tests</a>
+    <a
+      href={urls.searchParamsAndHash({
         searchParams: {
           counterParam: 0,
           textParam: "initial text",
@@ -20,7 +20,7 @@ export const Main = () => (
       })}
     >
       Search params and hash tests
-    </Link>
-    <Link url={"https://www.google.com"}>External link</Link>
+    </a>
+    <a href={"https://www.google.com"}>External link</a>
   </>
 );
