@@ -347,11 +347,11 @@ export interface RequestInitUseFetch<B> extends Omit<RequestInit, "body"> {
 }
 
 export interface HistoryManagerType extends Observable<string | URL> {
-  canGoBack(fallbackUrl?: ObservableOrConst<string | URL>): boolean
-  back(fallbackUrl?: ObservableOrConst<string | URL>): void
-  replaceCurrentUrl(url: ObservableOrConst<string | URL>): void
-  push(url: ObservableOrConst<string | URL>): void,
-  matches(url: ObservableOrConst<string>): boolean
+  canGoBack(fallbackUrl?: ObservableOrConst<string | URL>): boolean;
+  back(fallbackUrl?: ObservableOrConst<string | URL>): void;
+  replaceCurrentUrl(url: ObservableOrConst<string | URL>): void;
+  push(url: ObservableOrConst<string | URL>): void;
+  matches(url: ObservableOrConst<string>): boolean;
 }
 
 export interface DoFetchProps<

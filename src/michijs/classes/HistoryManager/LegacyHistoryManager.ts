@@ -1,41 +1,50 @@
-import type { HistoryManagerType, ObservableOrConst, Subscription } from "../../types";
+import type {
+  HistoryManagerType,
+  ObservableOrConst,
+  Subscription,
+} from "../../types";
 import { unproxify } from "../../utils";
 import { Observable } from "../Observable";
 import { handleNavigation } from "./handleNavigation";
 
-export class LegacyHistoryManager extends Observable<string | URL> implements HistoryManagerType {
+export class LegacyHistoryManager
+  extends Observable<string | URL>
+  implements HistoryManagerType
+{
   private readonly history: (string | URL)[] = [location.pathname];
 
   constructor(initialObservers?: Subscription<string | URL>[]) {
     super(initialObservers);
     document.addEventListener("click", (e) => {
       if (e.target instanceof HTMLAnchorElement) {
-        const downloadRequest = e.target.download === "" ? null : e.target.download;
+        const downloadRequest =
+          e.target.download === "" ? null : e.target.download;
         const href = e.target.href;
         const canIntercept = new URL(href).origin === location.origin;
-        handleNavigation({
-          canIntercept,
-          downloadRequest,
-          navigationType: 'push'
-        }, 
-        () => {
-          e.preventDefault();
-          this.push(href);
-        });
+        handleNavigation(
+          {
+            canIntercept,
+            downloadRequest,
+            navigationType: "push",
+          },
+          () => {
+            e.preventDefault();
+            this.push(href);
+          },
+        );
       }
     });
     window.addEventListener("popstate", () => this.notify(location.href));
   }
   canGoBack(fallbackUrl?: ObservableOrConst<string | URL>): boolean {
-    if (this.history.length > 0)
-      return true;
+    if (this.history.length > 0) return true;
     let matchesFallbackUrl: boolean = false;
     if (fallbackUrl) {
       const urlValue = unproxify(fallbackUrl);
       const finalUrlValue = urlValue instanceof URL ? urlValue.href : urlValue;
-      matchesFallbackUrl = this.matches(finalUrlValue)
+      matchesFallbackUrl = this.matches(finalUrlValue);
     }
-    return matchesFallbackUrl
+    return matchesFallbackUrl;
   }
 
   back(fallbackUrl: ObservableOrConst<string | URL>): void {

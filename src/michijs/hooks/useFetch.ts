@@ -14,7 +14,7 @@ import { usePromise } from "./usePromise";
  *
  * @param callback The callback to get the options for the request
  * @param shouldWait All the promises that should resolve before executing the promise.
- * @param options Some additional options 
+ * @param options Some additional options
  * @returns An Observable that emits the result of the fetch operation.
  * @template R Type of the expected response data.
  * @template S Type of the optional search parameters.
