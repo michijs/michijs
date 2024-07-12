@@ -25,7 +25,7 @@ export class ModernHistoryManager
   }
   canGoBack(fallbackUrl?: ObservableOrConst<string | URL>): boolean {
     if (window.navigation?.canGoBack) return window.navigation?.canGoBack;
-    let matchesFallbackUrl: boolean = false;
+    let matchesFallbackUrl = false;
     if (fallbackUrl) {
       const urlValue = unproxify(fallbackUrl);
       const finalUrlValue = urlValue instanceof URL ? urlValue.href : urlValue;
