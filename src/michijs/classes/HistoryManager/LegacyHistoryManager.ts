@@ -38,7 +38,7 @@ export class LegacyHistoryManager
   }
   canGoBack(fallbackUrl?: ObservableOrConst<string | URL>): boolean {
     if (this.history.length > 0) return true;
-    let matchesFallbackUrl: boolean = false;
+    let matchesFallbackUrl = false;
     if (fallbackUrl) {
       const urlValue = unproxify(fallbackUrl);
       const finalUrlValue = urlValue instanceof URL ? urlValue.href : urlValue;
