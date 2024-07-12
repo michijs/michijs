@@ -351,7 +351,7 @@ export interface HistoryManagerType extends Observable<string | URL> {
   back(fallbackUrl?: ObservableOrConst<string | URL>): void;
   replaceCurrentUrl(url: ObservableOrConst<string | URL>): void;
   push(url: ObservableOrConst<string | URL>): void;
-  matches(url: ObservableOrConst<string>): boolean;
+  matches(url: ObservableOrConst<string>, flexible?: boolean): boolean;
 }
 
 export interface DoFetchProps<
