@@ -16,18 +16,17 @@ export const Title: FC<TitleProps> = ({ children }) => {
 
   const updateTitleCallback = () => {
     const newValue = unproxify(children);
-    if (el?.isConnected && newValue)
-      title(newValue)
-  }
+    if (el?.isConnected && newValue) title(newValue);
+  };
 
   return (
     <GenericElement
       onelementconnected={(elEvent) => {
         el = elEvent.detail;
-        updateTitleCallback()
+        updateTitleCallback();
       }}
       onelementmounted={() => {
-        useWatch(updateTitleCallback, [children])
+        useWatch(updateTitleCallback, [children]);
       }}
     />
   );
