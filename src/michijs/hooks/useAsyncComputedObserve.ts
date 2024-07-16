@@ -37,6 +37,7 @@ export const useAsyncComputedObserve: UseAsyncComputedObserve = (
     (newObservable as ObservableType<object>)(callbackResult as object);
     options?.onAfterUpdate?.();
   };
+  listener();
   useWatch(listener, deps);
 
   return newObservable;
