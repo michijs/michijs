@@ -1,6 +1,6 @@
-import { useTitle } from "../hooks";
+import { useTitle, useWatch } from "../hooks";
 import type { FC, ObservableOrConst } from "../types";
-import { bindObservable } from "../utils";
+import { unproxify } from "../utils";
 import { GenericElement } from "./GenericElement";
 
 export interface TitleProps {
@@ -14,15 +14,20 @@ const title = useTitle();
 export const Title: FC<TitleProps> = ({ children }) => {
   let el: HTMLElement | undefined = undefined;
 
-  // bindObservable(children, updateTitleCallback)
+  const updateTitleCallback = () => {
+    const newValue = unproxify(children);
+    if (el?.isConnected && newValue)
+      title(newValue)
+  }
+
   return (
     <GenericElement
-      onelementconnected={async (elEvent) => {
+      onelementconnected={(elEvent) => {
         el = elEvent.detail;
-        bindObservable(children, (newValue) => {
-          if (el?.isConnected && newValue)
-            title(newValue);
-        });
+        updateTitleCallback()
+      }}
+      onelementmounted={() => {
+        useWatch(updateTitleCallback, [children])
       }}
     />
   );

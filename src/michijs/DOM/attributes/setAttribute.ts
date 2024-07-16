@@ -13,7 +13,10 @@ export function setAttribute(
       break;
     }
     case typeof value === "object": {
-      element.setAttribute(key, JSON.stringify(value));
+      if (value instanceof URL)
+        element.setAttribute(key, value.href)
+      else
+        element.setAttribute(key, JSON.stringify(value));
       break;
     }
     default: {
