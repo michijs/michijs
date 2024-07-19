@@ -394,7 +394,7 @@ export interface PromiseResult<R> {
   /**
    * Call again the promise. Available after first call
    */
-  recall?(): void;
+  recall(): void;
 }
 
 // Needs to be partial to allow asignation operation
