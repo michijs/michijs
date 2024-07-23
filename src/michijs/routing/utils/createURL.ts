@@ -1,14 +1,15 @@
-import { Hash, SearchParams } from "../types"
+import { Hash, SearchParams } from "../types";
 import { normalizeURL } from "./normalizeURL";
 import { setSearchParam } from "./setSearchParam";
 
 export const createURL = (
   input: string,
   options?: {
-    baseURL?: string | URL,
-    searchParams?: SearchParams,
-    hash?: Hash
-  }) => {
+    baseURL?: string | URL;
+    searchParams?: SearchParams;
+    hash?: Hash;
+  },
+) => {
   const url = new URL(normalizeURL(input), options?.baseURL);
   if (options?.searchParams)
     Object.entries(options.searchParams).forEach(([name, value]) =>
@@ -17,4 +18,4 @@ export const createURL = (
   const hashValue = options?.hash?.valueOf();
   if (hashValue) url.hash = hashValue;
   return url;
-}
+};

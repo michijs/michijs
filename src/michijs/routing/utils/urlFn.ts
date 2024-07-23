@@ -17,7 +17,7 @@ export const urlFn = (
 
     return createURL(`${baseURL}${propertyName}`, {
       searchParams,
-      hash
+      hash,
     });
   };
 };
