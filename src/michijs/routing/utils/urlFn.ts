@@ -1,6 +1,6 @@
 import { formatToKebabCase } from "../../utils";
 import type { UrlFunction } from "../types";
-import { setSearchParam } from "./setSearchParam";
+import { createURL } from "./createURL";
 
 export const urlFn = (
   property: string,
@@ -14,13 +14,10 @@ export const urlFn = (
     const propertyName = formatToKebabCase(
       property.startsWith("/") ? property : `/${property}`,
     );
-    const url = new URL(`${baseURL}${propertyName}`);
-    if (searchParams)
-      Object.entries(searchParams).forEach(([name, value]) =>
-        setSearchParam(url, name, value),
-      );
-    if (hash?.valueOf()) url.hash = hash.valueOf();
 
-    return url;
+    return createURL(`${baseURL}${propertyName}`, {
+      searchParams,
+      hash
+    });
   };
 };

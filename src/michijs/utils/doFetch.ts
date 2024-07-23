@@ -1,4 +1,4 @@
-import type { SearchParams } from "../routing";
+import { createURL, type SearchParams } from "../routing";
 import type { AnyObject, DoFetchProps, UseFetchOptions } from "../types";
 
 export const doFetch = async <
@@ -9,14 +9,10 @@ export const doFetch = async <
   { input, searchParams, ...init }: DoFetchProps<S, B>,
   options?: UseFetchOptions<R>,
 ): Promise<R> => {
-  const url = new URL(
-    input,
-    input.startsWith("/") ? location.origin : undefined,
-  );
-  if (searchParams)
-    Object.entries(searchParams).forEach(([key, value]) => {
-      if (value) url.searchParams.append(key, value.toString());
-    });
+  const url = createURL(input, {
+    baseURL: input.startsWith("/") ? location.origin : undefined,
+    searchParams
+  })
 
   const response = await fetch(url, {
     ...init,
