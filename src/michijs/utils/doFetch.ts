@@ -11,8 +11,8 @@ export const doFetch = async <
 ): Promise<R> => {
   const url = createURL(input, {
     baseURL: input.startsWith("/") ? location.origin : undefined,
-    searchParams
-  })
+    searchParams,
+  });
 
   const response = await fetch(url, {
     ...init,
