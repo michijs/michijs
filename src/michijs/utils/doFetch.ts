@@ -20,7 +20,8 @@ export const doFetch = async <
       typeof init?.body === "object" ? JSON.stringify(init.body) : init?.body,
   });
 
-  if (!response.ok) throw response.statusText ? response.statusText : await response.text();
+  if (!response.ok)
+    throw response.statusText ? response.statusText : await response.text();
 
   const jsonResult = (await response.json()) as R;
   return options?.transform?.(jsonResult) ?? jsonResult;
