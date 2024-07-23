@@ -1,6 +1,21 @@
 import { createURL, type SearchParams } from "../routing";
 import type { AnyObject, DoFetchProps, UseFetchOptions } from "../types";
 
+const getErrorMessage = async (response: Response): Promise<string> => {
+  if (response.statusText)
+    return response.statusText;
+
+  const text = await response.text();
+
+  try {
+    const stringifiedObject = JSON.parse(text);
+    // Usually there is a message field
+    return stringifiedObject.message ?? stringifiedObject
+  } catch {
+    return text;
+  }
+}
+
 export const doFetch = async <
   R,
   S extends SearchParams = undefined,
@@ -21,7 +36,7 @@ export const doFetch = async <
   });
 
   if (!response.ok)
-    throw response.statusText ? response.statusText : await response.text();
+    throw await getErrorMessage(response);
 
   const jsonResult = (await response.json()) as R;
   return options?.transform?.(jsonResult) ?? jsonResult;
