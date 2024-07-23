@@ -1,4 +1,4 @@
-import { Hash, SearchParams } from "../types";
+import type { Hash, SearchParams } from "../types";
 import { normalizeURL } from "./normalizeURL";
 import { setSearchParam } from "./setSearchParam";
 
