@@ -26,7 +26,11 @@ export function deepEqual(object1: any, object2: any): boolean {
         return !object1Value.find(
           (value, index) => !deepEqual(value, object2Value[index]),
         );
-      } else {
+      }
+      if (
+        Object.getPrototypeOf(object1Value) === Object.prototype &&
+        Object.getPrototypeOf(object2Value) === Object.prototype
+      ) {
         if (
           Object.keys(object1Value).length !== Object.keys(object2Value).length
         )
@@ -34,6 +38,8 @@ export function deepEqual(object1: any, object2: any): boolean {
         for (const key in { ...object1Value, ...object2Value }) {
           if (!deepEqual(object1Value[key], object2Value[key])) return false;
         }
+      } else {
+        return object1Value === object2Value;
       }
       return true;
     }

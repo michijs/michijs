@@ -1,31 +1,7 @@
 import { Router } from "../components/Router";
 import { jsx } from "../h";
-import { formatToKebabCase } from "../utils/formatToKebabCase";
 import type { CreateRouterResult, UrlFunction } from "./types";
-import { setSearchParam } from "./utils/setSearchParam";
-
-export const urlFn = (
-  property: string,
-  parentRoute?: UrlFunction,
-): UrlFunction => {
-  return ({ searchParams, hash } = {}) => {
-    const parentRouteURL = parentRoute?.();
-    const baseURL = parentRouteURL
-      ? `${parentRouteURL.origin}${parentRouteURL.pathname}`
-      : location.origin;
-    const propertyName = formatToKebabCase(
-      property.startsWith("/") ? property : `/${property}`,
-    );
-    const url = new URL(`${baseURL}${propertyName}`);
-    if (searchParams)
-      Object.entries(searchParams).forEach(([name, value]) =>
-        setSearchParam(url, name, value),
-      );
-    if (hash?.valueOf()) url.hash = hash.valueOf();
-
-    return url;
-  };
-};
+import { urlFn } from "./utils/urlFn";
 
 export function createRouter<R extends Record<string, JSX.Element>>(
   routes: R,

@@ -3,7 +3,7 @@ import {
   EventDispatcher,
   useIndexedDB,
   createCustomElement,
-  useComputedObserve,
+  useAsyncComputedObserve,
 } from "@michijs/michijs";
 import { counterStyle } from "./shared/counterStyle";
 
@@ -18,12 +18,12 @@ const storedCount = useIndexedDB<{
   },
 });
 
-const count = useComputedObserve(
+const count = useAsyncComputedObserve(
   async () => {
     return (await storedCount.counter?.get(1))?.count ?? 0;
   },
-  [storedCount],
   (await storedCount.counter?.get(1))?.count ?? 0,
+  [storedCount],
 );
 
 function decrementCount() {

@@ -6,7 +6,7 @@ export const bindObservableToRef = <T, E extends WeakKey>(
   observable: T,
   el: E,
   callback: RefSubscription<T extends ObservableLike<infer Y> ? Y : T, E>,
-) => {
+): void => {
   if (isObservableType(observable)) {
     const overridenCallback = overrideCallbackWithRef(
       el,

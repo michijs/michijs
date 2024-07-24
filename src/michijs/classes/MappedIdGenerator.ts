@@ -2,9 +2,9 @@ import { IdGenerator } from "./IdGenerator";
 
 export class MappedIdGenerator {
   private idGenerator = new IdGenerator();
-  ids = new Map<string, string>();
+  ids: Map<string, string> = new Map<string, string>();
 
-  getId(key: string) {
+  getId(key: string): string | undefined {
     if (this.ids.has(key)) {
       return this.ids.get(key);
     }
@@ -13,7 +13,9 @@ export class MappedIdGenerator {
     return newId;
   }
 
-  get(key: string) {
+  get(key: string): {
+    id: string | undefined;
+  } {
     return { id: this.getId(key) };
   }
 }

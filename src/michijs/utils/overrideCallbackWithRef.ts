@@ -8,7 +8,7 @@ export const overrideCallbackWithRef = <
   val: E,
   observable: T,
   callback: RefSubscription<Y, E>,
-) => {
+): Subscription<Y> => {
   const ref = new WeakRef(val);
   const overridenCallback: Subscription<Y> = (signal: Y) => {
     const el = ref.deref();

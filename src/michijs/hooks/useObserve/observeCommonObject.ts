@@ -19,15 +19,16 @@ export const customObjectSet =
     if (target.$value) {
       const oldValue = target.$value[property];
       if (oldValue) {
-        oldValue(newValue);
+        // If you call something.myfunctionname = other function it should not call the function
+        if (typeof oldValue.$value === "function") oldValue.$value = newValue;
+        else oldValue(newValue);
         return true;
-      } else {
-        const newItem = useObserve(newValue, initialObservers);
-        const result = Reflect.set(target.$value, property, newItem);
-        // @ts-ignore
-        newItem.notifyCurrentValue?.();
-        return result;
       }
+      const newItem = useObserve(newValue, initialObservers);
+      const result = Reflect.set(target.$value, property, newItem);
+      // @ts-ignore
+      newItem.notifyCurrentValue?.();
+      return result;
     }
     return false;
   };
@@ -54,7 +55,8 @@ export const customObjectGet =
     // Because function already has length
     if (!["length", "name"].includes(p as string) && p in target) {
       return Reflect.get(target, p, receiver);
-    } else if (target.$value) {
+    }
+    if (target.$value) {
       if (typeof target.$value === "object")
         if (p in target.$value)
           return Reflect.get(target.$value, p, target.$value);
@@ -103,7 +105,7 @@ export const customObjectApply: (
   (proxy, initialObservers) => (target, _, args) => {
     const valueType = typeof target.$value;
     if (valueType === "function") return proxy().$value(...args);
-    else if (args.length > 0) {
+    if (args.length > 0) {
       const newValue = args[0];
       if (target.$value && valueType === "object")
         setObservableValue(proxy(), newValue, initialObservers);

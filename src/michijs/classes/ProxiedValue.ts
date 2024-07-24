@@ -3,6 +3,7 @@ import type {
   Subscription,
   ObservableType,
   ProxiedValueInterface,
+  Typeof,
 } from "../types";
 import { deepEqual, unproxify } from "../utils";
 import { useComputedObserve } from "../hooks/useComputedObserve";
@@ -13,12 +14,31 @@ export class ProxiedValue<T>
   implements ProxiedValueInterface<T, T>
 {
   private $privateValue: T;
-  private $transactionInProgress = false;
-  private $triedToNotifyDuringTransaction = false;
+
+  static transactionsInProgress = 0;
+  static valuesToNotifyOnTransactionFinish: Set<
+    InstanceType<typeof ProxiedValue<any>>
+  > = new Set<InstanceType<typeof ProxiedValue<any>>>();
+  static startTransaction(): void {
+    ProxiedValue.transactionsInProgress++;
+  }
+  static endTransaction(): void {
+    if (ProxiedValue.transactionsInProgress === 1) {
+      ProxiedValue.valuesToNotifyOnTransactionFinish.forEach((x) => {
+        x.forceNotifyCurrentValue();
+      });
+      ProxiedValue.valuesToNotifyOnTransactionFinish.clear();
+      // Intentionally at the end to avoid notifying twice
+    }
+    ProxiedValue.transactionsInProgress--;
+  }
 
   constructor(initialValue?: T, initialObservers?: Subscription<T>[]) {
     super(initialObservers);
     this.$privateValue = initialValue!;
+    // To avoid issues with isolatedDeclarations
+    this[Symbol.toStringTag] = () => this.toString();
+    this[Symbol.toPrimitive] = () => this.valueOf();
   }
 
   set $value(newValue: T) {
@@ -29,28 +49,19 @@ export class ProxiedValue<T>
       }
     } else this.$privateValue = newValue;
   }
-  get $value() {
+  get $value(): T {
     return this.$privateValue;
   }
 
-  notifyCurrentValue() {
+  notifyCurrentValue(): void {
     if (this.shouldNotify()) {
-      if (this.$transactionInProgress)
-        this.$triedToNotifyDuringTransaction = true;
+      if (ProxiedValue.transactionsInProgress > 0)
+        ProxiedValue.valuesToNotifyOnTransactionFinish.add(this);
       else this.notify(this.valueOf());
     }
   }
-
-  startTransaction() {
-    this.$transactionInProgress = true;
-  }
-
-  endTransaction() {
-    this.$transactionInProgress = false;
-    if (this.$triedToNotifyDuringTransaction) {
-      this.$triedToNotifyDuringTransaction = false;
-      this.notifyCurrentValue();
-    }
+  forceNotifyCurrentValue(): void {
+    this.notify(this.valueOf());
   }
 
   // @ts-ignore
@@ -66,11 +77,11 @@ export class ProxiedValue<T>
     return useComputedObserve(() => this.toString(), [this]);
   }
 
-  public toBoolean() {
+  public toBoolean(): boolean {
     return Boolean(this.$value);
   }
 
-  public not() {
+  public not(): boolean {
     return !this.$value;
   }
 
@@ -78,36 +89,30 @@ export class ProxiedValue<T>
     return this.$value === anotherValue?.valueOf();
   }
 
-  toJSON() {
+  toJSON(): any {
     if (this.$value && hasToJSON(this.$value)) return this.$value.toJSON();
 
     return this.$value;
   }
 
-  [Symbol.toPrimitive]() {
-    return this.valueOf();
-  }
-  protected [Symbol.toStringTag]() {
-    return this.toString();
-  }
   toString(): string {
     // @ts-ignore
     return this.$value.toString();
   }
-  unproxify() {
+  unproxify(): T {
     return this.valueOf();
   }
 
-  shouldNotify() {
+  shouldNotify(): boolean {
     return !!this.observers;
   }
 
-  typeof() {
+  typeof(): Typeof {
     return typeof this.$value;
   }
 
   // Only for jest
-  asymmetricMatch(prop) {
+  asymmetricMatch(prop: unknown): boolean {
     return this.is(prop);
   }
 }

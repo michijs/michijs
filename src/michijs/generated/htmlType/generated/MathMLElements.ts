@@ -1,4 +1,4 @@
-// file generated from @michijs/vscode-mathml 1.0.3
+// file generated from @michijs/vscode-mathml 1.0.4
 // HTML Data Version 1.1
 import type { AllAttributes } from "./AllAttributes";
 import type { ValueSets } from "./ValueSets";
@@ -14,50 +14,78 @@ interface GlobalAttributes
    * The text direction. Possible values are either `ltr` (left to right) or `rtl` (right to left).
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/MathML/Attribute} */
-  dir?: ValueSets["41"];
+  dir?: ValueSets["42"];
 }
 
 export interface MathMLMathAttributes<I extends Record<string, {}>>
   extends Pick<AllAttributes, "display">,
     DataGlobalAttributes,
-    MichiAttributes<I["math"] extends Element ? I["math"] : MathMLElement>,
-    MathMLEvents<I["math"] extends Element ? I["math"] : MathMLElement>,
+    MichiAttributes<
+      I["math"] extends Element ? I["math"] : MathMLElementTagNameMap["math"]
+    >,
+    MathMLEvents<
+      I["math"] extends Element ? I["math"] : MathMLElementTagNameMap["math"]
+    >,
     GlobalAttributes {
   /**
    * Specifies the URI for the MathML namespace.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/MathML/Attribute} */
-  xmlns?: ValueSets["43"];
+  xmlns?: ValueSets["44"];
 }
 export interface MathMLMerrorAttributes<I extends Record<string, {}>>
   extends DataGlobalAttributes,
-    MichiAttributes<I["merror"] extends Element ? I["merror"] : MathMLElement>,
-    MathMLEvents<I["merror"] extends Element ? I["merror"] : MathMLElement>,
+    MichiAttributes<
+      I["merror"] extends Element
+        ? I["merror"]
+        : MathMLElementTagNameMap["merror"]
+    >,
+    MathMLEvents<
+      I["merror"] extends Element
+        ? I["merror"]
+        : MathMLElementTagNameMap["merror"]
+    >,
     GlobalAttributes {}
 export interface MathMLMfracAttributes<I extends Record<string, {}>>
   extends Pick<AllAttributes, "linethickness">,
     DataGlobalAttributes,
-    MichiAttributes<I["mfrac"] extends Element ? I["mfrac"] : MathMLElement>,
-    MathMLEvents<I["mfrac"] extends Element ? I["mfrac"] : MathMLElement>,
+    MichiAttributes<
+      I["mfrac"] extends Element ? I["mfrac"] : MathMLElementTagNameMap["mfrac"]
+    >,
+    MathMLEvents<
+      I["mfrac"] extends Element ? I["mfrac"] : MathMLElementTagNameMap["mfrac"]
+    >,
     GlobalAttributes {}
 export interface MathMLMiAttributes<I extends Record<string, {}>>
   extends DataGlobalAttributes,
-    MichiAttributes<I["mi"] extends Element ? I["mi"] : MathMLElement>,
-    MathMLEvents<I["mi"] extends Element ? I["mi"] : MathMLElement>,
+    MichiAttributes<
+      I["mi"] extends Element ? I["mi"] : MathMLElementTagNameMap["mi"]
+    >,
+    MathMLEvents<
+      I["mi"] extends Element ? I["mi"] : MathMLElementTagNameMap["mi"]
+    >,
     GlobalAttributes {}
 export interface MathMLMmultiscriptsAttributes<I extends Record<string, {}>>
   extends DataGlobalAttributes,
     MichiAttributes<
-      I["mmultiscripts"] extends Element ? I["mmultiscripts"] : MathMLElement
+      I["mmultiscripts"] extends Element
+        ? I["mmultiscripts"]
+        : MathMLElementTagNameMap["mmultiscripts"]
     >,
     MathMLEvents<
-      I["mmultiscripts"] extends Element ? I["mmultiscripts"] : MathMLElement
+      I["mmultiscripts"] extends Element
+        ? I["mmultiscripts"]
+        : MathMLElementTagNameMap["mmultiscripts"]
     >,
     GlobalAttributes {}
 export interface MathMLMnAttributes<I extends Record<string, {}>>
   extends DataGlobalAttributes,
-    MichiAttributes<I["mn"] extends Element ? I["mn"] : MathMLElement>,
-    MathMLEvents<I["mn"] extends Element ? I["mn"] : MathMLElement>,
+    MichiAttributes<
+      I["mn"] extends Element ? I["mn"] : MathMLElementTagNameMap["mn"]
+    >,
+    MathMLEvents<
+      I["mn"] extends Element ? I["mn"] : MathMLElementTagNameMap["mn"]
+    >,
     GlobalAttributes {}
 export interface MathMLMoAttributes<I extends Record<string, {}>>
   extends Pick<
@@ -74,14 +102,22 @@ export interface MathMLMoAttributes<I extends Record<string, {}>>
       | "symmetric"
     >,
     DataGlobalAttributes,
-    MichiAttributes<I["mo"] extends Element ? I["mo"] : MathMLElement>,
-    MathMLEvents<I["mo"] extends Element ? I["mo"] : MathMLElement>,
+    MichiAttributes<
+      I["mo"] extends Element ? I["mo"] : MathMLElementTagNameMap["mo"]
+    >,
+    MathMLEvents<
+      I["mo"] extends Element ? I["mo"] : MathMLElementTagNameMap["mo"]
+    >,
     GlobalAttributes {}
 export interface MathMLMoverAttributes<I extends Record<string, {}>>
   extends Pick<AllAttributes, "accent">,
     DataGlobalAttributes,
-    MichiAttributes<I["mover"] extends Element ? I["mover"] : MathMLElement>,
-    MathMLEvents<I["mover"] extends Element ? I["mover"] : MathMLElement>,
+    MichiAttributes<
+      I["mover"] extends Element ? I["mover"] : MathMLElementTagNameMap["mover"]
+    >,
+    MathMLEvents<
+      I["mover"] extends Element ? I["mover"] : MathMLElementTagNameMap["mover"]
+    >,
     GlobalAttributes {}
 export interface MathMLMpaddedAttributes<I extends Record<string, {}>>
   extends Pick<
@@ -90,106 +126,196 @@ export interface MathMLMpaddedAttributes<I extends Record<string, {}>>
     >,
     DataGlobalAttributes,
     MichiAttributes<
-      I["mpadded"] extends Element ? I["mpadded"] : MathMLElement
+      I["mpadded"] extends Element
+        ? I["mpadded"]
+        : MathMLElementTagNameMap["mpadded"]
     >,
-    MathMLEvents<I["mpadded"] extends Element ? I["mpadded"] : MathMLElement>,
+    MathMLEvents<
+      I["mpadded"] extends Element
+        ? I["mpadded"]
+        : MathMLElementTagNameMap["mpadded"]
+    >,
     GlobalAttributes {}
 export interface MathMLMphantomAttributes<I extends Record<string, {}>>
   extends DataGlobalAttributes,
     MichiAttributes<
-      I["mphantom"] extends Element ? I["mphantom"] : MathMLElement
+      I["mphantom"] extends Element
+        ? I["mphantom"]
+        : MathMLElementTagNameMap["mphantom"]
     >,
-    MathMLEvents<I["mphantom"] extends Element ? I["mphantom"] : MathMLElement>,
+    MathMLEvents<
+      I["mphantom"] extends Element
+        ? I["mphantom"]
+        : MathMLElementTagNameMap["mphantom"]
+    >,
     GlobalAttributes {}
 export interface MathMLMrootAttributes<I extends Record<string, {}>>
   extends DataGlobalAttributes,
-    MichiAttributes<I["mroot"] extends Element ? I["mroot"] : MathMLElement>,
-    MathMLEvents<I["mroot"] extends Element ? I["mroot"] : MathMLElement>,
+    MichiAttributes<
+      I["mroot"] extends Element ? I["mroot"] : MathMLElementTagNameMap["mroot"]
+    >,
+    MathMLEvents<
+      I["mroot"] extends Element ? I["mroot"] : MathMLElementTagNameMap["mroot"]
+    >,
     GlobalAttributes {}
 export interface MathMLMrowAttributes<I extends Record<string, {}>>
   extends DataGlobalAttributes,
-    MichiAttributes<I["mrow"] extends Element ? I["mrow"] : MathMLElement>,
-    MathMLEvents<I["mrow"] extends Element ? I["mrow"] : MathMLElement>,
+    MichiAttributes<
+      I["mrow"] extends Element ? I["mrow"] : MathMLElementTagNameMap["mrow"]
+    >,
+    MathMLEvents<
+      I["mrow"] extends Element ? I["mrow"] : MathMLElementTagNameMap["mrow"]
+    >,
     GlobalAttributes {}
 export interface MathMLMsAttributes<I extends Record<string, {}>>
   extends Pick<AllAttributes, "lquote" | "rquote">,
     DataGlobalAttributes,
-    MichiAttributes<I["ms"] extends Element ? I["ms"] : MathMLElement>,
-    MathMLEvents<I["ms"] extends Element ? I["ms"] : MathMLElement>,
+    MichiAttributes<
+      I["ms"] extends Element ? I["ms"] : MathMLElementTagNameMap["ms"]
+    >,
+    MathMLEvents<
+      I["ms"] extends Element ? I["ms"] : MathMLElementTagNameMap["ms"]
+    >,
     GlobalAttributes {}
 export interface MathMLMspaceAttributes<I extends Record<string, {}>>
   extends Pick<AllAttributes, "depth" | "height" | "width">,
     DataGlobalAttributes,
-    MichiAttributes<I["mspace"] extends Element ? I["mspace"] : MathMLElement>,
-    MathMLEvents<I["mspace"] extends Element ? I["mspace"] : MathMLElement>,
+    MichiAttributes<
+      I["mspace"] extends Element
+        ? I["mspace"]
+        : MathMLElementTagNameMap["mspace"]
+    >,
+    MathMLEvents<
+      I["mspace"] extends Element
+        ? I["mspace"]
+        : MathMLElementTagNameMap["mspace"]
+    >,
     GlobalAttributes {}
 export interface MathMLMsqrtAttributes<I extends Record<string, {}>>
   extends DataGlobalAttributes,
-    MichiAttributes<I["msqrt"] extends Element ? I["msqrt"] : MathMLElement>,
-    MathMLEvents<I["msqrt"] extends Element ? I["msqrt"] : MathMLElement>,
+    MichiAttributes<
+      I["msqrt"] extends Element ? I["msqrt"] : MathMLElementTagNameMap["msqrt"]
+    >,
+    MathMLEvents<
+      I["msqrt"] extends Element ? I["msqrt"] : MathMLElementTagNameMap["msqrt"]
+    >,
     GlobalAttributes {}
 export interface MathMLMstyleAttributes<I extends Record<string, {}>>
   extends DataGlobalAttributes,
-    MichiAttributes<I["mstyle"] extends Element ? I["mstyle"] : MathMLElement>,
-    MathMLEvents<I["mstyle"] extends Element ? I["mstyle"] : MathMLElement>,
+    MichiAttributes<
+      I["mstyle"] extends Element
+        ? I["mstyle"]
+        : MathMLElementTagNameMap["mstyle"]
+    >,
+    MathMLEvents<
+      I["mstyle"] extends Element
+        ? I["mstyle"]
+        : MathMLElementTagNameMap["mstyle"]
+    >,
     GlobalAttributes {}
 export interface MathMLMsubAttributes<I extends Record<string, {}>>
   extends DataGlobalAttributes,
-    MichiAttributes<I["msub"] extends Element ? I["msub"] : MathMLElement>,
-    MathMLEvents<I["msub"] extends Element ? I["msub"] : MathMLElement>,
+    MichiAttributes<
+      I["msub"] extends Element ? I["msub"] : MathMLElementTagNameMap["msub"]
+    >,
+    MathMLEvents<
+      I["msub"] extends Element ? I["msub"] : MathMLElementTagNameMap["msub"]
+    >,
     GlobalAttributes {}
 export interface MathMLMsubsupAttributes<I extends Record<string, {}>>
   extends DataGlobalAttributes,
     MichiAttributes<
-      I["msubsup"] extends Element ? I["msubsup"] : MathMLElement
+      I["msubsup"] extends Element
+        ? I["msubsup"]
+        : MathMLElementTagNameMap["msubsup"]
     >,
-    MathMLEvents<I["msubsup"] extends Element ? I["msubsup"] : MathMLElement>,
+    MathMLEvents<
+      I["msubsup"] extends Element
+        ? I["msubsup"]
+        : MathMLElementTagNameMap["msubsup"]
+    >,
     GlobalAttributes {}
 export interface MathMLMtableAttributes<I extends Record<string, {}>>
   extends DataGlobalAttributes,
-    MichiAttributes<I["mtable"] extends Element ? I["mtable"] : MathMLElement>,
-    MathMLEvents<I["mtable"] extends Element ? I["mtable"] : MathMLElement>,
+    MichiAttributes<
+      I["mtable"] extends Element
+        ? I["mtable"]
+        : MathMLElementTagNameMap["mtable"]
+    >,
+    MathMLEvents<
+      I["mtable"] extends Element
+        ? I["mtable"]
+        : MathMLElementTagNameMap["mtable"]
+    >,
     GlobalAttributes {}
 export interface MathMLMtdAttributes<I extends Record<string, {}>>
   extends Pick<AllAttributes, "columnspan" | "rowspan">,
     DataGlobalAttributes,
-    MichiAttributes<I["mtd"] extends Element ? I["mtd"] : MathMLElement>,
-    MathMLEvents<I["mtd"] extends Element ? I["mtd"] : MathMLElement>,
+    MichiAttributes<
+      I["mtd"] extends Element ? I["mtd"] : MathMLElementTagNameMap["mtd"]
+    >,
+    MathMLEvents<
+      I["mtd"] extends Element ? I["mtd"] : MathMLElementTagNameMap["mtd"]
+    >,
     GlobalAttributes {}
 export interface MathMLMtextAttributes<I extends Record<string, {}>>
   extends DataGlobalAttributes,
-    MichiAttributes<I["mtext"] extends Element ? I["mtext"] : MathMLElement>,
-    MathMLEvents<I["mtext"] extends Element ? I["mtext"] : MathMLElement>,
+    MichiAttributes<
+      I["mtext"] extends Element ? I["mtext"] : MathMLElementTagNameMap["mtext"]
+    >,
+    MathMLEvents<
+      I["mtext"] extends Element ? I["mtext"] : MathMLElementTagNameMap["mtext"]
+    >,
     GlobalAttributes {}
 export interface MathMLMtrAttributes<I extends Record<string, {}>>
   extends DataGlobalAttributes,
-    MichiAttributes<I["mtr"] extends Element ? I["mtr"] : MathMLElement>,
-    MathMLEvents<I["mtr"] extends Element ? I["mtr"] : MathMLElement>,
+    MichiAttributes<
+      I["mtr"] extends Element ? I["mtr"] : MathMLElementTagNameMap["mtr"]
+    >,
+    MathMLEvents<
+      I["mtr"] extends Element ? I["mtr"] : MathMLElementTagNameMap["mtr"]
+    >,
     GlobalAttributes {}
 export interface MathMLMunderAttributes<I extends Record<string, {}>>
   extends Pick<AllAttributes, "accentunder">,
     DataGlobalAttributes,
-    MichiAttributes<I["munder"] extends Element ? I["munder"] : MathMLElement>,
-    MathMLEvents<I["munder"] extends Element ? I["munder"] : MathMLElement>,
+    MichiAttributes<
+      I["munder"] extends Element
+        ? I["munder"]
+        : MathMLElementTagNameMap["munder"]
+    >,
+    MathMLEvents<
+      I["munder"] extends Element
+        ? I["munder"]
+        : MathMLElementTagNameMap["munder"]
+    >,
     GlobalAttributes {}
 export interface MathMLMunderoverAttributes<I extends Record<string, {}>>
   extends Pick<AllAttributes, "accent" | "accentunder">,
     DataGlobalAttributes,
     MichiAttributes<
-      I["munderover"] extends Element ? I["munderover"] : MathMLElement
+      I["munderover"] extends Element
+        ? I["munderover"]
+        : MathMLElementTagNameMap["munderover"]
     >,
     MathMLEvents<
-      I["munderover"] extends Element ? I["munderover"] : MathMLElement
+      I["munderover"] extends Element
+        ? I["munderover"]
+        : MathMLElementTagNameMap["munderover"]
     >,
     GlobalAttributes {}
 export interface MathMLSemanticsAttributes<I extends Record<string, {}>>
   extends Pick<AllAttributes, "encoding">,
     DataGlobalAttributes,
     MichiAttributes<
-      I["semantics"] extends Element ? I["semantics"] : MathMLElement
+      I["semantics"] extends Element
+        ? I["semantics"]
+        : MathMLElementTagNameMap["semantics"]
     >,
     MathMLEvents<
-      I["semantics"] extends Element ? I["semantics"] : MathMLElement
+      I["semantics"] extends Element
+        ? I["semantics"]
+        : MathMLElementTagNameMap["semantics"]
     >,
     GlobalAttributes {}
 export interface MathMLElements<I extends {} = {}> {

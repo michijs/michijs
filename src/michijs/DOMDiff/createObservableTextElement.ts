@@ -4,7 +4,7 @@ import { createTextElement } from "./createTextElement";
 
 export const createObservableTextElement = (
   jsx: ObservableNonNullablePrimitiveType,
-) => {
+): Text => {
   const textNode = createTextElement(jsx.$value);
   overrideCallbackWithRef(
     textNode,

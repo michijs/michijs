@@ -1,7 +1,7 @@
-import { Observable } from "../classes";
+import { ProxiedValue } from "../classes";
 import { useObserve } from "../hooks";
 import type { ObservableOrConst, ObservableType, Subscription } from "../types";
-import { bindObservable } from "../utils";
+import { bindObservable, unproxify } from "../utils";
 
 export type Translation<K extends string, T> = {
   [key in K]: T | (() => Promise<{ default: T }>) | (() => Promise<T>);
@@ -11,19 +11,24 @@ export interface TranslationItem<K extends string, T> {
   observable: ObservableType<Partial<T>>;
 }
 
-export class I18n<K extends string = string> extends Observable<K> {
+export class I18n<K extends string = string> extends ProxiedValue<
+  K | undefined
+> {
   private translations = new Array<TranslationItem<K, any>>();
-  private _currentLanguage: K | undefined;
-  private isUsingSystemLanguage = true;
+  private get isUsingSystemLanguage() {
+    return this.$value === navigator.language;
+  }
 
   constructor(
-    language?: ObservableOrConst<string | null>,
-    initialObservers?: Subscription<string>[],
+    language?: ObservableOrConst<K | undefined>,
+    initialObservers?: Subscription<K | undefined>[],
   ) {
-    super(initialObservers);
+    super(
+      (unproxify(language) ?? navigator.language) as K | undefined,
+      initialObservers,
+    );
     if (language) {
       bindObservable(language, (newValue) => this.setLanguage(newValue as K));
-      this.isUsingSystemLanguage = false;
     }
 
     window.addEventListener("languagechange", () => {
@@ -33,11 +38,10 @@ export class I18n<K extends string = string> extends Observable<K> {
   }
 
   get currentLanguage(): K | undefined {
-    return this._currentLanguage;
+    return this.$value;
   }
   set currentLanguage(newLang: K | undefined) {
     this.setLanguage(newLang);
-    this.isUsingSystemLanguage = false;
   }
 
   createTranslation<T>(
@@ -74,7 +78,7 @@ export class I18n<K extends string = string> extends Observable<K> {
         }
       }
       const value = translation[key];
-      this._currentLanguage = key;
+      this.$value = key;
 
       if (typeof value === "function")
         value().then((res) => {
@@ -85,8 +89,8 @@ export class I18n<K extends string = string> extends Observable<K> {
   }
 
   private async setLanguage(newLang: K | undefined) {
-    if (this._currentLanguage !== newLang) {
-      this._currentLanguage = newLang;
+    if (this.$value !== newLang) {
+      this.$value = newLang;
       //Update every translation
       await Promise.all(
         this.translations.map(async (x) => {
@@ -96,13 +100,10 @@ export class I18n<K extends string = string> extends Observable<K> {
           x.observable(currentTranslation);
         }),
       );
-      // Then notify
-      this.notify(newLang);
     }
   }
 
-  useSystemLanguage() {
+  useSystemLanguage(): void {
     this.setLanguage(navigator.language as K);
-    this.isUsingSystemLanguage = true;
   }
 }

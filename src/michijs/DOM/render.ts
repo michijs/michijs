@@ -3,7 +3,7 @@ import { create } from "../DOMDiff";
 export function renderSync(
   Component: JSX.Element,
   mountPoint: ParentNode = document.body,
-) {
+): ParentNode {
   mountPoint.textContent = "";
   const renderResult = create(Component);
   mountPoint.append(renderResult);

@@ -1,6 +1,6 @@
-import { isSafari } from "../utils";
+// import { getBrowser } from "../utils/getBrowser";
 
-console.log(isSafari);
+// const isSafari = getBrowser() === 'safari'
 if (true) {
   const extendedElements: Record<string, [CustomElementConstructor, string]> =
     {};
@@ -24,7 +24,6 @@ if (true) {
     const newEl = originalCreateElement(tagName, options);
 
     if (options?.is) {
-      console.log(newEl);
       const [customElement, customElementTag] = extendedElements[options.is];
       Object.setPrototypeOf(newEl, customElement.prototype);
       newEl.setAttribute("is", customElementTag);

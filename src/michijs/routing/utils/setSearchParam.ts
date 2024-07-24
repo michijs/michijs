@@ -1,6 +1,10 @@
 import { isNil } from "../../utils";
 
-export const setSearchParam = (url: URL, name: string, value: unknown) => {
+export const setSearchParam = (
+  url: URL,
+  name: string,
+  value: unknown,
+): void => {
   const valueOf = value?.valueOf();
   if (isNil(valueOf)) url.searchParams.delete(name);
   else

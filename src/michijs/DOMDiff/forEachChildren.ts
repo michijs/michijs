@@ -10,7 +10,7 @@ export const forEachChildren = (
   shouldContinueCallback: (currentNode: ChildNode | null) => any = (
     currentNode: ChildNode | null,
   ) => currentNode,
-) => {
+): number => {
   let i = 0;
   if (initialNode) {
     let currentNode: ChildNode | null = initialNode;

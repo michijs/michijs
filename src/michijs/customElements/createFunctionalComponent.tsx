@@ -4,7 +4,7 @@ import type {
   AnyObject,
   CreateOptions,
   CreateFCResult,
-  CreateFunctionalComponentProps,
+  CreateFunctionalComponent,
 } from "../types";
 import { unproxify } from "../utils";
 
@@ -12,9 +12,7 @@ export function createFunctionalComponent<
   T extends AnyObject,
   S extends Element = Element,
   C = CreateOptions<S>,
->(
-  callback: CreateFCResult<T, S, C>,
-): (props: CreateFunctionalComponentProps<T>) => JSX.Element {
+>(callback: CreateFCResult<T, S, C>): CreateFunctionalComponent<T> {
   return (props) => {
     // TODO: Not sure why ts compiler is complaining here
     // @ts-ignore

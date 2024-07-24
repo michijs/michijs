@@ -34,7 +34,16 @@ export const [asyncTestsUrls, AsyncTestsRouter] = createRouter(
         promise={async () => (await import("./SimpleCounter")).SimpleCounter}
       />
     ),
-    test3: <Redirect to={urls["/"]()} />,
+    test3: (
+      <AsyncComponent
+        promise={async () => {
+          wait(3000);
+          return 1;
+        }}
+        then={(res) => res * 2}
+      />
+    ),
+    test4: <Redirect to={urls["/"]()} />,
   },
   urls.asyncTests,
 );

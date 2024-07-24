@@ -11,7 +11,7 @@ export function setProperty(
   name: string,
   newValue: any,
   options?: CreateOptions,
-) {
+): void {
   // priority to properties and events
   if (name === "_")
     Object.entries(newValue).forEach(([propertyName, value]) =>

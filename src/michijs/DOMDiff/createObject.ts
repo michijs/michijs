@@ -3,7 +3,10 @@ import { Namespaces, RootTags } from "../constants/namespaces";
 import type { CreateOptions, ObjectJSXElement } from "../types";
 import { create } from "./create";
 
-export const createObject = (jsx: ObjectJSXElement, options: CreateOptions) => {
+export const createObject = (
+  jsx: ObjectJSXElement,
+  options: CreateOptions,
+): Element => {
   const isSVG = options.isSVG || jsx.jsxTag === RootTags.SVG;
   let isMATHML;
   let el: Element;

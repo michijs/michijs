@@ -26,6 +26,6 @@ export class ObservableFromEventListener<
 > extends Observable<EventsMap<T>[K]> {
   constructor(obj: T, key: K) {
     super();
-    obj.addEventListener(key, (e) => this.notify(e));
+    obj.addEventListener(key, (e) => this.notify(e as EventsMap<T>[K]));
   }
 }

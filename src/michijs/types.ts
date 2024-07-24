@@ -3,8 +3,18 @@ import type {
   CSSProperties,
   GlobalEvents,
 } from "./generated/htmlType";
-import type { EventDispatcher, MappedIdGenerator } from "./classes";
+import type { EventDispatcher, MappedIdGenerator, Observable } from "./classes";
+import type { SearchParams } from "./routing";
 
+export type Browser =
+  | "edge"
+  | "chrome"
+  | "firefox"
+  | "safari"
+  | "opera"
+  | "android"
+  | "iphone"
+  | "unknown";
 export type StringKeyOf<T extends object> = Extract<keyof T, string>;
 export type CSSVar<T extends string> = <
   V extends undefined | string | number = undefined,
@@ -168,10 +178,14 @@ export interface CompatibleSubscription {
   (): void;
 }
 
+export type ObservableTypeOrConst<T> = ObservableType<T> | T;
 export type ObservableOrConst<T> = ObservableLike<T> | T;
 export type CreateFunctionalComponentProps<T> = {
   [k in keyof T]: k extends "children" ? T[k] : ObservableOrConst<T[k]>;
 };
+export type CreateFunctionalComponent<T> = (
+  props: CreateFunctionalComponentProps<T>,
+) => SingleJSXElement;
 export interface ObservableLike<T> {
   subscribe(observer: Subscription<T>): void;
   unsubscribe(observer: Subscription<T>): void;
@@ -225,7 +239,7 @@ export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>>
   /**
    * Removes all the list elements
    */
-  $clear();
+  $clear(): void;
   /**
    * Replace all the list elements
    */
@@ -233,11 +247,11 @@ export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>>
   /**
    * Removes an item
    */
-  $remove(index: number);
+  $remove(index: number): void;
   /**
    * Swaps two items
    */
-  $swap(indexA: number, indexB: number);
+  $swap(indexA: number, indexB: number): void;
 
   /**
    * Is a proxy that allows you to avoid using dom diff algorithms to render lists.
@@ -252,7 +266,7 @@ export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>>
   ): Node;
 }
 
-type Typeof =
+export type Typeof =
   | "string"
   | "number"
   | "bigint"
@@ -331,10 +345,35 @@ export type IsAny<T> = 0 extends 1 & T ? true : false;
 export interface RequestInitUseFetch<B> extends Omit<RequestInit, "body"> {
   body?: B;
 }
-export interface UsePromiseOptions {
-  shouldWait?(): any;
+
+export interface HistoryManagerType extends Observable<string | URL> {
+  canGoBack(fallbackUrl?: ObservableOrConst<string | URL>): boolean;
+  back(fallbackUrl?: ObservableOrConst<string | URL>): void;
+  replaceCurrentUrl(url: ObservableOrConst<string | URL>): void;
+  push(url: ObservableOrConst<string | URL>): void;
+  matches(url: ObservableOrConst<string>, flexible?: boolean): boolean;
 }
-export interface UseFetchOptions extends UsePromiseOptions {}
+
+export interface DoFetchProps<
+  S extends SearchParams = undefined,
+  B extends AnyObject | undefined | string = undefined,
+> extends RequestInitUseFetch<
+    B extends AnyObject ? { [k in keyof B]: ObservableOrConst<B[k]> } : B
+  > {
+  input: string;
+  searchParams?: { [k in keyof S]: ObservableOrConst<S[k]> };
+}
+
+export type usePromiseShouldWait = ObservableTypeOrConst<Promise<any>>[];
+
+export type UseFetchCallback<
+  S extends SearchParams = undefined,
+  B extends AnyObject | undefined | string = undefined,
+> = () => DoFetchProps<S, B> | Promise<DoFetchProps<S, B>>;
+
+export interface UseFetchOptions<T> {
+  transform?(value: T): T;
+}
 export interface UseComputedObserveOptions {
   onBeforeUpdate?(): void;
   onAfterUpdate?(): void;
@@ -349,21 +388,13 @@ export type useWatchDeps = any[];
 export interface FetchResult<R> extends PromiseResult<R> {}
 export interface PromiseResult<R> {
   /**
+   * The promise
+   */
+  promise: ObservableType<Promise<R>>;
+  /**
    * Call again the promise. Available after first call
    */
-  recall?(): void;
-  /**
-   * The result data.
-   */
-  result?: R | undefined;
-  /**
-   * Error encountered during the fetch operation.
-   */
-  error?: Error;
-  /**
-   * Indicates whether the fetch operation is currently loading.
-   */
-  loading: boolean;
+  recall(): void;
 }
 
 // Needs to be partial to allow asignation operation
@@ -374,20 +405,22 @@ export type ObservableType<Y, T = NonNullable<Y>> = IsAny<T> extends true
     ? Y
     : [T] extends [Array<infer V>]
       ? ObservableArray<V>
-      : [T] extends [Function]
-        ? Y
-        : [T] extends [Map<infer K, infer V>]
-          ? ObservableMap<K, V>
-          : [T] extends [Set<infer V>]
-            ? ObservableSet<V>
-            : [T] extends [Date]
-              ? PrimitiveObservableValue<Y> & Date
-              : [T] extends [object]
-                ? // ? ExtendsObject<T> extends true
-                  ObservableObject<Y>
-                : // : ObservableComplexObject<Y>
-                  PrimitiveObservableValue<GetPrimitiveType<Y>> &
-                    GetPrimitiveTypeClass<T>;
+      : [T] extends [Promise<infer V>]
+        ? ObservableComplexObject<Promise<V>>
+        : [T] extends [Function]
+          ? Y
+          : [T] extends [Map<infer K, infer V>]
+            ? ObservableMap<K, V>
+            : [T] extends [Set<infer V>]
+              ? ObservableSet<V>
+              : [T] extends [Date]
+                ? PrimitiveObservableValue<Y> & Date
+                : [T] extends [object]
+                  ? // ? ExtendsObject<T> extends true
+                    ObservableObject<Y>
+                  : // : ObservableComplexObject<Y>
+                    PrimitiveObservableValue<GetPrimitiveType<Y>> &
+                      GetPrimitiveTypeClass<T>;
 
 export type Unproxify<T> = IsAny<T> extends true
   ? any
@@ -423,6 +456,7 @@ export type MutableArrayProperties =
   | MutableArrayNewItemsProperties
   | "shift"
   | "reverse"
+  | "sort"
   | "pop";
 
 export interface ReadWriteArray<RV, SV>
@@ -669,9 +703,13 @@ export type MichiElementSelf<O extends MichiElementOptions> = ObservableType<
       : HTMLElement
     : HTMLElement);
 
+export interface CEEvent<T> {
+  (ev: CustomEvent<T>): unknown;
+}
+
 type MichiElementProps<
   O extends MichiElementOptions,
-  S extends HTMLElement,
+  S extends HTMLElement = MichiElementSelf<O>,
   Attrs = {
     [k in keyof O["reflectedAttributes"] as KebabCase<k>]?: ObservableOrConst<
       GetPrimitiveType<O["reflectedAttributes"][k]> | undefined
@@ -684,18 +722,15 @@ type MichiElementProps<
     [k in keyof O["events"] as k extends string
       ? `on${Lowercase<k>}`
       : never]?: O["events"][k] extends EventDispatcher<infer D>
-      ? (ev: CustomEvent<D>) => unknown
+      ? CEEvent<D>
       : never;
   } & { name?: string } & GlobalEvents<S>,
 > = MichiAttributes<S> &
   Omit<ExtendsAttributes<O["extends"]>, keyof Attrs> &
   Attrs;
 
-export interface MichiElementClass<
-  O extends MichiElementOptions,
-  S extends HTMLElement,
-> {
-  new (props: MichiElementProps<O, S>): S;
+export interface MichiElementClass<O extends MichiElementOptions> {
+  new (props: MichiElementProps<O>): MichiElementSelf<O>;
   readonly tag: string;
   readonly extends?: string;
   readonly observedAttributes: Readonly<string[]>;

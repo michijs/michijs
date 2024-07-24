@@ -30,22 +30,25 @@ export function create(
         },
         options,
       );
-    else if (isNotAPrimitiveJSX(jsx)) {
+    if (isNotAPrimitiveJSX(jsx)) {
       if ("jsxTag" in jsx) {
         //Fix for non-jsx objects
         // Solves undefined Fragment caused by some compilers
         if (isDOMOrFragmentElement(jsx)) {
           jsx.jsxTag ??= document.createDocumentFragment();
           return createDOMElement(jsx as DOMElementJSXElement, options);
-        } else if (isFunctionOrClassJSXElement(jsx)) {
+        }
+        if (isFunctionOrClassJSXElement(jsx)) {
           // Explicit casting because of tsc error
           if (isClassJSXElement(jsx))
             return createObject(classJSXToObjectJSXElement(jsx), options);
-          else return create(jsx.jsxTag(jsx.attrs, options), options);
+          return create(jsx.jsxTag(jsx.attrs, options), options);
         }
         return createObject(jsx, options);
-      } else return jsx as Node;
-    } else if (isObservableType(jsx))
+      }
+      return jsx as Node;
+    }
+    if (isObservableType(jsx))
       return createObservableTextElement(
         jsx as unknown as ObservableNonNullablePrimitiveType,
       );

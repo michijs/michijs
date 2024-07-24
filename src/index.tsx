@@ -15,3 +15,4 @@ import "./michijs/generated/JSX";
 export * from "./michijs/customElements";
 export * from "./michijs/css";
 export * from "./michijs/utils";
+import "./michijs/navigation-api-types";

@@ -14,7 +14,7 @@ class Store {
     this.id = 1;
   }
   buildData(count = 1000) {
-    var adjectives = [
+    const adjectives = [
       "pretty",
       "large",
       "big",
@@ -41,7 +41,7 @@ class Store {
       "expensive",
       "fancy",
     ];
-    var colours = [
+    const colours = [
       "red",
       "yellow",
       "blue",
@@ -54,7 +54,7 @@ class Store {
       "black",
       "orange",
     ];
-    var nouns = [
+    const nouns = [
       "table",
       "chair",
       "house",
@@ -69,8 +69,8 @@ class Store {
       "mouse",
       "keyboard",
     ];
-    var data = [];
-    for (var i = 0; i < count; i++)
+    const data = [];
+    for (let i = 0; i < count; i++)
       data.push({
         id: this.id++,
         label: `${adjectives[_random(adjectives.length)]} ${
@@ -125,14 +125,14 @@ class Store {
   }
   swapRows() {
     if (this.data.length > 998) {
-      var a = this.data[1];
+      const a = this.data[1];
       this.data[1] = this.data[998];
       this.data[998] = a;
     }
   }
 }
 
-var getParentId = (elem) => {
+const getParentId = (elem) => {
   while (elem) {
     if (elem.tagName === "TR") {
       return elem.data_id;
@@ -341,7 +341,7 @@ class Main {
     // this.tbody.appendChild(docfrag);
 
     // ... than adding directly
-    var rows = this.rows,
+    const rows = this.rows,
       s_data = this.store.data,
       data = this.data,
       tbody = this.tbody;

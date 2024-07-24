@@ -24,17 +24,17 @@ export function useObserve<T>(
       // These are like properties but reserved for internal, specification-only purposes.
       // For instance, Map stores items in the internal slot [[MapData]].
       // Built-in methods access them directly, not via [[Get]]/[[Set]] internal methods. So Proxy can’t intercept that.
-      else if (item instanceof Date)
+      if (item instanceof Date)
         return observeDate(
           item,
           initialObservers,
         ) as unknown as ObservableType<T>;
-      else if (item instanceof Map)
+      if (item instanceof Map)
         return observeMap(
           item,
           initialObservers,
         ) as unknown as ObservableType<T>;
-      else if (item instanceof Set)
+      if (item instanceof Set)
         return observeSet(
           item,
           initialObservers,

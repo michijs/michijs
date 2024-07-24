@@ -1,5 +1,5 @@
 import { create } from "../DOMDiff";
-import { VirtualFragment } from "../classes";
+import { ProxiedValue, VirtualFragment } from "../classes";
 import { bindObservable } from "../utils";
 import type {
   CreateOptions,
@@ -7,6 +7,7 @@ import type {
   CreateFCResult,
   SingleJSXElement,
 } from "../types";
+import { useComputedObserve } from "../hooks";
 
 type IfProps<T> = ExtendableComponentWithoutChildren<T> & {
   /** The condition to evaluate for rendering content. */
@@ -44,8 +45,14 @@ export const If = <const T = CreateFCResult>(
   let cachedThen: DocumentFragment | undefined;
   let cachedElse: DocumentFragment | undefined;
 
+  const conditionAsBoolean = useComputedObserve(
+    () =>
+      condition instanceof ProxiedValue ? condition.toBoolean() : condition,
+    [condition],
+  );
+
   // Bind the observable 'condition' to monitor changes.
-  bindObservable(condition, (newValue) => {
+  bindObservable(conditionAsBoolean, (newValue) => {
     const newCache = el.childNodes.length
       ? Array.from(el.childNodes)
       : undefined;

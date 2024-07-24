@@ -6,35 +6,43 @@ import type {
   ExtendableComponentWithoutChildren,
   CreateFCResult,
   SingleJSXElement,
+  ObservableOrConst,
 } from "../types";
+import { isObservableType } from "../typeWards/isObservableType";
+import { bindObservable } from "../utils";
 
 // Define a type for the return value of promises, which can be a JSX element, a function component, or a DOM element.
-type PromiseReturnType =
-  | JSX.Element
-  | CreateFCResult
-  | (new (
-      ...args: any[]
-    ) => Element);
+type PromiseType<P> =
+  | Promise<{ default: P }>
+  | Promise<P>
+  | (() => Promise<P>)
+  | (() => Promise<{ default: P }>);
 
 // Define props for the AsyncComponent.
-type AsyncComponentProps<T> = ExtendableComponentWithoutChildren<T> & {
+type AsyncComponentProps<P, T> = ExtendableComponentWithoutChildren<T> & {
   // The promise that resolves to the component to render asynchronously.
-  promise:
-    | Promise<PromiseReturnType>
-    | (() => Promise<PromiseReturnType>)
-    | (() => Promise<{ default: PromiseReturnType }>);
+  promise: ObservableOrConst<PromiseType<P>>;
   // An optional loading component to display while the async component is loading.
   loadingComponent?: JSX.Element;
+  then?(promiseResult: P): JSX.Element;
+  catch?(reason: any): JSX.Element;
 };
 
 /**
  * Asynchronously renders a component after the promise ends. In the meantime you can choose to show a load component or not show anything.
  */
-export const AsyncComponent = <const T = CreateFCResult>(
-  { as: asTag, promise, loadingComponent, ...attrs }: AsyncComponentProps<T>,
+export const AsyncComponent = <P, const T = CreateFCResult>(
+  {
+    as: asTag,
+    promise,
+    loadingComponent,
+    catch: errorComponent,
+    then,
+    ...attrs
+  }: AsyncComponentProps<P, T>,
   options: CreateOptions,
-) => {
-  let el = asTag
+): Node => {
+  const el = asTag
     ? (create({
         jsxTag: asTag,
         attrs,
@@ -45,27 +53,40 @@ export const AsyncComponent = <const T = CreateFCResult>(
   if (loadingComponent) el.append(create(loadingComponent, options));
 
   // Function to render the component when the promise resolves.
-  const render = (
-    promiseResult: PromiseReturnType | { default: PromiseReturnType },
-  ) => {
-    const oldEl = el;
-    const Res: PromiseReturnType =
+  const render = (promiseResult: P) => {
+    const Res = (
       promiseResult &&
       typeof promiseResult === "object" &&
       "default" in promiseResult
         ? promiseResult.default
-        : promiseResult;
+        : promiseResult
+    ) as JSX.Element;
 
     // Create and replace the element with the resolved component.
-    el = create(
-      Res && typeof Res === "function" ? jsx(Res) : Res,
-      options,
-    ) as ChildNode & ParentNode;
-    oldEl.replaceWith(el);
+    el.replaceChildren(
+      create(
+        then
+          ? then(Res as P)
+          : Res && typeof Res === "function"
+            ? jsx(Res)
+            : Res,
+        options,
+      ) as ChildNode & ParentNode,
+    );
   };
 
   // Execute the promise and render the component when it resolves.
-  (typeof promise === "function" ? promise() : promise).then(render);
+  const renderCallback = (p: PromiseType<P>) =>
+    (typeof p === "function" ? p() : p)
+      .then((res) => render(res))
+      .catch((e) => {
+        if (errorComponent) {
+          render(errorComponent(e) as P);
+        } else throw e;
+      });
+
+  if (isObservableType(promise)) bindObservable(promise, renderCallback);
+  else renderCallback(promise);
 
   // Return the rendered element.
   return el.valueOf() as Node;

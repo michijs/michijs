@@ -1,62 +1,32 @@
 import type { SearchParams } from "../routing/types";
 import type {
-  ObservableType,
   FetchResult,
   AnyObject,
-  RequestInitUseFetch,
   UseFetchOptions,
-  ObservableOrConst,
-  useWatchDeps,
+  UseFetchCallback,
+  usePromiseShouldWait,
 } from "../types";
+import { doFetch } from "../utils";
 import { usePromise } from "./usePromise";
 
 /**
  * Fetches data from a URL, parses the response as JSON and allows to manage the result as an observable.
  *
- * @param input The URL to fetch data from.
- * @param searchParams Optional search parameters to append to the URL.
- * @param init Optional request initialization options.
- * @param deps Dependencies to watch for changes.
- * @param options An optional object that may contain shouldWaitToFetch callback function.
+ * @param callback The callback to get the options for the request
+ * @param shouldWait All the promises that should resolve before executing the promise.
+ * @param options Some additional options
  * @returns An Observable that emits the result of the fetch operation.
  * @template R Type of the expected response data.
  * @template S Type of the optional search parameters.
+ * @template B Type of the optional body.
  */
 export const useFetch = <
   R,
   S extends SearchParams = undefined,
   B extends AnyObject | undefined | string = undefined,
 >(
-  input: string,
-  searchParams?: { [k in keyof S]: ObservableOrConst<S[k]> },
-  init?: RequestInitUseFetch<ObservableOrConst<B>>,
-  deps?: useWatchDeps,
-  options?: UseFetchOptions,
-): ObservableType<FetchResult<R>> => {
-  return usePromise(
-    async () => {
-      const url = new URL(
-        input,
-        input.startsWith("/") ? location.origin : undefined,
-      );
-      if (searchParams)
-        Object.entries(searchParams).forEach(([key, value]) => {
-          if (value) url.searchParams.append(key, value.toString());
-        });
-
-      const response = await fetch(url, {
-        ...init,
-        body:
-          typeof init?.body === "object"
-            ? JSON.stringify(init.body)
-            : init?.body,
-      });
-
-      if (!response.ok) throw response.statusText;
-
-      return (await response.json()) as R;
-    },
-    deps,
-    options,
-  );
-};
+  callback: UseFetchCallback<S, B>,
+  shouldWait?: usePromiseShouldWait,
+  options?: UseFetchOptions<R>,
+): FetchResult<R> =>
+  usePromise(async () => doFetch(await callback(), options), shouldWait);

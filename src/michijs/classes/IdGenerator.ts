@@ -1,7 +1,7 @@
 export class IdGenerator {
   private ids = new Set<string>();
 
-  generateId(length = 4) {
+  generateId(length = 4): string {
     //TODO: Check a way to standardize this method
     const cryptoObj: Crypto = window.crypto ?? window.msCrypto; // for IE 11 https://developer.mozilla.org/en-US/docs/Web/API/Window/crypto
     // let bytes = cryptoObj.getRandomValues(new Uint8Array(32));

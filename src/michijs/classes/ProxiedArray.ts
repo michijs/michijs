@@ -1,7 +1,6 @@
 import {
   type CreateOptions,
   type ExtendableComponentWithoutChildren,
-  type Subscription,
   ProxiedValue,
   type SingleJSXElement,
   type ProxiedArrayInterface,
@@ -17,9 +16,6 @@ export class ProxiedArray<V>
   implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties>
 {
   private targets = new Array<Target<V>>();
-  constructor(initialData: V[], initialObservers?: Subscription<V[]>[]) {
-    super(initialData, initialObservers);
-  }
   List = <const E = FC>(
     {
       as: asTag,
@@ -46,27 +42,27 @@ export class ProxiedArray<V>
     return el.valueOf() as Node;
   };
 
-  $clear() {
+  $clear(): void {
     this.targets.forEach((target) => target.clear());
     this.$value = [];
     this.notifyCurrentValue();
   }
 
-  $replace(...items: V[]) {
+  $replace(...items: V[]): number {
     this.targets.forEach((target) => target.replace(...items));
     this.$value = items;
     this.notifyCurrentValue();
     return items.length;
   }
 
-  $remove(index: number) {
+  $remove(index: number): number {
     this.$value = this.$value.filter((_x, i) => i !== index);
     this.targets.forEach((target) => target.remove(index));
     this.notifyCurrentValue();
     return this.$value.length;
   }
 
-  $swap(indexA: number, indexB: number) {
+  $swap(indexA: number, indexB: number): void {
     if (this.$value.length > indexA && this.$value.length > indexB) {
       this.targets.forEach((target) => target.swap(indexA, indexB));
       [this.$value[indexA], this.$value[indexB]] = [
@@ -93,7 +89,7 @@ export class ProxiedArray<V>
     this.notifyCurrentValue();
     return result;
   }
-  reverse() {
+  reverse(): V[] {
     this.targets.forEach((target) => target.reverse());
     const result = this.$value.reverse();
 
@@ -112,37 +108,39 @@ export class ProxiedArray<V>
     this.notifyCurrentValue();
     return result;
   }
-  fill(item: V, start?: number, end?: number) {
+  fill(item: V, start?: number, end?: number): V[] {
     this.targets.forEach((target) => target.fill(item, start, end));
     const result = this.$value.fill(item, start, end);
     this.notifyCurrentValue();
     return result;
   }
-  sort(compareFn?: (a: V, b: V) => number) {
+  sort(compareFn?: (a: V, b: V) => number): V[] {
     const arrayCopy = [...this.$value];
     const result = this.$value.sort(compareFn);
-    const indexesArray = arrayCopy.reduce(
-      (previousValue, currentValue, currentIndex) => {
-        const newIndex = result.indexOf(currentValue);
-        // To avoid repeated indexes
-        if (newIndex > currentIndex) {
-          previousValue.push({
-            currentIndex,
-            newIndex,
-          });
-        }
-        return previousValue;
-      },
-      new Array<{ currentIndex: number; newIndex: number }>(),
-    );
-    this.targets.forEach((target) => {
-      indexesArray.forEach(({ currentIndex, newIndex }) => {
-        target.swap(currentIndex, newIndex);
+    if (this.targets.length > 0) {
+      const indexesArray = arrayCopy.reduce(
+        (previousValue, currentValue, currentIndex) => {
+          const newIndex = result.indexOf(currentValue);
+          // To avoid repeated indexes
+          if (newIndex > currentIndex) {
+            previousValue.push({
+              currentIndex,
+              newIndex,
+            });
+          }
+          return previousValue;
+        },
+        new Array<{ currentIndex: number; newIndex: number }>(),
+      );
+      this.targets.forEach((target) => {
+        indexesArray.forEach(({ currentIndex, newIndex }) => {
+          target.swap(currentIndex, newIndex);
+        });
       });
-    });
+    }
     return result;
   }
-  splice(start: number, deleteCount = 0, ...items: V[]) {
+  splice(start: number, deleteCount = 0, ...items: V[]): V[] {
     if (start === 0 && deleteCount >= this.$value.length)
       this.$replace(...items);
     else {

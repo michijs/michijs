@@ -1,4 +1,4 @@
-// file generated from @michijs/vscode-svg 2.0.7
+// file generated from @michijs/vscode-svg 2.0.8
 // HTML Data Version 1.1
 import type { AllAttributes } from "./AllAttributes";
 import type { ValueSets } from "./ValueSets";
@@ -152,7 +152,7 @@ interface PresentationAttributes
    * The display attribute lets you control the rendering of graphical or container elements.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/display} */
-  display?: ValueSets["59"];
+  display?: ValueSets["60"];
 }
 interface TransferFunctionAttributes
   extends Pick<
@@ -163,7 +163,7 @@ interface TransferFunctionAttributes
    * Is a generic attribute and it has different meaning based on the context in which it's used.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/type} */
-  type?: ValueSets["75"];
+  type?: ValueSets["76"];
 }
 export interface SVGAAttributes<I extends Record<string, {}>>
   extends Pick<
@@ -740,7 +740,7 @@ export interface SVGFeTurbulenceAttributes<I extends Record<string, {}>>
    * Is a generic attribute and it has different meaning based on the context in which it's used.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/type} */
-  type?: ValueSets["84"];
+  type?: ValueSets["85"];
 }
 export interface SVGFilterAttributes<I extends Record<string, {}>>
   extends Pick<AllAttributes, "filterUnits" | "primitiveUnits">,
@@ -1062,7 +1062,7 @@ export interface SVGSvgAttributes<I extends Record<string, {}>>
    * Specifies the XML Namespace of the document.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/xmlns} */
-  xmlns?: ValueSets["87"];
+  xmlns?: ValueSets["88"];
 }
 export interface SVGSwitchAttributes<I extends Record<string, {}>>
   extends DataGlobalAttributes,
@@ -1132,7 +1132,7 @@ export interface SVGTextPathAttributes<I extends Record<string, {}>>
    * Which method to render individual glyphs along the path.
    *
    * [MDN Reference] {@link https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/method} */
-  method?: ValueSets["89"];
+  method?: ValueSets["90"];
 }
 export interface SVGTitleAttributes<I extends Record<string, {}>>
   extends DataGlobalAttributes,

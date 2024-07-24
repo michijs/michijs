@@ -51,7 +51,7 @@ if (window.cookieStore) {
 }
 
 export class CookieStorage implements Storage {
-  static cookieStoreObservable = cookieStoreObservable;
+  static cookieStoreObservable: Observable<string[]> = cookieStoreObservable;
   setOptions: string | undefined;
   [name: string]: any;
   get length(): number {

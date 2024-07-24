@@ -9,6 +9,9 @@ if (styles.replaceSync) styles.replaceSync(":host{display: none}");
 
 export const GenericElement = createCustomElement("michi-generic-element", {
   lifecycle: {
+    didMount() {
+      this.elementMounted(this);
+    },
     connected() {
       this.elementConnected(this);
     },
@@ -17,6 +20,7 @@ export const GenericElement = createCustomElement("michi-generic-element", {
   // Brokes unit tests
   // adoptedStyleSheets: [useStyleSheet({ ':host': { display: 'none' } })],
   events: {
+    elementMounted: new EventDispatcher<HTMLElement>(),
     elementConnected: new EventDispatcher<HTMLElement>(),
   },
 });

@@ -17,7 +17,7 @@ export function observeDate<T extends Date>(
     getOwnPropertyDescriptor: customObjectGetOwnPropertyDescriptor,
     get(target, property) {
       if (property in target) return Reflect.get(target, property);
-      else if (target.$value) {
+      if (target.$value) {
         const targetProperty = Reflect.get(target.$value, property);
         if (typeof property === "string") {
           if (property.startsWith("set")) {
