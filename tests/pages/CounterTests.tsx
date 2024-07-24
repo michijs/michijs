@@ -1,9 +1,4 @@
-import { Title } from "@michijs/michijs";
 import { BuiltInButton } from "../BuiltInButton";
-import { CounterWithReduxStore } from "../CounterWithReduxStore";
-import { SimpleCounter } from "../SimpleCounter";
-import { StoredObservableCounter } from "../StoredObservableCounter";
-import { IndexedDBCounter } from "../IndexedDBCounter";
 
 const CounterTests = () => (
   <>
