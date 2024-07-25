@@ -8,7 +8,13 @@ import type {
 } from "./generated/htmlType";
 import type { SearchParams } from "./routing/types";
 
-export type Platform = "ios" | "android" | "macos" | "chromeos" | "windows" | "unknown";
+export type Platform =
+  | "ios"
+  | "android"
+  | "macos"
+  | "chromeos"
+  | "windows"
+  | "unknown";
 
 export type Browser =
   | "edge"

@@ -4,7 +4,7 @@ import type {
   ObservableType,
 } from "../../types";
 import { useObserve } from "../useObserve";
-import { describe, it, expect, jest, beforeEach, afterEach } from 'bun:test'
+import { describe, it, expect, jest, beforeEach, afterEach } from "bun:test";
 
 const exampleValue = 1;
 const exampleValue2 = 2;
@@ -230,10 +230,10 @@ describe("Observe tests", () => {
   describe("When observing objects with nullable fields", () => {
     const object = useObserve<
       | {
-        test: {
-          test2: undefined | number;
-        } | null;
-      }
+          test: {
+            test2: undefined | number;
+          } | null;
+        }
       | undefined
     >(undefined);
     it("Getting test doesnt throw exception", () => {

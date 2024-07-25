@@ -44,5 +44,5 @@ export function observeDate<T extends Date>(
       }
     },
   }) as unknown as ObservableType<T>;
-  return proxy
+  return proxy;
 }

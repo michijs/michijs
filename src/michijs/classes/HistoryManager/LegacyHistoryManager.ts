@@ -64,10 +64,7 @@ export class LegacyHistoryManager
       this.history.splice(this.history.length, 1, urlValue);
     } catch (ex) {
       console.error(ex);
-      const href =
-      urlValue instanceof URL
-          ? urlValue.href
-          : urlValue;
+      const href = urlValue instanceof URL ? urlValue.href : urlValue;
       window.location.href = href;
     }
     this.notify(urlValue);
@@ -81,10 +78,7 @@ export class LegacyHistoryManager
       this.history.push(urlValue);
     } catch (ex) {
       console.error(ex);
-      const href =
-      urlValue instanceof URL
-          ? urlValue.href
-          : urlValue;
+      const href = urlValue instanceof URL ? urlValue.href : urlValue;
       window.location.href = href;
     }
     this.notify(urlValue);
