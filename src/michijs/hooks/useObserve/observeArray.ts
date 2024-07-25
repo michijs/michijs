@@ -1,7 +1,15 @@
 import { useObserve } from "../useObserve";
 import type { ObservableType, Subscription } from "../../types";
 import { ProxiedArray } from "../../classes/ProxiedArray";
-import { customObjectApply, customObjectDelete, customObjectGet, customObjectGetOwnPropertyDescriptor, customObjectHas, customObjectOwnKeys, customObjectSet } from "./customHandlers";
+import {
+  customObjectApply,
+  customObjectDelete,
+  customObjectGet,
+  customObjectGetOwnPropertyDescriptor,
+  customObjectHas,
+  customObjectOwnKeys,
+  customObjectSet,
+} from "./customHandlers";
 import { cloneArray } from "../../utils/clone/cloneArray";
 
 const mutableNewItemsProperties = new Set<

@@ -5,7 +5,13 @@ import {
   customMapAndSetClear,
   customMapAndSetDelete,
 } from "./mapAndSetCommonHandlers";
-import { customObjectApply, customObjectDelete, customObjectGetOwnPropertyDescriptor, customObjectOwnKeys, customObjectSet } from "./customHandlers";
+import {
+  customObjectApply,
+  customObjectDelete,
+  customObjectGetOwnPropertyDescriptor,
+  customObjectOwnKeys,
+  customObjectSet,
+} from "./customHandlers";
 
 import { cloneMap } from "../../utils/clone/cloneMap";
 
