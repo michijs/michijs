@@ -121,11 +121,11 @@ export function useIndexedDB<T extends AnyObject>(
 
   const dbPromise = initDb(name, objectsStore, version);
 
-  return new Proxy(observable as unknown as IndexeddbObservableResult<T>, {
+  return new window.Proxy(observable as unknown as IndexeddbObservableResult<T>, {
     get(target, p: string, receiver) {
       if (p in target) return Reflect.get(target, p, receiver);
 
-      return new Proxy(
+      return new window.Proxy(
         {},
         {
           get(_, method: keyof TypedIDBObjectStore<T>) {

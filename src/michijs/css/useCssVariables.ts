@@ -2,7 +2,7 @@ import type { CssVariablesObject, AnyObject } from "../types";
 import { formatToKebabCase } from "../utils/formatToKebabCase";
 
 function getProxyGetter<T>(parent = "-") {
-  return new Proxy(Function as unknown as CssVariablesObject<T>, {
+  return new window.Proxy(Function as unknown as CssVariablesObject<T>, {
     apply(_, _2, args) {
       const defaultValue = args[0];
       return `var(${parent}${

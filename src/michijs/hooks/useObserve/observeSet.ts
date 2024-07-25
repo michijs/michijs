@@ -26,7 +26,7 @@ export const observeSet = <E, T extends Set<E>>(
     useObserve(value, newInitialObservers),
   );
   const newObservable = new ProxiedValue(proxiedSet);
-  const proxy = new Proxy(newObservable, {
+  const proxy = new window.Proxy(newObservable, {
     set: customObjectSet(newInitialObservers),
     apply: customObjectApply(() => proxy, newInitialObservers),
     get: (target, property) => {
