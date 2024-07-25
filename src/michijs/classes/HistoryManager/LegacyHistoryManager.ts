@@ -3,9 +3,9 @@ import type {
   ObservableOrConst,
   Subscription,
 } from "../../types";
+import { handleNavigation } from "./handleNavigation";
 import { unproxify } from "../../utils/unproxify";
 import { Observable } from "../Observable";
-import { handleNavigation } from "./handleNavigation";
 
 export class LegacyHistoryManager
   extends Observable<string | URL>
