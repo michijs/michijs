@@ -1,5 +1,5 @@
 import type { ProxiedValue } from "../../classes/ProxiedValue";
-import { ObservableType, Subscription } from "../../types";
+import type { ObservableType, Subscription } from "../../types";
 import { setObservableValue } from "../../utils/setObservableValue";
 import { useObserve } from "../useObserve";
 
