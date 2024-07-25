@@ -1,9 +1,9 @@
-export const extendedElements: Record<string, [CustomElementConstructor, string]> =
-  {};
+export const extendedElements: Record<
+  string,
+  [CustomElementConstructor, string]
+> = {};
 
-const originalDefine = window.customElements.define.bind(
-  window.customElements,
-);
+const originalDefine = window.customElements.define.bind(window.customElements);
 
 window.customElements.define = (name, constructor, options) => {
   if (options?.extends) {

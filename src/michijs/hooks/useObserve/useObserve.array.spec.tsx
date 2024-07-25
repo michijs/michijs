@@ -1,6 +1,6 @@
 import type { ObservableType } from "../../types";
 import { useObserve } from "../useObserve";
-import { describe, it, expect, beforeEach } from 'bun:test'
+import { describe, it, expect, beforeEach } from "bun:test";
 
 const exampleValue = 1;
 const exampleValue2 = 2;

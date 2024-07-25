@@ -1,12 +1,20 @@
 import { create } from "../DOMDiff";
-import { CreateOptions, ExtendableComponentWithoutChildren, FC, MutableArrayProperties, ProxiedArrayInterface, SingleJSXElement } from "../types";
+import {
+  CreateOptions,
+  ExtendableComponentWithoutChildren,
+  FC,
+  MutableArrayProperties,
+  ProxiedArrayInterface,
+  SingleJSXElement,
+} from "../types";
 import { ProxiedValue } from "./ProxiedValue";
 import { Target } from "./Target";
 import { VirtualFragment } from "./VirtualFragment";
 
 export class ProxiedArray<V>
   extends ProxiedValue<V[]>
-  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties> {
+  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties>
+{
   private targets = new Array<Target<V>>();
   List = <const E = FC>(
     {
@@ -20,9 +28,9 @@ export class ProxiedArray<V>
   ): Node => {
     const el = asTag
       ? (create({
-        jsxTag: asTag,
-        attrs,
-      } as SingleJSXElement) as ParentNode)
+          jsxTag: asTag,
+          attrs,
+        } as SingleJSXElement) as ParentNode)
       : new VirtualFragment();
 
     const newTarget = new Target(el, renderItem, context);

@@ -1,10 +1,10 @@
 import { type Browser, launch, type Page } from "puppeteer";
 import { makePerformanceTests, type Result } from "./shared";
-import { describe, it, expect, beforeEach, afterAll } from 'bun:test'
-import { spawn } from 'child_process';
-const serverProcess = spawn('bun', ['run', 'start'], {
-  stdio: 'inherit',
-  env: { ...process.env, NODE_ENV: 'TESTING' }
+import { describe, it, expect, beforeEach, afterAll } from "bun:test";
+import { spawn } from "child_process";
+const serverProcess = spawn("bun", ["run", "start"], {
+  stdio: "inherit",
+  env: { ...process.env, NODE_ENV: "TESTING" },
 });
 
 describe("Performance tests - MichiJS", () => {
@@ -102,7 +102,7 @@ describe("Performance tests - MichiJS", () => {
         ],
       ]),
     ).toMatchSnapshot("MichiJS Benchmarks");
-    serverProcess.kill()
+    serverProcess.kill();
     browser.close();
   });
 });
