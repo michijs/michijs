@@ -74,10 +74,12 @@ const objectTests = (initialValue: () => AnyObject | unknown[]) => {
       nonProxiedObject[0] = exampleValue;
       expect(Object.keys(object)).toStrictEqual(Object.keys(nonProxiedObject));
     });
-    it.skip("entries of the objects should be the same", () => {
+    it("entries of the objects should be the same", () => {
       object[0] = exampleValue;
       nonProxiedObject[0] = exampleValue;
-      expect(Object.entries(object)).toStrictEqual(
+      // Doesnt work with bun:test
+      // expect(Object.entries(object)).toStrictEqual(
+      expect(Object.entries(object())).toStrictEqual(
         Object.entries(nonProxiedObject),
       );
     });
