@@ -5,13 +5,8 @@ import {
   customMapAndSetClear,
   customMapAndSetDelete,
 } from "./mapAndSetCommonHandlers";
-import {
-  customObjectApply,
-  customObjectDelete,
-  customObjectGetOwnPropertyDescriptor,
-  customObjectOwnKeys,
-  customObjectSet,
-} from "./observeCommonObject";
+import { customObjectApply, customObjectDelete, customObjectGetOwnPropertyDescriptor, customObjectOwnKeys, customObjectSet } from "./customHandlers";
+
 import { cloneMap } from "../../utils/clone/cloneMap";
 
 export const observeSet = <E, T extends Set<E>>(

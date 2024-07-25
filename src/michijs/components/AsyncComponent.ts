@@ -1,4 +1,4 @@
-import { create } from "../DOMDiff";
+import { create } from "../DOMDiff/create";
 import { jsx } from "../h";
 import { VirtualFragment } from "../classes/VirtualFragment";
 import type {

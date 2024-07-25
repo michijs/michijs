@@ -1,10 +1,6 @@
 import type { ObservableType, Subscription } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
-import {
-  customObjectApply,
-  customObjectGetOwnPropertyDescriptor,
-  customObjectOwnKeys,
-} from "./observeCommonObject";
+import { customObjectApply, customObjectGetOwnPropertyDescriptor, customObjectOwnKeys } from "./customHandlers";
 import { cloneDate } from "../../utils/clone/cloneDate";
 
 export function observeDate<T extends Date>(

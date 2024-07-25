@@ -1,4 +1,4 @@
-import { create } from "../DOMDiff";
+import { create } from "../DOMDiff/create";
 import type {
   CreateOptions,
   ExtendableComponentWithoutChildren,

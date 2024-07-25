@@ -1,4 +1,4 @@
-import { create } from "../DOMDiff";
+import { create } from "../DOMDiff/create";
 import { bindObservable } from "../utils/bindObservable";
 import type {
   CreateOptions,

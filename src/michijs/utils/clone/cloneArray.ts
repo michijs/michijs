@@ -1,4 +1,4 @@
-import { ProxiedValue } from "../../classes";
+import { ProxiedValue } from "../../classes/ProxiedValue";
 
 export function cloneArray<I, T extends Array<I>, E = I>(
   array: T,

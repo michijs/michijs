@@ -1,4 +1,4 @@
-import { create } from "../DOMDiff";
+import { create } from "../DOMDiff/create";
 
 export function renderSync(
   Component: JSX.Element,

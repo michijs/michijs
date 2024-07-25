@@ -1,7 +1,7 @@
 // import { useStyleSheet } from "../css";
 // Fixes jest error
 import { EventDispatcher } from "../classes/EventDispatcher";
-import { createCustomElement } from "../customElements";
+import { createCustomElement } from "../customElements/createCustomElement";
 
 const styles = new CSSStyleSheet();
 // Jest fix
