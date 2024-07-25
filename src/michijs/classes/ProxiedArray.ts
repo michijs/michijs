@@ -1,5 +1,5 @@
 import { create } from "../DOMDiff";
-import {
+import type {
   CreateOptions,
   ExtendableComponentWithoutChildren,
   FC,
