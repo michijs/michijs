@@ -2,7 +2,15 @@ import { useObserve } from "../useObserve";
 import type { ObservableType, Subscription } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 import { cloneCommonObject } from "../../utils/clone/cloneCommonObject";
-import { customObjectApply, customObjectDelete, customObjectGet, customObjectGetOwnPropertyDescriptor, customObjectHas, customObjectOwnKeys, customObjectSet } from "./customHandlers";
+import {
+  customObjectApply,
+  customObjectDelete,
+  customObjectGet,
+  customObjectGetOwnPropertyDescriptor,
+  customObjectHas,
+  customObjectOwnKeys,
+  customObjectSet,
+} from "./customHandlers";
 
 export function observeCommonObject<T>(
   item: T,
