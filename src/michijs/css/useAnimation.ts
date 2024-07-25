@@ -1,7 +1,8 @@
 import { IdGenerator } from "../classes/IdGenerator";
 import type { CSSObject } from "../types";
 import type { CSSProperties } from "../generated/htmlType";
-import { formatToKebabCase, removeNullableFromObject } from "../utils";
+import { formatToKebabCase } from "../utils/formatToKebabCase";
+import { removeNullableFromObject } from "../utils/removeNullableFromObject";
 
 /**
  * Represents keyframes for CSS animations.

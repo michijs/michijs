@@ -1,4 +1,5 @@
-import { CookieStorage, ObservableFromEventListener } from "../..";
+import { CookieStorage } from "../classes/CookieStorage";
+import { ObservableFromEventListener } from "../classes/ObservableFromEventListener";
 import type { ObservableType } from "../types";
 import { useObserve } from "./useObserve";
 

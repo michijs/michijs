@@ -1,4 +1,5 @@
-import { useObserve } from "..";
+import { useObserve } from "../useObserve";
+import {describe, it, expect} from 'bun:test'
 
 const STR1 = "Hello, ";
 const STR2 = "World!";

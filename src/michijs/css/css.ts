@@ -1,6 +1,6 @@
 import { useStringTemplate } from "../hooks/useStringTemplate";
 import type { ObservableType } from "../types";
-import { bindObservableToRef } from "../utils";
+import { bindObservableToRef } from "../utils/bindObservableToRef";
 
 /**
  * Allows to create a Constructable Stylesheet with a Template String.

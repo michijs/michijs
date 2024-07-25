@@ -3,7 +3,7 @@ import type {
   ObservableOrConst,
   Subscription,
 } from "../../types";
-import { unproxify } from "../../utils";
+import { unproxify } from "../../utils/unproxify";
 import { Observable } from "../Observable";
 import { handleNavigation } from "./handleNavigation";
 
@@ -65,7 +65,7 @@ export class LegacyHistoryManager
     } catch (ex) {
       console.error(ex);
       const href =
-        typeof urlValue === "object" && "href" in urlValue
+      urlValue instanceof URL
           ? urlValue.href
           : urlValue;
       window.location.href = href;
@@ -82,7 +82,7 @@ export class LegacyHistoryManager
     } catch (ex) {
       console.error(ex);
       const href =
-        typeof urlValue === "object" && "href" in urlValue
+      urlValue instanceof URL
           ? urlValue.href
           : urlValue;
       window.location.href = href;

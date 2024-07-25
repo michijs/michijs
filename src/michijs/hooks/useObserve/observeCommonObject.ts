@@ -1,7 +1,8 @@
 import { useObserve } from "../useObserve";
 import type { ObservableType, Subscription } from "../../types";
-import { ProxiedValue } from "../../classes";
-import { cloneCommonObject, setObservableValue } from "../../utils";
+import { ProxiedValue } from "../../classes/ProxiedValue";
+import { setObservableValue } from "../../utils/setObservableValue";
+import { cloneCommonObject } from "../../utils/clone/cloneCommonObject";
 
 type CommonObjectProxyHandler<T extends object> = Required<
   ProxyHandler<ProxiedValue<T>>

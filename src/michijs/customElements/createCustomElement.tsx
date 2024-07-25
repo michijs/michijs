@@ -1,5 +1,3 @@
-import { useComputedObserve, useObserve } from "../hooks";
-import { IdGenerator, MappedIdGenerator } from "../classes";
 import type {
   MichiCustomElement,
   CustomElementTag,
@@ -11,8 +9,10 @@ import type {
 } from "../types";
 import {
   formatToKebabCase,
+} from "../utils/formatToKebabCase";
+import {
   addStylesheetsToDocumentOrShadowRoot,
-} from "../utils";
+} from "../utils/addStylesheetsToDocumentOrShadowRoot";
 import { defineEvent } from "./properties/defineEvent";
 import { definePropertyFromObservable } from "./properties/definePropertyFromObservable";
 import { defineMethod } from "./properties/defineMethod";
@@ -23,6 +23,10 @@ import { defineReflectedAttributes } from "./properties/defineReflectedAttribute
 import { useStyleSheet, convertCssObjectToCssVariablesObject } from "../css";
 import { create } from "../DOMDiff";
 import { setProperty } from "../DOM/attributes/setProperty";
+import { MappedIdGenerator } from "../classes/MappedIdGenerator";
+import { IdGenerator } from "../classes/IdGenerator";
+import { useComputedObserve } from "../hooks/useComputedObserve";
+import { useObserve } from "../hooks/useObserve";
 
 let classesIdGenerator: undefined | IdGenerator;
 

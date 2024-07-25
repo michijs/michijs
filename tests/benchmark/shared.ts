@@ -1,4 +1,5 @@
 import type { ElementHandle, Page } from "puppeteer";
+import { it, expect } from 'bun:test'
 
 export type Result =
   | "create1000Rows"

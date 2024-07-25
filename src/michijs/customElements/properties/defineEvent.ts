@@ -1,4 +1,4 @@
-import type { EventDispatcher } from "../../classes";
+import type { EventDispatcher } from "../../classes/EventDispatcher";
 import type { MichiCustomElement } from "../../types";
 
 export function defineEvent(

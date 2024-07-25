@@ -6,7 +6,7 @@ import type {
   UseFetchCallback,
   usePromiseShouldWait,
 } from "../types";
-import { doFetch } from "../utils";
+import { doFetch } from "../utils/doFetch";
 import { usePromise } from "./usePromise";
 
 /**

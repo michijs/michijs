@@ -22,16 +22,15 @@ export const config: ServerConfigFactory<"TESTING" | DefaultEnvironment> = ({
     defaultConfig.openBrowser = false;
     defaultConfig.esbuildOptions = {
       ...defaultConfig.esbuildOptions,
-      splitting: false,
-      format: undefined,
-      target: undefined,
     };
     if (environment === "TESTING") {
+      defaultConfig.port = 3000;
       defaultConfig.public!.path = "./tests/benchmark/michijs/public";
       defaultConfig.esbuildOptions.entryPoints = [
         "./tests/benchmark/michijs/src/index.tsx",
       ];
     } else {
+      defaultConfig.port = 3001;
       defaultConfig.public!.path = "./tests/benchmark/vanillajs/public";
       defaultConfig.esbuildOptions.entryPoints = [
         "./tests/benchmark/vanillajs/src/index.js",

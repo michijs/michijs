@@ -2,7 +2,7 @@ import type { CreateOptions } from "../../types";
 import { setStyle } from "./setStyle";
 import { setAttribute } from "./setAttribute";
 import { bindFunction } from "../../utils/bindFunction";
-import { bindObservableToRef } from "../../utils";
+import { bindObservableToRef } from "../../utils/bindObservableToRef";
 import type { CSSProperties } from "../../generated/htmlType";
 import { isMichiCustomElement } from "../../typeWards/isMichiCustomElement";
 

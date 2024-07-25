@@ -1,18 +1,17 @@
-import { ProxiedValue } from "../classes";
-import { useComputedObserve, useObserve } from "../hooks";
+import { ProxiedValue } from "../classes/ProxiedValue";
+import { useComputedObserve } from "../hooks/useComputedObserve";
+import { useObserve } from "../hooks/useObserve";
 import type {
   AnyObject,
   CSSObject,
   UseStyleSheet,
   UseStyleSheetCallback,
 } from "../types";
-import {
-  formatToKebabCase,
-  getObservables,
-  bindObservable,
-  unproxify,
-  isNil,
-} from "../utils";
+import { bindObservable } from "../utils/bindObservable";
+import { formatToKebabCase } from "../utils/formatToKebabCase";
+import { getObservables } from "../utils/getObservables";
+import { isNil } from "../utils/isNil";
+import { unproxify } from "../utils/unproxify";
 import { useCssVariables } from "./useCssVariables";
 
 const hostSelectors = [":host", ":host-context"];

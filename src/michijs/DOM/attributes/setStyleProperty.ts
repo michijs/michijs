@@ -1,4 +1,4 @@
-import { isNil } from "../../utils";
+import { isNil } from "../../utils/isNil";
 
 export const setStyleProperty = (
   element: HTMLElement,

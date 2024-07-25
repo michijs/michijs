@@ -1,6 +1,6 @@
 import { useObserve } from "../useObserve";
 import type { ObservableType, Subscription } from "../../types";
-import { ProxiedArray } from "../../classes";
+import { ProxiedArray } from "../../classes/ProxiedArray";
 import {
   customObjectApply,
   customObjectDelete,
@@ -10,7 +10,7 @@ import {
   customObjectOwnKeys,
   customObjectSet,
 } from "./observeCommonObject";
-import { cloneArray } from "../../utils";
+import { cloneArray } from "../../utils/clone/cloneArray";
 
 const mutableNewItemsProperties = new Set<
   keyof InstanceType<typeof ProxiedArray>

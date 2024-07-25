@@ -1,19 +1,21 @@
 import type { ObservableType, Subscription } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 import {
+  customObjectApply,
   customObjectGetOwnPropertyDescriptor,
   customObjectOwnKeys,
 } from "./observeCommonObject";
-import { cloneDate } from "../../utils";
+import { cloneDate } from "../../utils/clone/cloneDate";
 
 export function observeDate<T extends Date>(
   item: T,
-  initialObservers?: Subscription<T>[],
+  initialObservers: Subscription<T>[] = [],
 ) {
   const clone = cloneDate(item);
   const newObservable = new ProxiedValue<T>(clone, initialObservers);
-  return new Proxy(newObservable, {
+  const proxy = new Proxy(newObservable, {
     ownKeys: customObjectOwnKeys,
+    apply: customObjectApply(() => proxy, initialObservers),
     getOwnPropertyDescriptor: customObjectGetOwnPropertyDescriptor,
     get(target, property) {
       if (property in target) return Reflect.get(target, property);
@@ -42,4 +44,5 @@ export function observeDate<T extends Date>(
       }
     },
   }) as unknown as ObservableType<T>;
+  return proxy
 }

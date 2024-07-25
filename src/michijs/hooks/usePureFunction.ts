@@ -1,4 +1,4 @@
-import { ProxiedValue } from "../classes";
+import { ProxiedValue } from "../classes/ProxiedValue";
 import type { useWatchDeps } from "../types";
 import { useWatch } from "./useWatch";
 

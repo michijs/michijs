@@ -1,10 +1,12 @@
+import { EventDispatcher } from "./classes/EventDispatcher";
+import { MappedIdGenerator } from "./classes/MappedIdGenerator";
+import { Observable } from "./classes/Observable";
 import type {
   HTMLElements,
   CSSProperties,
   GlobalEvents,
 } from "./generated/htmlType";
-import type { EventDispatcher, MappedIdGenerator, Observable } from "./classes";
-import type { SearchParams } from "./routing";
+import type { SearchParams } from "./routing/types";
 
 export type Platform = "ios" | "android" | "macos" | "chromeos" | "windows" | "unknown";
 
