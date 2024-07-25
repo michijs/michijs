@@ -1,6 +1,6 @@
-import { EventDispatcher } from "./classes/EventDispatcher";
-import { MappedIdGenerator } from "./classes/MappedIdGenerator";
-import { Observable } from "./classes/Observable";
+import type { EventDispatcher } from "./classes/EventDispatcher";
+import type { MappedIdGenerator } from "./classes/MappedIdGenerator";
+import type { Observable } from "./classes/Observable";
 import type {
   HTMLElements,
   CSSProperties,
@@ -8,7 +8,13 @@ import type {
 } from "./generated/htmlType";
 import type { SearchParams } from "./routing/types";
 
-export type Platform = "ios" | "android" | "macos" | "chromeos" | "windows" | "unknown";
+export type Platform =
+  | "ios"
+  | "android"
+  | "macos"
+  | "chromeos"
+  | "windows"
+  | "unknown";
 
 export type Browser =
   | "edge"

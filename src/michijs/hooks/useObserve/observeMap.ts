@@ -79,5 +79,5 @@ export const observeMap = <E, T extends Map<any, E>>(
     getOwnPropertyDescriptor: customObjectGetOwnPropertyDescriptor,
     deleteProperty: customObjectDelete,
   }) as unknown as ObservableType<T>;
-  return proxy
+  return proxy;
 };

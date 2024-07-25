@@ -1,2 +1,3 @@
 [test]
-preload = "./happydom.ts"
+preload = "./happydom.ts"[install.scopes]
+'@michijs' = { token = "$BUN_AUTH_TOKEN", url = "https://npm.pkg.github.com/"}

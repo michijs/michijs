@@ -7,12 +7,8 @@ import type {
   CSSObject,
   NoExtraProperties,
 } from "../types";
-import {
-  formatToKebabCase,
-} from "../utils/formatToKebabCase";
-import {
-  addStylesheetsToDocumentOrShadowRoot,
-} from "../utils/addStylesheetsToDocumentOrShadowRoot";
+import { formatToKebabCase } from "../utils/formatToKebabCase";
+import { addStylesheetsToDocumentOrShadowRoot } from "../utils/addStylesheetsToDocumentOrShadowRoot";
 import { defineEvent } from "./properties/defineEvent";
 import { definePropertyFromObservable } from "./properties/definePropertyFromObservable";
 import { defineMethod } from "./properties/defineMethod";
@@ -151,7 +147,7 @@ export function createCustomElement<O extends MichiElementOptions>(
         idGen: undefined,
         internals: undefined,
       };
-      this.render = render as MichiCustomElement["render"]
+      this.render = render as MichiCustomElement["render"];
 
       for (const key in storeInit) {
         definePropertyFromObservable(this, key, this.$michi.store);

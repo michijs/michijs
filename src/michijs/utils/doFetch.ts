@@ -1,4 +1,4 @@
-import { type SearchParams } from "../routing/types";
+import type { SearchParams } from "../routing/types";
 import { createURL } from "../routing/utils/createURL";
 import type { AnyObject, DoFetchProps, UseFetchOptions } from "../types";
 
