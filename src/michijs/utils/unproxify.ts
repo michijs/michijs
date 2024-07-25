@@ -1,10 +1,10 @@
-import { ProxiedValue } from "../../michijs/classes/ProxiedValue";
 import type { Unproxify } from "../types";
 import { cloneArray } from "./clone/cloneArray";
 import { cloneCommonObject } from "./clone/cloneCommonObject";
 import { cloneDate } from "./clone/cloneDate";
 import { cloneMap } from "./clone/cloneMap";
 import { cloneSet } from "./clone/cloneSet";
+import { ProxiedValue } from "../../michijs/classes/ProxiedValue";
 
 /**
  * Converts any proxy into a common value

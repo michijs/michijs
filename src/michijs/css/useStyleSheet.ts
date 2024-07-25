@@ -1,4 +1,3 @@
-import { ProxiedValue } from "../classes/ProxiedValue";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { useObserve } from "../hooks/useObserve";
 import type {
@@ -13,6 +12,7 @@ import { getObservables } from "../utils/getObservables";
 import { isNil } from "../utils/isNil";
 import { unproxify } from "../utils/unproxify";
 import { useCssVariables } from "./useCssVariables";
+import { ProxiedValue } from "../classes/ProxiedValue";
 
 const hostSelectors = [":host", ":host-context"];
 

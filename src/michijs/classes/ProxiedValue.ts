@@ -1,3 +1,4 @@
+import { unproxify } from "../utils/unproxify";
 import { hasToJSON } from "../typeWards/hasToJSON";
 import type {
   Subscription,
@@ -5,10 +6,9 @@ import type {
   ProxiedValueInterface,
   Typeof,
 } from "../types";
+import { deepEqual } from "../utils/deepEqual";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { Observable } from "./Observable";
-import { deepEqual } from "../utils/deepEqual";
-import { unproxify } from "../utils/unproxify";
 
 export class ProxiedValue<T>
   extends Observable<T>

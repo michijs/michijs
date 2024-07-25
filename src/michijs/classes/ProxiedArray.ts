@@ -7,9 +7,9 @@ import type {
   ProxiedArrayInterface,
   SingleJSXElement,
 } from "../types";
-import { ProxiedValue } from "./ProxiedValue";
 import { Target } from "./Target";
 import { VirtualFragment } from "./VirtualFragment";
+import { ProxiedValue } from "./ProxiedValue";
 
 export class ProxiedArray<V>
   extends ProxiedValue<V[]>
