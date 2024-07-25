@@ -121,64 +121,67 @@ export function useIndexedDB<T extends AnyObject>(
 
   const dbPromise = initDb(name, objectsStore, version);
 
-  return new Proxy(observable as unknown as IndexeddbObservableResult<T>, {
-    get(target, p: string, receiver) {
-      if (p in target) return Reflect.get(target, p, receiver);
+  return new Proxy(
+    observable as unknown as IndexeddbObservableResult<T>,
+    {
+      get(target, p: string, receiver) {
+        if (p in target) return Reflect.get(target, p, receiver);
 
-      return new Proxy(
-        {},
-        {
-          get(_, method: keyof TypedIDBObjectStore<T>) {
-            let transactionMode: IDBTransactionMode = "readonly";
-            switch (method) {
-              case "add":
-              case "clear":
-              case "delete":
-              case "deleteIndex":
-              case "put": {
-                transactionMode = "readwrite";
-              }
-            }
-            if (
-              [
-                "autoIncrement",
-                "indexNames",
-                "keyPath",
-                "name",
-                "transaction",
-              ].includes(method)
-            ) {
-              return new Promise(async (resolve) => {
-                const db = await dbPromise;
-                const transaction = db.transaction(p, transactionMode);
-                resolve(transaction.objectStore(p)[method]);
-              });
-            }
-            return (...args) =>
-              new Promise(async (resolve, reject) => {
-                const db = await dbPromise;
-                const transaction = db.transaction(p, transactionMode);
-                const result = (
-                  transaction.objectStore(p)[method] as Function
-                ).call(transaction.objectStore(p), ...args);
-                transaction.onabort = reject;
-                transaction.onerror = reject;
-                if (result instanceof IDBRequest) {
-                  result.onsuccess = () => {
-                    if (transactionMode === "readwrite") {
-                      observable.notify(p);
-                      bc.postMessage(p);
-                    }
-                    resolve(result.result);
-                  };
-                  result.onerror = reject;
-                } else {
-                  resolve(result);
+        return new Proxy(
+          {},
+          {
+            get(_, method: keyof TypedIDBObjectStore<T>) {
+              let transactionMode: IDBTransactionMode = "readonly";
+              switch (method) {
+                case "add":
+                case "clear":
+                case "delete":
+                case "deleteIndex":
+                case "put": {
+                  transactionMode = "readwrite";
                 }
-              });
+              }
+              if (
+                [
+                  "autoIncrement",
+                  "indexNames",
+                  "keyPath",
+                  "name",
+                  "transaction",
+                ].includes(method)
+              ) {
+                return new Promise(async (resolve) => {
+                  const db = await dbPromise;
+                  const transaction = db.transaction(p, transactionMode);
+                  resolve(transaction.objectStore(p)[method]);
+                });
+              }
+              return (...args) =>
+                new Promise(async (resolve, reject) => {
+                  const db = await dbPromise;
+                  const transaction = db.transaction(p, transactionMode);
+                  const result = (
+                    transaction.objectStore(p)[method] as Function
+                  ).call(transaction.objectStore(p), ...args);
+                  transaction.onabort = reject;
+                  transaction.onerror = reject;
+                  if (result instanceof IDBRequest) {
+                    result.onsuccess = () => {
+                      if (transactionMode === "readwrite") {
+                        observable.notify(p);
+                        bc.postMessage(p);
+                      }
+                      resolve(result.result);
+                    };
+                    result.onerror = reject;
+                  } else {
+                    resolve(result);
+                  }
+                });
+            },
           },
-        },
-      );
+        );
+      },
     },
-  });
+  );
 }
