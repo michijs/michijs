@@ -6,6 +6,8 @@ import type {
 import type { EventDispatcher, MappedIdGenerator, Observable } from "./classes";
 import type { SearchParams } from "./routing";
 
+export type Platform = "ios" | "android" | "macos" | "chromeos" | "windows" | "unknown";
+
 export type Browser =
   | "edge"
   | "chrome"

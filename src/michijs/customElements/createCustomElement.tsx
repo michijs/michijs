@@ -85,7 +85,7 @@ export function createCustomElement<O extends MichiElementOptions>(
     disabledCallback;
     resetCallback;
     stateRestoreCallback;
-    render = render as MichiCustomElement["render"];
+    render;
     child<T extends (new () => any) | HTMLElement = HTMLElement>(
       selector: string,
     ) {
@@ -147,6 +147,7 @@ export function createCustomElement<O extends MichiElementOptions>(
         idGen: undefined,
         internals: undefined,
       };
+      this.render = render as MichiCustomElement["render"]
 
       for (const key in storeInit) {
         definePropertyFromObservable(this, key, this.$michi.store);
