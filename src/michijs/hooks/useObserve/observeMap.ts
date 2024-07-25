@@ -27,7 +27,7 @@ export const observeMap = <E, T extends Map<any, E>>(
     useObserve(value, newInitialObservers),
   );
   const newObservable = new ProxiedValue<T>(proxiedMap as T, initialObservers);
-  const proxy = new window.Proxy(newObservable, {
+  const proxy = new Proxy(newObservable, {
     set: customObjectSet(newInitialObservers),
     apply: customObjectApply(() => proxy, newInitialObservers),
     get: (target, property) => {

@@ -29,7 +29,7 @@ export function observeArray<T extends Array<unknown>>(
   );
 
   const newObservable = new ProxiedArray<T>(proxiedArray);
-  const proxy = new window.Proxy(newObservable, {
+  const proxy = new Proxy(newObservable, {
     set: customObjectSet(newInitialObservers),
     deleteProperty: customObjectDelete,
     ownKeys: customObjectOwnKeys,

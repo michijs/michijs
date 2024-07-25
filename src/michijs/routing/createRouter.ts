@@ -7,7 +7,7 @@ export function createRouter<R extends Record<string, JSX.Element>>(
   routes: R,
   parentRoute?: UrlFunction,
 ) {
-  const urls = new window.Proxy(
+  const urls = new Proxy(
     {},
     {
       get(_, property: string) {

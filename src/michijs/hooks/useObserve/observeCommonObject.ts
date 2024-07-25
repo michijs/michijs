@@ -132,7 +132,7 @@ export function observeCommonObject<T>(
       : item,
     initialObservers,
   );
-  const proxy = new window.Proxy(newObservable, {
+  const proxy = new Proxy(newObservable, {
     set: customObjectSet(newInitialObservers),
     deleteProperty: customObjectDelete,
     apply: customObjectApply(() => proxy, newInitialObservers),

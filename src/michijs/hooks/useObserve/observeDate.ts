@@ -13,7 +13,7 @@ export function observeDate<T extends Date>(
 ) {
   const clone = cloneDate(item);
   const newObservable = new ProxiedValue<T>(clone, initialObservers);
-  const proxy = new window.Proxy(newObservable, {
+  const proxy = new Proxy(newObservable, {
     ownKeys: customObjectOwnKeys,
     apply: customObjectApply(() => proxy, initialObservers),
     getOwnPropertyDescriptor: customObjectGetOwnPropertyDescriptor,
