@@ -1,13 +1,14 @@
-import { create } from "../DOMDiff";
-import { ProxiedValue, VirtualFragment } from "../classes";
-import { bindObservable } from "../utils";
+import { create } from "../DOMDiff/create";
+import { bindObservable } from "../utils/bindObservable";
 import type {
   CreateOptions,
   ExtendableComponentWithoutChildren,
   CreateFCResult,
   SingleJSXElement,
 } from "../types";
-import { useComputedObserve } from "../hooks";
+import { useComputedObserve } from "../hooks/useComputedObserve";
+import { VirtualFragment } from "../classes/VirtualFragment";
+import { ProxiedValue } from "../classes/ProxiedValue";
 
 type IfProps<T> = ExtendableComponentWithoutChildren<T> & {
   /** The condition to evaluate for rendering content. */

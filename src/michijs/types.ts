@@ -1,10 +1,20 @@
+import type { EventDispatcher } from "./classes/EventDispatcher";
+import type { MappedIdGenerator } from "./classes/MappedIdGenerator";
+import type { Observable } from "./classes/Observable";
 import type {
   HTMLElements,
   CSSProperties,
   GlobalEvents,
 } from "./generated/htmlType";
-import type { EventDispatcher, MappedIdGenerator, Observable } from "./classes";
-import type { SearchParams } from "./routing";
+import type { SearchParams } from "./routing/types";
+
+export type Platform =
+  | "ios"
+  | "android"
+  | "macos"
+  | "chromeos"
+  | "windows"
+  | "unknown";
 
 export type Browser =
   | "edge"

@@ -6,6 +6,7 @@ import type {
   ObjectJSXElement,
 } from "../types";
 import { jsx } from "./";
+import { describe, it, expect } from "bun:test";
 
 const testChild = "child";
 const testAttrs = {

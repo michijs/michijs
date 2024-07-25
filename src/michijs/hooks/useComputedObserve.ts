@@ -1,4 +1,4 @@
-import { useObserve } from ".";
+import { useObserve } from "./useObserve";
 import type {
   ObservableType,
   UseComputedObserveOptions,

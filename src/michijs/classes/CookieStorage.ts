@@ -1,6 +1,6 @@
-import { Observable } from ".";
+import { Observable } from "./Observable";
 import { ObservableFromEventListener } from "./ObservableFromEventListener";
-import { formatToKebabCase } from "../utils";
+import { formatToKebabCase } from "../utils/formatToKebabCase";
 
 export interface CookieStorageConstructor {
   path?: string;

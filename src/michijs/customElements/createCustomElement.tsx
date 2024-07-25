@@ -1,5 +1,3 @@
-import { useComputedObserve, useObserve } from "../hooks";
-import { IdGenerator, MappedIdGenerator } from "../classes";
 import type {
   MichiCustomElement,
   CustomElementTag,
@@ -9,10 +7,8 @@ import type {
   CSSObject,
   NoExtraProperties,
 } from "../types";
-import {
-  formatToKebabCase,
-  addStylesheetsToDocumentOrShadowRoot,
-} from "../utils";
+import { formatToKebabCase } from "../utils/formatToKebabCase";
+import { addStylesheetsToDocumentOrShadowRoot } from "../utils/addStylesheetsToDocumentOrShadowRoot";
 import { defineEvent } from "./properties/defineEvent";
 import { definePropertyFromObservable } from "./properties/definePropertyFromObservable";
 import { defineMethod } from "./properties/defineMethod";
@@ -20,9 +16,14 @@ import { getRootNode } from "../DOM/getRootNode";
 import { getAttributeValue } from "../DOM/attributes/getAttributeValue";
 import { getMountPoint } from "../DOM/getMountPoint";
 import { defineReflectedAttributes } from "./properties/defineReflectedAttributes";
-import { useStyleSheet, convertCssObjectToCssVariablesObject } from "../css";
-import { create } from "../DOMDiff";
+import { useStyleSheet } from "../css/useStyleSheet";
+import { convertCssObjectToCssVariablesObject } from "../css/convertCssObjectToCssVariablesObject";
+import { create } from "../DOMDiff/create";
 import { setProperty } from "../DOM/attributes/setProperty";
+import { MappedIdGenerator } from "../classes/MappedIdGenerator";
+import { IdGenerator } from "../classes/IdGenerator";
+import { useComputedObserve } from "../hooks/useComputedObserve";
+import { useObserve } from "../hooks/useObserve";
 
 let classesIdGenerator: undefined | IdGenerator;
 
@@ -73,13 +74,7 @@ export function createCustomElement<O extends MichiElementOptions>(
     extends (classToExtend as CustomElementConstructor)
     implements MichiCustomElement
   {
-    $michi: MichiCustomElement["$michi"] = {
-      store: useObserve(storeInit),
-      alreadyRendered: false,
-      styles: {},
-      idGen: undefined,
-      internals: undefined,
-    };
+    $michi: MichiCustomElement["$michi"];
     connected;
     willMount;
     willConstruct;
@@ -91,7 +86,7 @@ export function createCustomElement<O extends MichiElementOptions>(
     disabledCallback;
     resetCallback;
     stateRestoreCallback;
-    render = render as MichiCustomElement["render"];
+    render;
     child<T extends (new () => any) | HTMLElement = HTMLElement>(
       selector: string,
     ) {
@@ -141,6 +136,19 @@ export function createCustomElement<O extends MichiElementOptions>(
     }
     constructor() {
       super();
+
+      this.fakeConstructor();
+    }
+
+    fakeConstructor() {
+      this.$michi = {
+        store: useObserve(storeInit),
+        alreadyRendered: false,
+        styles: {},
+        idGen: undefined,
+        internals: undefined,
+      };
+      this.render = render as MichiCustomElement["render"];
 
       for (const key in storeInit) {
         definePropertyFromObservable(this, key, this.$michi.store);

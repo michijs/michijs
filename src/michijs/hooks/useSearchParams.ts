@@ -1,8 +1,8 @@
 import { useComputedObserve } from "./useComputedObserve";
-import { HistoryManager } from "../classes";
+import { HistoryManager } from "../classes/HistoryManager";
 import { setSearchParam } from "../routing/utils/setSearchParam";
 import type { ObservableType } from "../types";
-import { getSearchParamsValue } from "../utils";
+import { getSearchParamsValue } from "../utils/getSearchParamsValue";
 
 let isUpdating = false;
 

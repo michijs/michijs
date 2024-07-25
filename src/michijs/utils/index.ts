@@ -16,3 +16,5 @@ export { doFetch } from "./doFetch";
 export { removeNullableFromObject } from "./removeNullableFromObject";
 export * from "./getBrowser";
 export * from "./clone";
+export * from "./getPlatform";
+export * from "./getAdoptedStyleSheetText";

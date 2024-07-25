@@ -1,6 +1,6 @@
-import { create } from "../DOMDiff";
+import { create } from "../DOMDiff/create";
 import { jsx } from "../h";
-import { VirtualFragment } from "../classes";
+import { VirtualFragment } from "../classes/VirtualFragment";
 import type {
   CreateOptions,
   ExtendableComponentWithoutChildren,
@@ -9,7 +9,7 @@ import type {
   ObservableOrConst,
 } from "../types";
 import { isObservableType } from "../typeWards/isObservableType";
-import { bindObservable } from "../utils";
+import { bindObservable } from "../utils/bindObservable";
 
 // Define a type for the return value of promises, which can be a JSX element, a function component, or a DOM element.
 type PromiseType<P> =

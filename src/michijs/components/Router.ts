@@ -5,9 +5,12 @@ import type {
   CreateFCResult,
   SingleJSXElement,
 } from "../types";
-import { HistoryManager, useComputedObserve, create, urlFn } from "../..";
 import { VirtualFragment } from "../classes/VirtualFragment";
-import { bindObservable } from "../utils";
+import { bindObservable } from "../utils/bindObservable";
+import { create } from "../DOMDiff/create";
+import { useComputedObserve } from "../hooks/useComputedObserve";
+import { HistoryManager } from "../classes/HistoryManager";
+import { urlFn } from "../routing/utils/urlFn";
 
 export type RouterProps<T> = ExtendableComponentWithoutChildren<T> & {
   routes: Record<string, JSX.Element>;

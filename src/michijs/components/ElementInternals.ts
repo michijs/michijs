@@ -1,10 +1,12 @@
 import type { AllAttributes } from "../generated/htmlType";
 import { setAttribute } from "../DOM/attributes/setAttribute";
 import { isMichiCustomElement } from "../typeWards/isMichiCustomElement";
-import { bindObservableToRef, getObservables, unproxify } from "../utils";
 import { createFunctionalComponent } from "../customElements/createFunctionalComponent";
-import { useComputedObserve } from "../hooks";
+import { useComputedObserve } from "../hooks/useComputedObserve";
 import type { CreateFunctionalComponent } from "../types";
+import { getObservables } from "../utils/getObservables";
+import { bindObservableToRef } from "../utils/bindObservableToRef";
+import { unproxify } from "../utils/unproxify";
 
 export interface ElementInternalsProps
   extends Omit<Partial<ARIAMixin>, "role"> {

@@ -1,4 +1,4 @@
-import { Fragment } from "../components";
+import { Fragment } from "../components/Fragment";
 
 function jsx(
   jsxTag: any,

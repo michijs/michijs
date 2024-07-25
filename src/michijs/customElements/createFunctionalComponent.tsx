@@ -1,4 +1,4 @@
-import { useObserve } from "../hooks";
+import { useObserve } from "../hooks/useObserve";
 import { isObservableType } from "../typeWards/isObservableType";
 import type {
   AnyObject,
@@ -6,7 +6,7 @@ import type {
   CreateFCResult,
   CreateFunctionalComponent,
 } from "../types";
-import { unproxify } from "../utils";
+import { unproxify } from "../utils/unproxify";
 
 export function createFunctionalComponent<
   T extends AnyObject,

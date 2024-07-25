@@ -1,7 +1,8 @@
+import "./michijs/polyfill";
+export * from "./michijs/classes";
 export * from "./michijs/h";
 export * from "./michijs/constants";
 export * from "./michijs/components";
-export * from "./michijs/classes";
 export * from "./michijs/hooks";
 export * from "./michijs/trustedTypes";
 export * from "./michijs/routing";

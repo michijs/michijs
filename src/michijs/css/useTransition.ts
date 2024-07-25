@@ -1,5 +1,5 @@
 import type { CSSObject } from "../types";
-import { removeNullableFromObject } from "../utils";
+import { removeNullableFromObject } from "../utils/removeNullableFromObject";
 
 /**
  * Represents transition properties for CSS animations.

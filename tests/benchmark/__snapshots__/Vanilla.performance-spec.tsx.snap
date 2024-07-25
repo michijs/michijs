@@ -1,0 +1,15 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Performance tests - vanilla-js clear rows: Vanilla JS 1`] = `
+Map {
+  "create1000Rows" => 367.21,
+  "replaceAllRows" => 276.42,
+  "partialUpdate" => 178.34,
+  "selectRow" => 548.01,
+  "swapRows" => 161.78,
+  "removeRow" => 480.54,
+  "createManyRows" => 1027.21,
+  "appendRowsToLargeTable" => 149.67,
+  "clearRows" => 147.37,
+}
+`;

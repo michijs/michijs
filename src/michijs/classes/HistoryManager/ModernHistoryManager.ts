@@ -3,7 +3,7 @@ import type {
   Subscription,
   HistoryManagerType,
 } from "../../types";
-import { unproxify } from "../../utils";
+import { unproxify } from "../../utils/unproxify";
 import { Observable } from "../Observable";
 import { handleNavigation } from "./handleNavigation";
 

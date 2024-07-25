@@ -1,15 +1,15 @@
-import {
-  type CreateOptions,
-  type ExtendableComponentWithoutChildren,
-  ProxiedValue,
-  type SingleJSXElement,
-  type ProxiedArrayInterface,
-  type MutableArrayProperties,
-  type FC,
-} from "../..";
-import { create } from "../DOMDiff";
+import { create } from "../DOMDiff/create";
+import type {
+  CreateOptions,
+  ExtendableComponentWithoutChildren,
+  FC,
+  MutableArrayProperties,
+  ProxiedArrayInterface,
+  SingleJSXElement,
+} from "../types";
 import { Target } from "./Target";
 import { VirtualFragment } from "./VirtualFragment";
+import { ProxiedValue } from "./ProxiedValue";
 
 export class ProxiedArray<V>
   extends ProxiedValue<V[]>

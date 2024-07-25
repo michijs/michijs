@@ -6,12 +6,14 @@ import {
   customMapAndSetDelete,
 } from "./mapAndSetCommonHandlers";
 import {
+  customObjectApply,
   customObjectDelete,
   customObjectGetOwnPropertyDescriptor,
   customObjectOwnKeys,
   customObjectSet,
-} from "./observeCommonObject";
-import { cloneMap } from "../../utils";
+} from "./customHandlers";
+
+import { cloneMap } from "../../utils/clone/cloneMap";
 
 export const observeSet = <E, T extends Set<E>>(
   item: T,
@@ -27,6 +29,7 @@ export const observeSet = <E, T extends Set<E>>(
   const newObservable = new ProxiedValue(proxiedSet);
   const proxy = new Proxy(newObservable, {
     set: customObjectSet(newInitialObservers),
+    apply: customObjectApply(() => proxy, newInitialObservers),
     get: (target, property) => {
       if (property in target) return Reflect.get(target, property);
 
