@@ -127,7 +127,6 @@ export class ProxiedValue<T>
   }
 }
 
-
 export class ProxiedArray<V>
   extends ProxiedValue<V[]>
   implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties>
