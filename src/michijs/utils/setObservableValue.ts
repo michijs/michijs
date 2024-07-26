@@ -1,5 +1,4 @@
-import { ProxiedArray } from "../classes/ProxiedArray";
-import { ProxiedValue } from "../classes/ProxiedValue";
+import { ProxiedValue, ProxiedArray } from "../classes/ProxiedValue";
 import { useObserve } from "../hooks/useObserve";
 import type { Subscription } from "../types";
 

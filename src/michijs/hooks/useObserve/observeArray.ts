@@ -10,7 +10,7 @@ import {
   customObjectSet,
 } from "./customHandlers";
 import { cloneArray } from "../../utils/clone/cloneArray";
-import { ProxiedArray } from "../../classes/ProxiedArray";
+import { ProxiedArray } from "../../classes/ProxiedValue";
 
 const mutableNewItemsProperties = new Set<
   keyof InstanceType<typeof ProxiedArray>
