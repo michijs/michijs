@@ -17,8 +17,8 @@ export const getBrowser = (): Browser => {
               ? "android"
               : userAgent.match(/iphone/i)
                 ? "iphone"
-                // Playwright
-                : userAgent.match(/AppleWebKit/i)
+                : // Playwright
+                  userAgent.match(/AppleWebKit/i)
                   ? "safari"
                   : "unknown";
 };
