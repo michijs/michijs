@@ -1,4 +1,4 @@
-import type { ProxiedValue } from "../../classes/ProxiedValue";
+import { ProxiedValue } from "../../classes/ProxiedValue";
 import type { ObservableType, Subscription } from "../../types";
 import { setObservableValue } from "../../utils/setObservableValue";
 import { useObserve } from "../useObserve";
@@ -20,7 +20,7 @@ export const customObjectSet =
       const oldValue = target.$value[property];
       if (oldValue) {
         // If you call something.myfunctionname = other function it should not call the function
-        if (typeof oldValue.$value === "function") oldValue.$value = newValue;
+        if (typeof oldValue.$value  === "function" && !(oldValue.$value instanceof ProxiedValue)) oldValue.$value = newValue;
         else oldValue(newValue);
         return true;
       }
@@ -104,7 +104,7 @@ export const customObjectApply: (
 ) => CommonObjectProxyHandler<any>["apply"] =
   (proxy, initialObservers) => (target, _, args) => {
     const valueType = typeof target.$value;
-    if (valueType === "function") return proxy().$value(...args);
+    if (valueType === "function" && !(target.$value instanceof ProxiedValue)) return proxy().$value(...args);
     if (args.length > 0) {
       const newValue = args[0];
       if (target.$value && valueType === "object")
