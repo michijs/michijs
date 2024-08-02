@@ -7,7 +7,7 @@ import { observeSet } from "./useObserve/observeSet";
 
 /**
  * Responsible for observing changes on different types of values.
- * @param itemValue The value to be observed.
+ * @param item The value to be observed.
  * @param initialObservers An array of initial observers of type Subscription<T>.
  * @returns A new observable
  */
