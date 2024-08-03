@@ -15,7 +15,7 @@ export function useObserve<T>(
   item?: T,
   initialObservers?: Subscription<T>[],
 ): ObservableType<T> {
-  const itemValue = item?.valueOf() as T
+  const itemValue = item?.valueOf() as T;
   if (itemValue) {
     const typeofItem = typeof itemValue;
     if (typeofItem === "object") {
