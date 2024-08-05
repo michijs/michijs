@@ -17,7 +17,7 @@ export const createObject = (
     });
   else {
     isMATHML = options.isMATHML || jsx.jsxTag === RootTags.MATHML;
-    if (isMATHML) 
+    if (isMATHML)
       el = document.createElementNS(Namespaces.MATHML, jsx.jsxTag, {
         is: jsx.attrs?.is,
       });
