@@ -8,7 +8,7 @@ export class VirtualChildNodes
   item(index: number): ChildNode {
     return this.at(index) ?? (null as unknown as ChildNode);
   }
-  forEach(
+  override forEach(
     callbackfn: (value: ChildNode, key: number, parent: any) => void,
     thisArg?: any,
   ): void {

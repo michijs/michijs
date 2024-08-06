@@ -105,7 +105,7 @@ export class ProxiedValue<T>
     return this.$value;
   }
 
-  toString(): string {
+  override toString(): string {
     // @ts-ignore
     return this.$value.toString();
   }
