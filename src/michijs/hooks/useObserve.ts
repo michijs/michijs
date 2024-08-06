@@ -1,3 +1,4 @@
+import { ProxiedValue } from "../classes/ProxiedValue";
 import type { ObservableType, Subscription } from "../types";
 import { observeArray } from "./useObserve/observeArray";
 import { observeCommonObject } from "./useObserve/observeCommonObject";
@@ -15,7 +16,7 @@ export function useObserve<T>(
   item?: T,
   initialObservers?: Subscription<T>[],
 ): ObservableType<T> {
-  const itemValue = item?.valueOf() as T;
+  const itemValue = item instanceof ProxiedValue ? item?.valueOf() as T: item;
   if (itemValue) {
     const typeofItem = typeof itemValue;
     if (typeofItem === "object") {

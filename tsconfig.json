@@ -8,7 +8,9 @@
       "@michijs/michijs": [
         "./src/index"
       ],
-    }
+    },
+    "jsx": "react-jsx",
+    "jsxImportSource": "@michijs/michijs",
   },
   "include": [
     "src",
