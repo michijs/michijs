@@ -1,29 +1,6 @@
 {
+  "extends": "@michijs/tsconfig/tsconfig.json",
   "compilerOptions": {
-    "strictFunctionTypes": true,
-    "strictNullChecks": true,
-    "strictBindCallApply": true,
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-    "allowUnreachableCode": false,
-    "declaration": true,
-    "experimentalDecorators": true,
-    "noErrorTruncation": true,
-    "lib": [
-      "dom",
-      "ESNext"
-    ],
-    "isolatedDeclarations": false,
-    "isolatedModules": true,
-    "outDir": "dist",
-    "moduleResolution": "node",
-    "module": "esnext",
-    "target": "esnext",
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitThis": true,
-    "jsx": "react-jsx",
-    "jsxImportSource": "@michijs/michijs",
     "paths": {
       "@michijs/michijs/*": [
         "./src/*"
