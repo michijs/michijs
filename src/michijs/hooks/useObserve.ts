@@ -16,7 +16,8 @@ export function useObserve<T>(
   item?: T,
   initialObservers?: Subscription<T>[],
 ): ObservableType<T> {
-  const itemValue = item instanceof ProxiedValue ? item?.valueOf() as T: item;
+  const itemValue =
+    item instanceof ProxiedValue ? (item?.valueOf() as T) : item;
   if (itemValue) {
     const typeofItem = typeof itemValue;
     if (typeofItem === "object") {
