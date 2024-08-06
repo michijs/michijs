@@ -11,30 +11,22 @@ export const createObject = (
   let isMATHML;
   let el: Element;
   const { children, ...attrs } = jsx.attrs;
-  if (isSVG) {
-    if (jsx.attrs?.is)
-      el = document.createElementNS(Namespaces.SVG, jsx.jsxTag, {
-        is: jsx.attrs.is,
-      });
-    else el = document.createElementNS(Namespaces.SVG, jsx.jsxTag);
-  } else {
+  if (isSVG)
+    el = document.createElementNS(Namespaces.SVG, jsx.jsxTag, {
+      is: jsx.attrs?.is,
+    });
+  else {
     isMATHML = options.isMATHML || jsx.jsxTag === RootTags.MATHML;
-    if (isMATHML) {
-      if (jsx.attrs?.is)
-        el = document.createElementNS(Namespaces.MATHML, jsx.jsxTag, {
-          is: jsx.attrs.is,
-        });
-      else el = document.createElementNS(Namespaces.MATHML, jsx.jsxTag);
-    } else if (jsx.attrs?.is)
-      el = document.createElement(jsx.jsxTag, {
-        is: jsx.attrs.is,
+    if (isMATHML)
+      el = document.createElementNS(Namespaces.MATHML, jsx.jsxTag, {
+        is: jsx.attrs?.is,
       });
-    else el = document.createElement(jsx.jsxTag);
+    else
+      el = document.createElement(jsx.jsxTag, {
+        is: jsx.attrs?.is,
+      });
   }
 
-  // $oncreated?.(el, isSVG, isMATHML, self);
-
-  // if (!el.$doNotTouchChildren && !$doNotTouchChildren)
   const newOptions = {
     ...options,
     isMATHML,
