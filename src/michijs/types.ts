@@ -286,7 +286,7 @@ export type Typeof =
   | "object"
   | "function";
 
-export interface ProxiedValueInterface<RV, SV> extends ObservableLike<SV> {
+export interface ProxiedValueInterface<RV, SV> extends ObservableLike<RV> {
   get $value(): SV;
   set $value(newValue: SV | RV);
   notifyCurrentValue(): void;
