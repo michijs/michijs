@@ -1,7 +1,7 @@
 import { useComputedObserve } from "./useComputedObserve";
 import { HistoryManager } from "../classes/HistoryManager";
 import { setSearchParam } from "../routing/utils/setSearchParam";
-import type { ObservableType } from "../types";
+import type { AnyObject, ObservableType } from "../types";
 import { getSearchParamsValue } from "../utils/getSearchParamsValue";
 
 let isUpdating = false;
@@ -26,7 +26,7 @@ const SearchParams = useComputedObserve(
 export function useSearchParams<
   // Removed because it doesnt work with observables
   // T extends Record<string, unknown> = Record<string, unknown>,
-  T = Record<string, unknown>,
+  T = AnyObject,
 >(): ObservableType<T> {
   return SearchParams as unknown as ObservableType<T>;
 }
