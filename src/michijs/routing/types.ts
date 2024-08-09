@@ -1,7 +1,7 @@
 import type { Router } from "../components/Router";
-import type { CreateFCResult, GetElementProps } from "../types";
+import type { AnyObject, CreateFCResult, GetElementProps } from "../types";
 
-export type SearchParams = Record<string, unknown> | undefined;
+export type SearchParams = AnyObject | undefined;
 export type Hash = `#${string}` | "" | undefined;
 
 export type UrlFunction<
