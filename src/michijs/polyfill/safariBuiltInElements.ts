@@ -3,7 +3,11 @@ export const extendedElements: Record<
   [CustomElementConstructor, string]
 > = {};
 
-export const safariDefine: typeof window.customElements.define = (name, constructor, options) => {
+export const safariDefine: typeof window.customElements.define = (
+  name,
+  constructor,
+  options,
+) => {
   extendedElements[name] = [constructor, options!.extends!];
 };
 
@@ -29,12 +33,12 @@ export const overrideDocumentCreateElement = () => {
     options?: ElementCreationOptions,
   ) => {
     const newEl = originalCreateElement(tagName, options);
-  
+
     if (options?.is) {
       const [customElement, customElementTag] = extendedElements[options.is];
       Object.setPrototypeOf(newEl, customElement.prototype);
       newEl.setAttribute("is", customElementTag);
-  
+
       // @ts-ignore
       newEl.fakeConstructor?.();
       // @ts-ignore
@@ -52,7 +56,7 @@ export const overrideDocumentCreateElement = () => {
         });
       }
     }
-  
+
     return newEl;
   };
-}
+};
