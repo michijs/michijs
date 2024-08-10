@@ -24,8 +24,11 @@ import { MappedIdGenerator } from "../classes/MappedIdGenerator";
 import { IdGenerator } from "../classes/IdGenerator";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { useObserve } from "../hooks/useObserve";
+import { getCreateBuiltInElement } from "../polyfill";
 
 let classesIdGenerator: undefined | IdGenerator;
+
+const createBuiltInElement = await getCreateBuiltInElement();
 
 export function createCustomElement<O extends MichiElementOptions>(
   tag: CustomElementTag,
@@ -307,7 +310,7 @@ export function createCustomElement<O extends MichiElementOptions>(
 
   try {
     if (extendsTag) {
-      window.customElements.define(tag, MichiCustomElementResult, {
+      createBuiltInElement(tag, MichiCustomElementResult, {
         extends: extendsTag,
       });
     } else {

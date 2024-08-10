@@ -3,15 +3,9 @@ export const extendedElements: Record<
   [CustomElementConstructor, string]
 > = {};
 
-const originalDefine = window.customElements.define.bind(window.customElements);
-
-window.customElements.define = (name, constructor, options) => {
-  if (options?.extends) {
-    extendedElements[name] = [constructor, options.extends];
-  } else originalDefine(name, constructor, options);
+export const safariDefine: typeof window.customElements.define = (name, constructor, options) => {
+  extendedElements[name] = [constructor, options!.extends!];
 };
-
-const originalCreateElement = document.createElement.bind(document);
 
 const observer = new MutationObserver((mutationList) => {
   mutationList.forEach((mutation) => {
@@ -28,34 +22,37 @@ const observer = new MutationObserver((mutationList) => {
   });
 });
 
-document.createElement = (
-  tagName: string,
-  options?: ElementCreationOptions,
-) => {
-  const newEl = originalCreateElement(tagName, options);
-
-  if (options?.is) {
-    const [customElement, customElementTag] = extendedElements[options.is];
-    Object.setPrototypeOf(newEl, customElement.prototype);
-    newEl.setAttribute("is", customElementTag);
-
-    // @ts-ignore
-    newEl.fakeConstructor?.();
-    // @ts-ignore
-    newEl.connectedCallback?.();
-    if (
+export const overrideDocumentCreateElement = () => {
+  const originalCreateElement = document.createElement.bind(document);
+  document.createElement = (
+    tagName: string,
+    options?: ElementCreationOptions,
+  ) => {
+    const newEl = originalCreateElement(tagName, options);
+  
+    if (options?.is) {
+      const [customElement, customElementTag] = extendedElements[options.is];
+      Object.setPrototypeOf(newEl, customElement.prototype);
+      newEl.setAttribute("is", customElementTag);
+  
       // @ts-ignore
-      typeof newEl.attributeChangedCallback === "function" &&
+      newEl.fakeConstructor?.();
       // @ts-ignore
-      customElement.observedAttributes
-    ) {
-      observer.observe(newEl, {
+      newEl.connectedCallback?.();
+      if (
         // @ts-ignore
-        attributeFilter: customElement.observedAttributes,
-        attributeOldValue: true,
-      });
+        typeof newEl.attributeChangedCallback === "function" &&
+        // @ts-ignore
+        customElement.observedAttributes
+      ) {
+        observer.observe(newEl, {
+          // @ts-ignore
+          attributeFilter: customElement.observedAttributes,
+          attributeOldValue: true,
+        });
+      }
     }
-  }
-
-  return newEl;
-};
+  
+    return newEl;
+  };
+}
