@@ -10,5 +10,4 @@ else
     await import("./LegacyHistoryManager")
   ).LegacyHistoryManager();
 
-
 export { HistoryManager };
