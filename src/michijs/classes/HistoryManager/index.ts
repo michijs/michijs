@@ -1,6 +1,4 @@
 import type { HistoryManagerType } from "../../types";
-import { ModernHistoryManager } from "./ModernHistoryManager";
-import { LegacyHistoryManager } from "./LegacyHistoryManager";
 
 let HistoryManager: HistoryManagerType;
 if (window.navigation && window.URLPattern) {
