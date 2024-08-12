@@ -2,6 +2,7 @@ import { CookieStorage } from "../classes/CookieStorage";
 import { ObservableFromEventListener } from "../classes/ObservableFromEventListener";
 import type { ObservableType } from "../types";
 import { useObserve } from "./useObserve";
+import { isNil } from "../utils/isNil";
 
 /**
  * Allows for observing changes in an object and synchronizing it with the browser's storage (such as localStorage).
@@ -35,7 +36,8 @@ export function useStorage<T extends object>(
 
   Object.entries(newObservable).forEach(([key, value]) => {
     value?.subscribe((newValue) => {
-      storage.setItem(key, JSON.stringify(newValue));
+      if (isNil(newValue)) storage.removeItem(key);
+      else storage.setItem(key, JSON.stringify(newValue));
     });
   });
 

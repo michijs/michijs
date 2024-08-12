@@ -24,11 +24,9 @@ import { MappedIdGenerator } from "../classes/MappedIdGenerator";
 import { IdGenerator } from "../classes/IdGenerator";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { useObserve } from "../hooks/useObserve";
-import { getCreateBuiltInElement } from "../polyfill";
+import { createBuiltInElement } from "../polyfill";
 
 let classesIdGenerator: undefined | IdGenerator;
-
-const createBuiltInElement = await getCreateBuiltInElement();
 
 export function createCustomElement<O extends MichiElementOptions>(
   tag: CustomElementTag,
