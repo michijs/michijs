@@ -2,6 +2,7 @@ import { CookieStorage } from "../classes/CookieStorage";
 import { ObservableFromEventListener } from "../classes/ObservableFromEventListener";
 import type { ObservableType } from "../types";
 import { useObserve } from "./useObserve";
+import { isNil } from "../utils/isNil"
 
 /**
  * Allows for observing changes in an object and synchronizing it with the browser's storage (such as localStorage).
