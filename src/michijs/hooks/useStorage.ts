@@ -35,10 +35,8 @@ export function useStorage<T extends object>(
 
   Object.entries(newObservable).forEach(([key, value]) => {
     value?.subscribe((newValue) => {
-      if(isNil(newValue))
-        storage.removeItem(key);
-      else
-        storage.setItem(key, JSON.stringify(newValue));
+      if (isNil(newValue)) storage.removeItem(key);
+      else storage.setItem(key, JSON.stringify(newValue));
     });
   });
 
