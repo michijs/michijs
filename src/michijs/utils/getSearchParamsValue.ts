@@ -1,8 +1,8 @@
 import type { AnyObject } from "../types";
 
-export const getSearchParamsValue = <T extends AnyObject = AnyObject>(): T => {
+export const getSearchParamsValue = <T extends AnyObject = AnyObject>(search: string = location.search): T => {
   const initialSearchParamsValue: AnyObject = {};
-  new URLSearchParams(location.search).forEach((value, key) => {
+  new URLSearchParams(search).forEach((value, key) => {
     try {
       initialSearchParamsValue[key] = JSON.parse(value);
     } catch {
