@@ -35,7 +35,7 @@ export const useComputedObserve: UseComputedObserve = (
       (newObservable as ObservableType<object>)(callbackResult as object);
       options?.onAfterUpdate?.();
     } catch (ex) {
-      console.error(ex)
+      console.error(ex);
     }
   };
   useWatch(listener, deps);

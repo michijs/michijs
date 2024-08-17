@@ -10,7 +10,10 @@ export const createURL = (
     hash?: Hash;
   },
 ) => {
-  const url = new URL(encodeURI(normalizeURL(decodeURIComponent(input))), options?.baseURL);
+  const url = new URL(
+    encodeURI(normalizeURL(decodeURIComponent(input))),
+    options?.baseURL,
+  );
   if (options?.searchParams)
     Object.entries(options.searchParams).forEach(([name, value]) =>
       setSearchParam(url, name, value),
