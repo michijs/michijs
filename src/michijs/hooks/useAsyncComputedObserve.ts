@@ -32,10 +32,14 @@ export const useAsyncComputedObserve: UseAsyncComputedObserve = (
   const newObservable = useObserve(initialValue);
 
   const listener = async () => {
-    const callbackResult = await callback();
-    options?.onBeforeUpdate?.();
-    (newObservable as ObservableType<object>)(callbackResult as object);
-    options?.onAfterUpdate?.();
+    try {
+      const callbackResult = await callback();
+      options?.onBeforeUpdate?.();
+      (newObservable as ObservableType<object>)(callbackResult as object);
+      options?.onAfterUpdate?.();
+    } catch (ex) {
+      console.error(ex)
+    }
   };
   listener();
   useWatch(listener, deps);
