@@ -1,4 +1,3 @@
-import { ProxiedValue } from "../classes/ProxiedValue";
 import type { useWatchDeps } from "../types";
 import { useWatch } from "./useWatch";
 
@@ -11,8 +10,8 @@ import { useWatch } from "./useWatch";
 export const usePureFunction = <T>(
   callback: () => T,
   deps: useWatchDeps,
-): (() => ProxiedValue<T>) => {
-  const proxiedValue = new ProxiedValue<T>();
+): (() => T) => {
+  let value: T = undefined as T;
   let outdated = true;
 
   const listener = () => (outdated = true);
@@ -22,8 +21,8 @@ export const usePureFunction = <T>(
   return () => {
     if (outdated) {
       outdated = false;
-      proxiedValue.$value = callback();
+      value = callback();
     }
-    return proxiedValue;
+    return value;
   };
 };
