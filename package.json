@@ -34,9 +34,6 @@
     "url": "https://opencollective.com/michijs"
   },
   "description": "Typescript library to build web components",
-  "trustedDependencies": [
-    "puppeteer"
-  ],
   "scripts": {
     "start": "michi-server --start",
     "dist": "michi-server --dist",
@@ -69,7 +66,7 @@
     "@michijs/tsconfig": "0.0.4",
     "@reduxjs/toolkit": "1.9.7",
     "@types/bun": "^1.1.6",
-    "puppeteer": "22.14.0",
+    "playwright-core": "1.46.1",
     "redux": "5.0.1",
     "typescript": "5.5.3"
   },

@@ -1,6 +1,6 @@
-import { type Browser, launch, type Page } from "puppeteer";
+import { type Browser, chromium, type Page } from "playwright-core";
 import { makePerformanceTests, type Result } from "./shared";
-import { describe, it, expect, beforeEach, afterAll } from "bun:test";
+import { describe, it, expect, beforeEach, afterAll, beforeAll } from "bun:test";
 import { spawn } from "child_process";
 const serverProcess = spawn("bun", ["run", "start"], {
   stdio: "inherit",
@@ -10,8 +10,12 @@ const serverProcess = spawn("bun", ["run", "start"], {
 describe("Performance tests - MichiJS", () => {
   let browser: Browser;
   let page: Page;
+  beforeAll(async () => {
+    browser = await chromium.launch({
+      headless: true,
+    });;
+  })
   beforeEach(async () => {
-    browser = await launch();
     page = await browser.newPage();
     await page.goto("http://localhost:3000", {
       waitUntil: "domcontentloaded",
