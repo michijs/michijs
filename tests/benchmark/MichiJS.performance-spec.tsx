@@ -1,6 +1,13 @@
 import { type Browser, chromium, type Page } from "playwright-core";
 import { makePerformanceTests, type Result } from "./shared";
-import { describe, it, expect, beforeEach, afterAll, beforeAll } from "bun:test";
+import {
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterAll,
+  beforeAll,
+} from "bun:test";
 import { spawn } from "child_process";
 const serverProcess = spawn("bun", ["run", "start"], {
   stdio: "inherit",
@@ -13,8 +20,8 @@ describe("Performance tests - MichiJS", () => {
   beforeAll(async () => {
     browser = await chromium.launch({
       headless: true,
-    });;
-  })
+    });
+  });
   beforeEach(async () => {
     page = await browser.newPage();
     await page.goto("http://localhost:3000", {

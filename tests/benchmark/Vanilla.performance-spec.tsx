@@ -13,8 +13,8 @@ describe("Performance tests - vanilla-js", () => {
   beforeAll(async () => {
     browser = await chromium.launch({
       headless: true,
-    });;
-  })
+    });
+  });
   beforeEach(async () => {
     page = await browser.newPage();
     await page.goto("http://localhost:3001", {
