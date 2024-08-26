@@ -10,6 +10,8 @@ if (isSafari) {
   createBuiltInElement = safariDefine;
   overrideDocumentCreateElement();
 } else
-  createBuiltInElement = window.customElements.define.bind(window.customElements);
+  createBuiltInElement = window.customElements.define.bind(
+    window.customElements,
+  );
 
 export { createBuiltInElement };
