@@ -7,9 +7,9 @@ if (isSafari) {
   const { overrideDocumentCreateElement, safariDefine } = await import(
     "./safariBuiltInElements"
   );
-  overrideDocumentCreateElement();
   createBuiltInElement = safariDefine;
-}
-createBuiltInElement = window.customElements.define.bind(window.customElements);
+  overrideDocumentCreateElement();
+} else
+  createBuiltInElement = window.customElements.define.bind(window.customElements);
 
 export { createBuiltInElement };
