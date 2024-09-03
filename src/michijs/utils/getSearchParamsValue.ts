@@ -6,7 +6,7 @@ export const getSearchParamsValue = <T extends AnyObject = AnyObject>(
   const initialSearchParamsValue: AnyObject = {};
   new URLSearchParams(search).forEach((value, key) => {
     try {
-      initialSearchParamsValue[key] = JSON.parse(decodeURI(value));
+      initialSearchParamsValue[key] = JSON.parse(value);
     } catch {
       initialSearchParamsValue[key] = value;
     }
