@@ -13,7 +13,7 @@ const title = useTitle();
  * Title component for dynamically updating the document's title.
  */
 export const Title: FC<TitleProps> = ({ children }) => {
-  let el: HTMLElement | undefined = undefined;
+  let el: HTMLElement | undefined;
 
   const updateTitleCallback = () => {
     const newValue = unproxify(children);

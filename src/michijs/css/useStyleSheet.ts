@@ -76,8 +76,7 @@ export function cssObjectToText(
       }
       const valueIsObject = typeof value === "object";
       const isQueryResult = isQuery(key);
-      let newKey = 
-        isChild && !isQueryResult && valueIsObject ? `&${key}` : key;
+      let newKey = isChild && !isQueryResult && valueIsObject ? `&${key}` : key;
       let newValue;
       let queries = "";
 
@@ -102,9 +101,9 @@ export function cssObjectToText(
           isChild || !isQueryResult,
         )}}`;
       } else {
-        newKey = formatToKebabCase(newKey)
-        newValue = `:${value?.toString()};`
-      };
+        newKey = formatToKebabCase(newKey);
+        newValue = `:${value?.toString()};`;
+      }
 
       return `${previousValue}${queries}${newKey}${newValue}`;
     },
