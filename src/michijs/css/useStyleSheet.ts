@@ -7,12 +7,12 @@ import type {
   UseStyleSheetCallback,
 } from "../types";
 import { bindObservable } from "../utils/bindObservable";
-import { formatToKebabCase } from "../utils/formatToKebabCase";
 import { getObservables } from "../utils/getObservables";
 import { isNil } from "../utils/isNil";
 import { unproxify } from "../utils/unproxify";
 import { useCssVariables } from "./useCssVariables";
 import { ProxiedValue } from "../classes/ProxiedValue";
+import { formatToKebabCase } from "../utils/formatToKebabCase";
 
 const hostSelectors = [":host", ":host-context"];
 
@@ -27,22 +27,21 @@ export const hostToText = (
     (previousValue, [key, value]) => {
       if (!isNil(value)) {
         const valueIsObject = typeof value === "object";
-        const newKey = formatToKebabCase(key);
-        const isQueryResult = isQuery(newKey);
+        const isQueryResult = isQuery(key);
         if (valueIsObject) {
           if (isQueryResult)
             return `${previousValue}${cssObjectToText({
-              [newKey]: {
+              [key]: {
                 [parentSelector]: value,
               },
             })}`;
 
           return `${previousValue}${hostToText(
             value as CSSObject,
-            `${parentSelector}${newKey}`,
+            `${parentSelector}${key}`,
           )}`;
         }
-        thisRunObjectSelector[newKey] = value;
+        thisRunObjectSelector[formatToKebabCase(key)] = value;
       }
       return previousValue;
     },
@@ -77,9 +76,8 @@ export function cssObjectToText(
       }
       const valueIsObject = typeof value === "object";
       const isQueryResult = isQuery(key);
-      const newKey = formatToKebabCase(
-        isChild && !isQueryResult && valueIsObject ? `&${key}` : key,
-      );
+      let newKey = 
+        isChild && !isQueryResult && valueIsObject ? `&${key}` : key;
       let newValue;
       let queries = "";
 
@@ -103,7 +101,10 @@ export function cssObjectToText(
           valueToStringify as CSSObject,
           isChild || !isQueryResult,
         )}}`;
-      } else newValue = `:${value?.toString()};`;
+      } else {
+        newKey = formatToKebabCase(newKey)
+        newValue = `:${value?.toString()};`
+      };
 
       return `${previousValue}${queries}${newKey}${newValue}`;
     },

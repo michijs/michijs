@@ -13,6 +13,9 @@ const stylesheet = cssObjectToText({
     "@media (max-width: 600px)": {
       color: "blue",
     },
+    '.textClass': {
+      WebkitAlignItems: 'center'
+    },
     "::before": {
       "@media (prefers-reduced-motion: no-preference)": {
         opacity: 1,
@@ -32,6 +35,9 @@ const stylesheet = cssObjectToText({
         color: "green",
       },
     },
+    '(.textClass)': {
+      WebkitAlignItems: 'center'
+    },
     "([hidden])": {
       display: "none",
     },
@@ -39,7 +45,7 @@ const stylesheet = cssObjectToText({
 });
 
 const expectedResult =
-  "div{--test:green;background-color:var(--test);&:not([test-attribute]){color:red;}@media (max-width: 600px){color:blue;}@media (prefers-reduced-motion: no-preference){&::before{opacity:1;}}&::before{opacity:0;}@media (prefers-reduced-motion: no-preference){&div::after{opacity:1;}}&div::after{opacity:0;}}@media (max-width: 600px){:host a{color:green;}}:host([hidden]){display:none;}";
+  "div{--test:green;background-color:var(--test);&:not([test-attribute]){color:red;}@media (max-width: 600px){color:blue;}&.textClass{-webkit-align-items:center;}@media (prefers-reduced-motion: no-preference){&::before{opacity:1;}}&::before{opacity:0;}@media (prefers-reduced-motion: no-preference){&div::after{opacity:1;}}&div::after{opacity:0;}}@media (max-width: 600px){:host a{color:green;}}:host(.textClass){-webkit-align-items:center;}:host([hidden]){display:none;}";
 
 describe("useStyleSheet", () => {
   it("should return the expected css variables text", () => {
