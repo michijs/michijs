@@ -13,8 +13,8 @@ const stylesheet = cssObjectToText({
     "@media (max-width: 600px)": {
       color: "blue",
     },
-    '.textClass': {
-      WebkitAlignItems: 'center'
+    ".textClass": {
+      WebkitAlignItems: "center",
     },
     "::before": {
       "@media (prefers-reduced-motion: no-preference)": {
@@ -35,8 +35,8 @@ const stylesheet = cssObjectToText({
         color: "green",
       },
     },
-    '(.textClass)': {
-      WebkitAlignItems: 'center'
+    "(.textClass)": {
+      WebkitAlignItems: "center",
     },
     "([hidden])": {
       display: "none",
