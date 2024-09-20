@@ -30,6 +30,7 @@ export const doFetch = async <
   });
 
   const response = await fetch(url, {
+    cache: 'no-cache',
     ...init,
     body:
       typeof init?.body === "object" ? JSON.stringify(init.body) : init?.body,
