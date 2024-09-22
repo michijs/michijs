@@ -5,4 +5,4 @@
 /**
  * @type {Browser}
  */
-let a = "android";
+const a = "android";

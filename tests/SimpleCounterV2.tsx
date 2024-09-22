@@ -1,5 +1,4 @@
-import { CEEvent, ObservableType } from "@michijs/michijs";
-import { counterStyle } from "./shared/counterStyle";
+import type { CEEvent, ObservableType } from "@michijs/michijs";
 
 interface FE<T, C = HTMLElement> {
   (
