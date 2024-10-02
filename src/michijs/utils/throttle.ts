@@ -1,4 +1,7 @@
-export const throttle = <T extends (...args: any[]) => void>(func: T, limit: number) => {
+export const throttle = <T extends (...args: any[]) => void>(
+  func: T,
+  limit: number,
+) => {
   let inThrottle: boolean;
   return (...args: Parameters<T>) => {
     if (!inThrottle) {
@@ -7,4 +10,4 @@ export const throttle = <T extends (...args: any[]) => void>(func: T, limit: num
       setTimeout(() => (inThrottle = false), limit);
     }
   };
-}
+};
