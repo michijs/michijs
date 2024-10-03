@@ -233,7 +233,9 @@ export interface MichiProperties
   };
   render?(): JSX.Element;
   /**Allows to get a child element from the host with the selector */
-  child<T = HTMLElement>(selector: string): (T extends new (props: any) => infer Y ? Y : T) | undefined;
+  child<T = HTMLElement>(
+    selector: string,
+  ): (T extends new (props: any) => infer Y ? Y : T) | undefined;
   /**Create unique IDs with a discernible key */
   readonly idGen: MappedIdGenerator["getId"];
   readonly name: string | null;
