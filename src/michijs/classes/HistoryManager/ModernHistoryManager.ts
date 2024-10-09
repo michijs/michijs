@@ -27,18 +27,23 @@ export class ModernHistoryManager
       return "Changes that you made may not be saved";
     });
     window.navigation!.addEventListener("navigate", (e) => {
+      const previousNavigationEvent = navigation?.currentEntry;
       this.lastNavigationEvent = e;
 
       handleNavigation(e, () => {
         e.intercept({
           handler: () => {
-            // The user is not interested on hash changes when going back
-            if (
-              e.navigationType === "traverse" &&
-              e.destination.url.includes("#")
-            )
-              this.back(document.location.origin);
-            else this.notify(e.destination.url);
+            const newIndex = e.destination.index;
+            const currentIndex = previousNavigationEvent?.index || 0;
+            const newUrl = e.destination.url;
+            const newUrlIgnoringHash = newUrl.split('#')[0];
+            const currentUrl = previousNavigationEvent?.url?.split('#')[0];
+            const isGoingBackward =  newIndex < currentIndex;
+            // The user is not interested on hash changes when going back nor going to the same page
+            if (e.navigationType === 'traverse' && isGoingBackward && (newUrl.includes('#') || newUrlIgnoringHash === currentUrl))
+              this.back(document.location.origin)
+            else
+              this.notify(e.destination.url);
           },
         });
       });
