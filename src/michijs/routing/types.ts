@@ -1,5 +1,5 @@
-import type { Router, RouterProps } from "../components/Router";
-import type { AnyObject, FC } from "../types";
+import type { Router } from "../components/Router";
+import type { AnyObject } from "../types";
 
 export type SearchParams = AnyObject | undefined;
 export type Hash = `#${string}` | "" | undefined;
@@ -29,5 +29,5 @@ export type CreateRouterResult<R extends Record<string, JSX.Element>> = [
   {
     [k in keyof R]: UrlFunction;
   },
-  typeof Router
+  typeof Router,
 ];

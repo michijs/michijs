@@ -30,7 +30,7 @@ createCustomElement("root-test-element", {
   render() {
     return (
       <Host>
-        <Router/>
+        <Router />
         <math display="block" onclick={this.toggleShowExample}>
           <mfrac>
             <mn>{this.arrayTest.length}</mn>
