@@ -65,7 +65,7 @@
   ],
   "devDependencies": {
     "@happy-dom/global-registrator": "14.12.3",
-    "@michijs/dev-server": "0.7.3",
+    "@michijs/dev-server": "0.7.17",
     "@michijs/htmltype": "0.2.16",
     "@michijs/tsconfig": "0.0.4",
     "@reduxjs/toolkit": "1.9.7",
