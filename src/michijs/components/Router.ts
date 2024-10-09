@@ -2,7 +2,6 @@ import type { UrlFunction } from "../routing/types";
 import type {
   CreateOptions,
   ExtendableComponentWithoutChildren,
-  CreateFCResult,
   SingleJSXElement,
 } from "../types";
 import { VirtualFragment } from "../classes/VirtualFragment";
@@ -13,13 +12,13 @@ import { HistoryManager } from "../classes/HistoryManager";
 import { urlFn } from "../routing/utils/urlFn";
 
 export type RouterProps<T> = ExtendableComponentWithoutChildren<T> & {
-  routes: Record<string, JSX.Element>;
+  routes?: Record<string, JSX.Element>;
   parentRoute?: UrlFunction<any, any>;
   /** Allows to caché then / else components. */
   enableCache?: boolean;
 };
 
-export const Router = <const T = CreateFCResult>(
+export const Router = <const T>(
   { as: asTag, routes, parentRoute, enableCache, ...attrs }: RouterProps<T>,
   options: CreateOptions,
 ) => {
@@ -32,7 +31,7 @@ export const Router = <const T = CreateFCResult>(
   const cache: Record<string, DocumentFragment> = {};
 
   const matchedRoute = useComputedObserve(() => {
-    return Object.keys(routes).find((key) =>
+    return Object.keys(routes ?? {}).find((key) =>
       HistoryManager.matches(urlFn(key, parentRoute)().pathname, true),
     );
   }, [HistoryManager]);
@@ -51,7 +50,7 @@ export const Router = <const T = CreateFCResult>(
     if (newMatchedRoute) {
       if (cache[newMatchedRoute]) el.replaceChildren(cache[newMatchedRoute]);
       else {
-        const component = routes[newMatchedRoute];
+        const component = routes?.[newMatchedRoute];
         el.replaceChildren(create(component, options));
       }
     }
