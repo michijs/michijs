@@ -9,8 +9,7 @@ import { Observable } from "../Observable";
 
 export class LegacyHistoryManager
   extends Observable<string | URL>
-  implements HistoryManagerType
-{
+  implements HistoryManagerType {
   private readonly history: (string | URL)[] = [location.pathname];
   shouldShowUnloadPrompt?: () => boolean;
 
@@ -55,13 +54,15 @@ export class LegacyHistoryManager
     return matchesFallbackUrl;
   }
 
-  back(fallbackUrl: ObservableOrConst<string | URL>): void {
+  back(fallbackUrl?: ObservableOrConst<string | URL>): void {
     if (this.history.length > 0) {
       history.back();
       const url = this.history.pop()!;
       this.notify(url);
+      return;
     }
-    this.replaceCurrentUrl(fallbackUrl);
+    if (fallbackUrl)
+      this.replaceCurrentUrl(fallbackUrl);
   }
 
   replaceCurrentUrl(url: ObservableOrConst<string | URL>): void {

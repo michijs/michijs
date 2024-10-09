@@ -357,6 +357,7 @@ export interface RequestInitUseFetch<B> extends Omit<RequestInit, "body"> {
 }
 
 export interface HistoryManagerType extends Observable<string | URL> {
+  ignoreHashes?: boolean;
   canGoBack(fallbackUrl?: ObservableOrConst<string | URL>): boolean;
   back(fallbackUrl?: ObservableOrConst<string | URL>): void;
   replaceCurrentUrl(url: ObservableOrConst<string | URL>): void;

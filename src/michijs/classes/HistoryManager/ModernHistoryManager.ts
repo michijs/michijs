@@ -9,16 +9,16 @@ import { handleNavigation } from "./handleNavigation";
 
 export class ModernHistoryManager
   extends Observable<string | URL>
-  implements HistoryManagerType
-{
+  implements HistoryManagerType {
   shouldShowUnloadPrompt?: () => boolean;
+  ignoreHashes = true;
   private lastNavigationEvent?: NavigateEvent;
   constructor(initialObservers?: Subscription<string | URL>[]) {
     super(initialObservers);
     window.addEventListener("beforeunload", (e) => {
       const isFormEvent =
         window.navigation?.currentEntry?.url ===
-          this.lastNavigationEvent?.destination.url &&
+        this.lastNavigationEvent?.destination.url &&
         this.lastNavigationEvent?.formData;
       if (isFormEvent || !this.shouldShowUnloadPrompt?.()) {
         return undefined;
@@ -33,17 +33,20 @@ export class ModernHistoryManager
       handleNavigation(e, () => {
         e.intercept({
           handler: () => {
-            const newIndex = e.destination.index;
-            const currentIndex = previousNavigationEvent?.index || 0;
-            const newUrl = e.destination.url;
-            const newUrlIgnoringHash = newUrl.split('#')[0];
-            const currentUrl = previousNavigationEvent?.url?.split('#')[0];
-            const isGoingBackward =  newIndex < currentIndex;
-            // The user is not interested on hash changes when going back nor going to the same page
-            if (e.navigationType === 'traverse' && isGoingBackward && (newUrl.includes('#') || newUrlIgnoringHash === currentUrl))
-              this.back(document.location.origin)
-            else
-              this.notify(e.destination.url);
+            if (this.ignoreHashes) {
+              const newIndex = e.destination.index;
+              const currentIndex = previousNavigationEvent?.index || 0;
+              const newUrl = e.destination.url;
+              const newUrlIgnoringHash = newUrl.split('#')[0];
+              const currentUrl = previousNavigationEvent?.url?.split('#')[0];
+              const isGoingBackward = newIndex < currentIndex;
+              // The user is not interested on hash changes when going back nor going to the same page
+              if (e.navigationType === 'traverse' && isGoingBackward && (newUrl.includes('#') || newUrlIgnoringHash === currentUrl)) {
+                this.back(document.location.origin)
+                return;
+              }
+            }
+            this.notify(e.destination.url);
           },
         });
       });
@@ -65,8 +68,20 @@ export class ModernHistoryManager
       navigation?.back();
       return;
     }
+
     if (fallbackUrl) this.replaceCurrentUrl(fallbackUrl);
   }
+
+  // canGoForward(): boolean {
+  //   return window.navigation!.canGoForward;
+  // }
+
+  // forward(): void {
+  //   if (this.canGoForward()) {
+  //     navigation?.forward();
+  //     return;
+  //   }
+  // }
 
   replaceCurrentUrl(url: ObservableOrConst<string | URL>): void {
     const urlValue = unproxify(url);
