@@ -9,7 +9,8 @@ import { handleNavigation } from "./handleNavigation";
 
 export class ModernHistoryManager
   extends Observable<string | URL>
-  implements HistoryManagerType {
+  implements HistoryManagerType
+{
   constructor(initialObservers?: Subscription<string | URL>[]) {
     super(initialObservers);
     window.navigation!.addEventListener("navigate", (e) =>
@@ -17,10 +18,12 @@ export class ModernHistoryManager
         e.intercept({
           handler: () => {
             // The user is not interested on hash changes when going back
-            if (e.navigationType === 'traverse' && e.destination.url.includes('#'))
-              this.back(document.location.origin)
-            else 
-              this.notify(e.destination.url);
+            if (
+              e.navigationType === "traverse" &&
+              e.destination.url.includes("#")
+            )
+              this.back(document.location.origin);
+            else this.notify(e.destination.url);
           },
         });
       }),
