@@ -16,12 +16,12 @@ export function createRouter<R extends Record<string, JSX.Element>>(
     },
   );
 
-  const RouterProxy: CreateRouterResult<R>[1] = (props) =>
+  const RouterProxy = (props) =>
     jsx(Router, {
       ...props,
       routes,
       parentRoute,
     });
 
-  return [urls, RouterProxy] as CreateRouterResult<R>;
+  return [urls, RouterProxy] as unknown as CreateRouterResult<R>;
 }
