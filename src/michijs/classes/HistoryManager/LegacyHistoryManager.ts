@@ -12,9 +12,17 @@ export class LegacyHistoryManager
   implements HistoryManagerType
 {
   private readonly history: (string | URL)[] = [location.pathname];
+  shouldShowUnloadPrompt?: () => boolean;
 
   constructor(initialObservers?: Subscription<string | URL>[]) {
     super(initialObservers);
+    window.addEventListener('beforeunload', e => {
+      if (!this.shouldShowUnloadPrompt?.()) {
+        return undefined;
+      }
+      e.preventDefault();
+      return "Changes that you made may not be saved";
+    });
     document.addEventListener("click", (e) => {
       if (e.target instanceof HTMLAnchorElement) {
         const downloadRequest =

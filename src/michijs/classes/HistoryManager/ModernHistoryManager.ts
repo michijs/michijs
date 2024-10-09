@@ -10,21 +10,33 @@ import { handleNavigation } from "./handleNavigation";
 export class ModernHistoryManager
   extends Observable<string | URL>
   implements HistoryManagerType {
+  shouldShowUnloadPrompt?: () => boolean;
+  private lastNavigationEvent?: NavigateEvent;
   constructor(initialObservers?: Subscription<string | URL>[]) {
     super(initialObservers);
-    window.navigation!.addEventListener("navigate", (e) =>
+    window.addEventListener('beforeunload', e => {
+      const isFormEvent = window.navigation?.currentEntry?.url === this.lastNavigationEvent?.destination.url && this.lastNavigationEvent?.formData
+      if (isFormEvent || !this.shouldShowUnloadPrompt?.()) {
+        return undefined;
+      }
+      e.preventDefault();
+      return "Changes that you made may not be saved";
+    });
+    window.navigation!.addEventListener("navigate", (e) => {
+      this.lastNavigationEvent = e;
+
       handleNavigation(e, () => {
         e.intercept({
           handler: () => {
             // The user is not interested on hash changes when going back
             if (e.navigationType === 'traverse' && e.destination.url.includes('#'))
               this.back(document.location.origin)
-            else 
+            else
               this.notify(e.destination.url);
           },
         });
-      }),
-    );
+      });
+    });
   }
   canGoBack(fallbackUrl?: ObservableOrConst<string | URL>): boolean {
     if (window.navigation?.canGoBack) return window.navigation?.canGoBack;
