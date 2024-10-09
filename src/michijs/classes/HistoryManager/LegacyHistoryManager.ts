@@ -16,7 +16,7 @@ export class LegacyHistoryManager
 
   constructor(initialObservers?: Subscription<string | URL>[]) {
     super(initialObservers);
-    window.addEventListener('beforeunload', e => {
+    window.addEventListener("beforeunload", (e) => {
       if (!this.shouldShowUnloadPrompt?.()) {
         return undefined;
       }

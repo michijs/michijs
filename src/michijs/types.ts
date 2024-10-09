@@ -362,7 +362,7 @@ export interface HistoryManagerType extends Observable<string | URL> {
   replaceCurrentUrl(url: ObservableOrConst<string | URL>): void;
   push(url: ObservableOrConst<string | URL>): void;
   matches(url: ObservableOrConst<string>, flexible?: boolean): boolean;
-  shouldShowUnloadPrompt?(): boolean
+  shouldShowUnloadPrompt?(): boolean;
 }
 
 export interface DoFetchProps<
