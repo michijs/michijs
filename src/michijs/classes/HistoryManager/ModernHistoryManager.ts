@@ -9,7 +9,8 @@ import { handleNavigation } from "./handleNavigation";
 
 export class ModernHistoryManager
   extends Observable<string | URL>
-  implements HistoryManagerType {
+  implements HistoryManagerType
+{
   shouldShowUnloadPrompt?: () => boolean;
   ignoreHashes = true;
   private lastNavigationEvent?: NavigateEvent;
@@ -18,7 +19,7 @@ export class ModernHistoryManager
     window.addEventListener("beforeunload", (e) => {
       const isFormEvent =
         window.navigation?.currentEntry?.url ===
-        this.lastNavigationEvent?.destination.url &&
+          this.lastNavigationEvent?.destination.url &&
         this.lastNavigationEvent?.formData;
       if (isFormEvent || !this.shouldShowUnloadPrompt?.()) {
         return undefined;
@@ -37,12 +38,16 @@ export class ModernHistoryManager
               const newIndex = e.destination.index;
               const currentIndex = previousNavigationEvent?.index || 0;
               const newUrl = e.destination.url;
-              const newUrlIgnoringHash = newUrl.split('#')[0];
-              const currentUrl = previousNavigationEvent?.url?.split('#')[0];
+              const newUrlIgnoringHash = newUrl.split("#")[0];
+              const currentUrl = previousNavigationEvent?.url?.split("#")[0];
               const isGoingBackward = newIndex < currentIndex;
               // The user is not interested on hash changes when going back nor going to the same page
-              if (e.navigationType === 'traverse' && isGoingBackward && (newUrl.includes('#') || newUrlIgnoringHash === currentUrl)) {
-                this.back(document.location.origin)
+              if (
+                e.navigationType === "traverse" &&
+                isGoingBackward &&
+                (newUrl.includes("#") || newUrlIgnoringHash === currentUrl)
+              ) {
+                this.back(document.location.origin);
                 return;
               }
             }
