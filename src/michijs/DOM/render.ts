@@ -1,15 +1,12 @@
-import { updateChildren } from "../DOMDiff";
+import { create } from "../DOMDiff/create";
 
 export function renderSync(
   Component: JSX.Element,
   mountPoint: ParentNode = document.body,
-) {
+): ParentNode {
   mountPoint.textContent = "";
-  updateChildren(
-    mountPoint,
-    Array.isArray(Component) ? Component : [Component],
-    false,
-  );
+  const renderResult = create(Component);
+  mountPoint.append(renderResult);
   return mountPoint;
 }
 

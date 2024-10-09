@@ -1,55 +1,55 @@
-import type { TypedEvent } from "@michijs/htmltype";
-import { createCustomElement, h, I18n, List } from "../../src";
+import {
+  createCustomElement,
+  I18n,
+  Title,
+  useStorage,
+  type TypedEvent,
+} from "@michijs/michijs";
 import en from "./i18nTests/en.json";
 
-const supportedLanguages = [
-  { key: "en", label: "English" },
-  { key: "es", label: "Español" },
-];
+type SupportedLanguages = "es" | "en";
 
-const translator = new I18n<"es" | "en">(localStorage.getItem("lang"));
+const supportedLanguages: Record<SupportedLanguages, string> = {
+  en: "English",
+  es: "Español",
+};
 
-const store = translator.createTranslation({
+const { lang } = useStorage({
+  lang: "en" as SupportedLanguages,
+});
+
+const translator = new I18n<SupportedLanguages>(lang);
+
+const t = translator.createTranslation({
   es: () => import("./i18nTests/es.json"),
   en,
 });
-const t = store.state.t;
 
-translator.subscribe(() => {
-  if (translator.currentLanguage)
-    localStorage.setItem("lang", translator.currentLanguage);
-});
-
-export const I18nTests = createCustomElement("i18n-tests", {
-  subscribeTo: {
-    store,
-  },
+const I18nTests = createCustomElement("i18n-tests", {
   methods: {
     onChangeLanguage(ev: TypedEvent<HTMLSelectElement>) {
-      if (ev.target)
-        translator.currentLanguage = ev.target.value as "es" | "en";
+      if (ev.target) {
+        const newValue = ev.target.value as SupportedLanguages;
+        lang(newValue);
+      }
     },
   },
   render() {
     return (
       <>
+        <Title>I18n tests Page</Title>
         <span>{t.language}</span>
-        <List
-          as="select"
-          onchange={this.onChangeLanguage}
-          data={supportedLanguages}
-          renderItem={({ key, label }) => (
-            <option
-              key={key}
-              selected={key === translator.currentLanguage}
-              value={key}
-            >
+        <select onchange={this.onChangeLanguage}>
+          {Object.entries(supportedLanguages).map(([key, label]) => (
+            <option selected={key === translator.currentLanguage} value={key}>
               {label}
             </option>
-          )}
-        />
+          ))}
+        </select>
         <span>{t.dogBit}</span>
       </>
     );
   },
 });
+
+export default I18nTests;

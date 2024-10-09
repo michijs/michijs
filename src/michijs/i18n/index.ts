@@ -1,123 +1,110 @@
-import { observable, store } from "../hooks";
-import { ObservableLike, ObserverCallback, Store } from "../types";
+import { ProxiedValue } from "../classes/ProxiedValue";
+import { useObserve } from "../hooks/useObserve";
+import type { ObservableOrConst, ObservableType, Subscription } from "../types";
+import { unproxify } from "../utils/unproxify";
+import { bindObservable } from "../utils/bindObservable";
 
-type StringObject =
-  | {
-      [key: string]: string | StringObject | undefined | null | number;
-    }
-  | (string | StringObject | undefined | null | number)[];
-
-export type Translation<T extends StringObject, K extends string> = {
-  [key in K]: T | (() => Promise<{ default: T }>);
+export type Translation<K extends string, T> = {
+  [key in K]: T | (() => Promise<{ default: T }>) | (() => Promise<T>);
 };
-export interface TranslationItem<T extends StringObject, K extends string> {
-  translation: Translation<T, K>;
-  store: CreateTranslationResultStore<T>;
+export interface TranslationItem<K extends string, T> {
+  translation: Translation<K, T>;
+  observable: ObservableType<Partial<T>>;
 }
-export type CreateTranslationResultStore<T extends StringObject> = Store<
-  {
-    t: T;
-  },
-  {
-    updateTranslation(newTranslation: T);
+
+export class I18n<K extends string = string> extends ProxiedValue<
+  K | undefined
+> {
+  private translations = new Array<TranslationItem<K, any>>();
+  private get isUsingSystemLanguage() {
+    return this.$value === navigator.language;
   }
->;
 
-export class I18n<K extends string> implements ObservableLike {
-  private translations = new Array<TranslationItem<StringObject, string>>();
-  private observer = observable();
-  private _currentLanguage: K | undefined;
-  private isUsingSystemLanguage = true;
-
-  constructor(initialLanguage?: string | null) {
-    if (initialLanguage) {
-      this._currentLanguage = initialLanguage as K;
-      this.isUsingSystemLanguage = false;
+  constructor(
+    language?: ObservableOrConst<K | undefined>,
+    initialObservers?: Subscription<K | undefined>[],
+  ) {
+    super(
+      (unproxify(language) ?? navigator.language) as K | undefined,
+      initialObservers,
+    );
+    if (language) {
+      bindObservable(language, (newValue) => this.setLanguage(newValue as K));
     }
 
     window.addEventListener("languagechange", () => {
-      if (!this.isUsingSystemLanguage) {
+      if (!this.isUsingSystemLanguage)
         this.setLanguage(navigator.language as K);
-      }
     });
-  }
-  subscribe(observer: ObserverCallback<any>): void {
-    return this.observer.subscribe(observer);
-  }
-  unsubscribe?(observer: ObserverCallback<any>): void {
-    return this.observer.unsubscribe(observer);
   }
 
   get currentLanguage(): K | undefined {
-    return this._currentLanguage;
+    return this.$value;
   }
   set currentLanguage(newLang: K | undefined) {
     this.setLanguage(newLang);
-    this.isUsingSystemLanguage = false;
   }
 
-  createTranslation<T extends StringObject>(translation: Translation<T, K>) {
-    const translationResult = store({
-      state: {
-        t: {} as T,
-      },
-      transactions: {
-        updateTranslation(newTranslation: T) {
-          Object.entries(newTranslation).forEach(([key, value]) => {
-            translationResult.state.t[key] = value;
-          });
-        },
-      },
+  createTranslation<T>(
+    translation: Translation<K, T>,
+  ): ObservableType<Partial<T>> {
+    const currentTranslationPromise = this.getCurrentTranslation(translation);
+    const observable = useObserve<Partial<T>>({});
+    currentTranslationPromise.then((currentTranslation) => {
+      (observable as ObservableType<object>)(currentTranslation as object);
     });
-    const translationItem = {
+
+    const translationItem: TranslationItem<K, T> = {
       translation,
-      store: translationResult,
+      observable,
     };
-    this.translations.push(translationItem);
-    this.updateTranslation<T>(translationItem);
-    return { ...translationResult, t: translationResult.state.t };
+    this.translations.push(translationItem as TranslationItem<K, any>);
+    return observable;
   }
 
-  private updateTranslation<T extends StringObject>({
-    translation,
-    store,
-  }: TranslationItem<T, K>) {
-    const translationKeys = Object.keys(translation) as K[];
-    let key: K | undefined = this.currentLanguage
-      ? translationKeys.find((key) => key === this.currentLanguage)
-      : undefined;
-    if (!key) {
-      // It does not have the current language - Fallback to next language in navigator.languages
-      key = navigator.languages.find((key) =>
-        translationKeys.includes(key as K),
-      ) as K;
+  private getCurrentTranslation<T>(translation: Translation<K, T>): Promise<T> {
+    return new Promise<T>((resolve) => {
+      const translationKeys = Object.keys(translation) as K[];
+      let key: K | undefined = this.currentLanguage
+        ? translationKeys.find((key) => key === this.currentLanguage)
+        : undefined;
       if (!key) {
-        // Does not include any browser language - I use the latest language of the object
-        key = translationKeys[translationKeys.length - 1];
+        // It does not have the current language - Fallback to next language in navigator.languages
+        key = navigator.languages.find((key) =>
+          translationKeys.includes(key as K),
+        ) as K;
+        if (!key) {
+          // Does not include any browser language - I use the latest language of the object
+          key = translationKeys[translationKeys.length - 1];
+        }
       }
-    }
-    const value = translation[key];
-    this._currentLanguage = key;
+      const value = translation[key];
+      this.$value = key;
 
-    if (typeof value === "function")
-      value().then((res) => {
-        store.transactions.updateTranslation(res.default);
-      });
-    else store.transactions.updateTranslation(value as T);
+      if (typeof value === "function")
+        value().then((res) => {
+          resolve(res.default ?? res);
+        });
+      else resolve(value as T);
+    });
   }
 
-  private setLanguage(newLang: K | undefined) {
-    if (this._currentLanguage !== newLang) {
-      this._currentLanguage = newLang;
+  private async setLanguage(newLang: K | undefined) {
+    if (this.$value !== newLang) {
+      this.$value = newLang;
       //Update every translation
-      this.translations.forEach((x) => this.updateTranslation(x));
-      // Then notify
-      this.observer.notify(newLang);
+      await Promise.all(
+        this.translations.map(async (x) => {
+          const currentTranslation = await this.getCurrentTranslation(
+            x.translation,
+          );
+          x.observable(currentTranslation);
+        }),
+      );
     }
   }
 
-  useSystemLanguage() {
+  useSystemLanguage(): void {
     this.setLanguage(navigator.language as K);
-    this.isUsingSystemLanguage = true;
   }
 }

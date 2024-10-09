@@ -1,4 +1,4 @@
-import { createCustomElement, css, h } from "../src";
+import { createCustomElement, css, useComputedObserve } from "@michijs/michijs";
 
 const style = css`
     span {
@@ -14,15 +14,21 @@ const style = css`
 
 export const ColorSelector = createCustomElement("color-selector", {
   reflectedCssVariables: {
-    color: "#ff0000" as `#${string}`,
+    color: "#ff0000a1" as `#${string}`,
   },
-  computedStyleSheet() {
+  shadow: false,
+  computedStyleSheet(selector: string) {
     return {
-      color: "white",
-      "--example": this.color === "#ff0000" ? '"red"' : '"not red"',
+      [selector]: {
+        color: "white",
+        "--example": useComputedObserve(
+          () => (this.color() === "#ff0000" ? '"red"' : '"not red"'),
+          [this.color],
+        ),
+      },
     };
   },
-  adoptedStyleSheets: [style],
+  adoptedStyleSheets: { style },
   render() {
     return (
       <span>
@@ -30,7 +36,7 @@ export const ColorSelector = createCustomElement("color-selector", {
           type="color"
           value={this.color}
           oninput={(ev) => {
-            this.color = ev.target?.value as `#${string}`;
+            this.color(ev.target?.value as `#${string}`);
           }}
         />
       </span>

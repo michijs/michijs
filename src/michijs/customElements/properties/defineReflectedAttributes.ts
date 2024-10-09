@@ -1,30 +1,31 @@
-import { setAttributes } from "../../DOM/attributes/setAttributes";
-import {
-  AnyObject,
+import { getAttributeValue } from "../../DOM/attributes/getAttributeValue";
+import type {
   MichiCustomElement,
+  ObservableType,
   ReflectedAttributesType,
-  Store,
 } from "../../types";
-import { formatToKebabCase } from "../../utils";
-import { definePropertyFromStore } from "./definePropertyFromStore";
+import { formatToKebabCase } from "../../utils/formatToKebabCase";
+import { definePropertyFromObservable } from "./definePropertyFromObservable";
 
 export const defineReflectedAttributes = (
   self: MichiCustomElement,
-  store: Store<AnyObject, AnyObject>,
+  observable: ObservableType<any>,
   reflectedAttributes?: ReflectedAttributesType,
-) => {
+): void => {
   if (reflectedAttributes)
     for (const key in reflectedAttributes) {
       const standarizedAttributeName = formatToKebabCase(key);
+      // Setting the specific element initial value -- only happens if attribute was set on html
+      if (self.hasAttribute(standarizedAttributeName))
+        observable[key] = getAttributeValue(
+          self.getAttribute(standarizedAttributeName),
+        );
       if (key !== standarizedAttributeName)
-        definePropertyFromStore(self, standarizedAttributeName, store, key);
-      store.subscribe((propertiesThatChanged) => {
-        if (propertiesThatChanged?.find((x) => x.startsWith(key))) {
-          const newAttributes = {
-            [standarizedAttributeName]: store.state[key as string],
-          };
-          setAttributes(self, newAttributes, self);
-        }
-      });
+        definePropertyFromObservable(
+          self,
+          standarizedAttributeName,
+          observable,
+          key,
+        );
     }
 };

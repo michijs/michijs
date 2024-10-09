@@ -2,21 +2,23 @@ export function setAttribute(
   element: Element | HTMLElement,
   key: string,
   newValue: any,
-) {
+): void {
+  const value = newValue?.valueOf();
   switch (true) {
-    case newValue === null:
-    case newValue === undefined:
-    case typeof newValue === "boolean": {
-      if (newValue) element.setAttribute(key, "");
+    case value === null:
+    case value === undefined:
+    case typeof value === "boolean": {
+      if (value) element.setAttribute(key, "");
       else element.removeAttribute(key);
       break;
     }
-    case typeof newValue === "object": {
-      element.setAttribute(key, JSON.stringify(newValue));
+    case typeof value === "object": {
+      if (value instanceof URL) element.setAttribute(key, value.href);
+      else element.setAttribute(key, JSON.stringify(value));
       break;
     }
     default: {
-      element.setAttribute(key, newValue);
+      element.setAttribute(key, value);
     }
   }
 }

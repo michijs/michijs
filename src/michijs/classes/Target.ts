@@ -1,107 +1,82 @@
-import { create } from "../DOMDiff";
-import { update } from "../DOMDiff/update";
-import { RenderFunction } from "./ElementList";
+import { create } from "../DOMDiff/create";
+import type { CreateOptions, FC } from "../types";
+import type { VirtualFragment } from "./VirtualFragment";
 
 export class Target<V> {
-  private template: ChildNode | ParentNode;
-
+  private element: VirtualFragment | ParentNode;
+  private renderItem: FC<V>;
+  private options?: CreateOptions;
   constructor(
-    private element: ParentNode,
-    private renderItem: RenderFunction<V>,
-    private isSVG?: boolean,
-    private isMATHML?: boolean,
-    private context?: Element,
-  ) {}
-
-  private getTemplate(value: V) {
-    return (
-      this.template ??
-      create(this.renderItem(value), this.isSVG, this.isMATHML, this.context)
-    );
+    element: VirtualFragment | ParentNode,
+    renderItem: FC<V>,
+    options?: CreateOptions,
+  ) {
+    this.element = element;
+    this.renderItem = renderItem;
+    this.options = options;
   }
 
-  private create(...items: V[]): ChildNode[] {
-    if (items.length > 0) {
-      const template = this.getTemplate(items[0]);
-      return items.map((item) => this.createSingleItem(item, template));
-    }
-    return [];
-  }
-
-  createSingleItem(item: V, template = this.getTemplate(item)): ChildNode {
-    const el = template.cloneNode(true) as ChildNode;
-    update(el, this.renderItem(item), this.isSVG, this.isMATHML, this.context);
-    return el;
-  }
-
-  clear() {
+  clear(): void {
     this.element.textContent = "";
   }
 
-  replace(...items: V[]) {
+  createSingleItem(value: V): Node {
+    return create(this.renderItem(value), this.options);
+  }
+  create(...value: V[]): Node[] {
+    return value.map((x) => this.createSingleItem(x));
+  }
+
+  replace(...items: V[]): void {
     // A little better than replaceChildren
     this.clear();
     this.appendItems(...items);
   }
 
-  replaceNode(el: ChildNode, value: V) {
+  replaceNode(el: ChildNode, value: V): void {
     const newNode = this.createSingleItem(value);
     el.replaceWith(newNode);
   }
 
-  update(index: number, value: V) {
-    update(
-      this.element.childNodes.item(index),
-      this.renderItem(value),
-      this.isSVG,
-      this.isMATHML,
-      this.context,
-    );
-  }
-
-  updateNode(el: ChildNode, value: V) {
-    update(el, this.renderItem(value), this.isSVG, this.isMATHML, this.context);
-  }
-
-  pop() {
+  pop(): void {
     this.element.lastChild?.remove();
   }
 
-  shift() {
+  shift(): void {
     this.element.firstChild?.remove();
   }
 
-  remove(index: number) {
-    this.element.childNodes.item(index)?.remove();
+  remove(index: number): void {
+    this.element.childNodes[index]?.remove();
   }
 
-  insertItemsAt(i: number, ...items: V[]) {
+  insertItemsAt(i: number, ...items: V[]): void {
     const renderResult = this.create(...items);
 
     this.insertChildNodesAt(i, ...renderResult);
   }
 
-  prependItems(...items: V[]) {
+  prependItems(...items: V[]): void {
     const renderResult = this.create(...items);
 
     this.element.prepend(...renderResult);
   }
 
-  appendItems(...items: V[]) {
+  appendItems(...items: V[]): void {
     const renderResult = this.create(...items);
 
     this.element.append(...renderResult);
   }
 
-  reverse() {
+  reverse(): void {
     this.element.replaceChildren(
       ...Array.from(this.element.childNodes).reverse(),
     );
   }
 
-  swap(indexA: number, indexB: number) {
-    const elA = this.element.childNodes.item(indexA);
-    const elB = this.element.childNodes.item(indexB);
+  swap(indexA: number, indexB: number): void {
+    const elA = this.element.childNodes[indexA];
+    const elB = this.element.childNodes[indexB];
     if (elA && elB) {
       const previousSiblingA = elA.previousSibling;
       if (previousSiblingA) {
@@ -137,8 +112,48 @@ export class Target<V> {
     // });
   }
 
-  insertChildNodesAt(i: number, ...childNodes: ChildNode[]) {
+  insertChildNodesAt(i: number, ...childNodes: Node[]): void {
     if (i === 0) this.element.prepend(...childNodes);
-    else this.element.childNodes.item(i - 1).after(...childNodes);
+    else this.element.childNodes[i - 1].after(...childNodes);
+  }
+  splice(start: number, deleteCount: number, ...items: V[]): void {
+    const len = this.element.childNodes.length;
+    const relativeStart = start >> 0;
+    const k =
+      relativeStart < 0
+        ? Math.max(len + relativeStart, 0)
+        : Math.min(relativeStart, len);
+
+    let item: ChildNode | null = this.element.childNodes.item(k),
+      count = 0;
+    while (item && count < deleteCount) {
+      const nextSibling = item.nextSibling;
+      item.remove();
+      item = nextSibling;
+      count++;
+    }
+    if (items.length > 0) this.insertItemsAt(k, ...items);
+  }
+  fill(value: V, start = 0, end?: number): void {
+    const len = this.element.childNodes.length;
+    const relativeStart = start >> 0;
+
+    let k =
+      relativeStart < 0
+        ? Math.max(len + relativeStart, 0)
+        : Math.min(relativeStart, len);
+
+    const relativeEnd = end === undefined ? len : end >> 0;
+
+    const final =
+      relativeEnd < 0
+        ? Math.max(len + relativeEnd, 0)
+        : Math.min(relativeEnd, len);
+
+    while (k < final) {
+      this.remove(k);
+      this.insertItemsAt(k, value);
+      k++;
+    }
   }
 }

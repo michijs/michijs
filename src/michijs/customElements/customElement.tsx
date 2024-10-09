@@ -1,7 +1,9 @@
-import {
+import type {
   CustomElementTag,
+  MichiElementClass,
   MichiElementOptions,
   MichiElementSelf,
+  NoExtraProperties,
 } from "../types";
 import { createCustomElement } from "./createCustomElement";
 
@@ -10,6 +12,7 @@ export function customElement(tag: TemplateStringsArray) {
     O extends MichiElementOptions,
     S extends HTMLElement = MichiElementSelf<O>,
   >(
-    elementOptions: O & ThisType<S>,
-  ) => createCustomElement<O, S>(tag[0] as CustomElementTag, elementOptions);
+    elementOptions: NoExtraProperties<MichiElementOptions, O> & ThisType<S>,
+  ): MichiElementClass<O> =>
+    createCustomElement<O>(tag[0] as CustomElementTag, elementOptions);
 }

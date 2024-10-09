@@ -1,28 +1,5 @@
 {
-  "compilerOptions": {
-    "strictFunctionTypes": true,
-    "strictNullChecks": true,
-    "strictBindCallApply": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
-    "allowUnreachableCode": false,
-    "declaration": true,
-    "experimentalDecorators": true,
-    "noErrorTruncation": true,
-    "lib": [
-      "dom",
-      "esnext"
-    ],
-    "incremental": true,
-    "outDir": "bin",
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "target": "esnext",
-    "noUnusedLocals": false,
-    "noUnusedParameters": false
-  },
+  "extends": "@michijs/tsconfig/tsconfig.json",
   "include": [
     "tasks"
   ],

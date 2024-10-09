@@ -1,30 +1,16 @@
 {
+  "extends": "@michijs/tsconfig/tsconfig.json",
   "compilerOptions": {
-    "strictFunctionTypes": true,
-    "strictNullChecks": true,
-    "strictBindCallApply": true,
-    "resolveJsonModule": true,
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
-    "allowUnreachableCode": false,
-    "declaration": true,
-    "experimentalDecorators": true,
-    "noErrorTruncation": true,
-    "lib": [
-      "dom",
-      "es2020"
-    ],
-    "incremental": true,
-    "outDir": "dist",
-    "moduleResolution": "node",
-    "module": "esnext",
-    "target": "es2019",
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitThis": true,
-    "jsx": "react",
-    "jsxFactory": "h.createElement",
-    "jsxFragmentFactory": "h.Fragment"
+    "paths": {
+      "@michijs/michijs/*": [
+        "./src/*"
+      ],
+      "@michijs/michijs": [
+        "./src/index"
+      ],
+    },
+    "jsx": "react-jsx",
+    "jsxImportSource": "@michijs/michijs",
   },
   "include": [
     "src",

@@ -1,9 +1,9 @@
 import {
   createCustomElement,
   EventDispatcher,
-  h,
   ElementInternals,
-} from "../src";
+  useComputedObserve,
+} from "@michijs/michijs";
 import { counterStyle } from "./shared/counterStyle";
 
 export const A11YCounter = createCustomElement("a11y-counter", {
@@ -16,10 +16,10 @@ export const A11YCounter = createCustomElement("a11y-counter", {
   },
   methods: {
     decrementCount() {
-      if (!this.matches(":disabled")) this.value--;
+      if (!this.matches(":disabled")) this.value(this.value() - 1);
     },
     incrementCount() {
-      if (!this.matches(":disabled")) this.value++;
+      if (!this.matches(":disabled")) this.value(this.value() + 1);
     },
   },
   lifecycle: {
@@ -43,25 +43,20 @@ export const A11YCounter = createCustomElement("a11y-counter", {
   events: {
     countChanged: new EventDispatcher<number>(),
   },
-  observe: {
-    value() {
-      this.countChanged(this.value);
-    },
-    count() {
-      this.value = this.count;
-    },
-  },
-  adoptedStyleSheets: [counterStyle],
+  adoptedStyleSheets: { counterStyle },
   render() {
+    this.value.subscribe(this.countChanged);
+    this.count.subscribe(() => this.value(this.count()));
+    const errorMessage = useComputedObserve(
+      () => (this.value() > 0 ? undefined : "Value should be greater than 0"),
+      [this.value],
+    );
     return (
-      <>
-        <ElementInternals
-          ariaValueText={this.value.toString()}
-          formValue={this.value.toString()}
-          errorMessage={
-            this.value > 0 ? undefined : "Value should be greater than 0"
-          }
-        />
+      <ElementInternals
+        ariaValueText={this.value.toObservableString()}
+        formValue={this.value.toObservableString()}
+        errorMessage={errorMessage}
+      >
         <button type="button" onpointerup={this.decrementCount}>
           -
         </button>
@@ -69,7 +64,7 @@ export const A11YCounter = createCustomElement("a11y-counter", {
         <button type="button" onpointerup={this.incrementCount}>
           +
         </button>
-      </>
+      </ElementInternals>
     );
   },
 });
