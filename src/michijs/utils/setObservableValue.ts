@@ -44,11 +44,7 @@ export function setObservableValue<T extends object>(
 
       ProxiedValue.startTransaction();
       if (object1 instanceof ProxiedArray && Array.isArray(object2Value)) {
-        object1.$replace(
-          ...object2Value.map((x) =>
-            useObserve<Object>(x, initialObservers as Subscription<Object>[]),
-          ),
-        );
+        object1.$replace(...object2Value);
       } else if (Object.getPrototypeOf(object1Value) === Object.prototype)
         for (const key in { ...object1Value, ...object2Value }) {
           object1[key] = object2Value[key];

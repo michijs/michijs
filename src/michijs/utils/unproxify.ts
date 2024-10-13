@@ -20,7 +20,6 @@ export function unproxify<T>(val: T): Unproxify<T> {
       if (item instanceof Set) return cloneSet(item, unproxify) as Unproxify<T>;
       if (Object.getPrototypeOf(item) === Object.prototype)
         return cloneCommonObject(item, unproxify) as Unproxify<T>;
-      return item as Unproxify<T>;
     }
   }
   return item as Unproxify<T>;

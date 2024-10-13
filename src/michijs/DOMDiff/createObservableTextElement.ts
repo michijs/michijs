@@ -7,8 +7,8 @@ export const createObservableTextElement = (
 ): Text => {
   const textNode = createTextElement(jsx.$value);
   overrideCallbackWithRef(
-    textNode,
     jsx,
+    textNode,
     (newValue, el) =>
       (el.textContent =
         (typeof newValue === "object"

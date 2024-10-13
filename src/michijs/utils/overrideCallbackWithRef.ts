@@ -5,8 +5,8 @@ export const overrideCallbackWithRef = <
   T extends ObservableLike<Y>,
   E extends WeakKey,
 >(
-  val: E,
   observable: T,
+  val: E,
   callback: RefSubscription<Y, E>,
 ): Subscription<Y> => {
   const ref = new WeakRef(val);

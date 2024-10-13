@@ -132,6 +132,11 @@ export class ProxiedArray<V>
   implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties>
 {
   private targets = new Array<Target<V>>();
+  
+  constructor(initialValue?: V[], initialObservers?: Subscription<V[]>[] | undefined) {
+    super(initialValue, initialObservers);
+  }
+
   List = <const E = FC>(
     {
       as: asTag,
