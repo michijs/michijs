@@ -28,7 +28,10 @@ export function observeArray<T extends Array<unknown>>(
     useObserve<any>(value, newInitialObservers),
   );
 
-  const newObservable = new ProxiedArray<T>(proxiedArray, initialObservers as Subscription<any[]>[]);
+  const newObservable = new ProxiedArray<T>(
+    proxiedArray,
+    initialObservers as Subscription<any[]>[],
+  );
   const proxy = new Proxy(newObservable, {
     set: customObjectSet(newInitialObservers),
     deleteProperty: customObjectDelete,
