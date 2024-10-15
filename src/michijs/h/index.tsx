@@ -1,4 +1,4 @@
-import { Fragment } from "../components/Fragment";
+export { Fragment } from "../components/Fragment";
 
 function jsx(
   jsxTag: any,
@@ -13,4 +13,4 @@ function jsx(
   };
 }
 
-export { jsx, jsx as jsxs, jsx as jsxDEV, Fragment };
+export { jsx, jsx as jsxs, jsx as jsxDEV };

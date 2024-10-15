@@ -7,7 +7,7 @@
     "dist/",
     "jsx-runtime/"
   ],
-  "packageManager": "bun@1.1.26",
+  "packageManager": "bun@1.1.30",
   "sideEffects": false,
   "main": "dist/index.js",
   "module": "dist/index.js",

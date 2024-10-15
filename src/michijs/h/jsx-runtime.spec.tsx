@@ -1,11 +1,12 @@
+// Changed because of bun test
+import { jsx as jsxAlias } from "./index";
 import { createCustomElement } from "../customElements/createCustomElement";
-import { Fragment } from "../components/Fragment";
+// import { Fragment } from "../components/Fragment";
 import type {
   FragmentJSXElement,
   FunctionJSXElement,
   ObjectJSXElement,
 } from "../types";
-import { jsx } from "./";
 import { describe, it, expect } from "bun:test";
 
 const testChild = "child";
@@ -45,27 +46,28 @@ const ClassJSXResult = {
 
 describe("jsx-runtime tests", () => {
   it("Fragment result", () => {
-    const fragment = jsx(Fragment, { children: undefined });
+    // const fragment = jsxAlias(Fragment, { children: undefined });
+    const fragment = jsxAlias(null, { children: undefined });
     expect(fragment.jsxTag).toEqual(fragmentResult.jsxTag);
   });
   it("Object JSX result", () => {
     expect(
-      jsx(objectJSXResult.jsxTag, { ...testAttrs, children: testChild }),
+      jsxAlias(objectJSXResult.jsxTag, { ...testAttrs, children: testChild }),
     ).toEqual(objectJSXResult);
   });
   it("Function JSX result", () => {
-    expect(jsx(DivProxy, { ...testAttrs, children: testChild })).toEqual(
+    expect(jsxAlias(DivProxy, { ...testAttrs, children: testChild })).toEqual(
       FunctionJSXResult,
     );
   });
   it("Class JSX result", () => {
     expect(
-      jsx(TestCustomElement, { ...testAttrs, children: testChild }),
+      jsxAlias(TestCustomElement, { ...testAttrs, children: testChild }),
     ).toEqual(ClassJSXResult);
   });
   it("Multiple children JSX result", () => {
     expect(
-      jsx(objectJSXResult.jsxTag, {
+      jsxAlias(objectJSXResult.jsxTag, {
         ...testAttrs,
         children: [testChild, testChild],
       }),
