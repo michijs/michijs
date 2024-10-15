@@ -41,18 +41,18 @@ export const overrideDocumentCreateElement = () => {
       Object.setPrototypeOf(newEl, customElement.prototype);
       newEl.setAttribute("is", customElementTag);
 
-      import('../components/GenericElement').then(({GenericElement}) => {
+      import("../components/GenericElement").then(({ GenericElement }) => {
         const helper = create(
           <GenericElement
-          // @ts-ignore
+            // @ts-ignore
             onelementconnected={() => newEl.connectedCallback?.()}
             // @ts-ignore
             onelementdisconnected={() => newEl.disconnectedCallback?.()}
-          />
+          />,
         );
         newEl.append(helper);
-        console.log(helper)
-      })
+        console.log(helper);
+      });
 
       // @ts-ignore
       newEl.fakeConstructor?.();

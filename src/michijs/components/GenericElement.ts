@@ -14,7 +14,9 @@ export const GenericElement = createCustomElement("michi-generic-element", {
       this.elementDisconnected(this);
     },
   },
-  adoptedStyleSheets: { styles: useStyleSheet({ ':host': { display: 'none' } }) },
+  adoptedStyleSheets: {
+    styles: useStyleSheet({ ":host": { display: "none" } }),
+  },
   events: {
     elementDisconnected: new EventDispatcher<HTMLElement>(),
     elementMounted: new EventDispatcher<HTMLElement>(),
