@@ -8,11 +8,11 @@ import { getShadowRoot } from "../utils/getShadowRoot";
 
 const MichiSlot = createCustomElement("michi-slot", {
   reflectedAttributes: {
-    name: null as string | null
+    name: null as string | null,
   },
   attributes: {
     hostElement: undefined as Element | undefined,
-    defaultChildren: undefined as any
+    defaultChildren: undefined as any,
   },
   lifecycle: {
     didMount() {
@@ -20,11 +20,15 @@ const MichiSlot = createCustomElement("michi-slot", {
 
       const callback = (nodeList: NodeList) => {
         const name = this.name();
-        Array.from(nodeList).forEach(x => {
-          if ([this.nodeName, 'MICHI-GENERIC-ELEMENT', 'STYLE'].includes(x.nodeName))
+        Array.from(nodeList).forEach((x) => {
+          if (
+            [this.nodeName, "MICHI-GENERIC-ELEMENT", "STYLE"].includes(
+              x.nodeName,
+            )
+          )
             return;
           if (isElement(x)) {
-            if (x.getAttribute('slot') === name) {
+            if (x.getAttribute("slot") === name) {
               this.append(x);
               this.slotchange();
               return;
@@ -33,36 +37,43 @@ const MichiSlot = createCustomElement("michi-slot", {
             this.append(x);
             this.slotchange();
           }
-        })
-      }
+        });
+      };
 
       if (hostElement) {
         const observer = new MutationObserver((mutations) => {
           mutations.forEach((mutation) => {
-            if (mutation.addedNodes.length > 0)
-              callback(mutation.addedNodes)
+            if (mutation.addedNodes.length > 0) callback(mutation.addedNodes);
           });
         });
         observer.observe(hostElement, {
-          childList: true
-        })
-        callback(hostElement.childNodes)
+          childList: true,
+        });
+        callback(hostElement.childNodes);
       }
     },
   },
-  adoptedStyleSheets: { styles: useStyleSheet({ ':host': { display: 'contents' } }) },
+  adoptedStyleSheets: {
+    styles: useStyleSheet({ ":host": { display: "contents" } }),
+  },
   events: {
     slotchange: new EventDispatcher<void>(),
   },
   render() {
-    return <slot>{this.defaultChildren()}</slot>
-  }
+    return <slot>{this.defaultChildren()}</slot>;
+  },
 });
 
-export const Slot: FCC<HTMLElements['slot']> = (attrs, context) => getShadowRoot(context?.contextElement) ? <slot {...attrs} /> : (
-  <MichiSlot {...attrs} _={{
-    hostElement: context?.contextElement,
-    // @ts-ignore
-    defaultChildren: attrs.children
-  }} />
-) 
+export const Slot: FCC<HTMLElements["slot"]> = (attrs, context) =>
+  getShadowRoot(context?.contextElement) ? (
+    <slot {...attrs} />
+  ) : (
+    <MichiSlot
+      {...attrs}
+      _={{
+        hostElement: context?.contextElement,
+        // @ts-ignore
+        defaultChildren: attrs.children,
+      }}
+    />
+  );
