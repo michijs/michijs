@@ -51,7 +51,6 @@ export const overrideDocumentCreateElement = () => {
           />
         );
         newEl.append(helper);
-        console.log(helper)
       })
 
       // @ts-ignore

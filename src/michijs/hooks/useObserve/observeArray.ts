@@ -18,10 +18,10 @@ const mutableNewItemsProperties = new Set<
 
 export function observeArray<T extends Array<unknown>>(
   item: T,
-  initialObservers: Subscription<T>[] = [],
+  initialObservers: Subscription<T>[] | undefined,
 ) {
   const newInitialObservers = [
-    ...initialObservers,
+    ...(initialObservers ?? []),
     () => newObservable.notifyCurrentValue(),
   ];
   const proxiedArray = cloneArray(item, (value) =>

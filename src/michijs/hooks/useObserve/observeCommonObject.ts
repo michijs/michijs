@@ -14,10 +14,10 @@ import {
 
 export function observeCommonObject<T>(
   item: T,
-  initialObservers: Subscription<T>[] = [],
+  initialObservers?: Subscription<T>[],
 ): ObservableType<T> {
   const newInitialObservers = [
-    ...initialObservers,
+    ...(initialObservers ?? []),
     () => newObservable.notifyCurrentValue(),
   ];
   const newObservable = new ProxiedValue<T>(

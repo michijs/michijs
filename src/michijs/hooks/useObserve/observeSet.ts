@@ -17,16 +17,17 @@ import { cloneMap } from "../../utils/clone/cloneMap";
 
 export const observeSet = <E, T extends Set<E>>(
   item: T,
-  initialObservers: Subscription<T>[] = [],
+  initialObservers?: Subscription<T>[],
 ): ObservableType<Set<E>> => {
   const newInitialObservers: Subscription<any>[] = [
-    ...initialObservers,
+    ...(initialObservers ?? []),
     () => newObservable.notifyCurrentValue(),
   ];
   const proxiedSet = cloneMap(item, (value) =>
     useObserve(value, newInitialObservers),
   );
-  const newObservable = new ProxiedValue(proxiedSet);
+  // @ts-ignore
+  const newObservable = new ProxiedValue(proxiedSet, initialObservers);
   const proxy = new Proxy(newObservable, {
     set: customObjectSet(newInitialObservers),
     apply: customObjectApply(() => proxy, newInitialObservers),
@@ -68,6 +69,7 @@ export const observeSet = <E, T extends Set<E>>(
           };
         }
         case "delete": {
+          // @ts-ignore
           return customMapAndSetDelete(target, bindedTargetProperty);
         }
         default: {

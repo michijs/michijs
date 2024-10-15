@@ -17,10 +17,10 @@ import { setObservableValue } from "../../utils/setObservableValue";
 
 export const observeMap = <E, T extends Map<any, E>>(
   item: T,
-  initialObservers: Subscription<T>[] = [],
+  initialObservers?: Subscription<T>[],
 ) => {
   const newInitialObservers: Subscription<any>[] = [
-    ...initialObservers,
+    ...(initialObservers ?? []),
     () => newObservable.notifyCurrentValue(),
   ];
   const proxiedMap = cloneMap(item, (value) =>

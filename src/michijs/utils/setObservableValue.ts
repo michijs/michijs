@@ -7,7 +7,7 @@ export function setObservableValue<T extends object>(
   object1: T,
   object2: any,
   // Intentional - this function should be only used on observe functions to avoid removing subscription to parents
-  initialObservers: Subscription<T>[],
+  initialObservers?: Subscription<T>[],
 ): boolean {
   // null?.valueOf() is undefined - bug
   const object1Value = object1 ? object1.valueOf() : object1;

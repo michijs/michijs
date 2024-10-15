@@ -104,7 +104,7 @@ export const customObjectHas: CommonObjectProxyHandler<any>["has"] = (
 export const customObjectApply: (
   // Using proxy instead of target because otherwise it does not trap gets and sets
   proxy: () => ObservableType<any>,
-  initialObservers: Subscription<any>[],
+  initialObservers?: Subscription<any>[],
 ) => CommonObjectProxyHandler<any>["apply"] =
   (proxy, initialObservers) => (target, _, args) => {
     const valueType = typeof target.$value;

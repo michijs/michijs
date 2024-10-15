@@ -9,7 +9,7 @@ import { cloneDate } from "../../utils/clone/cloneDate";
 
 export function observeDate<T extends Date>(
   item: T,
-  initialObservers: Subscription<T>[] = [],
+  initialObservers?: Subscription<T>[],
 ) {
   const clone = cloneDate(item);
   const newObservable = new ProxiedValue<T>(clone, initialObservers);
