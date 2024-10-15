@@ -3,6 +3,7 @@ import type {
   ObservableComplexObject,
   ObservableType,
 } from "../../types";
+import { useComputedObserve } from "../useComputedObserve";
 import { useObserve } from "../useObserve";
 import { describe, it, expect, jest, beforeEach, afterEach } from "bun:test";
 
@@ -222,6 +223,10 @@ describe("Observe tests", () => {
       date.setTime(newExampleValue);
       nonProxiedDate.setTime(newExampleValue);
       expect(mockCallback).toHaveBeenCalledTimes(1);
+    });
+    it("Using useComputedObserve should keep it as a Date", () => {
+      const computedDate = useComputedObserve(() => date, [date]);
+      expect(computedDate.getTime()).toEqual(nonProxiedDate.getTime());
     });
     afterEach(() => {
       expect(date.getTime()).toEqual(nonProxiedDate.getTime());
