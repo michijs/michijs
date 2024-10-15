@@ -1,3 +1,5 @@
+import { create } from "../DOMDiff/create";
+
 export const extendedElements: Record<
   string,
   [CustomElementConstructor, string]
@@ -39,10 +41,21 @@ export const overrideDocumentCreateElement = () => {
       Object.setPrototypeOf(newEl, customElement.prototype);
       newEl.setAttribute("is", customElementTag);
 
+      import('../components/GenericElement').then(({GenericElement}) => {
+        const helper = create(
+          <GenericElement
+          // @ts-ignore
+            onelementconnected={() => newEl.connectedCallback?.()}
+            // @ts-ignore
+            onelementdisconnected={() => newEl.disconnectedCallback?.()}
+          />
+        );
+        newEl.append(helper);
+        console.log(helper)
+      })
+
       // @ts-ignore
       newEl.fakeConstructor?.();
-      // @ts-ignore
-      newEl.connectedCallback?.();
       if (
         // @ts-ignore
         typeof newEl.attributeChangedCallback === "function" &&

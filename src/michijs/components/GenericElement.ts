@@ -1,11 +1,6 @@
-// import { useStyleSheet } from "../css";
-// Fixes jest error
 import { EventDispatcher } from "../classes/EventDispatcher";
+import { useStyleSheet } from "../css/useStyleSheet";
 import { createCustomElement } from "../customElements/createCustomElement";
-
-const styles = new CSSStyleSheet();
-// Jest fix
-if (styles.replaceSync) styles.replaceSync(":host{display: none}");
 
 export const GenericElement = createCustomElement("michi-generic-element", {
   lifecycle: {
@@ -15,11 +10,13 @@ export const GenericElement = createCustomElement("michi-generic-element", {
     connected() {
       this.elementConnected(this);
     },
+    disconnected() {
+      this.elementDisconnected(this);
+    },
   },
-  adoptedStyleSheets: { styles },
-  // Brokes unit tests
-  // adoptedStyleSheets: [useStyleSheet({ ':host': { display: 'none' } })],
+  adoptedStyleSheets: { styles: useStyleSheet({ ':host': { display: 'none' } }) },
   events: {
+    elementDisconnected: new EventDispatcher<HTMLElement>(),
     elementMounted: new EventDispatcher<HTMLElement>(),
     elementConnected: new EventDispatcher<HTMLElement>(),
   },

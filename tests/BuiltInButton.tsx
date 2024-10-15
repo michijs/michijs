@@ -1,9 +1,11 @@
 import {
   createCustomElement,
   Host,
+  trace,
   useComputedObserve,
 } from "@michijs/michijs";
 import { buttonStyle } from "./BuiltInButton.css";
+import { Slot } from "@michijs/michijs/michijs/components/Slot";
 
 export const BuiltInButton = createCustomElement("built-in-button", {
   extends: {
@@ -13,6 +15,14 @@ export const BuiltInButton = createCustomElement("built-in-button", {
   reflectedAttributes: {
     counter: 0,
     type: "button",
+  },
+  lifecycle: {
+    connected(){
+      console.log('connected');
+    },
+    disconnected(){
+      console.log('disconnected');
+    }
   },
   computedStyleSheet(selector: string) {
     return {
@@ -25,7 +35,10 @@ export const BuiltInButton = createCustomElement("built-in-button", {
   render() {
     return (
       <Host onpointerup={() => this.counter(this.counter() + 1)}>
-        {this.counter}
+        <Slot />
+        <span slot="text">
+          {this.counter}
+        </span>
       </Host>
     );
   },

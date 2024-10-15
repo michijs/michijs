@@ -83,6 +83,7 @@ export function createCustomElement<O extends MichiElementOptions>(
     didMount;
     willReceiveAttribute;
     didUnmount;
+    disconnected;
     associatedCallback;
     disabledCallback;
     resetCallback;
@@ -249,6 +250,7 @@ export function createCustomElement<O extends MichiElementOptions>(
     }
 
     disconnectedCallback() {
+      this.disconnected?.();
       if (!document.contains(this)) {
         this.didUnmount?.();
       }

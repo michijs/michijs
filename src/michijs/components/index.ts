@@ -6,3 +6,4 @@ export { Fragment } from "./Fragment";
 export { Title } from "./Title";
 export { Redirect } from "./Redirect";
 export { AsyncComponent } from "./AsyncComponent";
+export { Slot } from "./Slot";

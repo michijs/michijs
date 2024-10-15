@@ -743,7 +743,7 @@ type MichiElementProps<
   Attrs;
 
 export interface MichiElementClass<O extends MichiElementOptions> {
-  new (props: MichiElementProps<O>): MichiElementSelf<O>;
+  new (props?: MichiElementProps<O>): MichiElementSelf<O>;
   readonly tag: string;
   readonly extends?: string;
   readonly observedAttributes: Readonly<string[]>;
@@ -759,6 +759,8 @@ export interface Lifecycle {
   didConstruct?(): void;
   /**This method is called when a component is connected to the DOM.*/
   connected?(): void;
+  /**This method is called when a component is disconnected from the DOM.*/
+  disconnected?(): void;
   /**This method is called right before a component mounts.*/
   willMount?(): void;
   /**This method is called after the component has mounted. */
