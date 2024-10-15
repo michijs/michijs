@@ -1,7 +1,6 @@
 import {
   createCustomElement,
   Host,
-  trace,
   useComputedObserve,
 } from "@michijs/michijs";
 import { buttonStyle } from "./BuiltInButton.css";
@@ -17,12 +16,12 @@ export const BuiltInButton = createCustomElement("built-in-button", {
     type: "button",
   },
   lifecycle: {
-    connected(){
-      console.log('connected');
+    connected() {
+      console.log("connected");
     },
-    disconnected(){
-      console.log('disconnected');
-    }
+    disconnected() {
+      console.log("disconnected");
+    },
   },
   computedStyleSheet(selector: string) {
     return {
@@ -36,9 +35,7 @@ export const BuiltInButton = createCustomElement("built-in-button", {
     return (
       <Host onpointerup={() => this.counter(this.counter() + 1)}>
         <Slot />
-        <span slot="text">
-          {this.counter}
-        </span>
+        <span slot="text">{this.counter}</span>
       </Host>
     );
   },
