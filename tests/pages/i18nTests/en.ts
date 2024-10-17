@@ -1,11 +1,8 @@
 export default {
-  "language": "Language",
-  "dogBit": "The dog bit its owner",
-  "birthDay": "My birthday is",
+  language: "Language",
+  dogBit: "The dog bit its owner",
+  birthDay: "My birthday is",
   "en-uk": "English",
-  "es": "Spanish",
-  listTest: [
-    'one',
-    "two"
-  ]
-}
+  es: "Spanish",
+  listTest: ["one", "two"],
+};
