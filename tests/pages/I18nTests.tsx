@@ -11,11 +11,11 @@ const { lang } = useStorage({
   lang: navigator.language,
 });
 
-const translator = new I18n(['en', 'es'], lang);
+const translator = new I18n(["en", "es"], lang);
 
 const t = translator.createTranslation({
   es: () => import("./i18nTests/es"),
-  en
+  en,
 });
 
 const I18nTests = createCustomElement("i18n-tests", {
