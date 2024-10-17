@@ -5,32 +5,24 @@ import {
   useStorage,
   type TypedEvent,
 } from "@michijs/michijs";
-import en from "./i18nTests/en.json";
-
-type SupportedLanguages = "es" | "en";
-
-const supportedLanguages: Record<SupportedLanguages, string> = {
-  en: "English",
-  es: "Español",
-};
+import en from "./i18nTests/en";
 
 const { lang } = useStorage({
-  lang: "en" as SupportedLanguages,
+  lang: navigator.language,
 });
 
-const translator = new I18n<SupportedLanguages>(lang);
+const translator = new I18n(['en', 'es'], lang);
 
 const t = translator.createTranslation({
-  es: () => import("./i18nTests/es.json"),
-  en,
+  es: () => import("./i18nTests/es"),
+  en
 });
 
 const I18nTests = createCustomElement("i18n-tests", {
   methods: {
     onChangeLanguage(ev: TypedEvent<HTMLSelectElement>) {
       if (ev.target) {
-        const newValue = ev.target.value as SupportedLanguages;
-        lang(newValue);
+        lang(ev.target.value);
       }
     },
   },
@@ -40,9 +32,9 @@ const I18nTests = createCustomElement("i18n-tests", {
         <Title>I18n tests Page</Title>
         <span>{t.language}</span>
         <select onchange={this.onChangeLanguage}>
-          {Object.entries(supportedLanguages).map(([key, label]) => (
-            <option selected={key === translator.currentLanguage} value={key}>
-              {label}
+          {translator.supportedLanguages.map((key) => (
+            <option selected={translator.currentLanguage === key} value={key}>
+              {t[key]}
             </option>
           ))}
         </select>

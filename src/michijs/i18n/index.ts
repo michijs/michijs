@@ -1,85 +1,85 @@
 import { ProxiedValue } from "../classes/ProxiedValue";
-import { useObserve } from "../hooks/useObserve";
 import type { ObservableOrConst, ObservableType, Subscription } from "../types";
 import { unproxify } from "../utils/unproxify";
 import { bindObservable } from "../utils/bindObservable";
+import { useAsyncComputedObserve } from "../hooks";
 
 export type Translation<K extends string, T> = {
   [key in K]: T | (() => Promise<{ default: T }>) | (() => Promise<T>);
 };
-export interface TranslationItem<K extends string, T> {
-  translation: Translation<K, T>;
-  observable: ObservableType<Partial<T>>;
-}
 
 export class I18n<K extends string = string> extends ProxiedValue<
-  K | undefined
+  K
 > {
-  private translations = new Array<TranslationItem<K, any>>();
-  private get isUsingSystemLanguage() {
-    return this.$value === navigator.language;
-  }
+  private isUsingSystemLanguage = true;
+  public supportedLanguages: K[];
 
   constructor(
-    language?: ObservableOrConst<K | undefined>,
+    supportedLanguages: K[],
+    language?: ObservableOrConst<string | undefined>,
     initialObservers?: Subscription<K | undefined>[],
   ) {
     super(
-      (unproxify(language) ?? navigator.language) as K | undefined,
+      (unproxify(language) ?? navigator.language) as K,
       initialObservers,
     );
-    if (language) {
-      bindObservable(language, (newValue) => this.setLanguage(newValue as K));
-    }
+    this.supportedLanguages = supportedLanguages;
+    bindObservable(language, (newValue) => this.currentLanguage = newValue);
 
     window.addEventListener("languagechange", () => {
-      if (!this.isUsingSystemLanguage)
-        this.setLanguage(navigator.language as K);
+      if (this.isUsingSystemLanguage)
+        this.currentLanguage = undefined
     });
   }
 
-  get currentLanguage(): K | undefined {
+  get currentLanguage(): K {
     return this.$value;
   }
-  set currentLanguage(newLang: K | undefined) {
-    this.setLanguage(newLang);
+  set currentLanguage(newDesiredLanguage: string | undefined) {
+    const desiredLanguages = [...navigator.languages];
+    let foundMatch = false;
+    if (newDesiredLanguage) {
+      this.isUsingSystemLanguage = false;
+      desiredLanguages.unshift(newDesiredLanguage)
+    }
+    else
+      this.isUsingSystemLanguage = true;
+
+    for (const desiredLang of desiredLanguages) {
+      // First, check for an exact match
+      if (this.supportedLanguages.includes(desiredLang as K)) {
+        this.$value = desiredLang as K;
+        foundMatch = true;
+        break;
+      }
+
+      // Then, check for a general match (e.g., "en" instead of "en-EN")
+      const generalLang = desiredLang.split('-')[0] as K;
+      if (this.supportedLanguages.includes(generalLang)) {
+        this.$value = generalLang as K;
+        foundMatch = true;
+        break;
+      }
+    }
+    if(!foundMatch)
+      this.$value = this.defaultLanguage
+  }
+
+  get defaultLanguage(){
+    return this.supportedLanguages[0]
   }
 
   createTranslation<T>(
     translation: Translation<K, T>,
   ): ObservableType<Partial<T>> {
-    const currentTranslationPromise = this.getCurrentTranslation(translation);
-    const observable = useObserve<Partial<T>>({});
-    currentTranslationPromise.then((currentTranslation) => {
-      (observable as ObservableType<object>)(currentTranslation as object);
-    });
-
-    const translationItem: TranslationItem<K, T> = {
-      translation,
-      observable,
-    };
-    this.translations.push(translationItem as TranslationItem<K, any>);
-    return observable;
+    return useAsyncComputedObserve<Partial<T>>(async () =>
+      await this.getCurrentTranslation(translation),
+    translation[this.defaultLanguage] as Partial<T>, [this])
   }
 
   private getCurrentTranslation<T>(translation: Translation<K, T>): Promise<T> {
     return new Promise<T>((resolve) => {
-      const translationKeys = Object.keys(translation) as K[];
-      let key: K | undefined = this.currentLanguage
-        ? translationKeys.find((key) => key === this.currentLanguage)
-        : undefined;
-      if (!key) {
-        // It does not have the current language - Fallback to next language in navigator.languages
-        key = navigator.languages.find((key) =>
-          translationKeys.includes(key as K),
-        ) as K;
-        if (!key) {
-          // Does not include any browser language - I use the latest language of the object
-          key = translationKeys[translationKeys.length - 1];
-        }
-      }
-      const value = translation[key];
-      this.$value = key;
+      const value = translation[this.currentLanguage];
 
       if (typeof value === "function")
         value().then((res) => {
@@ -87,24 +87,5 @@ export class I18n<K extends string = string> extends ProxiedValue<
         });
       else resolve(value as T);
     });
-  }
-
-  private async setLanguage(newLang: K | undefined) {
-    if (this.$value !== newLang) {
-      this.$value = newLang;
-      //Update every translation
-      await Promise.all(
-        this.translations.map(async (x) => {
-          const currentTranslation = await this.getCurrentTranslation(
-            x.translation,
-          );
-          x.observable(currentTranslation);
-        }),
-      );
-    }
-  }
-
-  useSystemLanguage(): void {
-    this.setLanguage(navigator.language as K);
   }
 }
