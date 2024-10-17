@@ -11,11 +11,11 @@ const { lang } = useStorage({
   lang: navigator.language,
 });
 
-const translator = new I18n(['en-uk', 'es'], lang);
+const translator = new I18n(["en-uk", "es"], lang);
 
 const t = translator.createTranslation({
   es: () => import("./i18nTests/es"),
-  'en-uk': en
+  "en-uk": en,
 });
 
 const I18nTests = createCustomElement("i18n-tests", {
@@ -39,7 +39,12 @@ const I18nTests = createCustomElement("i18n-tests", {
           ))}
         </select>
         <p>{t.dogBit}</p>
-        <p>{t.birthDay} {translator.computedTranslation(lang => new Date().toLocaleDateString(lang))}</p>
+        <p>
+          {t.birthDay}{" "}
+          {translator.computedTranslation((lang) =>
+            new Date().toLocaleDateString(lang),
+          )}
+        </p>
         {t.listTest}
       </>
     );
