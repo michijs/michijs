@@ -2,7 +2,7 @@ import { ProxiedValue } from "../classes/ProxiedValue";
 import type { ObservableOrConst, ObservableType, Subscription } from "../types";
 import { unproxify } from "../utils/unproxify";
 import { bindObservable } from "../utils/bindObservable";
-import { useAsyncComputedObserve } from "../hooks";
+import { useAsyncComputedObserve, useComputedObserve } from "../hooks";
 
 export type Translation<K extends string, T> = {
   [key in K]: T | (() => Promise<{ default: T }>) | (() => Promise<T>);
@@ -75,6 +75,12 @@ export class I18n<K extends string = string> extends ProxiedValue<
     return useAsyncComputedObserve<Partial<T>>(async () =>
       await this.getCurrentTranslation(translation),
     translation[this.defaultLanguage] as Partial<T>, [this])
+  }
+
+  computedTranslation(callback: (language: K) => string): ObservableType<string> {
+    return useComputedObserve<string>(() =>
+      callback(this.currentLanguage as K),
+    [this])
   }
 
   private getCurrentTranslation<T>(translation: Translation<K, T>): Promise<T> {
