@@ -145,9 +145,9 @@ A component consists of the following properties:
       <td colspan="3">Function that renders the component.</td>
     </tr>
     <tr>
-      <td rowspan="14">lifecycle</td>
+      <td rowspan="15">lifecycle</td>
       <tr>
-        <td rowspan="8">Custom Element related</td>
+        <td rowspan="9">Custom Element related</td>
         <tr>
           <td>willConstruct</td>
           <td>This method is called at the start of constructor.</td>
@@ -171,6 +171,10 @@ A component consists of the following properties:
         <tr>
           <td>willReceiveAttribute</td>
           <td>This method is called before a component does anything with an attribute.</td>
+        </tr>
+        <tr>
+          <td>disconnected</td>
+          <td>This method is called when a component is disconnected from the DOM.</td>
         </tr>
         <tr>
           <td>didUnmount</td>
