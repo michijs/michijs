@@ -40,14 +40,14 @@
 | ❌ = not implemented
 
 <details>
-<summary>More details</summary>
-
-1. React does not support web elements until version 19
-2. Only with separated / external packages - Not an unique-state-first approach
-3. React only supports properties and synthetic events
-4. StencilJS only supports properties
-5. Svelte components can be shared only using custom elements
-
+  <summary>More details</summary>
+  <ol>
+    <li>React does not support web elements until version 19</li>
+    <li>Only with separated / external packages - Not an unique-state-first approach</li>
+    <li>React only supports properties and synthetic events</li>
+    <li>StencilJS only supports properties</li>
+    <li>Svelte components can be shared only using custom elements</li>
+  </ol>
 </details>
 
 ## Getting Started
