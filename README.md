@@ -25,19 +25,30 @@
 | [Element internals](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals) support | ✅ | ❌ | ❌ | ❌ | ✅ |
 | Does not require extensions to be identified by the IDE | ✅ | ✅ | ✅ | ❌ | ✅ |
 | [Differentiation between attributes and properties in jsx / templates](#attributes-vs-properties-in-jsx) | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Standard Web Components | ✅ |  ⭕ | ✅ | ⭕ | ✅ |
-| Observables / stores support | ✅ | ⭕ | ⭕ | ⭕ | ❌ |
+| Standard Web Components | ✅ |  ⭕ <sup>1</sup> | ✅ | ✅ | ✅ |
+| Observables / stores support | ✅ | ⭕ <sup>2</sup> | ⭕ <sup>2</sup> | ⭕ <sup>2</sup> | ❌ |
 | [Esbuild](https://esbuild.github.io/)  as default bundler | ✅ | ❌ | ❌ | ❌ |❌ |
-| [TypeScript](https://www.typescriptlang.org) support | ✅ | ✅ | ✅ | ✅ | ⭕ |
+| [TypeScript](https://www.typescriptlang.org) support | ✅ | ✅ | ✅ | ✅ | ⭕<sup>2</sup> |
 | Reactive | ✅ | ✅ | ✅ | ✅ | ❌ |
 | Automatic component type generation | ✅ | ❌ | ✅ | ❌ | ❌ |
-| Attributes / Native events support | ✅ | ❌ | ⭕ | ✅ | ✅ |
+| Attributes / Native events support | ✅ | ❌ <sup>3</sup> | ⭕<sup>4</sup> | ✅ | ✅ |
 | Supports [Shadow DOM](https://developers.google.com/web/fundamentals/web-components/shadowdom) | ✅ | ❌ | ✅ | ✅ | ✅ |
 | Supports Custom Built-in elements | ✅ | ❌ | ❌ | ✅ | ✅ |
-| Can be used with different frameworks right out of the box | ✅ | ❌ | ✅ | ⭕ | ✅ |
+| Can be used with different frameworks right out of the box | ✅ | ❌ | ✅ | ⭕<sup>5</sup> | ✅ |
 | ✅ = implemented
 | ⭕ = partially implemented
 | ❌ = not implemented
+
+<details>
+<summary>More details</summary>
+
+1. React does not support web elements until version 19
+2. Only with separated / external packages - Not an unique-state-first approach
+3. React only supports properties and synthetic events
+4. StencilJS only supports properties
+5. Svelte components can be shared only using custom elements
+
+</details>
 
 ## Getting Started
 
