@@ -18,6 +18,8 @@
 |  | MichiJS  |  React  |  StencilJS  | SvelteJS | VanillaJS |
 |--|--|--|--|--|--|
 | Prefer real DOM over virtual DOM | ✅ | ❌ | ❌ | ✅ | ✅ |
+| Dynamic Constructable Stylesheets support | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Styling / Constructable Stylesheets support | ✅ | ❌ | ✅ | ❌ | ✅ |
 | Prefer Javascript templates over compiled plain text | ✅ | ✅ | ✅ | ❌ | ✅ |
 | Templates with [JSX](https://es.reactjs.org/docs/introducing-jsx.html) | ✅ | ✅ | ✅ | ❌ | ❌ |
 | [Element internals](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals) support | ✅ | ❌ | ❌ | ❌ | ✅ |
@@ -28,9 +30,7 @@
 | [Esbuild](https://esbuild.github.io/)  as default bundler | ✅ | ❌ | ❌ | ❌ |❌ |
 | [TypeScript](https://www.typescriptlang.org) support | ✅ | ✅ | ✅ | ✅ | ⭕ |
 | Reactive | ✅ | ✅ | ✅ | ✅ | ❌ |
-| Styling / Constructable Stylesheets support | ✅ | ❌ | ✅ | ❌ | ✅ |
 | Automatic component type generation | ✅ | ❌ | ✅ | ❌ | ❌ |
-| Without polyfills | ✅ | ✅ | ❌ | ❌ | ✅ |
 | Attributes / Native events support | ✅ | ❌ | ⭕ | ✅ | ✅ |
 | Supports [Shadow DOM](https://developers.google.com/web/fundamentals/web-components/shadowdom) | ✅ | ❌ | ✅ | ✅ | ✅ |
 | Supports Custom Built-in elements | ✅ | ❌ | ❌ | ✅ | ✅ |
@@ -782,6 +782,9 @@ If you REALLY need polyfills i recommend you to read this topics:
 
 - https://www.webcomponents.org/polyfills
 - https://ungap.github.io
+
+### Built-in elements in Safari
+We provide partial support for Safari's built-in elements by emulating their behavior with a custom element, michi-generic-element. This is necessary to manage the element's lifecycle and support adoptedStyleSheets. However, the children of the built-in element may vary depending on the browser.
 
 ## Browser Support
 
