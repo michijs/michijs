@@ -253,6 +253,24 @@ A component consists of the following properties:
 
 If the extends field is not provided an [Autonomous custom element](https://developers.google.com/web/fundamentals/web-components/customelements#shadowdom) will be created.
 
+### Component lifecycle
+```mermaid
+stateDiagram-v2
+    [*] --> willConstruct
+    willConstruct --> didConstruct
+    didConstruct --> connected
+    connected --> willMount: Only the first time
+    willMount --> didMount
+    didMount --> disconnected
+    disconnected --> didUnmount
+    didUnmount --> [*]
+    disconnected --> connected: If element was moved
+    connected --> disconnected
+    didUnmount --> connected: If the element was in caché
+
+    willConstruct --> formAssociated: Only if formAssociated
+    formAssociated --> didConstruct
+```
 
 ## How this works?
 ### The problem with stores - the traditional approach
