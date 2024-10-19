@@ -272,6 +272,8 @@ stateDiagram-v2
     formAssociated --> didConstruct
 ```
 
+Callbacks can be called at almost any point of the lifecycle
+
 ## How this works?
 ### The problem with stores - the traditional approach
 Libraries traditional approach is usually based on stores.
