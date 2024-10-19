@@ -4,7 +4,6 @@ import {
   useComputedObserve,
 } from "@michijs/michijs";
 import { buttonStyle } from "./BuiltInButton.css";
-import { Slot } from "@michijs/michijs/michijs/components/Slot";
 
 export const BuiltInButton = createCustomElement("built-in-button", {
   extends: {
