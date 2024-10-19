@@ -34,7 +34,6 @@ export const BuiltInButton = createCustomElement("built-in-button", {
   render() {
     return (
       <Host onpointerup={() => this.counter(this.counter() + 1)}>
-        <Slot />
         <span slot="text">{this.counter}</span>
       </Host>
     );

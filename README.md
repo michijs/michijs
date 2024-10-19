@@ -815,7 +815,7 @@ If you REALLY need polyfills i recommend you to read this topics:
 - https://ungap.github.io
 
 ### Built-in elements in Safari
-We provide partial support for Safari's built-in elements by emulating their behavior with a custom element, michi-generic-element. This is necessary to manage the element's lifecycle and support adoptedStyleSheets. However, the children of the built-in element may vary depending on the browser.
+We provide partial support for Safari's built-in elements by emulating their behavior with a custom element, michi-generic-element. This is necessary to manage the element's lifecycle and support adoptedStyleSheets.
 
 ## Browser Support
 
