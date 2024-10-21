@@ -1,7 +1,7 @@
 import type { ObservableType } from "../types";
-import { useObserve } from "./useObserve";
+import { useObserveInternal } from "./useObserve";
 
-const observer = useObserve(document.title);
+const observer = useObserveInternal(document.title);
 
 observer.subscribe((newValue) => (document.title = newValue));
 

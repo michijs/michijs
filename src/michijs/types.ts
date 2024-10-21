@@ -420,8 +420,8 @@ export type ObservableType<Y, T = NonNullable<Y>> = IsAny<T> extends true
       ? ObservableArray<V>
       : [T] extends [Promise<infer V>]
         ? ObservableComplexObject<Promise<V>>
-        : [T] extends [Function]
-          ? Y
+        : [T] extends [(...args: infer A) => infer R]
+          ? (...args: A) => ObservableType<R>
           : [T] extends [Map<infer K, infer V>]
             ? ObservableMap<K, V>
             : [T] extends [Set<infer V>]

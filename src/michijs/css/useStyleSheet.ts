@@ -1,5 +1,5 @@
 import { useComputedObserve } from "../hooks/useComputedObserve";
-import { useObserve } from "../hooks/useObserve";
+import { useObserveInternal } from "../hooks/useObserve";
 import type {
   AnyObject,
   CSSObject,
@@ -133,7 +133,7 @@ export const useStyleSheet = ((
   cssObject: UseStyleSheetCallback<AnyObject> | CSSObject,
 ) => {
   if (typeof cssObject === "function" && !(cssObject instanceof ProxiedValue)) {
-    const tags = useObserve(new Set<string>());
+    const tags = useObserveInternal(new Set<string>());
     let styleSheet;
     return (tag) => {
       tags.add(tag);

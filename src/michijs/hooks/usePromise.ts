@@ -1,5 +1,5 @@
 import type { PromiseResult, usePromiseShouldWait } from "../types";
-import { useObserve } from "./useObserve";
+import { useObserveInternal } from "./useObserve";
 import { useWatch } from "./useWatch";
 
 /**
@@ -18,7 +18,7 @@ export const usePromise = <R>(
   let loading = false;
 
   const result = {
-    promise: useObserve(internalPromiseWithResolvers.promise),
+    promise: useObserveInternal(internalPromiseWithResolvers.promise),
     async recall() {
       if (!loading) {
         try {

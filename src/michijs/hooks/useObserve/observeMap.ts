@@ -1,4 +1,4 @@
-import { useObserve } from "../useObserve";
+import { useObserveInternal } from "../useObserve";
 import type { ObservableType, Subscription } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 import {
@@ -18,18 +18,19 @@ import { setObservableValue } from "../../utils/setObservableValue";
 export const observeMap = <E, T extends Map<any, E>>(
   item: T,
   initialObservers?: Subscription<T>[],
+  rootObservableCallback?: () => ObservableType<any>
 ) => {
   const newInitialObservers: Subscription<any>[] = [
     ...(initialObservers ?? []),
     () => newObservable.notifyCurrentValue(),
   ];
   const proxiedMap = cloneMap(item, (value) =>
-    useObserve(value, newInitialObservers),
+    useObserveInternal(value, newInitialObservers, rootObservableCallback),
   );
   const newObservable = new ProxiedValue<T>(proxiedMap as T, initialObservers);
   const proxy = new Proxy(newObservable, {
-    set: customObjectSet(newInitialObservers),
-    apply: customObjectApply(() => proxy, newInitialObservers),
+    set: customObjectSet(newInitialObservers, rootObservableCallback),
+    apply: customObjectApply(() => proxy, newInitialObservers, rootObservableCallback),
     get: (target, property) => {
       if (property in target) return Reflect.get(target, property);
       const targetProperty = Reflect.get(target.$value, property);
@@ -53,11 +54,13 @@ export const observeMap = <E, T extends Map<any, E>>(
                 oldValue,
                 newValue,
                 newInitialObservers,
+                rootObservableCallback
               );
             }
-            const observedItem = useObserve<object>(
+            const observedItem = useObserveInternal<object>(
               newValue,
               newInitialObservers,
+              rootObservableCallback
             );
             const result = bindedTargetProperty(key, observedItem);
             observedItem.notifyCurrentValue?.();

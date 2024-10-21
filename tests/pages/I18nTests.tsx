@@ -40,10 +40,7 @@ const I18nTests = createCustomElement("i18n-tests", {
         </select>
         <p>{t.dogBit}</p>
         <p>
-          {t.birthDay}{" "}
-          {translator.computedTranslation((lang) =>
-            new Date().toLocaleDateString(lang),
-          )}
+          {t.birthDay(new Date(1997, 20, 2))}
         </p>
         {t.listTest}
       </>

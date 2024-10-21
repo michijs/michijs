@@ -23,7 +23,7 @@ import { setProperty } from "../DOM/attributes/setProperty";
 import { MappedIdGenerator } from "../classes/MappedIdGenerator";
 import { IdGenerator } from "../classes/IdGenerator";
 import { useComputedObserve } from "../hooks/useComputedObserve";
-import { useObserve } from "../hooks/useObserve";
+import { useObserveInternal } from "../hooks/useObserve";
 import { createBuiltInElement } from "../polyfill";
 
 let classesIdGenerator: undefined | IdGenerator;
@@ -144,7 +144,7 @@ export function createCustomElement<O extends MichiElementOptions>(
 
     fakeConstructor() {
       this.$michi = {
-        store: useObserve(storeInit),
+        store: useObserveInternal(storeInit),
         alreadyRendered: false,
         styles: {},
         idGen: undefined,

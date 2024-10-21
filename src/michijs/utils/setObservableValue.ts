@@ -1,6 +1,6 @@
 import { ProxiedValue, ProxiedArray } from "../classes/ProxiedValue";
-import { useObserve } from "../hooks/useObserve";
-import type { Subscription } from "../types";
+import { useObserveInternal } from "../hooks/useObserve";
+import type { ObservableType, Subscription } from "../types";
 
 // <T extends ObservableType<any>>
 export function setObservableValue<T extends object>(
@@ -8,6 +8,7 @@ export function setObservableValue<T extends object>(
   object2: any,
   // Intentional - this function should be only used on observe functions to avoid removing subscription to parents
   initialObservers?: Subscription<T>[],
+  rootObservableCallback?: () => ObservableType<any>,
 ): boolean {
   // null?.valueOf() is undefined - bug
   const object1Value = object1 ? object1.valueOf() : object1;
@@ -23,7 +24,7 @@ export function setObservableValue<T extends object>(
     return Reflect.set(
       object1,
       "$value",
-      useObserve<Object>(object2, initialObservers as Subscription<Object>[])
+      useObserveInternal<Object>(object2, initialObservers as Subscription<Object>[], rootObservableCallback)
         .$value,
     );
   }
@@ -36,9 +37,10 @@ export function setObservableValue<T extends object>(
         return Reflect.set(
           object1,
           "$value",
-          useObserve<Object>(
+          useObserveInternal<Object>(
             object2,
             initialObservers as Subscription<Object>[],
+            rootObservableCallback
           ).$value,
         );
 
@@ -53,9 +55,10 @@ export function setObservableValue<T extends object>(
         Reflect.set(
           object1,
           "$value",
-          useObserve<Object>(
+          useObserveInternal<Object>(
             object2,
             initialObservers as Subscription<Object>[],
+            rootObservableCallback
           ).$value,
         );
       ProxiedValue.endTransaction();

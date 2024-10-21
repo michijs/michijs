@@ -1,7 +1,7 @@
 import { CookieStorage } from "../classes/CookieStorage";
 import { ObservableFromEventListener } from "../classes/ObservableFromEventListener";
 import type { ObservableType } from "../types";
-import { useObserve } from "./useObserve";
+import { useObserveInternal } from "./useObserve";
 import { isNil } from "../utils/isNil";
 
 /**
@@ -24,7 +24,7 @@ export function useStorage<T extends object>(
       }
     else return item[key];
   }
-  const newObservable = useObserve<T>(
+  const newObservable = useObserveInternal<T>(
     Object.keys(item).reduce(
       (previousValue, key) => ({
         ...previousValue,

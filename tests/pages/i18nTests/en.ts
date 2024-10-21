@@ -1,7 +1,7 @@
 export default {
   language: "Language",
   dogBit: "The dog bit its owner",
-  birthDay: "My birthday is",
+  birthDay: (date: Date) => `My birthday is ${date.toLocaleDateString('en-uk')}`,
   "en-uk": "English",
   es: "Spanish",
   listTest: ["one", "two"],

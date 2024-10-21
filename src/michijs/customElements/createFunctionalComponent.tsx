@@ -1,4 +1,4 @@
-import { useObserve } from "../hooks/useObserve";
+import { useObserveInternal } from "../hooks/useObserve";
 import { isObservableType } from "../typeWards/isObservableType";
 import type {
   AnyObject,
@@ -20,9 +20,9 @@ export function createFunctionalComponent<
       (previousValue, [key, value]) => {
         if (key === "children") previousValue[key] = value;
         else if (isObservableType(value)) {
-          previousValue[key] = useObserve(unproxify(value));
+          previousValue[key] = useObserveInternal(unproxify(value));
           value.subscribe((newValue) => (previousValue[key] = newValue));
-        } else previousValue[key] = useObserve(value);
+        } else previousValue[key] = useObserveInternal(value);
         return previousValue;
       },
       {},

@@ -1,4 +1,4 @@
-import { useObserve } from "../useObserve";
+import { useObserveInternal } from "../useObserve";
 import type { ObservableType, Subscription } from "../../types";
 import {
   customObjectApply,
@@ -19,13 +19,14 @@ const mutableNewItemsProperties = new Set<
 export function observeArray<T extends Array<unknown>>(
   item: T,
   initialObservers: Subscription<T>[] | undefined,
+  rootObservableCallback?: () => ObservableType<any>
 ) {
   const newInitialObservers = [
     ...(initialObservers ?? []),
     () => newObservable.notifyCurrentValue(),
   ];
   const proxiedArray = cloneArray(item, (value) =>
-    useObserve<any>(value, newInitialObservers),
+    useObserveInternal<any>(value, newInitialObservers, rootObservableCallback),
   );
 
   const newObservable = new ProxiedArray<T>(
@@ -33,10 +34,10 @@ export function observeArray<T extends Array<unknown>>(
     initialObservers as Subscription<any[]>[],
   );
   const proxy = new Proxy(newObservable, {
-    set: customObjectSet(newInitialObservers),
+    set: customObjectSet(newInitialObservers, rootObservableCallback),
     deleteProperty: customObjectDelete,
     ownKeys: customObjectOwnKeys,
-    apply: customObjectApply(() => proxy, newInitialObservers),
+    apply: customObjectApply(() => proxy, newInitialObservers, rootObservableCallback),
     getOwnPropertyDescriptor(target, prop) {
       return prop !== "length"
         ? customObjectGetOwnPropertyDescriptor(target, prop)
@@ -51,7 +52,7 @@ export function observeArray<T extends Array<unknown>>(
           const targetProperty = Reflect.get(target, p) as Function;
           return (...args: T[]) => {
             const proxiedArray = args.map((value) =>
-              useObserve<any>(value, newInitialObservers),
+              useObserveInternal<any>(value, newInitialObservers, rootObservableCallback),
             );
             const result = targetProperty.apply(target, proxiedArray);
             return result;
@@ -61,7 +62,7 @@ export function observeArray<T extends Array<unknown>>(
           const targetProperty = Reflect.get(target, p) as Function;
           return (value, start, end) => {
             const result = targetProperty.apply(target, [
-              useObserve<any>(value, newInitialObservers),
+              useObserveInternal<any>(value, newInitialObservers, rootObservableCallback),
               start,
               end,
             ]);
@@ -74,13 +75,13 @@ export function observeArray<T extends Array<unknown>>(
             const result = targetProperty.apply(target, [
               start,
               deleteCount,
-              ...items.map((x) => useObserve<any>(x, newInitialObservers)),
+              ...items.map((x) => useObserveInternal<any>(x, newInitialObservers, rootObservableCallback)),
             ]);
             return result;
           };
         }
       }
-      return customObjectGet(newInitialObservers)(target, p, receiver);
+      return customObjectGet(newInitialObservers, rootObservableCallback)(target, p, receiver);
     },
   });
 

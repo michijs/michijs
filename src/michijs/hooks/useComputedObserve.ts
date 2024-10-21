@@ -1,4 +1,4 @@
-import { useObserve } from "./useObserve";
+import { useObserveInternal } from "./useObserve";
 import type {
   ObservableType,
   UseComputedObserveOptions,
@@ -26,7 +26,7 @@ export const useComputedObserve: UseComputedObserve = (
   deps,
   options,
 ) => {
-  const newObservable = useObserve(callback());
+  const newObservable = useObserveInternal(callback());
 
   const listener = () => {
     try {

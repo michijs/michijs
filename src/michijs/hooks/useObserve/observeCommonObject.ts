@@ -1,4 +1,4 @@
-import { useObserve } from "../useObserve";
+import { useObserveInternal } from "../useObserve";
 import type { ObservableType, Subscription } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 import { cloneCommonObject } from "../../utils/clone/cloneCommonObject";
@@ -15,6 +15,7 @@ import {
 export function observeCommonObject<T>(
   item: T,
   initialObservers?: Subscription<T>[],
+  rootObservableCallback?: () => ObservableType<any>
 ): ObservableType<T> {
   const newInitialObservers = [
     ...(initialObservers ?? []),
@@ -23,18 +24,18 @@ export function observeCommonObject<T>(
   const newObservable = new ProxiedValue<T>(
     item && Object.getPrototypeOf(item) === Object.prototype
       ? cloneCommonObject(item, (value) =>
-          useObserve<any>(value, newInitialObservers),
+          useObserveInternal<any>(value, newInitialObservers, rootObservableCallback),
         )
       : item,
     initialObservers,
   );
   const proxy = new Proxy(newObservable, {
-    set: customObjectSet(newInitialObservers),
+    set: customObjectSet(newInitialObservers, rootObservableCallback),
     deleteProperty: customObjectDelete,
-    apply: customObjectApply(() => proxy, newInitialObservers),
+    apply: customObjectApply(() => proxy, newInitialObservers, rootObservableCallback),
     ownKeys: customObjectOwnKeys,
     getOwnPropertyDescriptor: customObjectGetOwnPropertyDescriptor,
-    get: customObjectGet(newInitialObservers),
+    get: customObjectGet(newInitialObservers, rootObservableCallback),
     has: customObjectHas,
   }) as unknown as ObservableType<T>;
   return proxy;
