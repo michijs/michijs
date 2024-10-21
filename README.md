@@ -291,7 +291,7 @@ graph TD;
 ```
 This approach brings two major issues:
 - Any update on the store will trigger an update on a component even if the property that changed store has no relation to the component. Every tag / attribute / etc will need to be checked for changes in every rerender.
-- There is now way to set static properties in a dinamic environment. Take this React example:
+- There is now way to set static properties in a dynamic environment. Take this React example:
 ```tsx
 const [value, setValue] = useState(0);
 <input type="number" value={value} onChange={(e) => setValue(e.target.value)}>
@@ -316,7 +316,7 @@ sequenceDiagram
     end
     Subscriber->>Proxy: Subscribes to
     Environment->>Proxy: Request to change a value
-    Proxy-->>Value: Value is diferent?
+    Proxy-->>Value: Value is different?
     Value-->>Value: Yes! Update
     Value-->>Proxy: Sends a clone of the value
     Proxy->>Subscriber: Notifies with a signal (new value)
@@ -336,7 +336,7 @@ graph TD;
     B --> F["Another observable F"];
     C --> G["Text node G"];
 ```
-When a node is garbage collected in the next update will be unsubscribed.
+When a node is garbage collected, it will be unsubscribed in the next update.
 
 ### Rendering - Static vs dynamic
 Taking the above into account, the rendering process changes drastically. Instead of rendering the entire component with each change, __we render the component only once and the changes are managed through the observables__.
@@ -363,11 +363,11 @@ createCustomElement("test-component", {
         <button onpointerup={this.incrementValueB}>Increment B</button>
         {/* Renders 0, but is static */}
         <span>{this.valueA()}</span>
-        {/* Renders 1, but is dinamic and will change when clicking on the button */}
+        {/* Renders 1, but is dynamic and will change when clicking on the button */}
         <span>{this.valueB}</span>
         {/* Renders 1, but is static */}
         <span>{this.valueA() + this.valueB()}</span>
-        {/* Renders 1, but is dinamic and will change when clicking on the button */}
+        {/* Renders 1, but is dynamic and will change when clicking on the button */}
         <span>{sum}</span>
       </>
     );
