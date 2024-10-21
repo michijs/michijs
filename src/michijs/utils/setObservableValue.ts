@@ -24,8 +24,11 @@ export function setObservableValue<T extends object>(
     return Reflect.set(
       object1,
       "$value",
-      useObserveInternal<Object>(object2, initialObservers as Subscription<Object>[], rootObservableCallback)
-        .$value,
+      useObserveInternal<Object>(
+        object2,
+        initialObservers as Subscription<Object>[],
+        rootObservableCallback,
+      ).$value,
     );
   }
   switch (type) {
@@ -40,7 +43,7 @@ export function setObservableValue<T extends object>(
           useObserveInternal<Object>(
             object2,
             initialObservers as Subscription<Object>[],
-            rootObservableCallback
+            rootObservableCallback,
           ).$value,
         );
 
@@ -58,7 +61,7 @@ export function setObservableValue<T extends object>(
           useObserveInternal<Object>(
             object2,
             initialObservers as Subscription<Object>[],
-            rootObservableCallback
+            rootObservableCallback,
           ).$value,
         );
       ProxiedValue.endTransaction();

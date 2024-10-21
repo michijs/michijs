@@ -2,7 +2,7 @@ import { ProxiedValue } from "../classes/ProxiedValue";
 import type { ObservableOrConst, ObservableType, Subscription } from "../types";
 import { unproxify } from "../utils/unproxify";
 import { bindObservable } from "../utils/bindObservable";
-import { useAsyncComputedObserve, useComputedObserve } from "../hooks";
+import { useAsyncComputedObserve } from "../hooks";
 
 export type Translation<K extends string, T> = {
   [key in K]: T | (() => Promise<{ default: T }>) | (() => Promise<T>);
