@@ -287,16 +287,19 @@ graph TD;
     Store --> D["Component D"];
     Store --> E["Component E"];
     Store --> F["Component F"];
+    F --> H["Component H"];
+    F --> I["Component I"];
     Store --> G["Component G"];
 ```
-This approach brings two major issues:
+This approach brings three major issues:
 - Any update on the store will trigger an update on a component even if the property that changed store has no relation to the component. Every tag / attribute / etc will need to be checked for changes in every rerender.
+- Any update on a component will trigger an update on the children. Which might be unnecesary.
 - There is now way to set static properties in a dynamic environment. Take this React example:
 ```tsx
 const [value, setValue] = useState(0);
 <input type="number" value={value} onChange={(e) => setValue(e.target.value)}>
 ```
-In this example value is updated every time input changes; which, by definition, is wrong. Why? Because value *"Specifies the default value"*. This means that the value does not need to be updated after the first render, since it has no effect. *"But React says that you can use defaultValue!"* Yes, but it's not the standard way to do it and it's one of the most common mistakes most React developers make. All this, for not using the platform.
+In this example value is updated every time input changes; which, by definition, is wrong. Why? Because "value" *"Specifies the default value"*. This means that the value does not need to be updated after the first render, since it has no effect. *"But React says that you can use defaultValue!"* Yes, but it's not the standard way to do it and it's one of the most common mistakes most React developers make. All this, for not using the platform.
 
 With Michijs the solution is:
 ```tsx
@@ -833,19 +836,10 @@ If you REALLY need polyfills i recommend you to read this topics:
 We provide partial support for Safari's built-in elements by emulating their behavior with a custom element, michi-generic-element. This is necessary to manage the element's lifecycle and support adoptedStyleSheets.
 
 ## Browser Support
-
-### Customized built-in elements
-- https://www.chromestatus.com/feature/4670146924773376
-
-### Autonomous custom elements
-- https://www.chromestatus.com/feature/4696261944934400
-- https://www.webcomponents.org/
-
-### Compatibility with frameworks
-- https://custom-elements-everywhere.com
-
-### Element internals
-- https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/attachInternals
+- **Customized built-in elements**: [Chrome feature status](https://www.chromestatus.com/feature/4670146924773376)
+- **Autonomous custom elements**: [Chrome feature status](https://www.chromestatus.com/feature/4696261944934400) | [WebComponents.org](https://www.webcomponents.org/)
+- **Framework Compatibility**: [Custom Elements Everywhere](https://custom-elements-everywhere.com)
+- **Element internals**: [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/attachInternals)
 
 ## Supporting MichiJS
 ### Sponsors
