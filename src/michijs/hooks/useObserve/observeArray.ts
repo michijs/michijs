@@ -19,7 +19,7 @@ const mutableNewItemsProperties = new Set<
 export function observeArray<T extends Array<unknown>>(
   item: T,
   initialObservers: Subscription<T>[] | undefined,
-  rootObservableCallback?: () => ObservableType<any>
+  rootObservableCallback?: () => ObservableType<any>,
 ) {
   const newInitialObservers = [
     ...(initialObservers ?? []),
@@ -37,7 +37,11 @@ export function observeArray<T extends Array<unknown>>(
     set: customObjectSet(newInitialObservers, rootObservableCallback),
     deleteProperty: customObjectDelete,
     ownKeys: customObjectOwnKeys,
-    apply: customObjectApply(() => proxy, newInitialObservers, rootObservableCallback),
+    apply: customObjectApply(
+      () => proxy,
+      newInitialObservers,
+      rootObservableCallback,
+    ),
     getOwnPropertyDescriptor(target, prop) {
       return prop !== "length"
         ? customObjectGetOwnPropertyDescriptor(target, prop)
@@ -52,7 +56,11 @@ export function observeArray<T extends Array<unknown>>(
           const targetProperty = Reflect.get(target, p) as Function;
           return (...args: T[]) => {
             const proxiedArray = args.map((value) =>
-              useObserveInternal<any>(value, newInitialObservers, rootObservableCallback),
+              useObserveInternal<any>(
+                value,
+                newInitialObservers,
+                rootObservableCallback,
+              ),
             );
             const result = targetProperty.apply(target, proxiedArray);
             return result;
@@ -62,7 +70,11 @@ export function observeArray<T extends Array<unknown>>(
           const targetProperty = Reflect.get(target, p) as Function;
           return (value, start, end) => {
             const result = targetProperty.apply(target, [
-              useObserveInternal<any>(value, newInitialObservers, rootObservableCallback),
+              useObserveInternal<any>(
+                value,
+                newInitialObservers,
+                rootObservableCallback,
+              ),
               start,
               end,
             ]);
@@ -75,13 +87,23 @@ export function observeArray<T extends Array<unknown>>(
             const result = targetProperty.apply(target, [
               start,
               deleteCount,
-              ...items.map((x) => useObserveInternal<any>(x, newInitialObservers, rootObservableCallback)),
+              ...items.map((x) =>
+                useObserveInternal<any>(
+                  x,
+                  newInitialObservers,
+                  rootObservableCallback,
+                ),
+              ),
             ]);
             return result;
           };
         }
       }
-      return customObjectGet(newInitialObservers, rootObservableCallback)(target, p, receiver);
+      return customObjectGet(newInitialObservers, rootObservableCallback)(
+        target,
+        p,
+        receiver,
+      );
     },
   });
 
