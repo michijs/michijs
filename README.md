@@ -771,19 +771,30 @@ export default AsyncChildExample
 ```
 
 ## I18n
-It is supported by using a custom store
+It is supported using observables. By default, the desired languages are taken from the browser. If your code supports an exact match (e.g., "en-UK") or a general match (e.g., "en"), that language will be selected. Otherwise, it falls back to the default language (the first one in the list). The default language cannot be obtained asynchronously.
 ```tsx
-const translator = new I18n<'es' | 'en'>(localStorage.getItem('lang'));
+
+const { lang } = useStorage({
+  lang: navigator.language,
+});
+
+const translator = new I18n(["en-uk", "es"], lang);
 
 const t = translator.createTranslation({
-  es: () => import('./translations/es.json'),
-  en
+  "en-uk": {
+    dogBit: "The dog bit its owner",
+    birthDay: (date: Date) => `My birthday is ${date.toLocaleDateString('en-uk')}`,
+  },
+  es: () => import("./translations/es.json"),
 });
 
 export const MyComponent = createCustomElement('my-component', {
   render() {
     return (
-      <span>{t.hello}</span>
+      <>
+        <p>{t.dogBit}</p>
+        <p>{t.birthDay(new Date(1997, 20, 2))}</p>
+      </>
     );
   }
 });
