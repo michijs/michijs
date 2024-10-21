@@ -18,7 +18,7 @@ import { cloneMap } from "../../utils/clone/cloneMap";
 export const observeSet = <E, T extends Set<E>>(
   item: T,
   initialObservers?: Subscription<T>[],
-  rootObservableCallback?: () => ObservableType<any>
+  rootObservableCallback?: () => ObservableType<any>,
 ): ObservableType<Set<E>> => {
   const newInitialObservers: Subscription<any>[] = [
     ...(initialObservers ?? []),
@@ -31,7 +31,11 @@ export const observeSet = <E, T extends Set<E>>(
   const newObservable = new ProxiedValue(proxiedSet, initialObservers);
   const proxy = new Proxy(newObservable, {
     set: customObjectSet(newInitialObservers, rootObservableCallback),
-    apply: customObjectApply(() => proxy, newInitialObservers, rootObservableCallback),
+    apply: customObjectApply(
+      () => proxy,
+      newInitialObservers,
+      rootObservableCallback,
+    ),
     get: (target, property) => {
       if (property in target) return Reflect.get(target, property);
 
@@ -61,7 +65,7 @@ export const observeSet = <E, T extends Set<E>>(
               const observedItem = useObserveInternal<E>(
                 newValueOf,
                 newInitialObservers,
-                rootObservableCallback
+                rootObservableCallback,
               );
               bindedTargetProperty(newValueOf, observedItem);
               // @ts-ignore
