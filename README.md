@@ -416,7 +416,9 @@ Responsible for observing changes on different types of values. Takes two argume
 - initialObservers: An array of initial observers of type Subscription<T>.
 This is the most basic hook and it is the basis of the entire component structure.
 
-If the item contains a function. It will return an observable that observes for changes in the object itself.
+If the item contains a function. It will return an observable that observes for changes in the object itself. 
+
+**A function in an observable should never mutate the observable.**
 
 #### usePureFunction
 It is used to create a memoized function that encapsulates the result of the provided callback function and updates it only when any of the dependencies change. Takes two arguments:

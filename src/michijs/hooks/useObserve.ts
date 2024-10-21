@@ -56,12 +56,6 @@ export function useObserveInternal<T>(
  * @param initialObservers An array of initial observers of type Subscription<T>.
  * @returns A new observable
  */
-/**
- * Responsible for observing changes on different types of values.
- * @param item The value to be observed.
- * @param initialObservers An array of initial observers of type Subscription<T>.
- * @returns A new observable
- */
 export function useObserve<T>(
   item?: T,
   initialObservers?: Subscription<T>[],

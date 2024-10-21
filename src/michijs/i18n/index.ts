@@ -12,6 +12,12 @@ export class I18n<K extends string = string> extends ProxiedValue<K> {
   private isUsingSystemLanguage = true;
   public supportedLanguages: K[];
 
+  /**
+   * It is supported using observables. By default, the desired languages are taken from the browser. If your code supports an exact match (e.g., "en-UK") or a general match (e.g., "en"), that language will be selected. Otherwise, it falls back to the default language (the first one in the list). The default language cannot be obtained asynchronously.
+   * @param supportedLanguages A list of supported languages - BCP 47
+   * @param language The selected language - can be an observable
+   * @param initialObservers An array of initial observers of type Subscription<T>.
+   */
   constructor(
     supportedLanguages: K[],
     language?: ObservableOrConst<string | undefined>,
