@@ -70,15 +70,6 @@ export class I18n<K extends string = string> extends ProxiedValue<K> {
     );
   }
 
-  computedTranslation(
-    callback: (language: K) => string,
-  ): ObservableType<string> {
-    return useComputedObserve<string>(
-      () => callback(this.currentLanguage as K),
-      [this],
-    );
-  }
-
   private getCurrentTranslation<T>(translation: Translation<K, T>): Promise<T> {
     return new Promise<T>((resolve) => {
       const value = translation[this.currentLanguage];
