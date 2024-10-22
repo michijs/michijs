@@ -18,7 +18,7 @@ import { setObservableValue } from "../../utils/setObservableValue";
 export const observeMap = <E, T extends Map<any, E>>(
   item: T,
   initialObservers?: Subscription<T>[],
-  rootObservableCallback?: () => ObservableType<any>
+  rootObservableCallback?: () => ObservableType<any>,
 ) => {
   const newInitialObservers: Subscription<any>[] = [
     ...(initialObservers ?? []),
@@ -30,7 +30,11 @@ export const observeMap = <E, T extends Map<any, E>>(
   const newObservable = new ProxiedValue<T>(proxiedMap as T, initialObservers);
   const proxy = new Proxy(newObservable, {
     set: customObjectSet(newInitialObservers, rootObservableCallback),
-    apply: customObjectApply(() => proxy, newInitialObservers, rootObservableCallback),
+    apply: customObjectApply(
+      () => proxy,
+      newInitialObservers,
+      rootObservableCallback,
+    ),
     get: (target, property) => {
       if (property in target) return Reflect.get(target, property);
       const targetProperty = Reflect.get(target.$value, property);
@@ -54,13 +58,13 @@ export const observeMap = <E, T extends Map<any, E>>(
                 oldValue,
                 newValue,
                 newInitialObservers,
-                rootObservableCallback
+                rootObservableCallback,
               );
             }
             const observedItem = useObserveInternal<object>(
               newValue,
               newInitialObservers,
-              rootObservableCallback
+              rootObservableCallback,
             );
             const result = bindedTargetProperty(key, observedItem);
             observedItem.notifyCurrentValue?.();
