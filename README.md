@@ -1,6 +1,6 @@
 <div align="center">
-  <img width="500px" src="https://raw.githubusercontent.com/michijs/art/main/logo-with-background-strait.png">
-  <p>A Vainilla Library for Web Components</p>
+  <img width="500px" alt="Michijs Logo" src="https://raw.githubusercontent.com/michijs/art/main/logo-with-background-strait.png">
+  <p>A lightweight vanilla JavaScript library for creating Web Components.</p>
 
   [![Open in Visual Studio Code][open-in-vscode]][open-in-vscode-url] 
   ![npm][version] 
@@ -8,7 +8,6 @@
   ![npm][npm-downloads] 
   ![npm][repo-size]
   ![npm][minzipped-size]
-  [![CodeQL](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/codeql-analysis.yml)
   [![Tests](https://github.com/michijs/michijs/actions/workflows/tests.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/tests.yml)
 
 </div>
