@@ -332,8 +332,9 @@ When a node is garbage collected, it will be unsubscribed in the next update.
 ### Rendering - Static vs Dynamic
 Taking the above into account, the rendering process changes drastically. Instead of rendering the entire component with each change, **we render the component only once, and the changes are managed through the observables**.
 
-For example:
-
+<details>
+  <summary><b>Example:</b></summary>
+  
 ```tsx
 import { createCustomElement, useComputedObserve } from "@michijs/michijs";
 
@@ -365,6 +366,8 @@ createCustomElement("test-component", {
   },
 });
 ```
+
+</details>
 
 ### Operators
 Since all observables are objects, operators work in a different way.
@@ -417,7 +420,9 @@ It is used to create a memoized function that encapsulates the result of the pro
 - **callback**: A function that returns a value of type T.
 - **deps**: An array of dependencies that the callback function depends on.
 
-**Example:**
+<details>
+  <summary><b>Example:</b></summary>
+
 ```tsx
 import { usePureFunction } from "@michijs/michijs";
 
@@ -427,6 +432,8 @@ console.log(sum(1, 2)); // Outputs 3
 console.log(sum(1, 2)); // Outputs 3 - without calling the callback - returning the cached value
 ```
 
+</details>
+
 #### useAsyncComputedObserve
 It is used for computing a value and observing its changes. Takes four arguments:
 - **callback**: A function that returns a promise of type T.
@@ -434,7 +441,9 @@ It is used for computing a value and observing its changes. Takes four arguments
 - **deps**: Dependencies to watch for changes.
 - **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions.
 
-**Example:**
+<details>
+  <summary><b>Example:</b></summary>
+  
 ```tsx
 import { useAsyncComputedObserve } from "@michijs/michijs";
 
@@ -451,13 +460,18 @@ const fetchData = useAsyncComputedObserve(
 );
 ```
 
+</details>
+
 #### useComputedObserve
 It is used for computing a value and observing its changes. Takes three arguments:
 - **callback**: A function that returns a value of type T.
 - **deps**: Dependencies to watch for changes.
 - **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions.
 
-**Example:**
+
+<details>
+  <summary><b>Example:</b></summary>
+  
 ```tsx
 import { useComputedObserve } from "@michijs/michijs";
 
@@ -472,22 +486,32 @@ const sum = useComputedObserve(() => a() + b(), [a, b], {
 console.log(sum()); // Outputs the computed sum
 ```
 
+</details>
+
 #### useStringTemplate
 It is used to create a string template by interpolating dynamic values.
 
-**Example:**
+
+<details>
+  <summary><b>Example:</b></summary>
+  
 ```tsx
   const a = useObserve(3);
   // Returns an observable with initial value 'Test 3' and subscribed to a
   const b = useStringTemplate`Test ${a}`;
 ```
 
+</details>
+
 #### useWatch
 A simple mechanism for watching dependencies and invoking a callback when any of them change. Takes two parameters:
 - **callback**: A function that returns a value of type T. This is the function that will be invoked when any dependency changes.
 - **deps**: Optional array of dependencies to watch for changes.
 
-**Example:**
+
+<details>
+  <summary><b>Example:</b></summary>
+  
 ```tsx
 import { useObserve, useWatch } from "@michijs/michijs";
 
@@ -501,6 +525,8 @@ useWatch(() => {
 count(1); // Outputs: Count has changed to: 1
 ```
 
+</details>
+
 #### useFetch
 Fetches data from a URL, parses the response as JSON, and allows managing the result as an observable. Takes three parameters:
 - **callback**: A function that returns the request options.
@@ -511,7 +537,10 @@ Fetches data from a URL, parses the response as JSON, and allows managing the re
 - **promise**: An observable representing the fetch promise.
 - **recall()**: A method to call the promise again, available after the first call.
 
-**Example:**
+
+<details>
+  <summary><b>Example:</b></summary>
+
 ```tsx
 import { useFetch } from "@michijs/michijs";
 
@@ -542,6 +571,8 @@ promise().then(data => {
 recall();
 ```
 
+</details>
+
 #### usePromise
 Uses a promise and allows managing the result as an observable. Takes two parameters:
 - **callback**: The operation that returns a promise.
@@ -554,7 +585,10 @@ Uses a promise and allows managing the result as an observable. Takes two parame
 <!-- > [!TIP] -->
 > You can also use `doPromise` for an imperative alternative.
 
-**Example:**
+
+<details>
+  <summary><b>Example:</b></summary>
+  
 ```tsx
 import { usePromise } from "@michijs/michijs";
 
@@ -571,13 +605,18 @@ promise().then(user => {
 recall();
 ```
 
+</details>
+
 ### Route management hooks
 #### useHash
 The `useHash` hook manages the hash portion of the URL, allowing you to observe and synchronize changes between the hash value and an observable state. This is particularly useful for single-page applications (SPAs) where routing is handled client-side. Parameters:
   
 **Returns**: An observable with keys of type `T` and boolean values. 
 
-**Example:**
+
+<details>
+  <summary><b>Example:</b></summary>
+  
 ```tsx
 import { useHash } from "@michijs/michijs";
 
@@ -588,12 +627,17 @@ const hashState = useHash<'#drawerOpened'>();
 hashState['#drawerOpened'](true);
 ```
 
+</details>
+
 #### useSearchParams
 Facilitates the management and observation of search parameters in the URL, providing a reactive way to handle changes and update the URL accordingly.
 
 **Returns**: An observable object containing the search parameters defined by the generic type `T`.
 
-**Example:**
+
+<details>
+  <summary><b>Example:</b></summary>
+  
 ```tsx
 import { useSearchParams } from "@michijs/michijs";
 
@@ -605,10 +649,15 @@ const searchParams = useSearchParams<{
 searchParams.textParam("Hello");
 ```
 
+</details>
+
 #### useTitle
 Allows to observe the document title. Do not use document.title use this hook instead
 
-**Example:**
+
+<details>
+  <summary><b>Example:</b></summary>
+  
 ```tsx
 import { useTitle } from "@michijs/michijs";
 
@@ -616,6 +665,8 @@ const title = useTitle();
 
 title('test')
 ```
+
+</details>
 
 ### Storage hooks
 #### useStorage
@@ -626,7 +677,10 @@ Allows for observing changes in an object and synchronizing it with the browser'
 <!-- > [!TIP] -->
 > If you want to use cookies we provide a class that acts like an storage called CookieStorage
 
-**Example:**
+
+<details>
+  <summary><b>Example:</b></summary>
+  
 ```tsx
 const { lang } = useStorage({
   // Default value
@@ -634,13 +688,18 @@ const { lang } = useStorage({
 });
 ```
 
+</details>
+
 #### useIndexedDB
 It sets up event listeners for changes in the IndexedDB database. It returns a Proxy object that intercepts property accesses and performs corresponding IndexedDB operations. IndexedDB operations are performed asynchronously and return Promises. Takes three arguments:
 - **name**: Specifies the name of the IndexedDB database to be used or created.
 - **objectsStore**: Is a generic type that describes the structure of the object stores. It's defined as an object where each key represents the name of a property in the stored objects, and the value represents the configuration options for that property.
 - **version**: (Optional) specifies the version number of the IndexedDB database. If the database with the specified name already exists and its version is lower than the provided version, it will perform any necessary upgrades.
 
-**Example:**
+
+<details>
+  <summary><b>Example:</b></summary>
+  
 ```tsx
 const storedCount = useIndexedDB<{
   counter: {
@@ -669,6 +728,8 @@ function incrementCount() {
 }
 ```
 
+</details>
+
 ### CSS hooks
 To use css we provide functions to create Constructable Stylesheets.
 __Our stylesheets can also subscribe to observables.__
@@ -676,7 +737,10 @@ __Our stylesheets can also subscribe to observables.__
 #### useStyleSheet
 Allows to create a Constructable Stylesheet with a CSSObject.
 
-**Example:**
+
+<details>
+  <summary><b>Example:</b></summary>
+  
 ```tsx
 export const counterStyle = useStyleSheet({
   ':host': {
@@ -690,11 +754,16 @@ export const counterStyle = useStyleSheet({
 });
 ```
 
+</details>
+
 #### css
 Allows to create a Constructable Stylesheet with a Template String.
 [Recomended extension for VSCode](https://marketplace.visualstudio.com/items?itemName=paulmolluzzo.convert-css-in-js).
 
-**Example:**
+
+<details>
+  <summary><b>Example:</b></summary>
+  
 ```tsx
 export const counterStyle = css`
   :host {
@@ -709,10 +778,15 @@ export const counterStyle = css`
 `
 ```
 
+</details>
+
 #### useAnimation
 Generates CSS keyframes and animation properties based on the provided keyframes and options.
 
-**Example:**
+
+<details>
+  <summary><b>Example:</b></summary>
+  
 ```tsx
 const hiddenState = {
   opacity: 0,
@@ -741,10 +815,16 @@ export const dialogStyle = useStyleSheet((tag) => ({
   },
 }));
 ```
+
+</details>
+
 #### useTransition
 Hook to generate CSS transition properties based on the provided configuration.
 
-**Example:**
+
+<details>
+  <summary><b>Example:</b></summary>
+  
 ```tsx
 const opacityTransition = useTransition({
   property: ["opacity"],
@@ -763,6 +843,8 @@ export const dialogStyle = useStyleSheet((tag) => ({
   },
 }));
 ```
+
+</details>
 
 #### CSS module scripts
 We do not provide support for this functionality yet as ESBuild does not support it yet. You can read how it works [here](https://web.dev/css-module-scripts/)
@@ -911,6 +993,10 @@ This will generate an element like:
 ## Routing
 The intention of using a custom routing tool is to avoid the use of strings to represent the urls and to use modern apis that allow the use of the URL object itself. It also allows to separate the components of the routes which allows a cleaner code.
 
+
+<details>
+  <summary><b>Example:</b></summary>
+  
 ```tsx
 //Parent routes
 export const [urls, Router] = registerRoutes({
@@ -962,8 +1048,15 @@ const AsyncChildExample: FC = () => {
 export default AsyncChildExample
 ```
 
+</details>
+
 ## I18n
 It is supported using observables. By default, the desired languages are taken from the browser. If your code supports an exact match (e.g., "en-UK") or a general match (e.g., "en"), that language will be selected. Otherwise, it falls back to the default language (the first one in the list). The default language cannot be obtained asynchronously.
+
+
+<details>
+  <summary><b>Example:</b></summary>
+  
 ```tsx
 
 const { lang } = useStorage({
@@ -991,6 +1084,8 @@ export const MyComponent = createCustomElement('my-component', {
   }
 });
 ```
+
+</details>
 
 ## Limitations
 ### Observable objects
