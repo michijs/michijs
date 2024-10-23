@@ -60,13 +60,13 @@ type PromisableTypedIDBObjectStore<T extends AnyObject> = {
         | (ReturnType<TypedIDBObjectStore<T>[k]> extends IDBRequest<infer R>
             ? R
             : ReturnType<TypedIDBObjectStore<T>[k]>)
-        | null
+        | undefined
       >
     : Promise<TypedIDBObjectStore<T>[k]>;
 };
 
 type IndexeddbObservableResult<T extends AnyObject> = {
-  [k in keyof T]?: PromisableTypedIDBObjectStore<T[k]>;
+  [k in keyof T]: PromisableTypedIDBObjectStore<T[k]>;
 } & ObservableLike<keyof T>;
 
 function initDb<T extends AnyObject>(

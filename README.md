@@ -551,6 +551,9 @@ Uses a promise and allows managing the result as an observable. Takes two parame
 - **promise**: An observable representing the promise.
 - **recall()**: A method to call the promise again, available after the first call.
 
+<!-- > [!TIP] -->
+> You can also use `doPromise` for an imperative alternative.
+
 **Example:**
 ```tsx
 import { usePromise } from "@michijs/michijs";
@@ -617,17 +620,54 @@ title('test')
 ### Storage hooks
 #### useStorage
 Allows for observing changes in an object and synchronizing it with the browser's storage (such as localStorage). Takes two parameters:
-- item: The object to be observed and synchronized with storage.
-- storage: The storage object to be used (defaults to localStorage if not provided)
+- **item**: The object to be observed and synchronized with storage.
+- **storage**: (Optional) The storage object to be used, defaults to `localStorage`.
 
 <!-- > [!TIP] -->
 > If you want to use cookies we provide a class that acts like an storage called CookieStorage
 
+**Example:**
+```tsx
+const { lang } = useStorage({
+  // Default value
+  lang: navigator.language,
+});
+```
+
 #### useIndexedDB
 It sets up event listeners for changes in the IndexedDB database. It returns a Proxy object that intercepts property accesses and performs corresponding IndexedDB operations. IndexedDB operations are performed asynchronously and return Promises. Takes three arguments:
-- name Specifies the name of the IndexedDB database to be used or created.
-- objectsStore Is a generic type that describes the structure of the object stores. It's defined as an object where each key represents the name of a property in the stored objects, and the value represents the configuration options for that property.
-- version specifies the version number of the IndexedDB database. If the database with the specified name already exists and its version is lower than the provided version, it will perform any necessary upgrades.
+- **name**: Specifies the name of the IndexedDB database to be used or created.
+- **objectsStore**: Is a generic type that describes the structure of the object stores. It's defined as an object where each key represents the name of a property in the stored objects, and the value represents the configuration options for that property.
+- **version**: (Optional) specifies the version number of the IndexedDB database. If the database with the specified name already exists and its version is lower than the provided version, it will perform any necessary upgrades.
+
+**Example:**
+```tsx
+const storedCount = useIndexedDB<{
+  counter: {
+    count: number;
+    id: number;
+  };
+}>("counter", {
+  counter: {
+    keyPath: "id",
+  },
+});
+
+const count = useAsyncComputedObserve(
+  async () => {
+    return (await storedCount.counter.get(1))?.count ?? 0;
+  },
+  (await storedCount.counter.get(1))?.count ?? 0,
+  [storedCount],
+);
+
+function decrementCount() {
+  storedCount.counter.put({ count: count() - 1, id: 1 });
+}
+function incrementCount() {
+  storedCount.counter.put({ count: count() + 1, id: 1 });
+}
+```
 
 ### CSS hooks
 To use css we provide functions to create Constructable Stylesheets.
@@ -649,6 +689,7 @@ export const counterStyle = useStyleSheet({
   }
 });
 ```
+
 #### css
 Allows to create a Constructable Stylesheet with a Template String.
 [Recomended extension for VSCode](https://marketplace.visualstudio.com/items?itemName=paulmolluzzo.convert-css-in-js).

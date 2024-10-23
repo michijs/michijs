@@ -20,17 +20,17 @@ const storedCount = useIndexedDB<{
 
 const count = useAsyncComputedObserve(
   async () => {
-    return (await storedCount.counter?.get(1))?.count ?? 0;
+    return (await storedCount.counter.get(1))?.count ?? 0;
   },
-  (await storedCount.counter?.get(1))?.count ?? 0,
+  (await storedCount.counter.get(1))?.count ?? 0,
   [storedCount],
 );
 
 function decrementCount() {
-  storedCount.counter?.put({ count: count() - 1, id: 1 });
+  storedCount.counter.put({ count: count() - 1, id: 1 });
 }
 function incrementCount() {
-  storedCount.counter?.put({ count: count() + 1, id: 1 });
+  storedCount.counter.put({ count: count() + 1, id: 1 });
 }
 
 export const IndexedDBCounter = createCustomElement("indexed-db-counter", {
