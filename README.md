@@ -532,7 +532,7 @@ const { promise, recall } = useFetch(async () => {
 }, [validationProps, ...(shouldWait ?? [])], {});
 
 // Example usage of the promise
-promise.then(data => {
+promise().then(data => {
   console.log(data); // Outputs the fetched data
 }).catch(error => {
   console.error(error);
