@@ -940,7 +940,7 @@ This will generate an element like:
 ```
 
 ### The dynamic way - Using List component
-It is a component that avoids using dom diff algorithms to render dynamic lists. This allows it to have a performance close to vanilla js. An operation on the data implies an operation on the associated elements. 
+It is a component that avoids using dom diff algorithms to render dynamic lists. This allows it to have a performance close to vanilla js. Operations on the array trigger corresponding changes in the DOM elements, making it ideal for dynamic lists.
 ```tsx
 const arrayTest = useObserve([0, 1, 2]);
 
@@ -991,8 +991,7 @@ This will generate an element like:
 </table>
 
 ## Routing
-The intention of using a custom routing tool is to avoid the use of strings to represent the urls and to use modern apis that allow the use of the URL object itself. It also allows to separate the components of the routes which allows a cleaner code.
-
+The custom routing tool avoids using strings to represent URLs and instead utilizes modern APIs like the `URL` object. It also allows separating route components, promoting cleaner code.
 
 <details>
   <summary><b>Example:</b></summary>
@@ -1026,7 +1025,7 @@ const generatedUrl = urlsChild.asyncChildRoute({
   hash: '#hash1' 
 })
 ```
-Router and RouterChild are components that represent the mount points of each registered route.
+Router and RouterChild are components representing the mount points for each registered route.
 
 ```tsx
 const AsyncChildExample: FC = () => {
@@ -1051,8 +1050,7 @@ export default AsyncChildExample
 </details>
 
 ## I18n
-It is supported using observables. By default, the desired languages are taken from the browser. If your code supports an exact match (e.g., "en-UK") or a general match (e.g., "en"), that language will be selected. Otherwise, it falls back to the default language (the first one in the list). The default language cannot be obtained asynchronously.
-
+Internationalization (i18n) is supported through observables. By default, the desired languages are inferred from the browser settings. If your code supports an exact match (e.g., "en-UK") or a general match (e.g., "en"), that language will be selected. Otherwise, it falls back to the default language, which is the first one in the list. The default language cannot be obtained asynchronously.
 
 <details>
   <summary><b>Example:</b></summary>
