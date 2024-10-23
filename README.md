@@ -533,7 +533,7 @@ Fetches data from a URL, parses the response as JSON, and allows managing the re
 - **shouldWait**: An optional array of promises that should resolve before executing the fetch.
 - **options**: Additional options for the fetch operation.
 
-**Returns**: An object of type `FetchResult<R>`, which includes:
+Returns: An object of type `FetchResult<R>`, which includes:
 - **promise**: An observable representing the fetch promise.
 - **recall()**: A method to call the promise again, available after the first call.
 
@@ -578,7 +578,7 @@ Uses a promise and allows managing the result as an observable. Takes two parame
 - **callback**: The operation that returns a promise.
 - **shouldWait**: An optional array of promises that should resolve before executing the promise.
 
-**Returns**: A `PromiseResult` object, which includes:
+Returns: A `PromiseResult` object, which includes:
 - **promise**: An observable representing the promise.
 - **recall()**: A method to call the promise again, available after the first call.
 
@@ -611,7 +611,7 @@ recall();
 #### useHash
 The `useHash` hook manages the hash portion of the URL, allowing you to observe and synchronize changes between the hash value and an observable state. This is particularly useful for single-page applications (SPAs) where routing is handled client-side. Parameters:
   
-**Returns**: An observable with keys of type `T` and boolean values. 
+Returns: An observable with keys of type `T` and boolean values. 
 
 
 <details>
@@ -632,7 +632,7 @@ hashState['#drawerOpened'](true);
 #### useSearchParams
 Facilitates the management and observation of search parameters in the URL, providing a reactive way to handle changes and update the URL accordingly.
 
-**Returns**: An observable object containing the search parameters defined by the generic type `T`.
+Returns: An observable object containing the search parameters defined by the generic type `T`.
 
 
 <details>
