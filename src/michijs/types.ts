@@ -768,7 +768,7 @@ export interface Lifecycle {
   /**This method is called after a component is removed from the DOM. */
   didUnmount?(): void;
   /**This method is called before a component does anything with an attribute. */
-  willReceiveAttribute?(
+  willReceiveAttributeCallback?(
     name: string,
     newValue: unknown,
     oldValue: unknown,

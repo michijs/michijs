@@ -12,46 +12,48 @@
 
 </div>
 
-## Why "MichiJS?"
+## Why *MichiJS*?
 
-|  | MichiJS  |  React  |  StencilJS  | SvelteJS | VanillaJS |
-|--|--|--|--|--|--|
-| Prefer real DOM over virtual DOM | ✅ | ❌ | ❌ | ✅ | ✅ |
-| Dynamic Constructable Stylesheets support | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Styling / Constructable Stylesheets support | ✅ | ❌ | ✅ | ❌ | ✅ |
-| Prefer Javascript templates over compiled plain text | ✅ | ✅ | ✅ | ❌ | ✅ |
-| Templates with [JSX](https://es.reactjs.org/docs/introducing-jsx.html) | ✅ | ✅ | ✅ | ❌ | ❌ |
-| [Element internals](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals) support | ✅ | ❌ | ❌ | ❌ | ✅ |
-| Does not require extensions to be identified by the IDE | ✅ | ✅ | ✅ | ❌ | ✅ |
-| [Differentiation between attributes and properties in jsx / templates](#attributes-vs-properties-in-jsx) | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Standard Web Components | ✅ |  ⭕ <sup>1</sup> | ✅ | ✅ | ✅ |
-| Observables / stores support | ✅ | ⭕ <sup>2</sup> | ⭕ <sup>2</sup> | ⭕ <sup>2</sup> | ❌ |
-| [Esbuild](https://esbuild.github.io/)  as default bundler | ✅ | ❌ | ❌ | ❌ |❌ |
-| [TypeScript](https://www.typescriptlang.org) support | ✅ | ✅ | ✅ | ✅ | ⭕<sup>2</sup> |
-| Reactive | ✅ | ✅ | ✅ | ✅ | ❌ |
-| Automatic component type generation | ✅ | ❌ | ✅ | ❌ | ❌ |
-| Attributes / Native events support | ✅ | ❌ <sup>3</sup> | ⭕<sup>4</sup> | ✅ | ✅ |
-| Supports [Shadow DOM](https://developers.google.com/web/fundamentals/web-components/shadowdom) | ✅ | ❌ | ✅ | ✅ | ✅ |
-| Supports Custom Built-in elements | ✅ | ❌ | ❌ | ✅ | ✅ |
-| Can be used with different frameworks right out of the box | ✅ | ❌ | ✅ | ⭕<sup>5</sup> | ✅ |
-| ✅ = implemented
-| ⭕ = partially implemented
-| ❌ = not implemented
+| Feature | MichiJS | React | StencilJS | SvelteJS | VueJS | VanillaJS |
+|--|--|--|--|--|--|--|
+| Real DOM preferred over virtual DOM | ✅ | ❌ | ❌ | ✅ | ❌ | ✅ |
+| Dynamic constructable stylesheets | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| General constructable stylesheets | ✅ | ❌ | ✅ | ❌ | ❌ | ✅ |
+| JavaScript templates preferred over compiled text | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ |
+| Templates with [JSX](https://es.reactjs.org/docs/introducing-jsx.html) | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| [Element internals](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals) support | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| IDE-friendly without special extensions | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ |
+| Attribute vs property distinction in JSX/templates | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Standard Web Components | ✅ | ⭕ <sup>1</sup> | ✅ | ✅ | ⭕ <sup>2</sup> | ✅ |
+| Observables/stores support | ✅ | ⭕ <sup>3</sup> | ⭕ <sup>3</sup> | ⭕ <sup>3</sup> | ⭕ <sup>3</sup> | ❌ |
+| [Esbuild](https://esbuild.github.io/) as default bundler | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| [TypeScript](https://www.typescriptlang.org) support | ✅ | ✅ | ✅ | ✅ | ✅ | ⭕ <sup>3</sup> |
+| Reactive programming | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Automatic component type generation | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| Native attributes/events support | ✅ | ❌ <sup>4</sup> | ⭕ <sup>5</sup> | ✅ | ✅ | ✅ |
+| [Shadow DOM](https://developers.google.com/web/fundamentals/web-components/shadowdom) support | ✅ | ❌ | ✅ | ✅ | ❌ | ✅ |
+| Custom built-in elements support | ✅ | ❌ | ❌ | ✅ | ❌ | ✅ |
+| Cross-framework compatibility | ✅ | ❌ | ✅ | ⭕ <sup>6</sup> | ❌ | ✅ |
+
+✅ = Fully implemented  
+⭕ = Partially implemented  
+❌ = Not implemented
 
 <details>
   <summary>More details</summary>
   <ol>
-    <li>React does not support web elements until version 19</li>
-    <li>Only with separated / external packages - Not an unique-state-first approach</li>
-    <li>React only supports properties and synthetic events</li>
-    <li>StencilJS only supports properties</li>
-    <li>Svelte components can be shared only using custom elements</li>
+    <li>React supports Web Components starting from version 19.</li>
+    <li>Vue has partial support for Web Components, but usage requires workarounds or third-party packages.</li>
+    <li>Requires external packages, not a unique-state-first approach.</li>
+    <li>React only supports properties and synthetic events.</li>
+    <li>StencilJS supports only properties.</li>
+    <li>Svelte components can be shared only through custom elements.</li>
   </ol>
 </details>
 
 ## Getting Started
 
-You can use [this template](https://github.com/michijs/michijs-template) or you can see on [Code Sandbox](https://githubbox.com/michijs/michijs-storybook-template/tree/master).
+You can start by using [this template](https://github.com/michijs/michijs-template) to quickly set up your project. Alternatively, you can explore the [Code Sandbox](https://githubbox.com/michijs/michijs-storybook-template/tree/master) version for a hands-on example.
   
 ## Creating components
 
@@ -103,14 +105,14 @@ import '../Counter';
 <my-counter oncountchanged={(ev) => console.log(`New count value: ${ev.detail}`)} />
 ```
 
-Or if you are using jsx
+Or if you are using JSX
 ```tsx
 import Counter from '../Counter';
 
 <Counter oncountchanged={(ev) => console.log(`New count value: ${ev.detail}`)} />
 ```
 
-### Component structure
+### Component Structure
 A component consists of the following properties:
 
 <table>
@@ -123,12 +125,11 @@ A component consists of the following properties:
   <tbody>
     <tr>
       <td>attributes</td>
-      <td colspan="3">Allows to define attributes.</td>
+      <td colspan="3">Allows defining attributes.</td>
     </tr>
     <tr>
       <td>reflectedAttributes</td>
-      <td colspan="3">Allows to define <a href="https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr">reflected attributes</a> and follows the Kebab case. A reflected attribute cannot be initialized with a true value
-      </td>
+      <td colspan="3">Allows defining <a href="https://developers.google.com/web/fundamentals/web-components/customelements#reflectattr">reflected attributes</a> and follows the Kebab case. A reflected attribute cannot be initialized with a true value.</td>
     </tr>
     <tr>
       <td>methods</td>
@@ -136,19 +137,19 @@ A component consists of the following properties:
     </tr>
     <tr>
       <td>adoptedStyleSheets</td>
-      <td colspan="3">Allows to use <a href="https://developers.google.com/web/updates/2019/02/constructable-stylesheets">Constructable Stylesheets.</a> Remember that you need to use Shadow DOM to be able to use Constructable Stylesheets. In case your component doesn't support this feature, it will return a style tag.</td>
+      <td colspan="3">Allows using <a href="https://developers.google.com/web/updates/2019/02/constructable-stylesheets">Constructable Stylesheets</a>. Remember that you need to use Shadow DOM to utilize Constructable Stylesheets; otherwise, it will return a style tag.</td>
     </tr>
     <tr>
       <td>cssVariables</td>
-      <td colspan="3">Allows to define CSS variables.</td>
+      <td colspan="3">Allows defining CSS variables.</td>
     </tr>
     <tr>
       <td>reflectedCssVariables</td>
-      <td colspan="3">Allows to define reflected CSS variables and follows the Kebab case. A reflected CSS variable cannot be initialized with a true value</td>
+      <td colspan="3">Allows defining reflected CSS variables and follows the Kebab case. A reflected CSS variable cannot be initialized with a true value.</td>
     </tr>
     <tr>
       <td>computedStyleSheet</td>
-      <td colspan="3">Allows you to define a Constructable Stylesheet that depend on the state of the component. When there is no shadow root the style will be reflected in the style attribute.</td>
+      <td colspan="3">Allows defining a Constructable Stylesheet that depends on the component's state. When there is no shadow root, the style will be reflected in the style attribute.</td>
     </tr>
     <tr>
       <td>render</td>
@@ -160,11 +161,11 @@ A component consists of the following properties:
         <td rowspan="9">Custom Element related</td>
         <tr>
           <td>willConstruct</td>
-          <td>This method is called at the start of constructor.</td>
+          <td>This method is called at the start of the constructor.</td>
         </tr>
         <tr>
           <td>didConstruct</td>
-          <td>This method is called at the end of constructor.</td>
+          <td>This method is called at the end of the constructor.</td>
         </tr>
         <tr>
           <td>connected</td>
@@ -179,7 +180,7 @@ A component consists of the following properties:
           <td>This method is called after the component has mounted.</td>
         </tr>
         <tr>
-          <td>willReceiveAttribute</td>
+          <td>willReceiveAttributeCallback</td>
           <td>This method is called before a component does anything with an attribute.</td>
         </tr>
         <tr>
@@ -195,41 +196,29 @@ A component consists of the following properties:
         <td rowspan="5">Form-associated Custom Element related</td>
         <tr>
           <td>formAssociatedCallback</td>
-          <td>Called when the browser associates the element with a form element, or disassociates the element from a form element.</td>
+          <td>Called when the browser associates the element with a form element or disassociates the element from a form element.</td>
         </tr>
         <tr>
           <td>formDisabledCallback</td>
-          <td>Called after the disabled state of the element changes, either because the disabled attribute of this element was added or removed; 
-      or because the disabled state changed on a fieldset that's an ancestor of this element. The disabled parameter represents the new disabled state of the element. The element may, for example, disable elements in its shadow DOM when it is disabled.</td>
+          <td>Called after the disabled state of the element changes, either because the disabled attribute of this element was added or removed; or because the disabled state changed on a fieldset that's an ancestor of this element. The disabled parameter represents the new disabled state of the element. The element may disable elements in its shadow DOM when it is disabled.</td>
         </tr>
         <tr>
           <td>formResetCallback</td>
-          <td>Called after the form is reset. The element should reset itself to some kind of default state. For input elements, this usually involves setting the value property to match the value attribute set in markup (or in the case of a checkbox, setting the checked property to match the checked attribute.</td>
+          <td>Called after the form is reset. The element should reset itself to some kind of default state. For input elements, this usually involves setting the value property to match the value attribute set in markup (or, in the case of a checkbox, setting the checked property to match the checked attribute).</td>
         </tr>
         <tr>
           <td>formStateRestoreCallback</td>
-          <td>
-          Called in one of two circumstances:
-            <ul>
-              <li>
-              When the browser restores the state of the element (for example,after a navigation, or when the browser restarts). The mode argument is "restore" in this case.
-              </li>
-              <li>
-              When the browser's input-assist features such as form autofilling sets a value. The mode argument is "autocomplete" in this case.
-              </li>
-            </ul>
-            The type of the first argument depends on how the setFormValue() method was called. 
-          </td>
+          <td>Called in one of two circumstances: when the browser restores the state of the element (for example, after a navigation, or when the browser restarts) or when the browser's input-assist features such as form autofilling sets a value. The type of the first argument depends on how the setFormValue() method was called.</td>
         </tr>
       </tr>
     </tr>
     <tr>
       <td>events</td>
-      <td colspan="3">Allows you to define an <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events">event</a> to his parent and triggering it easily. It will be defined using Lower case. For example countChanged will be registered as countchanged.</td>
+      <td colspan="3">Allows you to define an <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events">event</a> to its parent and trigger it easily. It will be defined using lowercase. For example, countChanged will be registered as countchanged.</td>
     </tr>
     <tr>
       <td>shadow</td>
-      <td colspan="3">Allows you to add a Shadow DOM. By default, it uses open mode on Autonomous Custom elements and does not use Shadow DOM on Customized built-in elements. Only <a href="https://dom.spec.whatwg.org/#dom-element-attachshadow">this elements</a> are allowed to use Shadow DOM.</td>
+      <td colspan="3">Allows you to add a Shadow DOM. By default, it uses open mode on Autonomous Custom elements and does not use Shadow DOM on Customized built-in elements. Only <a href="https://dom.spec.whatwg.org/#dom-element-attachshadow">these elements</a> are allowed to use Shadow DOM.</td>
     </tr>
     <tr>
       <td>formAssociated</td>
@@ -237,14 +226,14 @@ A component consists of the following properties:
     </tr>
     <tr>
       <td rowspan="3">extends</td>
-      <td rowspan="3">Allows to create a <a href ="https://developers.google.com/web/fundamentals/web-components/customelements#extendhtml">Customized built-in element</a></td>
+      <td rowspan="3">Allows creating a <a href ="https://developers.google.com/web/fundamentals/web-components/customelements#extendhtml">Customized built-in element</a>.</td>
       <tr>
         <td>tag</td>
-        <td colspan="3">The tag to extend</td>
+        <td colspan="3">The tag to extend.</td>
       </tr>
       <tr>
         <td>class</td>
-        <td colspan="3">The class you want to extend</td>
+        <td colspan="3">The class you want to extend.</td>
       </tr>
     </tr>
   </tbody>
@@ -252,7 +241,7 @@ A component consists of the following properties:
 
 If the extends field is not provided an [Autonomous custom element](https://developers.google.com/web/fundamentals/web-components/customelements#shadowdom) will be created.
 
-### Component lifecycle
+### Component Lifecycle
 ```mermaid
 stateDiagram-v2
     [*] --> willConstruct
@@ -265,7 +254,7 @@ stateDiagram-v2
     didUnmount --> [*]
     disconnected --> connected: If element was moved
     connected --> disconnected
-    didUnmount --> connected: If the element was in caché
+    didUnmount --> connected: If the element was cached
 
     willConstruct --> formAssociated: Only if formAssociated
     formAssociated --> didConstruct
@@ -273,7 +262,7 @@ stateDiagram-v2
 
 Callbacks can be called at almost any point of the lifecycle
 
-## How this works?
+## How This Works?
 ### The problem with stores - the traditional approach
 Libraries traditional approach is usually based on stores.
 ```mermaid
@@ -291,20 +280,20 @@ graph TD;
     Store --> G["Component G"];
 ```
 This approach brings three major issues:
-- Any update on the store will trigger an update on a component even if the property that changed store has no relation to the component. Every tag / attribute / etc will need to be checked for changes in every rerender.
-- Any update on a component will trigger an update on the children. Which might be unnecesary.
-- There is now way to set static properties in a dynamic environment. Take this React example:
+- Any update on the store will trigger an update on a component, even if the property that changed in the store has no relation to the component. Every tag, attribute, etc., will need to be checked for changes in every re-render.
+- Any update on a component will trigger an update on the children, which might be unnecessary.
+- There is no way to set static properties in a dynamic environment. Take this React example:
 ```tsx
 const [value, setValue] = useState(0);
-<input type="number" value={value} onChange={(e) => setValue(e.target.value)}>
+<input type="number" value={value} onChange={(e) => setValue(e.target.value)}/>
 ```
-In this example value is updated every time input changes; which, by definition, is wrong. Why? Because "value" *"Specifies the default value"*. This means that the value does not need to be updated after the first render, since it has no effect. *"But React says that you can use defaultValue!"* Yes, but it's not the standard way to do it and it's one of the most common mistakes most React developers make. All this, for not using the platform.
+In this example, the value is updated every time the input changes, which, by definition, is incorrect. Why? Because "value" *"Specifies the default value"*. This means that the value does not need to be updated after the first render since it has no effect. *"But React says that you can use defaultValue!"* Yes, but it's not the standard way to do it and it's one of the most common mistakes most React developers make. All this is due to not using the platform.
 
 With Michijs the solution is:
 ```tsx
 const value = useObserve(0);
 
-<input type="number" value={value()} onchange={(e) => value(e.target.value)}>
+<input type="number" value={value()} onchange={(e) => value(e.target.value)}/>
 ```
 
 ### Observers / Signals
@@ -324,7 +313,7 @@ sequenceDiagram
     Proxy->>Subscriber: Notifies with a signal (new value)
 ```
 
-This approach allows for a much more granular update. Instead of updating an entire component, you can update html elements, attributes, or a simple text node and still maintain the principle of a single source of truth.
+This approach allows for much more granular updates. Instead of updating an entire component, you can update HTML elements, attributes, or a simple text node and still maintain the principle of a single source of truth.
 
 ```mermaid
 graph TD;
@@ -340,8 +329,8 @@ graph TD;
 ```
 When a node is garbage collected, it will be unsubscribed in the next update.
 
-### Rendering - Static vs dynamic
-Taking the above into account, the rendering process changes drastically. Instead of rendering the entire component with each change, __we render the component only once and the changes are managed through the observables__.
+### Rendering - Static vs Dynamic
+Taking the above into account, the rendering process changes drastically. Instead of rendering the entire component with each change, **we render the component only once, and the changes are managed through the observables**.
 
 For example:
 
@@ -359,7 +348,7 @@ createCustomElement("test-component", {
     },
   },
   render() {
-    const sum = useComputedObserve(() => this.valueA() + this.valueB(), [this.valueA, this.valueB])
+    const sum = useComputedObserve(() => this.valueA() + this.valueB(), [this.valueA, this.valueB]);
     return (
       <>
         <button onpointerup={this.incrementValueB}>Increment B</button>
@@ -378,7 +367,7 @@ createCustomElement("test-component", {
 ```
 
 ### Operators
-Since all observables are objects, operators works in a different way.
+Since all observables are objects, operators work in a different way.
 We support most operators without explicitly calling the getter of the observable.
 
 ```tsx
@@ -399,49 +388,94 @@ We do not support boolean operators since proxies are objects:
   const a = useObserve(false);
   // Valid - Returns 2
   const b = a() ? 1: 2;
-  // Valid but wrong usage - Returns 1 since "a" is an object
+  // Valid but wrong usage - Returns 1 since "a" is an object and evaluates "true"
   const b = a ? 1: 2;
 ```
 
 ## Hooks
 There are several differences between our hooks and traditional ones:
 - Can be used in various contexts, including top-level script code, functional components, and custom hooks. This flexibility allows developers to encapsulate logic and state management using hooks in different parts of their application.
-- Most of them returns observables.
+- Most of them return observables.
 
-The ability to use hooks outside of component code can be beneficial for managing application-wide state, setting up global side effects, or encapsulating reusable logic in utility functions or modules.
+The ability to use hooks outside of component code can be beneficial for managing application-wide state, setting up global side effects, or encapsulating reusable logic in utility functions or modules.  
 It provides more flexibility in organizing code and separates concerns by allowing developers to centralize state management and side effects in hooks that can be reused across components or accessed from different parts of the application.
 
 ### Basic hooks
 #### useObserve
 Responsible for observing changes on different types of values. Takes two arguments:
-- item: The value to be observed.
-- initialObservers: An array of initial observers of type Subscription<T>.
+- **item**: The value to be observed.
+- **initialObservers**: An array of initial observers of type `Subscription<T>`.
+
 This is the most basic hook and it is the basis of the entire component structure.
 
-If the item contains a function. It will return an observable that observes for changes in the object itself. 
+If the item contains a function, it will return an observable that observes for changes in the object itself. 
 
 **A function in an observable should never mutate the observable.**
 
 #### usePureFunction
 It is used to create a memoized function that encapsulates the result of the provided callback function and updates it only when any of the dependencies change. Takes two arguments:
-- callback: A function that returns a value of type T.
-- deps: An array of dependencies that the callback function depends on.
+- **callback**: A function that returns a value of type T.
+- **deps**: An array of dependencies that the callback function depends on.
+
+**Example:**
+```tsx
+import { usePureFunction } from "@michijs/michijs";
+
+const sum = usePureFunction((a, b) => a + b, [a, b]);
+
+console.log(sum(1, 2)); // Outputs 3
+console.log(sum(1, 2)); // Outputs 3 - without calling the callback - returning the cached value
+```
 
 #### useAsyncComputedObserve
 It is used for computing a value and observing its changes. Takes four arguments:
-- callback: A function that returns a promise of type T.
-- initialValue: Initial value of type T.
-- deps: Dependencies to watch for changes.
-- options: Optional object that may contain onBeforeUpdate and onAfterUpdate callback functions.
+- **callback**: A function that returns a promise of type T.
+- **initialValue**: Initial value of type T.
+- **deps**: Dependencies to watch for changes.
+- **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions.
+
+**Example:**
+```tsx
+import { useAsyncComputedObserve } from "@michijs/michijs";
+
+const fetchData = useAsyncComputedObserve(
+  async () => {
+    const response = await fetch("https://api.example.com/data");
+    return response.json();
+  },
+  [], // Initial value
+  {
+    onBeforeUpdate: () => console.log("Fetching data..."),
+    onAfterUpdate: () => console.log("Data fetched:", fetchData()),
+  }
+);
+```
 
 #### useComputedObserve
 It is used for computing a value and observing its changes. Takes three arguments:
-- callback: A function that returns a value of type T.
-- deps: Dependencies to watch for changes.
-- options: Optional object that may contain onBeforeUpdate and onAfterUpdate callback functions.
+- **callback**: A function that returns a value of type T.
+- **deps**: Dependencies to watch for changes.
+- **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions.
+
+**Example:**
+```tsx
+import { useComputedObserve } from "@michijs/michijs";
+
+const a = useObserve(2);
+const b = useObserve(3);
+
+const sum = useComputedObserve(() => a() + b(), [a, b], {
+  onBeforeUpdate: () => console.log("Calculating sum..."),
+  onAfterUpdate: () => console.log("New sum:", sum()),
+});
+
+console.log(sum()); // Outputs the computed sum
+```
 
 #### useStringTemplate
 It is used to create a string template by interpolating dynamic values.
+
+**Example:**
 ```tsx
   const a = useObserve(3);
   // Returns an observable with initial value 'Test 3' and subscribed to a
@@ -450,31 +484,135 @@ It is used to create a string template by interpolating dynamic values.
 
 #### useWatch
 A simple mechanism for watching dependencies and invoking a callback when any of them change. Takes two parameters:
-- callback: A function that returns a value of type T. This is the function that will be invoked when any dependency changes.
-- deps: Optional array of dependencies to watch for changes.
+- **callback**: A function that returns a value of type T. This is the function that will be invoked when any dependency changes.
+- **deps**: Optional array of dependencies to watch for changes.
+
+**Example:**
+```tsx
+import { useObserve, useWatch } from "@michijs/michijs";
+
+const count = useObserve(0);
+
+useWatch(() => {
+  console.log(`Count has changed to: ${count()}`);
+}, [count]);
+
+// Simulating a change
+count(1); // Outputs: Count has changed to: 1
+```
 
 #### useFetch
-Fetches data from a URL, parses the response as JSON and allows to manage the result as an observable. Takes three parameters:
-- callback: The callback to get the options for the request
-- shouldWait: All the promises that should resolve before executing the promise.
-- options: Some additional options 
+Fetches data from a URL, parses the response as JSON, and allows managing the result as an observable. Takes three parameters:
+- **callback**: A function that returns the request options.
+- **shouldWait**: An optional array of promises that should resolve before executing the fetch.
+- **options**: Additional options for the fetch operation.
+
+**Returns**: An object of type `FetchResult<R>`, which includes:
+- **promise**: An observable representing the fetch promise.
+- **recall()**: A method to call the promise again, available after the first call.
+
+**Example:**
+```tsx
+import { useFetch } from "@michijs/michijs";
+
+const { promise, recall } = useFetch(async () => {
+  const token = tokenCookie.token();
+  const input = "/some/endpoint";
+  const searchParams = { query: "example" };
+  
+  return {
+    input: `https://api.github.com${input}`,
+    searchParams,
+    headers: {
+      Accept: "application/vnd.github+json",
+      Authorization: `${token!.type} ${token!.value}`,
+      "X-GitHub-Api-Version": "2022-11-28",
+    },
+  };
+}, [validationProps, ...(shouldWait ?? [])], {});
+
+// Example usage of the promise
+promise.then(data => {
+  console.log(data); // Outputs the fetched data
+}).catch(error => {
+  console.error(error);
+});
+
+// To call the promise again
+recall();
+```
 
 #### usePromise
-Ues a promise and allows to manage the result as an observable.
-- callback: The operation.
-- shouldWait: All the promises that should resolve before executing the promise.
+Uses a promise and allows managing the result as an observable. Takes two parameters:
+- **callback**: The operation that returns a promise.
+- **shouldWait**: An optional array of promises that should resolve before executing the promise.
+
+**Returns**: A `PromiseResult` object, which includes:
+- **promise**: An observable representing the promise.
+- **recall()**: A method to call the promise again, available after the first call.
+
+**Example:**
+```tsx
+import { usePromise } from "@michijs/michijs";
+
+const { promise, recall } = usePromise(async () => {
+  const response = await fetch("https://api.github.com/users/octocat");
+  return response.json();
+}, []);
+
+promise().then(user => {
+  console.log(user); // Outputs the user data
+});
+
+// To recall the promise later
+recall();
+```
 
 ### Route management hooks
 #### useHash
-It is designed to manage the hash portion of the URL. Provides a way to manage and observe changes in the hash portion of the URL, ensuring synchronization between the hash value and the observable state.
+The `useHash` hook manages the hash portion of the URL, allowing you to observe and synchronize changes between the hash value and an observable state. This is particularly useful for single-page applications (SPAs) where routing is handled client-side. Parameters:
+  
+**Returns**: An observable with keys of type `T` and boolean values. 
 
-Returns the Hash observable with the specified type T, ensuring that it returns an observable with keys of type T and boolean values.
+**Example:**
+```tsx
+import { useHash } from "@michijs/michijs";
+
+// Using useHash to manage the hash state
+const hashState = useHash<'#drawerOpened'>();
+
+// Opening a drawer
+hashState['#drawerOpened'](true);
+```
 
 #### useSearchParams
-It facilitates the management and observation of search parameters in the URL, providing a reactive way to handle changes and update the URL accordingly.
+Facilitates the management and observation of search parameters in the URL, providing a reactive way to handle changes and update the URL accordingly.
+
+**Returns**: An observable object containing the search parameters defined by the generic type `T`.
+
+**Example:**
+```tsx
+import { useSearchParams } from "@michijs/michijs";
+
+const searchParams = useSearchParams<{
+    textParam: string;
+}>();
+
+// To update the search parameters
+searchParams.textParam("Hello");
+```
 
 #### useTitle
 Allows to observe the document title. Do not use document.title use this hook instead
+
+**Example:**
+```tsx
+import { useTitle } from "@michijs/michijs";
+
+const title = useTitle();
+
+title('test')
+```
 
 ### Storage hooks
 #### useStorage
@@ -496,7 +634,9 @@ To use css we provide functions to create Constructable Stylesheets.
 __Our stylesheets can also subscribe to observables.__
 
 #### useStyleSheet
-Allows to create a Constructable Stylesheet with a CSSObject
+Allows to create a Constructable Stylesheet with a CSSObject.
+
+**Example:**
 ```tsx
 export const counterStyle = useStyleSheet({
   ':host': {
@@ -513,6 +653,7 @@ export const counterStyle = useStyleSheet({
 Allows to create a Constructable Stylesheet with a Template String.
 [Recomended extension for VSCode](https://marketplace.visualstudio.com/items?itemName=paulmolluzzo.convert-css-in-js).
 
+**Example:**
 ```tsx
 export const counterStyle = css`
   :host {
@@ -529,6 +670,8 @@ export const counterStyle = css`
 
 #### useAnimation
 Generates CSS keyframes and animation properties based on the provided keyframes and options.
+
+**Example:**
 ```tsx
 const hiddenState = {
   opacity: 0,
@@ -559,6 +702,8 @@ export const dialogStyle = useStyleSheet((tag) => ({
 ```
 #### useTransition
 Hook to generate CSS transition properties based on the provided configuration.
+
+**Example:**
 ```tsx
 const opacityTransition = useTransition({
   property: ["opacity"],
@@ -624,7 +769,7 @@ Allows to get a child element from the host with the selector
 Create unique IDs with a discernible key
 
 ## Attributes vs Properties in jsx
-Usually, if you want to get an html like this:
+Usually, if you want to get an HTML like this:
 ```html
 <div class='test'></div>
 ```
@@ -652,7 +797,7 @@ el.className = 'test';
 // Using attributes
 el.setAttribute('class', 'test')
 ```
-In this way the jsx syntax of MichiJS is more similar to html.
+In this way the jsx syntax of MichiJS is more similar to HTML.
 
 ## Lists
 There are 2 ways to create a list

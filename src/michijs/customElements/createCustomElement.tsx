@@ -81,7 +81,7 @@ export function createCustomElement<O extends MichiElementOptions>(
     willConstruct;
     didConstruct;
     didMount;
-    willReceiveAttribute;
+    willReceiveAttributeCallback;
     didUnmount;
     disconnected;
     associatedCallback;
@@ -187,7 +187,7 @@ export function createCustomElement<O extends MichiElementOptions>(
       // Running this even in the initial render because attributes can be setted before connected
       if (newValue !== oldValue) {
         const parsedNewValue = getAttributeValue(newValue);
-        this.willReceiveAttribute?.(name, parsedNewValue, this[name]);
+        this.willReceiveAttributeCallback?.(name, parsedNewValue, this[name]);
         this[name](parsedNewValue);
       }
     }
