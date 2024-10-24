@@ -242,6 +242,7 @@ A component consists of the following properties:
 If the extends field is not provided an [Autonomous custom element](https://developers.google.com/web/fundamentals/web-components/customelements#shadowdom) will be created.
 
 ### Component Lifecycle
+
 ```mermaid
 stateDiagram-v2
     [*] --> willConstruct
@@ -265,6 +266,7 @@ Callbacks can be called at almost any point of the lifecycle
 ## How This Works?
 ### The problem with stores - the traditional approach
 Libraries traditional approach is usually based on stores.
+
 ```mermaid
 graph TD;
     subgraph Store
@@ -279,6 +281,7 @@ graph TD;
     F --> I["Component I"];
     Store --> G["Component G"];
 ```
+
 This approach brings three major issues:
 - Any update on the store will trigger an update on a component, even if the property that changed in the store has no relation to the component. Every tag, attribute, etc., will need to be checked for changes in every re-render.
 - Any update on a component will trigger an update on the children, which might be unnecessary.

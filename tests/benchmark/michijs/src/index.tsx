@@ -82,8 +82,8 @@ function buildData(count = 1000) {
   return data;
 }
 const rows = useObserve<Row[]>([]);
-const run = () => rows.$replace?.(...buildData());
-const runLots = () => rows.$replace?.(...buildData(10000));
+const run = () => rows.$replace(...buildData());
+const runLots = () => rows.$replace(...buildData(10000));
 const add = () => rows.push(...buildData());
 const update = () => {
   for (let i = 0; i < rows.length; i += 10) {
@@ -92,7 +92,7 @@ const update = () => {
     rows[i].label += " !!!";
   }
 };
-const clear = () => rows.$clear?.();
+const clear = () => rows.$clear();
 const select = (row: ObservableType<Row>) => {
   // Will be solved on https://github.com/microsoft/TypeScript/issues/43826
   // @ts-ignore
@@ -101,8 +101,8 @@ const select = (row: ObservableType<Row>) => {
   selectedItem = row;
 };
 const deleteItem = (id: ObservableType<number>) =>
-  rows.$remove?.(rows.findIndex((x) => x.id === id));
-const swapRows = () => rows.$swap?.(1, 998);
+  rows.$remove(rows.findIndex((x) => x.id === id));
+const swapRows = () => rows.$swap(1, 998);
 
 export const Table = createCustomElement("michi-table", {
   extends: {
