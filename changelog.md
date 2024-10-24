@@ -21,6 +21,7 @@
 - Slot support without shadow dom
 - doFetch
 - If and GenericElement added
+- New callbacks for custom elements
 
 ### Updated
 - Diff algorithm was replaced with observables
