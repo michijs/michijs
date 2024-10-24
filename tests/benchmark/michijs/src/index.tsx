@@ -116,21 +116,19 @@ export const Table = createCustomElement("michi-table", {
         _={{ id: "tbody" }}
         renderItem={(row) => (
           <tr class={row.selected}>
-            <td _={{ className: "col-md-1" }}>{row.id}</td>
-            <td _={{ className: "col-md-4" }}>
-              <a _={{ onclick: () => select(row) }}>{row.label}</a>
+            <td class="col-md-1">{row.id}</td>
+            <td class="col-md-4">
+              <a onclick={() => select(row)}>{row.label}</a>
             </td>
-            <td _={{ className: "col-md-1" }}>
+            <td class="col-md-1">
               <a onclick={() => deleteItem(row.id)}>
                 <span
-                  _={{
-                    className: "glyphicon glyphicon-remove",
-                    ariaHidden: "true",
-                  }}
+                  class="glyphicon glyphicon-remove"
+                  aria-hidden="true"
                 />
               </a>
             </td>
-            <td _={{ className: "col-md-6" }} />
+            <td class="col-md-6" />
           </tr>
         )}
       />
