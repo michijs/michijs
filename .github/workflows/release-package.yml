@@ -14,6 +14,9 @@ on:
           - preminor
           - prepatch
           - prerelease
+      release-notes-path:
+        description: "Release notes path"
+        type: string
       release-notes:
         description: "Release notes"
         type: string
@@ -27,6 +30,7 @@ jobs:
     name: 'Call Workflow'
     uses: "michijs/.github/.github/workflows/release-package.yml@main"
     with:
+      release-notes-path: ${{ github.event.inputs.release-notes-path }}
       release-type: ${{ github.event.inputs.release-type }}
       release-notes: ${{ github.event.inputs.release-notes }}
     secrets: inherit
