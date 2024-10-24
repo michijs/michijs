@@ -75,8 +75,9 @@ function buildData(count = 1000) {
   for (let i = 0; i < count; i++)
     data[i] = {
       id: nextId++,
-      label: `${adjectives[_random(adjectivesLength)]} ${colours[_random(coloursLength)]
-        } ${nouns[_random(nounsLength)]}`,
+      label: `${adjectives[_random(adjectivesLength)]} ${
+        colours[_random(coloursLength)]
+      } ${nouns[_random(nounsLength)]}`,
     };
   return data;
 }
@@ -121,10 +122,7 @@ export const Table = createCustomElement("michi-table", {
             </td>
             <td class="col-md-1">
               <a onclick={() => deleteItem(row.id)}>
-                <span
-                  class="glyphicon glyphicon-remove"
-                  aria-hidden="true"
-                />
+                <span class="glyphicon glyphicon-remove" aria-hidden="true" />
               </a>
             </td>
             <td class="col-md-6" />
