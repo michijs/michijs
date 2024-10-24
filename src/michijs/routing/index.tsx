@@ -1,5 +1,5 @@
-export { hash } from "./hash";
-export { searchParams } from "./searchParams";
 export { createRouter } from "./createRouter";
-export { goTo } from "./goTo";
-export { wait } from "./wait";
+export { urlFn } from "./utils/urlFn";
+export { createURL } from "./utils/createURL";
+export { normalizeURL } from "./utils/normalizeURL";
+export * from "./types";

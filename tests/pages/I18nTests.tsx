@@ -1,55 +1,49 @@
-import type { TypedEvent } from "@michijs/htmltype";
-import { createCustomElement, h, I18n, List } from "../../src";
-import en from "./i18nTests/en.json";
+import {
+  createCustomElement,
+  I18n,
+  Title,
+  useStorage,
+  type TypedEvent,
+} from "@michijs/michijs";
+import en from "./i18nTests/en";
 
-const supportedLanguages = [
-  { key: "en", label: "English" },
-  { key: "es", label: "Español" },
-];
-
-const translator = new I18n<"es" | "en">(localStorage.getItem("lang"));
-
-const store = translator.createTranslation({
-  es: () => import("./i18nTests/es.json"),
-  en,
-});
-const t = store.state.t;
-
-translator.subscribe(() => {
-  if (translator.currentLanguage)
-    localStorage.setItem("lang", translator.currentLanguage);
+const { lang } = useStorage({
+  lang: navigator.language,
 });
 
-export const I18nTests = createCustomElement("i18n-tests", {
-  subscribeTo: {
-    store,
-  },
+const translator = new I18n(["en-uk", "es"], lang);
+
+const t = translator.createTranslation({
+  es: () => import("./i18nTests/es"),
+  "en-uk": en,
+});
+
+const I18nTests = createCustomElement("i18n-tests", {
   methods: {
     onChangeLanguage(ev: TypedEvent<HTMLSelectElement>) {
-      if (ev.target)
-        translator.currentLanguage = ev.target.value as "es" | "en";
+      if (ev.target) {
+        lang(ev.target.value);
+      }
     },
   },
   render() {
     return (
       <>
+        <Title>I18n tests Page</Title>
         <span>{t.language}</span>
-        <List
-          as="select"
-          onchange={this.onChangeLanguage}
-          data={supportedLanguages}
-          renderItem={({ key, label }) => (
-            <option
-              key={key}
-              selected={key === translator.currentLanguage}
-              value={key}
-            >
-              {label}
+        <select onchange={this.onChangeLanguage}>
+          {translator.supportedLanguages.map((key) => (
+            <option selected={translator.currentLanguage === key} value={key}>
+              {t[key]}
             </option>
-          )}
-        />
-        <span>{t.dogBit}</span>
+          ))}
+        </select>
+        <p>{t.dogBit}</p>
+        <p>{t.birthDay(new Date(1997, 20, 2))}</p>
+        {t.listTest}
       </>
     );
   },
 });
+
+export default I18nTests;

@@ -1,123 +1,90 @@
-import { observable, store } from "../hooks";
-import { ObservableLike, ObserverCallback, Store } from "../types";
+import { ProxiedValue } from "../classes/ProxiedValue";
+import type { ObservableOrConst, ObservableType, Subscription } from "../types";
+import { unproxify } from "../utils/unproxify";
+import { bindObservable } from "../utils/bindObservable";
+import { useAsyncComputedObserve } from "../hooks";
 
-type StringObject =
-  | {
-      [key: string]: string | StringObject | undefined | null | number;
-    }
-  | (string | StringObject | undefined | null | number)[];
-
-export type Translation<T extends StringObject, K extends string> = {
-  [key in K]: T | (() => Promise<{ default: T }>);
+export type Translation<K extends string, T> = {
+  [key in K]: T | (() => Promise<{ default: T }>) | (() => Promise<T>);
 };
-export interface TranslationItem<T extends StringObject, K extends string> {
-  translation: Translation<T, K>;
-  store: CreateTranslationResultStore<T>;
-}
-export type CreateTranslationResultStore<T extends StringObject> = Store<
-  {
-    t: T;
-  },
-  {
-    updateTranslation(newTranslation: T);
-  }
->;
 
-export class I18n<K extends string> implements ObservableLike {
-  private translations = new Array<TranslationItem<StringObject, string>>();
-  private observer = observable();
-  private _currentLanguage: K | undefined;
+export class I18n<K extends string = string> extends ProxiedValue<K> {
   private isUsingSystemLanguage = true;
+  public supportedLanguages: K[];
 
-  constructor(initialLanguage?: string | null) {
-    if (initialLanguage) {
-      this._currentLanguage = initialLanguage as K;
-      this.isUsingSystemLanguage = false;
-    }
+  /**
+   * It is supported using observables. By default, the desired languages are taken from the browser. If your code supports an exact match (e.g., "en-UK") or a general match (e.g., "en"), that language will be selected. Otherwise, it falls back to the default language (the first one in the list). The default language cannot be obtained asynchronously.
+   * @param supportedLanguages A list of supported languages - BCP 47
+   * @param language The selected language - can be an observable
+   * @param initialObservers An array of initial observers of type Subscription<T>.
+   */
+  constructor(
+    supportedLanguages: K[],
+    language?: ObservableOrConst<string | undefined>,
+    initialObservers?: Subscription<K | undefined>[],
+  ) {
+    super((unproxify(language) ?? navigator.language) as K, initialObservers);
+    this.supportedLanguages = supportedLanguages;
+    bindObservable(language, (newValue) => (this.currentLanguage = newValue));
 
     window.addEventListener("languagechange", () => {
-      if (!this.isUsingSystemLanguage) {
-        this.setLanguage(navigator.language as K);
-      }
+      if (this.isUsingSystemLanguage) this.currentLanguage = undefined;
     });
   }
-  subscribe(observer: ObserverCallback<any>): void {
-    return this.observer.subscribe(observer);
-  }
-  unsubscribe?(observer: ObserverCallback<any>): void {
-    return this.observer.unsubscribe(observer);
-  }
 
-  get currentLanguage(): K | undefined {
-    return this._currentLanguage;
+  get currentLanguage(): K {
+    return this.$value;
   }
-  set currentLanguage(newLang: K | undefined) {
-    this.setLanguage(newLang);
-    this.isUsingSystemLanguage = false;
-  }
+  set currentLanguage(newDesiredLanguage: string | undefined) {
+    const desiredLanguages = [...navigator.languages];
+    let foundMatch = false;
+    if (newDesiredLanguage) {
+      this.isUsingSystemLanguage = false;
+      desiredLanguages.unshift(newDesiredLanguage);
+    } else this.isUsingSystemLanguage = true;
 
-  createTranslation<T extends StringObject>(translation: Translation<T, K>) {
-    const translationResult = store({
-      state: {
-        t: {} as T,
-      },
-      transactions: {
-        updateTranslation(newTranslation: T) {
-          Object.entries(newTranslation).forEach(([key, value]) => {
-            translationResult.state.t[key] = value;
-          });
-        },
-      },
-    });
-    const translationItem = {
-      translation,
-      store: translationResult,
-    };
-    this.translations.push(translationItem);
-    this.updateTranslation<T>(translationItem);
-    return { ...translationResult, t: translationResult.state.t };
-  }
+    for (const desiredLang of desiredLanguages) {
+      // First, check for an exact match
+      if (this.supportedLanguages.includes(desiredLang as K)) {
+        this.$value = desiredLang as K;
+        foundMatch = true;
+        break;
+      }
 
-  private updateTranslation<T extends StringObject>({
-    translation,
-    store,
-  }: TranslationItem<T, K>) {
-    const translationKeys = Object.keys(translation) as K[];
-    let key: K | undefined = this.currentLanguage
-      ? translationKeys.find((key) => key === this.currentLanguage)
-      : undefined;
-    if (!key) {
-      // It does not have the current language - Fallback to next language in navigator.languages
-      key = navigator.languages.find((key) =>
-        translationKeys.includes(key as K),
-      ) as K;
-      if (!key) {
-        // Does not include any browser language - I use the latest language of the object
-        key = translationKeys[translationKeys.length - 1];
+      // Then, check for a general match (e.g., "en" instead of "en-EN")
+      const generalLang = desiredLang.split("-")[0] as K;
+      if (this.supportedLanguages.includes(generalLang)) {
+        this.$value = generalLang as K;
+        foundMatch = true;
+        break;
       }
     }
-    const value = translation[key];
-    this._currentLanguage = key;
-
-    if (typeof value === "function")
-      value().then((res) => {
-        store.transactions.updateTranslation(res.default);
-      });
-    else store.transactions.updateTranslation(value as T);
+    if (!foundMatch) this.$value = this.defaultLanguage;
   }
 
-  private setLanguage(newLang: K | undefined) {
-    if (this._currentLanguage !== newLang) {
-      this._currentLanguage = newLang;
-      //Update every translation
-      this.translations.forEach((x) => this.updateTranslation(x));
-      // Then notify
-      this.observer.notify(newLang);
-    }
+  get defaultLanguage() {
+    return this.supportedLanguages[0];
   }
 
-  useSystemLanguage() {
-    this.setLanguage(navigator.language as K);
-    this.isUsingSystemLanguage = true;
+  createTranslation<T>(
+    translation: Translation<K, T>,
+  ): ObservableType<Partial<T>> {
+    return useAsyncComputedObserve<Partial<T>>(
+      async () => await this.getCurrentTranslation(translation),
+      translation[this.defaultLanguage] as Partial<T>,
+      [this],
+    );
+  }
+
+  private getCurrentTranslation<T>(translation: Translation<K, T>): Promise<T> {
+    return new Promise<T>((resolve) => {
+      const value = translation[this.currentLanguage];
+
+      if (typeof value === "function")
+        value().then((res) => {
+          resolve(res.default ?? res);
+        });
+      else resolve(value as T);
+    });
   }
 }

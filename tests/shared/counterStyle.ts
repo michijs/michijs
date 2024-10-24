@@ -1,18 +1,18 @@
-import { createStyleSheet } from "../../src";
+import { useStyleSheet } from "@michijs/michijs";
 
-export const counterStyle = createStyleSheet({
+export const counterStyle = useStyleSheet({
   ":host": {
-    display: "inline-flex",
-    flexDirection: "row",
     "(:disabled)": {
       backgroundColor: "gray",
     },
-    "(:invalid)": {
+    "(:user-invalid)": {
       border: "1px solid red",
     },
-    // '@media (max-width: 600px)': {
-    //   color: 'blue'
-    // }
+    display: "inline-flex",
+    flexDirection: "row",
+    "@media (max-width: 600px)": {
+      color: "blue",
+    },
   },
   span: {
     minWidth: "60px",

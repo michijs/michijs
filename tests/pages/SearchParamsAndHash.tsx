@@ -1,22 +1,43 @@
-import { h } from "../../src";
+import {
+  useSearchParams,
+  useHash,
+  useComputedObserve,
+  Title,
+} from "@michijs/michijs";
 import { SimpleCounter } from "../SimpleCounter";
-import { pages } from "../routes";
 
-export const SearchParamsAndHash = pages.searchParamsAndHash(
-  ({ searchParams, hash }) => (
+const SearchParamsAndHash = () => {
+  const searchParams = useSearchParams<{
+    counterParam: number;
+    textParam: string;
+  }>();
+  const hash = useHash<"#hashTest">();
+  const hashTestText = useComputedObserve(() => {
+    return `hash test is ${hash["#hashTest"].toBoolean()}`;
+  }, [hash]);
+
+  return (
     <>
+      <Title>Search params and hash tests</Title>
       <button
         onclick={() => {
-          hash["#hashTest"] = !hash["#hashTest"];
+          // Just to test '#'
+          if (hash["#hashTest"]()) hash[""](true);
+          else hash["#hashTest"](hash["#hashTest"].not());
+          console.log(hash);
         }}
-      >{`hash test is ${hash["#hashTest"]}`}</button>
+      >
+        {hashTestText}
+      </button>
       <SimpleCounter
         count={searchParams.counterParam}
         oncountchanged={(newValue) => {
-          searchParams.counterParam = newValue.detail;
+          searchParams.counterParam(newValue.detail);
         }}
       />
       <div>{searchParams.textParam}</div>
     </>
-  ),
-);
+  );
+};
+
+export default SearchParamsAndHash;

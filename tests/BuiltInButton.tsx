@@ -1,4 +1,8 @@
-import { createCustomElement, h, Host } from "../src";
+import {
+  createCustomElement,
+  Host,
+  useComputedObserve,
+} from "@michijs/michijs";
 import { buttonStyle } from "./BuiltInButton.css";
 
 export const BuiltInButton = createCustomElement("built-in-button", {
@@ -8,9 +12,29 @@ export const BuiltInButton = createCustomElement("built-in-button", {
   },
   reflectedAttributes: {
     counter: 0,
+    type: "button",
   },
-  adoptedStyleSheets: [buttonStyle],
+  lifecycle: {
+    connected() {
+      console.log("connected");
+    },
+    disconnected() {
+      console.log("disconnected");
+    },
+  },
+  computedStyleSheet(selector: string) {
+    return {
+      [selector]: {
+        margin: useComputedObserve(() => `${this.counter}px`, [this.counter]),
+      },
+    };
+  },
+  adoptedStyleSheets: { buttonStyle },
   render() {
-    return <Host onpointerup={() => this.counter++}>{this.counter}</Host>;
+    return (
+      <Host onpointerup={() => this.counter(this.counter() + 1)}>
+        <span slot="text">{this.counter}</span>
+      </Host>
+    );
   },
 });

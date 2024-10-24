@@ -1,16 +1,22 @@
-import { createCustomElement, h, Host } from "../src";
+import { createCustomElement, Host, If } from "@michijs/michijs";
 import { ColorSelector } from "./ColorSelector";
 import { Router } from "./routes";
-// // import sheet from './a.css' assert { type: 'css' };
-// // console.log(sheet)
+// import sheet from './a.css' assert { type: 'css' };
+// console.log(sheet)
 
 createCustomElement("root-test-element", {
   reflectedAttributes: {
-    // arrayTest: new ElementList(0, 1, 2, 3, 4, 5, 6),
+    count: 1,
     arrayTest: [0, 1, 2, 3, 4, 5],
   },
+  attributes: {
+    showExample: true,
+  },
   shadow: false,
-  transactions: {
+  methods: {
+    toggleShowExample() {
+      this.showExample(this.showExample.not());
+    },
     onClickArray() {
       this.arrayTest.push(7, 8);
       // this.arrayTest = [0, 1, 2, 3, 6]
@@ -21,17 +27,11 @@ createCustomElement("root-test-element", {
       // this.arrayTest = [6, 3, 2, 1, 0]
     },
   },
-  fakeRoot: false,
-  observe: {
-    "arrayTest.6"() {
-      console.log("6 Added");
-    },
-  },
   render() {
     return (
       <Host>
         <Router />
-        <math display="block">
+        <math display="block" onclick={this.toggleShowExample}>
           <mfrac>
             <mn>{this.arrayTest.length}</mn>
             <msqrt>
@@ -39,53 +39,20 @@ createCustomElement("root-test-element", {
             </msqrt>
           </mfrac>
         </math>
-        {/* <List
-          as='div'
-          data={this.arrayTest}
-          renderItem={item => <div key={item} onclick={this.onClickArray}>{item}</div>}
-        /> */}
-        <ColorSelector />
-        {this.arrayTest.map((item) => (
-          <div key={item} onclick={this.onClickArray}>
-            {item}
-          </div>
-        ))}
-        {/* <this.arrayTest.List
+        <If
+          as="div"
+          condition={this.showExample}
+          then={<div onclick={this.onClickArray}>{this.arrayTest}</div>}
+        />
+        <this.arrayTest.List
+          as="div"
           renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}
-        /> */}
+        />
+        <ColorSelector />
       </Host>
     );
   },
 });
-
-// const a = indexeddbObservable<
-//   {
-//     logs: {
-//       test: string
-//     }
-//   }
-// >('testdb', {
-//   logs: {
-//     keyPath: 'test'
-//   }
-// })
-
-// await wait(2000);
-// a.logs.add({
-//   test: 'xd2'
-// })
-// a.logs.add({
-//   test: 'xd3'
-// })
-// console.log(a.logs.getAll().result)
-// TODO:
-// Update readme
-// check blank space in template
-// Deploy live demo
-// Remove param from htmlElements since is deprecated
-// Unit tests some functions from element list
-// unlinked attributes ex: <div {bla ? ...obj1: ...obj2}/>
-// and obj2 has an attribute that obj1 does not that attribute will be unlinked...
 // documentTransition test
 // const titulo1 = document.createElement('h1');
 // titulo1.textContent = 'hola 1'
@@ -110,17 +77,3 @@ createCustomElement("root-test-element", {
 
 //     }
 // }, 300)
-
-// const unproxyfy = (object: unknown) => {
-//     if (typeof object === 'object') {
-//         const unproxyfiedObject = {};
-//         Object.entries(object).forEach(([key, value]) => {
-//             unproxyfiedObject[key] = unproxyfy(value)
-//         })
-
-//         return unproxyfiedObject;
-//     }else{
-//         return object;
-//     }
-// }
-// console.log(unproxyfy(a))

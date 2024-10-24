@@ -1,4 +1,4 @@
-import { createCustomElement, EventDispatcher, h } from "../src";
+import { createCustomElement, EventDispatcher } from "@michijs/michijs";
 import { counterStyle } from "./shared/counterStyle";
 
 export const SimpleCounter = createCustomElement("simple-counter", {
@@ -7,22 +7,18 @@ export const SimpleCounter = createCustomElement("simple-counter", {
   },
   methods: {
     decrementCount() {
-      this.count--;
+      this.count(this.count() - 1);
     },
     incrementCount() {
-      this.count++;
+      this.count(this.count() + 1);
     },
   },
   events: {
     countChanged: new EventDispatcher<number>(),
   },
-  observe: {
-    count() {
-      this.countChanged(this.count);
-    },
-  },
-  adoptedStyleSheets: [counterStyle],
+  adoptedStyleSheets: { counterStyle },
   render() {
+    this.count.subscribe(this.countChanged);
     return (
       <>
         <button onpointerup={this.decrementCount}>-</button>

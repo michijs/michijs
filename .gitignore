@@ -3,6 +3,7 @@ dist/
 www/
 build/
 bun.lockb
+supported
 
 *~
 *.sw[mnpcod]

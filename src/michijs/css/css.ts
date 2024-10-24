@@ -1,21 +1,21 @@
+import { useStringTemplate } from "../hooks/useStringTemplate";
+import type { ObservableType } from "../types";
+import { bindObservableToRef } from "../utils/bindObservableToRef";
+
 /**
  * Allows to create a Constructable Stylesheet with a Template String.
  * Recomended extension for VSCode:
  * @link https://marketplace.visualstudio.com/items?itemName=paulmolluzzo.convert-css-in-js
  */
-export const css = (
+export function css(
   cssObject: TemplateStringsArray,
-  ...props: (string | number)[]
-) => {
+  ...props: (ObservableType<string | number> | string | number)[]
+): CSSStyleSheet {
+  const template = useStringTemplate(cssObject, ...props);
   const styleSheet = new CSSStyleSheet();
-  styleSheet.replaceSync(
-    cssObject.raw.reduce((previousValue, currentValue, i) => {
-      const type = typeof props[i];
-      if (type === "string" || type === "number")
-        return `${previousValue}${currentValue}${props[i]}`;
-      return `${previousValue}${currentValue}`;
-      // The accumulator takes the first value if you don't pass a value as the second argument:
-    }, ""),
-  );
+  bindObservableToRef(template, styleSheet, (newValue, styleSheet) => {
+    // Jest fix
+    if (styleSheet.replaceSync) styleSheet.replaceSync(newValue);
+  });
   return styleSheet;
-};
+}

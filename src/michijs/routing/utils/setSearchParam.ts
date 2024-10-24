@@ -1,7 +1,17 @@
-export const setSearchParam = (url: URL, name: string, value: unknown) => {
-  if (value !== undefined)
+import { isNil } from "../../utils/isNil";
+
+export const setSearchParam = (
+  url: URL,
+  name: string,
+  value: unknown,
+): void => {
+  const valueOf = value?.valueOf();
+  if (isNil(valueOf)) url.searchParams.delete(name);
+  else
     url.searchParams.set(
       name,
-      typeof value === "object" ? JSON.stringify(value) : (value as string),
+      typeof valueOf === "object"
+        ? JSON.stringify(valueOf)
+        : (valueOf as string),
     );
 };
