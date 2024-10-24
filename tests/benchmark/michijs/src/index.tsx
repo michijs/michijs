@@ -122,10 +122,7 @@ export const Table = createCustomElement("michi-table", {
             </td>
             <td class="col-md-1">
               <a onclick={() => deleteItem(row.id)}>
-                <span
-                  class="glyphicon glyphicon-remove"
-                  aria-hidden="true"
-                />
+                <span class="glyphicon glyphicon-remove" aria-hidden="true" />
               </a>
             </td>
             <td class="col-md-6" />
