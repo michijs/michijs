@@ -1,5 +1,5 @@
 import type { Router } from "../components/Router";
-import type { AnyObject } from "../types";
+import type { AnyObject, ExtendableComponentWithoutChildren } from "../types";
 
 export type SearchParams = AnyObject | undefined;
 export type Hash = `#${string}` | "" | undefined;
@@ -11,6 +11,13 @@ export type UrlFunction<
   searchParams?: S;
   hash?: H;
 }) => URL;
+
+export type RouterProps<T> = ExtendableComponentWithoutChildren<T> & {
+  routes?: Record<string, JSX.Element>;
+  parentRoute?: UrlFunction<any, any>;
+  /** Allows to caché then / else components. */
+  enableCache?: boolean;
+};
 
 // export type AsyncRoute = {
 //   // if typed properly the type of pages does not work

@@ -1,7 +1,6 @@
-import type { UrlFunction } from "../routing/types";
+import type { RouterProps } from "../routing/types";
 import type {
   CreateOptions,
-  ExtendableComponentWithoutChildren,
   SingleJSXElement,
 } from "../types";
 import { VirtualFragment } from "../classes/VirtualFragment";
@@ -10,13 +9,6 @@ import { create } from "../DOMDiff/create";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { HistoryManager } from "../classes/HistoryManager";
 import { urlFn } from "../routing/utils/urlFn";
-
-export type RouterProps<T> = ExtendableComponentWithoutChildren<T> & {
-  routes?: Record<string, JSX.Element>;
-  parentRoute?: UrlFunction<any, any>;
-  /** Allows to caché then / else components. */
-  enableCache?: boolean;
-};
 
 export const Router = <const T>(
   { as: asTag, routes, parentRoute, enableCache, ...attrs }: RouterProps<T>,
