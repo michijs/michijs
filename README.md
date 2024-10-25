@@ -1,6 +1,6 @@
 <div align="center">
   <img width="500px" alt="Michijs Logo" src="https://raw.githubusercontent.com/michijs/art/main/logo-with-background-strait-round.png">
-  <p>A lightweight vanilla JavaScript library for creating Web Components.</p>
+  <p>A lightweight vanilla JavaScript library for creating Web Components</p>
 
   [![Open in Visual Studio Code][open-in-vscode]][open-in-vscode-url] 
   ![npm][version] 
