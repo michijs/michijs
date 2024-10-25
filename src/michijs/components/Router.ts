@@ -1,8 +1,5 @@
 import type { RouterProps } from "../routing/types";
-import type {
-  CreateOptions,
-  SingleJSXElement,
-} from "../types";
+import type { CreateOptions, SingleJSXElement } from "../types";
 import { VirtualFragment } from "../classes/VirtualFragment";
 import { bindObservable } from "../utils/bindObservable";
 import { create } from "../DOMDiff/create";
