@@ -92,7 +92,7 @@ export function createCustomElement<O extends MichiElementOptions>(
     child<T extends (new () => any) | HTMLElement = HTMLElement>(
       selector: string,
     ) {
-      return getRootNode(this).querySelector(
+      return getMountPoint(this).querySelector(
         selector,
       ) as unknown as T extends new () => any ? InstanceType<T> : T;
     }

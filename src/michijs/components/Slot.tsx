@@ -27,16 +27,17 @@ const MichiSlot = createCustomElement("michi-slot", {
             )
           )
             return;
-          if (isElement(x)) {
-            if (x.getAttribute("slot") === name) {
+          if (!x.contains(this))
+            if (isElement(x)) {
+              if (x.getAttribute("slot") === name) {
+                this.append(x);
+                this.slotchange();
+                return;
+              }
+            } else if (!name) {
               this.append(x);
               this.slotchange();
-              return;
             }
-          } else if (!name) {
-            this.append(x);
-            this.slotchange();
-          }
         });
       };
 
