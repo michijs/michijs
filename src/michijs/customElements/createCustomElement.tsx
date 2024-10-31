@@ -12,7 +12,6 @@ import { addStylesheetsToDocumentOrShadowRoot } from "../utils/addStylesheetsToD
 import { defineEvent } from "./properties/defineEvent";
 import { definePropertyFromObservable } from "./properties/definePropertyFromObservable";
 import { defineMethod } from "./properties/defineMethod";
-import { getRootNode } from "../DOM/getRootNode";
 import { getAttributeValue } from "../DOM/attributes/getAttributeValue";
 import { getMountPoint } from "../DOM/getMountPoint";
 import { defineReflectedAttributes } from "./properties/defineReflectedAttributes";
