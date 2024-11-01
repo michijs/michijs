@@ -24,6 +24,7 @@ import { IdGenerator } from "../classes/IdGenerator";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { useObserveInternal } from "../hooks/useObserve";
 import { createBuiltInElement } from "../polyfill";
+import { getShadowRoot } from "../utils/getShadowRoot";
 
 let classesIdGenerator: undefined | IdGenerator;
 
@@ -90,10 +91,12 @@ export function createCustomElement<O extends MichiElementOptions>(
     render;
     child<T extends (new () => any) | HTMLElement = HTMLElement>(
       selector: string,
-    ) {
-      return getMountPoint(this).querySelector(
-        selector,
-      ) as unknown as T extends new () => any ? InstanceType<T> : T;
+    ): T extends new () => any ? InstanceType<T> : T {
+      return (getShadowRoot(this)?.querySelector(
+        selector
+      ) ?? this.querySelector(
+        selector
+      )) as unknown as T extends new () => any ? InstanceType<T> : T
     }
     get idGen() {
       this.$michi.idGen ??= new MappedIdGenerator().getId;
