@@ -92,11 +92,10 @@ export function createCustomElement<O extends MichiElementOptions>(
     child<T extends (new () => any) | HTMLElement = HTMLElement>(
       selector: string,
     ): T extends new () => any ? InstanceType<T> : T {
-      return (getShadowRoot(this)?.querySelector(
-        selector
-      ) ?? this.querySelector(
-        selector
-      )) as unknown as T extends new () => any ? InstanceType<T> : T
+      return (getShadowRoot(this)?.querySelector(selector) ??
+        this.querySelector(selector)) as unknown as T extends new () => any
+        ? InstanceType<T>
+        : T;
     }
     get idGen() {
       this.$michi.idGen ??= new MappedIdGenerator().getId;
