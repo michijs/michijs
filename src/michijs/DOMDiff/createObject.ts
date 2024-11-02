@@ -25,9 +25,9 @@ export const createObject = (
   if (children)
     if (Array.isArray(children))
       el.append(...children.map((x) => create(x, contextElement,
-        contextNamespace)));
+        newNamespace)));
     else el.append(create(children, contextElement,
-      contextNamespace));
+      newNamespace));
 
   setProperties(el, attrs, contextElement);
 
