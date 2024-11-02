@@ -18,7 +18,7 @@ import { Namespaces } from "../constants/namespaces";
 export function create<T = Node>(
   jsx: SingleJSXElement,
   contextElement?: Element,
-  contextNamespace: string = Namespaces.HTML
+  contextNamespace: string = Namespaces.HTML,
 ): T {
   if (jsx) {
     if (Array.isArray(jsx))
@@ -30,7 +30,7 @@ export function create<T = Node>(
           },
         },
         contextElement,
-        contextNamespace
+        contextNamespace,
       ) as T;
     if (isNotAPrimitiveJSX(jsx)) {
       if ("jsxTag" in jsx) {
@@ -38,25 +38,27 @@ export function create<T = Node>(
         // Solves undefined Fragment caused by some compilers
         if (isDOMOrFragmentElement(jsx)) {
           jsx.jsxTag ??= document.createDocumentFragment();
-          return createDOMElement(jsx as DOMElementJSXElement,
+          return createDOMElement(
+            jsx as DOMElementJSXElement,
             contextElement,
-            contextNamespace) as T;
+            contextNamespace,
+          ) as T;
         }
         if (isFunctionOrClassJSXElement(jsx)) {
           // Explicit casting because of tsc error
           if (isClassJSXElement(jsx))
-            return createObject(classJSXToObjectJSXElement(jsx),
-          contextElement,
-          contextNamespace) as T;
-          return create(jsx.jsxTag(jsx.attrs,
+            return createObject(
+              classJSXToObjectJSXElement(jsx),
+              contextElement,
+              contextNamespace,
+            ) as T;
+          return create(
+            jsx.jsxTag(jsx.attrs, contextElement, contextNamespace),
             contextElement,
-            contextNamespace),
-            contextElement,
-            contextNamespace);
+            contextNamespace,
+          );
         }
-        return createObject(jsx,
-          contextElement,
-          contextNamespace) as T;
+        return createObject(jsx, contextElement, contextNamespace) as T;
       }
       return jsx as T;
     }

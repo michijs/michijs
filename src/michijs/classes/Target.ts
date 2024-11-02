@@ -11,7 +11,7 @@ export class Target<V> {
     element: VirtualFragment | ParentNode,
     renderItem: FC<V>,
     contextElement?: Element,
-    contextNamespace?: string
+    contextNamespace?: string,
   ) {
     this.element = element;
     this.renderItem = renderItem;
@@ -24,7 +24,11 @@ export class Target<V> {
   }
 
   createSingleItem(value: V): Node {
-    return create(this.renderItem(value), this.contextElement, this.contextNamespace);
+    return create(
+      this.renderItem(value),
+      this.contextElement,
+      this.contextNamespace,
+    );
   }
   create(...value: V[]): Node[] {
     return value.map((x) => this.createSingleItem(x));

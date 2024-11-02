@@ -155,8 +155,11 @@ export const customObjectApply: (
     return target.valueOf();
   };
 
-export const createSpecialSubscription = <T>(proxiedValue: () => ProxiedValue<T>): Subscription<T> => {
-  const subscription: Subscription<T> = () => proxiedValue().notifyCurrentValue();
+export const createSpecialSubscription = <T>(
+  proxiedValue: () => ProxiedValue<T>,
+): Subscription<T> => {
+  const subscription: Subscription<T> = () =>
+    proxiedValue().notifyCurrentValue();
   subscription.ignore = () => !proxiedValue().notifiableObservers;
   return subscription;
-}
+};

@@ -40,7 +40,7 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
     ...attrs
   }: AsyncComponentProps<P, T>,
   contextElement?: Element,
-  contextNamespace?: string
+  contextNamespace?: string,
 ): Node => {
   const el = asTag
     ? (create({
@@ -50,7 +50,8 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
     : new VirtualFragment();
 
   // If a loading component is provided, append it to the element.
-  if (loadingComponent) el.append(create(loadingComponent, contextElement, contextNamespace));
+  if (loadingComponent)
+    el.append(create(loadingComponent, contextElement, contextNamespace));
 
   // Function to render the component when the promise resolves.
   const render = (promiseResult: P) => {
@@ -69,7 +70,9 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
           ? then(Res as P)
           : Res && typeof Res === "function"
             ? jsx(Res)
-            : Res, contextElement, contextNamespace
+            : Res,
+        contextElement,
+        contextNamespace,
       ) as ChildNode & ParentNode,
     );
   };
