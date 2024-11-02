@@ -7,14 +7,13 @@ const serverProcess = spawn("bun", ["run", "start"], {
   env: { ...process.env, NODE_ENV: "TESTING_VANILLA" },
 });
 
-
 describe("Performance tests - vanilla-js", () => {
   let browser: Browser;
   let page: Page;
   beforeEach(async () => {
     browser = await chromium.launch({
       headless: true,
-    });;
+    });
     page = await browser.newPage();
     await page.goto("http://localhost:3001", {
       waitUntil: "domcontentloaded",

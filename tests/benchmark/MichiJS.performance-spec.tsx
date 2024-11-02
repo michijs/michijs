@@ -13,7 +13,7 @@ describe("Performance tests - MichiJS", () => {
   beforeEach(async () => {
     browser = await chromium.launch({
       headless: true,
-    });;
+    });
     page = await browser.newPage();
     await page.goto("http://localhost:3000", {
       waitUntil: "domcontentloaded",
