@@ -1,4 +1,4 @@
-import type { ElementHandle, Page } from "puppeteer";
+import type { ElementHandle, Page } from "playwright-core";
 import { it, expect } from "bun:test";
 
 export type Result =

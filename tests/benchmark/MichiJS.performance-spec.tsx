@@ -1,4 +1,4 @@
-import { type Browser, launch, type Page } from "puppeteer";
+import { type Browser, chromium, type Page } from "playwright-core";
 import { makePerformanceTests, type Result } from "./shared";
 import { describe, it, expect, beforeEach, afterAll } from "bun:test";
 import { spawn } from "child_process";
@@ -11,7 +11,9 @@ describe("Performance tests - MichiJS", () => {
   let browser: Browser;
   let page: Page;
   beforeEach(async () => {
-    browser = await launch();
+    browser = await chromium.launch({
+      headless: true,
+    });;
     page = await browser.newPage();
     await page.goto("http://localhost:3000", {
       waitUntil: "domcontentloaded",
