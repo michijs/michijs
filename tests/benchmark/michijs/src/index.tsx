@@ -67,7 +67,11 @@ const adjectivesLength = adjectives.length;
 const coloursLength = colours.length;
 const nounsLength = nouns.length;
 
-interface Row { label: string; id: number; selected: string | undefined };
+interface Row {
+  label: string;
+  id: number;
+  selected: string | undefined;
+}
 let nextId = 1;
 let selectedItem: ObservableType<Row> | null = null;
 function buildData(count = 1000) {
