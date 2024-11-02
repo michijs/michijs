@@ -6,13 +6,15 @@ import type { DOMElementJSXElement } from "../types";
 export const createDOMElement = (
   jsx: DOMElementJSXElement,
   contextElement?: Element,
-  contextNamespace?: string
+  contextNamespace?: string,
 ): ParentNode => {
   const { children, ...attrs } = jsx.attrs;
 
   if (children)
     if (Array.isArray(children))
-      jsx.jsxTag.append(...children.map((x) => create(x, contextElement, contextNamespace)));
+      jsx.jsxTag.append(
+        ...children.map((x) => create(x, contextElement, contextNamespace)),
+      );
     else jsx.jsxTag.append(create(children, contextElement, contextNamespace));
 
   if (isElement(jsx.jsxTag)) setProperties(jsx.jsxTag, attrs, contextElement);

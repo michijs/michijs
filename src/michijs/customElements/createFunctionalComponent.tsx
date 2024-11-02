@@ -9,8 +9,12 @@ import { unproxify } from "../utils/unproxify";
 
 export function createFunctionalComponent<
   T extends AnyObject,
-  S extends Element = Element
->(callback: CreateFCResult<T, S>, contextElement?: S, contextNamespace?: string): CreateFunctionalComponent<T> {
+  S extends Element = Element,
+>(
+  callback: CreateFCResult<T, S>,
+  contextElement?: S,
+  contextNamespace?: string,
+): CreateFunctionalComponent<T> {
   return (props) => {
     // TODO: Not sure why ts compiler is complaining here
     // @ts-ignore
