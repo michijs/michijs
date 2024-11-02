@@ -5,14 +5,22 @@ export function createElement<
   const T extends string,
   A extends GetElementProps<T> | JSX.IntrinsicElements["div"],
   E extends T extends keyof HTMLElementTagNameMap
-  ? HTMLElementTagNameMap[T]
-  : T extends keyof SVGElementTagNameMap
-  ? SVGElementTagNameMap[T]
-  : HTMLElement,
+    ? HTMLElementTagNameMap[T]
+    : T extends keyof SVGElementTagNameMap
+      ? SVGElementTagNameMap[T]
+      : HTMLElement,
 >(
   tagName: T,
   attributes?: A,
-  { is, contextElement, contextNamespace, ...options }: ElementCreationOptions & { contextElement?: Element, contextNamespace?: string } = {},
+  {
+    is,
+    contextElement,
+    contextNamespace,
+    ...options
+  }: ElementCreationOptions & {
+    contextElement?: Element;
+    contextNamespace?: string;
+  } = {},
 ) {
   const el = createObject(
     {
@@ -23,7 +31,7 @@ export function createElement<
       },
     },
     contextElement,
-    contextNamespace
+    contextNamespace,
   );
 
   return el as unknown as E & ((props?: A) => E);

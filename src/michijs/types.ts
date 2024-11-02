@@ -184,8 +184,8 @@ export type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>;
 // End Auxiliar Types
 export interface Subscription<T> {
   (signal: T): void;
-  ignore?(): boolean
-};
+  ignore?(): boolean;
+}
 export type RefSubscription<T, E> = (signal: T, el: E) => void;
 export interface CompatibleSubscription {
   // its optional to keep compatibility with others observers like redux
@@ -277,7 +277,7 @@ export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>>
       renderItem: FC<SV>;
     },
     context?: Element,
-    namespace?: string
+    namespace?: string,
   ): Node;
 }
 
@@ -291,7 +291,7 @@ export type Typeof =
   | "object"
   | "function";
 
-export type NotifiableObservers<T> = Subscription<T>[] | null
+export type NotifiableObservers<T> = Subscription<T>[] | null;
 
 export interface ProxiedValueInterface<RV, SV> extends ObservableLike<RV> {
   get $value(): SV;
@@ -572,15 +572,16 @@ export type FCProps<T = {}> = {
   [k in keyof T]: k extends "children" ? T[k] : ObservableType<T[k]>;
 };
 
-export type CreateFCResult<
-  T = {},
-  S extends Element = Element
-> = (attrs: FCProps<T>, contextElement?: S, namespace?: string) => SingleJSXElement;
+export type CreateFCResult<T = {}, S extends Element = Element> = (
+  attrs: FCProps<T>,
+  contextElement?: S,
+  namespace?: string,
+) => SingleJSXElement;
 
 export type FC<T = {}, S extends Element = Element> = (
   attrs: T,
   contextElement?: S,
-  namespace?: string
+  namespace?: string,
 ) => SingleJSXElement;
 export interface FCC<T = {}, S extends Element = Element>
   extends FC<T & { children?: JSX.Element }, S> {}

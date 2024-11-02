@@ -3,18 +3,19 @@ import { Namespaces, RootTags } from "../constants/namespaces";
 import type { ObjectJSXElement } from "../types";
 import { create } from "./create";
 
-const getNamespace = (jsx: ObjectJSXElement, contextNamespace: string = Namespaces.HTML): string => {
-  if (jsx.jsxTag === RootTags.SVG)
-    return Namespaces.SVG 
-  if (jsx.jsxTag === RootTags.MATHML)
-    return Namespaces.MATHML
-  return contextNamespace
-}
+const getNamespace = (
+  jsx: ObjectJSXElement,
+  contextNamespace: string = Namespaces.HTML,
+): string => {
+  if (jsx.jsxTag === RootTags.SVG) return Namespaces.SVG;
+  if (jsx.jsxTag === RootTags.MATHML) return Namespaces.MATHML;
+  return contextNamespace;
+};
 
 export const createObject = (
   jsx: ObjectJSXElement,
   contextElement?: Element,
-  contextNamespace?: string
+  contextNamespace?: string,
 ): Element => {
   const newNamespace = getNamespace(jsx, contextNamespace);
   const el = document.createElementNS(newNamespace, jsx.jsxTag, {
@@ -24,10 +25,10 @@ export const createObject = (
 
   if (children)
     if (Array.isArray(children))
-      el.append(...children.map((x) => create(x, contextElement,
-        contextNamespace)));
-    else el.append(create(children, contextElement,
-      contextNamespace));
+      el.append(
+        ...children.map((x) => create(x, contextElement, contextNamespace)),
+      );
+    else el.append(create(children, contextElement, contextNamespace));
 
   setProperties(el, attrs, contextElement);
 
