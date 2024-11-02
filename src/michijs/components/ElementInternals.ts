@@ -41,9 +41,8 @@ export const ElementInternals: CreateFunctionalComponent<ElementInternalsProps> 
         validityStateFlags = { customError: true },
         ...aria
       },
-      options,
+      self,
     ) => {
-      const self = options?.contextElement;
       if (self && isMichiCustomElement(self) && self.$michi.internals) {
         if (errorMessage) {
           const errorObservable = useComputedObserve(

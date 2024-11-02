@@ -6,6 +6,7 @@ import {
   customMapAndSetDelete,
 } from "./mapAndSetCommonHandlers";
 import {
+  createSpecialSubscription,
   customObjectApply,
   customObjectDelete,
   customObjectGetOwnPropertyDescriptor,
@@ -22,7 +23,7 @@ export const observeMap = <E, T extends Map<any, E>>(
 ) => {
   const newInitialObservers: Subscription<any>[] = [
     ...(initialObservers ?? []),
-    () => newObservable.notifyCurrentValue(),
+    createSpecialSubscription(() => newObservable),
   ];
   const proxiedMap = cloneMap(item, (value) =>
     useObserveInternal(value, newInitialObservers, rootObservableCallback),
@@ -67,7 +68,7 @@ export const observeMap = <E, T extends Map<any, E>>(
               rootObservableCallback,
             );
             const result = bindedTargetProperty(key, observedItem);
-            observedItem.notifyCurrentValue?.();
+            observedItem.notifyIfNeeded?.();
             return result;
           };
         }

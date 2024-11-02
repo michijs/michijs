@@ -52,7 +52,7 @@ export function setObservableValue<T extends object>(
         object1.$replace(...object2Value);
       } else if (Object.getPrototypeOf(object1Value) === Object.prototype)
         for (const key in { ...object1Value, ...object2Value }) {
-          object1[key] = object2Value[key];
+          object1[key](object2Value[key]);
         }
       else
         Reflect.set(

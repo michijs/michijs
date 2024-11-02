@@ -2,7 +2,6 @@ import { create } from "../DOMDiff/create";
 import { jsx } from "../h";
 import { VirtualFragment } from "../classes/VirtualFragment";
 import type {
-  CreateOptions,
   ExtendableComponentWithoutChildren,
   CreateFCResult,
   SingleJSXElement,
@@ -40,7 +39,8 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
     then,
     ...attrs
   }: AsyncComponentProps<P, T>,
-  options: CreateOptions,
+  contextElement?: Element,
+  contextNamespace?: string
 ): Node => {
   const el = asTag
     ? (create({
@@ -50,7 +50,7 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
     : new VirtualFragment();
 
   // If a loading component is provided, append it to the element.
-  if (loadingComponent) el.append(create(loadingComponent, options));
+  if (loadingComponent) el.append(create(loadingComponent, contextElement, contextNamespace));
 
   // Function to render the component when the promise resolves.
   const render = (promiseResult: P) => {
@@ -69,8 +69,7 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
           ? then(Res as P)
           : Res && typeof Res === "function"
             ? jsx(Res)
-            : Res,
-        options,
+            : Res, contextElement, contextNamespace
       ) as ChildNode & ParentNode,
     );
   };

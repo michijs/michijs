@@ -6,6 +6,7 @@ import {
   customMapAndSetDelete,
 } from "./mapAndSetCommonHandlers";
 import {
+  createSpecialSubscription,
   customObjectApply,
   customObjectDelete,
   customObjectGetOwnPropertyDescriptor,
@@ -22,7 +23,7 @@ export const observeSet = <E, T extends Set<E>>(
 ): ObservableType<Set<E>> => {
   const newInitialObservers: Subscription<any>[] = [
     ...(initialObservers ?? []),
-    () => newObservable.notifyCurrentValue(),
+    createSpecialSubscription(() => newObservable),
   ];
   const proxiedSet = cloneMap(item, (value) =>
     useObserveInternal(value, newInitialObservers, rootObservableCallback),
@@ -62,14 +63,14 @@ export const observeSet = <E, T extends Set<E>>(
             const newValueOf = newValue?.valueOf?.();
             const hasOldValue = target.$value.has(newValueOf);
             if (!hasOldValue) {
-              const observedItem = useObserveInternal<E>(
+              // Can be wathever but doesnt work properly if I use E for example
+              const observedItem = useObserveInternal<number>(
                 newValueOf,
                 newInitialObservers,
                 rootObservableCallback,
               );
               bindedTargetProperty(newValueOf, observedItem);
-              // @ts-ignore
-              observedItem.notifyCurrentValue?.();
+              observedItem.notifyIfNeeded?.();
             }
             return proxy;
           };

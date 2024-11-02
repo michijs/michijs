@@ -1,7 +1,6 @@
 import { create } from "../DOMDiff/create";
 import { bindObservable } from "../utils/bindObservable";
 import type {
-  CreateOptions,
   ExtendableComponentWithoutChildren,
   CreateFCResult,
   SingleJSXElement,
@@ -33,7 +32,8 @@ export const If = <const T = CreateFCResult>(
     enableCache,
     ...attrs
   }: IfProps<T>,
-  options: CreateOptions,
+  contextElement?: Element,
+  contextNamespace?: string
 ) => {
   // Create an element or a virtual fragment depending on the 'asTag' prop.
   const el = asTag
@@ -66,7 +66,7 @@ export const If = <const T = CreateFCResult>(
       if (cachedThen) el.replaceChildren(cachedThen);
       else if (then)
         el.replaceChildren(
-          create(typeof then === "function" ? then() : then, options),
+          create(typeof then === "function" ? then() : then, contextElement, contextNamespace),
         );
     } else {
       if (newCache) {
@@ -81,7 +81,7 @@ export const If = <const T = CreateFCResult>(
             typeof elseComponent === "function"
               ? elseComponent()
               : elseComponent,
-            options,
+              contextElement, contextNamespace
           ),
         );
     }

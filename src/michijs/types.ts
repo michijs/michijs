@@ -182,7 +182,10 @@ export type RequiredKeys<T> = {
 export type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>;
 
 // End Auxiliar Types
-export type Subscription<T> = (signal: T) => void;
+export interface Subscription<T> {
+  (signal: T): void;
+  ignore?(): boolean
+};
 export type RefSubscription<T, E> = (signal: T, el: E) => void;
 export interface CompatibleSubscription {
   // its optional to keep compatibility with others observers like redux
@@ -273,7 +276,8 @@ export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>>
     props: ExtendableComponentWithoutChildren<E> & {
       renderItem: FC<SV>;
     },
-    context?: CreateOptions,
+    context?: Element,
+    namespace?: string
   ): Node;
 }
 
@@ -287,15 +291,17 @@ export type Typeof =
   | "object"
   | "function";
 
+export type NotifiableObservers<T> = Subscription<T>[] | null
+
 export interface ProxiedValueInterface<RV, SV> extends ObservableLike<RV> {
   get $value(): SV;
   set $value(newValue: SV | RV);
-  notifyCurrentValue(): void;
+  notifyCurrentValue(notifiableObservers?: NotifiableObservers<RV>): void;
+  notifyIfNeeded(): void;
   toObservableString(): ObservableType<string>;
   toBoolean(): boolean;
   toString(): string;
   not(): boolean;
-  shouldNotify(): boolean;
   is(anotherValue: unknown): boolean;
   typeof(): Typeof;
   unproxify(): RV;
@@ -568,16 +574,16 @@ export type FCProps<T = {}> = {
 
 export type CreateFCResult<
   T = {},
-  S extends Element = Element,
-  C = CreateOptions<S>,
-> = (attrs: FCProps<T>, context?: C) => SingleJSXElement;
+  S extends Element = Element
+> = (attrs: FCProps<T>, contextElement?: S, namespace?: string) => SingleJSXElement;
 
-export type FC<T = {}, S extends Element = Element, C = CreateOptions<S>> = (
+export type FC<T = {}, S extends Element = Element> = (
   attrs: T,
-  context?: C,
+  contextElement?: S,
+  namespace?: string
 ) => SingleJSXElement;
-export interface FCC<T = {}, S extends Element = Element, C = CreateOptions<S>>
-  extends FC<T & { children?: JSX.Element }, S, C> {}
+export interface FCC<T = {}, S extends Element = Element>
+  extends FC<T & { children?: JSX.Element }, S> {}
 
 export type PropertyKey = string | number | symbol;
 
@@ -822,12 +828,6 @@ export type GetElementProps<El> = El extends (...args: infer Y) => any
     : El extends keyof JSX.IntrinsicElements
       ? JSX.IntrinsicElements[El]
       : {};
-
-export interface CreateOptions<E extends Element = Element> {
-  readonly isSVG?: boolean;
-  readonly isMATHML?: boolean;
-  readonly contextElement?: E;
-}
 
 export type UseStyleSheetCallback<T> = (
   tags: string,

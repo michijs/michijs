@@ -1,4 +1,3 @@
-import type { CreateOptions } from "../../types";
 import { setStyle } from "./setStyle";
 import { setAttribute } from "./setAttribute";
 import { bindFunction } from "../../utils/bindFunction";
@@ -10,7 +9,7 @@ export function setProperty(
   el: Element,
   name: string,
   newValue: any,
-  options?: CreateOptions,
+  contextElement?: Element,
 ): void {
   // priority to properties and events
   if (name === "_")
@@ -23,7 +22,7 @@ export function setProperty(
     );
   else if (name.startsWith("on")) {
     const eventName = name.slice(2) as keyof ElementEventMap;
-    const bindedEvent = bindFunction(options?.contextElement, newValue);
+    const bindedEvent = bindFunction(contextElement, newValue);
     el.addEventListener(eventName, bindedEvent);
   } else if (name === "style" && typeof newValue === "object")
     setStyle(el, newValue as CSSProperties);

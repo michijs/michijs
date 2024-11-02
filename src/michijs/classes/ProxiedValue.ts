@@ -8,7 +8,6 @@ import type {
   MutableArrayProperties,
   FC,
   ExtendableComponentWithoutChildren,
-  CreateOptions,
   SingleJSXElement,
 } from "../types";
 import { deepEqual } from "../utils/deepEqual";
@@ -21,8 +20,7 @@ import { VirtualFragment } from "./VirtualFragment";
 
 export class ProxiedValue<T>
   extends Observable<T>
-  implements ProxiedValueInterface<T, T>
-{
+  implements ProxiedValueInterface<T, T> {
   private $privateValue: T;
 
   static transactionsInProgress = 0;
@@ -52,10 +50,11 @@ export class ProxiedValue<T>
   }
 
   set $value(newValue: T) {
-    if (this.shouldNotify()) {
+    const notifiableObservers = this.notifiableObservers;
+    if (notifiableObservers) {
       if (!deepEqual(newValue, this.$privateValue)) {
         this.$privateValue = newValue;
-        this.notifyCurrentValue();
+        this.notifyCurrentValue(notifiableObservers);
       }
     } else this.$privateValue = newValue;
   }
@@ -63,13 +62,18 @@ export class ProxiedValue<T>
     return this.$privateValue;
   }
 
-  notifyCurrentValue(): void {
-    if (this.shouldNotify()) {
-      if (ProxiedValue.transactionsInProgress > 0)
-        ProxiedValue.valuesToNotifyOnTransactionFinish.add(this);
-      else this.notify(this.valueOf());
-    }
+  notifyCurrentValue(notifiableObservers: Subscription<T>[] | null = this.notifiableObservers): void {
+    if (ProxiedValue.transactionsInProgress > 0)
+      ProxiedValue.valuesToNotifyOnTransactionFinish.add(this);
+    else this.notify(this.valueOf(), notifiableObservers);
   }
+
+  notifyIfNeeded(): void {
+    const notifiableObservers = this.notifiableObservers;
+    if (notifiableObservers)
+      this.notifyCurrentValue(notifiableObservers)
+  }
+
   forceNotifyCurrentValue(): void {
     this.notify(this.valueOf());
   }
@@ -112,11 +116,6 @@ export class ProxiedValue<T>
   unproxify(): T {
     return this.valueOf();
   }
-
-  shouldNotify(): boolean {
-    return !!this.observers;
-  }
-
   typeof(): Typeof {
     return typeof this.$value;
   }
@@ -129,8 +128,7 @@ export class ProxiedValue<T>
 
 export class ProxiedArray<V>
   extends ProxiedValue<V[]>
-  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties>
-{
+  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties> {
   private targets = new Array<Target<V>>();
 
   constructor(
@@ -148,16 +146,20 @@ export class ProxiedArray<V>
     }: ExtendableComponentWithoutChildren<E> & {
       renderItem: FC<V>;
     },
-    context?: CreateOptions,
+    contextElement?: Element,
+    contextNamespace?: string
   ): Node => {
     const el = asTag
       ? (create({
-          jsxTag: asTag,
-          attrs,
-        } as SingleJSXElement) as ParentNode)
+        jsxTag: asTag,
+        attrs
+      } as SingleJSXElement,
+        contextElement,
+        contextNamespace) as ParentNode)
       : new VirtualFragment();
 
-    const newTarget = new Target(el, renderItem, context);
+    const newTarget = new Target(el, renderItem, contextElement,
+      contextNamespace);
 
     this.targets.push(newTarget);
 
@@ -169,20 +171,17 @@ export class ProxiedArray<V>
   $clear(): void {
     this.targets.forEach((target) => target.clear());
     this.$value = [];
-    this.notifyCurrentValue();
   }
 
   $replace(...items: V[]): number {
     this.targets.forEach((target) => target.replace(...items));
     this.$value = items;
-    this.notifyCurrentValue();
     return items.length;
   }
 
   $remove(index: number): number {
     this.$value = this.$value.filter((_x, i) => i !== index);
     this.targets.forEach((target) => target.remove(index));
-    this.notifyCurrentValue();
     return this.$value.length;
   }
 
@@ -193,14 +192,12 @@ export class ProxiedArray<V>
         this.$value[indexB],
         this.$value[indexA],
       ];
-      this.notifyCurrentValue();
     }
   }
 
   pop(): V | undefined {
     this.targets.forEach((target) => target.pop());
     const result = this.$value.pop();
-    this.notifyCurrentValue();
 
     return result;
   }
@@ -210,32 +207,27 @@ export class ProxiedArray<V>
       this.targets.forEach((target) => target.appendItems(...items));
     const result = this.$value?.push(...items);
 
-    this.notifyCurrentValue();
     return result;
   }
   reverse(): V[] {
     this.targets.forEach((target) => target.reverse());
     const result = this.$value.reverse();
 
-    this.notifyCurrentValue();
     return result;
   }
   shift(): V | undefined {
     this.targets.forEach((target) => target.shift());
     const result = this.$value.shift();
-    this.notifyCurrentValue();
     return result;
   }
   unshift(...items: V[]): number {
     this.targets.forEach((target) => target.prependItems(...items));
     const result = this.$value.unshift(...items);
-    this.notifyCurrentValue();
     return result;
   }
   fill(item: V, start?: number, end?: number): V[] {
     this.targets.forEach((target) => target.fill(item, start, end));
     const result = this.$value.fill(item, start, end);
-    this.notifyCurrentValue();
     return result;
   }
   sort(compareFn?: (a: V, b: V) => number): V[] {

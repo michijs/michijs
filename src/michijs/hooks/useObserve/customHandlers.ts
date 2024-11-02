@@ -37,7 +37,7 @@ export const customObjectSet =
       );
       const result = Reflect.set(target.$value, property, newItem);
       // @ts-ignore
-      newItem.notifyCurrentValue?.();
+      newItem.notifyIfNeeded?.();
       return result;
     }
     return false;
@@ -154,3 +154,9 @@ export const customObjectApply: (
     }
     return target.valueOf();
   };
+
+export const createSpecialSubscription = <T>(proxiedValue: () => ProxiedValue<T>): Subscription<T> => {
+  const subscription: Subscription<T> = () => proxiedValue().notifyCurrentValue();
+  subscription.ignore = () => !proxiedValue().notifiableObservers;
+  return subscription;
+}

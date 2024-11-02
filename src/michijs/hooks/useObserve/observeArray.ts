@@ -1,6 +1,7 @@
 import { useObserveInternal } from "../useObserve";
 import type { ObservableType, Subscription } from "../../types";
 import {
+  createSpecialSubscription,
   customObjectApply,
   customObjectDelete,
   customObjectGet,
@@ -23,7 +24,7 @@ export function observeArray<T extends Array<unknown>>(
 ) {
   const newInitialObservers = [
     ...(initialObservers ?? []),
-    () => newObservable.notifyCurrentValue(),
+    createSpecialSubscription(() => newObservable),
   ];
   const proxiedArray = cloneArray(item, (value) =>
     useObserveInternal<any>(value, newInitialObservers, rootObservableCallback),

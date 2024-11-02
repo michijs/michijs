@@ -1,19 +1,22 @@
 import { create } from "../DOMDiff/create";
-import type { CreateOptions, FC } from "../types";
+import type { FC } from "../types";
 import type { VirtualFragment } from "./VirtualFragment";
 
 export class Target<V> {
   private element: VirtualFragment | ParentNode;
   private renderItem: FC<V>;
-  private options?: CreateOptions;
+  contextElement?: Element;
+  contextNamespace?: string;
   constructor(
     element: VirtualFragment | ParentNode,
     renderItem: FC<V>,
-    options?: CreateOptions,
+    contextElement?: Element,
+    contextNamespace?: string
   ) {
     this.element = element;
     this.renderItem = renderItem;
-    this.options = options;
+    this.contextElement = contextElement;
+    this.contextNamespace = contextNamespace;
   }
 
   clear(): void {
@@ -21,7 +24,7 @@ export class Target<V> {
   }
 
   createSingleItem(value: V): Node {
-    return create(this.renderItem(value), this.options);
+    return create(this.renderItem(value), this.contextElement, this.contextNamespace);
   }
   create(...value: V[]): Node[] {
     return value.map((x) => this.createSingleItem(x));

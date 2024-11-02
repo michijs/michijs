@@ -1,5 +1,5 @@
 import type { RouterProps } from "../routing/types";
-import type { CreateOptions, SingleJSXElement } from "../types";
+import type { SingleJSXElement } from "../types";
 import { VirtualFragment } from "../classes/VirtualFragment";
 import { bindObservable } from "../utils/bindObservable";
 import { create } from "../DOMDiff/create";
@@ -9,7 +9,7 @@ import { urlFn } from "../routing/utils/urlFn";
 
 export const Router = <const T>(
   { as: asTag, routes, parentRoute, enableCache, ...attrs }: RouterProps<T>,
-  options: CreateOptions,
+  contextElement, contextNamespace
 ) => {
   const el = asTag
     ? (create({
@@ -40,7 +40,7 @@ export const Router = <const T>(
       if (cache[newMatchedRoute]) el.replaceChildren(cache[newMatchedRoute]);
       else {
         const component = routes?.[newMatchedRoute];
-        el.replaceChildren(create(component, options));
+        el.replaceChildren(create(component, contextElement, contextNamespace));
       }
     }
     currentRoute = newMatchedRoute;

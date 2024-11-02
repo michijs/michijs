@@ -3,7 +3,6 @@ import { isDOMOrFragmentElement } from "../typeWards/isDOMOrFragmentElement";
 import { isNotAPrimitiveJSX } from "../typeWards/isNotAPrimitiveJSX";
 import { isFunctionOrClassJSXElement } from "../typeWards/isFunctionOrClassJSXElement";
 import type {
-  CreateOptions,
   DOMElementJSXElement,
   ObservableNonNullablePrimitiveType,
   SingleJSXElement,
@@ -14,10 +13,12 @@ import { createObject } from "./createObject";
 import { createTextElement } from "./createTextElement";
 import { isObservableType } from "../typeWards/isObservableType";
 import { createObservableTextElement } from "./createObservableTextElement";
+import { Namespaces } from "../constants/namespaces";
 
 export function create<T = Node>(
   jsx: SingleJSXElement,
-  options: CreateOptions = {},
+  contextElement?: Element,
+  contextNamespace: string = Namespaces.HTML
 ): T {
   if (jsx) {
     if (Array.isArray(jsx))
@@ -28,7 +29,8 @@ export function create<T = Node>(
             children: jsx,
           },
         },
-        options,
+        contextElement,
+        contextNamespace
       ) as T;
     if (isNotAPrimitiveJSX(jsx)) {
       if ("jsxTag" in jsx) {
@@ -36,15 +38,25 @@ export function create<T = Node>(
         // Solves undefined Fragment caused by some compilers
         if (isDOMOrFragmentElement(jsx)) {
           jsx.jsxTag ??= document.createDocumentFragment();
-          return createDOMElement(jsx as DOMElementJSXElement, options) as T;
+          return createDOMElement(jsx as DOMElementJSXElement,
+            contextElement,
+            contextNamespace) as T;
         }
         if (isFunctionOrClassJSXElement(jsx)) {
           // Explicit casting because of tsc error
           if (isClassJSXElement(jsx))
-            return createObject(classJSXToObjectJSXElement(jsx), options) as T;
-          return create(jsx.jsxTag(jsx.attrs, options), options);
+            return createObject(classJSXToObjectJSXElement(jsx),
+          contextElement,
+          contextNamespace) as T;
+          return create(jsx.jsxTag(jsx.attrs,
+            contextElement,
+            contextNamespace),
+            contextElement,
+            contextNamespace);
         }
-        return createObject(jsx, options) as T;
+        return createObject(jsx,
+          contextElement,
+          contextNamespace) as T;
       }
       return jsx as T;
     }

@@ -59,10 +59,10 @@ export async function makePerformanceTests(page: () => Page) {
     key: Result,
     functionToMeasure: () => Promise<void>,
   ) => {
-    const t0 = (await page().metrics()).Timestamp!;
+    const t0 = performance.now();
     await functionToMeasure();
-    const t1 = (await page().metrics()).Timestamp!;
-    results.set(key, Number((Number(t1 - t0) * 1000).toFixed(2)));
+    const t1 = performance.now();
+    results.set(key, Number((Number(t1 - t0)).toFixed(2)));
   };
   it("creates 1000 rows when clicking run", async () => {
     await saveResult("create1000Rows", create1000Rows);

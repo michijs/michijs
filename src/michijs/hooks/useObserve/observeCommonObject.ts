@@ -3,6 +3,7 @@ import type { ObservableType, Subscription } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 import { cloneCommonObject } from "../../utils/clone/cloneCommonObject";
 import {
+  createSpecialSubscription,
   customObjectApply,
   customObjectDelete,
   customObjectGet,
@@ -19,7 +20,7 @@ export function observeCommonObject<T>(
 ): ObservableType<T> {
   const newInitialObservers = [
     ...(initialObservers ?? []),
-    () => newObservable.notifyCurrentValue(),
+    createSpecialSubscription(() => newObservable),
   ];
   const newObservable = new ProxiedValue<T>(
     item && Object.getPrototypeOf(item) === Object.prototype

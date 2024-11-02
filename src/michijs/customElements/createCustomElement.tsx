@@ -234,15 +234,11 @@ export function createCustomElement<O extends MichiElementOptions>(
           ...reflectedCssVariables,
         }) {
           const standarizedAttributeName = formatToKebabCase(key);
-          setProperty(this, standarizedAttributeName, this[key], {
-            contextElement: this,
-          });
+          setProperty(this, standarizedAttributeName, this[key], this);
         }
         this.willMount?.();
         if (this.render) {
-          const newChildren = create(this.render(), {
-            contextElement: this,
-          });
+          const newChildren = create(this.render(), this);
           getMountPoint(this).append(newChildren);
         }
         this.$michi.alreadyRendered = true;
