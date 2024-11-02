@@ -20,7 +20,8 @@ import { VirtualFragment } from "./VirtualFragment";
 
 export class ProxiedValue<T>
   extends Observable<T>
-  implements ProxiedValueInterface<T, T> {
+  implements ProxiedValueInterface<T, T>
+{
   private $privateValue: T;
 
   static transactionsInProgress = 0;
@@ -62,7 +63,9 @@ export class ProxiedValue<T>
     return this.$privateValue;
   }
 
-  notifyCurrentValue(notifiableObservers: Subscription<T>[] | null = this.notifiableObservers): void {
+  notifyCurrentValue(
+    notifiableObservers: Subscription<T>[] | null = this.notifiableObservers,
+  ): void {
     if (ProxiedValue.transactionsInProgress > 0)
       ProxiedValue.valuesToNotifyOnTransactionFinish.add(this);
     else this.notify(this.valueOf(), notifiableObservers);
@@ -70,8 +73,7 @@ export class ProxiedValue<T>
 
   notifyIfNeeded(): void {
     const notifiableObservers = this.notifiableObservers;
-    if (notifiableObservers)
-      this.notifyCurrentValue(notifiableObservers)
+    if (notifiableObservers) this.notifyCurrentValue(notifiableObservers);
   }
 
   forceNotifyCurrentValue(): void {
@@ -128,7 +130,8 @@ export class ProxiedValue<T>
 
 export class ProxiedArray<V>
   extends ProxiedValue<V[]>
-  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties> {
+  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties>
+{
   private targets = new Array<Target<V>>();
 
   constructor(
@@ -147,19 +150,25 @@ export class ProxiedArray<V>
       renderItem: FC<V>;
     },
     contextElement?: Element,
-    contextNamespace?: string
+    contextNamespace?: string,
   ): Node => {
     const el = asTag
-      ? (create({
-        jsxTag: asTag,
-        attrs
-      } as SingleJSXElement,
-        contextElement,
-        contextNamespace) as ParentNode)
+      ? (create(
+          {
+            jsxTag: asTag,
+            attrs,
+          } as SingleJSXElement,
+          contextElement,
+          contextNamespace,
+        ) as ParentNode)
       : new VirtualFragment();
 
-    const newTarget = new Target(el, renderItem, contextElement,
-      contextNamespace);
+    const newTarget = new Target(
+      el,
+      renderItem,
+      contextElement,
+      contextNamespace,
+    );
 
     this.targets.push(newTarget);
 

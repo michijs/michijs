@@ -9,7 +9,8 @@ import { urlFn } from "../routing/utils/urlFn";
 
 export const Router = <const T>(
   { as: asTag, routes, parentRoute, enableCache, ...attrs }: RouterProps<T>,
-  contextElement, contextNamespace
+  contextElement,
+  contextNamespace,
 ) => {
   const el = asTag
     ? (create({

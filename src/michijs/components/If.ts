@@ -33,7 +33,7 @@ export const If = <const T = CreateFCResult>(
     ...attrs
   }: IfProps<T>,
   contextElement?: Element,
-  contextNamespace?: string
+  contextNamespace?: string,
 ) => {
   // Create an element or a virtual fragment depending on the 'asTag' prop.
   const el = asTag
@@ -66,7 +66,11 @@ export const If = <const T = CreateFCResult>(
       if (cachedThen) el.replaceChildren(cachedThen);
       else if (then)
         el.replaceChildren(
-          create(typeof then === "function" ? then() : then, contextElement, contextNamespace),
+          create(
+            typeof then === "function" ? then() : then,
+            contextElement,
+            contextNamespace,
+          ),
         );
     } else {
       if (newCache) {
@@ -81,7 +85,8 @@ export const If = <const T = CreateFCResult>(
             typeof elseComponent === "function"
               ? elseComponent()
               : elseComponent,
-              contextElement, contextNamespace
+            contextElement,
+            contextNamespace,
           ),
         );
     }
