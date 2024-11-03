@@ -87,7 +87,7 @@ function buildData(count = 1000) {
     };
   return data;
 }
-const rows = new ProxiedArray<Row>([]);
+const rows = new ProxiedArray<Row>([], undefined, true);
 const run = () => rows.$replace(...buildData());
 const runLots = () => {
   rows.$replace(...buildData(10000));

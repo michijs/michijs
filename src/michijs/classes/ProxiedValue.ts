@@ -29,6 +29,9 @@ export class ProxiedValue<T>
   static valuesToNotifyOnTransactionFinish = new Set<
     InstanceType<typeof ProxiedValue<any>>
   >();
+  /**
+   * Helps to self manage notifications - useful for arrays where you dont need to compare to know if the value its different
+   */
   protected manualNotifications = false;
 
   static startTransaction(): void {
@@ -131,13 +134,24 @@ export class ProxiedArray<V>
   implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties>
 {
   private targets = new Array<Target<V>>();
+  /**
+   * Removed the need to notificate. Useful if you dont have notifiableObservers
+   */
+  private disableNotifications;
+
+  override notifyCurrentValue(){
+    if(!this.disableNotifications)
+      super.notifyCurrentValue()
+  }
 
   constructor(
-    initialValue?: V[],
+    initialValue: V[],
     parentSubscription?: ParentSubscription<V[]>,
+    disableNotifications?: boolean
   ) {
     super(initialValue, parentSubscription);
     this.manualNotifications = true;
+    this.disableNotifications = disableNotifications;
   }
 
   List = <const E = FC>(
