@@ -1,12 +1,12 @@
 import { useObserveInternal } from "../useObserve";
-import type { ObservableType, Subscription } from "../../types";
+import type { ObservableType, ParentSubscription } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 import {
   customMapAndSetClear,
   customMapAndSetDelete,
 } from "./mapAndSetCommonHandlers";
 import {
-  createSpecialSubscription,
+  createParentSubscription,
   customObjectApply,
   customObjectDelete,
   customObjectGetOwnPropertyDescriptor,
@@ -18,22 +18,19 @@ import { setObservableValue } from "../../utils/setObservableValue";
 
 export const observeMap = <E, T extends Map<any, E>>(
   item: T,
-  initialObservers?: Subscription<T>[],
+  parentSubscription?: ParentSubscription<any>,
   rootObservableCallback?: () => ObservableType<any>,
 ) => {
-  const newInitialObservers: Subscription<any>[] = [
-    ...(initialObservers ?? []),
-    createSpecialSubscription(() => newObservable),
-  ];
+  const newParentSubscription = createParentSubscription(() => newObservable);
   const proxiedMap = cloneMap(item, (value) =>
-    useObserveInternal(value, newInitialObservers, rootObservableCallback),
+    useObserveInternal(value, newParentSubscription, rootObservableCallback),
   );
-  const newObservable = new ProxiedValue<T>(proxiedMap as T, initialObservers);
+  const newObservable = new ProxiedValue<T>(proxiedMap as T, parentSubscription);
   const proxy = new Proxy(newObservable, {
-    set: customObjectSet(newInitialObservers, rootObservableCallback),
+    set: customObjectSet(newParentSubscription, rootObservableCallback),
     apply: customObjectApply(
       () => proxy,
-      newInitialObservers,
+      newParentSubscription,
       rootObservableCallback,
     ),
     get: (target, property) => {
@@ -58,17 +55,17 @@ export const observeMap = <E, T extends Map<any, E>>(
               return setObservableValue(
                 oldValue,
                 newValue,
-                newInitialObservers,
+                newParentSubscription,
                 rootObservableCallback,
               );
             }
             const observedItem = useObserveInternal<object>(
               newValue,
-              newInitialObservers,
+              newParentSubscription,
               rootObservableCallback,
             );
             const result = bindedTargetProperty(key, observedItem);
-            observedItem.notifyIfNeeded?.();
+            observedItem.notifyCurrentValue?.();
             return result;
           };
         }

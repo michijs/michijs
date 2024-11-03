@@ -1,9 +1,9 @@
 import { useObserveInternal } from "../useObserve";
-import type { ObservableType, Subscription } from "../../types";
+import type { ObservableType, ParentSubscription } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 import { cloneCommonObject } from "../../utils/clone/cloneCommonObject";
 import {
-  createSpecialSubscription,
+  createParentSubscription,
   customObjectApply,
   customObjectDelete,
   customObjectGet,
@@ -15,36 +15,33 @@ import {
 
 export function observeCommonObject<T>(
   item: T,
-  initialObservers?: Subscription<T>[],
+  parentSubscription?: ParentSubscription<any>,
   rootObservableCallback?: () => ObservableType<any>,
 ): ObservableType<T> {
-  const newInitialObservers = [
-    ...(initialObservers ?? []),
-    createSpecialSubscription(() => newObservable),
-  ];
+  const newParentSubscription = createParentSubscription(() => newObservable);
   const newObservable = new ProxiedValue<T>(
     item && Object.getPrototypeOf(item) === Object.prototype
       ? cloneCommonObject(item, (value) =>
           useObserveInternal<any>(
             value,
-            newInitialObservers,
+            newParentSubscription,
             rootObservableCallback,
           ),
         )
       : item,
-    initialObservers,
+    parentSubscription,
   );
   const proxy = new Proxy(newObservable, {
-    set: customObjectSet(newInitialObservers, rootObservableCallback),
+    set: customObjectSet(newParentSubscription, rootObservableCallback),
     deleteProperty: customObjectDelete,
     apply: customObjectApply(
       () => proxy,
-      newInitialObservers,
+      newParentSubscription,
       rootObservableCallback,
     ),
     ownKeys: customObjectOwnKeys,
     getOwnPropertyDescriptor: customObjectGetOwnPropertyDescriptor,
-    get: customObjectGet(newInitialObservers, rootObservableCallback),
+    get: customObjectGet(newParentSubscription, rootObservableCallback),
     has: customObjectHas,
   }) as unknown as ObservableType<T>;
   return proxy;

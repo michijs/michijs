@@ -1,13 +1,13 @@
 import { ProxiedValue, ProxiedArray } from "../classes/ProxiedValue";
 import { useObserveInternal } from "../hooks/useObserve";
-import type { ObservableType, Subscription } from "../types";
+import type { ObservableType, ParentSubscription } from "../types";
 
 // <T extends ObservableType<any>>
 export function setObservableValue<T extends object>(
   object1: T,
   object2: any,
   // Intentional - this function should be only used on observe functions to avoid removing subscription to parents
-  initialObservers?: Subscription<T>[],
+  parentSubscription?: ParentSubscription<any>,
   rootObservableCallback?: () => ObservableType<any>,
 ): boolean {
   // null?.valueOf() is undefined - bug
@@ -26,7 +26,7 @@ export function setObservableValue<T extends object>(
       "$value",
       useObserveInternal<Object>(
         object2,
-        initialObservers as Subscription<Object>[],
+        parentSubscription,
         rootObservableCallback,
       ).$value,
     );
@@ -42,7 +42,7 @@ export function setObservableValue<T extends object>(
           "$value",
           useObserveInternal<Object>(
             object2,
-            initialObservers as Subscription<Object>[],
+            parentSubscription,
             rootObservableCallback,
           ).$value,
         );
@@ -52,7 +52,8 @@ export function setObservableValue<T extends object>(
         object1.$replace(...object2Value);
       } else if (Object.getPrototypeOf(object1Value) === Object.prototype)
         for (const key in { ...object1Value, ...object2Value }) {
-          object1[key](object2Value[key]);
+          // tried using object1[key](object2Value[key]); but it breaks functions for some reason
+          object1[key] = object2Value[key];
         }
       else
         Reflect.set(
@@ -60,7 +61,7 @@ export function setObservableValue<T extends object>(
           "$value",
           useObserveInternal<Object>(
             object2,
-            initialObservers as Subscription<Object>[],
+            parentSubscription,
             rootObservableCallback,
           ).$value,
         );

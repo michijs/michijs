@@ -1,5 +1,5 @@
 import { ProxiedValue } from "../../classes/ProxiedValue";
-import type { ObservableType, Subscription } from "../../types";
+import type { ObservableType, ParentSubscription } from "../../types";
 import { setObservableValue } from "../../utils/setObservableValue";
 import { useComputedObserve } from "../useComputedObserve";
 import { useObserveInternal } from "../useObserve";
@@ -10,7 +10,7 @@ type CommonObjectProxyHandler<T extends object> = Required<
 
 export const customObjectSet =
   <T>(
-    initialObservers: Subscription<T>[],
+    parentSubscription: ParentSubscription<T>,
     rootObservableCallback?: () => ObservableType<any>,
   ): CommonObjectProxyHandler<any>["set"] =>
   (target, property, newValue, receiver) => {
@@ -32,12 +32,12 @@ export const customObjectSet =
       }
       const newItem = useObserveInternal(
         newValue,
-        initialObservers,
+        parentSubscription,
         rootObservableCallback?.(),
       );
       const result = Reflect.set(target.$value, property, newItem);
       // @ts-ignore
-      newItem.notifyIfNeeded?.();
+      newItem.notifyCurrentValue?.();
       return result;
     }
     return false;
@@ -59,7 +59,7 @@ export const customObjectDelete: CommonObjectProxyHandler<any>["deleteProperty"]
 
 export const customObjectGet =
   <T extends ObservableType<any>>(
-    initialObservers: Subscription<T>[],
+    parentSubscription: ParentSubscription<T>,
     rootObservableCallback?: () => ObservableType<any>,
   ): CommonObjectProxyHandler<any>["get"] =>
   (target, p, receiver) => {
@@ -72,7 +72,7 @@ export const customObjectGet =
         if (p in target.$value)
           return Reflect.get(target.$value, p, target.$value);
         else
-          customObjectSet(initialObservers, rootObservableCallback)(
+          customObjectSet(parentSubscription, rootObservableCallback)(
             target,
             p,
             undefined,
@@ -82,7 +82,7 @@ export const customObjectGet =
       // If a nested object is undefined
     } else {
       target.$value = {};
-      customObjectSet(initialObservers, rootObservableCallback)(
+      customObjectSet(parentSubscription, rootObservableCallback)(
         target,
         p,
         undefined,
@@ -122,10 +122,10 @@ export const customObjectHas: CommonObjectProxyHandler<any>["has"] = (
 export const customObjectApply: (
   // Using proxy instead of target because otherwise it does not trap gets and sets
   proxy: () => ObservableType<any>,
-  initialObservers?: Subscription<any>[],
+  parentSubscription?: ParentSubscription<any>,
   rootObservableCallback?: () => ObservableType<any>,
 ) => CommonObjectProxyHandler<any>["apply"] =
-  (proxy, initialObservers, rootObservableCallback) => (target, _, args) => {
+  (proxy, parentSubscription, rootObservableCallback) => (target, _, args) => {
     const valueType = typeof target.$value;
     if (valueType === "function" && !(target.$value instanceof ProxiedValue)) {
       if (rootObservableCallback)
@@ -141,13 +141,13 @@ export const customObjectApply: (
         setObservableValue(
           proxy(),
           newValue,
-          initialObservers,
+          parentSubscription as ParentSubscription<any>,
           rootObservableCallback,
         );
       else
         proxy().$value = useObserveInternal(
           newValue,
-          initialObservers,
+          parentSubscription,
           rootObservableCallback,
         ).$value;
       return;
@@ -155,11 +155,11 @@ export const customObjectApply: (
     return target.valueOf();
   };
 
-export const createSpecialSubscription = <T>(
+export const createParentSubscription = <T>(
   proxiedValue: () => ProxiedValue<T>,
-): Subscription<T> => {
-  const subscription: Subscription<T> = () =>
+): ParentSubscription<T> => {
+  const subscription: ParentSubscription<T> = () =>
     proxiedValue().notifyCurrentValue();
-  subscription.ignore = () => !proxiedValue().notifiableObservers;
+  subscription.shouldNotify = () => proxiedValue().notifiableObservers;
   return subscription;
 };

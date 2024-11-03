@@ -1,5 +1,5 @@
 import { ProxiedValue } from "../classes/ProxiedValue";
-import type { ObservableType, Subscription } from "../types";
+import type { ObservableType, ParentSubscription } from "../types";
 import { observeArray } from "./useObserve/observeArray";
 import { observeCommonObject } from "./useObserve/observeCommonObject";
 import { observeDate } from "./useObserve/observeDate";
@@ -8,7 +8,7 @@ import { observeSet } from "./useObserve/observeSet";
 
 export function useObserveInternal<T>(
   item?: T,
-  initialObservers?: Subscription<T>[],
+  parentSubscription?: ParentSubscription<T>,
   rootObservableCallback?: () => ObservableType<unknown>,
 ): ObservableType<T> {
   const itemValue =
@@ -19,7 +19,7 @@ export function useObserveInternal<T>(
       if (Array.isArray(itemValue))
         return observeArray(
           itemValue,
-          initialObservers,
+          parentSubscription,
           rootObservableCallback,
         ) as ObservableType<T>;
       // Many built-in objects, for example Map, Set, Date, Promise and others make use of so-called internal slots.
@@ -29,19 +29,19 @@ export function useObserveInternal<T>(
       if (itemValue instanceof Date)
         return observeDate(
           itemValue,
-          initialObservers,
+          parentSubscription,
           rootObservableCallback,
         ) as unknown as ObservableType<T>;
       if (itemValue instanceof Map)
         return observeMap(
           itemValue,
-          initialObservers,
+          parentSubscription,
           rootObservableCallback,
         ) as unknown as ObservableType<T>;
       if (itemValue instanceof Set)
         return observeSet(
           itemValue,
-          initialObservers,
+          parentSubscription,
           rootObservableCallback,
         ) as unknown as ObservableType<T>;
       // console.error(`The object with path "${props.propertyPath}" cannot be observed ${item}`)
@@ -49,7 +49,7 @@ export function useObserveInternal<T>(
   }
   return observeCommonObject<T>(
     itemValue as T,
-    initialObservers,
+    parentSubscription,
     rootObservableCallback,
   ) as unknown as ObservableType<T>;
 }
@@ -57,17 +57,15 @@ export function useObserveInternal<T>(
 /**
  * Responsible for observing changes on different types of values.
  * @param item The value to be observed.
- * @param initialObservers An array of initial observers of type Subscription<T>.
  * @returns A new observable
  */
 export function useObserve<T>(
   item?: T,
-  initialObservers?: Subscription<T>[],
 ): ObservableType<T> {
   const rootObservableCallback = () => result;
   const result = useObserveInternal(
     item,
-    initialObservers,
+    undefined,
     rootObservableCallback,
   );
   return result;

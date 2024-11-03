@@ -14,8 +14,8 @@ export class ModernHistoryManager
   shouldShowUnloadPrompt?: () => boolean;
   ignoreHashes = true;
   private lastNavigationEvent?: NavigateEvent;
-  constructor(initialObservers?: Subscription<string | URL>[]) {
-    super(initialObservers);
+  constructor() {
+    super();
     window.addEventListener("beforeunload", (e) => {
       const isFormEvent =
         window.navigation?.currentEntry?.url ===

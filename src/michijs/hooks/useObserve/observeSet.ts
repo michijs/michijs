@@ -1,12 +1,12 @@
 import { useObserveInternal } from "../useObserve";
-import type { ObservableType, Subscription } from "../../types";
+import type { ObservableType, ParentSubscription } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 import {
   customMapAndSetClear,
   customMapAndSetDelete,
 } from "./mapAndSetCommonHandlers";
 import {
-  createSpecialSubscription,
+  createParentSubscription,
   customObjectApply,
   customObjectDelete,
   customObjectGetOwnPropertyDescriptor,
@@ -18,23 +18,20 @@ import { cloneMap } from "../../utils/clone/cloneMap";
 
 export const observeSet = <E, T extends Set<E>>(
   item: T,
-  initialObservers?: Subscription<T>[],
+  parentSubscription?: ParentSubscription<any>,
   rootObservableCallback?: () => ObservableType<any>,
 ): ObservableType<Set<E>> => {
-  const newInitialObservers: Subscription<any>[] = [
-    ...(initialObservers ?? []),
-    createSpecialSubscription(() => newObservable),
-  ];
+  const newParentSubscription = createParentSubscription(() => newObservable);
   const proxiedSet = cloneMap(item, (value) =>
-    useObserveInternal(value, newInitialObservers, rootObservableCallback),
+    useObserveInternal(value, newParentSubscription, rootObservableCallback),
   );
   // @ts-ignore
-  const newObservable = new ProxiedValue(proxiedSet, initialObservers);
+  const newObservable = new ProxiedValue(proxiedSet, parentSubscription);
   const proxy = new Proxy(newObservable, {
-    set: customObjectSet(newInitialObservers, rootObservableCallback),
+    set: customObjectSet(newParentSubscription, rootObservableCallback),
     apply: customObjectApply(
       () => proxy,
-      newInitialObservers,
+      newParentSubscription,
       rootObservableCallback,
     ),
     get: (target, property) => {
@@ -66,11 +63,11 @@ export const observeSet = <E, T extends Set<E>>(
               // Can be wathever but doesnt work properly if I use E for example
               const observedItem = useObserveInternal<number>(
                 newValueOf,
-                newInitialObservers,
+                newParentSubscription,
                 rootObservableCallback,
               );
               bindedTargetProperty(newValueOf, observedItem);
-              observedItem.notifyIfNeeded?.();
+              observedItem.notifyCurrentValue?.();
             }
             return proxy;
           };

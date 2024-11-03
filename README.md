@@ -410,7 +410,6 @@ It provides more flexibility in organizing code and separates concerns by allowi
 #### useObserve
 Responsible for observing changes on different types of values. Takes two arguments:
 - **item**: The value to be observed.
-- **initialObservers**: An array of initial observers of type `Subscription<T>`.
 
 This is the most basic hook and it is the basis of the entire component structure.
 

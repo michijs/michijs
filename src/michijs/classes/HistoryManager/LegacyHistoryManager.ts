@@ -1,7 +1,7 @@
 import type {
   HistoryManagerType,
   ObservableOrConst,
-  Subscription,
+  ParentSubscription,
 } from "../../types";
 import { handleNavigation } from "./handleNavigation";
 import { unproxify } from "../../utils/unproxify";
@@ -14,8 +14,8 @@ export class LegacyHistoryManager
   private readonly history: (string | URL)[] = [location.pathname];
   shouldShowUnloadPrompt?: () => boolean;
 
-  constructor(initialObservers?: Subscription<string | URL>[]) {
-    super(initialObservers);
+  constructor() {
+    super();
     window.addEventListener("beforeunload", (e) => {
       if (!this.shouldShowUnloadPrompt?.()) {
         return undefined;

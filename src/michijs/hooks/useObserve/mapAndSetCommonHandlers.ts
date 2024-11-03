@@ -8,7 +8,7 @@ export const customMapAndSetClear = (
   return () => {
     if (target.$value.size !== 0) {
       clearFn();
-      target.notifyIfNeeded();
+      target.notifyCurrentValue();
     }
   };
 };
@@ -24,7 +24,7 @@ export const customMapAndSetDelete = (
   //In Map is key, in Set is value
   return (key) => {
     const result = deleteFn(key?.valueOf?.());
-    if (result) target.notifyIfNeeded();
+    if (result) target.notifyCurrentValue();
     return result;
   };
 };

@@ -1,6 +1,5 @@
 import { hasToJSON } from "../typeWards/hasToJSON";
 import type {
-  Subscription,
   ObservableType,
   ProxiedValueInterface,
   Typeof,
@@ -9,6 +8,8 @@ import type {
   FC,
   ExtendableComponentWithoutChildren,
   SingleJSXElement,
+  NotifiableObservers,
+  ParentSubscription,
 } from "../types";
 import { deepEqual } from "../utils/deepEqual";
 import { useComputedObserve } from "../hooks/useComputedObserve";
@@ -20,14 +21,13 @@ import { VirtualFragment } from "./VirtualFragment";
 
 export class ProxiedValue<T>
   extends Observable<T>
-  implements ProxiedValueInterface<T, T>
-{
+  implements ProxiedValueInterface<T, T> {
   private $privateValue: T;
 
   static transactionsInProgress = 0;
-  static valuesToNotifyOnTransactionFinish: Set<
-    InstanceType<typeof ProxiedValue<any>>
-  > = new Set<InstanceType<typeof ProxiedValue<any>>>();
+  static valuesToNotifyOnTransactionFinish = new Set<InstanceType<typeof ProxiedValue<any>>>();
+  protected manualNotifications = false;
+
   static startTransaction(): void {
     ProxiedValue.transactionsInProgress++;
   }
@@ -42,8 +42,8 @@ export class ProxiedValue<T>
     ProxiedValue.transactionsInProgress--;
   }
 
-  constructor(initialValue?: T, initialObservers?: Subscription<T>[]) {
-    super(initialObservers);
+  constructor(initialValue?: T, parentSubscription?: ParentSubscription<T>) {
+    super(parentSubscription);
     this.$privateValue = initialValue!;
     // To avoid issues with isolatedDeclarations
     // this[Symbol.toStringTag] = () => this.toString();
@@ -51,33 +51,33 @@ export class ProxiedValue<T>
   }
 
   set $value(newValue: T) {
-    const notifiableObservers = this.notifiableObservers;
-    if (notifiableObservers) {
-      if (!deepEqual(newValue, this.$privateValue)) {
-        this.$privateValue = newValue;
-        this.notifyCurrentValue(notifiableObservers);
-      }
-    } else this.$privateValue = newValue;
+    if (!this.manualNotifications) {
+      const notifiableObservers = this.notifiableObservers;
+      if (notifiableObservers) {
+        if (!deepEqual(newValue, this.$privateValue)) {
+          this.$privateValue = newValue;
+          this.notifyCurrentValue(notifiableObservers);
+        }
+      } else this.$privateValue = newValue;
+    } else this.$privateValue = newValue
   }
   get $value(): T {
     return this.$privateValue;
   }
 
   notifyCurrentValue(
-    notifiableObservers: Subscription<T>[] | null = this.notifiableObservers,
+    notifiableObservers: NotifiableObservers<T> = this.notifiableObservers,
   ): void {
-    if (ProxiedValue.transactionsInProgress > 0)
-      ProxiedValue.valuesToNotifyOnTransactionFinish.add(this);
-    else this.notify(this.valueOf(), notifiableObservers);
+    if (notifiableObservers)
+      if (ProxiedValue.transactionsInProgress > 0)
+        ProxiedValue.valuesToNotifyOnTransactionFinish.add(this);
+      else this.forceNotifyCurrentValue(notifiableObservers);
   }
 
-  notifyIfNeeded(): void {
-    const notifiableObservers = this.notifiableObservers;
-    if (notifiableObservers) this.notifyCurrentValue(notifiableObservers);
-  }
-
-  forceNotifyCurrentValue(): void {
-    this.notify(this.valueOf());
+  forceNotifyCurrentValue(
+    notifiableObservers: NotifiableObservers<T> = this.notifiableObservers,
+  ): void {
+    this.notify(this.valueOf(), notifiableObservers);
   }
 
   // @ts-ignore
@@ -121,24 +121,19 @@ export class ProxiedValue<T>
   typeof(): Typeof {
     return typeof this.$value;
   }
-
-  // Only for jest
-  asymmetricMatch(prop: unknown): boolean {
-    return this.is(prop);
-  }
 }
 
 export class ProxiedArray<V>
   extends ProxiedValue<V[]>
-  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties>
-{
+  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties> {
   private targets = new Array<Target<V>>();
 
   constructor(
     initialValue?: V[],
-    initialObservers?: Subscription<V[]>[] | undefined,
+    parentSubscription?: ParentSubscription<V[]>,
   ) {
-    super(initialValue, initialObservers);
+    super(initialValue, parentSubscription);
+    this.manualNotifications = true;
   }
 
   List = <const E = FC>(
@@ -154,13 +149,13 @@ export class ProxiedArray<V>
   ): Node => {
     const el = asTag
       ? (create(
-          {
-            jsxTag: asTag,
-            attrs,
-          } as SingleJSXElement,
-          contextElement,
-          contextNamespace,
-        ) as ParentNode)
+        {
+          jsxTag: asTag,
+          attrs,
+        } as SingleJSXElement,
+        contextElement,
+        contextNamespace,
+      ) as ParentNode)
       : new VirtualFragment();
 
     const newTarget = new Target(
@@ -180,17 +175,20 @@ export class ProxiedArray<V>
   $clear(): void {
     this.targets.forEach((target) => target.clear());
     this.$value = [];
+    this.notifyCurrentValue();
   }
 
   $replace(...items: V[]): number {
     this.targets.forEach((target) => target.replace(...items));
     this.$value = items;
+    this.notifyCurrentValue();
     return items.length;
   }
 
   $remove(index: number): number {
     this.$value = this.$value.filter((_x, i) => i !== index);
     this.targets.forEach((target) => target.remove(index));
+    this.notifyCurrentValue();
     return this.$value.length;
   }
 
@@ -201,12 +199,14 @@ export class ProxiedArray<V>
         this.$value[indexB],
         this.$value[indexA],
       ];
+      this.notifyCurrentValue();
     }
   }
 
   pop(): V | undefined {
     this.targets.forEach((target) => target.pop());
     const result = this.$value.pop();
+    this.notifyCurrentValue();
 
     return result;
   }
@@ -215,28 +215,33 @@ export class ProxiedArray<V>
     if (items.length > 0)
       this.targets.forEach((target) => target.appendItems(...items));
     const result = this.$value?.push(...items);
+    this.notifyCurrentValue();
 
     return result;
   }
   reverse(): V[] {
     this.targets.forEach((target) => target.reverse());
     const result = this.$value.reverse();
+    this.notifyCurrentValue();
 
     return result;
   }
   shift(): V | undefined {
     this.targets.forEach((target) => target.shift());
     const result = this.$value.shift();
+    this.notifyCurrentValue();
     return result;
   }
   unshift(...items: V[]): number {
     this.targets.forEach((target) => target.prependItems(...items));
     const result = this.$value.unshift(...items);
+    this.notifyCurrentValue();
     return result;
   }
   fill(item: V, start?: number, end?: number): V[] {
     this.targets.forEach((target) => target.fill(item, start, end));
     const result = this.$value.fill(item, start, end);
+    this.notifyCurrentValue();
     return result;
   }
   sort(compareFn?: (a: V, b: V) => number): V[] {
@@ -262,6 +267,7 @@ export class ProxiedArray<V>
           target.swap(currentIndex, newIndex);
         });
       });
+      this.notifyCurrentValue();
     }
     return result;
   }
@@ -274,6 +280,7 @@ export class ProxiedArray<V>
       );
       this.$value.splice(start, deleteCount, ...items);
     }
+    this.notifyCurrentValue();
     return this.$value;
   }
 }

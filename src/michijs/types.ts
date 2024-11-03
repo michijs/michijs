@@ -184,7 +184,10 @@ export type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>;
 // End Auxiliar Types
 export interface Subscription<T> {
   (signal: T): void;
-  ignore?(): boolean;
+}
+export interface ParentSubscription<T> extends Subscription<T> {
+  (signal: T): void;
+  shouldNotify(): any;
 }
 export type RefSubscription<T, E> = (signal: T, el: E) => void;
 export interface CompatibleSubscription {
@@ -291,13 +294,12 @@ export type Typeof =
   | "object"
   | "function";
 
-export type NotifiableObservers<T> = Subscription<T>[] | null;
+export type NotifiableObservers<T> = Subscription<T>[] | undefined;
 
 export interface ProxiedValueInterface<RV, SV> extends ObservableLike<RV> {
   get $value(): SV;
   set $value(newValue: SV | RV);
   notifyCurrentValue(notifiableObservers?: NotifiableObservers<RV>): void;
-  notifyIfNeeded(): void;
   toObservableString(): ObservableType<string>;
   toBoolean(): boolean;
   toString(): string;

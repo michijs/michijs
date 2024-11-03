@@ -1,4 +1,4 @@
-import type { ObservableType, Subscription } from "../../types";
+import type { ObservableType, ParentSubscription } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 import {
   customObjectApply,
@@ -9,16 +9,16 @@ import { cloneDate } from "../../utils/clone/cloneDate";
 
 export function observeDate<T extends Date>(
   item: T,
-  initialObservers?: Subscription<T>[],
+  parentSubscription?: ParentSubscription<any>,
   rootObservableCallback?: () => ObservableType<any>,
 ) {
   const clone = cloneDate(item);
-  const newObservable = new ProxiedValue<T>(clone, initialObservers);
+  const newObservable = new ProxiedValue<T>(clone, parentSubscription);
   const proxy = new Proxy(newObservable, {
     ownKeys: customObjectOwnKeys,
     apply: customObjectApply(
       () => proxy,
-      initialObservers,
+      parentSubscription,
       rootObservableCallback,
     ),
     getOwnPropertyDescriptor: customObjectGetOwnPropertyDescriptor,
@@ -35,7 +35,7 @@ export function observeDate<T extends Date>(
                 args,
               );
               const newValue = target.$value.getTime();
-              if (newValue !== oldValue) target.notifyIfNeeded();
+              if (newValue !== oldValue) target.notifyCurrentValue();
 
               return result;
             };

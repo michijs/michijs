@@ -1,21 +1,23 @@
 import type {
   NotifiableObservers,
   ObservableLike,
+  ParentSubscription,
   Subscription,
 } from "../types";
 
 export class Observable<T> extends Function implements ObservableLike<T> {
   // Intentional explicit null value - it breaks proxy otherwise
-  observers: Set<Subscription<T>> | null = null;
+  parentSubscription: ParentSubscription<T> | undefined;
+  observers: Subscription<T>[] = [];
 
-  constructor(initialObservers?: Subscription<T>[]) {
+  constructor(parentSubscription?: ParentSubscription<T>) {
     super();
-    if (initialObservers) this.observers = new Set(initialObservers);
+    this.parentSubscription = parentSubscription;
   }
 
   notify(
     value: T,
-    observers: Subscription<T>[] | null = this.notifiableObservers,
+    observers: NotifiableObservers<T> = this.notifiableObservers,
   ): void {
     observers?.forEach((observer) => {
       observer(value);
@@ -23,20 +25,23 @@ export class Observable<T> extends Function implements ObservableLike<T> {
   }
 
   get notifiableObservers(): NotifiableObservers<T> {
-    if (!this.observers) return null;
-    const notifiableObservers = Array.from(this.observers).filter(
-      (x) => !x.ignore?.(),
-    );
-    if (notifiableObservers.length === 0) return null;
-    return notifiableObservers;
+    let allObservers;
+    if (this.parentSubscription?.shouldNotify?.()) {
+      allObservers = [...this.observers];
+      allObservers.push(this.parentSubscription);
+    } else
+      allObservers = this.observers;
+
+    if (allObservers.length === 0)
+      return;
+    return allObservers;
   }
 
   subscribe(observer: Subscription<T>): void {
-    if (this.observers) this.observers.add(observer);
-    else this.observers = new Set([observer]);
+    this.observers.push(observer);
   }
 
   unsubscribe(oldObserver: Subscription<T>): void {
-    this.observers?.delete(oldObserver);
+    this.observers = this.observers?.filter(x => x === oldObserver);
   }
 }
