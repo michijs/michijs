@@ -62,7 +62,7 @@ export async function makePerformanceTests(page: () => Page) {
     const t0 = performance.now();
     await functionToMeasure();
     const t1 = performance.now();
-    results[key] = Number(Number(t1 - t0).toFixed(2))
+    results[key] = Number(Number(t1 - t0).toFixed(2));
   };
   it("creates 1000 rows when clicking run", async () => {
     await saveResult("create1000Rows", create1000Rows);
@@ -77,7 +77,7 @@ export async function makePerformanceTests(page: () => Page) {
       tableBody.map(async (row) => {
         const rowId = await getRowId(row);
         expect(rowId).toBeGreaterThan(1000);
-      })
+      }),
     );
   });
   it("update every 10th row 1000 rows on a table with 1000 rows when clicking update", async () => {
@@ -96,7 +96,7 @@ export async function makePerformanceTests(page: () => Page) {
         } else {
           expect(innerHTML.includes("!!!")).toBeFalsy();
         }
-      })
+      }),
     );
   });
   it("select a row (1000 rows)", async () => {
@@ -127,7 +127,7 @@ export async function makePerformanceTests(page: () => Page) {
       newTable.map(async (row) => {
         const rowId = await getRowId(row);
         expect(rowId !== rowToDeleteId).toBeTruthy();
-      })
+      }),
     );
     expect(newTable.length).toEqual(999);
   });

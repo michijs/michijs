@@ -2,7 +2,7 @@ import { type Browser, chromium, type Page } from "playwright-core";
 import { makePerformanceTests } from "./shared";
 import { describe, beforeEach, afterAll } from "bun:test";
 import { spawn } from "child_process";
-import { writeFileSync } from 'fs'
+import { writeFileSync } from "fs";
 const serverProcess = spawn("bun", ["run", "start"], {
   stdio: "inherit",
   env: { ...process.env, NODE_ENV: "TESTING_VANILLA" },
@@ -14,7 +14,7 @@ describe("Performance tests - vanilla-js", () => {
   beforeEach(async () => {
     browser = await chromium.launch({
       headless: true,
-    });;
+    });
     page = await browser.newPage();
     await page.goto("http://localhost:3001", {
       waitUntil: "domcontentloaded",
@@ -22,7 +22,10 @@ describe("Performance tests - vanilla-js", () => {
   });
   const results = makePerformanceTests(() => page);
   afterAll(async () => {
-    writeFileSync('./tests/benchmark/results/vanillajs.json', JSON.stringify(await results, undefined, 2));
+    writeFileSync(
+      "./tests/benchmark/results/vanillajs.json",
+      JSON.stringify(await results, undefined, 2),
+    );
     serverProcess.kill();
     browser.close();
   });
