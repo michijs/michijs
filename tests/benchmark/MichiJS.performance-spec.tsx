@@ -2,6 +2,7 @@ import { type Browser, chromium, type Page } from "playwright-core";
 import { installPlaywright, makePerformanceTests } from "./shared";
 import { describe, it, expect, beforeEach, afterAll } from "bun:test";
 import { spawn } from "child_process";
+import { omit } from '@michijs/michijs'
 import { writeFileSync } from "fs";
 import michijs from "./results/michijs.json";
 import vanillajs from "./results/vanillajs.json";
@@ -37,7 +38,7 @@ describe("Performance tests - MichiJS", () => {
     writeFileSync(
       "./tests/benchmark/results/michijs.json",
       JSON.stringify(
-        { ...michijs, [packagejson.version]: results },
+        { [packagejson.version]: results, ...omit(michijs, [packagejson.version]) },
         undefined,
         2,
       ),

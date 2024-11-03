@@ -16,6 +16,7 @@ export { doFetch } from "./doFetch";
 export { throttle } from "./throttle";
 export { debounce } from "./debounce";
 export { removeNullableFromObject } from "./removeNullableFromObject";
+export { omit } from "./omit";
 export * from "./getBrowser";
 export * from "./clone";
 export * from "./getPlatform";
