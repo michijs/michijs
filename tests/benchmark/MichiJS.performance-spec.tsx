@@ -35,17 +35,19 @@ describe("Performance tests - MichiJS", () => {
   const resultsPromise = makePerformanceTests(() => page);
   afterAll(async () => {
     const results = await resultsPromise;
+    const resultsString = JSON.stringify(
+      {
+        [packagejson.version]: results,
+        ...omit(michijs, [packagejson.version]),
+      },
+      undefined,
+      2,
+    )
     writeFileSync(
       "./tests/benchmark/results/michijs.json",
-      JSON.stringify(
-        {
-          [packagejson.version]: results,
-          ...omit(michijs, [packagejson.version]),
-        },
-        undefined,
-        2,
-      ),
+      resultsString,
     );
+    console.log("Results: ", resultsString);
     const diff = Object.entries(results).reduce(
       (previousValue, [key, value]) => {
         // Bigger values are worst
@@ -57,9 +59,9 @@ describe("Performance tests - MichiJS", () => {
       },
       {},
     );
-    const diffResults = JSON.stringify(diff, undefined, 2);
-    console.log("Diff results: ", diffResults);
-    writeFileSync("./tests/benchmark/results/diff.json", diffResults);
+    const diffString = JSON.stringify(diff, undefined, 2);
+    console.log("Diff results: ", diffString);
+    writeFileSync("./tests/benchmark/results/diff.json", diffString);
     serverProcess.kill(2);
     browser.close();
   });
