@@ -2,10 +2,10 @@ import { type Browser, chromium, type Page } from "playwright-core";
 import { installPlaywright, makePerformanceTests } from "./shared";
 import { describe, it, expect, beforeEach, afterAll } from "bun:test";
 import { spawn } from "child_process";
-import { writeFileSync } from 'fs';
-import michijs from './results/michijs.json';
-import vanillajs from './results/vanillajs.json';
-import packagejson from '../../package.json';
+import { writeFileSync } from "fs";
+import michijs from "./results/michijs.json";
+import vanillajs from "./results/vanillajs.json";
+import packagejson from "../../package.json";
 const serverProcess = spawn("bun", ["run", "start"], {
   stdio: "inherit",
   env: { ...process.env, NODE_ENV: "TESTING" },
@@ -17,7 +17,7 @@ describe("Performance tests - MichiJS", () => {
   beforeEach(async () => {
     browser = await chromium.launch({
       headless: true,
-    });;
+    });
     page = await browser.newPage();
     await page.goto("http://localhost:3000", {
       waitUntil: "domcontentloaded",
@@ -34,15 +34,28 @@ describe("Performance tests - MichiJS", () => {
   const resultsPromise = makePerformanceTests(() => page);
   afterAll(async () => {
     const results = await resultsPromise;
-    writeFileSync('./tests/benchmark/results/michijs.json', JSON.stringify({ ...michijs, [packagejson.version]: results }, undefined, 2));
-    const diff = Object.entries(results).reduce((previousValue, [key, value]) => {
-      // Bigger values are worst
-      previousValue[key] = Math.max(0, Number((value - vanillajs[key]).toFixed(2)));
-      return previousValue;
-    }, {});
+    writeFileSync(
+      "./tests/benchmark/results/michijs.json",
+      JSON.stringify(
+        { ...michijs, [packagejson.version]: results },
+        undefined,
+        2,
+      ),
+    );
+    const diff = Object.entries(results).reduce(
+      (previousValue, [key, value]) => {
+        // Bigger values are worst
+        previousValue[key] = Math.max(
+          0,
+          Number((value - vanillajs[key]).toFixed(2)),
+        );
+        return previousValue;
+      },
+      {},
+    );
     const diffResults = JSON.stringify(diff, undefined, 2);
-    console.log('Diff results: ', diffResults)
-    writeFileSync('./tests/benchmark/results/diff.json', diffResults);
+    console.log("Diff results: ", diffResults);
+    writeFileSync("./tests/benchmark/results/diff.json", diffResults);
     serverProcess.kill();
     browser.close();
   });
