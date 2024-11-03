@@ -8,7 +8,7 @@ import type {
 export class Observable<T> extends Function implements ObservableLike<T> {
   // Intentional explicit null value - it breaks proxy otherwise
   parentSubscription: ParentSubscription<T> | undefined;
-  observers: Subscription<T>[] = [];
+  observers: Set<Subscription<T>> = new Set();
 
   constructor(parentSubscription?: ParentSubscription<T>) {
     super();
@@ -27,7 +27,7 @@ export class Observable<T> extends Function implements ObservableLike<T> {
   get notifiableObservers(): NotifiableObservers<T> {
     let allObservers;
     if (this.parentSubscription?.shouldNotify?.()) {
-      allObservers = [...this.observers];
+      allObservers = Array.from(this.observers);
       allObservers.push(this.parentSubscription);
     } else allObservers = this.observers;
 
@@ -36,10 +36,10 @@ export class Observable<T> extends Function implements ObservableLike<T> {
   }
 
   subscribe(observer: Subscription<T>): void {
-    this.observers.push(observer);
+    this.observers.add(observer);
   }
 
   unsubscribe(oldObserver: Subscription<T>): void {
-    this.observers = this.observers?.filter((x) => x === oldObserver);
+    this.observers.delete(oldObserver);
   }
 }
