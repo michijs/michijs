@@ -5,7 +5,16 @@ import type {
   Subscription,
 } from "../types";
 
-export class Observable<T> extends Function implements ObservableLike<T> {
+// Bypass Content-Security-Policy by creating a "Callable" object instead of using function
+class Callable {
+  constructor() {
+    const closure: any = function (...args: any) { return closure._call(...args) }
+    return Object.setPrototypeOf(closure, new.target.prototype)
+  }
+  _call() {}
+}
+
+export class Observable<T> extends Callable implements ObservableLike<T> {
   // Intentional explicit null value - it breaks proxy otherwise
   parentSubscription: ParentSubscription<T> | undefined;
   observers: Set<Subscription<T>> = new Set();
