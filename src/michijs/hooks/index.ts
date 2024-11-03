@@ -11,3 +11,7 @@ export { useStringTemplate } from "./useStringTemplate";
 export { useTitle } from "./useTitle";
 export { useWatch } from "./useWatch";
 export { useAsyncComputedObserve } from "./useAsyncComputedObserve";
+export { observeCommonObject } from "./useObserve/observeCommonObject";
+export { observeArray } from "./useObserve/observeArray";
+export { observeDate } from "./useObserve/observeDate";
+export { observeSet } from "./useObserve/observeSet";
