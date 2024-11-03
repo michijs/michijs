@@ -43,7 +43,7 @@ describe("Performance tests - MichiJS", () => {
     const diffResults = JSON.stringify(diff, undefined, 2);
     console.log('Diff results: ', diffResults)
     writeFileSync('./tests/benchmark/results/diff.json', diffResults);
-    serverProcess.kill();
+    serverProcess.kill(2);
     browser.close();
   });
 });

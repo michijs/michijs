@@ -24,7 +24,7 @@ describe("Performance tests - vanilla-js", () => {
   const results = makePerformanceTests(() => page);
   afterAll(async () => {
     writeFileSync('./tests/benchmark/results/vanillajs.json', JSON.stringify(await results, undefined, 2));
-    serverProcess.kill();
+    serverProcess.kill(2);
     browser.close();
   });
 });
