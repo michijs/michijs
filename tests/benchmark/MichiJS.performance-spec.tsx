@@ -42,11 +42,8 @@ describe("Performance tests - MichiJS", () => {
       },
       undefined,
       2,
-    )
-    writeFileSync(
-      "./tests/benchmark/results/michijs.json",
-      resultsString,
     );
+    writeFileSync("./tests/benchmark/results/michijs.json", resultsString);
     console.log("Results: ", resultsString);
     const diff = Object.entries(results).reduce(
       (previousValue, [key, value]) => {
