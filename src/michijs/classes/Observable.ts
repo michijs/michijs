@@ -29,11 +29,9 @@ export class Observable<T> extends Function implements ObservableLike<T> {
     if (this.parentSubscription?.shouldNotify?.()) {
       allObservers = [...this.observers];
       allObservers.push(this.parentSubscription);
-    } else
-      allObservers = this.observers;
+    } else allObservers = this.observers;
 
-    if (allObservers.length === 0)
-      return;
+    if (allObservers.length === 0) return;
     return allObservers;
   }
 
@@ -42,6 +40,6 @@ export class Observable<T> extends Function implements ObservableLike<T> {
   }
 
   unsubscribe(oldObserver: Subscription<T>): void {
-    this.observers = this.observers?.filter(x => x === oldObserver);
+    this.observers = this.observers?.filter((x) => x === oldObserver);
   }
 }

@@ -1,5 +1,5 @@
 import { ProxiedValue } from "../classes/ProxiedValue";
-import type { ObservableOrConst, ObservableType, ParentSubscription, Subscription } from "../types";
+import type { ObservableOrConst, ObservableType } from "../types";
 import { unproxify } from "../utils/unproxify";
 import { bindObservable } from "../utils/bindObservable";
 import { useAsyncComputedObserve } from "../hooks";
@@ -19,7 +19,7 @@ export class I18n<K extends string = string> extends ProxiedValue<K> {
    */
   constructor(
     supportedLanguages: K[],
-    language?: ObservableOrConst<string | undefined>
+    language?: ObservableOrConst<string | undefined>,
   ) {
     super((unproxify(language) ?? navigator.language) as K);
     this.supportedLanguages = supportedLanguages;

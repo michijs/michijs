@@ -14,14 +14,13 @@ const getNamespace = (
 
 // This has a lot of performance improvement for some reason
 export const createObject = (
-   // This has a lot of performance improvement for some reason
-   { attrs: { children, ...attrs }, jsxTag }: ObjectJSXElement,
+  // This has a lot of performance improvement for some reason
+  { attrs: { children, ...attrs }, jsxTag }: ObjectJSXElement,
   contextElement?: Element,
   contextNamespace?: string,
 ): Element => {
   const newNamespace = getNamespace(jsxTag, contextNamespace);
-  
-  
+
   const el = document.createElementNS(newNamespace, jsxTag, {
     is: attrs?.is,
   });

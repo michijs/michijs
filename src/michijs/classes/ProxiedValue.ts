@@ -21,11 +21,14 @@ import { VirtualFragment } from "./VirtualFragment";
 
 export class ProxiedValue<T>
   extends Observable<T>
-  implements ProxiedValueInterface<T, T> {
+  implements ProxiedValueInterface<T, T>
+{
   private $privateValue: T;
 
   static transactionsInProgress = 0;
-  static valuesToNotifyOnTransactionFinish = new Set<InstanceType<typeof ProxiedValue<any>>>();
+  static valuesToNotifyOnTransactionFinish = new Set<
+    InstanceType<typeof ProxiedValue<any>>
+  >();
   protected manualNotifications = false;
 
   static startTransaction(): void {
@@ -59,7 +62,7 @@ export class ProxiedValue<T>
           this.notifyCurrentValue(notifiableObservers);
         }
       } else this.$privateValue = newValue;
-    } else this.$privateValue = newValue
+    } else this.$privateValue = newValue;
   }
   get $value(): T {
     return this.$privateValue;
@@ -125,7 +128,8 @@ export class ProxiedValue<T>
 
 export class ProxiedArray<V>
   extends ProxiedValue<V[]>
-  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties> {
+  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties>
+{
   private targets = new Array<Target<V>>();
 
   constructor(
@@ -149,13 +153,13 @@ export class ProxiedArray<V>
   ): Node => {
     const el = asTag
       ? (create(
-        {
-          jsxTag: asTag,
-          attrs,
-        } as SingleJSXElement,
-        contextElement,
-        contextNamespace,
-      ) as ParentNode)
+          {
+            jsxTag: asTag,
+            attrs,
+          } as SingleJSXElement,
+          contextElement,
+          contextNamespace,
+        ) as ParentNode)
       : new VirtualFragment();
 
     const newTarget = new Target(
