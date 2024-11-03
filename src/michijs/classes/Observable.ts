@@ -8,8 +8,8 @@ import type {
 // Bypass Content-Security-Policy by creating a "Callable" object instead of using function
 class Callable {
   constructor() {
-    const closure: any = function (...args: any) { return closure._call(...args) }
-    return Object.setPrototypeOf(closure, new.target.prototype)
+    const closure: any = (...args: any) => closure._call(...args);
+    return Object.setPrototypeOf(closure, new.target.prototype);
   }
   _call() {}
 }
