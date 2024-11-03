@@ -46,8 +46,8 @@ export class ProxiedValue<T>
     super(initialObservers);
     this.$privateValue = initialValue!;
     // To avoid issues with isolatedDeclarations
-    this[Symbol.toStringTag] = () => this.toString();
-    this[Symbol.toPrimitive] = () => this.valueOf();
+    // this[Symbol.toStringTag] = () => this.toString();
+    // this[Symbol.toPrimitive] = () => this.valueOf();
   }
 
   set $value(newValue: T) {

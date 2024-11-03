@@ -4,19 +4,18 @@ import { create } from "./create";
 import type { DOMElementJSXElement } from "../types";
 
 export const createDOMElement = (
-  jsx: DOMElementJSXElement,
+  // This has a lot of performance improvement for some reason
+  { attrs: { children, ...attrs }, jsxTag }: DOMElementJSXElement,
   contextElement?: Element,
   contextNamespace?: string,
 ): ParentNode => {
-  const { children, ...attrs } = jsx.attrs;
-
   if (children)
     if (Array.isArray(children))
-      jsx.jsxTag.append(
+      jsxTag.append(
         ...children.map((x) => create(x, contextElement, contextNamespace)),
       );
-    else jsx.jsxTag.append(create(children, contextElement, contextNamespace));
+    else jsxTag.append(create(children, contextElement, contextNamespace));
 
-  if (isElement(jsx.jsxTag)) setProperties(jsx.jsxTag, attrs, contextElement);
-  return jsx.jsxTag;
+  if (isElement(jsxTag)) setProperties(jsxTag, attrs, contextElement);
+  return jsxTag;
 };

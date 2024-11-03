@@ -4,24 +4,27 @@ import type { ObjectJSXElement } from "../types";
 import { create } from "./create";
 
 const getNamespace = (
-  jsx: ObjectJSXElement,
+  jsxTag: string,
   contextNamespace: string = Namespaces.HTML,
 ): string => {
-  if (jsx.jsxTag === RootTags.SVG) return Namespaces.SVG;
-  if (jsx.jsxTag === RootTags.MATHML) return Namespaces.MATHML;
+  if (jsxTag === RootTags.SVG) return Namespaces.SVG;
+  if (jsxTag === RootTags.MATHML) return Namespaces.MATHML;
   return contextNamespace;
 };
 
+// This has a lot of performance improvement for some reason
 export const createObject = (
-  jsx: ObjectJSXElement,
+   // This has a lot of performance improvement for some reason
+   { attrs: { children, ...attrs }, jsxTag }: ObjectJSXElement,
   contextElement?: Element,
   contextNamespace?: string,
 ): Element => {
-  const newNamespace = getNamespace(jsx, contextNamespace);
-  const el = document.createElementNS(newNamespace, jsx.jsxTag, {
-    is: jsx.attrs?.is,
+  const newNamespace = getNamespace(jsxTag, contextNamespace);
+  
+  
+  const el = document.createElementNS(newNamespace, jsxTag, {
+    is: attrs?.is,
   });
-  const { children, ...attrs } = jsx.attrs;
 
   if (children)
     if (Array.isArray(children))

@@ -13,12 +13,11 @@ import { createObject } from "./createObject";
 import { createTextElement } from "./createTextElement";
 import { isObservableType } from "../typeWards/isObservableType";
 import { createObservableTextElement } from "./createObservableTextElement";
-import { Namespaces } from "../constants/namespaces";
 
 export function create<T = Node>(
   jsx: SingleJSXElement,
   contextElement?: Element,
-  contextNamespace: string = Namespaces.HTML,
+  contextNamespace?: string,
 ): T {
   if (jsx) {
     if (Array.isArray(jsx))
