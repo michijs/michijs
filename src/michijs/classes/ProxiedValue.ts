@@ -139,15 +139,14 @@ export class ProxiedArray<V>
    */
   private disableNotifications;
 
-  override notifyCurrentValue(){
-    if(!this.disableNotifications)
-      super.notifyCurrentValue()
+  override notifyCurrentValue() {
+    if (!this.disableNotifications) super.notifyCurrentValue();
   }
 
   constructor(
     initialValue: V[],
     parentSubscription?: ParentSubscription<V[]>,
-    disableNotifications?: boolean
+    disableNotifications?: boolean,
   ) {
     super(initialValue, parentSubscription);
     this.manualNotifications = true;
