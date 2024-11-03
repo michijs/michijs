@@ -1,5 +1,6 @@
-import type { ElementHandle, Page } from "puppeteer";
+import type { ElementHandle, Page } from "playwright-core";
 import { it, expect } from "bun:test";
+import { exec } from "child_process";
 
 export type Result =
   | "create1000Rows"
@@ -54,7 +55,7 @@ export async function makePerformanceTests(page: () => Page) {
     await page().click("#clear");
   };
 
-  const results = new Map<Result, number>();
+  const results: Partial<Record<Result, number>> = {};
   const saveResult = async (
     key: Result,
     functionToMeasure: () => Promise<void>,
@@ -62,7 +63,7 @@ export async function makePerformanceTests(page: () => Page) {
     const t0 = performance.now();
     await functionToMeasure();
     const t1 = performance.now();
-    results.set(key, Number(Number(t1 - t0).toFixed(2)));
+    results[key] = Number(Number(t1 - t0).toFixed(2));
   };
   it("creates 1000 rows when clicking run", async () => {
     await saveResult("create1000Rows", create1000Rows);
@@ -73,25 +74,31 @@ export async function makePerformanceTests(page: () => Page) {
     await saveResult("replaceAllRows", create1000Rows);
     const tableBody = await getTableBody();
     expect(tableBody.length).toEqual(1000);
-    for (let i = 0; i < tableBody.length; i++) {
-      const rowId = await getRowId(tableBody[i]);
-      expect(rowId).toBeGreaterThan(1000);
-    }
+    await Promise.all(
+      tableBody.map(async (row) => {
+        const rowId = await getRowId(row);
+        expect(rowId).toBeGreaterThan(1000);
+      }),
+    );
   });
   it("update every 10th row 1000 rows on a table with 1000 rows when clicking update", async () => {
     await create1000Rows();
     await saveResult("partialUpdate", updateEvery10Rows);
     const tableBody = await getTableBody();
     expect(tableBody.length).toEqual(1000);
-    for (let i = 0; i < tableBody.length; i++) {
-      const innerHTMLProperty = await tableBody[i].getProperty("innerHTML");
-      const innerHTML = await innerHTMLProperty.jsonValue();
-      if (i % 10 === 0) {
-        expect(innerHTML.includes("!!!")).toBeTruthy();
-      } else {
-        expect(innerHTML.includes("!!!")).toBeFalsy();
-      }
-    }
+    // Run all checks in parallel
+    await Promise.all(
+      tableBody.map(async (row, index) => {
+        const innerHTMLProperty = await row.getProperty("innerHTML");
+        const innerHTML = await innerHTMLProperty.jsonValue();
+
+        if (index % 10 === 0) {
+          expect(innerHTML.includes("!!!")).toBeTruthy();
+        } else {
+          expect(innerHTML.includes("!!!")).toBeFalsy();
+        }
+      }),
+    );
   });
   it("select a row (1000 rows)", async () => {
     await create1000Rows();
@@ -117,10 +124,12 @@ export async function makePerformanceTests(page: () => Page) {
     await saveResult("removeRow", async () => await deleteRow(996));
     const newTable = await getTableBody();
 
-    for (let i = 0; i < newTable.length; i++) {
-      const rowId = await getRowId(newTable[i]);
-      expect(rowId !== rowToDeleteId).toBeTruthy();
-    }
+    await Promise.all(
+      newTable.map(async (row) => {
+        const rowId = await getRowId(row);
+        expect(rowId !== rowToDeleteId).toBeTruthy();
+      }),
+    );
     expect(newTable.length).toEqual(999);
   });
   it("creates 10000 rows when clicking runlots", async () => {
@@ -138,4 +147,27 @@ export async function makePerformanceTests(page: () => Page) {
     expect((await getTableBody()).length).toEqual(0);
   });
   return results;
+}
+
+export async function installPlaywright() {
+  console.log("Installing Playwright...");
+
+  return new Promise<void>((resolve, reject) => {
+    const runners = ["bunx", "npx"];
+    exec(
+      runners
+        .map((x) => `${x} playwright install chromium --with-deps`)
+        .join(" || "),
+      (error, stdout, stderr) => {
+        if (error) {
+          console.error(
+            `Error during Playwright installation: ${error.message}`,
+          );
+          return reject(error);
+        }
+        console.log(stdout);
+        resolve();
+      },
+    );
+  });
 }
