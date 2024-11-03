@@ -1,12 +1,12 @@
 import { type Browser, chromium, type Page } from "playwright-core";
 import { makePerformanceTests } from "./shared";
-import { describe, expect, beforeEach, afterAll } from "bun:test";
+import { describe, beforeEach, afterAll } from "bun:test";
 import { spawn } from "child_process";
+import { writeFileSync } from 'fs'
 const serverProcess = spawn("bun", ["run", "start"], {
   stdio: "inherit",
   env: { ...process.env, NODE_ENV: "TESTING_VANILLA" },
 });
-
 
 describe("Performance tests - vanilla-js", () => {
   let browser: Browser;
@@ -22,7 +22,7 @@ describe("Performance tests - vanilla-js", () => {
   });
   const results = makePerformanceTests(() => page);
   afterAll(async () => {
-    expect(await results).toMatchSnapshot("Vanilla JS");
+    writeFileSync('./tests/benchmark/results/vanillajs.json', JSON.stringify(await results, undefined, 2));
     serverProcess.kill();
     browser.close();
   });
