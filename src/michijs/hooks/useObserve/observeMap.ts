@@ -25,7 +25,10 @@ export const observeMap = <E, T extends Map<any, E>>(
   const proxiedMap = cloneMap(item, (value) =>
     useObserveInternal(value, newParentSubscription, rootObservableCallback),
   );
-  const newObservable = new ProxiedValue<T>(proxiedMap as T, parentSubscription);
+  const newObservable = new ProxiedValue<T>(
+    proxiedMap as T,
+    parentSubscription,
+  );
   const proxy = new Proxy(newObservable, {
     set: customObjectSet(newParentSubscription, rootObservableCallback),
     apply: customObjectApply(

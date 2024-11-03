@@ -1,8 +1,4 @@
-import type {
-  ObservableOrConst,
-  Subscription,
-  HistoryManagerType,
-} from "../../types";
+import type { ObservableOrConst, HistoryManagerType } from "../../types";
 import { unproxify } from "../../utils/unproxify";
 import { Observable } from "../Observable";
 import { handleNavigation } from "./handleNavigation";

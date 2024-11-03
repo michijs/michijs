@@ -59,14 +59,8 @@ export function useObserveInternal<T>(
  * @param item The value to be observed.
  * @returns A new observable
  */
-export function useObserve<T>(
-  item?: T,
-): ObservableType<T> {
+export function useObserve<T>(item?: T): ObservableType<T> {
   const rootObservableCallback = () => result;
-  const result = useObserveInternal(
-    item,
-    undefined,
-    rootObservableCallback,
-  );
+  const result = useObserveInternal(item, undefined, rootObservableCallback);
   return result;
 }

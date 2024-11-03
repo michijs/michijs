@@ -24,13 +24,14 @@ export function observeArray<T extends Array<unknown>>(
 ) {
   const newParentSubscription = createParentSubscription(() => newObservable);
   const proxiedArray = cloneArray(item, (value) =>
-    useObserveInternal<any>(value, newParentSubscription, rootObservableCallback),
+    useObserveInternal<any>(
+      value,
+      newParentSubscription,
+      rootObservableCallback,
+    ),
   );
 
-  const newObservable = new ProxiedArray<T>(
-    proxiedArray,
-    parentSubscription,
-  );
+  const newObservable = new ProxiedArray<T>(proxiedArray, parentSubscription);
   const proxy = new Proxy(newObservable, {
     set: customObjectSet(newParentSubscription, rootObservableCallback),
     deleteProperty: customObjectDelete,

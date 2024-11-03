@@ -2,7 +2,7 @@ import {
   type ObservableType,
   createCustomElement,
   useObserve,
-  ProxiedArray
+  ProxiedArray,
 } from "@michijs/michijs";
 
 function _random(max: number) {
@@ -81,14 +81,16 @@ function buildData(count = 1000) {
     data[i] = {
       selected: useObserve<string | undefined>(undefined),
       id: nextId++,
-      label: useObserve(`${adjectives[_random(adjectivesLength)]} ${colours[_random(coloursLength)]} ${nouns[_random(nounsLength)]}`),
+      label: useObserve(
+        `${adjectives[_random(adjectivesLength)]} ${colours[_random(coloursLength)]} ${nouns[_random(nounsLength)]}`,
+      ),
     };
   return data;
 }
 const rows = new ProxiedArray<Row>([]);
 const run = () => rows.$replace(...buildData());
 const runLots = () => {
-  rows.$replace(...buildData(10000))
+  rows.$replace(...buildData(10000));
 };
 const add = () => rows.push(...buildData());
 const update = () => {
