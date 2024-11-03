@@ -1,5 +1,6 @@
 import type { ElementHandle, Page } from "playwright-core";
 import { it, expect } from "bun:test";
+import { exec } from "child_process";
 
 export type Result =
   | "create1000Rows"
@@ -146,4 +147,27 @@ export async function makePerformanceTests(page: () => Page) {
     expect((await getTableBody()).length).toEqual(0);
   });
   return results;
+}
+
+export async function installPlaywright() {
+  console.log("Installing Playwright...");
+
+  return new Promise<void>((resolve, reject) => {
+    const runners = ["bunx", "npx"];
+    exec(
+      runners
+        .map((x) => `${x} playwright install chromium --with-deps`)
+        .join(" || "),
+      (error, stdout, stderr) => {
+        if (error) {
+          console.error(
+            `Error during Playwright installation: ${error.message}`,
+          );
+          return reject(error);
+        }
+        console.log(stdout);
+        resolve();
+      },
+    );
+  });
 }

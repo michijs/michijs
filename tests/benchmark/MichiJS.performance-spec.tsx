@@ -1,5 +1,5 @@
 import { type Browser, chromium, type Page } from "playwright-core";
-import { makePerformanceTests } from "./shared";
+import { installPlaywright, makePerformanceTests } from "./shared";
 import { describe, it, expect, beforeEach, afterAll } from "bun:test";
 import { spawn } from "child_process";
 import { writeFileSync } from 'fs';
@@ -10,7 +10,7 @@ const serverProcess = spawn("bun", ["run", "start"], {
   stdio: "inherit",
   env: { ...process.env, NODE_ENV: "TESTING" },
 });
-
+await installPlaywright();
 describe("Performance tests - MichiJS", () => {
   let browser: Browser;
   let page: Page;

@@ -1,5 +1,5 @@
 import { type Browser, chromium, type Page } from "playwright-core";
-import { makePerformanceTests } from "./shared";
+import { installPlaywright, makePerformanceTests } from "./shared";
 import { describe, beforeEach, afterAll } from "bun:test";
 import { spawn } from "child_process";
 import { writeFileSync } from 'fs'
@@ -8,6 +8,7 @@ const serverProcess = spawn("bun", ["run", "start"], {
   env: { ...process.env, NODE_ENV: "TESTING_VANILLA" },
 });
 
+await installPlaywright();
 describe("Performance tests - vanilla-js", () => {
   let browser: Browser;
   let page: Page;
