@@ -1,15 +1,21 @@
 <div align="center">
   <img width="500px" alt="Michijs Logo" src="https://raw.githubusercontent.com/michijs/art/main/logo-with-background-strait-round.png">
   <p>A lightweight vanilla JavaScript library for creating Web Components</p>
-
-  [![Open in Visual Studio Code][open-in-vscode]][open-in-vscode-url] 
-  ![npm][version] 
-  [![license][github-license]][github-license-url] 
-  ![npm][npm-downloads] 
-  ![npm][repo-size]
-  ![npm][minzipped-size]
-  [![Tests](https://github.com/michijs/michijs/actions/workflows/tests.yml/badge.svg)](https://github.com/michijs/michijs/actions/workflows/tests.yml)
-
+  <p dir="auto">
+    <a href="https://vscode.dev/github/michijs/michijs-template" rel="nofollow">
+      <img src="https://img.shields.io/static/v1?label=Open%20in&logo=Visual%20Studio%20Code&message=Visual%20Studio%20Code&logoColor=007ACC&color=007ACC" alt="Open in Visual Studio Code">
+    </a>
+    <img src="https://img.shields.io/npm/v/@michijs/michijs" alt="Version">
+    <a href="https://github.com/michijs/michijs/blob/master/LICENSE.md" rel="nofollow">
+      <img src="https://img.shields.io/github/license/michijs/michijs" alt="MIT">
+    </a>
+    <img src="https://img.shields.io/github/repo-size/michijs/michijs" alt="Repo size">
+    <img src="https://img.shields.io/bundlephobia/minzip/@michijs/michijs" alt="Minzipped size">
+    <img src="https://img.shields.io/npm/dt/@michijs/michijs" alt="Downloads">
+    <a href="https://github.com/michijs/michijs/actions/workflows/tests.yml" rel="nofollow">
+      <img src="https://github.com/michijs/michijs/actions/workflows/tests.yml/badge.svg" alt="Tests">
+    </a>
+  </p>
 </div>
 
 ## Why *MichiJS*?
@@ -1117,7 +1123,7 @@ We provide partial support for Safari's built-in elements by emulating their beh
 
 ## Browser Support
 - **Customized built-in elements**: [Chrome feature status](https://www.chromestatus.com/feature/4670146924773376)
-- **Autonomous custom elements**: [Chrome feature status](https://www.chromestatus.com/feature/4696261944934400) | [WebComponents.org](https://www.webcomponents.org/)
+- **Autonomous custom elements**: [Chrome feature status](https://www.chromestatus.com/feature/4696261944934400) [WebComponents.org](https://www.webcomponents.org/)
 - **Framework Compatibility**: [Custom Elements Everywhere](https://custom-elements-everywhere.com)
 - **Element internals**: [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/attachInternals)
 
@@ -1141,13 +1147,3 @@ Become a sponsor and get your logo on our README on GitHub with a link to your s
 
 ## License
  - [MIT](https://github.com/michijs/michijs/blob/master/LICENSE.md)
-
-[open-in-vscode]: https://img.shields.io/static/v1?label=Open%20in&logo=Visual%20Studio%20Code&message=Visual%20Studio%20Code&logoColor=007ACC&color=007ACC
-[open-in-vscode-url]: https://vscode.dev/github/michijs/michijs-template
-<!-- [open-in-vscode-url]: vscode://github.remotehub/open?url=https://github.com/lsegurado/ls-element -->
-[minzipped-size]: https://img.shields.io/bundlephobia/minzip/@michijs/michijs
-[repo-size]: https://img.shields.io/github/repo-size/michijs/michijs
-[npm-downloads]: https://img.shields.io/npm/dt/@michijs/michijs
-[version]: https://img.shields.io/npm/v/@michijs/michijs
-[github-license]: https://img.shields.io/github/license/michijs/michijs
-[github-license-url]: https://github.com/michijs/michijs/blob/master/LICENSE.md
