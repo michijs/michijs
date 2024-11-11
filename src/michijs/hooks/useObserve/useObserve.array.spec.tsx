@@ -18,7 +18,7 @@ describe("Observe array tests", () => {
       as: "div",
       renderItem: (item) => <div>{item}</div>,
     });
-    jsonNode = create(<>{array}</>)
+    jsonNode = create(<>{array}</>);
   });
   function expectResult(result: number[]) {
     expect(array()).toStrictEqual(result);
