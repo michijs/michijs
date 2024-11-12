@@ -1,4 +1,4 @@
-import { createObject } from "../DOMDiff/createObject";
+import { createObject } from "./createObject";
 import type { GetElementProps } from "../types";
 
 export function createElement<

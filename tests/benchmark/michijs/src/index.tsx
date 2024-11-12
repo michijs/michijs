@@ -82,8 +82,8 @@ const adjectives = [
     return data;
   },
   rows = new ProxiedArray<Row>([], undefined, true),
-  run = () => rows.$replace(...buildData()),
-  runLots = () => rows.$replace(...buildData(10000)),
+  run = () => rows.$replace(buildData()),
+  runLots = () => rows.$replace(buildData(10000)),
   add = () => rows.push(...buildData()),
   update = () => {
     const array = rows.$value,
@@ -116,6 +116,7 @@ export const Table = createCustomElement("michi-table", {
       <rows.List
         as="tbody"
         id="tbody"
+        // useTemplate
         renderItem={(row) => (
           <tr class={row.selected}>
             <td _={{ className: "col-md-1" }}>{row.id}</td>

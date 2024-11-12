@@ -17,6 +17,7 @@ const clone = n => cloneNode.call(n, true);
 const insert = insertBefore.bind(TBODY);
 const create = (count, add) => {
     if (SIZE !== count)
+        // @ts-ignore
         TMPL = clone(TROW.content), [...Array((SIZE = count) / 50 - 1)]
             .forEach(() => TMPL.appendChild(clone(TMPL.firstChild)));
     !add && (clear(), TBODY.remove());
@@ -46,6 +47,7 @@ BUTTONS.forEach(function (b) { b.onclick = this[b.id]; }, {
     }
 });
 
+// @ts-ignore
 TBODY.onclick = e => {
     const t = e.target, n = t.tagName, r = t.closest('TR');
     e.stopPropagation();

@@ -1,4 +1,4 @@
-import { setProperties } from "../DOM/attributes/setProperties";
+import { setProperties } from "./attributes/setProperties";
 import { Namespaces, RootTags } from "../constants/namespaces";
 import type { ObjectJSXElement } from "../types";
 import { create } from "./create";

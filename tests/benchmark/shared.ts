@@ -1,4 +1,4 @@
-import type { ElementHandle, Page } from "playwright-core";
+import type { ElementHandle, Page, Browser } from "playwright-core";
 import { it, expect } from "bun:test";
 import { exec } from "child_process";
 
@@ -21,7 +21,7 @@ const getRowId = async (element: ElementHandle<Element>) => {
   return Number(textContent);
 };
 
-export async function makePerformanceTests(page: () => Page) {
+export async function makePerformanceTests(browser: () => Browser, page: () => Page) {
   const create1000Rows = async () => {
     await page().click("#run");
   };
@@ -60,10 +60,13 @@ export async function makePerformanceTests(page: () => Page) {
     key: Result,
     functionToMeasure: () => Promise<void>,
   ) => {
-    const t0 = performance.now();
+    await browser().startTracing(page());
     await functionToMeasure();
-    const t1 = performance.now();
-    results[key] = Number(Number(t1 - t0).toFixed(2));
+    const traceBuffer = await browser().stopTracing();
+    const trace = JSON.parse(traceBuffer.toString());
+    // console.log(traceBuffer.toString())
+    const duration = trace.traceEvents.find(x => x?.name === 'EventDispatch' && x?.args?.data?.type === 'click').dur / 1000
+    results[key] = Number(duration.toFixed(2));
   };
   it("creates 1000 rows when clicking run", async () => {
     await saveResult("create1000Rows", create1000Rows);

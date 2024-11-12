@@ -21,7 +21,7 @@ describe("Performance tests - vanilla-js", () => {
       waitUntil: "domcontentloaded",
     });
   });
-  const results = makePerformanceTests(() => page);
+  const results = makePerformanceTests(() => browser, () => page);
   afterAll(async () => {
     writeFileSync(
       "./tests/benchmark/results/vanillajs.json",

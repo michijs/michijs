@@ -1,14 +1,14 @@
 {
-  "2.0.8": {
-    "create1000Rows": 250.11,
-    "replaceAllRows": 215.62,
-    "partialUpdate": 80.24,
-    "selectRow": 424.03,
-    "swapRows": 55.47,
-    "removeRow": 348.15,
-    "createManyRows": 1731.49,
-    "appendRowsToLargeTable": 333.01,
-    "clearRows": 41.75
+  "2.1.0": {
+    "create1000Rows": 67.82,
+    "replaceAllRows": 80.77,
+    "partialUpdate": 2.16,
+    "selectRow": 0.68,
+    "swapRows": 0.58,
+    "removeRow": 0.8,
+    "createManyRows": 526.95,
+    "appendRowsToLargeTable": 65.53,
+    "clearRows": 13.7
   },
   "2.0.7": {
     "create1000Rows": 241.45,

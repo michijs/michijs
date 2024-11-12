@@ -32,7 +32,7 @@ describe("Performance tests - MichiJS", () => {
     expect(innerHTML).toMatchSnapshot();
   });
 
-  const resultsPromise = makePerformanceTests(() => page);
+  const resultsPromise = makePerformanceTests(() => browser, () => page);
   afterAll(async () => {
     const results = await resultsPromise;
     const resultsString = JSON.stringify(

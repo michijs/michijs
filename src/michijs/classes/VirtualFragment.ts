@@ -1,4 +1,4 @@
-import { forEachChildren } from "../DOMDiff/forEachChildren";
+import { forEachChildren } from "../DOM/forEachChildren";
 import { isElement } from "../typeWards/isElement";
 
 export class VirtualChildNodes
@@ -27,6 +27,7 @@ export class VirtualFragment
       | "firstChild"
       | "lastChild"
       | "childNodes"
+      | "appendChild"
     >,
     Pick<ChildNode, "remove" | "replaceWith" | "textContent">,
     Pick<Element, "innerHTML">
@@ -37,6 +38,10 @@ export class VirtualFragment
 
   constructor(initialItems: Node[] = []) {
     this.initialFragment.append(this.startItem, ...initialItems, this.endItem);
+  }
+  appendChild<T extends Node>(node: T): T {
+    this.append(node);
+    return node;
   }
   replaceWith(...nodes: (string | Node)[]): void {
     if (this.startItem.isConnected) {
@@ -65,7 +70,7 @@ export class VirtualFragment
       (node) => {
         node.remove();
       },
-      (node) => node !== this.endItem,
+      (node) => node === this.endItem,
     );
     this.append(...nodes);
   }
@@ -80,7 +85,7 @@ export class VirtualFragment
       (node) => {
         childNodes.push(node);
       },
-      (node) => node !== this.endItem,
+      (node) => node === this.endItem,
     );
 
     return childNodes;
@@ -95,7 +100,7 @@ export class VirtualFragment
       this.startItem.nextSibling,
       (node) =>
         (innerHTML += isElement(node) ? node.outerHTML : node.textContent),
-      (node) => node !== this.endItem,
+      (node) => node === this.endItem,
     );
     return innerHTML;
   }
@@ -108,7 +113,7 @@ export class VirtualFragment
     forEachChildren(
       this.startItem.nextSibling,
       (node) => (textContext += node.textContent),
-      (node) => node !== this.endItem,
+      (node) => node === this.endItem,
     );
     return textContext;
   }

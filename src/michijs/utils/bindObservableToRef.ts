@@ -11,16 +11,30 @@ export const bindObservableToRef = <T, E extends WeakKey>(
   callback: RefSubscription<T extends ObservableLike<infer Y> ? Y : T, E>,
 ): void => {
   const isObservableTypeResult = isObservableType(observable);
-  if (isObservableTypeResult || extendsObject(observable)) {
-    let finalObservable;
-    if (isObservableTypeResult) finalObservable = observable;
-    else {
-      const observables = getObservables(observable);
-      if (observables.length > 0)
-        finalObservable = useComputedObserve(() => observable, observables);
-    }
+  // if (isObservableTypeResult || extendsObject(observable)) {
+  //   let finalObservable;
+  //   if (isObservableTypeResult) finalObservable = observable;
+  //   else {
+  //     const observables = getObservables(observable);
+  //     if (observables.length > 0)
+  //       finalObservable = useComputedObserve(() => observable, observables);
+  //   }
+  //   const overridenCallback = overrideCallbackWithRef(
+  //     finalObservable as ObservableLike<
+  //       T extends ObservableLike<infer Y> ? Y : T
+  //     >,
+  //     el,
+  //     callback,
+  //   );
+  //   overridenCallback(
+  //     // @ts-ignore
+  //     finalObservable.valueOf(),
+  //   );
+  //   return;
+  // }
+  if (isObservableTypeResult) {
     const overridenCallback = overrideCallbackWithRef(
-      finalObservable as ObservableLike<
+      observable as ObservableLike<
         T extends ObservableLike<infer Y> ? Y : T
       >,
       el,
@@ -28,7 +42,7 @@ export const bindObservableToRef = <T, E extends WeakKey>(
     );
     overridenCallback(
       // @ts-ignore
-      finalObservable.valueOf(),
+      observable.valueOf(),
     );
     return;
   }
