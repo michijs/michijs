@@ -1,5 +1,11 @@
 import { updateTextCallback } from "./callbacks/updateTextCallback";
-import type { ArrayJSXElement, DOMElementJSXElement, ObjectJSXElement, ObservableNonNullablePrimitiveType, SingleJSXElement } from "../types";
+import type {
+  ArrayJSXElement,
+  DOMElementJSXElement,
+  ObjectJSXElement,
+  ObservableNonNullablePrimitiveType,
+  SingleJSXElement,
+} from "../types";
 import { isClassJSXElement } from "../typeWards/isClassJSXElement";
 import { isDOMElement } from "../typeWards/isDOMElement";
 import { isFragmentElement } from "../typeWards/isFragmentElement";
@@ -11,19 +17,26 @@ import { classJSXToObjectJSXElement } from "../utils/classJSXToObjectJSXElement"
 import { forEachChildren } from "./forEachChildren";
 import { setProperties } from "./attributes/setProperties";
 
-const UpdateCloneChildNodeCallback = (jsx: ArrayJSXElement, contextElement?: Element) => (childNode: ChildNode, i: number) => updateClone(childNode, jsx[i], contextElement);
+const UpdateCloneChildNodeCallback =
+  (jsx: ArrayJSXElement, contextElement?: Element) =>
+  (childNode: ChildNode, i: number) =>
+    updateClone(childNode, jsx[i], contextElement);
 
 export const updateClonedDomElementOrObjectJSXElement = (
   clonedNode: Element,
   // This has a lot of performance improvement for some reason
-  { attrs: { children, ...attrs } }: DOMElementJSXElement<Element> | ObjectJSXElement,
+  {
+    attrs: { children, ...attrs },
+  }: DOMElementJSXElement<Element> | ObjectJSXElement,
   contextElement?: Element,
 ): void => {
   if (children)
     if (Array.isArray(children))
-      forEachChildren(clonedNode.firstChild, UpdateCloneChildNodeCallback(children, contextElement))
-    else
-      updateClone(clonedNode.firstChild!, children, contextElement)
+      forEachChildren(
+        clonedNode.firstChild,
+        UpdateCloneChildNodeCallback(children, contextElement),
+      );
+    else updateClone(clonedNode.firstChild!, children, contextElement);
 
   setProperties(clonedNode, attrs, contextElement);
 };
@@ -31,18 +44,17 @@ export const updateClonedDomElementOrObjectJSXElement = (
 export const updateObservableTextElement = (
   clonedNode: Text,
   // This has a lot of performance improvement for some reason
-  jsx: ObservableNonNullablePrimitiveType
+  jsx: ObservableNonNullablePrimitiveType,
 ): void => {
   // Updates text as soon as binded
-  bindObservableToRef(
-    jsx,
-    clonedNode,
-    updateTextCallback,
-  );
+  bindObservableToRef(jsx, clonedNode, updateTextCallback);
 };
 
-
-export const updateClone = (clonedNode: Node, jsx: SingleJSXElement, contextElement?: Element): any => {
+export const updateClone = (
+  clonedNode: Node,
+  jsx: SingleJSXElement,
+  contextElement?: Element,
+): any => {
   // console.log(jsx)
   if (jsx) {
     if (Array.isArray(jsx))
@@ -57,8 +69,7 @@ export const updateClone = (clonedNode: Node, jsx: SingleJSXElement, contextElem
       if ("jsxTag" in jsx) {
         //Fix for non-jsx objects
         // Solves undefined Fragment caused by some compilers
-        if (isFragmentElement(jsx))
-          return;
+        if (isFragmentElement(jsx)) return;
         //   return createDOMFragment(
         //     jsx.attrs.children,
         //     contextElement,
@@ -68,7 +79,7 @@ export const updateClone = (clonedNode: Node, jsx: SingleJSXElement, contextElem
           updateClonedDomElementOrObjectJSXElement(
             clonedNode as Element,
             jsx as DOMElementJSXElement<Element>,
-            contextElement
+            contextElement,
           );
           return;
         }
@@ -78,7 +89,7 @@ export const updateClone = (clonedNode: Node, jsx: SingleJSXElement, contextElem
             updateClonedDomElementOrObjectJSXElement(
               clonedNode as Element,
               classJSXToObjectJSXElement(jsx),
-              contextElement
+              contextElement,
             );
             return;
           }
@@ -89,7 +100,11 @@ export const updateClone = (clonedNode: Node, jsx: SingleJSXElement, contextElem
           //   contextNamespace,
           // );
         }
-        updateClonedDomElementOrObjectJSXElement(clonedNode as Element, jsx, contextElement);
+        updateClonedDomElementOrObjectJSXElement(
+          clonedNode as Element,
+          jsx,
+          contextElement,
+        );
         return;
       }
       return;
@@ -102,10 +117,14 @@ export const updateClone = (clonedNode: Node, jsx: SingleJSXElement, contextElem
     return;
   }
   return;
-}
+};
 
-export const clone = <T = Node>(template: Node, jsx: SingleJSXElement, contextElement?: Element): T => {
+export const clone = <T = Node>(
+  template: Node,
+  jsx: SingleJSXElement,
+  contextElement?: Element,
+): T => {
   const clonedNode = template.cloneNode(true);
   updateClone(clonedNode, jsx, contextElement);
   return clonedNode as T;
-}
+};

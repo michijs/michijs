@@ -45,12 +45,12 @@ export function useObserveInternal<T>(
           parentSubscription,
           rootObservableCallback,
         ) as unknown as ObservableType<T>;
-      if(isPrototypeOfObject(itemValue))
+      if (isPrototypeOfObject(itemValue))
         return observeCommonObject<T>(
           itemValue as T,
           parentSubscription,
           rootObservableCallback,
-          true
+          true,
         ) as unknown as ObservableType<T>;
       // console.error(`The object with path "${props.propertyPath}" cannot be observed ${item}`)
     }

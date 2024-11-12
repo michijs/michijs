@@ -1,8 +1,5 @@
-import { useComputedObserve } from "../hooks/useComputedObserve";
 import { isObservableType } from "../typeWards/isObservableType";
 import type { ObservableLike, RefSubscription } from "../types";
-import { getObservables } from "./getObservables";
-import { extendsObject } from "./extendsObject";
 import { overrideCallbackWithRef } from "./overrideCallbackWithRef";
 
 export const bindObservableToRef = <T, E extends WeakKey>(
@@ -34,9 +31,7 @@ export const bindObservableToRef = <T, E extends WeakKey>(
   // }
   if (isObservableTypeResult) {
     const overridenCallback = overrideCallbackWithRef(
-      observable as ObservableLike<
-        T extends ObservableLike<infer Y> ? Y : T
-      >,
+      observable as ObservableLike<T extends ObservableLike<infer Y> ? Y : T>,
       el,
       callback,
     );

@@ -8,7 +8,7 @@ export const createDOMElement = (
   contextElement?: Element,
   contextNamespace?: string,
 ): ParentNode => {
-  setChildren(jsxTag, children, contextElement, contextNamespace)
+  setChildren(jsxTag, children, contextElement, contextNamespace);
 
   setProperties(jsxTag, attrs, contextElement);
   return jsxTag;

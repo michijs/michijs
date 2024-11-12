@@ -21,7 +21,10 @@ const getRowId = async (element: ElementHandle<Element>) => {
   return Number(textContent);
 };
 
-export async function makePerformanceTests(browser: () => Browser, page: () => Page) {
+export async function makePerformanceTests(
+  browser: () => Browser,
+  page: () => Page,
+) {
   const create1000Rows = async () => {
     await page().click("#run");
   };
@@ -65,7 +68,10 @@ export async function makePerformanceTests(browser: () => Browser, page: () => P
     const traceBuffer = await browser().stopTracing();
     const trace = JSON.parse(traceBuffer.toString());
     // console.log(traceBuffer.toString())
-    const duration = trace.traceEvents.find(x => x?.name === 'EventDispatch' && x?.args?.data?.type === 'click').dur / 1000
+    const duration =
+      trace.traceEvents.find(
+        (x) => x?.name === "EventDispatch" && x?.args?.data?.type === "click",
+      ).dur / 1000;
     results[key] = Number(duration.toFixed(2));
   };
   it("creates 1000 rows when clicking run", async () => {

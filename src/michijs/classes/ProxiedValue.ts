@@ -6,7 +6,6 @@ import type {
   ProxiedArrayInterface,
   MutableArrayProperties,
   FC,
-  ExtendableComponentWithoutChildren,
   SingleJSXElement,
   NotifiableObservers,
   ParentSubscription,
@@ -22,7 +21,8 @@ import { VirtualFragment } from "./VirtualFragment";
 
 export class ProxiedValue<T>
   extends Observable<T>
-  implements ProxiedValueInterface<T, T> {
+  implements ProxiedValueInterface<T, T>
+{
   private $privateValue: T;
 
   static transactionsInProgress = 0;
@@ -131,7 +131,8 @@ export class ProxiedValue<T>
 
 export class ProxiedArray<V>
   extends ProxiedValue<V[]>
-  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties> {
+  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties>
+{
   private targets = new Array<Target<V>>();
   /**
    * Removed the need to notificate. Useful if you dont have notifiableObservers
@@ -153,24 +154,19 @@ export class ProxiedArray<V>
   }
 
   List = <const E = FC>(
-    {
-      as: asTag,
-      renderItem,
-      useTemplate,
-      ...attrs
-    }: ListProps<E, V>,
+    { as: asTag, renderItem, useTemplate, ...attrs }: ListProps<E, V>,
     contextElement?: Element,
     contextNamespace?: string,
   ): Node => {
     const el = asTag
       ? (create(
-        {
-          jsxTag: asTag,
-          attrs,
-        } as SingleJSXElement,
-        contextElement,
-        contextNamespace,
-      ) as ParentNode)
+          {
+            jsxTag: asTag,
+            attrs,
+          } as SingleJSXElement,
+          contextElement,
+          contextNamespace,
+        ) as ParentNode)
       : new VirtualFragment();
 
     const newTarget = new Target(
@@ -178,7 +174,7 @@ export class ProxiedArray<V>
       renderItem,
       contextElement,
       contextNamespace,
-      useTemplate
+      useTemplate,
     );
 
     this.targets.push(newTarget);
@@ -197,8 +193,7 @@ export class ProxiedArray<V>
   $replace(items: V[]): number {
     if (this.$value.length)
       this.targets.forEach((target) => target.replace(items));
-    else
-      this.targets.forEach((target) => target.appendItems(items));
+    else this.targets.forEach((target) => target.appendItems(items));
     this.$value = items;
     this.notifyCurrentValue();
     return items.length;
@@ -291,8 +286,7 @@ export class ProxiedArray<V>
     return result;
   }
   splice(start: number, deleteCount = 0, ...items: V[]): V[] {
-    if (start === 0 && deleteCount >= this.$value.length)
-      this.$replace(items);
+    if (start === 0 && deleteCount >= this.$value.length) this.$replace(items);
     else {
       this.targets.forEach((target) =>
         target.splice(start, deleteCount, items),

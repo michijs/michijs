@@ -23,11 +23,7 @@ export function create<T = Node>(
 ): T {
   if (jsx) {
     if (Array.isArray(jsx))
-      return createDOMFragment(
-        jsx,
-        contextElement,
-        contextNamespace,
-      ) as T;
+      return createDOMFragment(jsx, contextElement, contextNamespace) as T;
     if (isNotAPrimitiveJSX(jsx)) {
       if ("jsxTag" in jsx) {
         //Fix for non-jsx objects
@@ -38,7 +34,7 @@ export function create<T = Node>(
             contextElement,
             contextNamespace,
           ) as T;
-        if(isDOMElement(jsx))
+        if (isDOMElement(jsx))
           return createDOMElement(
             jsx as DOMElementJSXElement<Element>,
             contextElement,
