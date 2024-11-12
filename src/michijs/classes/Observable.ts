@@ -11,8 +11,8 @@ class Callable {
     const closure = () => {};
     const result = Object.setPrototypeOf(closure, new.target.prototype);
     // Intentional it should not disturb arrays or strings
-    delete result['length']
-    delete result['name']
+    delete result["length"];
+    delete result["name"];
     return result;
   }
 }

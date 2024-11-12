@@ -249,19 +249,19 @@ export interface MichiProperties
   readonly type: string;
 }
 
-export interface MichiCustomElement extends HTMLElement, MichiProperties {};
+export interface MichiCustomElement extends HTMLElement, MichiProperties {}
 
 export type ListProps<E, SV> = ExtendableComponentWithoutChildren<E> & {
   renderItem: FC<SV>;
   /**
    * Uses cloneNode instead of creating every item separately. It is twice as fast as not using a template
-   * 
+   *
    * **Warning:** It only works with plain objectJSXElements or classJSXElements
-   * 
+   *
    * Do not use conditions, arrays or fragments on the renderItem function if this is enabled
    */
   useTemplate?: boolean;
-}
+};
 
 export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>>
   extends ProxiedValueInterface<RV[], SV[]> {
@@ -547,7 +547,9 @@ export interface CommonJSXAttrs<T> {
 }
 export interface FragmentJSXElement extends CommonJSXAttrs<null | undefined> {}
 export interface ObjectJSXElement extends CommonJSXAttrs<string> {}
-export interface DOMElementJSXElement<E extends ParentNode | Element = ParentNode | Element> extends CommonJSXAttrs<E> {}
+export interface DOMElementJSXElement<
+  E extends ParentNode | Element = ParentNode | Element,
+> extends CommonJSXAttrs<E> {}
 export interface FunctionJSXElement
   extends CommonJSXAttrs<CreateFCResult<any>> {}
 export interface ClassJSXElement
