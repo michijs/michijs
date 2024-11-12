@@ -6,20 +6,19 @@ import type { CSSProperties } from "../../generated/htmlType";
 import { isMichiCustomElement } from "../../typeWards/isMichiCustomElement";
 import type { MichiCustomElement } from "../../types";
 
-const updatePropertiesCallback = (el: Element) => ([propertyName, value]) =>
-  bindObservableToRef(
-    value,
-    el,
-    updatePropertyCallback(propertyName),
-  );
-const updatePropertyCallback = (propertyName: string) => (newValue: unknown, el: Element) => (el[propertyName] = newValue);
+const updatePropertiesCallback =
+  (el: Element) =>
+  ([propertyName, value]) =>
+    bindObservableToRef(value, el, updatePropertyCallback(propertyName));
+const updatePropertyCallback =
+  (propertyName: string) => (newValue: unknown, el: Element) =>
+    (el[propertyName] = newValue);
 const updateClassCallback = (newValue: unknown, el: MichiCustomElement) => {
   const newValueWithClassName = `${newValue} ${el.$michi.styles.className}`;
   setAttribute(el, "class", newValueWithClassName);
-}
+};
 const updateAttributeCallback = (propertyName: string) => (newValue, el) =>
-  setAttribute(el, propertyName, newValue)
-  ;
+  setAttribute(el, propertyName, newValue);
 
 export function setProperty(
   el: Element,

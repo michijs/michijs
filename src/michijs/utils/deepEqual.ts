@@ -30,7 +30,7 @@ export function deepEqual(object1: any, object2: any): boolean {
         );
       }
       if (
-        isPrototypeOfObject(object1Value)&&
+        isPrototypeOfObject(object1Value) &&
         isPrototypeOfObject(object2Value)
       ) {
         if (
