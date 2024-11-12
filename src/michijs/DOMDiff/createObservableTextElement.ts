@@ -2,6 +2,11 @@ import type { ObservableNonNullablePrimitiveType } from "../types";
 import { overrideCallbackWithRef } from "../utils/overrideCallbackWithRef";
 import { createTextElement } from "./createTextElement";
 
+const updateTextCallback = (newValue: unknown, el: Text) => (el.nodeValue =
+  (typeof newValue === "object"
+    ? JSON.stringify(newValue)
+    : newValue?.toString()) ?? "")
+
 export const createObservableTextElement = (
   jsx: ObservableNonNullablePrimitiveType,
 ): Text => {
@@ -9,11 +14,7 @@ export const createObservableTextElement = (
   overrideCallbackWithRef(
     jsx,
     textNode,
-    (newValue, el) =>
-      (el.textContent =
-        (typeof newValue === "object"
-          ? JSON.stringify(newValue)
-          : newValue?.toString()) ?? ""),
+    updateTextCallback,
   );
   return textNode;
 };

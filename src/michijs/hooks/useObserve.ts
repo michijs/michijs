@@ -1,5 +1,6 @@
 import { ProxiedValue } from "../classes/ProxiedValue";
 import type { ObservableType, ParentSubscription } from "../types";
+import { isPrototypeOfObject } from "../utils/isPrototypeOfObject";
 import { observeArray } from "./useObserve/observeArray";
 import { observeCommonObject } from "./useObserve/observeCommonObject";
 import { observeDate } from "./useObserve/observeDate";
@@ -43,6 +44,13 @@ export function useObserveInternal<T>(
           itemValue,
           parentSubscription,
           rootObservableCallback,
+        ) as unknown as ObservableType<T>;
+      if(isPrototypeOfObject(itemValue))
+        return observeCommonObject<T>(
+          itemValue as T,
+          parentSubscription,
+          rootObservableCallback,
+          true
         ) as unknown as ObservableType<T>;
       // console.error(`The object with path "${props.propertyPath}" cannot be observed ${item}`)
     }

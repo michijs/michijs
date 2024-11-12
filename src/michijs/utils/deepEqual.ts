@@ -1,3 +1,5 @@
+import { isPrototypeOfObject } from "./isPrototypeOfObject";
+
 export function deepEqual(object1: any, object2: any): boolean {
   // null?.valueOf() is undefined - bug
   const object1Value = object1 ? object1.valueOf() : object1;
@@ -28,8 +30,8 @@ export function deepEqual(object1: any, object2: any): boolean {
         );
       }
       if (
-        Object.getPrototypeOf(object1Value) === Object.prototype &&
-        Object.getPrototypeOf(object2Value) === Object.prototype
+        isPrototypeOfObject(object1Value)&&
+        isPrototypeOfObject(object2Value)
       ) {
         if (
           Object.keys(object1Value).length !== Object.keys(object2Value).length

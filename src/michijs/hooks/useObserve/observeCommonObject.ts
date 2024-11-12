@@ -17,17 +17,18 @@ export function observeCommonObject<T>(
   item: T,
   parentSubscription?: ParentSubscription<any>,
   rootObservableCallback?: () => ObservableType<any>,
+  needsToBeCloned?: boolean
 ): ObservableType<T> {
   const newParentSubscription = createParentSubscription(() => newObservable);
-  const newObservable = new ProxiedValue<T>(
-    item && Object.getPrototypeOf(item) === Object.prototype
-      ? cloneCommonObject(item, (value) =>
-          useObserveInternal<any>(
-            value,
-            newParentSubscription,
-            rootObservableCallback,
-          ),
-        )
+  const newObservable = new ProxiedValue(
+    needsToBeCloned
+      ? cloneCommonObject(item as object, (value) =>
+        useObserveInternal<any>(
+          value,
+          newParentSubscription,
+          rootObservableCallback,
+        ),
+      )
       : item,
     parentSubscription,
   );

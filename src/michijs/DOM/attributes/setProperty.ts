@@ -4,6 +4,22 @@ import { bindFunction } from "../../utils/bindFunction";
 import { bindObservableToRef } from "../../utils/bindObservableToRef";
 import type { CSSProperties } from "../../generated/htmlType";
 import { isMichiCustomElement } from "../../typeWards/isMichiCustomElement";
+import type { MichiCustomElement } from "../../types";
+
+const updatePropertiesCallback = (el: Element) => ([propertyName, value]) =>
+  bindObservableToRef(
+    value,
+    el,
+    updatePropertyCallback(propertyName),
+  );
+const updatePropertyCallback = (propertyName: string) => (newValue: unknown, el: Element) => (el[propertyName] = newValue);
+const updateClassCallback = (newValue: unknown, el: MichiCustomElement) => {
+  const newValueWithClassName = `${newValue} ${el.$michi.styles.className}`;
+  setAttribute(el, "class", newValueWithClassName);
+}
+const updateAttributeCallback = (propertyName: string) => (newValue, el) =>
+  setAttribute(el, propertyName, newValue)
+  ;
 
 export function setProperty(
   el: Element,
@@ -13,30 +29,20 @@ export function setProperty(
 ): void {
   // priority to properties and events
   if (name === "_")
-    Object.entries(newValue).forEach(([propertyName, value]) =>
-      bindObservableToRef(
-        value,
-        el,
-        (newValue, el) => (el[propertyName] = newValue),
-      ),
-    );
-  else if (name.startsWith("on")) {
+    return Object.entries(newValue).forEach(updatePropertiesCallback(el));
+  if (name.startsWith("on")) {
     const eventName = name.slice(2) as keyof ElementEventMap;
     const bindedEvent = bindFunction(contextElement, newValue);
     el.addEventListener(eventName, bindedEvent);
-  } else if (name === "style" && typeof newValue === "object")
-    setStyle(el, newValue as CSSProperties);
-  else if (
+    return;
+  }
+  if (name === "style" && typeof newValue === "object")
+    return setStyle(el, newValue as CSSProperties);
+  if (
     name === "class" &&
     isMichiCustomElement(el) &&
     el.$michi.styles.className
   )
-    bindObservableToRef(newValue, el, (newValue, el) => {
-      const newValueWithClassName = `${newValue} ${el.$michi.styles.className}`;
-      setAttribute(el, name, newValueWithClassName);
-    });
-  else
-    bindObservableToRef(newValue, el, (newValue, el) =>
-      setAttribute(el, name, newValue),
-    );
+    return bindObservableToRef(newValue, el, updateClassCallback);
+  return bindObservableToRef(newValue, el, updateAttributeCallback(name));
 }
