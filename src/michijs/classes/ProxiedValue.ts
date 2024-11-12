@@ -17,7 +17,7 @@ import { useComputedObserve } from "../hooks/useComputedObserve";
 import { Observable } from "./Observable";
 import { unproxify } from "../utils/unproxify";
 import { Target } from "./Target";
-import { create } from "../DOM/create";
+import { create } from "../DOM/create/create";
 import { VirtualFragment } from "./VirtualFragment";
 
 export class ProxiedValue<T>

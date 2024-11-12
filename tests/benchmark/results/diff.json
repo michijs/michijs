@@ -1,11 +1,11 @@
 {
-  "create1000Rows": 57.81,
-  "replaceAllRows": 59.78,
-  "partialUpdate": 1.36,
-  "selectRow": 0.49,
-  "swapRows": 0.27,
-  "removeRow": 0.5,
-  "createManyRows": 449.78,
-  "appendRowsToLargeTable": 58.05,
-  "clearRows": 0.62
+  "create1000Rows": 49.06,
+  "replaceAllRows": 40.54,
+  "partialUpdate": 1.62,
+  "selectRow": 0.54,
+  "swapRows": 0.32,
+  "removeRow": 0.46,
+  "createManyRows": 315.29,
+  "appendRowsToLargeTable": 47.08,
+  "clearRows": 0
 }

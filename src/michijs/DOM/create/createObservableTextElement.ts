@@ -1,7 +1,7 @@
-import type { ObservableNonNullablePrimitiveType } from "../types";
-import { overrideCallbackWithRef } from "../utils/overrideCallbackWithRef";
+import type { ObservableNonNullablePrimitiveType } from "../../types";
+import { overrideCallbackWithRef } from "../../utils/overrideCallbackWithRef";
 import { createTextElement } from "./createTextElement";
-import { updateTextCallback } from "./callbacks/updateTextCallback";
+import { updateTextCallback } from "../callbacks/updateTextCallback";
 
 export const createObservableTextElement = (
   jsx: ObservableNonNullablePrimitiveType,

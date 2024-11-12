@@ -1,4 +1,4 @@
-import { create } from "../DOM/create";
+import { create } from "../DOM/create/create";
 import { bindObservable } from "../utils/bindObservable";
 import type {
   ExtendableComponentWithoutChildren,

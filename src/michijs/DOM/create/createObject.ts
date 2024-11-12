@@ -1,7 +1,7 @@
-import { setProperties } from "./attributes/setProperties";
-import { Namespaces, RootTags } from "../constants/namespaces";
-import type { ObjectJSXElement } from "../types";
-import { create } from "./create";
+import { setProperties } from "../attributes/setProperties";
+import { Namespaces, RootTags } from "../../constants/namespaces";
+import type { ObjectJSXElement } from "../../types";
+import { setChildren } from "./setChildren";
 
 const getNamespace = (
   jsxTag: string,
@@ -25,12 +25,7 @@ export const createObject = (
     is: attrs?.is,
   });
 
-  if (children)
-    if (Array.isArray(children))
-      el.append(
-        ...children.map((x) => create(x, contextElement, newNamespace)),
-      );
-    else el.append(create(children, contextElement, newNamespace));
+  setChildren(el, children, contextElement, contextNamespace)
 
   setProperties(el, attrs, contextElement);
 

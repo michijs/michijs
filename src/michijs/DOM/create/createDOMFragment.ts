@@ -1,4 +1,4 @@
-import type { DOMElementJSXElement } from "../types";
+import type { DOMElementJSXElement } from "../../types";
 import { setChildren } from "./setChildren";
 
 export const createDOMFragment = (

@@ -17,7 +17,7 @@ import { getMountPoint } from "../DOM/getMountPoint";
 import { defineReflectedAttributes } from "./properties/defineReflectedAttributes";
 import { useStyleSheet } from "../css/useStyleSheet";
 import { convertCssObjectToCssVariablesObject } from "../css/convertCssObjectToCssVariablesObject";
-import { create } from "../DOM/create";
+import { create } from "../DOM/create/create";
 import { setProperty } from "../DOM/attributes/setProperty";
 import { MappedIdGenerator } from "../classes/MappedIdGenerator";
 import { IdGenerator } from "../classes/IdGenerator";

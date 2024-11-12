@@ -1,5 +1,5 @@
-import { setProperties } from "./attributes/setProperties";
-import type { DOMElementJSXElement } from "../types";
+import { setProperties } from "../attributes/setProperties";
+import type { DOMElementJSXElement } from "../../types";
 import { setChildren } from "./setChildren";
 
 export const createDOMElement = (

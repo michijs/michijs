@@ -1,8 +1,8 @@
 import {
   type ObservableType,
-  createCustomElement,
   observeCommonObject,
   ProxiedArray,
+  create
 } from "@michijs/michijs";
 
 interface Row {
@@ -106,117 +106,103 @@ const adjectives = [
 let nextId = 1,
   selectedItem: Row | null = null;
 
-export const Table = createCustomElement("michi-table", {
-  extends: {
-    tag: "table",
-    class: HTMLTableElement,
-  },
-  render() {
-    return (
-      <rows.List
-        as="tbody"
-        id="tbody"
-        // useTemplate
-        renderItem={(row) => (
-          <tr class={row.selected}>
-            <td _={{ className: "col-md-1" }}>{row.id}</td>
-            <td _={{ className: "col-md-4" }}>
-              <a _={{ onclick: () => select(row) }}>{row.label}</a>
-            </td>
-            <td _={{ className: "col-md-1" }}>
-              <a _={{ onclick: () => deleteItem(row.id) }}>
-                <span _={{ className: "glyphicon glyphicon-remove", ariaHidden: "true" }} />
-              </a>
-            </td>
-            <td _={{ className: "col-md-6" }} />
-          </tr>
-        )}
-      />
-    );
-  },
-});
+export const TableBody = create(
+  <rows.List
+    as="tbody"
+    id="tbody"
+    useTemplate
+    renderItem={(row) => (
+      <tr class={row.selected}>
+        <td _={{ className: "col-md-1" }}>{row.id}</td>
+        <td _={{ className: "col-md-4" }}>
+          <a _={{ onclick: () => select(row) }}>{row.label}</a>
+        </td>
+        <td _={{ className: "col-md-1" }}>
+          <a _={{ onclick: () => deleteItem(row.id) }}>
+            <span _={{ className: "glyphicon glyphicon-remove", ariaHidden: "true" }} />
+          </a>
+        </td>
+        <td _={{ className: "col-md-6" }} />
+      </tr>
+    )}
+  />
+)
+document.querySelector('table')?.appendChild(TableBody);
 
-export const TableManager = createCustomElement("michi-table-manager", {
-  extends: {
-    tag: "div",
-    class: HTMLDivElement,
-  },
-  render() {
-    return (
-      <div _={{ className: "row" }}>
-        <div _={{ className: "col-sm-6 smallpad" }}>
-          <button
-            _={{
-              type: "button",
-              className: "btn btn-primary btn-block",
-              id: "run",
-              onclick: run,
-            }}
-          >
-            Create 1,000 rows
-          </button>
-        </div>
-        <div _={{ className: "col-sm-6 smallpad" }}>
-          <button
-            _={{
-              type: "button",
-              className: "btn btn-primary btn-block",
-              id: "runlots",
-              onclick: runLots,
-            }}
-          >
-            Create 10,000 rows
-          </button>
-        </div>
-        <div _={{ className: "col-sm-6 smallpad" }}>
-          <button
-            _={{
-              type: "button",
-              className: "btn btn-primary btn-block",
-              id: "add",
-              onclick: add,
-            }}
-          >
-            Append 1,000 rows
-          </button>
-        </div>
-        <div _={{ className: "col-sm-6 smallpad" }}>
-          <button
-            _={{
-              type: "button",
-              className: "btn btn-primary btn-block",
-              id: "update",
-              onclick: update,
-            }}
-          >
-            Update every 10th row
-          </button>
-        </div>
-        <div _={{ className: "col-sm-6 smallpad" }}>
-          <button
-            _={{
-              type: "button",
-              className: "btn btn-primary btn-block",
-              id: "clear",
-              onclick: clear,
-            }}
-          >
-            Clear
-          </button>
-        </div>
-        <div _={{ className: "col-sm-6 smallpad" }}>
-          <button
-            _={{
-              type: "button",
-              className: "btn btn-primary btn-block",
-              id: "swaprows",
-              onclick: swapRows,
-            }}
-          >
-            Swap Rows
-          </button>
-        </div>
-      </div>
-    );
-  },
-});
+export const TableManager = create(
+  <div _={{ className: "row" }}>
+    <div _={{ className: "col-sm-6 smallpad" }}>
+      <button
+        _={{
+          type: "button",
+          className: "btn btn-primary btn-block",
+          id: "run",
+          onclick: run,
+        }}
+      >
+        Create 1,000 rows
+      </button>
+    </div>
+    <div _={{ className: "col-sm-6 smallpad" }}>
+      <button
+        _={{
+          type: "button",
+          className: "btn btn-primary btn-block",
+          id: "runlots",
+          onclick: runLots,
+        }}
+      >
+        Create 10,000 rows
+      </button>
+    </div>
+    <div _={{ className: "col-sm-6 smallpad" }}>
+      <button
+        _={{
+          type: "button",
+          className: "btn btn-primary btn-block",
+          id: "add",
+          onclick: add,
+        }}
+      >
+        Append 1,000 rows
+      </button>
+    </div>
+    <div _={{ className: "col-sm-6 smallpad" }}>
+      <button
+        _={{
+          type: "button",
+          className: "btn btn-primary btn-block",
+          id: "update",
+          onclick: update,
+        }}
+      >
+        Update every 10th row
+      </button>
+    </div>
+    <div _={{ className: "col-sm-6 smallpad" }}>
+      <button
+        _={{
+          type: "button",
+          className: "btn btn-primary btn-block",
+          id: "clear",
+          onclick: clear,
+        }}
+      >
+        Clear
+      </button>
+    </div>
+    <div _={{ className: "col-sm-6 smallpad" }}>
+      <button
+        _={{
+          type: "button",
+          className: "btn btn-primary btn-block",
+          id: "swaprows",
+          onclick: swapRows,
+        }}
+      >
+        Swap Rows
+      </button>
+    </div>
+  </div>
+)
+document.getElementById('table-manager')?.appendChild(TableManager)

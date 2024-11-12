@@ -8,10 +8,13 @@ import type {
 // Bypass Content-Security-Policy by creating a "Callable" object instead of using function
 class Callable {
   constructor() {
-    const closure: any = (...args: any) => closure._call(...args);
-    return Object.setPrototypeOf(closure, new.target.prototype);
+    const closure = () => {};
+    const result = Object.setPrototypeOf(closure, new.target.prototype);
+    // Intentional it should not disturb arrays or strings
+    delete result['length']
+    delete result['name']
+    return result;
   }
-  _call() {}
 }
 
 export class Observable<T> extends Callable implements ObservableLike<T> {

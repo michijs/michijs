@@ -1,20 +1,20 @@
-import { isClassJSXElement } from "../typeWards/isClassJSXElement";
-import { isDOMElement } from "../typeWards/isDOMElement";
-import { isNotAPrimitiveJSX } from "../typeWards/isNotAPrimitiveJSX";
-import { isFunctionOrClassJSXElement } from "../typeWards/isFunctionOrClassJSXElement";
+import { isClassJSXElement } from "../../typeWards/isClassJSXElement";
+import { isDOMElement } from "../../typeWards/isDOMElement";
+import { isNotAPrimitiveJSX } from "../../typeWards/isNotAPrimitiveJSX";
+import { isFunctionOrClassJSXElement } from "../../typeWards/isFunctionOrClassJSXElement";
 import type {
   DOMElementJSXElement,
   ObservableNonNullablePrimitiveType,
   SingleJSXElement,
-} from "../types";
-import { classJSXToObjectJSXElement } from "../utils/classJSXToObjectJSXElement";
+} from "../../types";
+import { classJSXToObjectJSXElement } from "../../utils/classJSXToObjectJSXElement";
 import { createDOMElement } from "./createDOMElement";
 import { createObject } from "./createObject";
 import { createTextElement } from "./createTextElement";
-import { isObservableType } from "../typeWards/isObservableType";
+import { isObservableType } from "../../typeWards/isObservableType";
 import { createObservableTextElement } from "./createObservableTextElement";
 import { createDOMFragment } from "./createDOMFragment";
-import { isFragmentElement } from "../typeWards/isFragmentElement";
+import { isFragmentElement } from "../../typeWards/isFragmentElement";
 
 export function create<T = Node>(
   jsx: SingleJSXElement,

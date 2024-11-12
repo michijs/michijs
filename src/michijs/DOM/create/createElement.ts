@@ -1,5 +1,5 @@
 import { createObject } from "./createObject";
-import type { GetElementProps } from "../types";
+import type { GetElementProps } from "../../types";
 
 export function createElement<
   const T extends string,

@@ -1,5 +1,5 @@
-import { create } from "../DOM/create";
-import { clone } from "../DOM/clone";
+import { create } from "../DOM/create/create";
+import { clone } from "../DOM/clone/clone";
 import type { FC } from "../types";
 import type { VirtualFragment } from "./VirtualFragment";
 

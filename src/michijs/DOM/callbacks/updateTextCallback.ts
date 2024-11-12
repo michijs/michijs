@@ -1,4 +1,3 @@
-export const updateTextCallback = (newValue: unknown, el: Text) => (el.nodeValue =
-  (typeof newValue === "object"
-    ? JSON.stringify(newValue)
-    : newValue?.toString()) ?? "");
+import { createTextNodeContentCallback } from "./createTextNodeContentCallback";
+
+export const updateTextCallback = (newValue: unknown, el: Text, newText: string = createTextNodeContentCallback(newValue)) => (el.nodeValue = newText);
