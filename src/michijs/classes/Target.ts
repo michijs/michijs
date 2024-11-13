@@ -21,23 +21,26 @@ export class Target<V> {
     this.renderItem = renderItem;
     this.contextElement = contextElement;
     this.contextNamespace = contextNamespace;
-    this.create = useTemplate ? ((value: V) => {
-      if (!this.template)
-        this.template = create(
-          this.renderItem(value),
-          this.contextElement,
-          this.contextNamespace,
-        )
-      return clone(
-        this.template,
-        this.renderItem(value),
-        this.contextElement
-      );
-    }) : ((value: V) => create(
-      this.renderItem(value),
-      this.contextElement,
-      this.contextNamespace,
-    ))
+    this.create = useTemplate
+      ? (value: V) => {
+          if (!this.template)
+            this.template = create(
+              this.renderItem(value),
+              this.contextElement,
+              this.contextNamespace,
+            );
+          return clone(
+            this.template,
+            this.renderItem(value),
+            this.contextElement,
+          );
+        }
+      : (value: V) =>
+          create(
+            this.renderItem(value),
+            this.contextElement,
+            this.contextNamespace,
+          );
   }
 
   clear(): void {

@@ -5,10 +5,10 @@ import { updateTextCallback } from "../callbacks/updateTextCallback";
 export const updateTextElement = (
   clonedNode: Text,
   // This has a lot of performance improvement for some reason
-  jsx: PrimitiveType | {}
+  jsx: PrimitiveType | {},
 ): void => {
-  const newText = createTextNodeContentCallback(jsx)
+  const newText = createTextNodeContentCallback(jsx);
   // In objects it will be always not correct
-  if(clonedNode.nodeValue !== newText)
-    updateTextCallback(jsx, clonedNode, newText)
+  if (clonedNode.nodeValue !== newText)
+    updateTextCallback(jsx, clonedNode, newText);
 };
