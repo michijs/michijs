@@ -17,7 +17,10 @@ export function updateCloneProperty(
   if (name === "_")
     return Object.entries(newValue).forEach(updatePropertiesCallback(el, true));
   if (name.startsWith("on"))
-    return el.addEventListener(name.slice(2), bindFunction(contextElement, newValue));
+    return el.addEventListener(
+      name.slice(2),
+      bindFunction(contextElement, newValue),
+    );
   if (name === "style" && typeof newValue === "object")
     return setStyle(el, newValue as CSSProperties);
   if (
@@ -27,5 +30,10 @@ export function updateCloneProperty(
   )
     return bindObservableToRef(newValue, el, updateClassCallback);
   // TODO: Validation needs to be improved
-  return bindObservableToRef(newValue, el, updateAttributeCallback(name), el.getAttribute(name) == newValue.valueOf());
+  return bindObservableToRef(
+    newValue,
+    el,
+    updateAttributeCallback(name),
+    el.getAttribute(name) == newValue.valueOf(),
+  );
 }
