@@ -27,5 +27,5 @@ export function updateCloneProperty(
   )
     return bindObservableToRef(newValue, el, updateClassCallback);
   // TODO: Validation needs to be improved
-  return bindObservableToRef(newValue, el, updateAttributeCallback(name), el.getAttribute(name) == newValue.valueOf());
+  return bindObservableToRef(newValue, el, updateAttributeCallback(name), el.getAttribute(name) === newValue.valueOf());
 }

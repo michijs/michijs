@@ -8,7 +8,7 @@ import {
 interface Row {
   label: ObservableType<string>;
   id: number;
-  selected: ObservableType<string | undefined>;
+  selected: ObservableType<string | null>;
 }
 const adjectives = [
   "pretty",
@@ -73,7 +73,7 @@ const adjectives = [
     const data = new Array<Row>(count);
     for (let i = 0; i < count; i++)
       data[i] = {
-        selected: observePrimitiveValue<string | undefined>(undefined),
+        selected: observePrimitiveValue<string | null>(null),
         id: nextId++,
         label: observePrimitiveValue(
           `${adjectives[_random(adjectivesLength)]} ${colours[_random(coloursLength)]} ${nouns[_random(nounsLength)]}`,
@@ -96,7 +96,7 @@ const adjectives = [
   clear = () => rows.$clear(),
   select = (row: Row) => {
     row.selected("danger");
-    if (selectedItem) selectedItem.selected(undefined);
+    if (selectedItem) selectedItem.selected(null);
     selectedItem = row;
   },
   deleteItem = (id: number) =>
