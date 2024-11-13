@@ -2,7 +2,7 @@ import {
   type ObservableType,
   observeCommonObject,
   ProxiedArray,
-  create
+  create,
 } from "@michijs/michijs";
 
 interface Row {
@@ -11,32 +11,32 @@ interface Row {
   selected: ObservableType<string | undefined>;
 }
 const adjectives = [
-  "pretty",
-  "large",
-  "big",
-  "small",
-  "tall",
-  "short",
-  "long",
-  "handsome",
-  "plain",
-  "quaint",
-  "clean",
-  "elegant",
-  "easy",
-  "angry",
-  "crazy",
-  "helpful",
-  "mushy",
-  "odd",
-  "unsightly",
-  "adorable",
-  "important",
-  "inexpensive",
-  "cheap",
-  "expensive",
-  "fancy",
-],
+    "pretty",
+    "large",
+    "big",
+    "small",
+    "tall",
+    "short",
+    "long",
+    "handsome",
+    "plain",
+    "quaint",
+    "clean",
+    "elegant",
+    "easy",
+    "angry",
+    "crazy",
+    "helpful",
+    "mushy",
+    "odd",
+    "unsightly",
+    "adorable",
+    "important",
+    "inexpensive",
+    "cheap",
+    "expensive",
+    "fancy",
+  ],
   colours = [
     "red",
     "yellow",
@@ -119,15 +119,20 @@ export const TableBody = create(
         </td>
         <td _={{ className: "col-md-1" }}>
           <a _={{ onclick: () => deleteItem(row.id) }}>
-            <span _={{ className: "glyphicon glyphicon-remove", ariaHidden: "true" }} />
+            <span
+              _={{
+                className: "glyphicon glyphicon-remove",
+                ariaHidden: "true",
+              }}
+            />
           </a>
         </td>
         <td _={{ className: "col-md-6" }} />
       </tr>
     )}
-  />
-)
-document.querySelector('table')?.appendChild(TableBody);
+  />,
+);
+document.querySelector("table")?.appendChild(TableBody);
 
 export const TableManager = create(
   <div _={{ className: "row" }}>
@@ -203,6 +208,6 @@ export const TableManager = create(
         Swap Rows
       </button>
     </div>
-  </div>
-)
-document.getElementById('table-manager')?.appendChild(TableManager)
+  </div>,
+);
+document.getElementById("table-manager")?.appendChild(TableManager);

@@ -21,23 +21,26 @@ export class Target<V> {
     this.renderItem = renderItem;
     this.contextElement = contextElement;
     this.contextNamespace = contextNamespace;
-    this.create = useTemplate ? ((value: V) => {
-      if (!this.template)
-        this.template = create(
-          this.renderItem(value),
-          this.contextElement,
-          this.contextNamespace,
-        )
-      return clone(
-        this.template,
-        this.renderItem(value),
-        this.contextElement
-      );
-    }) : ((value: V) => create(
-      this.renderItem(value),
-      this.contextElement,
-      this.contextNamespace,
-    ))
+    this.create = useTemplate
+      ? (value: V) => {
+          if (!this.template)
+            this.template = create(
+              this.renderItem(value),
+              this.contextElement,
+              this.contextNamespace,
+            );
+          return clone(
+            this.template,
+            this.renderItem(value),
+            this.contextElement,
+          );
+        }
+      : (value: V) =>
+          create(
+            this.renderItem(value),
+            this.contextElement,
+            this.contextNamespace,
+          );
   }
 
   clear(): void {
@@ -70,16 +73,16 @@ export class Target<V> {
 
   insertItemsAt(i: number, items: V[]): void {
     // TODO: find a better way to do this
-    this.insertChildNodesAt(i, ...items.map(x => this.create(x)));
+    this.insertChildNodesAt(i, ...items.map((x) => this.create(x)));
   }
 
   prependItems(items: V[]): void {
     // TODO: find a better way to do this
-    this.element.prepend(...items.map(x => this.create(x)));
+    this.element.prepend(...items.map((x) => this.create(x)));
   }
 
   appendItems(items: V[]): void {
-    items.forEach(x => this.element.appendChild(this.create(x)));
+    items.forEach((x) => this.element.appendChild(this.create(x)));
   }
 
   reverse(): void {

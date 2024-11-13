@@ -2,7 +2,9 @@
  *
  * @returns A boolean indicating if the current node should be ignored in the count of children
  */
-interface ForEachChildrenCallback { (childNode: ChildNode, index: number): void };
+interface ForEachChildrenCallback {
+  (childNode: ChildNode, index: number): void;
+}
 
 export const forEachChildren = (
   currentNode: ChildNode | null,
