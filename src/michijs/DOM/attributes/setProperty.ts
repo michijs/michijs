@@ -12,10 +12,11 @@ export function setProperty(
   name: string,
   newValue: any,
   contextElement?: Element,
+  shouldValidateInitialValue?: boolean
 ): void {
   // priority to properties and events
   if (name === "_")
-    return Object.entries(newValue).forEach(updatePropertiesCallback(el));
+    return Object.entries(newValue).forEach(updatePropertiesCallback(el, shouldValidateInitialValue));
   if (name.startsWith("on"))
     return el.addEventListener(
       name.slice(2),
@@ -29,5 +30,11 @@ export function setProperty(
     el.$michi.styles.className
   )
     return bindObservableToRef(newValue, el, updateClassCallback);
-  return bindObservableToRef(newValue, el, updateAttributeCallback(name));
+  return bindObservableToRef(
+    newValue,
+    el,
+    updateAttributeCallback(name),
+    // TODO: Validation needs to be improved
+    shouldValidateInitialValue && el.getAttribute(name) === newValue.valueOf(),
+  );
 }

@@ -1,8 +1,8 @@
 import type { DOMElementJSXElement, ObjectJSXElement } from "../../types";
-import { updateCloneProperties } from "../attributes/updateCloneProperties";
 import { forEachChildren } from "../forEachChildren";
 import { updateClone } from "./updateClone";
 import { updateCloneChildNodeCallback } from "../callbacks/updateCloneChildNodeCallback";
+import { setProperties } from "../attributes/setProperties";
 
 export const updateClonedDomElementOrObjectJSXElement = (
   clonedNode: Element,
@@ -20,5 +20,5 @@ export const updateClonedDomElementOrObjectJSXElement = (
       );
     else updateClone(clonedNode.firstChild!, children, contextElement);
 
-  updateCloneProperties(clonedNode, attrs, contextElement);
+  setProperties(clonedNode, attrs, contextElement, true);
 };
