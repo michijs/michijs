@@ -12,11 +12,13 @@ export function setProperty(
   name: string,
   newValue: any,
   contextElement?: Element,
-  shouldValidateInitialValue?: boolean
+  shouldValidateInitialValue?: boolean,
 ): void {
   // priority to properties and events
   if (name === "_")
-    return Object.entries(newValue).forEach(updatePropertiesCallback(el, shouldValidateInitialValue));
+    return Object.entries(newValue).forEach(
+      updatePropertiesCallback(el, shouldValidateInitialValue),
+    );
   if (name.startsWith("on"))
     return el.addEventListener(
       name.slice(2),
