@@ -7,10 +7,6 @@ export const createObservableTextElement = (
   jsx: ObservableNonNullablePrimitiveType,
 ): Text => {
   const textNode = createTextElement(jsx.$value);
-  overrideCallbackWithRef(
-    jsx,
-    textNode,
-    updateTextCallback,
-  );
+  overrideCallbackWithRef(jsx, textNode, updateTextCallback);
   return textNode;
 };

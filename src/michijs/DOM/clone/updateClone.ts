@@ -1,4 +1,8 @@
-import type { SingleJSXElement, DOMElementJSXElement, ObservableNonNullablePrimitiveType } from "../../types";
+import type {
+  SingleJSXElement,
+  DOMElementJSXElement,
+  ObservableNonNullablePrimitiveType,
+} from "../../types";
 import { isClassJSXElement } from "../../typeWards/isClassJSXElement";
 import { isDOMElement } from "../../typeWards/isDOMElement";
 import { isFragmentElement } from "../../typeWards/isFragmentElement";
@@ -10,10 +14,13 @@ import { updateClonedDomElementOrObjectJSXElement } from "./updateClonedDomEleme
 import { updateObservableTextElement } from "./updateObservableTextElement";
 import { updateTextElement } from "./updateTextElement";
 
-export const updateClone = (clonedNode: Node, jsx: SingleJSXElement, contextElement?: Element): any => {
+export const updateClone = (
+  clonedNode: Node,
+  jsx: SingleJSXElement,
+  contextElement?: Element,
+): any => {
   if (jsx) {
-    if (Array.isArray(jsx))
-      throw 'Arrays are not supported yet'
+    if (Array.isArray(jsx)) throw "Arrays are not supported yet";
     // return createDOMFragment(
     //   jsx,
     //   contextElement,
@@ -23,8 +30,7 @@ export const updateClone = (clonedNode: Node, jsx: SingleJSXElement, contextElem
       if ("jsxTag" in jsx) {
         //Fix for non-jsx objects
         // Solves undefined Fragment caused by some compilers
-        if (isFragmentElement(jsx))
-          throw 'Fragments are not supported yet'
+        if (isFragmentElement(jsx)) throw "Fragments are not supported yet";
         //   return createDOMFragment(
         //     jsx.attrs.children,
         //     contextElement,
@@ -34,7 +40,7 @@ export const updateClone = (clonedNode: Node, jsx: SingleJSXElement, contextElem
           updateClonedDomElementOrObjectJSXElement(
             clonedNode as Element,
             jsx as DOMElementJSXElement<Element>,
-            contextElement
+            contextElement,
           );
           return;
         }
@@ -44,30 +50,34 @@ export const updateClone = (clonedNode: Node, jsx: SingleJSXElement, contextElem
             updateClonedDomElementOrObjectJSXElement(
               clonedNode as Element,
               classJSXToObjectJSXElement(jsx),
-              contextElement
+              contextElement,
             );
             return;
           }
-          throw 'Functions are not supported yet'
+          throw "Functions are not supported yet";
           // return create(
           //   jsx.jsxTag(jsx.attrs, contextElement, contextNamespace),
           //   contextElement,
           //   contextNamespace,
           // );
         }
-        updateClonedDomElementOrObjectJSXElement(clonedNode as Element, jsx, contextElement);
+        updateClonedDomElementOrObjectJSXElement(
+          clonedNode as Element,
+          jsx,
+          contextElement,
+        );
         return;
       }
-      throw 'Nodes are not supported yet'
+      throw "Nodes are not supported yet";
     }
     if (isObservableType(jsx))
       return updateObservableTextElement(
         clonedNode as Text,
-        jsx as unknown as ObservableNonNullablePrimitiveType
+        jsx as unknown as ObservableNonNullablePrimitiveType,
       );
-    updateTextElement(clonedNode as Text, jsx)
+    updateTextElement(clonedNode as Text, jsx);
     return;
   }
-  updateTextElement(clonedNode as Text, jsx)
+  updateTextElement(clonedNode as Text, jsx);
   return;
 };

@@ -9,12 +9,10 @@ const overrideAndCallCallback = <T, E extends WeakKey>(
   observable: T,
   el: E,
   callback: RefSubscription<T extends ObservableLike<infer Y> ? Y : T, E>,
-  shouldIgnoreFirstCallback?: boolean
+  shouldIgnoreFirstCallback?: boolean,
 ) => {
   const overridenCallback = overrideCallbackWithRef(
-    observable as ObservableLike<
-      T extends ObservableLike<infer Y> ? Y : T
-    >,
+    observable as ObservableLike<T extends ObservableLike<infer Y> ? Y : T>,
     el,
     callback,
   );
@@ -23,24 +21,34 @@ const overrideAndCallCallback = <T, E extends WeakKey>(
       // @ts-ignore
       observable.valueOf(),
     );
-}
+};
 
 export const bindObservableToRef = <T, E extends WeakKey>(
   observable: T,
   el: E,
   callback: RefSubscription<T extends ObservableLike<infer Y> ? Y : T, E>,
-  shouldIgnoreFirstCallback?: boolean
+  shouldIgnoreFirstCallback?: boolean,
 ): void => {
   const isObservableTypeResult = isObservableType(observable);
   if (isObservableTypeResult) {
-    overrideAndCallCallback(observable, el, callback, shouldIgnoreFirstCallback);
+    overrideAndCallCallback(
+      observable,
+      el,
+      callback,
+      shouldIgnoreFirstCallback,
+    );
     return;
   }
   if (extendsObject(observable)) {
     const observables = getObservables(observable);
     if (observables.length > 0) {
       const finalObservable = useComputedObserve(() => observable, observables);
-      overrideAndCallCallback(finalObservable as T, el, callback, shouldIgnoreFirstCallback);
+      overrideAndCallCallback(
+        finalObservable as T,
+        el,
+        callback,
+        shouldIgnoreFirstCallback,
+      );
       return;
     }
   }
