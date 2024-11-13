@@ -17,7 +17,10 @@ export function setProperty(
   if (name === "_")
     return Object.entries(newValue).forEach(updatePropertiesCallback(el));
   if (name.startsWith("on"))
-    return el.addEventListener(name.slice(2), bindFunction(contextElement, newValue));
+    return el.addEventListener(
+      name.slice(2),
+      bindFunction(contextElement, newValue),
+    );
   if (name === "style" && typeof newValue === "object")
     return setStyle(el, newValue as CSSProperties);
   if (
