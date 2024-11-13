@@ -36,24 +36,20 @@ export const updateClone = (
         //     contextElement,
         //     contextNamespace,
         //   ) as T;
-        if (isDOMElement(jsx)) {
-          updateClonedDomElementOrObjectJSXElement(
+        if (isDOMElement(jsx))
+          return updateClonedDomElementOrObjectJSXElement(
             clonedNode as Element,
             jsx as DOMElementJSXElement<Element>,
             contextElement,
           );
-          return;
-        }
         if (isFunctionOrClassJSXElement(jsx)) {
           // Explicit casting because of tsc error
-          if (isClassJSXElement(jsx)) {
-            updateClonedDomElementOrObjectJSXElement(
+          if (isClassJSXElement(jsx))
+            return updateClonedDomElementOrObjectJSXElement(
               clonedNode as Element,
               classJSXToObjectJSXElement(jsx),
               contextElement,
             );
-            return;
-          }
           throw "Functions are not supported yet";
           // return create(
           //   jsx.jsxTag(jsx.attrs, contextElement, contextNamespace),
@@ -61,12 +57,11 @@ export const updateClone = (
           //   contextNamespace,
           // );
         }
-        updateClonedDomElementOrObjectJSXElement(
+        return updateClonedDomElementOrObjectJSXElement(
           clonedNode as Element,
           jsx,
           contextElement,
         );
-        return;
       }
       throw "Nodes are not supported yet";
     }
@@ -75,9 +70,7 @@ export const updateClone = (
         clonedNode as Text,
         jsx as unknown as ObservableNonNullablePrimitiveType,
       );
-    updateTextElement(clonedNode as Text, jsx);
-    return;
+    return updateTextElement(clonedNode as Text, jsx);
   }
-  updateTextElement(clonedNode as Text, jsx);
-  return;
+  return updateTextElement(clonedNode as Text, jsx);
 };
