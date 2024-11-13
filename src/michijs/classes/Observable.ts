@@ -8,8 +8,7 @@ import type {
 // Bypass Content-Security-Policy by creating a "Callable" object instead of using function
 class Callable {
   constructor() {
-    const closure = () => {};
-    const result = Object.setPrototypeOf(closure, new.target.prototype);
+    const result = Object.setPrototypeOf(() => {}, new.target.prototype);
     // Intentional it should not disturb arrays or strings
     delete result['length']
     delete result['name']
