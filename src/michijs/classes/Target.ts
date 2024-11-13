@@ -70,16 +70,19 @@ export class Target<V> {
 
   insertItemsAt(i: number, items: V[]): void {
     // TODO: find a better way to do this
-    this.insertChildNodesAt(i, ...items.map(x => this.create(x)));
+    this.insertChildNodesAt(i, ...items.map(this.create));
   }
 
   prependItems(items: V[]): void {
     // TODO: find a better way to do this
-    this.element.prepend(...items.map(x => this.create(x)));
+    this.element.prepend(...items.map(this.create));
   }
 
+  appendItem(item: V): void {
+    this.element.appendChild(this.create(item));
+  }
   appendItems(items: V[]): void {
-    items.forEach(x => this.element.appendChild(this.create(x)));
+    items.forEach(this.appendItem, this);
   }
 
   reverse(): void {

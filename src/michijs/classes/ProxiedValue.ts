@@ -6,7 +6,7 @@ import type {
   ProxiedArrayInterface,
   MutableArrayProperties,
   FC,
-  ExtendableComponentWithoutChildren,
+  ObservableGettersAndSetters,
   SingleJSXElement,
   NotifiableObservers,
   ParentSubscription,
@@ -48,8 +48,8 @@ export class ProxiedValue<T>
     ProxiedValue.transactionsInProgress--;
   }
 
-  constructor(initialValue?: T, parentSubscription?: ParentSubscription<T>) {
-    super(parentSubscription);
+  constructor(initialValue?: T, parentSubscription?: ParentSubscription<T>, setterAndGetterFunction?: ObservableGettersAndSetters<T, T>) {
+    super(parentSubscription, setterAndGetterFunction);
     this.$privateValue = initialValue!;
     // To avoid issues with isolatedDeclarations
     // this[Symbol.toStringTag] = () => this.toString();

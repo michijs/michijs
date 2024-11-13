@@ -16,12 +16,8 @@ export function setProperty(
   // priority to properties and events
   if (name === "_")
     return Object.entries(newValue).forEach(updatePropertiesCallback(el));
-  if (name.startsWith("on")) {
-    const eventName = name.slice(2) as keyof ElementEventMap;
-    const bindedEvent = bindFunction(contextElement, newValue);
-    el.addEventListener(eventName, bindedEvent);
-    return;
-  }
+  if (name.startsWith("on"))
+    return el.addEventListener(name.slice(2), bindFunction(contextElement, newValue));
   if (name === "style" && typeof newValue === "object")
     return setStyle(el, newValue as CSSProperties);
   if (

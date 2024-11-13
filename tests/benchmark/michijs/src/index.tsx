@@ -1,6 +1,6 @@
 import {
   type ObservableType,
-  observeCommonObject,
+  observePrimitiveValue,
   ProxiedArray,
   create
 } from "@michijs/michijs";
@@ -73,9 +73,9 @@ const adjectives = [
     const data = new Array<Row>(count);
     for (let i = 0; i < count; i++)
       data[i] = {
-        selected: observeCommonObject<string | undefined>(undefined),
+        selected: observePrimitiveValue<string | undefined>(undefined),
         id: nextId++,
-        label: observeCommonObject(
+        label: observePrimitiveValue(
           `${adjectives[_random(adjectivesLength)]} ${colours[_random(coloursLength)]} ${nouns[_random(nounsLength)]}`,
         ),
       };

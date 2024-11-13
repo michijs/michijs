@@ -5,7 +5,7 @@ import type { CSSProperties } from "../../generated/htmlType";
 import { isMichiCustomElement } from "../../typeWards/isMichiCustomElement";
 import { updateClassCallback } from "../callbacks/updateClassCallback";
 import { updateAttributeCallback } from "../callbacks/updateAttributeCallback";
-import { updateClonePropertiesCallback } from "../callbacks/updateClonePropertiesCallback";
+import { updatePropertiesCallback } from "../callbacks/updatePropertiesCallback";
 
 export function updateCloneProperty(
   el: Element,
@@ -15,13 +15,9 @@ export function updateCloneProperty(
 ): void {
   // priority to properties and events
   if (name === "_")
-    return Object.entries(newValue).forEach(updateClonePropertiesCallback(el));
-  if (name.startsWith("on")) {
-    const eventName = name.slice(2) as keyof ElementEventMap;
-    const bindedEvent = bindFunction(contextElement, newValue);
-    el.addEventListener(eventName, bindedEvent);
-    return;
-  }
+    return Object.entries(newValue).forEach(updatePropertiesCallback(el, true));
+  if (name.startsWith("on"))
+    return el.addEventListener(name.slice(2), bindFunction(contextElement, newValue));
   if (name === "style" && typeof newValue === "object")
     return setStyle(el, newValue as CSSProperties);
   if (
@@ -30,5 +26,6 @@ export function updateCloneProperty(
     el.$michi.styles.className
   )
     return bindObservableToRef(newValue, el, updateClassCallback);
-  return bindObservableToRef(newValue, el, updateAttributeCallback(name));
+  // TODO: Validation needs to be improved
+  return bindObservableToRef(newValue, el, updateAttributeCallback(name), el.getAttribute(name) == newValue.valueOf());
 }

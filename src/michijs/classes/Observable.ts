@@ -3,12 +3,13 @@ import type {
   ObservableLike,
   ParentSubscription,
   Subscription,
+  ObservableGettersAndSetters
 } from "../types";
 
 // Bypass Content-Security-Policy by creating a "Callable" object instead of using function
 class Callable {
-  constructor() {
-    const result = Object.setPrototypeOf(() => {}, new.target.prototype);
+  constructor(setterAndGetterFunction: Function = () => {}) {
+    const result = Object.setPrototypeOf(setterAndGetterFunction, new.target.prototype);
     // Intentional it should not disturb arrays or strings
     delete result['length']
     delete result['name']
@@ -21,8 +22,8 @@ export class Observable<T> extends Callable implements ObservableLike<T> {
   parentSubscription: ParentSubscription<T> | undefined;
   observers: Set<Subscription<T>> = new Set();
 
-  constructor(parentSubscription?: ParentSubscription<T>) {
-    super();
+  constructor(parentSubscription?: ParentSubscription<T>, setterAndGetterFunction?: ObservableGettersAndSetters<T, T>) {
+    super(setterAndGetterFunction);
     this.parentSubscription = parentSubscription;
   }
 

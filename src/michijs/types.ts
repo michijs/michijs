@@ -320,7 +320,7 @@ export interface ProxiedValueInterface<RV, SV> extends ObservableLike<RV> {
   valueOf(): RV;
 }
 
-interface ObservableGettersAndSetters<RV, SV> {
+export interface ObservableGettersAndSetters<RV, SV> {
   (newValue: SV | RV): void;
   (): RV;
 }
