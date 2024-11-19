@@ -10,6 +10,13 @@ export function observeDate<T extends Date>(
 ) {
   const clone = cloneDate(item);
   const newObservable = new ProxiedValue<T>(clone, parentSubscription);
-  const proxy = new Proxy(newObservable, new DateProxyHandler(() => proxy, rootObservableCallback, parentSubscription)) as unknown as ObservableType<T>;
+  const proxy = new Proxy(
+    newObservable,
+    new DateProxyHandler(
+      () => proxy,
+      rootObservableCallback,
+      parentSubscription,
+    ),
+  ) as unknown as ObservableType<T>;
   return proxy;
 }
