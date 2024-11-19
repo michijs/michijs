@@ -11,11 +11,11 @@ export function createFunctionalComponent<
   T extends AnyObject,
   S extends Element = Element,
 >(
-  callback: CreateFCResult<T, S>,
-  contextElement?: S,
-  contextNamespace?: string,
+  callback: CreateFCResult<T, S>
 ): CreateFunctionalComponent<T> {
-  return (props) => {
+  return (props,
+    contextElement?: S,
+    contextNamespace?: string,) => {
     // TODO: Not sure why ts compiler is complaining here
     // @ts-ignore
     const newProps = Object.entries(props).reduce(

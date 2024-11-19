@@ -100,6 +100,14 @@ describe("Observe tests", () => {
   });
   describe("When observing Objects", () => {
     objectTests(() => ({}));
+    
+    it("Assigning a new value to the object should ensure its child properties remain observable", () => {
+      const a = useObserve({test: 0});
+      a({test: 43});
+      expect(typeof a.test).toStrictEqual(
+        "function"
+      );
+    });
   });
   describe("When observing Arrays", () => {
     objectTests(() => []);

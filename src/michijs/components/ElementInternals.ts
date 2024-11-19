@@ -1,9 +1,8 @@
 import type { AllAttributes } from "../generated/htmlType";
 import { setAttribute } from "../DOM/attributes/setAttribute";
 import { isMichiCustomElement } from "../typeWards/isMichiCustomElement";
-import { createFunctionalComponent } from "../customElements/createFunctionalComponent";
 import { useComputedObserve } from "../hooks/useComputedObserve";
-import type { CreateFunctionalComponent } from "../types";
+import type { FC, ObservableOrConst } from "../types";
 import { getObservables } from "../utils/getObservables";
 import { bindObservableToRef } from "../utils/bindObservableToRef";
 import { unproxify } from "../utils/unproxify";
@@ -13,14 +12,14 @@ export interface ElementInternalsProps
   /**
    * Form controls usually expose a "value" property
    */
-  formValue?: Parameters<ElementInternals["setFormValue"]>[0];
+  formValue?: ObservableOrConst<Parameters<ElementInternals["setFormValue"]>[0]>;
   /**
    * A validation message to show
    */
-  errorMessage?: Parameters<ElementInternals["setValidity"]>[1];
-  validityStateFlags?: ValidityStateFlags;
+  errorMessage?: ObservableOrConst<Parameters<ElementInternals["setValidity"]>[1]>;
+  validityStateFlags?: ObservableOrConst<ValidityStateFlags>;
   tabIndex?: number;
-  role?: AllAttributes["role"];
+  role?: ObservableOrConst<AllAttributes["role"]>;
   children?: JSX.Element;
 }
 
@@ -30,9 +29,8 @@ export interface ElementInternalsProps
  * - Access element internals
  * - Validate and assign values to forms
  */
-export const ElementInternals: CreateFunctionalComponent<ElementInternalsProps> =
-  createFunctionalComponent<ElementInternalsProps>(
-    (
+export const ElementInternals: FC<ElementInternalsProps> =
+  (
       {
         children,
         errorMessage,
@@ -52,15 +50,17 @@ export const ElementInternals: CreateFunctionalComponent<ElementInternalsProps> 
             }),
             getObservables([validityStateFlags, errorMessage]),
           );
-
+          
           bindObservableToRef(errorObservable, self, (newValue, self) => {
+            const error = unproxify(newValue.errorMessage);
             self.$michi.internals!.setValidity(
               // @ts-ignore
-              unproxify(validityStateFlags),
-              unproxify(newValue.errorMessage),
+              error ? unproxify(validityStateFlags): undefined,
+              error,
             );
           });
         }
+
         if (formValue)
           bindObservableToRef(formValue, self, (newValue, self) => {
             self?.$michi.internals!.setFormValue(
@@ -92,5 +92,4 @@ export const ElementInternals: CreateFunctionalComponent<ElementInternalsProps> 
         });
       }
       return children;
-    },
-  );
+    }

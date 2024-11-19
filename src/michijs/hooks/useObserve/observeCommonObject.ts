@@ -2,16 +2,8 @@ import { useObserveInternal } from "../useObserve";
 import type { ObservableType, ParentSubscription } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 import { cloneCommonObject } from "../../utils/clone/cloneCommonObject";
-import {
-  createParentSubscription,
-  customObjectApply,
-  customObjectDelete,
-  customObjectGet,
-  customObjectGetOwnPropertyDescriptor,
-  customObjectHas,
-  customObjectOwnKeys,
-  customObjectSet,
-} from "./customHandlers";
+import { createParentSubscription } from "./proxyHandlers/createParentSubscription";
+import { ObjectProxyHandler } from "./proxyHandlers/ObjectProxyHandler";
 
 export function observeCommonObject<T>(
   item: T,
@@ -32,18 +24,6 @@ export function observeCommonObject<T>(
       : item,
     parentSubscription,
   );
-  const proxy = new Proxy(newObservable, {
-    set: customObjectSet(newParentSubscription, rootObservableCallback),
-    deleteProperty: customObjectDelete,
-    apply: customObjectApply(
-      () => proxy,
-      newParentSubscription,
-      rootObservableCallback,
-    ),
-    ownKeys: customObjectOwnKeys,
-    getOwnPropertyDescriptor: customObjectGetOwnPropertyDescriptor,
-    get: customObjectGet(newParentSubscription, rootObservableCallback),
-    has: customObjectHas,
-  }) as unknown as ObservableType<T>;
+  const proxy = new Proxy(newObservable, new ObjectProxyHandler(() => proxy, rootObservableCallback, newParentSubscription)) as unknown as ObservableType<T>;
   return proxy;
 }

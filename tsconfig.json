@@ -13,7 +13,6 @@
     "jsxImportSource": "@michijs/michijs",
   },
   "include": [
-    "src",
     "tests"
   ],
   "exclude": [

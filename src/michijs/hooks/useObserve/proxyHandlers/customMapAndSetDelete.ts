@@ -1,17 +1,5 @@
-import type { ObservableType } from "../../types";
-import type { ProxiedValue } from "../../classes/ProxiedValue";
-
-export const customMapAndSetClear = (
-  target: ProxiedValue<Map<any, any>> | ProxiedValue<Set<any>>,
-  clearFn: Map<any, any>["clear"] | Set<any>["clear"],
-): Map<any, any>["clear"] | Set<any>["clear"] => {
-  return () => {
-    if (target.$value.size !== 0) {
-      clearFn();
-      target.notifyCurrentValue();
-    }
-  };
-};
+import type { ObservableType } from "../../../types";
+import type { ProxiedValue } from "../../../classes/ProxiedValue";
 
 export const customMapAndSetDelete = (
   target: ProxiedValue<Map<any, any>> | ProxiedValue<Set<any>>,
