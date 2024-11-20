@@ -1,5 +1,5 @@
 {
-  "2.1.0": {
+  "2.0.9": {
     "create1000Rows": 48.44,
     "replaceAllRows": 54.04,
     "partialUpdate": 1.27,

@@ -2,7 +2,7 @@
   "name": "@michijs/michijs",
   "author": "Lucas M. Segurado",
   "license": "MIT",
-  "version": "2.1.0",
+  "version": "2.0.8",
   "files": [
     "dist/",
     "jsx-runtime/"
@@ -62,7 +62,7 @@
   ],
   "devDependencies": {
     "@happy-dom/global-registrator": "15.11.6",
-    "@michijs/dev-server": "0.7.21",
+    "@michijs/dev-server": "0.7.23",
     "@michijs/htmltype": "0.2.18",
     "@michijs/tsconfig": "0.0.4",
     "@reduxjs/toolkit": "2.3.0",
