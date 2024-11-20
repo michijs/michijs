@@ -6,7 +6,7 @@ import { useObserveInternal } from "../../useObserve";
 
 export class ObjectProxyHandler<T> implements ProxyHandler<ProxiedValue<T>> {
   proxy: () => ObservableType<any>;
-  parentSubscription?: ParentSubscription<T>;
+  parentSubscription?: ParentSubscription<any>;
   rootObservableCallback?: () => ObservableType<any>;
 
   constructor(
@@ -76,15 +76,12 @@ export class ObjectProxyHandler<T> implements ProxyHandler<ProxiedValue<T>> {
     }
     if (args.length > 0) {
       const newValue = args[0];
-      if (target.$value && valueType === "object")
-        setObservableValue(
-          this.proxy(),
-          newValue,
-          this.parentSubscription as ParentSubscription<any>,
-          this.rootObservableCallback,
-        );
-      else
-        this.proxy().$value = newValue;
+      setObservableValue(
+        this.proxy(),
+        newValue,
+        this.parentSubscription,
+        this.rootObservableCallback,
+      );
       return;
     }
     return target.valueOf();
