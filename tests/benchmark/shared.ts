@@ -1,6 +1,7 @@
 import type { ElementHandle, Page, Browser } from "playwright-core";
 import { it, expect } from "bun:test";
 import { exec } from "child_process";
+import packagejson from '../../package.json'
 
 export type Result =
   | "create1000Rows"
@@ -165,7 +166,7 @@ export async function installPlaywright() {
     const runners = ["bunx", "npx"];
     exec(
       runners
-        .map((x) => `${x} playwright install chromium --with-deps`)
+        .map((x) => `${x} playwright@${packagejson.devDependencies["playwright-core"]} install chromium --with-deps`)
         .join(" || "),
       (error, stdout, stderr) => {
         if (error) {
