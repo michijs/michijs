@@ -3,7 +3,7 @@ import type { ObservableType, ParentSubscription } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 import { createParentSubscription } from "./proxyHandlers/createParentSubscription";
 import { cloneMap } from "../../utils/clone/cloneMap";
-import { MapProxyHandler } from './proxyHandlers/MapProxyHandler'
+import { MapProxyHandler } from "./proxyHandlers/MapProxyHandler";
 
 export const observeMap = <E, T extends Map<any, E>>(
   item: T,
@@ -18,6 +18,13 @@ export const observeMap = <E, T extends Map<any, E>>(
     proxiedMap as T,
     parentSubscription,
   );
-  const proxy = new Proxy(newObservable, new MapProxyHandler(() => proxy, rootObservableCallback, newParentSubscription)) as unknown as ObservableType<T>;
+  const proxy = new Proxy(
+    newObservable,
+    new MapProxyHandler(
+      () => proxy,
+      rootObservableCallback,
+      newParentSubscription,
+    ),
+  ) as unknown as ObservableType<T>;
   return proxy;
 };

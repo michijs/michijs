@@ -5,7 +5,7 @@ import { useObserveInternal } from "../../useObserve";
 import { customMapAndSetDelete } from "./customMapAndSetDelete";
 
 export class SetProxyHandler<T> extends ObjectProxyHandler<T> {
-  override get(target, property){
+  override get(target, property) {
     if (property in target) return Reflect.get(target, property);
 
     const targetProperty = Reflect.get(

@@ -20,7 +20,14 @@ export function observeArray<T extends Array<unknown>>(
   );
 
   const newObservable = new ProxiedArray<T>(proxiedArray, parentSubscription);
-  const proxy = new Proxy(newObservable, new ArrayProxyHandler(() => proxy, rootObservableCallback, newParentSubscription));
+  const proxy = new Proxy(
+    newObservable,
+    new ArrayProxyHandler(
+      () => proxy,
+      rootObservableCallback,
+      newParentSubscription,
+    ),
+  );
 
   return proxy as unknown as ObservableType<T>;
 }

@@ -3,7 +3,7 @@ import type { ObservableType, ParentSubscription } from "../../types";
 import { ProxiedValue } from "../../classes/ProxiedValue";
 import { createParentSubscription } from "./proxyHandlers/createParentSubscription";
 import { cloneMap } from "../../utils/clone/cloneMap";
-import { SetProxyHandler } from './proxyHandlers/SetProxyHandler'
+import { SetProxyHandler } from "./proxyHandlers/SetProxyHandler";
 
 export const observeSet = <E, T extends Set<E>>(
   item: T,
@@ -16,6 +16,13 @@ export const observeSet = <E, T extends Set<E>>(
   );
   // @ts-ignore
   const newObservable = new ProxiedValue(proxiedSet, parentSubscription);
-  const proxy = new Proxy(newObservable, new SetProxyHandler(() => proxy, rootObservableCallback, newParentSubscription));
+  const proxy = new Proxy(
+    newObservable,
+    new SetProxyHandler(
+      () => proxy,
+      rootObservableCallback,
+      newParentSubscription,
+    ),
+  );
   return proxy as unknown as ObservableType<Set<E>>;
 };

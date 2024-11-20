@@ -2,19 +2,17 @@ import type { ProxiedArray } from "../../../classes/ProxiedValue";
 import { useObserveInternal } from "../../useObserve";
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 
-
 const mutableNewItemsProperties = new Set<
   keyof InstanceType<typeof ProxiedArray>
 >(["push", "$replace", "unshift"]);
 
 export class ArrayProxyHandler<T> extends ObjectProxyHandler<T> {
-
   // @ts-ignore
   override getOwnPropertyDescriptor(target, prop) {
     // Otherwise length is listed as a property
     return prop !== "length"
       ? super.getOwnPropertyDescriptor(target, prop)
-      : (Reflect.getOwnPropertyDescriptor(target, prop));
+      : Reflect.getOwnPropertyDescriptor(target, prop);
   }
   override get(target, p, receiver) {
     const castedP = p as unknown as keyof InstanceType<typeof ProxiedArray>;
@@ -66,10 +64,6 @@ export class ArrayProxyHandler<T> extends ObjectProxyHandler<T> {
         };
       }
     }
-    return super.get(
-      target,
-      p,
-      receiver,
-    );
+    return super.get(target, p, receiver);
   }
 }
