@@ -22,18 +22,14 @@ import { VirtualFragment } from "./VirtualFragment";
 
 export class ProxiedValue<T>
   extends Observable<T>
-  implements ProxiedValueInterface<T, T>
-{
-  private $privateValue: T;
+  implements ProxiedValueInterface<T, T> {
+    // TODO: should be protected
+  public $privateValue: T;
 
   static transactionsInProgress = 0;
   static valuesToNotifyOnTransactionFinish = new Set<
     InstanceType<typeof ProxiedValue<any>>
   >();
-  /**
-   * Helps to self manage notifications - useful for arrays where you dont need to compare to know if the value its different
-   */
-  protected manualNotifications = false;
 
   static startTransaction(): void {
     ProxiedValue.transactionsInProgress++;
@@ -62,14 +58,12 @@ export class ProxiedValue<T>
   }
 
   set $value(newValue: T) {
-    if (!this.manualNotifications) {
-      const notifiableObservers = this.notifiableObservers;
-      if (notifiableObservers) {
-        if (!deepEqual(newValue, this.$privateValue)) {
-          this.$privateValue = newValue;
-          this.notifyCurrentValue(notifiableObservers);
-        }
-      } else this.$privateValue = newValue;
+    const notifiableObservers = this.notifiableObservers;
+    if (notifiableObservers) {
+      if (!deepEqual(newValue, this.$privateValue)) {
+        this.$privateValue = newValue;
+        this.notifyCurrentValue(notifiableObservers);
+      }
     } else this.$privateValue = newValue;
   }
   get $value(): T {
@@ -136,8 +130,7 @@ export class ProxiedValue<T>
 
 export class ProxiedArray<V>
   extends ProxiedValue<V[]>
-  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties>
-{
+  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties> {
   private targets = new Array<Target<V>>();
   /**
    * Removed the need to notificate. Useful if you dont have notifiableObservers
@@ -154,8 +147,15 @@ export class ProxiedArray<V>
     disableNotifications?: boolean,
   ) {
     super(initialValue, parentSubscription);
-    this.manualNotifications = true;
     this.disableNotifications = disableNotifications;
+  }
+
+  override set $value(newValue: V[]) {
+    // Notifications on array are manual
+    this.$privateValue = newValue;
+  }
+  override get $value() {
+    return super.$value;
   }
 
   List = <const E = FC>(
@@ -165,13 +165,13 @@ export class ProxiedArray<V>
   ): Node => {
     const el = asTag
       ? (create(
-          {
-            jsxTag: asTag,
-            attrs,
-          } as SingleJSXElement,
-          contextElement,
-          contextNamespace,
-        ) as ParentNode)
+        {
+          jsxTag: asTag,
+          attrs,
+        } as SingleJSXElement,
+        contextElement,
+        contextNamespace,
+      ) as ParentNode)
       : new VirtualFragment();
 
     const newTarget = new Target(
