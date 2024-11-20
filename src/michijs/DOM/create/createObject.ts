@@ -25,7 +25,7 @@ export const createObject = (
     is: attrs?.is,
   });
 
-  setChildren(el, children, contextElement, contextNamespace);
+  setChildren(el, children, contextElement, newNamespace);
 
   setProperties(el, attrs, contextElement);
 

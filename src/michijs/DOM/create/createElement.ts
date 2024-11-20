@@ -15,8 +15,7 @@ export function createElement<
   {
     is,
     contextElement,
-    contextNamespace,
-    ...options
+    contextNamespace
   }: ElementCreationOptions & {
     contextElement?: Element;
     contextNamespace?: string;

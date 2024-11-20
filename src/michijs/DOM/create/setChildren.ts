@@ -13,7 +13,7 @@ export const setChildren = (
   contextNamespace?: string,
 ) => {
   if (children) {
-    const callback = appendChildCallback(node);
+    const callback = appendChildCallback(node, contextElement, contextNamespace);
     if (Array.isArray(children)) children.forEach(callback);
     else callback(children);
   }
