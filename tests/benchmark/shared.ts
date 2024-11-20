@@ -1,7 +1,7 @@
 import type { ElementHandle, Page, Browser } from "playwright-core";
 import { it, expect } from "bun:test";
 import { exec } from "child_process";
-import packagejson from '../../package.json'
+import packagejson from "../../package.json";
 
 export type Result =
   | "create1000Rows"
