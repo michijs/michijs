@@ -1,14 +1,14 @@
 {
   "2.1.0": {
-    "create1000Rows": 50.23,
-    "replaceAllRows": 50.48,
-    "partialUpdate": 2.19,
-    "selectRow": 0.86,
+    "create1000Rows": 48.44,
+    "replaceAllRows": 54.04,
+    "partialUpdate": 1.27,
+    "selectRow": 0.77,
     "swapRows": 0.56,
-    "removeRow": 0.8,
-    "createManyRows": 356.99,
-    "appendRowsToLargeTable": 34.59,
-    "clearRows": 12.89
+    "removeRow": 0.75,
+    "createManyRows": 356.57,
+    "appendRowsToLargeTable": 37.52,
+    "clearRows": 12.57
   },
   "2.0.8": {
     "create1000Rows": 67.27,
