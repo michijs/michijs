@@ -87,9 +87,7 @@ export class ObjectProxyHandler<T> implements ProxyHandler<ProxiedValue<T>> {
     return target.valueOf();
   }
 
-  ownKeys(
-    target,
-  ) {
+  ownKeys(target) {
     return Reflect.ownKeys(target.$value as object);
   }
 
@@ -101,13 +99,8 @@ export class ObjectProxyHandler<T> implements ProxyHandler<ProxiedValue<T>> {
     };
   }
 
-  has(
-    target,
-    property,
-  ) {
-    return (this.ownKeys(target) as Array<string | symbol>).includes(
-      property,
-    );
+  has(target, property) {
+    return (this.ownKeys(target) as Array<string | symbol>).includes(property);
   }
 
   get(target, p, receiver) {
@@ -119,28 +112,16 @@ export class ObjectProxyHandler<T> implements ProxyHandler<ProxiedValue<T>> {
       if (typeof target.$value === "object") {
         if (p in target.$value)
           return Reflect.get(target.$value, p, target.$value);
-        else
-          // Reflect doesnt work properly here
-          this.set(
-            target,
-            p,
-            undefined,
-            receiver,
-          );
+        // Reflect doesnt work properly here
+        else this.set(target, p, undefined, receiver);
       }
       // If a nested object is undefined
     } else {
       target.$value = {};
       // Reflect doesnt work properly here
-      this.set(
-        target,
-        p,
-        undefined,
-        receiver,
-      );
+      this.set(target, p, undefined, receiver);
     }
 
     return target.$value[p];
   }
 }
-

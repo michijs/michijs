@@ -24,6 +24,13 @@ export function observeCommonObject<T>(
       : item,
     parentSubscription,
   );
-  const proxy = new Proxy(newObservable, new ObjectProxyHandler(() => proxy, rootObservableCallback, newParentSubscription)) as unknown as ObservableType<T>;
+  const proxy = new Proxy(
+    newObservable,
+    new ObjectProxyHandler(
+      () => proxy,
+      rootObservableCallback,
+      newParentSubscription,
+    ),
+  ) as unknown as ObservableType<T>;
   return proxy;
 }

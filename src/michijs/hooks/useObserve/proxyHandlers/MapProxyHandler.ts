@@ -16,7 +16,7 @@ export class MapProxyHandler<T> extends ObjectProxyHandler<T> {
     switch (property) {
       case "clear": {
         return customMapAndSetClear(
-          target as unknown as ProxiedValue<Map<any,any>>,
+          target as unknown as ProxiedValue<Map<any, any>>,
           bindedTargetProperty,
         );
       }
