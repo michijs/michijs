@@ -10,6 +10,9 @@ import { observeSet } from "./useObserve/observeSet";
 export function useObserveInternal<T>(
   item?: T,
   parentSubscription?: ParentSubscription<T>,
+  /**
+   * For functions inside an observable
+   */
   rootObservableCallback?: () => ObservableType<unknown>,
 ): ObservableType<T> {
   const itemValue =
