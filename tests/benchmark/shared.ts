@@ -160,13 +160,14 @@ export async function makePerformanceTests(
 }
 
 export async function installPlaywright() {
-  console.log("Installing Playwright...");
+  const playwrightVersion = `playwright@${packagejson.devDependencies["playwright-core"]}`;
+  console.log(`Installing ${playwrightVersion}...`);
 
   return new Promise<void>((resolve, reject) => {
     const runners = ["bunx", "npx"];
     exec(
       runners
-        .map((x) => `${x} playwright@${packagejson.devDependencies["playwright-core"]} install chromium --with-deps`)
+        .map((x) => `${x} ${playwrightVersion} install chromium --with-deps`)
         .join(" || "),
       (error, stdout, stderr) => {
         if (error) {

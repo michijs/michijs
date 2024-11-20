@@ -61,13 +61,13 @@
     "Autonomous custom elements"
   ],
   "devDependencies": {
-    "@happy-dom/global-registrator": "15.8.3",
+    "@happy-dom/global-registrator": "15.11.6",
     "@michijs/dev-server": "0.7.21",
     "@michijs/htmltype": "0.2.18",
     "@michijs/tsconfig": "0.0.4",
     "@reduxjs/toolkit": "2.3.0",
     "@types/bun": "1.1.13",
-    "playwright-core": "1.48.2",
+    "playwright-core": "1.49.0",
     "redux": "5.0.1",
     "typescript": "5.6.3"
   },
