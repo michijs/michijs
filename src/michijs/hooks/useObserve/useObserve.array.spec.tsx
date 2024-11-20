@@ -1,3 +1,4 @@
+import { create } from "../../DOM/create/create";
 import type { ObservableType } from "../../types";
 import { useObserve } from "../useObserve";
 import { describe, it, expect, beforeEach } from "bun:test";
@@ -8,6 +9,7 @@ const exampleValue2 = 2;
 describe("Observe array tests", () => {
   let array: ObservableType<Array<number>>;
   let node: Node;
+  let jsonNode: Node;
 
   beforeEach(() => {
     array = useObserve(new Array<number>());
@@ -16,6 +18,7 @@ describe("Observe array tests", () => {
       as: "div",
       renderItem: (item) => <div>{item}</div>,
     });
+    jsonNode = create(<>{array}</>);
   });
   function expectResult(result: number[]) {
     expect(array()).toStrictEqual(result);
@@ -23,6 +26,7 @@ describe("Observe array tests", () => {
       expect(node.childNodes.item(i).textContent).toBe(x.toString()),
     );
     expect(node.childNodes.length).toBe(result.length);
+    expect(jsonNode.textContent).toBe(JSON.stringify(result));
   }
   it("Pop function should work for array and the node as expected", () => {
     array.push(exampleValue2);

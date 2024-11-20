@@ -2,7 +2,7 @@ import type { RouterProps } from "../routing/types";
 import type { SingleJSXElement } from "../types";
 import { VirtualFragment } from "../classes/VirtualFragment";
 import { bindObservable } from "../utils/bindObservable";
-import { create } from "../DOMDiff/create";
+import { create } from "../DOM/create/create";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { HistoryManager } from "../classes/HistoryManager";
 import { urlFn } from "../routing/utils/urlFn";

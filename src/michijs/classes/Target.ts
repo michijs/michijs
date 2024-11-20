@@ -1,4 +1,5 @@
-import { create } from "../DOMDiff/create";
+import { create } from "../DOM/create/create";
+import { clone } from "../DOM/clone/clone";
 import type { FC } from "../types";
 import type { VirtualFragment } from "./VirtualFragment";
 
@@ -7,42 +8,55 @@ export class Target<V> {
   private renderItem: FC<V>;
   contextElement?: Element;
   contextNamespace?: string;
+  template?: Node;
+
   constructor(
     element: VirtualFragment | ParentNode,
     renderItem: FC<V>,
     contextElement?: Element,
     contextNamespace?: string,
+    useTemplate?: boolean,
   ) {
     this.element = element;
     this.renderItem = renderItem;
     this.contextElement = contextElement;
     this.contextNamespace = contextNamespace;
+    this.create = useTemplate
+      ? (value: V) => {
+          if (!this.template)
+            this.template = create(
+              this.renderItem(value),
+              this.contextElement,
+              this.contextNamespace,
+            );
+          return clone(
+            this.template,
+            this.renderItem(value),
+            this.contextElement,
+          );
+        }
+      : (value: V) =>
+          create(
+            this.renderItem(value),
+            this.contextElement,
+            this.contextNamespace,
+          );
   }
 
   clear(): void {
     this.element.textContent = "";
   }
 
-  createSingleItem(value: V): Node {
-    return create(
-      this.renderItem(value),
-      this.contextElement,
-      this.contextNamespace,
-    );
-  }
-  create(...value: V[]): Node[] {
-    return value.map((x) => this.createSingleItem(x));
-  }
+  create: (value: V) => Node;
 
-  replace(...items: V[]): void {
+  replace(items: V[]): void {
     // A little better than replaceChildren
     this.clear();
-    this.appendItems(...items);
+    this.appendItems(items);
   }
 
   replaceNode(el: ChildNode, value: V): void {
-    const newNode = this.createSingleItem(value);
-    el.replaceWith(newNode);
+    el.replaceWith(this.create(value));
   }
 
   pop(): void {
@@ -57,22 +71,21 @@ export class Target<V> {
     this.element.childNodes[index]?.remove();
   }
 
-  insertItemsAt(i: number, ...items: V[]): void {
-    const renderResult = this.create(...items);
-
-    this.insertChildNodesAt(i, ...renderResult);
+  insertItemsAt(i: number, items: V[]): void {
+    // TODO: find a better way to do this
+    this.insertChildNodesAt(i, ...items.map(this.create));
   }
 
-  prependItems(...items: V[]): void {
-    const renderResult = this.create(...items);
-
-    this.element.prepend(...renderResult);
+  prependItems(items: V[]): void {
+    // TODO: find a better way to do this
+    this.element.prepend(...items.map(this.create));
   }
 
-  appendItems(...items: V[]): void {
-    const renderResult = this.create(...items);
-
-    this.element.append(...renderResult);
+  appendItem(item: V): void {
+    this.element.appendChild(this.create(item));
+  }
+  appendItems(items: V[]): void {
+    items.forEach(this.appendItem, this);
   }
 
   reverse(): void {
@@ -123,7 +136,7 @@ export class Target<V> {
     if (i === 0) this.element.prepend(...childNodes);
     else this.element.childNodes[i - 1].after(...childNodes);
   }
-  splice(start: number, deleteCount: number, ...items: V[]): void {
+  splice(start: number, deleteCount: number, items: V[]): void {
     const len = this.element.childNodes.length;
     const relativeStart = start >> 0;
     const k =
@@ -139,7 +152,7 @@ export class Target<V> {
       item = nextSibling;
       count++;
     }
-    if (items.length > 0) this.insertItemsAt(k, ...items);
+    if (items.length > 0) this.insertItemsAt(k, items);
   }
   fill(value: V, start = 0, end?: number): void {
     const len = this.element.childNodes.length;
@@ -159,7 +172,7 @@ export class Target<V> {
 
     while (k < final) {
       this.remove(k);
-      this.insertItemsAt(k, value);
+      this.insertItemsAt(k, [value]);
       k++;
     }
   }

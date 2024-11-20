@@ -1,42 +1,42 @@
 import { setStyle } from "./setStyle";
-import { setAttribute } from "./setAttribute";
 import { bindFunction } from "../../utils/bindFunction";
 import { bindObservableToRef } from "../../utils/bindObservableToRef";
 import type { CSSProperties } from "../../generated/htmlType";
 import { isMichiCustomElement } from "../../typeWards/isMichiCustomElement";
+import { updatePropertiesCallback } from "../callbacks/updatePropertiesCallback";
+import { updateClassCallback } from "../callbacks/updateClassCallback";
+import { updateAttributeCallback } from "../callbacks/updateAttributeCallback";
 
 export function setProperty(
   el: Element,
   name: string,
   newValue: any,
   contextElement?: Element,
+  shouldValidateInitialValue?: boolean,
 ): void {
   // priority to properties and events
   if (name === "_")
-    Object.entries(newValue).forEach(([propertyName, value]) =>
-      bindObservableToRef(
-        value,
-        el,
-        (newValue, el) => (el[propertyName] = newValue),
-      ),
+    return Object.entries(newValue).forEach(
+      updatePropertiesCallback(el, shouldValidateInitialValue),
     );
-  else if (name.startsWith("on")) {
-    const eventName = name.slice(2) as keyof ElementEventMap;
-    const bindedEvent = bindFunction(contextElement, newValue);
-    el.addEventListener(eventName, bindedEvent);
-  } else if (name === "style" && typeof newValue === "object")
-    setStyle(el, newValue as CSSProperties);
-  else if (
+  if (name.startsWith("on"))
+    return el.addEventListener(
+      name.slice(2),
+      bindFunction(contextElement, newValue),
+    );
+  if (name === "style" && typeof newValue === "object")
+    return setStyle(el, newValue as CSSProperties);
+  if (
     name === "class" &&
     isMichiCustomElement(el) &&
     el.$michi.styles.className
   )
-    bindObservableToRef(newValue, el, (newValue, el) => {
-      const newValueWithClassName = `${newValue} ${el.$michi.styles.className}`;
-      setAttribute(el, name, newValueWithClassName);
-    });
-  else
-    bindObservableToRef(newValue, el, (newValue, el) =>
-      setAttribute(el, name, newValue),
-    );
+    return bindObservableToRef(newValue, el, updateClassCallback);
+  return bindObservableToRef(
+    newValue,
+    el,
+    updateAttributeCallback(name),
+    // TODO: Validation needs to be improved
+    shouldValidateInitialValue && el.getAttribute(name) === newValue.valueOf(),
+  );
 }

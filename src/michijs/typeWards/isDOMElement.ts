@@ -1,18 +1,16 @@
 import type {
   ClassJSXElement,
   DOMElementJSXElement,
-  FragmentJSXElement,
   FunctionJSXElement,
   ObjectJSXElement,
 } from "../types";
 
-export function isDOMOrFragmentElement(
+export function isDOMElement(
   jsx:
     | ObjectJSXElement
     | FunctionJSXElement
-    | FragmentJSXElement
     | ClassJSXElement
     | DOMElementJSXElement,
-): jsx is DOMElementJSXElement | FragmentJSXElement {
-  return !jsx.jsxTag || typeof jsx.jsxTag === "object";
+): jsx is DOMElementJSXElement {
+  return typeof jsx.jsxTag === "object";
 }

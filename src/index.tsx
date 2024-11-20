@@ -6,7 +6,6 @@ export * from "./michijs/trustedTypes";
 export * from "./michijs/routing";
 export * from "./michijs/types";
 export * from "./michijs/DOM";
-export * from "./michijs/DOMDiff";
 export * from "./michijs/i18n";
 export * from "./michijs/generated/htmlType";
 export * from "./michijs/customElements";

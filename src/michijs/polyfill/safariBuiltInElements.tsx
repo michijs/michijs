@@ -1,4 +1,4 @@
-import { create } from "../DOMDiff/create";
+import { create } from "../DOM/create/create";
 
 export const extendedElements: Record<
   string,

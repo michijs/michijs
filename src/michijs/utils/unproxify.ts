@@ -5,6 +5,7 @@ import { cloneDate } from "./clone/cloneDate";
 import { cloneMap } from "./clone/cloneMap";
 import { cloneSet } from "./clone/cloneSet";
 import { ProxiedValue } from "../../michijs/classes/ProxiedValue";
+import { isPrototypeOfObject } from "./isPrototypeOfObject";
 
 /**
  * Converts any proxy into a common value
@@ -18,7 +19,7 @@ export function unproxify<T>(val: T): Unproxify<T> {
       if (item instanceof Date) return cloneDate(item) as Unproxify<T>;
       if (item instanceof Map) return cloneMap(item, unproxify) as Unproxify<T>;
       if (item instanceof Set) return cloneSet(item, unproxify) as Unproxify<T>;
-      if (Object.getPrototypeOf(item) === Object.prototype)
+      if (isPrototypeOfObject(item))
         return cloneCommonObject(item, unproxify) as Unproxify<T>;
     }
   }

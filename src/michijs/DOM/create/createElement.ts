@@ -1,5 +1,5 @@
-import { createObject } from "../DOMDiff/createObject";
-import type { GetElementProps } from "../types";
+import { createObject } from "./createObject";
+import type { GetElementProps } from "../../types";
 
 export function createElement<
   const T extends string,
@@ -16,7 +16,6 @@ export function createElement<
     is,
     contextElement,
     contextNamespace,
-    ...options
   }: ElementCreationOptions & {
     contextElement?: Element;
     contextNamespace?: string;

@@ -251,6 +251,18 @@ export interface MichiProperties
 
 export interface MichiCustomElement extends HTMLElement, MichiProperties {}
 
+export type ListProps<E, SV> = ExtendableComponentWithoutChildren<E> & {
+  renderItem: FC<SV>;
+  /**
+   * Uses cloneNode instead of creating every item separately. It is twice as fast as not using a template
+   *
+   * **Warning:** It only works with plain objectJSXElements or classJSXElements
+   *
+   * Do not use conditions, arrays or fragments on the renderItem function if this is enabled
+   */
+  useTemplate?: boolean;
+};
+
 export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>>
   extends ProxiedValueInterface<RV[], SV[]> {
   /**
@@ -260,7 +272,7 @@ export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>>
   /**
    * Replace all the list elements
    */
-  $replace(...items: (SV | RV)[]): number;
+  $replace(items: (SV | RV)[]): number;
   /**
    * Removes an item
    */
@@ -276,9 +288,7 @@ export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>>
    * An operation on the data implies an operation on the associated elements.
    */
   List<const E = FC>(
-    props: ExtendableComponentWithoutChildren<E> & {
-      renderItem: FC<SV>;
-    },
+    props: ListProps<E, SV>,
     context?: Element,
     namespace?: string,
   ): Node;
@@ -310,7 +320,7 @@ export interface ProxiedValueInterface<RV, SV> extends ObservableLike<RV> {
   valueOf(): RV;
 }
 
-interface ObservableGettersAndSetters<RV, SV> {
+export interface ObservableGettersAndSetters<RV, SV> {
   (newValue: SV | RV): void;
   (): RV;
 }
@@ -537,7 +547,9 @@ export interface CommonJSXAttrs<T> {
 }
 export interface FragmentJSXElement extends CommonJSXAttrs<null | undefined> {}
 export interface ObjectJSXElement extends CommonJSXAttrs<string> {}
-export interface DOMElementJSXElement extends CommonJSXAttrs<ParentNode> {}
+export interface DOMElementJSXElement<
+  E extends ParentNode | Element = ParentNode | Element,
+> extends CommonJSXAttrs<E> {}
 export interface FunctionJSXElement
   extends CommonJSXAttrs<CreateFCResult<any>> {}
 export interface ClassJSXElement

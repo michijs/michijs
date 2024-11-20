@@ -266,7 +266,7 @@ export interface ValueSets {
   >;
   d?: ObservableOrConst<"ltr" | "rtl" | "auto" | undefined>;
   decoding?: ObservableOrConst<"sync" | "async" | "auto" | undefined>;
-  default?: ObservableOrConst<string | number | boolean | undefined>;
+  default?: ObservableOrConst<string | number | boolean | null | undefined>;
   dropeffect?: ObservableOrConst<
     "copy" | "move" | "link" | "execute" | "popup" | "none" | undefined
   >;

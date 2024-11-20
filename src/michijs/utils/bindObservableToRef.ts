@@ -2,33 +2,56 @@ import { useComputedObserve } from "../hooks/useComputedObserve";
 import { isObservableType } from "../typeWards/isObservableType";
 import type { ObservableLike, RefSubscription } from "../types";
 import { getObservables } from "./getObservables";
+import { extendsObject } from "./extendsObject";
 import { overrideCallbackWithRef } from "./overrideCallbackWithRef";
+
+const overrideAndCallCallback = <T, E extends WeakKey>(
+  observable: T,
+  el: E,
+  callback: RefSubscription<T extends ObservableLike<infer Y> ? Y : T, E>,
+  shouldIgnoreFirstCallback?: boolean,
+) => {
+  const overridenCallback = overrideCallbackWithRef(
+    observable as ObservableLike<T extends ObservableLike<infer Y> ? Y : T>,
+    el,
+    callback,
+  );
+  if (!shouldIgnoreFirstCallback)
+    overridenCallback(
+      // @ts-ignore
+      observable.valueOf(),
+    );
+};
 
 export const bindObservableToRef = <T, E extends WeakKey>(
   observable: T,
   el: E,
   callback: RefSubscription<T extends ObservableLike<infer Y> ? Y : T, E>,
+  shouldIgnoreFirstCallback?: boolean,
 ): void => {
-  let finalObservable;
-  if (isObservableType(observable)) finalObservable = observable;
-  else {
-    const observables = getObservables(observable);
-    if (observables.length > 0)
-      finalObservable = useComputedObserve(() => observable, observables);
-  }
-  if (finalObservable) {
-    const overridenCallback = overrideCallbackWithRef(
-      finalObservable as ObservableLike<
-        T extends ObservableLike<infer Y> ? Y : T
-      >,
+  const isObservableTypeResult = isObservableType(observable);
+  if (isObservableTypeResult) {
+    overrideAndCallCallback(
+      observable,
       el,
       callback,
-    );
-    overridenCallback(
-      // @ts-ignore
-      finalObservable.valueOf(),
+      shouldIgnoreFirstCallback,
     );
     return;
   }
-  callback(observable as T extends ObservableLike<infer Y> ? Y : T, el);
+  if (extendsObject(observable)) {
+    const observables = getObservables(observable);
+    if (observables.length > 0) {
+      const finalObservable = useComputedObserve(() => observable, observables);
+      overrideAndCallCallback(
+        finalObservable as T,
+        el,
+        callback,
+        shouldIgnoreFirstCallback,
+      );
+      return;
+    }
+  }
+  if (!shouldIgnoreFirstCallback)
+    callback(observable as T extends ObservableLike<infer Y> ? Y : T, el);
 };
