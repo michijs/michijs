@@ -2,10 +2,10 @@ import { useObserve } from "../useObserve";
 import { describe, it, expect } from "bun:test";
 
 const obj = useObserve({
-  text: 'a',
+  text: "a",
   testFunction() {
     return obj.text();
-  }
+  },
 });
 
 const effect = obj.testFunction();
@@ -15,7 +15,7 @@ describe("Functions", () => {
     expect(effect()).toStrictEqual(obj.text());
   });
   it("should listen for changes and update accordingly", () => {
-    obj.text("b")
+    obj.text("b");
     expect(effect()).toStrictEqual(obj.text());
   });
 });
