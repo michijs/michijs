@@ -1,9 +1,11 @@
-import { ProxiedValueV2 } from "../../../classes/ProxiedValue";
+import type { ProxiedValueV2 } from "../../../classes/ProxiedValue";
 import type { ObservableType, ParentSubscription } from "../../../types";
-import { getHandler } from './getHandler'
+import { getHandler } from "./getHandler";
 import { isPrototypeOfObject } from "../../../utils";
 
-export class PrimitiveProxyHandler<T> implements ProxyHandler<ProxiedValueV2<T>> {
+export class PrimitiveProxyHandler<T>
+  implements ProxyHandler<ProxiedValueV2<T>>
+{
   parentSubscription?: ParentSubscription<any>;
   rootObservableCallback?: () => ObservableType<any>;
 
@@ -27,7 +29,7 @@ export class PrimitiveProxyHandler<T> implements ProxyHandler<ProxiedValueV2<T>>
           if (newValue && isPrototypeOfObject(newValue)) {
             const newHandler = getHandler(newValue);
             target.handler = newHandler;
-            newHandler.apply(target, _, args)
+            newHandler.apply(target, _, args);
             break;
           }
         default: {

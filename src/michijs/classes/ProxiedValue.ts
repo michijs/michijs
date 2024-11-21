@@ -305,14 +305,15 @@ export class ProxiedArray<V>
   }
 }
 
-
 export class ProxiedValueV2<T> extends ProxiedValue<T> {
   handler: ProxyHandler<any>;
-  constructor(
-    initialValue?: T,
-    parentSubscription?: ParentSubscription<T>,
-  ){
-    super(initialValue, parentSubscription, ((args) => this.handler?.apply(this, this, args)) as unknown as ObservableGettersAndSetters<T>);
+  constructor(initialValue?: T, parentSubscription?: ParentSubscription<T>) {
+    super(initialValue, parentSubscription, ((args) =>
+      this.handler?.apply(
+        this,
+        this,
+        args,
+      )) as unknown as ObservableGettersAndSetters<T>);
     this.handler = getHandler(initialValue);
     this.$value = initialValue;
   }
