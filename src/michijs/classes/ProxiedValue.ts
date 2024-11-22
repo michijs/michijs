@@ -10,6 +10,7 @@ import type {
   SingleJSXElement,
   NotifiableObservers,
   ParentSubscription,
+  ObservableProxyHandler,
   ListProps,
 } from "../types";
 import { deepEqual } from "../utils/deepEqual";
@@ -19,6 +20,7 @@ import { unproxify } from "../utils/unproxify";
 import { Target } from "./Target";
 import { create } from "../DOM/create/create";
 import { VirtualFragment } from "./VirtualFragment";
+import {getHandler} from '../hooks/useObserve/proxyHandlers/getHandler'
 
 export class ProxiedValue<T>
   extends Observable<T>
@@ -47,12 +49,12 @@ export class ProxiedValue<T>
   }
 
   constructor(
-    initialValue?: T,
+    initialValue: T,
     parentSubscription?: ParentSubscription<T>,
     setterAndGetterFunction?: ObservableGettersAndSetters<T, T>,
   ) {
     super(parentSubscription, setterAndGetterFunction);
-    this.$privateValue = initialValue!;
+    this.$privateValue = initialValue;
     // To avoid issues with isolatedDeclarations
     // this[Symbol.toStringTag] = () => this.toString();
     // this[Symbol.toPrimitive] = () => this.valueOf();
@@ -307,15 +309,23 @@ export class ProxiedArray<V>
 
 
 export class ProxiedValueV2<T> extends ProxiedValue<T> {
-  handler: ProxyHandler<any>;
+  handler: ObservableProxyHandler<any, any>;
   constructor(
-    initialValue?: T,
+    initialValue: T,
     parentSubscription?: ParentSubscription<T>,
+    rootObservableCallback?: () => ObservableType<any>,
   ){
-    super(initialValue, parentSubscription, ((args) => this.handler!.apply(this, this, args)) as unknown as ObservableGettersAndSetters<T>);
-    this.handler = getHandler(initialValue);
-    this.$value = initialValue;
+    super(initialValue, parentSubscription, ((args) => this.handler.apply(this, this, args)) as unknown as ObservableGettersAndSetters<T,T>);
+    const unproxifiedInitialValue = initialValue?.valueOf();
+    this.handler = getHandler(unproxifiedInitialValue, parentSubscription, rootObservableCallback);
+    this.$value = this.handler.getInitialValue?.(unproxifiedInitialValue) ?? unproxifiedInitialValue;
   }
 
-  override $value: T;
+  override get $value() {
+    return this.$privateValue;
+  };
+
+  override set $value(newValue: T) {
+    this.$privateValue = newValue
+  }
 }

@@ -1,15 +1,14 @@
 import { ProxiedValueV2 } from "../../../classes/ProxiedValue";
-import type { ObservableType, ParentSubscription } from "../../../types";
+import type { ObservableType, ParentSubscription, ObservableProxyHandler } from "../../../types";
 import { getHandler } from './getHandler'
 import { isPrototypeOfObject } from "../../../utils";
 
-export class PrimitiveProxyHandler<T> implements ProxyHandler<ProxiedValueV2<T>> {
+export class PrimitiveProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, T> {
   parentSubscription?: ParentSubscription<any>;
   rootObservableCallback?: () => ObservableType<any>;
 
   constructor(
-    rootObservableCallback?: () => ObservableType<any>,
-    parentSubscription?: ParentSubscription<any>,
+    parentSubscription?: ParentSubscription<any>, rootObservableCallback?: () => ObservableType<any>
   ) {
     this.rootObservableCallback = rootObservableCallback;
     this.parentSubscription = parentSubscription;
@@ -22,16 +21,16 @@ export class PrimitiveProxyHandler<T> implements ProxyHandler<ProxiedValueV2<T>>
       // Should check if the type if the same first
       switch (typeof newValue) {
         case "function": {
-          const newHandler = getHandler(newValue, this.rootObservableCallback, this.parentSubscription);
+          const newHandler = getHandler(newValue, this.parentSubscription, this.rootObservableCallback);
           target.handler = newHandler;
-          return target.handler!.apply(target, _, args);
+          return target.handler.apply(target, _, args);
         }
         case "object": 
           // Ignore null
           if (newValue && (isPrototypeOfObject(newValue))) {
-            const newHandler = getHandler(newValue, this.rootObservableCallback, this.parentSubscription);
+            const newHandler = getHandler(newValue, this.parentSubscription, this.rootObservableCallback);
             target.handler = newHandler;
-            return target.handler!.apply(target, _, args)
+            return target.handler.apply(target, _, args)
           }
           // If its an non observable object continue
         default: {

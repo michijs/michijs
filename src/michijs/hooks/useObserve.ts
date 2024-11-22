@@ -6,6 +6,7 @@ import { observeCommonObject } from "./useObserve/observeCommonObject";
 import { observeDate } from "./useObserve/observeDate";
 import { observeMap } from "./useObserve/observeMap";
 import { observeSet } from "./useObserve/observeSet";
+import { observePrimitiveValueV2 } from "./useObserve/observePrimitiveValueV2";
 
 export function useObserveInternal<T>(
   item?: T,
@@ -58,7 +59,7 @@ export function useObserveInternal<T>(
       // console.error(`The object with path "${props.propertyPath}" cannot be observed ${item}`)
     }
   }
-  return observeCommonObject<T>(
+  return observePrimitiveValueV2<T>(
     itemValue as T,
     parentSubscription,
     rootObservableCallback,

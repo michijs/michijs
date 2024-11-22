@@ -211,6 +211,11 @@ export interface CompatibleObservableLike {
   subscribe(observer: CompatibleSubscription): void;
 }
 
+export interface ObservableProxyHandler<T extends object, Y> extends Required<Pick<ProxyHandler<T>, 'apply'>>, Omit<ProxyHandler<T>, 'apply'> {
+  // TODO: Should be observableType
+  getInitialValue?(unproxifiedValue: Y): any
+}
+
 export interface MichiProperties
   extends Lifecycle,
     LifecycleInternals,
