@@ -1,14 +1,21 @@
-import { ProxiedValueV2 } from "../../../classes/ProxiedValue";
-import type { ObservableType, ParentSubscription, ObservableProxyHandler } from "../../../types";
-import { getHandler } from './getHandler'
+import type { ProxiedValueV2 } from "../../../classes/ProxiedValue";
+import type {
+  ObservableType,
+  ParentSubscription,
+  ObservableProxyHandler,
+} from "../../../types";
+import { getHandler } from "./getHandler";
 import { isPrototypeOfObject } from "../../../utils";
 
-export class PrimitiveProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, T> {
+export class PrimitiveProxyHandler<T>
+  implements ObservableProxyHandler<ProxiedValueV2<T>, T>
+{
   parentSubscription?: ParentSubscription<any>;
   rootObservableCallback?: () => ObservableType<any>;
 
   constructor(
-    parentSubscription?: ParentSubscription<any>, rootObservableCallback?: () => ObservableType<any>
+    parentSubscription?: ParentSubscription<any>,
+    rootObservableCallback?: () => ObservableType<any>,
   ) {
     this.rootObservableCallback = rootObservableCallback;
     this.parentSubscription = parentSubscription;
@@ -21,18 +28,26 @@ export class PrimitiveProxyHandler<T> implements ObservableProxyHandler<ProxiedV
       // Should check if the type if the same first
       switch (typeof newValue) {
         case "function": {
-          const newHandler = getHandler(newValue, this.parentSubscription, this.rootObservableCallback);
+          const newHandler = getHandler(
+            newValue,
+            this.parentSubscription,
+            this.rootObservableCallback,
+          );
           target.handler = newHandler;
           return target.handler.apply(target, _, args);
         }
-        case "object": 
+        case "object":
           // Ignore null
-          if (newValue && (isPrototypeOfObject(newValue))) {
-            const newHandler = getHandler(newValue, this.parentSubscription, this.rootObservableCallback);
+          if (newValue && isPrototypeOfObject(newValue)) {
+            const newHandler = getHandler(
+              newValue,
+              this.parentSubscription,
+              this.rootObservableCallback,
+            );
             target.handler = newHandler;
-            return target.handler.apply(target, _, args)
+            return target.handler.apply(target, _, args);
           }
-          // If its an non observable object continue
+        // If its an non observable object continue
         default: {
           const notifiableObservers = target.notifiableObservers;
           if (notifiableObservers && newValue !== target.$privateValue) {

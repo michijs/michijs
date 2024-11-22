@@ -1,8 +1,16 @@
-import type { ObservableProxyHandler, ObservableType, ParentSubscription } from "../../../types";
+import type {
+  ObservableProxyHandler,
+  ObservableType,
+  ParentSubscription,
+} from "../../../types";
 import { PrimitiveProxyHandler } from "./PrimitiveProxyHandler";
 import { FunctionProxyHandler } from "./FunctionProxyHandler";
 
-export const getHandler = (value: unknown, parentSubscription?: ParentSubscription<any>, rootObservableCallback?: () => ObservableType<any>): ObservableProxyHandler<any, any> => {
+export const getHandler = (
+  value: unknown,
+  parentSubscription?: ParentSubscription<any>,
+  rootObservableCallback?: () => ObservableType<any>,
+): ObservableProxyHandler<any, any> => {
   const typeOfValue = typeof value;
 
   switch (typeOfValue) {
@@ -10,6 +18,9 @@ export const getHandler = (value: unknown, parentSubscription?: ParentSubscripti
       return new FunctionProxyHandler(rootObservableCallback);
     default:
       // TODO: add props
-      return new PrimitiveProxyHandler(parentSubscription, rootObservableCallback)
+      return new PrimitiveProxyHandler(
+        parentSubscription,
+        rootObservableCallback,
+      );
   }
-}
+};
