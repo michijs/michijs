@@ -312,7 +312,7 @@ export class ProxiedValueV2<T> extends ProxiedValue<T> {
     initialValue?: T,
     parentSubscription?: ParentSubscription<T>,
   ){
-    super(initialValue, parentSubscription, ((args) => this.handler?.apply(this, this, args)) as unknown as ObservableGettersAndSetters<T>);
+    super(initialValue, parentSubscription, ((args) => this.handler!.apply(this, this, args)) as unknown as ObservableGettersAndSetters<T>);
     this.handler = getHandler(initialValue);
     this.$value = initialValue;
   }

@@ -21,15 +21,19 @@ export class PrimitiveProxyHandler<T> implements ProxyHandler<ProxiedValueV2<T>>
       const newValue = args[0].valueOf();
       // Should check if the type if the same first
       switch (typeof newValue) {
-        case "function":
-        case "object":
+        case "function": {
+          const newHandler = getHandler(newValue, this.rootObservableCallback, this.parentSubscription);
+          target.handler = newHandler;
+          return target.handler!.apply(target, _, args);
+        }
+        case "object": 
           // Ignore null
-          if (newValue && isPrototypeOfObject(newValue)) {
-            const newHandler = getHandler(newValue);
+          if (newValue && (isPrototypeOfObject(newValue))) {
+            const newHandler = getHandler(newValue, this.rootObservableCallback, this.parentSubscription);
             target.handler = newHandler;
-            newHandler.apply(target, _, args)
-            break;
+            return target.handler!.apply(target, _, args)
           }
+          // If its an non observable object continue
         default: {
           const notifiableObservers = target.notifiableObservers;
           if (notifiableObservers && newValue !== target.$privateValue) {
