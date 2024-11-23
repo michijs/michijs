@@ -1,6 +1,6 @@
 import type { ObservableType, ParentSubscription } from "../../types";
 import { ProxiedValueV2 } from "../../classes/ProxiedValue";
-import { ObservableProxyHandler } from "./proxyHandlers/ObservableProxyHandler";
+import { ObservableProxyHandler } from "../proxyHandlers/ObservableProxyHandler";
 // import { setObservableValue } from "../../utils/setObservableValue";
 const observableProxyHandler = new ObservableProxyHandler();
 /**

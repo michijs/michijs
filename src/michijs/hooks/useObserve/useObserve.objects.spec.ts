@@ -270,5 +270,8 @@ describe("Observe tests", () => {
     it("Getting the value should return same instance type", () => {
       expect(obj() instanceof File).toBe(true);
     });
+    it("Getting the value name should return same name", () => {
+      expect(obj.name).toBe("test");
+    });
   });
 });

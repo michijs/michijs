@@ -31,12 +31,6 @@ export function useObserveInternal<T>(
       // These are like properties but reserved for internal, specification-only purposes.
       // For instance, Map stores items in the internal slot [[MapData]].
       // Built-in methods access them directly, not via [[Get]]/[[Set]] internal methods. So Proxy can’t intercept that.
-      if (itemValue instanceof Date)
-        return observeDate(
-          itemValue,
-          parentSubscription,
-          rootObservableCallback,
-        ) as unknown as ObservableType<T>;
       if (itemValue instanceof Map)
         return observeMap(
           itemValue,

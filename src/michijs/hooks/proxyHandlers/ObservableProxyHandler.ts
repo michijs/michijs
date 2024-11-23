@@ -1,4 +1,4 @@
-import { ProxiedValueV2 } from "../../../classes/ProxiedValue";
+import { ProxiedValueV2 } from "../../classes/ProxiedValue";
 
 export class ObservableProxyHandler<T> implements ProxyHandler<ProxiedValueV2<T>> {
   set(target: ProxiedValueV2<T>, property, newValue, receiver) {

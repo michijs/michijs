@@ -1,6 +1,6 @@
-import { ProxiedValueV2 } from "../../../classes/ProxiedValue";
-import type { ObservableType, ObservableProxyHandler } from "../../../types";
-import { useComputedObserve } from "../../useComputedObserve";
+import { ProxiedValueV2 } from "../../classes/ProxiedValue";
+import type { ObservableType, ObservableProxyHandler } from "../../types";
+import { useComputedObserve } from "../useComputedObserve";
 
 export class FunctionProxyHandler implements ObservableProxyHandler<ProxiedValueV2<Function>, Function> {
     rootObservableCallback?: () => ObservableType<any>;

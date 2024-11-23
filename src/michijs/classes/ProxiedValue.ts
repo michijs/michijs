@@ -20,7 +20,7 @@ import { unproxify } from "../utils/unproxify";
 import { Target } from "./Target";
 import { create } from "../DOM/create/create";
 import { VirtualFragment } from "./VirtualFragment";
-import {getHandler} from '../hooks/useObserve/proxyHandlers/getHandler'
+import {getHandler} from '../hooks/proxyHandlers/getHandler'
 
 export class ProxiedValue<T>
   extends Observable<T>
@@ -316,7 +316,7 @@ export class ProxiedValueV2<T> extends ProxiedValue<T> {
     rootObservableCallback?: () => ObservableType<any>,
   ){
     super(initialValue, parentSubscription, ((args) => this.handler.apply(this, this, args)) as unknown as ObservableGettersAndSetters<T,T>);
-    const unproxifiedInitialValue = initialValue?.valueOf();
+    const unproxifiedInitialValue = unproxify(initialValue);
     this.handler = getHandler(unproxifiedInitialValue, parentSubscription, rootObservableCallback);
     this.$value = this.handler.getInitialValue?.(unproxifiedInitialValue) ?? unproxifiedInitialValue;
   }
