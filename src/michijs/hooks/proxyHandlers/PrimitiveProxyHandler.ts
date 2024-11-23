@@ -1,15 +1,22 @@
-import { ProxiedValueV2 } from "../../classes/ProxiedValue";
-import type { ObservableType, ParentSubscription, ObservableProxyHandler } from "../../types";
-import { getObjectHandler } from './getHandler'
+import type { ProxiedValueV2 } from "../../classes/ProxiedValue";
+import type {
+  ObservableType,
+  ParentSubscription,
+  ObservableProxyHandler,
+} from "../../types";
+import { getObjectHandler } from "./getHandler";
 import { FunctionProxyHandler } from "./FunctionProxyHandler";
 import { unproxify } from "../../utils/unproxify";
 
-export class PrimitiveProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, T> {
+export class PrimitiveProxyHandler<T>
+  implements ObservableProxyHandler<ProxiedValueV2<T>, T>
+{
   parentSubscription?: ParentSubscription<any>;
   rootObservableCallback?: () => ObservableType<any>;
 
   constructor(
-    parentSubscription?: ParentSubscription<any>, rootObservableCallback?: () => ObservableType<any>
+    parentSubscription?: ParentSubscription<any>,
+    rootObservableCallback?: () => ObservableType<any>,
   ) {
     this.rootObservableCallback = rootObservableCallback;
     this.parentSubscription = parentSubscription;
@@ -23,16 +30,22 @@ export class PrimitiveProxyHandler<T> implements ObservableProxyHandler<ProxiedV
       switch (typeof newValue) {
         // Intentional order
         case "function": {
-          target.handler = new FunctionProxyHandler(this.rootObservableCallback);
+          target.handler = new FunctionProxyHandler(
+            this.rootObservableCallback,
+          );
           return target.handler.apply(target, _, args);
         }
         case "object":
           // Ignore null
           if (newValue) {
-            const newHandler = getObjectHandler(newValue, this.parentSubscription, this.rootObservableCallback);
+            const newHandler = getObjectHandler(
+              newValue,
+              this.parentSubscription,
+              this.rootObservableCallback,
+            );
             if (newHandler) {
               target.handler = newHandler;
-              return target.handler.apply(target, _, args)
+              return target.handler.apply(target, _, args);
             }
           }
         // If its an non observable object continue

@@ -11,7 +11,10 @@ export function observePrimitiveValueV2<T>(
   parentSubscription?: ParentSubscription<any>,
   rootObservableCallback?: () => ObservableType<any>,
 ): ObservableType<T> {
-  const target = new Proxy(new ProxiedValueV2(item, parentSubscription, rootObservableCallback), observableProxyHandler);
+  const target = new Proxy(
+    new ProxiedValueV2(item, parentSubscription, rootObservableCallback),
+    observableProxyHandler,
+  );
 
   return target as unknown as ObservableType<T>;
 }

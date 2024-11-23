@@ -3,7 +3,6 @@ import type { ObservableType, ParentSubscription } from "../types";
 import { isPrototypeOfObject } from "../utils/isPrototypeOfObject";
 import { observeArray } from "./useObserve/observeArray";
 import { observeCommonObject } from "./useObserve/observeCommonObject";
-import { observeDate } from "./useObserve/observeDate";
 import { observeMap } from "./useObserve/observeMap";
 import { observeSet } from "./useObserve/observeSet";
 import { observePrimitiveValueV2 } from "./useObserve/observePrimitiveValueV2";
