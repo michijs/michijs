@@ -7,10 +7,8 @@ import type { ObservableProxyHandler, ParentSubscription } from "../../types";
 import { cloneMap } from "../../utils/clone/cloneMap";
 import { unproxify } from "../../utils/unproxify";
 import { getHandler } from "./getHandler";
-import { createParentSubscription } from "../useObserve/proxyHandlers/createParentSubscription";
 
 export class MapProxyHandler<T extends Map<any, any>> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, Map<any, any>> {
-  $ownSubscription?: ParentSubscription<T>;
   $overrides = {
     clear: customMapAndSetClear,
     set: (target, bindedTargetProperty) => (key, newValue) => {
@@ -30,9 +28,6 @@ export class MapProxyHandler<T extends Map<any, any>> extends ObjectProxyHandler
       return result;
     },
     delete: customMapAndSetDelete
-  }
-  getOwnSubscription(target: ProxiedValueV2<T>): ParentSubscription<T> {
-    return this.$ownSubscription ??= createParentSubscription(() => target);
   }
   apply(target: ProxiedValueV2<T>, _: any, args: any[]) {
     if (args.length > 0) {
