@@ -42,7 +42,6 @@ export class SetProxyHandler<T> extends ObjectProxyHandler<T> {
             observedItem.notifyCurrentValue?.();
           }
           return target;
-          // return proxy;
         };
       }
       case "delete": {

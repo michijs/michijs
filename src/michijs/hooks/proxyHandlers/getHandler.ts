@@ -3,6 +3,8 @@ import { PrimitiveProxyHandler } from "./PrimitiveProxyHandler";
 import { FunctionProxyHandler } from "./FunctionProxyHandler";
 import { isPrototypeOfObject } from "../../utils";
 import { DateProxyHandler } from "./DateProxyHandler";
+import { MapProxyHandler } from "./MapProxyHandler";
+import { SetProxyHandler } from "./SetProxyHandler";
 
 export const getObjectHandler = (value: unknown, parentSubscription?: ParentSubscription<any>, rootObservableCallback?: () => ObservableType<any>): ObservableProxyHandler<any, any> | void => {
   if(isPrototypeOfObject(value))
@@ -12,9 +14,9 @@ export const getObjectHandler = (value: unknown, parentSubscription?: ParentSubs
   if(value instanceof Date)
     return new DateProxyHandler(parentSubscription, rootObservableCallback);;
   if(value instanceof Set)
-    return;
+    return new SetProxyHandler(parentSubscription, rootObservableCallback);
   if(value instanceof Map)
-    return;
+    return new MapProxyHandler(parentSubscription, rootObservableCallback);
 }
 
 export const getHandler = (unproxifiedValue: unknown, parentSubscription?: ParentSubscription<any>, rootObservableCallback?: () => ObservableType<any>): ObservableProxyHandler<any, any> => {

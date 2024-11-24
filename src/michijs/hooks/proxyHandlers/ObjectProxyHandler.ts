@@ -1,5 +1,5 @@
 import { ProxiedValueV2 } from "../../classes/ProxiedValue";
-import { ObservableType, ParentSubscription } from "../../types";
+import type { ObservableType, ParentSubscription } from "../../types";
 
 export class ObjectProxyHandler<T> implements ProxyHandler<ProxiedValueV2<T>> {
   parentSubscription?: ParentSubscription<any>;

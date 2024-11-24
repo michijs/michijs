@@ -213,7 +213,7 @@ export interface CompatibleObservableLike {
 
 export interface ObservableProxyHandler<T extends object, Y> extends Required<Pick<ProxyHandler<T>, 'apply'>>, Omit<ProxyHandler<T>, 'apply'> {
   // TODO: Should be observableType
-  getInitialValue?(unproxifiedValue: Y): any
+  getInitialValue?(target: T, unproxifiedValue: Y): any
 }
 
 export interface MichiProperties

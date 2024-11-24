@@ -318,7 +318,7 @@ export class ProxiedValueV2<T> extends ProxiedValue<T> {
     super(initialValue, parentSubscription, ((args) => this.handler.apply(this, this, args)) as unknown as ObservableGettersAndSetters<T,T>);
     const unproxifiedInitialValue = unproxify(initialValue);
     this.handler = getHandler(unproxifiedInitialValue, parentSubscription, rootObservableCallback);
-    this.$value = this.handler.getInitialValue?.(unproxifiedInitialValue) ?? unproxifiedInitialValue;
+    this.$value = this.handler.getInitialValue?.(this, unproxifiedInitialValue) ?? unproxifiedInitialValue;
   }
 
   override get $value() {
