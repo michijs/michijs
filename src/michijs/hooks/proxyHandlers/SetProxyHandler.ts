@@ -9,7 +9,10 @@ import { unproxify } from "../../utils/unproxify";
 import { getHandler } from "./getHandler";
 import { createParentSubscription } from "../useObserve/proxyHandlers/createParentSubscription";
 
-export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, Set<any>> {
+export class SetProxyHandler<T extends Set<any>>
+  extends ObjectProxyHandler<T>
+  implements ObservableProxyHandler<ProxiedValueV2<T>, Set<any>>
+{
   $ownSubscription?: ParentSubscription<T>;
   $overrides = {
     clear: customMapAndSetClear,
@@ -29,10 +32,10 @@ export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> i
       }
       return target;
     },
-    delete: customMapAndSetDelete
-  }
+    delete: customMapAndSetDelete,
+  };
   getOwnSubscription(target: ProxiedValueV2<T>): ParentSubscription<T> {
-    return this.$ownSubscription ??= createParentSubscription(() => target);
+    return (this.$ownSubscription ??= createParentSubscription(() => target));
   }
   apply(target: ProxiedValueV2<T>, _: any, args: any[]) {
     if (args.length > 0) {
@@ -40,25 +43,32 @@ export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> i
       if (newValue instanceof Set) {
         target.$value = this.getInitialValue(target, newValue);
         const notifiableObservers = target.notifiableObservers;
-        if (notifiableObservers)
-          target.notifyCurrentValue(notifiableObservers);
+        if (notifiableObservers) target.notifyCurrentValue(notifiableObservers);
         return;
       } else {
-        const newHandler = getHandler(newValue, this.parentSubscription, this.rootObservableCallback);
+        const newHandler = getHandler(
+          newValue,
+          this.parentSubscription,
+          this.rootObservableCallback,
+        );
         target.handler = newHandler;
-        return target.handler.apply(target, _, args)
+        return target.handler.apply(target, _, args);
       }
     }
     return target.valueOf();
   }
   getInitialValue(target, unproxifiedValue: Set<any>): T {
     return cloneMap(unproxifiedValue, (value) =>
-      useObserveInternal(value as any, this.getOwnSubscription(target), this.rootObservableCallback),
+      useObserveInternal(
+        value as any,
+        this.getOwnSubscription(target),
+        this.rootObservableCallback,
+      ),
     ) as unknown as T;
   }
   set(target: ProxiedValueV2<T>, p: string | symbol, newValue: any): boolean {
     // When setting a new value, call set function
-    return this.get(target, 'add')(p, newValue)
+    return this.get(target, "add")(p, newValue);
   }
   get(target, property) {
     if (property in target) return Reflect.get(target, property);
@@ -70,9 +80,11 @@ export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> i
       typeof targetProperty === "function"
         ? (targetProperty as Function).bind(target.$value)
         : targetProperty;
-    if (property === Symbol.iterator)
-      return () => target.$value.values();
+    if (property === Symbol.iterator) return () => target.$value.values();
 
-    return this.$overrides[property]?.(target, bindedTargetProperty) ?? bindedTargetProperty
+    return (
+      this.$overrides[property]?.(target, bindedTargetProperty) ??
+      bindedTargetProperty
+    );
   }
 }

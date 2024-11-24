@@ -1,4 +1,4 @@
-import { ProxiedValueV2 } from "../../classes/ProxiedValue";
+import type { ProxiedValueV2 } from "../../classes/ProxiedValue";
 import type { ObservableType, ParentSubscription } from "../../types";
 
 export class ObjectProxyHandler<T> implements ProxyHandler<ProxiedValueV2<T>> {
@@ -6,7 +6,8 @@ export class ObjectProxyHandler<T> implements ProxyHandler<ProxiedValueV2<T>> {
   rootObservableCallback?: () => ObservableType<any>;
 
   constructor(
-    parentSubscription?: ParentSubscription<any>, rootObservableCallback?: () => ObservableType<any>
+    parentSubscription?: ParentSubscription<any>,
+    rootObservableCallback?: () => ObservableType<any>,
   ) {
     this.parentSubscription = parentSubscription;
     this.rootObservableCallback = rootObservableCallback;
