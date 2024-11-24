@@ -1,6 +1,6 @@
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 import { customMapAndSetClear } from "./customMapAndSetClear";
-import type { ProxiedValue, ProxiedValueV2 } from "../../classes/ProxiedValue";
+import type { ProxiedValueV2 } from "../../classes/ProxiedValue";
 import { useObserveInternal } from "../useObserve";
 import { customMapAndSetDelete } from "./customMapAndSetDelete";
 import type { ObservableProxyHandler, ParentSubscription } from "../../types";
@@ -9,7 +9,10 @@ import { unproxify } from "../../utils/unproxify";
 import { getHandler } from "./getHandler";
 import { createParentSubscription } from "../useObserve/proxyHandlers/createParentSubscription";
 
-export class MapProxyHandler<T extends Map<any, any>> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, Map<any, any>> {
+export class MapProxyHandler<T extends Map<any, any>>
+  extends ObjectProxyHandler<T>
+  implements ObservableProxyHandler<ProxiedValueV2<T>, Map<any, any>>
+{
   $ownSubscription?: ParentSubscription<T>;
   $overrides = {
     clear: customMapAndSetClear,
@@ -29,10 +32,10 @@ export class MapProxyHandler<T extends Map<any, any>> extends ObjectProxyHandler
       observedItem.notifyCurrentValue?.();
       return result;
     },
-    delete: customMapAndSetDelete
-  }
+    delete: customMapAndSetDelete,
+  };
   getOwnSubscription(target: ProxiedValueV2<T>): ParentSubscription<T> {
-    return this.$ownSubscription ??= createParentSubscription(() => target);
+    return (this.$ownSubscription ??= createParentSubscription(() => target));
   }
   apply(target: ProxiedValueV2<T>, _: any, args: any[]) {
     if (args.length > 0) {
@@ -40,25 +43,32 @@ export class MapProxyHandler<T extends Map<any, any>> extends ObjectProxyHandler
       if (newValue instanceof Map) {
         target.$value = this.getInitialValue(target, newValue);
         const notifiableObservers = target.notifiableObservers;
-        if (notifiableObservers)
-          target.notifyCurrentValue(notifiableObservers);
+        if (notifiableObservers) target.notifyCurrentValue(notifiableObservers);
         return;
       } else {
-        const newHandler = getHandler(newValue, this.parentSubscription, this.rootObservableCallback);
+        const newHandler = getHandler(
+          newValue,
+          this.parentSubscription,
+          this.rootObservableCallback,
+        );
         target.handler = newHandler;
-        return target.handler.apply(target, _, args)
+        return target.handler.apply(target, _, args);
       }
     }
     return target.valueOf();
   }
   getInitialValue(target, unproxifiedValue: Map<any, any>): T {
     return cloneMap(unproxifiedValue, (value) =>
-      useObserveInternal(value as any, this.getOwnSubscription(target), this.rootObservableCallback),
+      useObserveInternal(
+        value as any,
+        this.getOwnSubscription(target),
+        this.rootObservableCallback,
+      ),
     ) as T;
   }
   set(target: ProxiedValueV2<T>, p: string | symbol, newValue: any): boolean {
     // When setting a new value, call set function
-    return this.get(target, 'set')(p, newValue)
+    return this.get(target, "set")(p, newValue);
   }
   get(target, property) {
     if (property in target) return Reflect.get(target, property);
@@ -68,6 +78,9 @@ export class MapProxyHandler<T extends Map<any, any>> extends ObjectProxyHandler
         ? (targetProperty as Function).bind(target.$value)
         : targetProperty;
 
-    return this.$overrides[property]?.(target, bindedTargetProperty) ?? bindedTargetProperty
+    return (
+      this.$overrides[property]?.(target, bindedTargetProperty) ??
+      bindedTargetProperty
+    );
   }
 }
