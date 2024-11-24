@@ -1,23 +1,15 @@
 import { ProxiedValueV2 } from "../../classes/ProxiedValue";
-import type { ObservableType, ParentSubscription, ObservableProxyHandler } from "../../types";
+import type { ObservableProxyHandler } from "../../types";
 import { getObjectHandler } from './getHandler'
+import { SharedProxyHandler } from './SharedProxyHandler'
 import { FunctionProxyHandler } from "./FunctionProxyHandler";
 import { unproxify } from "../../utils/unproxify";
+import { isNil } from "../../utils";
 
-export class PrimitiveProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, T> {
-  parentSubscription?: ParentSubscription<any>;
-  rootObservableCallback?: () => ObservableType<any>;
-
-  constructor(
-    parentSubscription?: ParentSubscription<any>, rootObservableCallback?: () => ObservableType<any>
-  ) {
-    this.rootObservableCallback = rootObservableCallback;
-    this.parentSubscription = parentSubscription;
-  }
+export class PrimitiveProxyHandler<T> extends SharedProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, T> {
 
   apply(target: ProxiedValueV2<T>, _, args) {
-    // TODO: Tried using target instead of proxy() but for some reason it mutates the proxy itself. Test with toggle fieldest on a11y tests
-    if (args.length > 0) {
+    if (args?.length > 0) {
       const newValue = unproxify(args[0]);
       // Should check if the type if the same first
       switch (typeof newValue) {
@@ -52,6 +44,9 @@ export class PrimitiveProxyHandler<T> implements ObservableProxyHandler<ProxiedV
 
   get(target, p, receiver) {
     if (p in target) return Reflect.get(target, p, receiver);
+    // Trying to get a property on an nil value will return an object with a nil property
+    if (isNil(target.$value))
+      this.apply(target, target, [{ [p]: undefined }]);
     return target.$value[p];
   }
 }

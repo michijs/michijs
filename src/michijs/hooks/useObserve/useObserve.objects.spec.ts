@@ -256,6 +256,7 @@ describe("Observe tests", () => {
       | undefined
     >(undefined);
     it("Getting test doesnt throw exception", () => {
+      console.log(object.test)
       expect(() => object.test.test2).not.toThrow();
       // @ts-ignore
       expect(object.test.test2()).toBe(undefined);

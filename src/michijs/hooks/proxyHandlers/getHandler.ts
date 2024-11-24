@@ -5,10 +5,11 @@ import { isPrototypeOfObject } from "../../utils";
 import { DateProxyHandler } from "./DateProxyHandler";
 import { MapProxyHandler } from "./MapProxyHandler";
 import { SetProxyHandler } from "./SetProxyHandler";
+import { CommonObjectProxyHandler } from "./CommonObjectProxyHandler";
 
 export const getObjectHandler = (value: unknown, parentSubscription?: ParentSubscription<any>, rootObservableCallback?: () => ObservableType<any>): ObservableProxyHandler<any, any> | void => {
   if(isPrototypeOfObject(value))
-    return;
+    return new CommonObjectProxyHandler(parentSubscription, rootObservableCallback);
   if(Array.isArray(value))
     return;
   if(value instanceof Date)

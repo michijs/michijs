@@ -3,14 +3,12 @@ import { customMapAndSetClear } from "./customMapAndSetClear";
 import type { ProxiedValueV2 } from "../../classes/ProxiedValue";
 import { useObserveInternal } from "../useObserve";
 import { customMapAndSetDelete } from "./customMapAndSetDelete";
-import type { ObservableProxyHandler, ParentSubscription } from "../../types";
+import type { ObservableProxyHandler } from "../../types";
 import { cloneMap } from "../../utils/clone/cloneMap";
 import { unproxify } from "../../utils/unproxify";
 import { getHandler } from "./getHandler";
-import { createParentSubscription } from "../useObserve/proxyHandlers/createParentSubscription";
 
 export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, Set<any>> {
-  $ownSubscription?: ParentSubscription<T>;
   $overrides = {
     clear: customMapAndSetClear,
     add: (target, bindedTargetProperty) => (newValue) => {
@@ -30,9 +28,6 @@ export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> i
       return target;
     },
     delete: customMapAndSetDelete
-  }
-  getOwnSubscription(target: ProxiedValueV2<T>): ParentSubscription<T> {
-    return this.$ownSubscription ??= createParentSubscription(() => target);
   }
   apply(target: ProxiedValueV2<T>, _: any, args: any[]) {
     if (args.length > 0) {

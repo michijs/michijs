@@ -90,10 +90,6 @@ export class ProxiedValue<T>
 
   // @ts-ignore
   valueOf(): T {
-    // if (typeof this.$value === 'object') {
-    //   console.log('pase', this.$value)
-    //   throw this.$value
-    // }
     return unproxify(this.$value) as T;
   }
 
