@@ -1,13 +1,15 @@
-import { ProxiedValueV2 } from "../../classes/ProxiedValue";
+import type { ProxiedValueV2 } from "../../classes/ProxiedValue";
 import type { ObservableProxyHandler } from "../../types";
-import { getObjectHandler } from './getHandler'
-import { SharedProxyHandler } from './SharedProxyHandler'
+import { getObjectHandler } from "./getHandler";
+import { SharedProxyHandler } from "./SharedProxyHandler";
 import { FunctionProxyHandler } from "./FunctionProxyHandler";
 import { unproxify } from "../../utils/unproxify";
 import { isNil } from "../../utils";
 
-export class PrimitiveProxyHandler<T> extends SharedProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, T> {
-
+export class PrimitiveProxyHandler<T>
+  extends SharedProxyHandler<T>
+  implements ObservableProxyHandler<ProxiedValueV2<T>, T>
+{
   apply(target: ProxiedValueV2<T>, _, args: any[]) {
     if (args?.length > 0) {
       const unproxifiedValue = unproxify(args[0]);
@@ -15,21 +17,27 @@ export class PrimitiveProxyHandler<T> extends SharedProxyHandler<T> implements O
         // Intentional order
         // TODO: check this
         case "function": {
-          target.handler = new FunctionProxyHandler(this.rootObservableCallback);
+          target.handler = new FunctionProxyHandler(
+            this.rootObservableCallback,
+          );
           return target.handler.applyNewValue(target, unproxifiedValue);
         }
         case "object":
           // Ignore null
           if (unproxifiedValue) {
-            const newHandler = getObjectHandler(unproxifiedValue, this.parentSubscription, this.rootObservableCallback);
+            const newHandler = getObjectHandler(
+              unproxifiedValue,
+              this.parentSubscription,
+              this.rootObservableCallback,
+            );
             if (newHandler) {
               target.handler = newHandler;
-              return target.handler.applyNewValue(target, unproxifiedValue)
+              return target.handler.applyNewValue(target, unproxifiedValue);
             }
           }
         // If its an non observable object continue
-        default: 
-          this.applyNewValue(target, unproxifiedValue)
+        default:
+          this.applyNewValue(target, unproxifiedValue);
       }
       return;
     }
@@ -48,7 +56,7 @@ export class PrimitiveProxyHandler<T> extends SharedProxyHandler<T> implements O
     if (p in target) return Reflect.get(target, p, receiver);
     // Trying to get a property on an nil value will return an object with a nil property
     if (isNil(target.$value))
-      this.updateHandlerAndValue(target, { [p]: undefined })
+      this.updateHandlerAndValue(target, { [p]: undefined });
     return target.$value[p];
   }
 }
