@@ -1,11 +1,9 @@
 import { create } from "../DOM/create/create";
-import { FC, ListProps, SingleJSXElement } from "../types";
+import type { FC, ListProps, SingleJSXElement } from "../types";
 import { Target } from "./Target";
 import { VirtualFragment } from "./VirtualFragment";
 
-export class ProxiedArray<V>
-  extends Array<V>
-{
+export class ProxiedArray<V> extends Array<V> {
   private targets = new Array<Target<V>>();
 
   List = <const E = FC>(
@@ -45,11 +43,10 @@ export class ProxiedArray<V>
   }
 
   $replace(items: V[]): number {
-    if (this.length)
-      this.targets.forEach((target) => target.replace(items));
+    if (this.length) this.targets.forEach((target) => target.replace(items));
     else this.targets.forEach((target) => target.appendItems(items));
     this.length = 0;
-    super.push(...items)
+    super.push(...items);
     return items.length;
   }
 
@@ -62,10 +59,7 @@ export class ProxiedArray<V>
   $swap(indexA: number, indexB: number): void {
     if (this.length > indexA && this.length > indexB) {
       this.targets.forEach((target) => target.swap(indexA, indexB));
-      [this[indexA], this[indexB]] = [
-        this[indexB],
-        this[indexA],
-      ];
+      [this[indexA], this[indexB]] = [this[indexB], this[indexA]];
     }
   }
 
@@ -94,7 +88,7 @@ export class ProxiedArray<V>
   fill(item: V, start?: number, end?: number) {
     this.targets.forEach((target) => target.fill(item, start, end));
     super.fill(item, start, end);
-    return this
+    return this;
   }
   sort(compareFn?: (a: V, b: V) => number) {
     const arrayCopy = [...this];
