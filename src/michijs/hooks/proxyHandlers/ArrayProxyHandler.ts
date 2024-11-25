@@ -1,4 +1,5 @@
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
+import { ProxiedArray } from "../../classes/ProxiedArray";
 import type { ProxiedValueV2 } from "../../classes/ProxiedValue";
 import type { ObservableProxyHandler } from "../../types";
 import { unproxify } from "../../utils/unproxify";
@@ -49,9 +50,9 @@ export class ArrayProxyHandler<T extends Array<any>> extends ObjectProxyHandler<
             return this.updateHandlerAndValue(target, unproxifiedValue)
     }
     getInitialValue(target: ProxiedValueV2<T>, unproxifiedValue: Array<any>): T {
-        return cloneArray(unproxifiedValue, (newValue) =>
+        return new ProxiedArray(cloneArray(unproxifiedValue, (newValue) =>
             this.createProxyChild(target, newValue),
-        ) as unknown as T;
+        )) as unknown as T;
     }
     set(target: ProxiedValueV2<T>, p: string | symbol, newValue: any): boolean {
         return target[p](newValue)
