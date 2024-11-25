@@ -20,7 +20,7 @@ export class FunctionProxyHandler implements ObservableProxyHandler<ProxiedValue
         else return target.$value(...args);
         // Functions cant change their type
     }
-    get(target, p, receiver) {
+    get(target: ProxiedValueV2<Function>, p: string | symbol, receiver) {
       if (p in target) return Reflect.get(target, p, receiver);
       return target.$value[p];
     }

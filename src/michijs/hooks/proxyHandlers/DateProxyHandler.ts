@@ -24,7 +24,7 @@ export class DateProxyHandler extends ObjectProxyHandler<Date> implements Observ
     }
     return target.valueOf();
   }
-  get(target: ProxiedValueV2<Date>, property) {
+  get(target: ProxiedValueV2<Date>, property: string | symbol) {
     if (property in target) return Reflect.get(target, property);
     const targetProperty = Reflect.get(target.$value, property);
     if (typeof property === "string" && property.startsWith("set")) {

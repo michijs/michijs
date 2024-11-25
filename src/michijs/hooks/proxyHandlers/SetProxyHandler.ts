@@ -10,15 +10,15 @@ import { getHandler } from "./getHandler";
 export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, Set<any>> {
   $overrides = {
     clear: customMapAndSetClear,
-    add: (target, bindedTargetProperty) => (newValue) => {
+    add: (target: ProxiedValueV2<T>, bindedTargetProperty: Map<any, any>['set']): Set<any>['add'] => (newValue) => {
       const unproxifiedValue = unproxify(newValue);
       const hasOldValue = target.$value.has(unproxifiedValue);
       if (!hasOldValue) {
         const observedItem = this.createProxyChild(target, unproxifiedValue);
         bindedTargetProperty(unproxifiedValue, observedItem);
-        observedItem.notifyCurrentValue?.();
+        observedItem.notifyCurrentValue();
       }
-      return target;
+      return target.$value;
     },
     delete: customMapAndSetDelete
   }
@@ -39,7 +39,7 @@ export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> i
     }
     return target.valueOf();
   }
-  getInitialValue(target, unproxifiedValue: Set<any>): T {
+  getInitialValue(target: ProxiedValueV2<T>, unproxifiedValue: Set<any>): T {
     return cloneMap(unproxifiedValue, (value) =>
       this.createProxyChild(target, value),
     ) as unknown as T;
@@ -48,19 +48,19 @@ export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> i
     // When setting a new value, call set function
     return this.get(target, 'add')(p, newValue)
   }
-  get(target, property) {
-    if (property in target) return Reflect.get(target, property);
+  get(target: ProxiedValueV2<T>, p: string | symbol) {
+    if (p in target) return Reflect.get(target, p);
     const targetProperty = Reflect.get(
       target.$value,
-      property === "add" ? "set" : property,
+      p === "add" ? "set" : p,
     );
     const bindedTargetProperty =
       typeof targetProperty === "function"
         ? (targetProperty as Function).bind(target.$value)
         : targetProperty;
-    if (property === Symbol.iterator)
+    if (p === Symbol.iterator)
       return () => target.$value.values();
 
-    return this.$overrides[property]?.(target, bindedTargetProperty) ?? bindedTargetProperty
+    return this.$overrides[p]?.(target, bindedTargetProperty) ?? bindedTargetProperty
   }
 }

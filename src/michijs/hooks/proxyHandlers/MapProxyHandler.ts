@@ -10,7 +10,7 @@ import { getHandler } from "./getHandler";
 export class MapProxyHandler<T extends Map<any, any>> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, Map<any, any>> {
   $overrides = {
     clear: customMapAndSetClear,
-    set: (target, bindedTargetProperty) => (key, newValue) => {
+    set: (target: ProxiedValueV2<T>, bindedTargetProperty: Map<any,any>['set']): Map<any,any>['set'] => (key, newValue) => {
       const hasOldValue = target.$value.has(key);
       if (hasOldValue) {
         const oldValue = target.$value.get(key);
@@ -18,8 +18,7 @@ export class MapProxyHandler<T extends Map<any, any>> extends ObjectProxyHandler
       }
       const observedItem = this.createProxyChild(target, newValue);
       const result = bindedTargetProperty(key, observedItem);
-      // @ts-ignore
-      observedItem.notifyCurrentValue?.();
+      observedItem.notifyCurrentValue();
       return result;
     },
     delete: customMapAndSetDelete
@@ -41,7 +40,7 @@ export class MapProxyHandler<T extends Map<any, any>> extends ObjectProxyHandler
     }
     return target.valueOf();
   }
-  getInitialValue(target, unproxifiedValue: Map<any, any>): T {
+  getInitialValue(target: ProxiedValueV2<T>, unproxifiedValue: Map<any, any>): T {
     return cloneMap(unproxifiedValue, (value) =>
       this.createProxyChild(target, value),
     ) as T;
@@ -50,7 +49,7 @@ export class MapProxyHandler<T extends Map<any, any>> extends ObjectProxyHandler
     // When setting a new value, call set function
     return this.get(target, 'set')(p, newValue)
   }
-  get(target, property) {
+  get(target: ProxiedValueV2<T>, property: string | symbol) {
     if (property in target) return Reflect.get(target, property);
     const targetProperty = Reflect.get(target.$value, property);
     const bindedTargetProperty =
