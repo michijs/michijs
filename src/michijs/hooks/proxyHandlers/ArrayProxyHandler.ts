@@ -5,10 +5,11 @@ import type { ObservableProxyHandler } from "../../types";
 import { unproxify } from "../../utils/unproxify";
 import { cloneArray } from "../../utils/clone/cloneArray";
 
-export class ArrayProxyHandler<T extends Array<any>> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, Array<any>> {
+export class ArrayProxyHandler<T extends ProxiedArray<any>> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, Array<any>> {
     $newItemsCallback = (target: ProxiedValueV2<T>, bindedTargetProperty: Function) => (...args: T[]) => {
-        const proxiedArray = this.getInitialValue(target, unproxify(args));
+        const proxiedArray = this.$cloneAndProxify(target, unproxify(args));
         const result = bindedTargetProperty(proxiedArray);
+        target.notifyCurrentValue();
         return result;
     }
     $overrides = {
@@ -21,6 +22,7 @@ export class ArrayProxyHandler<T extends Array<any>> extends ObjectProxyHandler<
                 start,
                 end,
             );
+            target.notifyCurrentValue();
             return result;
         },
         splice: (target, bindedTargetProperty: Array<any>['splice']): Array<any>['splice'] => (start, deleteCount, ...items) => {
@@ -31,6 +33,8 @@ export class ArrayProxyHandler<T extends Array<any>> extends ObjectProxyHandler<
                     this.createProxyChild(target, unproxify(x)),
                 ),
             );
+            if (deleteCount > 0 || items.length > 0)
+                target.notifyCurrentValue();
             return result;
         }
     }
@@ -39,20 +43,20 @@ export class ArrayProxyHandler<T extends Array<any>> extends ObjectProxyHandler<
             return this.applyNewValue(target, unproxify(args[0]))
         return target.valueOf();
     }
-    applyNewValue(target: ProxiedValueV2<T>, unproxifiedValue: Array<any>) {
+    applyNewValue(target: ProxiedValueV2<T>, unproxifiedValue: T) {
         if (Array.isArray(unproxifiedValue)) {
-            target.$value = this.getInitialValue(target, unproxifiedValue);
-            const notifiableObservers = target.notifiableObservers;
-            if (notifiableObservers)
-                target.notifyCurrentValue(notifiableObservers);
+            this.$overrides.$replace(target, target.$value.$replace)(unproxifiedValue)
             return;
         } else
             return this.updateHandlerAndValue(target, unproxifiedValue)
     }
     getInitialValue(target: ProxiedValueV2<T>, unproxifiedValue: Array<any>): T {
-        return new ProxiedArray(cloneArray(unproxifiedValue, (newValue) =>
+        return new ProxiedArray(this.$cloneAndProxify(target, unproxifiedValue)) as unknown as T;
+    }
+    $cloneAndProxify(target: ProxiedValueV2<T>, unproxifiedValue: Array<any>) {
+        return cloneArray(unproxifiedValue, (newValue) =>
             this.createProxyChild(target, newValue),
-        )) as unknown as T;
+        )
     }
     set(target: ProxiedValueV2<T>, p: string | symbol, newValue: any): boolean {
         return target[p](newValue)
