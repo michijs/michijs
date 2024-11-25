@@ -21,12 +21,12 @@ export function useObserveInternal<T>(
   if (itemValue) {
     const typeofItem = typeof itemValue;
     if (typeofItem === "object") {
-      if (Array.isArray(itemValue))
-        return observeArray(
-          itemValue,
-          parentSubscription,
-          rootObservableCallback,
-        ) as ObservableType<T>;
+      // if (Array.isArray(itemValue))
+      //   return observeArray(
+      //     itemValue,
+      //     parentSubscription,
+      //     rootObservableCallback,
+      //   ) as ObservableType<T>;
       // Many built-in objects, for example Map, Set, Date, Promise and others make use of so-called internal slots.
       // These are like properties but reserved for internal, specification-only purposes.
       // For instance, Map stores items in the internal slot [[MapData]].

@@ -1,5 +1,5 @@
 import { create } from "../DOM/create/create";
-import { FC, ListProps, SingleJSXElement } from "../types";
+import type { FC, ListProps, SingleJSXElement } from "../types";
 import { Target } from "./Target";
 import { VirtualFragment } from "./VirtualFragment";
 
@@ -39,10 +39,8 @@ export class ProxiedArray<V>
     };
 
     $clear(): void {
-        if (this.length) {
-            this.targets.forEach((target) => target.clear());
-            this.length = 0;
-        }
+        this.targets.forEach((target) => target.clear());
+        this.length = 0;
     }
 
     $replace(items: V[]): number {
@@ -60,44 +58,45 @@ export class ProxiedArray<V>
         return this.length;
     }
 
-    $swap(indexA: number, indexB: number): void {
+    $swap(indexA: number, indexB: number): boolean | void {
         if (this.length > indexA && this.length > indexB) {
             this.targets.forEach((target) => target.swap(indexA, indexB));
             [this[indexA], this[indexB]] = [
                 this[indexB],
                 this[indexA],
             ];
+            return true;
         }
     }
 
-    pop(): V | undefined {
+    override pop(): V | undefined {
         this.targets.forEach((target) => target.pop());
         return super.pop();
     }
 
-    push(...items: V[]): number {
+    override push(...items: V[]): number {
         if (items.length > 0)
             this.targets.forEach((target) => target.appendItems(items));
         return super.push(...items);
     }
-    reverse(): V[] {
+    override reverse(): V[] {
         this.targets.forEach((target) => target.reverse());
         return super.reverse();
     }
-    shift(): V | undefined {
+    override shift(): V | undefined {
         this.targets.forEach((target) => target.shift());
         return super.shift();
     }
-    unshift(...items: V[]): number {
+    override unshift(...items: V[]): number {
         this.targets.forEach((target) => target.prependItems(items));
         return super.unshift(...items);
     }
-    fill(item: V, start?: number, end?: number) {
+    override fill(item: V, start?: number, end?: number) {
         this.targets.forEach((target) => target.fill(item, start, end));
         super.fill(item, start, end);
         return this
     }
-    sort(compareFn?: (a: V, b: V) => number) {
+    override sort(compareFn?: (a: V, b: V) => number) {
         const arrayCopy = [...this];
         const result = super.sort(compareFn);
         if (this.targets.length > 0) {
@@ -123,7 +122,7 @@ export class ProxiedArray<V>
         }
         return this;
     }
-    splice(start: number, deleteCount = 0, ...items: V[]): V[] {
+    override splice(start: number, deleteCount = 0, ...items: V[]): V[] {
         if (start === 0 && deleteCount >= this.length) this.$replace(items);
         else {
             this.targets.forEach((target) =>

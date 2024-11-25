@@ -12,6 +12,19 @@ export class ArrayProxyHandler<T extends ProxiedArray<any>> extends ObjectProxyH
         target.notifyCurrentValue();
         return result;
     }
+    $callAndNotifyIfTrueCallback = (target: ProxiedValueV2<T>, bindedTargetProperty: Function) => (...args: T[]) => {
+        const result = bindedTargetProperty(...args);
+        if (result)
+            target.notifyCurrentValue();
+        return result;
+    }
+    $callAndNotifyIfLengthChangedCallback = (target: ProxiedValueV2<T>, bindedTargetProperty: Function) => (...args: T[]) => {
+        const oldLength = target.$value.length;
+        const result = bindedTargetProperty(...args);
+        if (oldLength !== target.$value.length)
+            target.notifyCurrentValue();
+        return result;
+    }
     $overrides = {
         push: this.$newItemsCallback,
         $replace: this.$newItemsCallback,
@@ -36,7 +49,19 @@ export class ArrayProxyHandler<T extends ProxiedArray<any>> extends ObjectProxyH
             if (deleteCount > 0 || items.length > 0)
                 target.notifyCurrentValue();
             return result;
-        }
+        },
+        $clear: (target: ProxiedValueV2<T>, bindedTargetProperty: Function) => () => {
+            if (target.$value.length > 0) {
+                bindedTargetProperty();
+                target.notifyCurrentValue();
+            }
+        },
+        $remove: this.$callAndNotifyIfLengthChangedCallback,
+        $swap: this.$callAndNotifyIfTrueCallback,
+        pop: this.$callAndNotifyIfTrueCallback,
+        reverse: this.$callAndNotifyIfTrueCallback,
+        shift: this.$callAndNotifyIfTrueCallback,
+        sort: this.$callAndNotifyIfTrueCallback,
     }
     apply(target: ProxiedValueV2<T>, _: any, args: any[]) {
         if (args.length > 0)
