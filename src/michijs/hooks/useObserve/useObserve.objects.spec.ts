@@ -60,7 +60,7 @@ const objectTests = (initialValue: () => AnyObject | unknown[]) => {
       try {
         delete object[0];
         delete nonProxiedObject[0];
-      } catch { }
+      } catch {}
       expect(mockCallback).toHaveBeenCalledTimes(0);
     });
     it("JSON versions of the objects should be the same", () => {
@@ -244,10 +244,10 @@ describe("Observe tests", () => {
   describe("When observing objects with nullable fields", () => {
     const object = useObserve<
       | {
-        test: {
-          test2: undefined | number;
-        } | null;
-      }
+          test: {
+            test2: undefined | number;
+          } | null;
+        }
       | undefined
     >(undefined);
     it("Getting test doesnt throw exception", () => {
