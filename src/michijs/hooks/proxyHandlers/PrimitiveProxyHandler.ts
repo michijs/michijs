@@ -9,38 +9,39 @@ import { isNil } from "../../utils";
 export class PrimitiveProxyHandler<T> extends SharedProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, T> {
 
   apply(target: ProxiedValueV2<T>, _, args: any[]) {
-    if (args?.length > 0)
-      return this.applyUproxifiedValue(target, unproxify(args[0]))
+    if (args?.length > 0) {
+      const unproxifiedValue = unproxify(args[0]);
+      switch (typeof unproxifiedValue) {
+        // Intentional order
+        // TODO: check this
+        case "function": {
+          target.handler = new FunctionProxyHandler(this.rootObservableCallback);
+          return target.handler.applyNewValue(target, unproxifiedValue);
+        }
+        case "object":
+          // Ignore null
+          if (unproxifiedValue) {
+            const newHandler = getObjectHandler(unproxifiedValue, this.parentSubscription, this.rootObservableCallback);
+            if (newHandler) {
+              target.handler = newHandler;
+              return target.handler.applyNewValue(target, unproxifiedValue)
+            }
+          }
+        // If its an non observable object continue
+        default: 
+          this.applyNewValue(target, unproxifiedValue)
+      }
+      return;
+    }
     return target.valueOf();
   }
-  applyUproxifiedValue(target: ProxiedValueV2<T>, unproxifiedValue: T) {
-    switch (typeof unproxifiedValue) {
-      // Intentional order
-      // TODO: check this
-      case "function": {
-        target.handler = new FunctionProxyHandler(this.rootObservableCallback);
-        return target.handler.applyUproxifiedValue(target, unproxifiedValue);
-      }
-      case "object":
-        // Ignore null
-        if (unproxifiedValue) {
-          const newHandler = getObjectHandler(unproxifiedValue, this.parentSubscription, this.rootObservableCallback);
-          if (newHandler) {
-            target.handler = newHandler;
-            return target.handler.applyUproxifiedValue(target, unproxifiedValue)
-          }
-        }
-      // If its an non observable object continue
-      default: {
-        const oldValue = target.$privateValue;
-        target.$privateValue = unproxifiedValue;
+  applyNewValue(target: ProxiedValueV2<T>, unproxifiedValue: T) {
+    const oldValue = target.$privateValue;
+    target.$privateValue = unproxifiedValue;
 
-        const notifiableObservers = target.notifiableObservers;
-        if (notifiableObservers && unproxifiedValue !== oldValue)
-          target.notifyCurrentValue(notifiableObservers);
-      }
-    }
-    return;
+    const notifiableObservers = target.notifiableObservers;
+    if (notifiableObservers && unproxifiedValue !== oldValue)
+      target.notifyCurrentValue(notifiableObservers);
   }
 
   get(target: ProxiedValueV2<T>, p: string | symbol, receiver) {

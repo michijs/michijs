@@ -21,8 +21,9 @@ export class SharedProxyHandler<T> {
   updateHandlerAndValue(target: ProxiedValueV2<T>, unproxifiedNewValue) {
     const newHandler = getHandler(unproxifiedNewValue, this.parentSubscription, this.rootObservableCallback);
     target.handler = newHandler;
-    // TODO: do an implementation that doesnt require to unproxify again
-    return target.handler.applyUproxifiedValue(target, unproxifiedNewValue)
+    target.$value = target.handler.getInitialValue?.(target, unproxifiedNewValue) ?? unproxifiedNewValue;
+    target.notifyCurrentValue();
+    return;
   }
 
   constructor(

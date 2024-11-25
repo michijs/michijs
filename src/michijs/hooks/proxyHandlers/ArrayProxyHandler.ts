@@ -35,10 +35,10 @@ export class ArrayProxyHandler<T extends Array<any>> extends ObjectProxyHandler<
     }
     apply(target: ProxiedValueV2<T>, _: any, args: any[]) {
         if (args.length > 0)
-            return this.applyUproxifiedValue(target, unproxify(args[0]))
+            return this.applyNewValue(target, unproxify(args[0]))
         return target.valueOf();
     }
-    applyUproxifiedValue(target: ProxiedValueV2<T>, unproxifiedValue: Array<any>) {
+    applyNewValue(target: ProxiedValueV2<T>, unproxifiedValue: Array<any>) {
         if (Array.isArray(unproxifiedValue)) {
             target.$value = this.getInitialValue(target, unproxifiedValue);
             const notifiableObservers = target.notifiableObservers;
