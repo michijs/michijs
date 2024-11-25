@@ -31,11 +31,8 @@ export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> i
         if (notifiableObservers)
           target.notifyCurrentValue(notifiableObservers);
         return;
-      } else {
-        const newHandler = getHandler(newValue, this.parentSubscription, this.rootObservableCallback);
-        target.handler = newHandler;
-        return target.handler.apply(target, _, args)
-      }
+      } else
+        return this.updateHandlerAndValue(target, newValue)
     }
     return target.valueOf();
   }

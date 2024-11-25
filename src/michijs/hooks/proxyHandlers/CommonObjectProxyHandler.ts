@@ -28,7 +28,7 @@ export class CommonObjectProxyHandler<T extends object> extends ObjectProxyHandl
     }
     return target.valueOf();
   }
-  getInitialValue(target, unproxifiedValue: Set<any>): T {
+  getInitialValue(target: ProxiedValueV2<T>, unproxifiedValue: Set<any>): T {
     return cloneCommonObject(unproxifiedValue as object, (value) =>
       this.createProxyChild(target,value),
     ) as T

@@ -10,7 +10,7 @@ import { getHandler } from "./getHandler";
 export class MapProxyHandler<T extends Map<any, any>> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, Map<any, any>> {
   $overrides = {
     clear: customMapAndSetClear,
-    set: (target: ProxiedValueV2<T>, bindedTargetProperty: Map<any,any>['set']): Map<any,any>['set'] => (key, newValue) => {
+    set: (target: ProxiedValueV2<T>, bindedTargetProperty: Map<any, any>['set']): Map<any, any>['set'] => (key, newValue) => {
       const hasOldValue = target.$value.has(key);
       if (hasOldValue) {
         const oldValue = target.$value.get(key);
@@ -32,11 +32,8 @@ export class MapProxyHandler<T extends Map<any, any>> extends ObjectProxyHandler
         if (notifiableObservers)
           target.notifyCurrentValue(notifiableObservers);
         return;
-      } else {
-        const newHandler = getHandler(newValue, this.parentSubscription, this.rootObservableCallback);
-        target.handler = newHandler;
-        return target.handler.apply(target, _, args)
-      }
+      } else
+        return this.updateHandlerAndValue(target, newValue)
     }
     return target.valueOf();
   }

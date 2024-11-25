@@ -2,7 +2,6 @@ import { ObjectProxyHandler } from "./ObjectProxyHandler";
 import type { ProxiedValueV2 } from "../../classes/ProxiedValue";
 import type { ObservableProxyHandler } from "../../types";
 import { unproxify } from "../../utils/unproxify";
-import { getHandler } from "./getHandler";
 import { cloneArray } from "../../utils/clone/cloneArray";
 
 export class ArrayProxyHandler<T extends Array<any>> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, Array<any>> {
@@ -43,11 +42,8 @@ export class ArrayProxyHandler<T extends Array<any>> extends ObjectProxyHandler<
                 if (notifiableObservers)
                     target.notifyCurrentValue(notifiableObservers);
                 return;
-            } else {
-                const newHandler = getHandler(newValue, this.parentSubscription, this.rootObservableCallback);
-                target.handler = newHandler;
-                return target.handler.apply(target, _, args)
-            }
+            } else
+                return this.updateHandlerAndValue(target, newValue)
         }
         return target.valueOf();
     }

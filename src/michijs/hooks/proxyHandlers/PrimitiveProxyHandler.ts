@@ -46,7 +46,7 @@ export class PrimitiveProxyHandler<T> extends SharedProxyHandler<T> implements O
     if (p in target) return Reflect.get(target, p, receiver);
     // Trying to get a property on an nil value will return an object with a nil property
     if (isNil(target.$value))
-      this.apply(target, target, [{ [p]: undefined }]);
+      this.updateHandlerAndValue(target, { [p]: undefined })
     return target.$value[p];
   }
 }
