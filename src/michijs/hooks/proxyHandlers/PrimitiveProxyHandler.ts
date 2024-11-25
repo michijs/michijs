@@ -33,8 +33,8 @@ export class PrimitiveProxyHandler<T> extends SharedProxyHandler<T> implements O
     return target.valueOf();
   }
   applyNewValue(target: ProxiedValueV2<T>, unproxifiedValue: T) {
-    const oldValue = target.$privateValue;
-    target.$privateValue = unproxifiedValue;
+    const oldValue = target.$value;
+    target.$value = unproxifiedValue;
 
     const notifiableObservers = target.notifiableObservers;
     if (notifiableObservers && unproxifiedValue !== oldValue)

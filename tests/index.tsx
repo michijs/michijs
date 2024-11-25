@@ -53,7 +53,6 @@ createCustomElement("root-test-element", {
     );
   },
 });
-
 // documentTransition test
 // const titulo1 = document.createElement('h1');
 // titulo1.textContent = 'hola 1'

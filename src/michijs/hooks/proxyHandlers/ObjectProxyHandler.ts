@@ -6,11 +6,9 @@ export class ObjectProxyHandler<T extends object> extends SharedProxyHandler<T> 
     if (p in target) return Reflect.deleteProperty(target, p);
     const deletedProperty = target.$value[p];
     if (deletedProperty) {
-      Reflect.set(deletedProperty, "$value", undefined);
-      // const result = Reflect.deleteProperty(target.$value, property);
-      // deletedProperty.$value = undefined;
-
-      return true;
+      const result = Reflect.deleteProperty(target.$value, p);
+      target.notifyCurrentValue();
+      return result;
     }
     return false;
   }
@@ -29,5 +27,16 @@ export class ObjectProxyHandler<T extends object> extends SharedProxyHandler<T> 
 
   has(target: ProxiedValueV2<T>, p: string | symbol) {
     return this.ownKeys(target).includes(p);
+  }
+
+  set(target: ProxiedValueV2<T>, p: string | symbol, newValue: any): boolean {
+    if (p in target.$value) {
+      target.$value[p](newValue)
+      return true;
+    } else {
+      target.$value[p] = this.createProxyChild(target, newValue)
+      target.notifyCurrentValue?.();
+      return true;
+    }
   }
 }

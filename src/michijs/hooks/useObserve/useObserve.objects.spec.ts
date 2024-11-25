@@ -42,14 +42,14 @@ const objectTests = (initialValue: () => AnyObject | unknown[]) => {
       nonProxiedObject[1] = exampleValue;
       expect(mockCallback).toHaveBeenCalledTimes(2);
     });
-    it.skip("Setting a value on an index and deleting it must call its callback", () => {
+    it("Setting a value on an index and deleting it must call its callback", () => {
       object[0] = exampleValue;
       delete object[0];
       nonProxiedObject[0] = exampleValue;
       delete nonProxiedObject[0];
       expect(mockCallback).toHaveBeenCalledTimes(2);
     });
-    it.skip("Deleting an existing index should call the callback", () => {
+    it("Deleting an existing index should call the callback", () => {
       object[0] = exampleValue;
       delete object[0];
       nonProxiedObject[0] = exampleValue;
@@ -118,13 +118,12 @@ describe("Observe tests", () => {
       map = useObserve(new Map());
       map.subscribe(mockCallback);
     });
-    // Non proxied map its not allowing assignations now for some reason
-    // it("Setting the same value two times must call its callback just one time", () => {
-    //   map[0] = exampleValue;
-    //   map[0] = exampleValue;
-    //   nonProxiedMap[0] = exampleValue;
-    //   expect(mockCallback).toHaveBeenCalledTimes(1);
-    // });
+    it("Setting the same value two times must call its callback just one time", () => {
+      map[0] = exampleValue;
+      map[0] = exampleValue;
+      nonProxiedMap[0] = exampleValue;
+      expect(mockCallback).toHaveBeenCalledTimes(1);
+    });
     it("Setting the same value two times must call its callback just one time (using set method)", () => {
       map.set(0, exampleValue);
       map.set(0, exampleValue);
@@ -173,14 +172,12 @@ describe("Observe tests", () => {
       set.subscribe(mockCallback);
     });
     // Non proxied set its not allowing assignations now for some reason
-    // it.skip("Setting the same value two times must call its callback just one time", () => {
-    //   console.log(set())
-    //   set[0] = exampleValue;
-    //   set[0] = exampleValue;
-    //   nonProxiedSet[0] = exampleValue;
-    //   expect(mockCallback).toHaveBeenCalledTimes(1);
-    //   console.log(set(), nonProxiedSet)
-    // });
+    it("Setting the same value two times must call its callback just one time", () => {
+      set[0] = exampleValue;
+      set[0] = exampleValue;
+      nonProxiedSet[0] = exampleValue;
+      expect(mockCallback).toHaveBeenCalledTimes(1);
+    });
     it("Adding the same value two times must call its callback just one time (using add method)", () => {
       set.add(exampleValue);
       set.add(exampleValue);

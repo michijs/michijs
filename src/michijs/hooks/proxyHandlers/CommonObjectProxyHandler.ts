@@ -30,15 +30,6 @@ export class CommonObjectProxyHandler<T extends object> extends ObjectProxyHandl
       this.createProxyChild(target, value),
     ) as T
   }
-  set(target: ProxiedValueV2<T>, p: string | symbol, newValue: any): boolean {
-    if (p in target.$value)
-      return target.$value[p](newValue)
-    else {
-      target.$value[p] = this.createProxyChild(target, newValue)
-      target.notifyCurrentValue?.();
-      return true;
-    }
-  }
   get(target: ProxiedValueV2<T>, p: string | symbol) {
     if (p in target) return Reflect.get(target, p);
     if (p in target.$value)

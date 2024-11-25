@@ -10,7 +10,7 @@ export class ObservableProxyHandler<T> implements ProxyHandler<ProxiedValueV2<T>
   }
 
   apply(target: ProxiedValueV2<T>, _, args) {
-    return target.handler.apply?.(target, _, args) ?? Reflect.apply(target, _, args);
+    return target.handler.apply(target, _, args);
   }
 
   ownKeys(target: ProxiedValueV2<T>) {

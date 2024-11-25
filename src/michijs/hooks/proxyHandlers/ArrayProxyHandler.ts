@@ -8,7 +8,7 @@ import { cloneArray } from "../../utils/clone/cloneArray";
 export class ArrayProxyHandler<T extends ProxiedArray<any>> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, Array<any>> {
     $newItemsCallback = (target: ProxiedValueV2<T>, bindedTargetProperty: Function) => (...args: T[]) => {
         const proxiedArray = this.$cloneAndProxify(target, unproxify(args));
-        const result = bindedTargetProperty(proxiedArray);
+        const result = bindedTargetProperty(...proxiedArray);
         target.notifyCurrentValue();
         return result;
     }
@@ -70,21 +70,18 @@ export class ArrayProxyHandler<T extends ProxiedArray<any>> extends ObjectProxyH
     }
     applyNewValue(target: ProxiedValueV2<T>, unproxifiedValue: T) {
         if (Array.isArray(unproxifiedValue)) {
-            this.$overrides.$replace(target, target.$value.$replace)(unproxifiedValue)
+            this.$overrides.$replace(target, target.$value.$replace.bind(target.$value))(...unproxifiedValue);
             return;
         } else
             return this.updateHandlerAndValue(target, unproxifiedValue)
     }
     getInitialValue(target: ProxiedValueV2<T>, unproxifiedValue: Array<any>): T {
-        return new ProxiedArray(this.$cloneAndProxify(target, unproxifiedValue)) as unknown as T;
+        return new ProxiedArray(...this.$cloneAndProxify(target, unproxifiedValue)) as unknown as T;
     }
     $cloneAndProxify(target: ProxiedValueV2<T>, unproxifiedValue: Array<any>) {
         return cloneArray(unproxifiedValue, (newValue) =>
             this.createProxyChild(target, newValue),
         )
-    }
-    set(target: ProxiedValueV2<T>, p: string | symbol, newValue: any): boolean {
-        return target[p](newValue)
     }
     get(target: ProxiedValueV2<T>, property) {
         if (property in target) return Reflect.get(target, property);
@@ -100,10 +97,10 @@ export class ArrayProxyHandler<T extends ProxiedArray<any>> extends ObjectProxyH
         return this.$overrides[property]?.(target, bindedTargetProperty) ?? bindedTargetProperty
     }
     // @ts-ignore
-    override getOwnPropertyDescriptor(target: ProxiedValueV2<T>, prop: string | symbol) {
-        // Otherwise length is listed as a property
-        return prop !== "length"
-            ? super.getOwnPropertyDescriptor(target, prop)
-            : Reflect.getOwnPropertyDescriptor(target, prop);
-    }
+  override getOwnPropertyDescriptor(target, prop) {
+    // Otherwise length is listed as a property
+    return prop !== "length"
+      ? super.getOwnPropertyDescriptor(target, prop)
+      : Reflect.getOwnPropertyDescriptor(target, prop);
+  }
 }

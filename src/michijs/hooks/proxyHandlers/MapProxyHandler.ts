@@ -43,10 +43,6 @@ export class MapProxyHandler<T extends Map<any, any>> extends ObjectProxyHandler
       this.createProxyChild(target, value),
     ) as T;
   }
-  set(target: ProxiedValueV2<T>, p: string | symbol, newValue: any): boolean {
-    // When setting a new value, call set function
-    return this.get(target, 'set')(p, newValue)
-  }
   get(target: ProxiedValueV2<T>, property: string | symbol) {
     if (property in target) return Reflect.get(target, property);
     const targetProperty = Reflect.get(target.$value, property);

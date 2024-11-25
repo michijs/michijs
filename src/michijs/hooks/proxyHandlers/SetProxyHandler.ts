@@ -43,10 +43,6 @@ export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> i
       this.createProxyChild(target, value),
     ) as unknown as T;
   }
-  set(target: ProxiedValueV2<T>, p: string | symbol, newValue: any): boolean {
-    // When setting a new value, call set function
-    return this.get(target, 'add')(p, newValue)
-  }
   get(target: ProxiedValueV2<T>, p: string | symbol) {
     if (p in target) return Reflect.get(target, p);
     const targetProperty = Reflect.get(
