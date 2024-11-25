@@ -1,9 +1,8 @@
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 import { customMapAndSetClear } from "./customMapAndSetClear";
 import type { ProxiedValue, ProxiedValueV2 } from "../../classes/ProxiedValue";
-import { useObserveInternal } from "../useObserve";
 import { customMapAndSetDelete } from "./customMapAndSetDelete";
-import type { ObservableProxyHandler, ParentSubscription } from "../../types";
+import type { ObservableProxyHandler } from "../../types";
 import { cloneMap } from "../../utils/clone/cloneMap";
 import { unproxify } from "../../utils/unproxify";
 import { getHandler } from "./getHandler";
@@ -17,11 +16,7 @@ export class MapProxyHandler<T extends Map<any, any>> extends ObjectProxyHandler
         const oldValue = target.$value.get(key);
         return oldValue(newValue);
       }
-      const observedItem = useObserveInternal(
-        newValue,
-        this.getOwnSubscription(target),
-        this.rootObservableCallback,
-      );
+      const observedItem = this.createProxyChild(target, newValue);
       const result = bindedTargetProperty(key, observedItem);
       // @ts-ignore
       observedItem.notifyCurrentValue?.();
@@ -48,7 +43,7 @@ export class MapProxyHandler<T extends Map<any, any>> extends ObjectProxyHandler
   }
   getInitialValue(target, unproxifiedValue: Map<any, any>): T {
     return cloneMap(unproxifiedValue, (value) =>
-      useObserveInternal(value as any, this.getOwnSubscription(target), this.rootObservableCallback),
+      this.createProxyChild(target, value),
     ) as T;
   }
   set(target: ProxiedValueV2<T>, p: string | symbol, newValue: any): boolean {

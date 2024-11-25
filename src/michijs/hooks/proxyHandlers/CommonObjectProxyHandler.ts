@@ -1,6 +1,5 @@
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 import type { ProxiedValueV2 } from "../../classes/ProxiedValue";
-import { useObserveInternal } from "../useObserve";
 import type { ObservableProxyHandler } from "../../types";
 import { unproxify } from "../../utils/unproxify";
 import { getHandler } from "./getHandler";
@@ -31,22 +30,14 @@ export class CommonObjectProxyHandler<T extends object> extends ObjectProxyHandl
   }
   getInitialValue(target, unproxifiedValue: Set<any>): T {
     return cloneCommonObject(unproxifiedValue as object, (value) =>
-      useObserveInternal<any>(
-        value,
-        this.getOwnSubscription(target),
-        this.rootObservableCallback,
-      ),
+      this.createProxyChild(target,value),
     ) as T
   }
   set(target: ProxiedValueV2<T>, p: string | symbol, newValue: any): boolean {
     if (p in target.$value)
       return target.$value[p](newValue)
     else {
-      target.$value[p] = useObserveInternal<any>(
-        newValue,
-        this.getOwnSubscription(target),
-        this.rootObservableCallback,
-      )
+      target.$value[p] = this.createProxyChild(target, newValue)
       target.notifyCurrentValue?.();
       return true;
     }

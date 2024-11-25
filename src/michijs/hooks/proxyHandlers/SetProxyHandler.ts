@@ -1,7 +1,6 @@
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 import { customMapAndSetClear } from "./customMapAndSetClear";
 import type { ProxiedValueV2 } from "../../classes/ProxiedValue";
-import { useObserveInternal } from "../useObserve";
 import { customMapAndSetDelete } from "./customMapAndSetDelete";
 import type { ObservableProxyHandler } from "../../types";
 import { cloneMap } from "../../utils/clone/cloneMap";
@@ -12,17 +11,11 @@ export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> i
   $overrides = {
     clear: customMapAndSetClear,
     add: (target, bindedTargetProperty) => (newValue) => {
-      const newValueOf = newValue?.valueOf?.();
-      const hasOldValue = target.$value.has(newValueOf);
+      const unproxifiedValue = unproxify(newValue);
+      const hasOldValue = target.$value.has(unproxifiedValue);
       if (!hasOldValue) {
-        // Can be wathever but doesnt work properly if I use E for example
-        const observedItem = useObserveInternal(
-          newValueOf,
-          this.getOwnSubscription(target),
-          this.rootObservableCallback,
-        );
-        bindedTargetProperty(newValueOf, observedItem);
-        // @ts-ignore
+        const observedItem = this.createProxyChild(target, unproxifiedValue);
+        bindedTargetProperty(unproxifiedValue, observedItem);
         observedItem.notifyCurrentValue?.();
       }
       return target;
@@ -48,7 +41,7 @@ export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> i
   }
   getInitialValue(target, unproxifiedValue: Set<any>): T {
     return cloneMap(unproxifiedValue, (value) =>
-      useObserveInternal(value as any, this.getOwnSubscription(target), this.rootObservableCallback),
+      this.createProxyChild(target, value),
     ) as unknown as T;
   }
   set(target: ProxiedValueV2<T>, p: string | symbol, newValue: any): boolean {
