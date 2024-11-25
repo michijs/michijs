@@ -12,16 +12,19 @@ export class FunctionProxyHandler implements ObservableProxyHandler<ProxiedValue
     }
 
     apply(target: ProxiedValueV2<Function>, _, args) {
+        // Functions cant change their type
         if (this.rootObservableCallback)
             return useComputedObserve(
                 () => target.$value(...args),
                 [this.rootObservableCallback()],
             );
         else return target.$value(...args);
-        // Functions cant change their type
+    }
+    applyUproxifiedValue(target: ProxiedValueV2<Function>, unproxifiedValue: Function) {
+        throw "Functions cant mutate their type"
     }
     get(target: ProxiedValueV2<Function>, p: string | symbol, receiver) {
-      if (p in target) return Reflect.get(target, p, receiver);
-      return target.$value[p];
+        if (p in target) return Reflect.get(target, p, receiver);
+        return target.$value[p];
     }
 }

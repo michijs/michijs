@@ -23,18 +23,19 @@ export class MapProxyHandler<T extends Map<any, any>> extends ObjectProxyHandler
     delete: customMapAndSetDelete
   }
   apply(target: ProxiedValueV2<T>, _: any, args: any[]) {
-    if (args.length > 0) {
-      const newValue = unproxify(args[0]);
-      if (newValue instanceof Map) {
-        target.$value = this.getInitialValue(target, newValue);
-        const notifiableObservers = target.notifiableObservers;
-        if (notifiableObservers)
-          target.notifyCurrentValue(notifiableObservers);
-        return;
-      } else
-        return this.updateHandlerAndValue(target, newValue)
-    }
+    if (args.length > 0) 
+      return this.applyUproxifiedValue(target, unproxify(args[0]))
     return target.valueOf();
+  }
+  applyUproxifiedValue(target: ProxiedValueV2<T>, unproxifiedValue: Map<any, any>) {
+    if (unproxifiedValue instanceof Map) {
+      target.$value = this.getInitialValue(target, unproxifiedValue);
+      const notifiableObservers = target.notifiableObservers;
+      if (notifiableObservers)
+        target.notifyCurrentValue(notifiableObservers);
+      return;
+    } else
+      return this.updateHandlerAndValue(target, unproxifiedValue)
   }
   getInitialValue(target: ProxiedValueV2<T>, unproxifiedValue: Map<any, any>): T {
     return cloneMap(unproxifiedValue, (value) =>

@@ -22,7 +22,7 @@ export class SharedProxyHandler<T> {
     const newHandler = getHandler(unproxifiedNewValue, this.parentSubscription, this.rootObservableCallback);
     target.handler = newHandler;
     // TODO: do an implementation that doesnt require to unproxify again
-    return target.handler.apply(target, target, [unproxifiedNewValue])
+    return target.handler.applyUproxifiedValue(target, unproxifiedNewValue)
   }
 
   constructor(

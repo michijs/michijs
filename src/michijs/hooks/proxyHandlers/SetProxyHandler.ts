@@ -21,18 +21,19 @@ export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> i
     },
     delete: customMapAndSetDelete
   }
+  applyUproxifiedValue(target: ProxiedValueV2<T>, unproxifiedValue: Set<any>) {
+    if (unproxifiedValue instanceof Set) {
+      target.$value = this.getInitialValue(target, unproxifiedValue);
+      const notifiableObservers = target.notifiableObservers;
+      if (notifiableObservers)
+        target.notifyCurrentValue(notifiableObservers);
+      return;
+    } else
+      return this.updateHandlerAndValue(target, unproxifiedValue)
+  }
   apply(target: ProxiedValueV2<T>, _: any, args: any[]) {
-    if (args.length > 0) {
-      const newValue = unproxify(args[0]);
-      if (newValue instanceof Set) {
-        target.$value = this.getInitialValue(target, newValue);
-        const notifiableObservers = target.notifiableObservers;
-        if (notifiableObservers)
-          target.notifyCurrentValue(notifiableObservers);
-        return;
-      } else
-        return this.updateHandlerAndValue(target, newValue)
-    }
+    if (args.length > 0) 
+      return this.applyUproxifiedValue(target, unproxify(args[0]))
     return target.valueOf();
   }
   getInitialValue(target: ProxiedValueV2<T>, unproxifiedValue: Set<any>): T {

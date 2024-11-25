@@ -7,24 +7,25 @@ import { cloneCommonObject } from "../../utils/clone/cloneCommonObject";
 
 export class CommonObjectProxyHandler<T extends object> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, any> {
   apply(target: ProxiedValueV2<T>, _: any, args: any[]) {
-    if (args.length > 0) {
-      const newValue = unproxify(args[0]);
-      if (newValue && extendsObject(newValue)) {
-        // Transaction
-        target.$value = this.getInitialValue(target, newValue);
-        for (const key in { ...target.$value, ...newValue }) {
-          target.$value[key](newValue[key]);
-        }
-        const notifiableObservers = target.notifiableObservers;
-        if (notifiableObservers)
-          target.notifyCurrentValue(notifiableObservers);
-        return;
-      } else 
-        return this.updateHandlerAndValue(target, newValue);
-    }
+    if (args.length > 0) 
+      return this.applyUproxifiedValue(target, unproxify(args[0]))
     return target.valueOf();
   }
-  getInitialValue(target: ProxiedValueV2<T>, unproxifiedValue: Set<any>): T {
+  applyUproxifiedValue(target: ProxiedValueV2<T>, unproxifiedValue: any) {
+    if (unproxifiedValue && extendsObject(unproxifiedValue)) {
+      // Transaction
+      target.$value = this.getInitialValue(target, unproxifiedValue);
+      for (const key in { ...target.$value, ...unproxifiedValue }) {
+        target.$value[key](unproxifiedValue[key]);
+      }
+      const notifiableObservers = target.notifiableObservers;
+      if (notifiableObservers)
+        target.notifyCurrentValue(notifiableObservers);
+      return;
+    } else 
+      return this.updateHandlerAndValue(target, unproxifiedValue);
+  }
+  getInitialValue(target: ProxiedValueV2<T>, unproxifiedValue: any): T {
     return cloneCommonObject(unproxifiedValue as object, (value) =>
       this.createProxyChild(target,value),
     ) as T
