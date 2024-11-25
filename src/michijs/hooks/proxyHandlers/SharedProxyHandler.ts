@@ -18,8 +18,7 @@ export class SharedProxyHandler<T> {
       this.rootObservableCallback,
     )
   }
-  updateHandlerAndValue(target: ProxiedValueV2<T>, unproxifiedNewValue) {
-    const newHandler = getHandler(unproxifiedNewValue, this.parentSubscription, this.rootObservableCallback);
+  updateHandlerAndValue(target: ProxiedValueV2<T>, unproxifiedNewValue, newHandler = getHandler(unproxifiedNewValue, this.parentSubscription, this.rootObservableCallback)) {
     target.handler = newHandler;
     target.$value = target.handler.getInitialValue?.(target, unproxifiedNewValue) ?? unproxifiedNewValue;
     target.notifyCurrentValue();

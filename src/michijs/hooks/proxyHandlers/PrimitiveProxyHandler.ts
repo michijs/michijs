@@ -15,17 +15,14 @@ export class PrimitiveProxyHandler<T> extends SharedProxyHandler<T> implements O
         // Intentional order
         // TODO: check this
         case "function": {
-          target.handler = new FunctionProxyHandler(this.rootObservableCallback);
-          return target.handler.applyNewValue(target, unproxifiedValue);
+          return this.updateHandlerAndValue(target, unproxifiedValue, new FunctionProxyHandler(this.rootObservableCallback));
         }
         case "object":
           // Ignore null
           if (unproxifiedValue) {
             const newHandler = getObjectHandler(unproxifiedValue, this.parentSubscription, this.rootObservableCallback);
-            if (newHandler) {
-              target.handler = newHandler;
-              return target.handler.applyNewValue(target, unproxifiedValue)
-            }
+            if (newHandler)
+              return this.updateHandlerAndValue(target, unproxifiedValue, newHandler);
           }
         // If its an non observable object continue
         default: 
