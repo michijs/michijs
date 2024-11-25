@@ -60,7 +60,7 @@ const objectTests = (initialValue: () => AnyObject | unknown[]) => {
       try {
         delete object[0];
         delete nonProxiedObject[0];
-      } catch { }
+      } catch {}
       expect(mockCallback).toHaveBeenCalledTimes(0);
     });
     it("JSON versions of the objects should be the same", () => {
@@ -213,7 +213,7 @@ describe("Observe tests", () => {
     });
     afterEach(() => {
       if (set.size !== nonProxiedSet.size)
-        console.log({ error: set(), nonProxiedSet })
+        console.log({ error: set(), nonProxiedSet });
       expect(set.size).toStrictEqual(nonProxiedSet.size);
       // Doesnt work with bun:test
       // expect(Array.from(set)).toEqual(Array.from(nonProxiedSet));
@@ -249,14 +249,14 @@ describe("Observe tests", () => {
   describe("When observing objects with nullable fields", () => {
     const object = useObserve<
       | {
-        test: {
-          test2: undefined | number;
-        } | null;
-      }
+          test: {
+            test2: undefined | number;
+          } | null;
+        }
       | undefined
     >(undefined);
     it("Getting test doesnt throw exception", () => {
-      console.log(object.test)
+      console.log(object.test);
       expect(() => object.test.test2).not.toThrow();
       // @ts-ignore
       expect(object.test.test2()).toBe(undefined);
