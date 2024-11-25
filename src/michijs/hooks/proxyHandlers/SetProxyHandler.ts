@@ -5,7 +5,6 @@ import { customMapAndSetDelete } from "./customMapAndSetDelete";
 import type { ObservableProxyHandler } from "../../types";
 import { cloneMap } from "../../utils/clone/cloneMap";
 import { unproxify } from "../../utils/unproxify";
-import { getHandler } from "./getHandler";
 
 export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, Set<any>> {
   $overrides = {

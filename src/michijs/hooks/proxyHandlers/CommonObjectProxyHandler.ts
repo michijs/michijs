@@ -2,7 +2,6 @@ import { ObjectProxyHandler } from "./ObjectProxyHandler";
 import type { ProxiedValueV2 } from "../../classes/ProxiedValue";
 import type { ObservableProxyHandler } from "../../types";
 import { unproxify } from "../../utils/unproxify";
-import { getHandler } from "./getHandler";
 import { extendsObject } from "../../utils/extendsObject";
 import { cloneCommonObject } from "../../utils/clone/cloneCommonObject";
 
@@ -20,11 +19,8 @@ export class CommonObjectProxyHandler<T extends object> extends ObjectProxyHandl
         if (notifiableObservers)
           target.notifyCurrentValue(notifiableObservers);
         return;
-      } else {
-        const newHandler = getHandler(newValue, this.parentSubscription, this.rootObservableCallback);
-        target.handler = newHandler;
-        return target.handler.apply(target, _, args)
-      }
+      } else 
+        return this.updateHandlerAndValue(target, newValue);
     }
     return target.valueOf();
   }
