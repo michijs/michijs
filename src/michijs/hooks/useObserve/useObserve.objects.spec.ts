@@ -212,8 +212,6 @@ describe("Observe tests", () => {
       expect(mockCallback).toHaveBeenCalledTimes(0);
     });
     afterEach(() => {
-      if (set.size !== nonProxiedSet.size)
-        console.log({ error: set(), nonProxiedSet })
       expect(set.size).toStrictEqual(nonProxiedSet.size);
       // Doesnt work with bun:test
       // expect(Array.from(set)).toEqual(Array.from(nonProxiedSet));
@@ -256,7 +254,6 @@ describe("Observe tests", () => {
       | undefined
     >(undefined);
     it("Getting test doesnt throw exception", () => {
-      console.log(object.test)
       expect(() => object.test.test2).not.toThrow();
       // @ts-ignore
       expect(object.test.test2()).toBe(undefined);
