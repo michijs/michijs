@@ -7,7 +7,10 @@ import { cloneMap } from "../../utils/clone/cloneMap";
 import { unproxify } from "../../utils/unproxify";
 import { getHandler } from "./getHandler";
 
-export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, Set<any>> {
+export class SetProxyHandler<T extends Set<any>>
+  extends ObjectProxyHandler<T>
+  implements ObservableProxyHandler<ProxiedValueV2<T>, Set<any>>
+{
   $overrides = {
     clear: customMapAndSetClear,
     add: (target, bindedTargetProperty) => (newValue) => {
@@ -20,21 +23,24 @@ export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> i
       }
       return target;
     },
-    delete: customMapAndSetDelete
-  }
+    delete: customMapAndSetDelete,
+  };
   apply(target: ProxiedValueV2<T>, _: any, args: any[]) {
     if (args.length > 0) {
       const newValue = unproxify(args[0]);
       if (newValue instanceof Set) {
         target.$value = this.getInitialValue(target, newValue);
         const notifiableObservers = target.notifiableObservers;
-        if (notifiableObservers)
-          target.notifyCurrentValue(notifiableObservers);
+        if (notifiableObservers) target.notifyCurrentValue(notifiableObservers);
         return;
       } else {
-        const newHandler = getHandler(newValue, this.parentSubscription, this.rootObservableCallback);
+        const newHandler = getHandler(
+          newValue,
+          this.parentSubscription,
+          this.rootObservableCallback,
+        );
         target.handler = newHandler;
-        return target.handler.apply(target, _, args)
+        return target.handler.apply(target, _, args);
       }
     }
     return target.valueOf();
@@ -46,7 +52,7 @@ export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> i
   }
   set(target: ProxiedValueV2<T>, p: string | symbol, newValue: any): boolean {
     // When setting a new value, call set function
-    return this.get(target, 'add')(p, newValue)
+    return this.get(target, "add")(p, newValue);
   }
   get(target, property) {
     if (property in target) return Reflect.get(target, property);
@@ -58,9 +64,11 @@ export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> i
       typeof targetProperty === "function"
         ? (targetProperty as Function).bind(target.$value)
         : targetProperty;
-    if (property === Symbol.iterator)
-      return () => target.$value.values();
+    if (property === Symbol.iterator) return () => target.$value.values();
 
-    return this.$overrides[property]?.(target, bindedTargetProperty) ?? bindedTargetProperty
+    return (
+      this.$overrides[property]?.(target, bindedTargetProperty) ??
+      bindedTargetProperty
+    );
   }
 }
