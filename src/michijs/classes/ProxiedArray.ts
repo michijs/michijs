@@ -18,13 +18,13 @@ export class ProxiedArray<V> extends Array<V> {
       ): Node => {
         const el = asTag
           ? (create(
-              {
-                jsxTag: asTag,
-                attrs,
-              } as SingleJSXElement,
-              contextElement,
-              contextNamespace,
-            ) as ParentNode)
+            {
+              jsxTag: asTag,
+              attrs,
+            } as SingleJSXElement,
+            contextElement,
+            contextNamespace,
+          ) as ParentNode)
           : new VirtualFragment();
 
         const newTarget = new Target(
@@ -50,6 +50,13 @@ export class ProxiedArray<V> extends Array<V> {
     contextNamespace?: string,
   ) => Node;
 
+  // Critical functions
+  override push(...items: V[]): number {
+    if (items.length > 0)
+      for (const target of this.#targets) target.appendItems(items);
+    return super.push(...items);
+  }
+
   $clear(): void {
     for (const target of this.#targets) target.clear();
     this.length = 0;
@@ -74,11 +81,9 @@ export class ProxiedArray<V> extends Array<V> {
   }
 
   $swap(indexA: number, indexB: number): boolean | void {
-    if (this.length > indexA && this.length > indexB) {
-      for (const target of this.#targets) target.swap(indexA, indexB);
-      [this[indexA], this[indexB]] = [this[indexB], this[indexA]];
-      return true;
-    }
+    for (const target of this.#targets) target.swap(indexA, indexB);
+    [this[indexA], this[indexB]] = [this[indexB], this[indexA]];
+    return true;
   }
 
   override pop(): V | undefined {
@@ -86,11 +91,6 @@ export class ProxiedArray<V> extends Array<V> {
     return super.pop();
   }
 
-  override push(...items: V[]): number {
-    if (items.length > 0)
-      for (const target of this.#targets) target.appendItems(items);
-    return super.push(...items);
-  }
   override reverse(): V[] {
     for (const target of this.#targets) target.reverse();
     return super.reverse();

@@ -28,8 +28,9 @@ export class VirtualFragment
       | "lastChild"
       | "childNodes"
       | "appendChild"
+      | "insertBefore"
     >,
-    Pick<ChildNode, "remove" | "replaceWith" | "textContent">,
+    Pick<ChildNode, "remove" | "replaceWith" | "textContent" | "removeChild">,
     Pick<Element, "innerHTML">
 {
   private startItem = document.createComment("<fragment>");
@@ -38,6 +39,26 @@ export class VirtualFragment
 
   constructor(initialItems: Node[] = []) {
     this.initialFragment.append(this.startItem, ...initialItems, this.endItem);
+  }
+  insertBefore<T extends Node>(node: T, child: Node | null): T {
+    if (!child || child === this.endItem) {
+      this.appendChild(node);
+    } else {
+      forEachChildren(
+        this.startItem.nextSibling,
+        (currentNode) => {
+          if (currentNode === child) {
+            child.parentNode?.insertBefore(node, child);
+            return true;
+          }
+        },
+        (currentNode) => currentNode === this.endItem,
+      );
+    }
+    return node;
+  }  
+  removeChild<T extends Node>(child: T): T {
+    return child.parentElement?.removeChild(child) ?? (child as unknown as ChildNode)?.remove() ?? child;
   }
   appendChild<T extends Node>(node: T): T {
     this.append(node);

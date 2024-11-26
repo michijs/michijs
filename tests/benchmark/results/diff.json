@@ -3,9 +3,9 @@
   "replaceAllRows": 17.69,
   "partialUpdate": 0,
   "selectRow": 0,
-  "swapRows": 0.13,
+  "swapRows": 0.11,
   "removeRow": 0.31,
   "createManyRows": 165.79,
   "appendRowsToLargeTable": 16.15,
-  "clearRows": 0.15
+  "clearRows": 0.1
 }
