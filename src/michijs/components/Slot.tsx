@@ -20,9 +20,8 @@ const MichiSlot = createCustomElement("michi-slot", {
 
       const callback = (nodeList: NodeList) => {
         const name = this.name();
-        // Doesnt work on gh actions for some reason
-        // for (const x of nodeList) {
-        nodeList.values().forEach(x => {
+        // This cast is only neccesary for gh actions
+        for (const x of (nodeList as unknown as Array<Node>)) {
           if (
             [this.nodeName, "MICHI-GENERIC-ELEMENT", "STYLE"].includes(
               x.nodeName,
@@ -40,7 +39,7 @@ const MichiSlot = createCustomElement("michi-slot", {
               this.append(x);
               this.slotchange();
             }
-        })
+        }
       };
 
       if (hostElement) {
