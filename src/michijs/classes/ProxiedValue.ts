@@ -3,31 +3,23 @@ import type {
   ObservableType,
   ProxiedValueInterface,
   Typeof,
-  ProxiedArrayInterface,
-  MutableArrayProperties,
-  FC,
   ObservableGettersAndSetters,
-  SingleJSXElement,
   NotifiableObservers,
   ParentSubscription,
   ObservableProxyHandler,
-  ListProps,
 } from "../types";
-import { deepEqual } from "../utils/deepEqual";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { Observable } from "./Observable";
 import { unproxify } from "../utils/unproxify";
-import { Target } from "./Target";
-import { create } from "../DOM/create/create";
-import { VirtualFragment } from "./VirtualFragment";
 import {getHandler} from '../hooks/proxyHandlers/getHandler'
 
 export class ProxiedValue<T>
   extends Observable<T>
   implements ProxiedValueInterface<T, T>
 {
-  // TODO: should be protected
-  public $privateValue: T;
+  $value: T;
+  handler: ObservableProxyHandler<any, any>;
+  parentSubscription: ParentSubscription<T> | undefined;
 
   static transactionsInProgress = 0;
   static valuesToNotifyOnTransactionFinish = new Set<
@@ -51,26 +43,17 @@ export class ProxiedValue<T>
   constructor(
     initialValue: T,
     parentSubscription?: ParentSubscription<T>,
-    setterAndGetterFunction?: ObservableGettersAndSetters<T, T>,
+    rootObservableCallback?: () => ObservableType<any>,
+    handler = getHandler(initialValue, parentSubscription, rootObservableCallback),
+    setterAndGetterFunction: ObservableGettersAndSetters<T, T> = ((args) => this.handler.apply(this, this, [args])) as unknown as ObservableGettersAndSetters<T,T>,
   ) {
-    super(parentSubscription, setterAndGetterFunction);
-    this.$privateValue = initialValue;
+    super(setterAndGetterFunction);
+    this.handler = handler;
+    this.$value = handler.getInitialValue?.(this, initialValue) ?? initialValue;
+    this.parentSubscription = parentSubscription;
     // To avoid issues with isolatedDeclarations
     // this[Symbol.toStringTag] = () => this.toString();
     // this[Symbol.toPrimitive] = () => this.valueOf();
-  }
-
-  set $value(newValue: T) {
-    const notifiableObservers = this.notifiableObservers;
-    if (notifiableObservers) {
-      if (!deepEqual(newValue, this.$privateValue)) {
-        this.$privateValue = newValue;
-        this.notifyCurrentValue(notifiableObservers);
-      }
-    } else this.$privateValue = newValue;
-  }
-  get $value(): T {
-    return this.$privateValue;
   }
 
   notifyCurrentValue(
@@ -86,6 +69,17 @@ export class ProxiedValue<T>
     notifiableObservers: NotifiableObservers<T> = this.notifiableObservers,
   ): void {
     this.notify(this.valueOf(), notifiableObservers);
+  }
+
+  get notifiableObservers(): NotifiableObservers<T> {
+    let allObservers;
+    if (this.parentSubscription?.shouldNotify?.()) {
+      allObservers = Array.from(this.observers);
+      allObservers.push(this.parentSubscription);
+    } else allObservers = this.observers;
+
+    if (allObservers.length === 0) return;
+    return allObservers;
   }
 
   // @ts-ignore
@@ -124,204 +118,5 @@ export class ProxiedValue<T>
   }
   typeof(): Typeof {
     return typeof this.$value;
-  }
-}
-
-export class ProxiedArray<V>
-  extends ProxiedValue<V[]>
-  implements ProxiedArrayInterface<V, V>, Pick<Array<V>, MutableArrayProperties>
-{
-  private targets = new Array<Target<V>>();
-  /**
-   * Removed the need to notificate. Useful if you dont have notifiableObservers
-   */
-  private disableNotifications;
-
-  override notifyCurrentValue() {
-    if (!this.disableNotifications) super.notifyCurrentValue();
-  }
-
-  constructor(
-    initialValue: V[],
-    parentSubscription?: ParentSubscription<V[]>,
-    disableNotifications?: boolean,
-  ) {
-    super(initialValue, parentSubscription);
-    this.disableNotifications = disableNotifications;
-  }
-
-  override set $value(newValue: V[]) {
-    // Notifications on array are manual
-    this.$privateValue = newValue;
-  }
-  override get $value() {
-    return super.$value;
-  }
-
-  List = <const E = FC>(
-    { as: asTag, renderItem, useTemplate, ...attrs }: ListProps<E, V>,
-    contextElement?: Element,
-    contextNamespace?: string,
-  ): Node => {
-    const el = asTag
-      ? (create(
-          {
-            jsxTag: asTag,
-            attrs,
-          } as SingleJSXElement,
-          contextElement,
-          contextNamespace,
-        ) as ParentNode)
-      : new VirtualFragment();
-
-    const newTarget = new Target(
-      el,
-      renderItem,
-      contextElement,
-      contextNamespace,
-      useTemplate,
-    );
-
-    this.targets.push(newTarget);
-
-    newTarget.appendItems(this.$value);
-
-    return el.valueOf() as Node;
-  };
-
-  $clear(): void {
-    this.targets.forEach((target) => target.clear());
-    this.$value = [];
-    this.notifyCurrentValue();
-  }
-
-  $replace(items: V[]): number {
-    if (this.$value.length)
-      this.targets.forEach((target) => target.replace(items));
-    else this.targets.forEach((target) => target.appendItems(items));
-    this.$value = items;
-    this.notifyCurrentValue();
-    return items.length;
-  }
-
-  $remove(index: number): number {
-    this.$value = this.$value.filter((_x, i) => i !== index);
-    this.targets.forEach((target) => target.remove(index));
-    this.notifyCurrentValue();
-    return this.$value.length;
-  }
-
-  $swap(indexA: number, indexB: number): void {
-    if (this.$value.length > indexA && this.$value.length > indexB) {
-      this.targets.forEach((target) => target.swap(indexA, indexB));
-      [this.$value[indexA], this.$value[indexB]] = [
-        this.$value[indexB],
-        this.$value[indexA],
-      ];
-      this.notifyCurrentValue();
-    }
-  }
-
-  pop(): V | undefined {
-    this.targets.forEach((target) => target.pop());
-    const result = this.$value.pop();
-    this.notifyCurrentValue();
-
-    return result;
-  }
-
-  push(...items: V[]): number {
-    if (items.length > 0)
-      this.targets.forEach((target) => target.appendItems(items));
-    const result = this.$value?.push(...items);
-    this.notifyCurrentValue();
-
-    return result;
-  }
-  reverse(): V[] {
-    this.targets.forEach((target) => target.reverse());
-    const result = this.$value.reverse();
-    this.notifyCurrentValue();
-
-    return result;
-  }
-  shift(): V | undefined {
-    this.targets.forEach((target) => target.shift());
-    const result = this.$value.shift();
-    this.notifyCurrentValue();
-    return result;
-  }
-  unshift(...items: V[]): number {
-    this.targets.forEach((target) => target.prependItems(items));
-    const result = this.$value.unshift(...items);
-    this.notifyCurrentValue();
-    return result;
-  }
-  fill(item: V, start?: number, end?: number): V[] {
-    this.targets.forEach((target) => target.fill(item, start, end));
-    const result = this.$value.fill(item, start, end);
-    this.notifyCurrentValue();
-    return result;
-  }
-  sort(compareFn?: (a: V, b: V) => number): V[] {
-    const arrayCopy = [...this.$value];
-    const result = this.$value.sort(compareFn);
-    if (this.targets.length > 0) {
-      const indexesArray = arrayCopy.reduce(
-        (previousValue, currentValue, currentIndex) => {
-          const newIndex = result.indexOf(currentValue);
-          // To avoid repeated indexes
-          if (newIndex > currentIndex) {
-            previousValue.push({
-              currentIndex,
-              newIndex,
-            });
-          }
-          return previousValue;
-        },
-        new Array<{ currentIndex: number; newIndex: number }>(),
-      );
-      this.targets.forEach((target) => {
-        indexesArray.forEach(({ currentIndex, newIndex }) => {
-          target.swap(currentIndex, newIndex);
-        });
-      });
-      this.notifyCurrentValue();
-    }
-    return result;
-  }
-  splice(start: number, deleteCount = 0, ...items: V[]): V[] {
-    if (start === 0 && deleteCount >= this.$value.length) this.$replace(items);
-    else {
-      this.targets.forEach((target) =>
-        target.splice(start, deleteCount, items),
-      );
-      this.$value.splice(start, deleteCount, ...items);
-    }
-    this.notifyCurrentValue();
-    return this.$value;
-  }
-}
-
-
-export class ProxiedValueV2<T> extends ProxiedValue<T> {
-  handler: ObservableProxyHandler<any, any>;
-  constructor(
-    initialValue: T,
-    parentSubscription?: ParentSubscription<T>,
-    rootObservableCallback?: () => ObservableType<any>,
-  ){
-    super(initialValue, parentSubscription, ((args) => this.handler.apply(this, this, args)) as unknown as ObservableGettersAndSetters<T,T>);
-    const unproxifiedInitialValue = unproxify(initialValue);
-    this.handler = getHandler(unproxifiedInitialValue, parentSubscription, rootObservableCallback);
-    this.$value = this.handler.getInitialValue?.(this, unproxifiedInitialValue) ?? unproxifiedInitialValue;
-  }
-
-  override get $value() {
-    return this.$privateValue;
-  };
-
-  override set $value(newValue: T) {
-    this.$privateValue = newValue
   }
 }

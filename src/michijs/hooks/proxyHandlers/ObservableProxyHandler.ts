@@ -1,31 +1,36 @@
-import { ProxiedValueV2 } from "../../classes/ProxiedValue";
+import { ProxiedValue } from "../../classes/ProxiedValue";
 
-export class ObservableProxyHandler<T> implements ProxyHandler<ProxiedValueV2<T>> {
-  set(target: ProxiedValueV2<T>, property, newValue, receiver) {
+export class ObservableProxyHandler<T> implements ProxyHandler<ProxiedValue<T>> {
+  callIfExists(name: keyof ProxyHandler<ProxiedValue<T>>, ...args: unknown[]) {
+    const target = args[0] as ProxiedValue<T>;
+    // @ts-ignore
+    return target.handler[name] ? target.handler[name](...args) : Reflect[name](...args)
+  }
+  set(target: ProxiedValue<T>, property, newValue, receiver) {
     return target.handler.set?.(target, property, newValue, receiver) ?? Reflect.set(target, property, newValue, receiver);
   }
 
-  deleteProperty(target: ProxiedValueV2<T>, property) {
-    return target.handler.deleteProperty?.(target, property) ?? Reflect.deleteProperty(target, property);
+  deleteProperty(...args: unknown[]) {
+    return this.callIfExists('deleteProperty', ...args);
   }
 
-  apply(target: ProxiedValueV2<T>, _, args) {
-    return target.handler.apply(target, _, args);
+  apply(...args: unknown[]) {
+    return this.callIfExists('apply', ...args);
   }
 
-  ownKeys(target: ProxiedValueV2<T>) {
-    return target.handler.ownKeys?.(target) ?? Reflect.ownKeys(target);
+  ownKeys(...args: unknown[]) {
+    return this.callIfExists('ownKeys', ...args);
   }
 
-  getOwnPropertyDescriptor(target: ProxiedValueV2<T>, property) {
-    return target.handler.getOwnPropertyDescriptor?.(target, property) ?? Reflect.getOwnPropertyDescriptor(target, property);
+  getOwnPropertyDescriptor(...args: unknown[]) {
+    return this.callIfExists('getOwnPropertyDescriptor', ...args);
   }
 
-  has(target: ProxiedValueV2<T>, property) {
-    return target.handler.has?.(target, property) ?? Reflect.has(target, property);
+  has(...args: unknown[]) {
+    return this.callIfExists('has', ...args);
   }
 
-  get(target: ProxiedValueV2<T>, p, receiver) {
-    return target.handler.get?.(target, p, receiver) ?? Reflect.get(target, p, receiver);
+  get(...args: unknown[]) {
+    return this.callIfExists('get', ...args);
   }
 }

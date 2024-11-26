@@ -1,24 +1,24 @@
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 import { ProxiedArray } from "../../classes/ProxiedArray";
-import type { ProxiedValueV2 } from "../../classes/ProxiedValue";
+import type { ProxiedValue } from "../../classes/ProxiedValue";
 import type { ObservableProxyHandler } from "../../types";
 import { unproxify } from "../../utils/unproxify";
 import { cloneArray } from "../../utils/clone/cloneArray";
 
-export class ArrayProxyHandler<T extends ProxiedArray<any>> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, Array<any>> {
-    $newItemsCallback = (target: ProxiedValueV2<T>, bindedTargetProperty: Function) => (...args: T[]) => {
+export class ArrayProxyHandler<T extends ProxiedArray<any>> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValue<T>, Array<any>> {
+    $newItemsCallback = (target: ProxiedValue<T>, bindedTargetProperty: Function) => (...args: T[]) => {
         const proxiedArray = this.$cloneAndProxify(target, unproxify(args));
         const result = bindedTargetProperty(...proxiedArray);
         target.notifyCurrentValue();
         return result;
     }
-    $callAndNotifyIfTrueCallback = (target: ProxiedValueV2<T>, bindedTargetProperty: Function) => (...args: T[]) => {
+    $callAndNotifyIfTrueCallback = (target: ProxiedValue<T>, bindedTargetProperty: Function) => (...args: T[]) => {
         const result = bindedTargetProperty(...args);
         if (result)
             target.notifyCurrentValue();
         return result;
     }
-    $callAndNotifyIfLengthChangedCallback = (target: ProxiedValueV2<T>, bindedTargetProperty: Function) => (...args: T[]) => {
+    $callAndNotifyIfLengthChangedCallback = (target: ProxiedValue<T>, bindedTargetProperty: Function) => (...args: T[]) => {
         const oldLength = target.$value.length;
         const result = bindedTargetProperty(...args);
         if (oldLength !== target.$value.length)
@@ -50,7 +50,7 @@ export class ArrayProxyHandler<T extends ProxiedArray<any>> extends ObjectProxyH
                 target.notifyCurrentValue();
             return result;
         },
-        $clear: (target: ProxiedValueV2<T>, bindedTargetProperty: Function) => () => {
+        $clear: (target: ProxiedValue<T>, bindedTargetProperty: Function) => () => {
             if (target.$value.length > 0) {
                 bindedTargetProperty();
                 target.notifyCurrentValue();
@@ -63,27 +63,27 @@ export class ArrayProxyHandler<T extends ProxiedArray<any>> extends ObjectProxyH
         shift: this.$callAndNotifyIfTrueCallback,
         sort: this.$callAndNotifyIfTrueCallback,
     }
-    apply(target: ProxiedValueV2<T>, _: any, args: any[]) {
+    apply(target: ProxiedValue<T>, _: any, args: any[]) {
         if (args.length > 0)
             return this.applyNewValue(target, unproxify(args[0]))
         return target.valueOf();
     }
-    applyNewValue(target: ProxiedValueV2<T>, unproxifiedValue: T) {
+    applyNewValue(target: ProxiedValue<T>, unproxifiedValue: T) {
         if (Array.isArray(unproxifiedValue)) {
             this.$overrides.$replace(target, target.$value.$replace.bind(target.$value))(...unproxifiedValue);
             return;
         } else
             return this.updateHandlerAndValue(target, unproxifiedValue)
     }
-    getInitialValue(target: ProxiedValueV2<T>, unproxifiedValue: Array<any>): T {
+    getInitialValue(target: ProxiedValue<T>, unproxifiedValue: Array<any>): T {
         return new ProxiedArray(...this.$cloneAndProxify(target, unproxifiedValue)) as unknown as T;
     }
-    $cloneAndProxify(target: ProxiedValueV2<T>, unproxifiedValue: Array<any>) {
+    $cloneAndProxify(target: ProxiedValue<T>, unproxifiedValue: Array<any>) {
         return cloneArray(unproxifiedValue, (newValue) =>
             this.createProxyChild(target, newValue),
         )
     }
-    get(target: ProxiedValueV2<T>, property) {
+    get(target: ProxiedValue<T>, property) {
         if (property in target) return Reflect.get(target, property);
         const targetProperty = Reflect.get(
             target.$value,
@@ -102,5 +102,9 @@ export class ArrayProxyHandler<T extends ProxiedArray<any>> extends ObjectProxyH
     return prop !== "length"
       ? super.getOwnPropertyDescriptor(target, prop)
       : Reflect.getOwnPropertyDescriptor(target, prop);
+  }
+  
+  override ownKeys(target: ProxiedValue<T>) {
+    return Reflect.ownKeys(target.$value).filter(x => x !== 'List');
   }
 }

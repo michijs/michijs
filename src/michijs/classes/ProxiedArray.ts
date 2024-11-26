@@ -7,36 +7,49 @@ export class ProxiedArray<V>
     extends Array<V> {
     #targets = new Array<Target<V>>();
 
-    List<const E = FC>(
-        { as: asTag, renderItem, useTemplate, ...attrs }: ListProps<E, V>,
+    constructor(...items: V[]) {
+        super(...items);
+        Object.defineProperty(this, 'List', {
+            enumerable: false,
+            configurable: true,
+            value: <const E = FC>(
+                { as: asTag, renderItem, useTemplate, ...attrs }: ListProps<E, V>,
+                contextElement?: Element,
+                contextNamespace?: string,
+            ): Node => {
+                const el = asTag
+                    ? (create(
+                        {
+                            jsxTag: asTag,
+                            attrs,
+                        } as SingleJSXElement,
+                        contextElement,
+                        contextNamespace,
+                    ) as ParentNode)
+                    : new VirtualFragment();
+
+                const newTarget = new Target(
+                    el,
+                    renderItem,
+                    contextElement,
+                    contextNamespace,
+                    useTemplate,
+                );
+
+                this.#targets.push(newTarget);
+
+                newTarget.appendItems(this);
+
+                return el.valueOf() as Node;
+            }
+        })
+    }
+
+    List: <const E = FC>(
+        { as, renderItem, useTemplate, ...attrs }: ListProps<E, V>,
         contextElement?: Element,
         contextNamespace?: string,
-    ): Node {
-        const el = asTag
-            ? (create(
-                {
-                    jsxTag: asTag,
-                    attrs,
-                } as SingleJSXElement,
-                contextElement,
-                contextNamespace,
-            ) as ParentNode)
-            : new VirtualFragment();
-
-        const newTarget = new Target(
-            el,
-            renderItem,
-            contextElement,
-            contextNamespace,
-            useTemplate,
-        );
-
-        this.#targets.push(newTarget);
-
-        newTarget.appendItems(this);
-
-        return el.valueOf() as Node;
-    };
+    )=> Node
 
     $clear(): void {
         this.#targets.forEach((target) => target.clear());

@@ -1,40 +1,38 @@
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
-import type { ProxiedValueV2 } from "../../classes/ProxiedValue";
+import { ProxiedValue } from "../../classes/ProxiedValue";
 import type { ObservableProxyHandler } from "../../types";
 import { unproxify } from "../../utils/unproxify";
 import { extendsObject } from "../../utils/extendsObject";
 import { cloneCommonObject } from "../../utils/clone/cloneCommonObject";
 
-export class CommonObjectProxyHandler<T extends object> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, any> {
-  apply(target: ProxiedValueV2<T>, _: any, args: any[]) {
+export class CommonObjectProxyHandler<T extends object> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValue<T>, any> {
+  apply(target: ProxiedValue<T>, _: any, args: any[]) {
     if (args.length > 0) {
       const unproxifiedValue = unproxify(args[0]);
-      if (unproxifiedValue && extendsObject(unproxifiedValue)) {
+      if (unproxifiedValue && extendsObject(unproxifiedValue))
         return this.applyNewValue(target, unproxifiedValue);
-      } else
+      else
         return this.updateHandlerAndValue(target, unproxifiedValue);
     }
     return target.valueOf();
   }
-  applyNewValue(target: ProxiedValueV2<T>, unproxifiedValue: any) {
-    // Transaction
+  applyNewValue(target: ProxiedValue<T>, unproxifiedValue: any) {
+    ProxiedValue.startTransaction();
     for (const key in { ...target.$value, ...unproxifiedValue }) {
-      target.$value[key](unproxifiedValue[key]);
+      this.set(target, key, unproxifiedValue[key]);
     }
-    const notifiableObservers = target.notifiableObservers;
-    if (notifiableObservers)
-      target.notifyCurrentValue(notifiableObservers);
+    ProxiedValue.endTransaction();
   }
-  getInitialValue(target: ProxiedValueV2<T>, unproxifiedValue: any): T {
+  getInitialValue(target: ProxiedValue<T>, unproxifiedValue: any): T {
     return cloneCommonObject(unproxifiedValue as object, (value) =>
       this.createProxyChild(target, value),
     ) as T
   }
-  get(target: ProxiedValueV2<T>, p: string | symbol) {
-    if (p in target) return Reflect.get(target, p);
-    if (p in target.$value)
-      return Reflect.get(target.$value, p, target.$value);
-    // Reflect doesnt work properly here
-    else this.set(target, p, undefined);
+  get(target: ProxiedValue<T>, p: string | symbol) {
+    if (p in target)
+      return Reflect.get(target, p)
+    if (!(p in target.$value))
+      this.set(target, p, undefined);
+    return Reflect.get(target.$value, p, target.$value);
   }
 }

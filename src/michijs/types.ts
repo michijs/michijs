@@ -37,10 +37,10 @@ export type CssVariablesObject<
 > = IsAny<T> extends true
   ? any
   : T extends object
-    ? {
-        [k in StringKeyOf<T>]: CssVariablesObject<T[k], `${PK}-${k}`>;
-      }
-    : CSSVar<PK> & string;
+  ? {
+    [k in StringKeyOf<T>]: CssVariablesObject<T[k], `${PK}-${k}`>;
+  }
+  : CSSVar<PK> & string;
 type IfEquals<X, Y, A = X, B = never> = (<T>() => T extends X ? 1 : 2) extends <
   T,
 >() => T extends Y ? 1 : 2
@@ -107,18 +107,18 @@ export type SplitIncludingDelimiters<
 > = Source extends ""
   ? []
   : Source extends `${infer FirstPart}${Delimiter}${infer SecondPart}`
-    ? Source extends `${FirstPart}${infer UsedDelimiter}${SecondPart}`
-      ? UsedDelimiter extends Delimiter
-        ? Source extends `${infer FirstPart}${UsedDelimiter}${infer SecondPart}`
-          ? [
-              ...SplitIncludingDelimiters<FirstPart, Delimiter>,
-              UsedDelimiter,
-              ...SplitIncludingDelimiters<SecondPart, Delimiter>,
-            ]
-          : never
-        : never
-      : never
-    : [Source];
+  ? Source extends `${FirstPart}${infer UsedDelimiter}${SecondPart}`
+  ? UsedDelimiter extends Delimiter
+  ? Source extends `${infer FirstPart}${UsedDelimiter}${infer SecondPart}`
+  ? [
+    ...SplitIncludingDelimiters<FirstPart, Delimiter>,
+    UsedDelimiter,
+    ...SplitIncludingDelimiters<SecondPart, Delimiter>,
+  ]
+  : never
+  : never
+  : never
+  : [Source];
 
 type StringPartToDelimiterCase<
   StringPart extends string,
@@ -128,8 +128,8 @@ type StringPartToDelimiterCase<
 > = StringPart extends UsedWordSeparators
   ? Delimiter
   : StringPart extends UsedUpperCaseCharacters
-    ? `${Delimiter}${Lowercase<StringPart>}`
-    : StringPart;
+  ? `${Delimiter}${Lowercase<StringPart>}`
+  : StringPart;
 
 type StringArrayToDelimiterCase<
   Parts extends any[],
@@ -138,16 +138,16 @@ type StringArrayToDelimiterCase<
   Delimiter extends string,
 > = Parts extends [`${infer FirstPart}`, ...infer RemainingParts]
   ? `${StringPartToDelimiterCase<
-      FirstPart,
-      UsedWordSeparators,
-      UsedUpperCaseCharacters,
-      Delimiter
-    >}${StringArrayToDelimiterCase<
-      RemainingParts,
-      UsedWordSeparators,
-      UsedUpperCaseCharacters,
-      Delimiter
-    >}`
+    FirstPart,
+    UsedWordSeparators,
+    UsedUpperCaseCharacters,
+    Delimiter
+  >}${StringArrayToDelimiterCase<
+    RemainingParts,
+    UsedWordSeparators,
+    UsedUpperCaseCharacters,
+    Delimiter
+  >}`
   : "";
 
 export type DelimiterCase<
@@ -155,11 +155,11 @@ export type DelimiterCase<
   Delimiter extends string,
 > = Value extends string
   ? StringArrayToDelimiterCase<
-      SplitIncludingDelimiters<Value, WordSeparators | UpperCaseCharacters>,
-      WordSeparators,
-      UpperCaseCharacters,
-      Delimiter
-    >
+    SplitIncludingDelimiters<Value, WordSeparators | UpperCaseCharacters>,
+    WordSeparators,
+    UpperCaseCharacters,
+    Delimiter
+  >
   : Value;
 
 export interface MichiAttributes<E> {
@@ -219,18 +219,18 @@ export interface ObservableProxyHandler<T extends object, Y> extends Required<Pi
 
 export interface MichiProperties
   extends Lifecycle,
-    LifecycleInternals,
-    Partial<
-      Pick<
-        ElementInternals,
-        | "checkValidity"
-        | "reportValidity"
-        | "form"
-        | "validity"
-        | "validationMessage"
-        | "willValidate"
-      >
-    > {
+  LifecycleInternals,
+  Partial<
+    Pick<
+      ElementInternals,
+      | "checkValidity"
+      | "reportValidity"
+      | "form"
+      | "validity"
+      | "validationMessage"
+      | "willValidate"
+    >
+  > {
   // props?: unknown,
   readonly $michi: {
     store: ObservableType<AttributesType>;
@@ -255,7 +255,7 @@ export interface MichiProperties
   readonly type: string;
 }
 
-export interface MichiCustomElement extends HTMLElement, MichiProperties {}
+export interface MichiCustomElement extends HTMLElement, MichiProperties { }
 
 export type ListProps<E, SV> = ExtendableComponentWithoutChildren<E> & {
   renderItem: FC<SV>;
@@ -310,7 +310,7 @@ export type Typeof =
   | "object"
   | "function";
 
-export type NotifiableObservers<T> = Subscription<T>[] | undefined;
+export type NotifiableObservers<T> = Set<Subscription<T>> | undefined;
 
 export interface ProxiedValueInterface<RV, SV> extends ObservableLike<RV> {
   get $value(): SV;
@@ -333,34 +333,38 @@ export interface ObservableGettersAndSetters<RV, SV> {
 
 export interface ObservableValue<RV, SV = RV>
   extends ProxiedValueInterface<RV, SV>,
-    ObservableGettersAndSetters<RV, SV> {}
+  ObservableGettersAndSetters<RV, SV> { }
 
-export interface PrimitiveObservableValue<RV> extends ObservableValue<RV, RV> {}
+export interface PrimitiveObservableType<RV>
+  extends ObservableLike<RV>,
+  ObservableGettersAndSetters<RV, RV> { }
+
+export interface PrimitiveObservableValue<RV> extends ObservableValue<RV, RV> { }
 
 type GetPrimitiveTypeClass<T> = T extends boolean
   ? Boolean
   : T extends number
-    ? Number
-    : T extends string
-      ? String
-      : T extends bigint
-        ? BigInt
-        : T extends symbol
-          ? Symbol
-          : {};
+  ? Number
+  : T extends string
+  ? String
+  : T extends bigint
+  ? BigInt
+  : T extends symbol
+  ? Symbol
+  : {};
 
 // For some reason if you use false it takes the boolean as a const
 type GetPrimitiveType<T> = T extends boolean
   ? boolean
   : //   : T extends number
-    //     ? number
-    //     : T extends string
-    //       ? string
-    //       : T extends bigint
-    //         ? bigint
-    //         : T extends symbol
-    //           ? symbol
-    T;
+  //     ? number
+  //     : T extends string
+  //       ? string
+  //       : T extends bigint
+  //         ? bigint
+  //         : T extends symbol
+  //           ? symbol
+  T;
 
 // Doesnt work properly
 // type ExtendsObject<V extends object> = V extends { prototype: any }
@@ -395,8 +399,8 @@ export interface DoFetchProps<
   S extends SearchParams = undefined,
   B extends AnyObject | undefined | string = undefined,
 > extends RequestInitUseFetch<
-    B extends AnyObject ? { [k in keyof B]: ObservableOrConst<B[k]> } : B
-  > {
+  B extends AnyObject ? { [k in keyof B]: ObservableOrConst<B[k]> } : B
+> {
   input: string;
   searchParams?: { [k in keyof S]: ObservableOrConst<S[k]> };
 }
@@ -422,7 +426,7 @@ export type useWatchDeps = any[];
  * Interface representing the result of a fetch operation.
  * @template R Type of the expected response data.
  */
-export interface FetchResult<R> extends PromiseResult<R> {}
+export interface FetchResult<R> extends PromiseResult<R> { }
 export interface PromiseResult<R> {
   /**
    * The promise
@@ -438,41 +442,41 @@ export interface PromiseResult<R> {
 export type ObservableType<Y, T = NonNullable<Y>> = IsAny<T> extends true
   ? any
   : // Intentional - otherwise it doesnt work
-    [Y] extends [ObservableLike<any>]
-    ? Y
-    : [T] extends [Array<infer V>]
-      ? ObservableArray<V>
-      : [T] extends [Promise<infer V>]
-        ? ObservableComplexObject<Promise<V>>
-        : [T] extends [(...args: infer A) => infer R]
-          ? (...args: A) => ObservableType<R>
-          : [T] extends [Map<infer K, infer V>]
-            ? ObservableMap<K, V>
-            : [T] extends [Set<infer V>]
-              ? ObservableSet<V>
-              : [T] extends [Date]
-                ? PrimitiveObservableValue<Y> & Date
-                : [T] extends [object]
-                  ? // ? ExtendsObject<T> extends true
-                    ObservableObject<Y>
-                  : // : ObservableComplexObject<Y>
-                    PrimitiveObservableValue<GetPrimitiveType<Y>> &
-                      GetPrimitiveTypeClass<T>;
+  [Y] extends [ObservableLike<any>]
+  ? Y
+  : [T] extends [Array<infer V>]
+  ? ObservableArray<V>
+  : [T] extends [Promise<infer V>]
+  ? ObservableComplexObject<Promise<V>>
+  : [T] extends [(...args: infer A) => infer R]
+  ? (...args: A) => ObservableType<R>
+  : [T] extends [Map<infer K, infer V>]
+  ? ObservableMap<K, V>
+  : [T] extends [Set<infer V>]
+  ? ObservableSet<V>
+  : [T] extends [Date]
+  ? PrimitiveObservableValue<Y> & Date
+  : [T] extends [object]
+  ? // ? ExtendsObject<T> extends true
+  ObservableObject<Y>
+  : // : ObservableComplexObject<Y>
+  PrimitiveObservableValue<GetPrimitiveType<Y>> &
+  GetPrimitiveTypeClass<T>;
 
 export type Unproxify<T> = IsAny<T> extends true
   ? any
   : T extends ObservableLike<infer Y>
-    ? [Y] extends [object]
-      ? { [k in keyof Y]: Unproxify<Y[k]> }
-      : Y
-    : T;
+  ? [Y] extends [object]
+  ? { [k in keyof Y]: Unproxify<Y[k]> }
+  : Y
+  : T;
 
 export type ObservableComplexObject<
   RV,
-  // It should be this way but typescript is ignoring undefined for no reason.
-  // Example ObservableComplexObject<File | undefined> Gets File & PrimitiveObservableValue<File | undefined>;
-  // It should be Gets (File | undefined) & PrimitiveObservableValue<File | undefined>
-  // RV & PrimitiveObservableValue<RV>
+// It should be this way but typescript is ignoring undefined for no reason.
+// Example ObservableComplexObject<File | undefined> Gets File & PrimitiveObservableValue<File | undefined>;
+// It should be Gets (File | undefined) & PrimitiveObservableValue<File | undefined>
+// RV & PrimitiveObservableValue<RV>
 > = PrimitiveObservableValue<RV>;
 
 export type ObservableObject<
@@ -498,30 +502,30 @@ export type MutableArrayProperties =
 
 export interface ReadWriteArray<RV, SV>
   extends Pick<Array<RV | SV>, MutableArrayNewItemsProperties>,
-    Omit<Array<SV>, MutableArrayNewItemsProperties> {}
+  Omit<Array<SV>, MutableArrayNewItemsProperties> { }
 export interface ReadWriteMap<K, RV, SV>
   extends Pick<Map<K, RV | SV>, MutableMapNewItemsProperties>,
-    Omit<Map<K, SV>, MutableMapNewItemsProperties> {}
+  Omit<Map<K, SV>, MutableMapNewItemsProperties> { }
 export interface ReadWriteSet<RV, SV>
   extends Pick<Set<RV | SV>, MutableSetNewDeleteItemsProperties>,
-    Omit<Set<SV>, MutableSetNewDeleteItemsProperties> {}
+  Omit<Set<SV>, MutableSetNewDeleteItemsProperties> { }
 
 interface ObservableArrayHelper<RV, SV = ObservableType<RV>>
   extends ReadWriteArray<RV, SV>,
-    ProxiedArrayInterface<RV, SV>,
-    ObservableGettersAndSetters<RV[], SV[]> {}
+  ProxiedArrayInterface<RV, SV>,
+  ObservableGettersAndSetters<RV[], SV[]> { }
 
-export interface ObservableArray<RV> extends ObservableArrayHelper<RV> {}
+export interface ObservableArray<RV> extends ObservableArrayHelper<RV> { }
 
 // TODO: we dont support common interfaces yet
 export interface ObservableMapHelper<K, RV, SV = ObservableType<RV>>
   extends ReadWriteMap<K, RV, SV>,
-    ObservableValue<Map<K, SV>, Map<K, SV>> {}
-export interface ObservableMap<K, RV> extends ObservableMapHelper<K, RV> {}
+  ObservableValue<Map<K, SV>, Map<K, SV>> { }
+export interface ObservableMap<K, RV> extends ObservableMapHelper<K, RV> { }
 export interface ObservableSetHelper<RV, SV = ObservableType<RV>>
   extends ReadWriteSet<RV, SV>,
-    ObservableValue<Set<SV>, Set<SV>> {}
-export interface ObservableSet<RV> extends ObservableSetHelper<RV> {}
+  ObservableValue<Set<SV>, Set<SV>> { }
+export interface ObservableSet<RV> extends ObservableSetHelper<RV> { }
 
 export type ObservableNonNullablePrimitiveType =
   ObservableType<NonNullablePrimitiveType>;
@@ -540,10 +544,10 @@ type DeepReadonlyObject<T> = {
 export type DeepReadonly<T> = T extends (infer R)[]
   ? DeepReadonlyArray<R>
   : T extends Function
-    ? T
-    : T extends object
-      ? DeepReadonlyObject<T>
-      : T;
+  ? T
+  : T extends object
+  ? DeepReadonlyObject<T>
+  : T;
 
 export interface CommonJSXAttrs<T> {
   attrs: Record<string, any> & {
@@ -551,17 +555,17 @@ export interface CommonJSXAttrs<T> {
   };
   jsxTag: T;
 }
-export interface FragmentJSXElement extends CommonJSXAttrs<null | undefined> {}
-export interface ObjectJSXElement extends CommonJSXAttrs<string> {}
+export interface FragmentJSXElement extends CommonJSXAttrs<null | undefined> { }
+export interface ObjectJSXElement extends CommonJSXAttrs<string> { }
 export interface DOMElementJSXElement<
   E extends ParentNode | Element = ParentNode | Element,
-> extends CommonJSXAttrs<E> {}
+> extends CommonJSXAttrs<E> { }
 export interface FunctionJSXElement
-  extends CommonJSXAttrs<CreateFCResult<any>> {}
+  extends CommonJSXAttrs<CreateFCResult<any>> { }
 export interface ClassJSXElement
   extends CommonJSXAttrs<
     (new (...args: any[]) => Element) & { tag: string; extends?: string }
-  > {}
+  > { }
 export type SingleJSXElement =
   | PrimitiveType
   | ObjectJSXElement
@@ -604,7 +608,7 @@ export type FC<T = {}, S extends Element = Element> = (
   namespace?: string,
 ) => SingleJSXElement;
 export interface FCC<T = {}, S extends Element = Element>
-  extends FC<T & { children?: JSX.Element }, S> {}
+  extends FC<T & { children?: JSX.Element }, S> { }
 
 export type PropertyKey = string | number | symbol;
 
@@ -649,8 +653,8 @@ export type ExtendableElements = keyof HTMLElements;
 
 export type CustomElementEvents<E extends EventsType | undefined> = Readonly<{
   [k in keyof E]: E[k] extends EventDispatcher<infer T>
-    ? (detail?: T) => boolean
-    : any;
+  ? (detail?: T) => boolean
+  : any;
 }>;
 
 export interface ExtendsType<T extends ExtendableElements = "div"> {
@@ -728,19 +732,19 @@ export type ExtendsAttributes<
 
 export type MichiElementSelf<O extends MichiElementOptions> = ObservableType<
   O["attributes"] &
-    O["reflectedAttributes"] &
-    O["cssVariables"] &
-    O["reflectedCssVariables"]
+  O["reflectedAttributes"] &
+  O["cssVariables"] &
+  O["reflectedCssVariables"]
 > &
   O["methods"] &
   CustomElementEvents<O["events"]> &
   MichiProperties &
   (O["extends"] extends { class: infer E }
     ? E extends new (
-        ...args: any
-      ) => any
-      ? InstanceType<E>
-      : HTMLElement
+      ...args: any
+    ) => any
+    ? InstanceType<E>
+    : HTMLElement
     : HTMLElement);
 
 export interface CEEvent<T> {
@@ -751,26 +755,26 @@ type MichiElementProps<
   O extends MichiElementOptions,
   S extends HTMLElement = MichiElementSelf<O>,
   Attrs = {
-    [k in keyof O["reflectedAttributes"] as KebabCase<k>]?: ObservableOrConst<
+    [k in keyof O["reflectedAttributes"]as KebabCase<k>]?: ObservableOrConst<
       GetPrimitiveType<O["reflectedAttributes"][k]> | undefined
     >;
   } & {
-    [k in keyof O["reflectedCssVariables"] as KebabCase<k>]?: ObservableOrConst<
+    [k in keyof O["reflectedCssVariables"]as KebabCase<k>]?: ObservableOrConst<
       GetPrimitiveType<O["reflectedCssVariables"][k]> | undefined
     >;
   } & {
-    [k in keyof O["events"] as k extends string
-      ? `on${Lowercase<k>}`
-      : never]?: O["events"][k] extends EventDispatcher<infer D>
-      ? CEEvent<D>
-      : never;
+    [k in keyof O["events"]as k extends string
+    ? `on${Lowercase<k>}`
+    : never]?: O["events"][k] extends EventDispatcher<infer D>
+    ? CEEvent<D>
+    : never;
   } & { name?: string } & GlobalEvents<S>,
 > = MichiAttributes<S> &
   Omit<ExtendsAttributes<O["extends"]>, keyof Attrs> &
   Attrs;
 
 export interface MichiElementClass<O extends MichiElementOptions> {
-  new (props?: MichiElementProps<O>): MichiElementSelf<O>;
+  new(props?: MichiElementProps<O>): MichiElementSelf<O>;
   readonly tag: string;
   readonly extends?: string;
   readonly observedAttributes: Readonly<string[]>;
@@ -843,12 +847,12 @@ export interface ElementFactory {
 export type GetElementProps<El> = El extends (...args: infer Y) => any
   ? Y[0]
   : El extends {
-        new (...args: infer T): any;
-      }
-    ? T[0]
-    : El extends keyof JSX.IntrinsicElements
-      ? JSX.IntrinsicElements[El]
-      : {};
+    new(...args: infer T): any;
+  }
+  ? T[0]
+  : El extends keyof JSX.IntrinsicElements
+  ? JSX.IntrinsicElements[El]
+  : {};
 
 export type UseStyleSheetCallback<T> = (
   tags: string,
@@ -865,7 +869,7 @@ declare global {
     msCrypto?: Crypto;
 
     URLPattern?: {
-      new (
+      new(
         url: Partial<URL> & { baseURL?: string },
       ): {
         test(url: string): boolean;

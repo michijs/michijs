@@ -1,8 +1,8 @@
-import { ProxiedValueV2 } from "../../classes/ProxiedValue";
+import { ProxiedValue } from "../../classes/ProxiedValue";
 import type { ObservableType, ObservableProxyHandler } from "../../types";
 import { useComputedObserve } from "../useComputedObserve";
 
-export class FunctionProxyHandler implements ObservableProxyHandler<ProxiedValueV2<Function>, Function> {
+export class FunctionProxyHandler implements ObservableProxyHandler<ProxiedValue<Function>, Function> {
     rootObservableCallback?: () => ObservableType<any>;
 
     constructor(
@@ -11,8 +11,13 @@ export class FunctionProxyHandler implements ObservableProxyHandler<ProxiedValue
         this.rootObservableCallback = rootObservableCallback;
     }
 
-    apply(target: ProxiedValueV2<Function>, _, args) {
-        // Functions cant change their type
+    apply(target: ProxiedValue<Function>, _, args) {
+        // Functions cant change their type - another function was set
+        if (args.length === 1 && typeof args[0] === 'function') {
+            target.$value = args[0]
+            return;
+        }
+
         if (this.rootObservableCallback)
             return useComputedObserve(
                 () => target.$value(...args),
@@ -20,7 +25,7 @@ export class FunctionProxyHandler implements ObservableProxyHandler<ProxiedValue
             );
         else return target.$value(...args);
     }
-    get(target: ProxiedValueV2<Function>, p: string | symbol, receiver) {
+    get(target: ProxiedValue<Function>, p: string | symbol, receiver) {
         if (p in target) return Reflect.get(target, p, receiver);
         return target.$value[p];
     }

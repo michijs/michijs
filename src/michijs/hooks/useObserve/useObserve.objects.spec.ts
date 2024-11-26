@@ -106,6 +106,12 @@ describe("Observe tests", () => {
       a({ test: 43 });
       expect(typeof a.test).toStrictEqual("function");
     });
+    it("Setting two object values should only notify a single time", () => {
+      const a = useObserve({});
+      a.subscribe(mockCallback)
+      a({ a: 1, b: 2 });
+      expect(mockCallback).toHaveBeenCalledTimes(1);
+    });
   });
   describe("When observing Arrays", () => {
     objectTests(() => []);

@@ -1,15 +1,15 @@
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 import { customMapAndSetClear } from "./customMapAndSetClear";
-import type { ProxiedValueV2 } from "../../classes/ProxiedValue";
+import type { ProxiedValue } from "../../classes/ProxiedValue";
 import { customMapAndSetDelete } from "./customMapAndSetDelete";
 import type { ObservableProxyHandler } from "../../types";
 import { cloneMap } from "../../utils/clone/cloneMap";
 import { unproxify } from "../../utils/unproxify";
 
-export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValueV2<T>, Set<any>> {
+export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValue<T>, Set<any>> {
   $overrides = {
     clear: customMapAndSetClear,
-    add: (target: ProxiedValueV2<T>, bindedTargetProperty: Map<any, any>['set']): Set<any>['add'] => (newValue) => {
+    add: (target: ProxiedValue<T>, bindedTargetProperty: Map<any, any>['set']): Set<any>['add'] => (newValue) => {
       const unproxifiedValue = unproxify(newValue);
       const hasOldValue = target.$value.has(unproxifiedValue);
       if (!hasOldValue) {
@@ -21,14 +21,14 @@ export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> i
     },
     delete: customMapAndSetDelete
   }
-  applyNewValue(target: ProxiedValueV2<T>, unproxifiedValue: Set<any>) {
+  applyNewValue(target: ProxiedValue<T>, unproxifiedValue: Set<any>) {
     target.$value = this.getInitialValue(target, unproxifiedValue);
     const notifiableObservers = target.notifiableObservers;
     if (notifiableObservers)
       target.notifyCurrentValue(notifiableObservers);
     return;
   }
-  apply(target: ProxiedValueV2<T>, _: any, args: any[]) {
+  apply(target: ProxiedValue<T>, _: any, args: any[]) {
     if (args.length > 0) {
       const unproxifiedValue = unproxify(args[0]);
       if (unproxifiedValue instanceof Set)
@@ -38,12 +38,12 @@ export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> i
     }
     return target.valueOf();
   }
-  getInitialValue(target: ProxiedValueV2<T>, unproxifiedValue: Set<any>): T {
+  getInitialValue(target: ProxiedValue<T>, unproxifiedValue: Set<any>): T {
     return cloneMap(unproxifiedValue, (value) =>
       this.createProxyChild(target, value),
     ) as unknown as T;
   }
-  get(target: ProxiedValueV2<T>, p: string | symbol) {
+  get(target: ProxiedValue<T>, p: string | symbol) {
     if (p in target) return Reflect.get(target, p);
     const targetProperty = Reflect.get(
       target.$value,

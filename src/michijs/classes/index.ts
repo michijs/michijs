@@ -7,3 +7,4 @@ export { HistoryManager } from "./HistoryManager";
 export { VirtualFragment } from "./VirtualFragment";
 export { MappedIdGenerator } from "./MappedIdGenerator";
 export { IdGenerator } from "./IdGenerator";
+export { ProxiedArray } from "./ProxiedArray";

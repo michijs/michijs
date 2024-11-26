@@ -1,4 +1,4 @@
-import { ProxiedValueV2 } from "../classes/ProxiedValue";
+import { ProxiedValue } from "../classes/ProxiedValue";
 import type { ObservableType, ParentSubscription } from "../types";
 import { ObservableProxyHandler } from "./proxyHandlers/ObservableProxyHandler";
 
@@ -11,7 +11,7 @@ export function useObserveInternal<T>(
    */
   rootObservableCallback?: () => ObservableType<unknown>,
 ): ObservableType<T> {
-  return new Proxy(new ProxiedValueV2<any>(item, parentSubscription, rootObservableCallback), observableProxyHandler) as unknown as ObservableType<T>;
+  return new Proxy(new ProxiedValue<any>(item, parentSubscription, rootObservableCallback), observableProxyHandler) as unknown as ObservableType<T>;
 }
 
 /**

@@ -1,10 +1,10 @@
-import { ProxiedValueV2 } from "../../classes/ProxiedValue";
+import { ProxiedValue } from "../../classes/ProxiedValue";
 import type { ObservableProxyHandler } from "../../types";
 import { unproxify } from "../../utils/unproxify";
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 
-export class DateProxyHandler extends ObjectProxyHandler<Date> implements ObservableProxyHandler<ProxiedValueV2<Date>, Date> {
-  apply(target: ProxiedValueV2<Date>, _, args: any[]) {
+export class DateProxyHandler extends ObjectProxyHandler<Date> implements ObservableProxyHandler<ProxiedValue<Date>, Date> {
+  apply(target: ProxiedValue<Date>, _, args: any[]) {
     if (args.length > 0) {
       const unproxifiedValue = unproxify(args[0]);
       if (unproxifiedValue instanceof Date)
@@ -14,7 +14,7 @@ export class DateProxyHandler extends ObjectProxyHandler<Date> implements Observ
     }
     return target.valueOf();
   }
-  applyNewValue(target: ProxiedValueV2<Date>, unproxifiedValue: Date) {
+  applyNewValue(target: ProxiedValue<Date>, unproxifiedValue: Date) {
     const newTime = unproxifiedValue.getTime();
     const oldValue = target.$value.getTime();
     target.$value.setTime(newTime);
@@ -22,7 +22,7 @@ export class DateProxyHandler extends ObjectProxyHandler<Date> implements Observ
     if (notifiableObservers && newTime !== oldValue)
       target.notifyCurrentValue(notifiableObservers);
   }
-  get(target: ProxiedValueV2<Date>, property: string | symbol) {
+  get(target: ProxiedValue<Date>, property: string | symbol) {
     if (property in target) return Reflect.get(target, property);
     const targetProperty = Reflect.get(target.$value, property);
     if (typeof property === "string" && property.startsWith("set")) {
