@@ -8,13 +8,15 @@ const times = 100;
 
 const run = () =>
   new Promise<void>((resolve) => {
-    const process = spawn("bun", ["run", "benchmark-michijs"], { stdio: "inherit" });
+    const process = spawn("bun", ["run", "benchmark-michijs"], {
+      stdio: "inherit",
+    });
 
     process.on("close", (code) => {
       if (code === 0) {
         resolve();
       } else {
-        console.error(`Process exited with code ${code}`)
+        console.error(`Process exited with code ${code}`);
         resolve();
       }
     });
@@ -26,11 +28,16 @@ let bestResults = jsonContent[packagejson.version];
 
 for (let i = 0; i < times; i++) {
   await run();
-  const newResults = JSON.parse(readFileSync(michijsJsonPath, "utf-8"))[packagejson.version] || {};
+  const newResults =
+    JSON.parse(readFileSync(michijsJsonPath, "utf-8"))[packagejson.version] ||
+    {};
 
   bestResults = Object.entries(newResults).reduce(
     (previousValue, [key, newResultsValue]) => {
-      previousValue[key] = Math.min(newResultsValue as number, bestResults[key] ?? Infinity);
+      previousValue[key] = Math.min(
+        newResultsValue as number,
+        bestResults[key] ?? Number.POSITIVE_INFINITY,
+      );
       return previousValue;
     },
     {},
@@ -46,4 +53,4 @@ for (let i = 0; i < times; i++) {
   );
   writeFileSync(michijsJsonPath, resultsString);
 }
-updateDiff(bestResults)
+updateDiff(bestResults);

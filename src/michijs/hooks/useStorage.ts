@@ -39,7 +39,7 @@ export function useStorage<T extends object>(
       if (isNil(newValue)) storage.removeItem(key);
       else storage.setItem(key, JSON.stringify(newValue));
     });
-  };
+  }
 
   if (storage instanceof CookieStorage) {
     CookieStorage.cookieStoreObservable.subscribe((ev) => {

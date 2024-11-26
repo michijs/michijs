@@ -118,9 +118,10 @@ export async function makePerformanceTests(
     const className = await classNameProperty.jsonValue();
     expect(className).toEqual("danger");
     await select(998);
-    
+
     const tableBodySecondTime = await getTableBody();
-    const classNamePropertySecondTime = await tableBodySecondTime[999].getProperty("className");
+    const classNamePropertySecondTime =
+      await tableBodySecondTime[999].getProperty("className");
     const classNameSecondTime = await classNamePropertySecondTime.jsonValue();
     expect(classNameSecondTime).not.toBe("danger");
   });

@@ -21,9 +21,10 @@ export function setProperty(
         newPropertyValue,
         el,
         updatePropertyCallback(propertyName),
-        shouldValidateInitialValue && el[propertyName] === (newPropertyValue as any).valueOf(),
+        shouldValidateInitialValue &&
+          el[propertyName] === (newPropertyValue as any).valueOf(),
       );
-    return
+    return;
   }
   if (name.startsWith("on"))
     return el.addEventListener(

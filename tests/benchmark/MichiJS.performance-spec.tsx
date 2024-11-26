@@ -48,7 +48,7 @@ describe("Performance tests - MichiJS", () => {
     );
     writeFileSync("./tests/benchmark/results/michijs.json", resultsString);
     console.log("Results: ", resultsString);
-    updateDiff(results)
+    updateDiff(results);
     serverProcess.kill(2);
     browser.close();
   });

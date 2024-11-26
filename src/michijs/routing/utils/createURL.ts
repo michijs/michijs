@@ -12,7 +12,8 @@ export const createURL = (
 ) => {
   const url = new URL(encodeURI(normalizeURL(input)), options?.baseURL);
   if (options?.searchParams)
-    for (const [name, value] of Object.entries(options.searchParams)) setSearchParam(url, name, value)
+    for (const [name, value] of Object.entries(options.searchParams))
+      setSearchParam(url, name, value);
   const hashValue = options?.hash?.valueOf();
   if (hashValue) url.hash = hashValue;
   return url;
