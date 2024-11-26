@@ -7,8 +7,10 @@ import { getObservables } from "../utils/getObservables";
 import { bindObservableToRef } from "../utils/bindObservableToRef";
 import { unproxify } from "../utils/unproxify";
 
+type ObservableAriaMixin = {[k in keyof Omit<ARIAMixin, "role">]?: ObservableOrConst<ARIAMixin[k]>}
+
 export interface ElementInternalsProps
-  extends Omit<Partial<ARIAMixin>, "role"> {
+  extends ObservableAriaMixin {
   /**
    * Form controls usually expose a "value" property
    */

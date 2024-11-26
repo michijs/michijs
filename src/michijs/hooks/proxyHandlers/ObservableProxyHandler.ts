@@ -5,9 +5,10 @@ export class ObservableProxyHandler<T>
 {
   callIfExists(name: keyof ProxyHandler<ProxiedValue<T>>, ...args: unknown[]) {
     const target = args[0] as ProxiedValue<T>;
-    // @ts-ignore
     return target.handler[name]
+    // @ts-ignore
       ? target.handler[name](...args)
+      // @ts-ignore
       : Reflect[name](...args);
   }
   set(target: ProxiedValue<T>, property, newValue, receiver) {
