@@ -14,7 +14,7 @@ export const safariDefine: typeof window.customElements.define = (
 };
 
 const observer = new MutationObserver((mutationList) => {
-  mutationList.forEach((mutation) => {
+  for (const mutation of mutationList) {
     switch (mutation.type) {
       case "attributes":
         // @ts-ignore
@@ -25,7 +25,7 @@ const observer = new MutationObserver((mutationList) => {
           mutation.target.getAttribute(mutation.attributeName),
         );
     }
-  });
+  };
 });
 
 export const overrideDocumentCreateElement = () => {

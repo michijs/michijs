@@ -7,7 +7,6 @@ export function setProperties(
   contextElement?: Element,
   shouldValidateInitialValue?: boolean,
 ): void {
-  Object.entries(attributes).forEach(([name, newValue]) =>
-    setProperty(el, name, newValue, contextElement, shouldValidateInitialValue),
-  );
+  for (const [name, newValue] of Object.entries(attributes))
+    setProperty(el, name, newValue, contextElement, shouldValidateInitialValue)
 }

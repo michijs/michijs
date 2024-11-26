@@ -43,6 +43,7 @@
     "bun-link": "bun link --force",
     "link": "bunx concurrently bun:dist-w bun:bun-link",
     "generate-types": "bun run ./tasks/generateTypes.ts",
+    "run-benchmark-and-save-best-result": "bun run ./tasks/runAndSaveBestRun.ts",
     "benchmark-michijs": "bun test --update-snapshots --timeout 30000 ./tests/benchmark/MichiJS.performance-spec.tsx",
     "benchmark-vanilla": "bun test --update-snapshots --timeout 30000 ./tests/benchmark/Vanilla.performance-spec.tsx",
     "benchmark": "bun run benchmark-michijs && bun run benchmark-vanilla",

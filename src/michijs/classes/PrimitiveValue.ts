@@ -8,8 +8,9 @@ export class PrimitiveValue<T>
     initialValue: T,
   ) {
     // @ts-ignore
-    super((newValue) => {
-      if (newValue) {
+    super((...args) => {
+      if (args.length > 0) {
+        const newValue = args[0];
         this.$value = newValue;
         this.notify(newValue)
         return;

@@ -5,8 +5,8 @@ import { spawn } from "child_process";
 import { omit } from "@michijs/michijs";
 import { writeFileSync } from "fs";
 import michijs from "./results/michijs.json";
-import vanillajs from "./results/vanillajs.json";
 import packagejson from "../../package.json";
+import { updateDiff } from "./updateDiff";
 const serverProcess = spawn("bun", ["run", "start"], {
   stdio: "inherit",
   env: { ...process.env, NODE_ENV: "TESTING" },
@@ -48,20 +48,7 @@ describe("Performance tests - MichiJS", () => {
     );
     writeFileSync("./tests/benchmark/results/michijs.json", resultsString);
     console.log("Results: ", resultsString);
-    const diff = Object.entries(results).reduce(
-      (previousValue, [key, value]) => {
-        // Bigger values are worst
-        previousValue[key] = Math.max(
-          0,
-          Number((value - vanillajs[key]).toFixed(2)),
-        );
-        return previousValue;
-      },
-      {},
-    );
-    const diffString = JSON.stringify(diff, undefined, 2);
-    console.log("Diff results: ", diffString);
-    writeFileSync("./tests/benchmark/results/diff.json", diffString);
+    updateDiff(results)
     serverProcess.kill(2);
     browser.close();
   });

@@ -20,7 +20,7 @@ const MichiSlot = createCustomElement("michi-slot", {
 
       const callback = (nodeList: NodeList) => {
         const name = this.name();
-        Array.from(nodeList).forEach((x) => {
+        for (const x of nodeList) {
           if (
             [this.nodeName, "MICHI-GENERIC-ELEMENT", "STYLE"].includes(
               x.nodeName,
@@ -38,14 +38,13 @@ const MichiSlot = createCustomElement("michi-slot", {
               this.append(x);
               this.slotchange();
             }
-        });
+        }
       };
 
       if (hostElement) {
         const observer = new MutationObserver((mutations) => {
-          mutations.forEach((mutation) => {
+          for (const mutation of mutations)
             if (mutation.addedNodes.length > 0) callback(mutation.addedNodes);
-          });
         });
         observer.observe(hostElement, {
           childList: true,

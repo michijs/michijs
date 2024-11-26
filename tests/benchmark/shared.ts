@@ -117,6 +117,12 @@ export async function makePerformanceTests(
     const classNameProperty = await tableBody[999].getProperty("className");
     const className = await classNameProperty.jsonValue();
     expect(className).toEqual("danger");
+    await select(998);
+    
+    const tableBodySecondTime = await getTableBody();
+    const classNamePropertySecondTime = await tableBodySecondTime[999].getProperty("className");
+    const classNameSecondTime = await classNamePropertySecondTime.jsonValue();
+    expect(classNameSecondTime).not.toBe("danger");
   });
   it("swap a row (1000 rows)", async () => {
     await create1000Rows();

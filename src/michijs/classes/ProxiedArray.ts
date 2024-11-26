@@ -49,34 +49,34 @@ export class ProxiedArray<V>
         { as, renderItem, useTemplate, ...attrs }: ListProps<E, V>,
         contextElement?: Element,
         contextNamespace?: string,
-    )=> Node
+    ) => Node
 
     $clear(): void {
-        this.#targets.forEach((target) => target.clear());
+        for (const target of this.#targets) target.clear();     
         this.length = 0;
     }
 
     $replace(...items: V[]): number {
         if (this.length) {
-            this.#targets.forEach((target) => target.replace(items));
+            for (const target of this.#targets) target.replace(items)
             this.length = items.length;
             items.forEach((x, i) => this[i] = x);
         } else {
-            this.#targets.forEach((target) => target.appendItems(items));
+            for (const target of this.#targets) target.appendItems(items)
             super.push(...items)
         };
         return items.length;
     }
 
     $remove(index: number): number {
-        this.#targets.forEach((target) => target.remove(index));
+        for (const target of this.#targets) target.remove(index);
         super.splice(index, 1);
         return this.length;
     }
 
     $swap(indexA: number, indexB: number): boolean | void {
         if (this.length > indexA && this.length > indexB) {
-            this.#targets.forEach((target) => target.swap(indexA, indexB));
+            for (const target of this.#targets) target.swap(indexA, indexB);
             [this[indexA], this[indexB]] = [
                 this[indexB],
                 this[indexA],
@@ -86,29 +86,29 @@ export class ProxiedArray<V>
     }
 
     override pop(): V | undefined {
-        this.#targets.forEach((target) => target.pop());
+        for (const target of this.#targets) target.pop();
         return super.pop();
     }
 
     override push(...items: V[]): number {
         if (items.length > 0)
-            this.#targets.forEach((target) => target.appendItems(items));
+            for (const target of this.#targets) target.appendItems(items);
         return super.push(...items);
     }
     override reverse(): V[] {
-        this.#targets.forEach((target) => target.reverse());
+        for (const target of this.#targets) target.reverse();
         return super.reverse();
     }
     override shift(): V | undefined {
-        this.#targets.forEach((target) => target.shift());
+        for (const target of this.#targets) target.shift();
         return super.shift();
     }
     override unshift(...items: V[]): number {
-        this.#targets.forEach((target) => target.prependItems(items));
+        for (const target of this.#targets) target.prependItems(items);
         return super.unshift(...items);
     }
     override fill(item: V, start?: number, end?: number) {
-        this.#targets.forEach((target) => target.fill(item, start, end));
+        for (const target of this.#targets) target.fill(item, start, end);
         super.fill(item, start, end);
         return this
     }
@@ -130,20 +130,17 @@ export class ProxiedArray<V>
                 },
                 new Array<{ currentIndex: number; newIndex: number }>(),
             );
-            this.#targets.forEach((target) => {
-                indexesArray.forEach(({ currentIndex, newIndex }) => {
+
+            for (const target of this.#targets)
+                for (const { currentIndex, newIndex } of indexesArray)
                     target.swap(currentIndex, newIndex);
-                });
-            });
         }
         return this;
     }
     override splice(start: number, deleteCount = 0, ...items: V[]): V[] {
         if (start === 0 && deleteCount >= this.length) this.$replace(...items);
         else {
-            this.#targets.forEach((target) =>
-                target.splice(start, deleteCount, items),
-            );
+            for (const target of this.#targets) target.splice(start, deleteCount, items)
             super.splice(start, deleteCount, ...items);
         }
         return this;

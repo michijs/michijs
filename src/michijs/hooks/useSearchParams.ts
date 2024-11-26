@@ -35,9 +35,8 @@ SearchParams.subscribe((newValue) => {
   // Prevents pushing new urls while updating search params
   if (!isUpdating) {
     const newUrl = new URL(location.href);
-    Object.keys(newValue).forEach((x) => {
+    for (const x in newValue)
       setSearchParam(newUrl, x, newValue[x]);
-    });
     if (location.href !== newUrl.href) HistoryManager.push(newUrl);
   }
 });

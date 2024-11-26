@@ -36,7 +36,7 @@ export class ProxiedValue<T>
     parentSubscription?: ParentSubscription<T>,
     rootObservableCallback?: () => ObservableType<any>,
     handler = getHandler(initialValue, parentSubscription, rootObservableCallback),
-    setterAndGetterFunction: ObservableGettersAndSetters<T, T> = ((args) => this.handler.apply(this, this, [args])) as unknown as ObservableGettersAndSetters<T, T>,
+    setterAndGetterFunction: ObservableGettersAndSetters<T, T> = ((...args) => this.handler.apply(this, this, args)) as unknown as ObservableGettersAndSetters<T, T>,
   ) {
     super(setterAndGetterFunction);
     this.handler = handler;

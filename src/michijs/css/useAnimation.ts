@@ -9,8 +9,8 @@ import { removeNullableFromObject } from "../utils/removeNullableFromObject";
  */
 type TransitionKeyframes =
   | ({
-      [k in keyof Omit<CSSProperties, "offset">]?: CSSProperties[k][];
-    } & { offset?: number[] })
+    [k in keyof Omit<CSSProperties, "offset">]?: CSSProperties[k][];
+  } & { offset?: number[] })
   | (Omit<CSSProperties, "offset"> & { offset?: number })[];
 
 const idGenerator = new IdGenerator();
@@ -54,7 +54,8 @@ export const useAnimation = (
     });
   } else {
     const { offset, ...keyframesWithoutOffset } = keyframes;
-    Object.entries(keyframesWithoutOffset).forEach(([key, value]) => {
+
+    for (const [key, value] of Object.entries(keyframesWithoutOffset)) {
       value?.forEach((x, i) => {
         const index = getOffset(i, value.length, offset?.[i]);
         keyframesCssObject[index] = {
@@ -62,7 +63,7 @@ export const useAnimation = (
           [key]: x,
         };
       });
-    });
+    };
   }
 
   return [

@@ -3,8 +3,8 @@ import { create } from "./create";
 
 const appendChildCallback =
   (node: ParentNode, contextElement?: Element, contextNamespace?: string) =>
-  (x: SingleJSXElement) =>
-    node.appendChild(create(x, contextElement, contextNamespace));
+    (x: SingleJSXElement) =>
+      node.appendChild(create(x, contextElement, contextNamespace));
 
 export const setChildren = (
   node: ParentNode,
@@ -18,7 +18,7 @@ export const setChildren = (
       contextElement,
       contextNamespace,
     );
-    if (Array.isArray(children)) children.forEach(callback);
+    if (Array.isArray(children)) for (const x of children) callback(x);
     else callback(children);
   }
 };

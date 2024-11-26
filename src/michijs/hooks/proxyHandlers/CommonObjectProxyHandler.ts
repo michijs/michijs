@@ -18,9 +18,8 @@ export class CommonObjectProxyHandler<T extends object> extends ObjectProxyHandl
   }
   applyNewValue(target: ProxiedValue<T>, unproxifiedValue: any) {
     target.startTransaction();
-    for (const key in { ...target.$value, ...unproxifiedValue }) {
+    for (const key in { ...target.$value, ...unproxifiedValue })
       this.setNewValue(target, key, unproxifiedValue[key]);
-    }
     target.endTransaction();
   }
   getInitialValue(target: ProxiedValue<T>, unproxifiedValue: any): T {
