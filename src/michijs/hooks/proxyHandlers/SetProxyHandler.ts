@@ -23,9 +23,7 @@ export class SetProxyHandler<T extends Set<any>> extends ObjectProxyHandler<T> i
   }
   applyNewValue(target: ProxiedValue<T>, unproxifiedValue: Set<any>) {
     target.$value = this.getInitialValue(target, unproxifiedValue);
-    const notifiableObservers = target.notifiableObservers;
-    if (notifiableObservers)
-      target.notifyCurrentValue(notifiableObservers);
+    target.notifyCurrentValue();
     return;
   }
   apply(target: ProxiedValue<T>, _: any, args: any[]) {

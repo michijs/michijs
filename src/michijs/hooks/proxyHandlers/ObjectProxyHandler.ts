@@ -1,4 +1,5 @@
 import { ProxiedValue } from "../../classes/ProxiedValue";
+import { unproxify } from "../../utils";
 import { SharedProxyHandler } from "./SharedProxyHandler";
 
 export class ObjectProxyHandler<T extends object> extends SharedProxyHandler<T> implements ProxyHandler<ProxiedValue<T>> {
@@ -30,11 +31,14 @@ export class ObjectProxyHandler<T extends object> extends SharedProxyHandler<T> 
   }
 
   set(target: ProxiedValue<T>, p: string | symbol, newValue: any): boolean {
+    return this.setNewValue(target,p, unproxify(newValue))
+  }
+  setNewValue(target: ProxiedValue<T>, p: string | symbol, unproxifiedValue: any): boolean {
     if (p in target.$value) {
-      target.$value[p](newValue)
+      target.$value[p](unproxifiedValue)
       return true;
     } else {
-      target.$value[p] = this.createProxyChild(target, newValue)
+      target.$value[p] = this.createProxyChild(target, unproxifiedValue)
       target.$value[p].notifyCurrentValue();
       return true;
     }

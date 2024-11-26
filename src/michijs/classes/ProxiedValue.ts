@@ -11,33 +11,24 @@ import type {
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { Observable } from "./Observable";
 import { unproxify } from "../utils/unproxify";
-import {getHandler} from '../hooks/proxyHandlers/getHandler'
+import { getHandler } from '../hooks/proxyHandlers/getHandler'
 
 export class ProxiedValue<T>
   extends Observable<T>
-  implements ProxiedValueInterface<T, T>
-{
+  implements ProxiedValueInterface<T, T> {
   $value: T;
   handler: ObservableProxyHandler<any, any>;
   parentSubscription: ParentSubscription<T> | undefined;
-
-  static transactionsInProgress = 0;
-  static valuesToNotifyOnTransactionFinish = new Set<
-    InstanceType<typeof ProxiedValue<any>>
-  >();
-
-  static startTransaction(): void {
-    ProxiedValue.transactionsInProgress++;
+  needsToNotify: boolean | undefined;
+  onTransaction: boolean | undefined;
+  startTransaction() {
+    this.onTransaction = true;
+    this.needsToNotify = false;
   }
-  static endTransaction(): void {
-    if (ProxiedValue.transactionsInProgress === 1) {
-      ProxiedValue.valuesToNotifyOnTransactionFinish.forEach((x) => {
-        x.forceNotifyCurrentValue();
-      });
-      ProxiedValue.valuesToNotifyOnTransactionFinish.clear();
-      // Intentionally at the end to avoid notifying twice
-    }
-    ProxiedValue.transactionsInProgress--;
+  endTransaction() {
+    this.onTransaction = false;
+    if (this.needsToNotify)
+      this.notifyCurrentValue();
   }
 
   constructor(
@@ -45,7 +36,7 @@ export class ProxiedValue<T>
     parentSubscription?: ParentSubscription<T>,
     rootObservableCallback?: () => ObservableType<any>,
     handler = getHandler(initialValue, parentSubscription, rootObservableCallback),
-    setterAndGetterFunction: ObservableGettersAndSetters<T, T> = ((args) => this.handler.apply(this, this, [args])) as unknown as ObservableGettersAndSetters<T,T>,
+    setterAndGetterFunction: ObservableGettersAndSetters<T, T> = ((args) => this.handler.apply(this, this, [args])) as unknown as ObservableGettersAndSetters<T, T>,
   ) {
     super(setterAndGetterFunction);
     this.handler = handler;
@@ -56,19 +47,14 @@ export class ProxiedValue<T>
     // this[Symbol.toPrimitive] = () => this.valueOf();
   }
 
-  notifyCurrentValue(
-    notifiableObservers: NotifiableObservers<T> = this.notifiableObservers,
-  ): void {
-    if (notifiableObservers)
-      if (ProxiedValue.transactionsInProgress > 0)
-        ProxiedValue.valuesToNotifyOnTransactionFinish.add(this);
-      else this.forceNotifyCurrentValue(notifiableObservers);
-  }
-
-  forceNotifyCurrentValue(
-    notifiableObservers: NotifiableObservers<T> = this.notifiableObservers,
-  ): void {
-    this.notify(this.valueOf(), notifiableObservers);
+  notifyCurrentValue(): void {
+    if (this.onTransaction)
+      this.needsToNotify = true;
+    else {
+      const notifiableObservers = this.notifiableObservers;
+      if (notifiableObservers)
+        this.notify(this.valueOf(), notifiableObservers);
+    }
   }
 
   get notifiableObservers(): NotifiableObservers<T> {

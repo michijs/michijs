@@ -7,6 +7,7 @@ import { MapProxyHandler } from "./MapProxyHandler";
 import { SetProxyHandler } from "./SetProxyHandler";
 import { ArrayProxyHandler } from "./ArrayProxyHandler";
 import { CommonObjectProxyHandler } from "./CommonObjectProxyHandler";
+import { getValue } from "./getValue";
 
 export const getObjectHandler = (value: unknown, parentSubscription?: ParentSubscription<any>, rootObservableCallback?: () => ObservableType<any>): ObservableProxyHandler<any, any> | void => {
   if(isPrototypeOfObject(value))
@@ -21,8 +22,8 @@ export const getObjectHandler = (value: unknown, parentSubscription?: ParentSubs
     return new MapProxyHandler(parentSubscription, rootObservableCallback);
 }
 
-export const getHandler = (unproxifiedValue: unknown, parentSubscription?: ParentSubscription<any>, rootObservableCallback?: () => ObservableType<any>): ObservableProxyHandler<any, any> => {
-  const typeOfValue = typeof unproxifiedValue;
+export const getHandler = (value: unknown, parentSubscription?: ParentSubscription<any>, rootObservableCallback?: () => ObservableType<any>): ObservableProxyHandler<any, any> => {
+  const typeOfValue = typeof getValue(value);
 
   switch (typeOfValue) {
     // Intentional order
@@ -30,8 +31,8 @@ export const getHandler = (unproxifiedValue: unknown, parentSubscription?: Paren
       return new FunctionProxyHandler(rootObservableCallback);
     }
     case "object": {
-      if (unproxifiedValue) {
-        const newHandler = getObjectHandler(unproxifiedValue, parentSubscription, rootObservableCallback);
+      if (value) {
+        const newHandler = getObjectHandler(value, parentSubscription, rootObservableCallback);
         if(newHandler)
           return newHandler
       }

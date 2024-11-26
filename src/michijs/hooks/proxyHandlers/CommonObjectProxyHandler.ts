@@ -17,11 +17,11 @@ export class CommonObjectProxyHandler<T extends object> extends ObjectProxyHandl
     return target.valueOf();
   }
   applyNewValue(target: ProxiedValue<T>, unproxifiedValue: any) {
-    ProxiedValue.startTransaction();
+    target.startTransaction();
     for (const key in { ...target.$value, ...unproxifiedValue }) {
-      this.set(target, key, unproxifiedValue[key]);
+      this.setNewValue(target, key, unproxifiedValue[key]);
     }
-    ProxiedValue.endTransaction();
+    target.endTransaction();
   }
   getInitialValue(target: ProxiedValue<T>, unproxifiedValue: any): T {
     return cloneCommonObject(unproxifiedValue as object, (value) =>
@@ -32,7 +32,7 @@ export class CommonObjectProxyHandler<T extends object> extends ObjectProxyHandl
     if (p in target)
       return Reflect.get(target, p)
     if (!(p in target.$value))
-      this.set(target, p, undefined);
+      this.setNewValue(target, p, undefined);
     return Reflect.get(target.$value, p, target.$value);
   }
 }

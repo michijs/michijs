@@ -3,30 +3,30 @@ import type { ObservableProxyHandler } from "../../types";
 import { getObjectHandler } from './getHandler'
 import { SharedProxyHandler } from './SharedProxyHandler'
 import { FunctionProxyHandler } from "./FunctionProxyHandler";
-import { unproxify } from "../../utils/unproxify";
 import { isNil } from "../../utils";
+import { getValue } from "./getValue";
 
 export class PrimitiveProxyHandler<T> extends SharedProxyHandler<T> implements ObservableProxyHandler<ProxiedValue<T>, T> {
 
   apply(target: ProxiedValue<T>, _, args: any[]) {
     if (args.length > 0) {
-      const unproxifiedValue = unproxify(args[0]);
-      switch (typeof unproxifiedValue) {
+      const value = getValue(args[0]);
+      switch (typeof value) {
         // Intentional order
         // TODO: check this
         case "function": {
-          return this.updateHandlerAndValue(target, unproxifiedValue, new FunctionProxyHandler(this.rootObservableCallback));
+          return this.updateHandlerAndValue(target, value, new FunctionProxyHandler(this.rootObservableCallback));
         }
         case "object":
           // Ignore null
-          if (unproxifiedValue) {
-            const newHandler = getObjectHandler(unproxifiedValue, this.parentSubscription, this.rootObservableCallback);
+          if (value) {
+            const newHandler = getObjectHandler(value, this.parentSubscription, this.rootObservableCallback);
             if (newHandler)
-              return this.updateHandlerAndValue(target, unproxifiedValue, newHandler);
+              return this.updateHandlerAndValue(target, value, newHandler);
           }
         // If its an non observable object continue
         default: 
-          this.applyNewValue(target, unproxifiedValue)
+          this.applyNewValue(target, value)
       }
       return;
     }
@@ -36,9 +36,8 @@ export class PrimitiveProxyHandler<T> extends SharedProxyHandler<T> implements O
     const oldValue = target.$value;
     target.$value = unproxifiedValue;
 
-    const notifiableObservers = target.notifiableObservers;
-    if (notifiableObservers && unproxifiedValue !== oldValue)
-      target.notifyCurrentValue(notifiableObservers);
+    if (unproxifiedValue !== oldValue)
+      target.notifyCurrentValue();
   }
 
   get(target: ProxiedValue<T>, p: string | symbol, receiver) {

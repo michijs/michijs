@@ -34,9 +34,7 @@ export class MapProxyHandler<T extends Map<any, any>> extends ObjectProxyHandler
   }
   applyNewValue(target: ProxiedValue<T>, unproxifiedValue: Map<any, any>) {
     target.$value = this.getInitialValue(target, unproxifiedValue);
-    const notifiableObservers = target.notifiableObservers;
-    if (notifiableObservers)
-      target.notifyCurrentValue(notifiableObservers);
+    target.notifyCurrentValue();
   }
   getInitialValue(target: ProxiedValue<T>, unproxifiedValue: Map<any, any>): T {
     return cloneMap(unproxifiedValue, (value) =>

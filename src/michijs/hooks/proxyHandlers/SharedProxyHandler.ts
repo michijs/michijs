@@ -9,7 +9,7 @@ export class SharedProxyHandler<T> {
   rootObservableCallback?: () => ObservableType<any>;
   private $ownSubscription?: ParentSubscription<T>;
   getOwnSubscription(target: ProxiedValue<T>): ParentSubscription<T> {
-    return this.$ownSubscription ??= createParentSubscription(() => target);
+    return this.$ownSubscription ??= createParentSubscription(target);
   }
   createProxyChild(target: ProxiedValue<T>, newValue): ObservableType<unknown> {
     return useObserveInternal<any>(

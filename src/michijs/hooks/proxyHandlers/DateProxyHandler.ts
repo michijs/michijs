@@ -18,9 +18,8 @@ export class DateProxyHandler extends ObjectProxyHandler<Date> implements Observ
     const newTime = unproxifiedValue.getTime();
     const oldValue = target.$value.getTime();
     target.$value.setTime(newTime);
-    const notifiableObservers = target.notifiableObservers;
-    if (notifiableObservers && newTime !== oldValue)
-      target.notifyCurrentValue(notifiableObservers);
+    if (newTime !== oldValue)
+      target.notifyCurrentValue();
   }
   get(target: ProxiedValue<Date>, property: string | symbol) {
     if (property in target) return Reflect.get(target, property);
