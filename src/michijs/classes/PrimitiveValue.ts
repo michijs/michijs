@@ -1,17 +1,14 @@
 import { hasToJSON } from "../typeWards/hasToJSON";
 import { Observable } from "./Observable";
 
-export class PrimitiveValue<T>
-  extends Observable<T> {
+export class PrimitiveValue<T> extends Observable<T> {
   $value: T;
-  constructor(
-    initialValue: T,
-  ) {
+  constructor(initialValue: T) {
     // @ts-ignore
     super((newValue) => {
       if (newValue) {
         this.$value = newValue;
-        this.notify(newValue)
+        this.notify(newValue);
         return;
       }
       return this.$value;

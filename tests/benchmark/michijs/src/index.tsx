@@ -97,8 +97,7 @@ const adjectives = [
     if (selectedItem) selectedItem.selected(null);
     selectedItem = row;
   },
-  deleteItem = (id: number) =>
-    rows.$remove(rows.findIndex((x) => x.id === id)),
+  deleteItem = (id: number) => rows.$remove(rows.findIndex((x) => x.id === id)),
   swapRows = () => rows.$swap(1, 998);
 
 let nextId = 1,
