@@ -1,7 +1,10 @@
-import { ProxiedValue } from "../../classes/ProxiedValue";
+import type { ProxiedValue } from "../../classes/ProxiedValue";
 import { SharedProxyHandler } from "./SharedProxyHandler";
 
-export class ObjectProxyHandler<T extends object> extends SharedProxyHandler<T> implements ProxyHandler<ProxiedValue<T>> {
+export class ObjectProxyHandler<T extends object>
+  extends SharedProxyHandler<T>
+  implements ProxyHandler<ProxiedValue<T>>
+{
   deleteProperty(target: ProxiedValue<T>, p: string | symbol) {
     if (p in target) return Reflect.deleteProperty(target, p);
     const deletedProperty = target.$value[p];
@@ -31,10 +34,10 @@ export class ObjectProxyHandler<T extends object> extends SharedProxyHandler<T> 
 
   set(target: ProxiedValue<T>, p: string | symbol, newValue: any): boolean {
     if (p in target.$value) {
-      target.$value[p](newValue)
+      target.$value[p](newValue);
       return true;
     } else {
-      target.$value[p] = this.createProxyChild(target, newValue)
+      target.$value[p] = this.createProxyChild(target, newValue);
       target.$value[p].notifyCurrentValue();
       return true;
     }

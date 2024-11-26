@@ -6,37 +6,43 @@ import type { ObservableProxyHandler } from "../../types";
 import { cloneMap } from "../../utils/clone/cloneMap";
 import { unproxify } from "../../utils/unproxify";
 
-export class MapProxyHandler<T extends Map<any, any>> extends ObjectProxyHandler<T> implements ObservableProxyHandler<ProxiedValue<T>, Map<any, any>> {
+export class MapProxyHandler<T extends Map<any, any>>
+  extends ObjectProxyHandler<T>
+  implements ObservableProxyHandler<ProxiedValue<T>, Map<any, any>>
+{
   $overrides = {
     clear: customMapAndSetClear,
-    set: (target: ProxiedValue<T>, bindedTargetProperty: Map<any, any>['set']): Map<any, any>['set'] => (key, newValue) => {
-      const hasOldValue = target.$value.has(key);
-      if (hasOldValue) {
-        const oldValue = target.$value.get(key);
-        return oldValue(newValue);
-      }
-      const observedItem = this.createProxyChild(target, newValue);
-      const result = bindedTargetProperty(key, observedItem);
-      observedItem.notifyCurrentValue();
-      return result;
-    },
-    delete: customMapAndSetDelete
-  }
+    set:
+      (
+        target: ProxiedValue<T>,
+        bindedTargetProperty: Map<any, any>["set"],
+      ): Map<any, any>["set"] =>
+      (key, newValue) => {
+        const hasOldValue = target.$value.has(key);
+        if (hasOldValue) {
+          const oldValue = target.$value.get(key);
+          return oldValue(newValue);
+        }
+        const observedItem = this.createProxyChild(target, newValue);
+        const result = bindedTargetProperty(key, observedItem);
+        observedItem.notifyCurrentValue();
+        return result;
+      },
+    delete: customMapAndSetDelete,
+  };
   apply(target: ProxiedValue<T>, _: any, args: any[]) {
     if (args.length > 0) {
       const unproxifiedValue = unproxify(args[0]);
       if (unproxifiedValue instanceof Map)
         return this.applyNewValue(target, unproxifiedValue);
-      else
-        return this.updateHandlerAndValue(target, unproxifiedValue)
+      else return this.updateHandlerAndValue(target, unproxifiedValue);
     }
     return target.valueOf();
   }
   applyNewValue(target: ProxiedValue<T>, unproxifiedValue: Map<any, any>) {
     target.$value = this.getInitialValue(target, unproxifiedValue);
     const notifiableObservers = target.notifiableObservers;
-    if (notifiableObservers)
-      target.notifyCurrentValue(notifiableObservers);
+    if (notifiableObservers) target.notifyCurrentValue(notifiableObservers);
   }
   getInitialValue(target: ProxiedValue<T>, unproxifiedValue: Map<any, any>): T {
     return cloneMap(unproxifiedValue, (value) =>
@@ -51,6 +57,9 @@ export class MapProxyHandler<T extends Map<any, any>> extends ObjectProxyHandler
         ? (targetProperty as Function).bind(target.$value)
         : targetProperty;
 
-    return this.$overrides[property]?.(target, bindedTargetProperty) ?? bindedTargetProperty
+    return (
+      this.$overrides[property]?.(target, bindedTargetProperty) ??
+      bindedTargetProperty
+    );
   }
 }
