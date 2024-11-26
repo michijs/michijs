@@ -18,13 +18,13 @@ export class ProxiedArray<V> extends Array<V> {
       ): Node => {
         const el = asTag
           ? (create(
-            {
-              jsxTag: asTag,
-              attrs,
-            } as SingleJSXElement,
-            contextElement,
-            contextNamespace,
-          ) as ParentNode)
+              {
+                jsxTag: asTag,
+                attrs,
+              } as SingleJSXElement,
+              contextElement,
+              contextNamespace,
+            ) as ParentNode)
           : new VirtualFragment();
 
         const newTarget = new Target(

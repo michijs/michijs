@@ -56,9 +56,13 @@ export class VirtualFragment
       );
     }
     return node;
-  }  
+  }
   removeChild<T extends Node>(child: T): T {
-    return child.parentElement?.removeChild(child) ?? (child as unknown as ChildNode)?.remove() ?? child;
+    return (
+      child.parentElement?.removeChild(child) ??
+      (child as unknown as ChildNode)?.remove() ??
+      child
+    );
   }
   appendChild<T extends Node>(node: T): T {
     this.append(node);
