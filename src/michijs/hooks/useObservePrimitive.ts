@@ -2,7 +2,7 @@ import { PrimitiveValue } from "../classes/PrimitiveValue";
 import type { PrimitiveObservableType } from "../types";
 
 /**
- * Responsible for observing changes on different types of values.
+ * Unproxied version of useObserve. Similar to tc39 signals proposal
  * @param item The value to be observed.
  * @returns A new primitive observable
  */
