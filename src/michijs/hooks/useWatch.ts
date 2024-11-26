@@ -6,7 +6,5 @@ import type { useWatchDeps } from "../types";
  * @param deps An array of dependencies to watch for changes.
  */
 export function useWatch<T>(callback: () => T, deps?: useWatchDeps): void {
-  if (deps)
-    for (const x of deps)
-      x?.subscribe?.(callback)
+  if (deps) for (const x of deps) x?.subscribe?.(callback);
 }

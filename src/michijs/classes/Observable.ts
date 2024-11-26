@@ -17,31 +17,26 @@ class Callable implements Function {
     delete result["name"];
     return result;
   }
-  apply: (this: Function, thisArg: any, argArray?: number) => void
-  call : (this: Function, thisArg: any, ...argArray: number[]) => void
-  bind:(this: Function, thisArg: any, ...argArray: number[]) => void
+  apply: (this: Function, thisArg: any, argArray?: number) => void;
+  call: (this: Function, thisArg: any, ...argArray: number[]) => void;
+  bind: (this: Function, thisArg: any, ...argArray: number[]) => void;
   prototype: any;
   length: number;
   arguments: number;
   caller: Function;
   name: string;
-  [Symbol.hasInstance]: (value: any) => boolean
+  [Symbol.hasInstance]: (value: any) => boolean;
   [Symbol.metadata]: DecoratorMetadataObject | null;
 }
 
 export class Observable<T> extends Callable implements ObservableLike<T> {
   observers: Set<Subscription<T>> = new Set();
 
-  constructor(
-    setterAndGetterFunction?: ObservableGettersAndSetters<T, T>,
-  ) {
+  constructor(setterAndGetterFunction?: ObservableGettersAndSetters<T, T>) {
     super(setterAndGetterFunction);
   }
 
-  notify(
-    value: T,
-    observers: NotifiableObservers<T> = this.observers,
-  ): void {
+  notify(value: T, observers: NotifiableObservers<T> = this.observers): void {
     for (const observer of observers) {
       observer(value);
     }

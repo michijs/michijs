@@ -14,5 +14,5 @@ export function setStyle(
       bindObservableToRef(value, element, (newValue, element) =>
         setStyleProperty(element, formattedKey, newValue),
       );
-    };
+    }
 }

@@ -6,7 +6,7 @@ import { StoredObservableCounter } from "../StoredObservableCounter";
 import { IndexedDBCounter } from "../IndexedDBCounter";
 import { ColorSelector } from "../ColorSelector";
 
-const TestCustomElement = createCustomElement('test-custom-element', {
+const TestCustomElement = createCustomElement("test-custom-element", {
   reflectedAttributes: {
     count: 1,
     arrayTest: [0, 1, 2, 3, 4, 5],
@@ -50,9 +50,10 @@ const TestCustomElement = createCustomElement('test-custom-element', {
           renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}
         />
         <ColorSelector />
-      </>)
-  }
-})
+      </>
+    );
+  },
+});
 
 const CounterTests = () => (
   <>

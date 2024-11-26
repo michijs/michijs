@@ -58,8 +58,8 @@ export function createCustomElement<O extends MichiElementOptions>(
 
   const mappedAdoptedStyleSheets = adoptedStyleSheets
     ? Object.values(adoptedStyleSheets).map((x) =>
-      typeof x === "function" ? x(internalCssSelector) : x,
-    )
+        typeof x === "function" ? x(internalCssSelector) : x,
+      )
     : undefined;
 
   if (events)
@@ -74,7 +74,8 @@ export function createCustomElement<O extends MichiElementOptions>(
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
-    implements MichiCustomElement {
+    implements MichiCustomElement
+  {
     $michi: MichiCustomElement["$michi"];
     connected;
     willMount;
@@ -164,16 +165,16 @@ export function createCustomElement<O extends MichiElementOptions>(
         this.addInitialStyleSheets(":host", attachedShadow);
       }
       if (lifecycle)
-        for (const [key, value] of Object.entries(lifecycle)) this[key] = value
+        for (const [key, value] of Object.entries(lifecycle)) this[key] = value;
 
       this.willConstruct?.();
 
       if (methods)
         for (const [key, value] of Object.entries(methods))
-          defineMethod(this, key, value)
+          defineMethod(this, key, value);
       if (events)
         for (const [key, value] of Object.entries(events))
-          defineEvent(this, key, value)
+          defineEvent(this, key, value);
 
       if (formAssociated) this.$michi.internals = this.attachInternals();
 

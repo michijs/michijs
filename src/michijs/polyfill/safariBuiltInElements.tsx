@@ -25,7 +25,7 @@ const observer = new MutationObserver((mutationList) => {
           mutation.target.getAttribute(mutation.attributeName),
         );
     }
-  };
+  }
 });
 
 export const overrideDocumentCreateElement = () => {

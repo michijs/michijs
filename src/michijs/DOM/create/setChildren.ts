@@ -3,8 +3,8 @@ import { create } from "./create";
 
 const appendChildCallback =
   (node: ParentNode, contextElement?: Element, contextNamespace?: string) =>
-    (x: SingleJSXElement) =>
-      node.appendChild(create(x, contextElement, contextNamespace));
+  (x: SingleJSXElement) =>
+    node.appendChild(create(x, contextElement, contextNamespace));
 
 export const setChildren = (
   node: ParentNode,

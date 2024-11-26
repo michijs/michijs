@@ -11,11 +11,12 @@ import type {
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { Observable } from "./Observable";
 import { unproxify } from "../utils/unproxify";
-import { getHandler } from '../hooks/proxyHandlers/getHandler'
+import { getHandler } from "../hooks/proxyHandlers/getHandler";
 
 export class ProxiedValue<T>
   extends Observable<T>
-  implements ProxiedValueInterface<T, T> {
+  implements ProxiedValueInterface<T, T>
+{
   $value: T;
   handler: ObservableProxyHandler<any, any>;
   parentSubscription: ParentSubscription<T> | undefined;
@@ -27,16 +28,24 @@ export class ProxiedValue<T>
   }
   endTransaction() {
     this.onTransaction = false;
-    if (this.needsToNotify)
-      this.notifyCurrentValue();
+    if (this.needsToNotify) this.notifyCurrentValue();
   }
 
   constructor(
     initialValue: T,
     parentSubscription?: ParentSubscription<T>,
     rootObservableCallback?: () => ObservableType<any>,
-    handler = getHandler(initialValue, parentSubscription, rootObservableCallback),
-    setterAndGetterFunction: ObservableGettersAndSetters<T, T> = ((...args) => this.handler.apply(this, this, args)) as unknown as ObservableGettersAndSetters<T, T>,
+    handler = getHandler(
+      initialValue,
+      parentSubscription,
+      rootObservableCallback,
+    ),
+    setterAndGetterFunction: ObservableGettersAndSetters<T, T> = ((...args) =>
+      this.handler.apply(
+        this,
+        this,
+        args,
+      )) as unknown as ObservableGettersAndSetters<T, T>,
   ) {
     super(setterAndGetterFunction);
     this.handler = handler;
@@ -48,12 +57,10 @@ export class ProxiedValue<T>
   }
 
   notifyCurrentValue(): void {
-    if (this.onTransaction)
-      this.needsToNotify = true;
+    if (this.onTransaction) this.needsToNotify = true;
     else {
       const notifiableObservers = this.notifiableObservers;
-      if (notifiableObservers)
-        this.notify(this.valueOf(), notifiableObservers);
+      if (notifiableObservers) this.notify(this.valueOf(), notifiableObservers);
     }
   }
 

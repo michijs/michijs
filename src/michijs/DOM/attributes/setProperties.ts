@@ -8,5 +8,5 @@ export function setProperties(
   shouldValidateInitialValue?: boolean,
 ): void {
   for (const [name, newValue] of Object.entries(attributes))
-    setProperty(el, name, newValue, contextElement, shouldValidateInitialValue)
+    setProperty(el, name, newValue, contextElement, shouldValidateInitialValue);
 }

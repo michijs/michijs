@@ -9,8 +9,8 @@ import { removeNullableFromObject } from "../utils/removeNullableFromObject";
  */
 type TransitionKeyframes =
   | ({
-    [k in keyof Omit<CSSProperties, "offset">]?: CSSProperties[k][];
-  } & { offset?: number[] })
+      [k in keyof Omit<CSSProperties, "offset">]?: CSSProperties[k][];
+    } & { offset?: number[] })
   | (Omit<CSSProperties, "offset"> & { offset?: number })[];
 
 const idGenerator = new IdGenerator();
@@ -63,7 +63,7 @@ export const useAnimation = (
           [key]: x,
         };
       });
-    };
+    }
   }
 
   return [

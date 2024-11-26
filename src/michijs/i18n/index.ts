@@ -59,8 +59,7 @@ export class I18n<K extends string = string> extends ProxiedValue<K> {
       }
     }
     if (!foundMatch) this.$value = this.defaultLanguage;
-    if(oldLanguage !== this.$value)
-      this.notifyCurrentValue()
+    if (oldLanguage !== this.$value) this.notifyCurrentValue();
   }
 
   get defaultLanguage() {
