@@ -21,7 +21,7 @@ const MichiSlot = createCustomElement("michi-slot", {
       const callback = (nodeList: NodeList) => {
         const name = this.name();
         // This cast is only neccesary for gh actions
-        for (const x of (nodeList as unknown as Array<Node>)) {
+        for (const x of nodeList as unknown as Array<Node>) {
           if (
             [this.nodeName, "MICHI-GENERIC-ELEMENT", "STYLE"].includes(
               x.nodeName,

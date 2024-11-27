@@ -23,24 +23,24 @@ export class Target<V> {
     this.contextNamespace = contextNamespace;
     this.create = useTemplate
       ? (value: V) => {
-        if (!this.template)
-          this.template = create(
+          if (!this.template)
+            this.template = create(
+              this.renderItem(value),
+              this.contextElement,
+              this.contextNamespace,
+            );
+          return clone(
+            this.template,
+            this.renderItem(value),
+            this.contextElement,
+          );
+        }
+      : (value: V) =>
+          create(
             this.renderItem(value),
             this.contextElement,
             this.contextNamespace,
           );
-        return clone(
-          this.template,
-          this.renderItem(value),
-          this.contextElement,
-        );
-      }
-      : (value: V) =>
-        create(
-          this.renderItem(value),
-          this.contextElement,
-          this.contextNamespace,
-        );
   }
 
   clear(): void {
@@ -75,15 +75,13 @@ export class Target<V> {
     const node1 = this.element.childNodes[indexA];
     const node2 = this.element.childNodes[indexB];
 
-    if(!node2) throw `Index ${indexB} is out of bound`;
+    if (!node2) throw `Index ${indexB} is out of bound`;
 
     const node2NextSibling = node2.nextSibling;
     // Insert `node2` before `node1`, then reinsert `node1` in `node2`'s position
     this.element.insertBefore(node2, node1);
-    if (node2NextSibling)
-      this.element.insertBefore(node1, node2NextSibling);
-    else
-      this.element.appendChild(node1); // If no nextSibling, append node1 at the end
+    if (node2NextSibling) this.element.insertBefore(node1, node2NextSibling);
+    else this.element.appendChild(node1); // If no nextSibling, append node1 at the end
   }
 
   replaceNode(el: ChildNode, value: V): void {
