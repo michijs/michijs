@@ -57,7 +57,7 @@ export class VirtualFragment
       );
     }
     return node;
-  }  
+  }
   appendChild<T extends Node>(node: T): T {
     this.append(node);
     return node;
