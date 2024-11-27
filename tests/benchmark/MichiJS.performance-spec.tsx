@@ -53,3 +53,10 @@ describe("Performance tests - MichiJS", () => {
     browser.close();
   });
 });
+
+// Personal notes about performance:
+// appendItem forEach (with referenced function) > appendItem for in > append forEach > fragment for in
+// for in > forEach Object.keys when has no inherited enumerable properties
+// for of > forEach
+// Do not create unnecesary callbacks - move them to a separated function
+// childList[i] > chilList.item(i)

@@ -3,8 +3,8 @@ import type { ObservableProxyHandler } from "../../types";
 import { getObjectHandler } from "./getHandler";
 import { SharedProxyHandler } from "./SharedProxyHandler";
 import { FunctionProxyHandler } from "./FunctionProxyHandler";
-import { isNil } from "../../utils";
-import { getValue } from "./getValue";
+import { unproxify } from "../../utils/unproxify";
+import { isNil } from "../../utils/isNil";
 
 export class PrimitiveProxyHandler<T>
   extends SharedProxyHandler<T>
@@ -12,7 +12,7 @@ export class PrimitiveProxyHandler<T>
 {
   apply(target: ProxiedValue<T>, _, args: any[]) {
     if (args.length > 0) {
-      const value = getValue(args[0]);
+      const value = unproxify(args[0]);
       switch (typeof value) {
         // Intentional order
         // TODO: check this

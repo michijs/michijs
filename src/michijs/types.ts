@@ -195,6 +195,13 @@ export interface CompatibleSubscription {
   (): void;
 }
 
+export interface CustomNavigateEvent
+  extends Pick<
+      NavigateEvent,
+      "downloadRequest" | "canIntercept" | "navigationType"
+    >,
+    Partial<Pick<NavigateEvent, "formData">> {}
+
 export type ObservableTypeOrConst<T> = ObservableType<T> | T;
 export type ObservableOrConst<T> = ObservableLike<T> | T;
 export type CreateFunctionalComponentProps<T> = {

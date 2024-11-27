@@ -8,7 +8,7 @@
     "removeRow": 0.56,
     "createManyRows": 212.69,
     "appendRowsToLargeTable": 20.29,
-    "clearRows": 5.39
+    "clearRows": 5.02
   },
   "2.0.10": {
     "create1000Rows": 33.82,
