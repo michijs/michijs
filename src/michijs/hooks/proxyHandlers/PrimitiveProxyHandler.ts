@@ -15,7 +15,6 @@ export class PrimitiveProxyHandler<T>
       const value = unproxify(args[0]);
       switch (typeof value) {
         // Intentional order
-        // TODO: check this
         case "function": {
           return this.updateHandlerAndValue(
             target,

@@ -43,7 +43,6 @@ export function setProperty(
     newValue,
     el,
     updateAttributeCallback(name),
-    // TODO: Validation needs to be improved
     shouldValidateInitialValue && el.getAttribute(name) === newValue.valueOf(),
   );
 }

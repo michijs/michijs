@@ -97,12 +97,10 @@ export class Target<V> {
   }
 
   insertItemsAt(i: number, items: V[]): void {
-    // TODO: find a better way to do this
     this.insertChildNodesAt(i, ...items.map(this.create));
   }
 
   prependItems(items: V[]): void {
-    // TODO: find a better way to do this
     this.element.prepend(...items.map(this.create));
   }
 

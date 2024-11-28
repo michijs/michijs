@@ -278,8 +278,7 @@ export type ListProps<E, SV> = ExtendableComponentWithoutChildren<E> & {
   useTemplate?: boolean;
 };
 
-export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>>
-  extends ProxiedValueInterface<RV[], SV[]> {
+export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>> {
   /**
    * Removes all the list elements
    */
@@ -522,6 +521,7 @@ export interface ReadWriteSet<RV, SV>
 interface ObservableArrayHelper<RV, SV = ObservableType<RV>>
   extends ReadWriteArray<RV, SV>,
     ProxiedArrayInterface<RV, SV>,
+    ProxiedValueInterface<RV[], SV[]>,
     ObservableGettersAndSetters<RV[], SV[]> {}
 
 export interface ObservableArray<RV> extends ObservableArrayHelper<RV> {}

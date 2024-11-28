@@ -1,9 +1,9 @@
 import { create } from "../DOM/create/create";
-import type { FC, ListProps, SingleJSXElement } from "../types";
+import type { FC, ListProps, ProxiedArrayInterface, SingleJSXElement } from "../types";
 import { Target } from "./Target";
 import { VirtualFragment } from "./VirtualFragment";
 
-export class ProxiedArray<V> extends Array<V> {
+export class ProxiedArray<V> extends Array<V> implements ProxiedArrayInterface<V,V> {
   #targets = new Array<Target<V>>();
 
   constructor(...items: V[]) {
