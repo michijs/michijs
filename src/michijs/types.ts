@@ -287,7 +287,7 @@ export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>>
   /**
    * Replace all the list elements
    */
-  $replace(items: (SV | RV)[]): number;
+  $replace(...items: (SV | RV)[]): number;
   /**
    * Removes an item
    */
