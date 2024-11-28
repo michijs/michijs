@@ -414,12 +414,16 @@ It provides more flexibility in organizing code and separates concerns by allowi
 
 ### Basic hooks
 #### useObserve
-Responsible for observing changes on different types of values. Takes two arguments:
+Responsible for observing changes on different types of values. Takes one argument:
 - **item**: The value to be observed.
 
 This is the most basic hook and it is the basis of the entire component structure.
 
 If the item contains a function, it will return an observable that observes for changes in the object itself. 
+
+#### useObservePrimitive
+Unproxied version of useObserve. Similar to [tc39 signals proposal](https://github.com/tc39/proposal-signals). Takes one argument:
+- **item**: The value to be observed.
 
 **A function in an observable should never mutate the observable.**
 

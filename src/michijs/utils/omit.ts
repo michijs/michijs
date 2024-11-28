@@ -3,9 +3,8 @@ export function omit<T extends object, K extends string>(
   keys: K[],
 ): Omit<T, K> {
   const newObj: Partial<T> = {};
-  Object.keys(obj).forEach((key) => {
-    if (!keys.includes(key as K)) newObj[key] = obj[key];
-  });
+  for (const key in obj)
+    if (!keys.includes(key as unknown as K)) newObj[key] = obj[key];
 
   return newObj as Omit<T, K>;
 }

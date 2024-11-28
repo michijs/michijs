@@ -1,4 +1,3 @@
-import "./michijs/polyfill";
 export * from "./michijs/classes";
 export * from "./michijs/h";
 export * from "./michijs/constants";

@@ -8,26 +8,21 @@ export const convertCssObjectToCssVariablesObject = (
 ): Record<string, string> => {
   const notObservableCssObject = JSON.parse(JSON.stringify(cssObject));
   let obj = {};
-  Object.entries<CSSProperty>(notObservableCssObject).forEach(
-    ([key, value]) => {
-      if (valueIsCSSObject(value))
-        obj = {
-          ...obj,
-          ...convertCssObjectToCssVariablesObject(
-            value,
-            properties.concat(key),
-          ),
-        };
-      else
-        obj[
-          formatToKebabCase(
-            `--${
-              properties.length > 0 ? `${properties.join("-")}-` : ""
-            }${key}`,
-          )
-        ] = value;
-    },
-  );
+  for (const [key, value] of Object.entries<CSSProperty>(
+    notObservableCssObject,
+  )) {
+    if (valueIsCSSObject(value))
+      obj = {
+        ...obj,
+        ...convertCssObjectToCssVariablesObject(value, properties.concat(key)),
+      };
+    else
+      obj[
+        formatToKebabCase(
+          `--${properties.length > 0 ? `${properties.join("-")}-` : ""}${key}`,
+        )
+      ] = value;
+  }
 
   return obj;
 };

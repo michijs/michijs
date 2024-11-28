@@ -62,7 +62,8 @@ export function createCustomElement<O extends MichiElementOptions>(
       )
     : undefined;
 
-  if (events) Object.entries(events).forEach(([key, value]) => value.init(key));
+  if (events)
+    for (const [key, value] of Object.entries(events)) value.init(key);
 
   const storeInit = {
     ...attributes,
@@ -164,20 +165,16 @@ export function createCustomElement<O extends MichiElementOptions>(
         this.addInitialStyleSheets(":host", attachedShadow);
       }
       if (lifecycle)
-        Object.entries(lifecycle).forEach(
-          ([key, value]) => (this[key] = value),
-        );
+        for (const [key, value] of Object.entries(lifecycle)) this[key] = value;
 
       this.willConstruct?.();
 
       if (methods)
-        Object.entries(methods).forEach(([key, value]) =>
-          defineMethod(this, key, value),
-        );
+        for (const [key, value] of Object.entries(methods))
+          defineMethod(this, key, value);
       if (events)
-        Object.entries(events).forEach(([key, value]) =>
-          defineEvent(this, key, value),
-        );
+        for (const [key, value] of Object.entries(events))
+          defineEvent(this, key, value);
 
       if (formAssociated) this.$michi.internals = this.attachInternals();
 

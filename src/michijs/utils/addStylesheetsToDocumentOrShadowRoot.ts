@@ -5,12 +5,14 @@ export const addStylesheetsToDocumentOrShadowRoot = (
   ...newStylesheets: CSSStyleSheet[]
 ): void => {
   // Safari throws undefined because its not connected when fired
-  if (target.adoptedStyleSheets)
+  if (target.adoptedStyleSheets) {
     target.adoptedStyleSheets = [
       ...new Set([...target.adoptedStyleSheets, ...newStylesheets]),
     ];
-  else if (target instanceof HTMLElement) {
-    newStylesheets.forEach((x) => {
+    return;
+  }
+  if (target instanceof HTMLElement)
+    for (const x of newStylesheets) {
       const originalReplaceSync = x.replaceSync.bind(x);
       const style = document.createElement("style");
       const updateStyle = () => {
@@ -22,6 +24,5 @@ export const addStylesheetsToDocumentOrShadowRoot = (
       };
       updateStyle();
       target.append(style);
-    });
-  }
+    }
 };

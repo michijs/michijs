@@ -3,7 +3,7 @@ import { bindFunction } from "../../utils/bindFunction";
 import { bindObservableToRef } from "../../utils/bindObservableToRef";
 import type { CSSProperties } from "../../generated/htmlType";
 import { isMichiCustomElement } from "../../typeWards/isMichiCustomElement";
-import { updatePropertiesCallback } from "../callbacks/updatePropertiesCallback";
+import { updatePropertyCallback } from "../callbacks/updatePropertyCallback";
 import { updateClassCallback } from "../callbacks/updateClassCallback";
 import { updateAttributeCallback } from "../callbacks/updateAttributeCallback";
 
@@ -15,10 +15,17 @@ export function setProperty(
   shouldValidateInitialValue?: boolean,
 ): void {
   // priority to properties and events
-  if (name === "_")
-    return Object.entries(newValue).forEach(
-      updatePropertiesCallback(el, shouldValidateInitialValue),
-    );
+  if (name === "_") {
+    for (const [propertyName, newPropertyValue] of Object.entries(newValue))
+      bindObservableToRef(
+        newPropertyValue,
+        el,
+        updatePropertyCallback(propertyName),
+        shouldValidateInitialValue &&
+          el[propertyName] === (newPropertyValue as any).valueOf(),
+      );
+    return;
+  }
   if (name.startsWith("on"))
     return el.addEventListener(
       name.slice(2),
@@ -36,7 +43,6 @@ export function setProperty(
     newValue,
     el,
     updateAttributeCallback(name),
-    // TODO: Validation needs to be improved
     shouldValidateInitialValue && el.getAttribute(name) === newValue.valueOf(),
   );
 }

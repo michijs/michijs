@@ -1,13 +1,12 @@
 import type {
   NotifiableObservers,
   ObservableLike,
-  ParentSubscription,
   Subscription,
   ObservableGettersAndSetters,
 } from "../types";
 
 // Bypass Content-Security-Policy by creating a "Callable" object instead of using function
-class Callable {
+class Callable implements Function {
   constructor(setterAndGetterFunction: Function = () => {}) {
     const result = Object.setPrototypeOf(
       setterAndGetterFunction,
@@ -18,39 +17,29 @@ class Callable {
     delete result["name"];
     return result;
   }
+  apply: (this: Function, thisArg: any, argArray?: number) => void;
+  call: (this: Function, thisArg: any, ...argArray: number[]) => void;
+  bind: (this: Function, thisArg: any, ...argArray: number[]) => void;
+  prototype: any;
+  length: number;
+  arguments: number;
+  caller: Function;
+  name: string;
+  [Symbol.hasInstance]: (value: any) => boolean;
+  [Symbol.metadata]: DecoratorMetadataObject | null;
 }
 
 export class Observable<T> extends Callable implements ObservableLike<T> {
-  // Intentional explicit null value - it breaks proxy otherwise
-  parentSubscription: ParentSubscription<T> | undefined;
   observers: Set<Subscription<T>> = new Set();
 
-  constructor(
-    parentSubscription?: ParentSubscription<T>,
-    setterAndGetterFunction?: ObservableGettersAndSetters<T, T>,
-  ) {
+  constructor(setterAndGetterFunction?: ObservableGettersAndSetters<T, T>) {
     super(setterAndGetterFunction);
-    this.parentSubscription = parentSubscription;
   }
 
-  notify(
-    value: T,
-    observers: NotifiableObservers<T> = this.notifiableObservers,
-  ): void {
-    observers?.forEach((observer) => {
+  notify(value: T, observers: NotifiableObservers<T> = this.observers): void {
+    for (const observer of observers) {
       observer(value);
-    });
-  }
-
-  get notifiableObservers(): NotifiableObservers<T> {
-    let allObservers;
-    if (this.parentSubscription?.shouldNotify?.()) {
-      allObservers = Array.from(this.observers);
-      allObservers.push(this.parentSubscription);
-    } else allObservers = this.observers;
-
-    if (allObservers.length === 0) return;
-    return allObservers;
+    }
   }
 
   subscribe(observer: Subscription<T>): void {

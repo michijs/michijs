@@ -195,6 +195,13 @@ export interface CompatibleSubscription {
   (): void;
 }
 
+export interface CustomNavigateEvent
+  extends Pick<
+      NavigateEvent,
+      "downloadRequest" | "canIntercept" | "navigationType"
+    >,
+    Partial<Pick<NavigateEvent, "formData">> {}
+
 export type ObservableTypeOrConst<T> = ObservableType<T> | T;
 export type ObservableOrConst<T> = ObservableLike<T> | T;
 export type CreateFunctionalComponentProps<T> = {
@@ -209,6 +216,14 @@ export interface ObservableLike<T> {
 }
 export interface CompatibleObservableLike {
   subscribe(observer: CompatibleSubscription): void;
+}
+
+export interface ObservableProxyHandler<T extends object, Y>
+  extends Required<Pick<ProxyHandler<T>, "apply">>,
+    Omit<ProxyHandler<T>, "apply"> {
+  // TODO: Should be observableType
+  getInitialValue?(target: T, unproxifiedValue: Y): any;
+  applyNewValue?(target: T, unproxifiedValue: Y): any;
 }
 
 export interface MichiProperties
@@ -263,8 +278,7 @@ export type ListProps<E, SV> = ExtendableComponentWithoutChildren<E> & {
   useTemplate?: boolean;
 };
 
-export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>>
-  extends ProxiedValueInterface<RV[], SV[]> {
+export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>> {
   /**
    * Removes all the list elements
    */
@@ -272,7 +286,7 @@ export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>>
   /**
    * Replace all the list elements
    */
-  $replace(items: (SV | RV)[]): number;
+  $replace(...items: (SV | RV)[]): number;
   /**
    * Removes an item
    */
@@ -304,7 +318,7 @@ export type Typeof =
   | "object"
   | "function";
 
-export type NotifiableObservers<T> = Subscription<T>[] | undefined;
+export type NotifiableObservers<T> = Set<Subscription<T>> | undefined;
 
 export interface ProxiedValueInterface<RV, SV> extends ObservableLike<RV> {
   get $value(): SV;
@@ -328,6 +342,10 @@ export interface ObservableGettersAndSetters<RV, SV> {
 export interface ObservableValue<RV, SV = RV>
   extends ProxiedValueInterface<RV, SV>,
     ObservableGettersAndSetters<RV, SV> {}
+
+export interface PrimitiveObservableType<RV>
+  extends ObservableLike<RV>,
+    ObservableGettersAndSetters<RV, RV> {}
 
 export interface PrimitiveObservableValue<RV> extends ObservableValue<RV, RV> {}
 
@@ -503,6 +521,7 @@ export interface ReadWriteSet<RV, SV>
 interface ObservableArrayHelper<RV, SV = ObservableType<RV>>
   extends ReadWriteArray<RV, SV>,
     ProxiedArrayInterface<RV, SV>,
+    ProxiedValueInterface<RV[], SV[]>,
     ObservableGettersAndSetters<RV[], SV[]> {}
 
 export interface ObservableArray<RV> extends ObservableArrayHelper<RV> {}

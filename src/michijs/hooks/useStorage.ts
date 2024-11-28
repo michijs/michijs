@@ -34,20 +34,18 @@ export function useStorage<T extends object>(
     ),
   );
 
-  Object.entries(newObservable).forEach(([key, value]) => {
+  for (const [key, value] of Object.entries(newObservable)) {
     value?.subscribe((newValue) => {
       if (isNil(newValue)) storage.removeItem(key);
       else storage.setItem(key, JSON.stringify(newValue));
     });
-  });
+  }
 
   if (storage instanceof CookieStorage) {
     CookieStorage.cookieStoreObservable.subscribe((ev) => {
-      Object.keys(item)
-        .filter((e) => ev.includes(e))
-        .forEach((key) => {
-          newObservable[key] = getStorageValue(key);
-        });
+      for (const key in item)
+        if (ev.includes(key))
+          newObservable[key as string] = getStorageValue(key);
     });
   } else {
     const windowObservable = new ObservableFromEventListener(window, "storage");

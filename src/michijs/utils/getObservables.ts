@@ -8,9 +8,8 @@ export function getObservables<T>(obj: T): ObservableType<T>[] {
     // It needs to include arrays also
     if (typeof obj === "object") {
       const observables = new Array<ObservableType<any>>();
-      Object.values(obj).forEach((x) => {
+      for (const x of Object.values(obj))
         observables.push(...getObservables(x));
-      });
       return observables;
     }
   }

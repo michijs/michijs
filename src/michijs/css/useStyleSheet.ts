@@ -86,14 +86,16 @@ export function cssObjectToText(
         if (key.includes("::")) {
           valueToStringify = {};
           // Separate media from the rest
-          Object.entries(value as CSSObject).forEach(([key, value]) => {
+          for (const [key, internalValue] of Object.entries(
+            value as CSSObject,
+          )) {
             if (key.startsWith("@"))
               queries += `${key}{${newKey}{${cssObjectToText(
-                value as CSSObject,
+                internalValue as CSSObject,
                 isChild || !isQueryResult,
               )}}}`;
-            else valueToStringify[key] = value;
-          });
+            else valueToStringify[key] = internalValue;
+          }
         } else valueToStringify = value;
 
         newValue = `{${cssObjectToText(

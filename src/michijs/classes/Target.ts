@@ -55,6 +55,35 @@ export class Target<V> {
     this.appendItems(items);
   }
 
+  // Critical functions
+  appendItem(item: V): void {
+    this.element.appendChild(this.create(item));
+  }
+  appendItems(items: V[]): void {
+    items.forEach(this.appendItem, this);
+  }
+
+  remove(index: number): void {
+    this.element.childNodes[index]?.remove();
+  }
+
+  swap(indexA: number, indexB: number): void {
+    if (indexA === indexB) return;
+
+    if (indexA > indexB) [indexA, indexB] = [indexB, indexA];
+
+    const node1 = this.element.childNodes[indexA];
+    const node2 = this.element.childNodes[indexB];
+
+    if (!node2) throw `Index ${indexB} is out of bound`;
+
+    const node2NextSibling = node2.nextSibling;
+    // Insert `node2` before `node1`, then reinsert `node1` in `node2`'s position
+    this.element.insertBefore(node2, node1);
+    if (node2NextSibling) this.element.insertBefore(node1, node2NextSibling);
+    else this.element.appendChild(node1); // If no nextSibling, append node1 at the end
+  }
+
   replaceNode(el: ChildNode, value: V): void {
     el.replaceWith(this.create(value));
   }
@@ -67,69 +96,18 @@ export class Target<V> {
     this.element.firstChild?.remove();
   }
 
-  remove(index: number): void {
-    this.element.childNodes[index]?.remove();
-  }
-
   insertItemsAt(i: number, items: V[]): void {
-    // TODO: find a better way to do this
     this.insertChildNodesAt(i, ...items.map(this.create));
   }
 
   prependItems(items: V[]): void {
-    // TODO: find a better way to do this
     this.element.prepend(...items.map(this.create));
-  }
-
-  appendItem(item: V): void {
-    this.element.appendChild(this.create(item));
-  }
-  appendItems(items: V[]): void {
-    items.forEach(this.appendItem, this);
   }
 
   reverse(): void {
     this.element.replaceChildren(
       ...Array.from(this.element.childNodes).reverse(),
     );
-  }
-
-  swap(indexA: number, indexB: number): void {
-    const elA = this.element.childNodes[indexA];
-    const elB = this.element.childNodes[indexB];
-    if (elA && elB) {
-      const previousSiblingA = elA.previousSibling;
-      if (previousSiblingA) {
-        if (previousSiblingA === elB)
-          // if [B, A] then move B after A
-          elA.after(elB);
-        else {
-          //if [B, ... , previousSiblingA, A] then replace B with A and move B after previousSiblingA
-          elB.replaceWith(elA);
-          previousSiblingA.after(elB);
-        }
-      } else {
-        const nextSiblingA = elA.nextSibling;
-        if (nextSiblingA === elB)
-          // if [A, B] then move A after B
-          elB.after(elA);
-        else {
-          //if [A, nextSiblingA, ... , B] then replace B with A and move B before nextSiblingA
-          elB.replaceWith(elA);
-          nextSiblingA?.before(elB);
-        }
-      }
-    }
-    // [this.data[indexA], this.data[indexB]] = [this.data[indexB], this.data[indexA]];
-    // const [greatestValue, lowestValue] = indexA > indexB ? [indexA, indexB] : [indexB, indexA];
-    // this.targets.forEach(target => {
-    //   const greatestValueNode = target.element.childNodes.item(greatestValue);
-    //   const lowestValueNode = target.element.childNodes.item(lowestValue);
-    //   const greatestValueNextNode = greatestValueNode.nextSibling;
-    //   const lowestValueNextNode = lowestValueNode.nextSibling;
-    //   target.element.insertBefore(greatestValueNode, lowestValueNextNode);
-    //   target.element.insertBefore(lowestValueNode, greatestValueNextNode);
-    // });
   }
 
   insertChildNodesAt(i: number, ...childNodes: Node[]): void {

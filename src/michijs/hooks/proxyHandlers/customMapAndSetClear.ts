@@ -1,4 +1,4 @@
-import type { ProxiedValue } from "../../../classes";
+import type { ProxiedValue } from "../../classes/ProxiedValue";
 
 export const customMapAndSetClear = (
   target: ProxiedValue<Map<any, any>> | ProxiedValue<Set<any>>,

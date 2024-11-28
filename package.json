@@ -2,7 +2,7 @@
   "name": "@michijs/michijs",
   "author": "Lucas M. Segurado",
   "license": "MIT",
-  "version": "2.0.10",
+  "version": "2.0.11-beta.0",
   "files": [
     "dist/",
     "jsx-runtime/"
@@ -43,6 +43,7 @@
     "bun-link": "bun link --force",
     "link": "bunx concurrently bun:dist-w bun:bun-link",
     "generate-types": "bun run ./tasks/generateTypes.ts",
+    "run-benchmark-and-save-best-result": "bun run ./tasks/runAndSaveBestRun.ts",
     "benchmark-michijs": "bun test --update-snapshots --timeout 30000 ./tests/benchmark/MichiJS.performance-spec.tsx",
     "benchmark-vanilla": "bun test --update-snapshots --timeout 30000 ./tests/benchmark/Vanilla.performance-spec.tsx",
     "benchmark": "bun run benchmark-michijs && bun run benchmark-vanilla",
@@ -69,7 +70,7 @@
     "@types/bun": "1.1.13",
     "playwright-core": "1.49.0",
     "redux": "5.0.1",
-    "typescript": "5.6.3"
+    "typescript": "5.7.2"
   },
   "peerDependencies": {
     "csstype": "^3.1.3"

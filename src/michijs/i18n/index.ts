@@ -34,6 +34,7 @@ export class I18n<K extends string = string> extends ProxiedValue<K> {
     return this.$value;
   }
   set currentLanguage(newDesiredLanguage: string | undefined) {
+    const oldLanguage = this.$value;
     const desiredLanguages = [...navigator.languages];
     let foundMatch = false;
     if (newDesiredLanguage) {
@@ -58,6 +59,7 @@ export class I18n<K extends string = string> extends ProxiedValue<K> {
       }
     }
     if (!foundMatch) this.$value = this.defaultLanguage;
+    if (oldLanguage !== this.$value) this.notifyCurrentValue();
   }
 
   get defaultLanguage() {

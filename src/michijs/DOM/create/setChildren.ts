@@ -18,7 +18,7 @@ export const setChildren = (
       contextElement,
       contextNamespace,
     );
-    if (Array.isArray(children)) children.forEach(callback);
+    if (Array.isArray(children)) for (const x of children) callback(x);
     else callback(children);
   }
 };

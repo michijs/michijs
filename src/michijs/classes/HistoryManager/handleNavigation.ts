@@ -1,9 +1,4 @@
-interface CustomNavigateEvent
-  extends Pick<
-      NavigateEvent,
-      "downloadRequest" | "canIntercept" | "navigationType"
-    >,
-    Partial<Pick<NavigateEvent, "formData">> {}
+import type { CustomNavigateEvent } from "../../types";
 
 export function handleNavigation(
   event: CustomNavigateEvent,

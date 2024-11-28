@@ -78,11 +78,9 @@ function initDb<T extends AnyObject>(
     const openRequest = indexedDB.open(name, version);
     openRequest.onupgradeneeded = () => {
       const db = openRequest.result;
-      Object.entries(objectsStore).forEach(([key, options]) => {
-        if (!db.objectStoreNames.contains(key)) {
+      for (const [key, options] of Object.entries(objectsStore))
+        if (!db.objectStoreNames.contains(key))
           db.createObjectStore(key, options);
-        }
-      });
     };
     openRequest.onerror = () => {
       console.error("Error", openRequest.error);
