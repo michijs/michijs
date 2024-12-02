@@ -40,12 +40,8 @@ export class ProxiedValue<T>
       parentSubscription,
       rootObservableCallback,
     ),
-    setterAndGetterFunction: ObservableGettersAndSetters<T, T> = ((...args) =>
-      this.handler.apply(
-        this,
-        this,
-        args,
-      )),
+    setterAndGetterFunction: ObservableGettersAndSetters<T, T> = (...args) =>
+      this.handler.apply(this, this, args),
   ) {
     super(setterAndGetterFunction);
     this.handler = handler;

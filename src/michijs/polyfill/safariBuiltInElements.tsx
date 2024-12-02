@@ -16,11 +16,15 @@ export const safariDefine: typeof window.customElements.define = (
 
 const observer = new MutationObserver((mutationList) => {
   for (const mutation of mutationList) {
-    if (mutation.type === 'attributes')
-      (mutation.target as CustomElementWithCallbacks).attributeChangedCallback?.(
+    if (mutation.type === "attributes")
+      (
+        mutation.target as CustomElementWithCallbacks
+      ).attributeChangedCallback?.(
         mutation.attributeName!,
         mutation.oldValue,
-        (mutation.target as CustomElementWithCallbacks).getAttribute(mutation.attributeName!),
+        (mutation.target as CustomElementWithCallbacks).getAttribute(
+          mutation.attributeName!,
+        ),
       );
   }
 });
@@ -31,7 +35,10 @@ export const overrideDocumentCreateElement = () => {
     tagName: string,
     options?: ElementCreationOptions,
   ) => {
-    const newEl = originalCreateElement(tagName, options) as CustomElementWithCallbacks;
+    const newEl = originalCreateElement(
+      tagName,
+      options,
+    ) as CustomElementWithCallbacks;
 
     if (options?.is) {
       const [customElement, customElementTag] = extendedElements[options.is];

@@ -68,9 +68,7 @@ export const ElementInternals: FC<ElementInternalsProps> = (
 
     if (formValue)
       bindObservableToRef(formValue, self, (newValue, self) => {
-        self?.$michi.internals!.setFormValue(
-          newValue,
-        );
+        self?.$michi.internals!.setFormValue(newValue);
       });
 
     Object.entries({ tabIndex, ...aria }).forEach(([key, value]) => {
