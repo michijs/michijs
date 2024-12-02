@@ -8,7 +8,7 @@ const OBSERVE_NUM1 = useObserve(NUM1);
 const OBSERVE_NUM2 = useObserve(NUM2);
 const OBSERVE_NUM3 = useObserve(-NUM1);
 
-describe("Number expressions and operators", () => {
+describe("Observe number - expressions and operators", () => {
   useObserveMutationTests(() => NUM1)
   it("should add two numbers", () => {
     expect(OBSERVE_NUM1() + OBSERVE_NUM2()).toBe(NUM1 + NUM2);

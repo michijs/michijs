@@ -7,7 +7,7 @@ const STR2 = "World!";
 const SUBSTRING = "llo,";
 const OBSERVE_STR1 = useObserve(STR1);
 
-describe("String expressions and operators", () => {
+describe("Observe string - expressions and operators", () => {
   useObserveMutationTests(() => "test")
   it("should concatenate two strings", () => {
     expect(OBSERVE_STR1 + STR2).toBe(STR1 + STR2);

@@ -2,6 +2,7 @@ import { create } from "../../DOM/create/create";
 import type { ObservableType } from "../../types";
 import { useObserve } from "../useObserve";
 import { describe, it, expect, beforeEach } from "bun:test";
+import { sharedObjectTests } from "./useObserveSharedObjectTests.spec";
 
 const exampleValue = 1;
 const exampleValue2 = 2;
@@ -10,6 +11,8 @@ describe("Observe array tests", () => {
   let array: ObservableType<Array<number>>;
   let node: Node;
   let jsonNode: Node;
+
+  sharedObjectTests(() => []);
 
   beforeEach(() => {
     array = useObserve(new Array<number>());

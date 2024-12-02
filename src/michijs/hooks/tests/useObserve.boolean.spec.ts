@@ -5,7 +5,7 @@ import { useObserveMutationTests } from "./useObserveMutation.spec";
 const TRUE_VALUE = useObserve(true);
 const FALSE_VALUE = useObserve(false);
 
-describe("Boolean expressions and operators", () => {
+describe("Observe boolean - expressions and operators", () => {
   useObserveMutationTests(() => false);
   it("should return true for true", () => {
     // Doesnt work with bun:test

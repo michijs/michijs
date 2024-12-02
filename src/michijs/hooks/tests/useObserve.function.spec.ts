@@ -10,7 +10,7 @@ const obj = useObserve({
 
 const effect = obj.testFunction();
 
-describe("Functions", () => {
+describe("Observe function tests", () => {
   it("should return the same value than the object is listening to", () => {
     expect(effect()).toStrictEqual(obj.text());
   });
