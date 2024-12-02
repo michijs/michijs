@@ -6,7 +6,7 @@ import type {
   ObservableGettersAndSetters,
   NotifiableObservers,
   ParentSubscription,
-  ObservableProxyHandler,
+  ObservableProxyHandlerInterface,
 } from "../types";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { Observable } from "./Observable";
@@ -15,10 +15,10 @@ import { getHandler } from "../hooks/proxyHandlers/getHandler";
 
 export class ProxiedValue<T>
   extends Observable<T>
-  implements ProxiedValueInterface<T, T>
+  implements ProxiedValueInterface<T>
 {
   $value: T;
-  handler: ObservableProxyHandler<any, any>;
+  handler: ObservableProxyHandlerInterface<T>;
   parentSubscription: ParentSubscription<T> | undefined;
   needsToNotify: boolean | undefined;
   onTransaction: boolean | undefined;

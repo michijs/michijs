@@ -1,5 +1,5 @@
 import type {
-  ObservableProxyHandler,
+  ObservableProxyHandlerInterface,
   ObservableType,
   ParentSubscription,
 } from "../../types";
@@ -16,7 +16,7 @@ export const getObjectHandler = (
   value: unknown,
   parentSubscription?: ParentSubscription<any>,
   rootObservableCallback?: () => ObservableType<any>,
-): ObservableProxyHandler<any, any> | void => {
+): ObservableProxyHandlerInterface<any> | void => {
   if (isPrototypeOfObject(value))
     return new CommonObjectProxyHandler(
       parentSubscription,
@@ -36,7 +36,7 @@ export const getHandler = (
   value: unknown,
   parentSubscription?: ParentSubscription<any>,
   rootObservableCallback?: () => ObservableType<any>,
-): ObservableProxyHandler<any, any> => {
+): ObservableProxyHandlerInterface<any> => {
   // @ts-ignore
   const typeOfValue = typeof (value?.$value ?? value);
 

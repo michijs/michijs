@@ -1,5 +1,5 @@
 import type { ProxiedValue } from "../../classes/ProxiedValue";
-import type { ObservableProxyHandler } from "../../types";
+import type { ObservableProxyHandlerInterface } from "../../types";
 import { getObjectHandler } from "./getHandler";
 import { SharedProxyHandler } from "./SharedProxyHandler";
 import { FunctionProxyHandler } from "./FunctionProxyHandler";
@@ -8,7 +8,7 @@ import { isNil } from "../../utils/isNil";
 
 export class PrimitiveProxyHandler<T>
   extends SharedProxyHandler<T>
-  implements ObservableProxyHandler<ProxiedValue<T>, T>
+  implements ObservableProxyHandlerInterface<T>
 {
   apply(target: ProxiedValue<T>, _, args: any[]) {
     if (args.length > 0) {

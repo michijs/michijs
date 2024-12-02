@@ -4,7 +4,7 @@ import { useObserveInternal } from "../useObserve";
 import { createParentSubscription } from "./createParentSubscription";
 import { getHandler } from "./getHandler";
 
-export class SharedProxyHandler<T> {
+export abstract class SharedProxyHandler<T> {
   parentSubscription?: ParentSubscription<any>;
   rootObservableCallback?: () => ObservableType<any>;
   private $ownSubscription?: ParentSubscription<T>;

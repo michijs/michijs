@@ -1,7 +1,8 @@
 import type { ProxiedValue } from "../../classes/ProxiedValue";
+import type { ObservableProxyHandlerInterface } from "../../types";
 
 export class ObservableProxyHandler<T>
-  implements ProxyHandler<ProxiedValue<T>>
+  implements ObservableProxyHandlerInterface<T>
 {
   callIfExists(name: keyof ProxyHandler<ProxiedValue<T>>, ...args: unknown[]) {
     const target = args[0] as ProxiedValue<T>;

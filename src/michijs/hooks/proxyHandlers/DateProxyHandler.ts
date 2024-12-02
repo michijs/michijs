@@ -1,11 +1,11 @@
 import type { ProxiedValue } from "../../classes/ProxiedValue";
-import type { ObservableProxyHandler } from "../../types";
+import type { ObservableProxyHandlerInterface } from "../../types";
 import { unproxify } from "../../utils/unproxify";
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 
 export class DateProxyHandler
   extends ObjectProxyHandler<Date>
-  implements ObservableProxyHandler<ProxiedValue<Date>, Date>
+  implements ObservableProxyHandlerInterface<Date>
 {
   apply(target: ProxiedValue<Date>, _, args: any[]) {
     if (args.length > 0) {

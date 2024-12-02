@@ -2,13 +2,13 @@ import { ObjectProxyHandler } from "./ObjectProxyHandler";
 import { customMapAndSetClear } from "./customMapAndSetClear";
 import type { ProxiedValue } from "../../classes/ProxiedValue";
 import { customMapAndSetDelete } from "./customMapAndSetDelete";
-import type { ObservableProxyHandler } from "../../types";
+import type { ObservableProxyHandlerInterface } from "../../types";
 import { cloneMap } from "../../utils/clone/cloneMap";
 import { unproxify } from "../../utils/unproxify";
 
 export class SetProxyHandler<T extends Set<any>>
   extends ObjectProxyHandler<T>
-  implements ObservableProxyHandler<ProxiedValue<T>, Set<any>>
+  implements ObservableProxyHandlerInterface<T>
 {
   $overrides = {
     clear: customMapAndSetClear,

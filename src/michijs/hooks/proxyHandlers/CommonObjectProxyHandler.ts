@@ -1,13 +1,13 @@
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 import type { ProxiedValue } from "../../classes/ProxiedValue";
-import type { ObservableProxyHandler } from "../../types";
+import type { ObservableProxyHandlerInterface } from "../../types";
 import { unproxify } from "../../utils/unproxify";
 import { extendsObject } from "../../utils/extendsObject";
 import { cloneCommonObject } from "../../utils/clone/cloneCommonObject";
 
 export class CommonObjectProxyHandler<T extends object>
   extends ObjectProxyHandler<T>
-  implements ObservableProxyHandler<ProxiedValue<T>, any>
+  implements ObservableProxyHandlerInterface<T>
 {
   apply(target: ProxiedValue<T>, _: any, args: any[]) {
     if (args.length > 0) {

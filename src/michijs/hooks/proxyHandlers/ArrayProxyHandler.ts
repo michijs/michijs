@@ -1,13 +1,13 @@
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 import { ProxiedArray } from "../../classes/ProxiedArray";
 import type { ProxiedValue } from "../../classes/ProxiedValue";
-import type { ObservableProxyHandler } from "../../types";
+import type { ObservableProxyHandlerInterface } from "../../types";
 import { unproxify } from "../../utils/unproxify";
 import { cloneArray } from "../../utils/clone/cloneArray";
 
 export class ArrayProxyHandler<T extends ProxiedArray<any>>
   extends ObjectProxyHandler<T>
-  implements ObservableProxyHandler<ProxiedValue<T>, Array<any>>
+  implements ObservableProxyHandlerInterface<T>
 {
   $newItemsCallback =
     (target: ProxiedValue<T>, bindedTargetProperty: Function) =>

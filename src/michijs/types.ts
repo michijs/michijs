@@ -218,12 +218,12 @@ export interface CompatibleObservableLike {
   subscribe(observer: CompatibleSubscription): void;
 }
 
-export interface ObservableProxyHandler<T extends object, Y>
-  extends Required<Pick<ProxyHandler<T>, "apply">>,
-    Omit<ProxyHandler<T>, "apply"> {
+export interface ObservableProxyHandlerInterface<T>
+  extends Required<Pick<ProxyHandler<ProxiedValueInterface<T>>, "apply">>,
+    Omit<ProxyHandler<ProxiedValueInterface<T>>, "apply"> {
   // TODO: Should be observableType
-  getInitialValue?(target: T, unproxifiedValue: Y): any;
-  applyNewValue?(target: T, unproxifiedValue: Y): any;
+  getInitialValue?(target: ProxiedValueInterface<T>, unproxifiedValue: T): any;
+  applyNewValue?(target: ProxiedValueInterface<T>, unproxifiedValue: T): any;
 }
 
 export interface MichiProperties
@@ -320,14 +320,13 @@ export type Typeof =
 
 export type NotifiableObservers<T> = Set<Subscription<T>> | undefined;
 
-export interface ProxiedValueInterface<RV, SV> extends ObservableLike<RV> {
-  get $value(): SV;
-  set $value(newValue: SV | RV);
+export interface ProxiedValueInterface<RV> extends ObservableLike<RV> {
+  $value: RV;
   notifyCurrentValue(notifiableObservers?: NotifiableObservers<RV>): void;
   toObservableString(): ObservableType<string>;
   toBoolean(): boolean;
   toString(): string;
-  handler: ObservableProxyHandler<ProxiedValueInterface<RV, SV>, RV>,
+  handler: ObservableProxyHandlerInterface<RV>,
   not(): boolean;
   is(anotherValue: unknown): boolean;
   typeof(): Typeof;
@@ -341,7 +340,7 @@ export interface ObservableGettersAndSetters<RV, SV> {
 }
 
 export interface ObservableValue<RV, SV = RV>
-  extends ProxiedValueInterface<RV, SV>,
+  extends ProxiedValueInterface<RV>,
     ObservableGettersAndSetters<RV, SV> {}
 
 export interface PrimitiveObservableType<RV>
@@ -522,7 +521,7 @@ export interface ReadWriteSet<RV, SV>
 interface ObservableArrayHelper<RV, SV = ObservableType<RV>>
   extends ReadWriteArray<RV, SV>,
     ProxiedArrayInterface<RV, SV>,
-    ProxiedValueInterface<RV[], SV[]>,
+    ProxiedValueInterface<RV[]>,
     ObservableGettersAndSetters<RV[], SV[]> {}
 
 export interface ObservableArray<RV> extends ObservableArrayHelper<RV> {}

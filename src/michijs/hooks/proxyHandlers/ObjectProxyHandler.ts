@@ -2,7 +2,7 @@ import type { ProxiedValue } from "../../classes/ProxiedValue";
 import { unproxify } from "../../utils";
 import { SharedProxyHandler } from "./SharedProxyHandler";
 
-export class ObjectProxyHandler<T extends object>
+export abstract class ObjectProxyHandler<T extends object>
   extends SharedProxyHandler<T>
   implements ProxyHandler<ProxiedValue<T>>
 {
