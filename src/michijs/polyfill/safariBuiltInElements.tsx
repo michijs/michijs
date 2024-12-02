@@ -1,3 +1,4 @@
+import { GenericElement } from "../components/GenericElement";
 import { create } from "../DOM/create/create";
 import type { CustomElementWithCallbacks } from "../types";
 
@@ -14,22 +15,22 @@ export const safariDefine: typeof window.customElements.define = (
   extendedElements[name] = [constructor, options!.extends!];
 };
 
-const observer = new MutationObserver((mutationList) => {
-  for (const mutation of mutationList) {
-    if (mutation.type === "attributes")
-      (
-        mutation.target as CustomElementWithCallbacks
-      ).attributeChangedCallback?.(
-        mutation.attributeName!,
-        mutation.oldValue,
-        (mutation.target as CustomElementWithCallbacks).getAttribute(
-          mutation.attributeName!,
-        ),
-      );
-  }
-});
-
 export const overrideDocumentCreateElement = () => {
+  const observer = new MutationObserver((mutationList) => {
+    for (const mutation of mutationList) {
+      if (mutation.type === "attributes")
+        (
+          mutation.target as CustomElementWithCallbacks
+        ).attributeChangedCallback?.(
+          mutation.attributeName!,
+          mutation.oldValue,
+          (mutation.target as CustomElementWithCallbacks).getAttribute(
+            mutation.attributeName!,
+          ),
+        );
+    }
+  });
+
   const originalCreateElement = document.createElement.bind(document);
   document.createElement = (
     tagName: string,
@@ -45,15 +46,16 @@ export const overrideDocumentCreateElement = () => {
       Object.setPrototypeOf(newEl, customElement.prototype);
       newEl.setAttribute("is", customElementTag);
 
-      import("../components/GenericElement").then(({ GenericElement }) => {
-        const helper = create(
-          <GenericElement
-            onelementconnected={() => newEl.connectedCallback?.()}
-            onelementdisconnected={() => newEl.disconnectedCallback?.()}
-          />,
-        );
-        newEl.append(helper);
-      });
+      // esbuild includes always this in the build this if splitting = true
+      // import("../components/GenericElement").then(({ GenericElement }) => {
+      const helper = create(
+        <GenericElement
+          onelementconnected={() => newEl.connectedCallback?.()}
+          onelementdisconnected={() => newEl.disconnectedCallback?.()}
+        />,
+      );
+      newEl.append(helper);
+      // });
 
       // @ts-ignore
       newEl.fakeConstructor?.();
