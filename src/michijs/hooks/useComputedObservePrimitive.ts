@@ -1,8 +1,5 @@
 import { useObservePrimitive } from "./useObservePrimitive";
-import type {
-  ObservableType,
-  UseComputedObservePrimitive,
-} from "../types";
+import type { ObservableType, UseComputedObservePrimitive } from "../types";
 import { useWatch } from "./useWatch";
 
 /**
