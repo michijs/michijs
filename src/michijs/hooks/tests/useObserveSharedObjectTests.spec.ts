@@ -1,4 +1,4 @@
-import { AnyObject, ObservableType } from "../../types";
+import type { AnyObject, ObservableType } from "../../types";
 import { useObserve } from "../useObserve";
 import { useObserveMutationTests } from "./useObserveMutation.spec";
 import { describe, it, expect, beforeEach, jest, afterEach } from "bun:test";
@@ -7,14 +7,12 @@ const exampleValue = 1;
 const exampleValue2 = 2;
 
 export const sharedObjectTests = (initialValue: () => AnyObject | unknown[]) => {
-    beforeEach(() => {
-      mockCallback.mockClear();
-    });
     useObserveMutationTests(initialValue)
     describe("shared object tests", () => {
       let nonProxiedObject;
       let object: ObservableType<any>;
       beforeEach(() => {
+        mockCallback.mockClear();
         nonProxiedObject = undefined;
         nonProxiedObject = initialValue();
         object = undefined;

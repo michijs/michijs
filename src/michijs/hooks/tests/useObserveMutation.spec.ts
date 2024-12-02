@@ -1,5 +1,4 @@
-import { describe, it, expect, beforeEach } from "bun:test";
-import { ObservableType } from "../../types";
+import { describe, it, expect, jest } from "bun:test";
 import { useObserve } from "../useObserve";
 import { CommonObjectProxyHandler } from "../proxyHandlers/CommonObjectProxyHandler";
 import { ArrayProxyHandler } from "../proxyHandlers/ArrayProxyHandler";
@@ -8,20 +7,23 @@ import { DateProxyHandler } from "../proxyHandlers/DateProxyHandler";
 import { SetProxyHandler } from "../proxyHandlers/SetProxyHandler";
 import { MapProxyHandler } from "../proxyHandlers/MapProxyHandler";
 import { FunctionProxyHandler } from "../proxyHandlers/FunctionProxyHandler";
+const mockCallback = jest.fn((x) => x);
 
 export const useObserveMutationTests = (initialValue: () => unknown) => {
     describe("useObserve mutation tests", () => {
-        let object: ObservableType<any>;
-        beforeEach(() => {
-            object = useObserve(initialValue());
-        });
         const matchHandlerAndValue = (handler: any, newValue: unknown, instanceType?: any) => {
+            mockCallback.mockClear();
+            const object = useObserve(initialValue());
+            object.subscribe(mockCallback);
+            const oldHandler = object.handler;
             object(newValue);
             if (instanceType)
                 expect(object.$value).toBeInstanceOf(instanceType)
             else
-                expect(object.$value).toBeTypeOf(typeof newValue)
-            expect(object.handler).toBeInstanceOf(handler)
+                expect(object.$value).toBeTypeOf(typeof newValue);
+            // If the handler changed should call the callback
+            if (!(oldHandler instanceof handler))
+                expect(mockCallback).toHaveBeenCalledTimes(1);
         }
 
         it("Setting a new object should match handler and value", () => {

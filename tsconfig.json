@@ -15,6 +15,8 @@
     "jsxImportSource": "@michijs/michijs",
   },
   "include": [
+    "src/**/*.spec.ts",
+    "src/**/*.spec.tsx",
     "tests"
   ],
   "exclude": [
