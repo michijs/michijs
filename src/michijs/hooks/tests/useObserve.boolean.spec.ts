@@ -1,10 +1,12 @@
 import { useObserve } from "../useObserve";
 import { describe, it, expect } from "bun:test";
+import { useObserveMutationTests } from "./useObserveMutation.spec";
 
 const TRUE_VALUE = useObserve(true);
 const FALSE_VALUE = useObserve(false);
 
 describe("Boolean expressions and operators", () => {
+  useObserveMutationTests(() => false);
   it("should return true for true", () => {
     // Doesnt work with bun:test
     // expect(TRUE_VALUE).toStrictEqual(true);

@@ -1,5 +1,6 @@
 import { useObserve } from "../useObserve";
 import { describe, it, expect } from "bun:test";
+import { useObserveMutationTests } from "./useObserveMutation.spec";
 
 const NUM1 = 2;
 const NUM2 = 4;
@@ -8,6 +9,7 @@ const OBSERVE_NUM2 = useObserve(NUM2);
 const OBSERVE_NUM3 = useObserve(-NUM1);
 
 describe("Number expressions and operators", () => {
+  useObserveMutationTests(() => NUM1)
   it("should add two numbers", () => {
     expect(OBSERVE_NUM1() + OBSERVE_NUM2()).toBe(NUM1 + NUM2);
     // @ts-ignore

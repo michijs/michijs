@@ -6,12 +6,14 @@ import type {
 import { useComputedObserve } from "../useComputedObserve";
 import { useObserve } from "../useObserve";
 import { describe, it, expect, jest, beforeEach, afterEach } from "bun:test";
+import { useObserveMutationTests } from "./useObserveMutation.spec";
 
 const exampleValue = 1;
 const exampleValue2 = 2;
 const mockCallback = jest.fn((x) => x);
 
 const objectTests = (initialValue: () => AnyObject | unknown[]) => {
+  useObserveMutationTests(initialValue)
   describe("object tests", () => {
     let nonProxiedObject;
     let object: ObservableType<any>;
@@ -230,6 +232,8 @@ describe("Observe tests", () => {
       date = useObserve(new Date());
       date.subscribe(mockCallback);
     });
+
+  useObserveMutationTests(() => new Date())
     it("Setting the same value two times must call its callback just one time", () => {
       const newExampleValue = date.getTime() + 1;
       date.setTime(newExampleValue);
