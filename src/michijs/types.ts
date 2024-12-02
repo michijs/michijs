@@ -327,7 +327,7 @@ export interface ProxiedValueInterface<RV, SV> extends ObservableLike<RV> {
   toObservableString(): ObservableType<string>;
   toBoolean(): boolean;
   toString(): string;
-  handler: ObservableProxyHandler<ProxiedValueInterface<RV, SV>, RV>,
+  handler: ObservableProxyHandler<ProxiedValueInterface<RV, SV>, RV>;
   not(): boolean;
   is(anotherValue: unknown): boolean;
   typeof(): Typeof;
