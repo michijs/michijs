@@ -12,3 +12,4 @@ export { useTitle } from "./useTitle";
 export { useWatch } from "./useWatch";
 export { useAsyncComputedObserve } from "./useAsyncComputedObserve";
 export { useObservePrimitive } from "./useObservePrimitive";
+export { useComputedObservePrimitive } from "./useComputedObservePrimitive";

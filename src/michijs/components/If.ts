@@ -5,7 +5,7 @@ import type {
   CreateFCResult,
   SingleJSXElement,
 } from "../types";
-import { useComputedObserve } from "../hooks/useComputedObserve";
+import { useComputedObservePrimitive } from "../hooks/useComputedObservePrimitive";
 import { VirtualFragment } from "../classes/VirtualFragment";
 import { ProxiedValue } from "../classes/ProxiedValue";
 
@@ -46,7 +46,7 @@ export const If = <const T = CreateFCResult>(
   let cachedThen: DocumentFragment | undefined;
   let cachedElse: DocumentFragment | undefined;
 
-  const conditionAsBoolean = useComputedObserve(
+  const conditionAsBoolean = useComputedObservePrimitive(
     () =>
       condition instanceof ProxiedValue ? condition.toBoolean() : condition,
     [condition],

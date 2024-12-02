@@ -1,23 +1,23 @@
-import { useObserve } from "./useObserve";
+import { useObservePrimitive } from "./useObservePrimitive";
 import type {
   ObservableType,
-  UseComputedObserve
+  UseComputedObservePrimitive,
 } from "../types";
 import { useWatch } from "./useWatch";
 
 /**
- * It is used for computing a value and observing its changes.
+ * It is used for computing a value and observing its changes. Primitive version of useComputedObserve
  * @param callback A function that returns a value of type T.
  * @param deps Dependencies to watch for changes.
  * @param options An optional object that may contain onBeforeUpdate and onAfterUpdate callback functions.
  * @returns A new observable
  */
-export const useComputedObserve: UseComputedObserve = (
+export const useComputedObservePrimitive: UseComputedObservePrimitive = (
   callback,
   deps,
   options,
 ) => {
-  const newObservable = useObserve(callback());
+  const newObservable = useObservePrimitive(callback());
 
   const listener = () => {
     try {

@@ -456,6 +456,21 @@ export interface PromiseResult<R> {
   recall(): void;
 }
 
+export interface UseComputedObserve {
+  <T>(
+    callback: () => T,
+    deps?: useWatchDeps,
+    options?: UseComputedObserveOptions,
+  ): ObservableType<T>;
+}
+export interface UseComputedObservePrimitive {
+  <T>(
+    callback: () => T,
+    deps?: useWatchDeps,
+    options?: UseComputedObserveOptions,
+  ): PrimitiveObservableType<T>;
+}
+
 // Needs to be partial to allow asignation operation
 export type ObservableType<Y, T = NonNullable<Y>> = IsAny<T> extends true
   ? any

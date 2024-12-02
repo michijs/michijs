@@ -500,6 +500,12 @@ console.log(sum()); // Outputs the computed sum
 
 </details>
 
+#### useComputedObservePrimitive
+Unproxied version of useComputedObserve. Similar to [tc39 signals proposal](https://github.com/tc39/proposal-signals). Takes three arguments:
+- **callback**: A function that returns a value of type T.
+- **deps**: Dependencies to watch for changes.
+- **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions.
+
 #### useStringTemplate
 It is used to create a string template by interpolating dynamic values.
 
