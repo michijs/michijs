@@ -264,6 +264,12 @@ export interface MichiProperties
   readonly type: string;
 }
 
+export interface CustomElementWithCallbacks extends HTMLElement {
+  disconnectedCallback?(): void;
+  connectedCallback?(): void;
+  attributeChangedCallback?(name: string, oldValue: unknown, newValue: unknown): void;
+}
+
 export interface MichiCustomElement extends HTMLElement, MichiProperties {}
 
 export type ListProps<E, SV> = ExtendableComponentWithoutChildren<E> & {

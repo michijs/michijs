@@ -75,8 +75,7 @@ export class ProxiedValue<T>
     return allObservers;
   }
 
-  // @ts-ignore
-  valueOf(): T {
+  override valueOf(): T {
     return unproxify(this.$value) as T;
   }
 

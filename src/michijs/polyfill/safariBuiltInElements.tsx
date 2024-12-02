@@ -1,4 +1,5 @@
 import { create } from "../DOM/create/create";
+import type { CustomElementWithCallbacks } from "../types";
 
 export const extendedElements: Record<
   string,
@@ -15,16 +16,12 @@ export const safariDefine: typeof window.customElements.define = (
 
 const observer = new MutationObserver((mutationList) => {
   for (const mutation of mutationList) {
-    switch (mutation.type) {
-      case "attributes":
-        // @ts-ignore
-        mutation.target.attributeChangedCallback(
-          mutation.attributeName,
-          mutation.oldValue,
-          // @ts-ignore
-          mutation.target.getAttribute(mutation.attributeName),
-        );
-    }
+    if (mutation.type === 'attributes')
+      (mutation.target as CustomElementWithCallbacks).attributeChangedCallback?.(
+        mutation.attributeName!,
+        mutation.oldValue,
+        (mutation.target as CustomElementWithCallbacks).getAttribute(mutation.attributeName!),
+      );
   }
 });
 
@@ -34,7 +31,7 @@ export const overrideDocumentCreateElement = () => {
     tagName: string,
     options?: ElementCreationOptions,
   ) => {
-    const newEl = originalCreateElement(tagName, options);
+    const newEl = originalCreateElement(tagName, options) as CustomElementWithCallbacks;
 
     if (options?.is) {
       const [customElement, customElementTag] = extendedElements[options.is];
@@ -44,9 +41,7 @@ export const overrideDocumentCreateElement = () => {
       import("../components/GenericElement").then(({ GenericElement }) => {
         const helper = create(
           <GenericElement
-            // @ts-ignore
             onelementconnected={() => newEl.connectedCallback?.()}
-            // @ts-ignore
             onelementdisconnected={() => newEl.disconnectedCallback?.()}
           />,
         );

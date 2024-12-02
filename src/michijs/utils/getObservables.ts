@@ -3,7 +3,7 @@ import type { ObservableType } from "../types";
 
 export function getObservables<T>(obj: T): ObservableType<T>[] {
   if (obj) {
-    if (isObservableType<T>(obj)) return [obj as ObservableType<T>];
+    if (isObservableType(obj)) return [obj as ObservableType<T>];
 
     // It needs to include arrays also
     if (typeof obj === "object") {

@@ -110,12 +110,11 @@ export class ArrayProxyHandler<T extends ProxiedArray<any>>
       bindedTargetProperty
     );
   }
-  // @ts-ignore
-  override getOwnPropertyDescriptor(target, prop) {
+  override getOwnPropertyDescriptor(target: ProxiedValue<T>, p: string | symbol) {
     // Otherwise length is listed as a property
-    return prop !== "length"
-      ? super.getOwnPropertyDescriptor(target, prop)
-      : Reflect.getOwnPropertyDescriptor(target, prop);
+    return p !== "length"
+      ? (super.getOwnPropertyDescriptor as ArrayProxyHandler<T>['getOwnPropertyDescriptor'])(target, p)
+      : Reflect.getOwnPropertyDescriptor(target, p);
   }
 
   override ownKeys(target: ProxiedValue<T>) {
