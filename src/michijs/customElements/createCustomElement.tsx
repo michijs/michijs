@@ -111,10 +111,10 @@ export function createCustomElement<O extends MichiElementOptions>(
             return previousValue;
           }, {});
 
-        const parsedCssVariables = useComputedObserve(
+        const parsedCssVariables = useComputedObserve<CSSObject>(
           () => convertCssObjectToCssVariablesObject(allCssVariables),
           Object.values(allCssVariables),
-        ) as CSSObject;
+        );
         this.$michi.styles.cssVariables ??= useStyleSheet({
           [selector]: parsedCssVariables,
         });
@@ -316,5 +316,5 @@ export function createCustomElement<O extends MichiElementOptions>(
     // To avoid it I catch the exception. In these cases, the first component to be registered will be taken.
   }
 
-  return MichiCustomElementResult as any;
+  return MichiCustomElementResult as unknown as MichiElementClass<O>;
 }

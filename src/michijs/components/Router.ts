@@ -13,10 +13,10 @@ export const Router = <const T>(
   contextNamespace,
 ) => {
   const el = asTag
-    ? (create({
+    ? (create<ParentNode>({
         jsxTag: asTag,
         attrs,
-      } as unknown as SingleJSXElement) as ChildNode & ParentNode)
+      } as SingleJSXElement))
     : new VirtualFragment();
   const cache: Record<string, DocumentFragment> = {};
 

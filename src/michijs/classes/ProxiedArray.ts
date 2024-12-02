@@ -25,14 +25,14 @@ export class ProxiedArray<V>
         contextNamespace?: string,
       ): Node => {
         const el = asTag
-          ? (create(
+          ? (create<ParentNode>(
               {
                 jsxTag: asTag,
                 attrs,
               } as SingleJSXElement,
               contextElement,
               contextNamespace,
-            ) as ParentNode)
+            ))
           : new VirtualFragment();
 
         const newTarget = new Target(

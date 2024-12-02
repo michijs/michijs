@@ -69,7 +69,7 @@ export const ElementInternals: FC<ElementInternalsProps> = (
     if (formValue)
       bindObservableToRef(formValue, self, (newValue, self) => {
         self?.$michi.internals!.setFormValue(
-          newValue as Parameters<ElementInternals["setFormValue"]>[0],
+          newValue,
         );
       });
 

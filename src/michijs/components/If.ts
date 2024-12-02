@@ -37,10 +37,10 @@ export const If = <const T = CreateFCResult>(
 ) => {
   // Create an element or a virtual fragment depending on the 'asTag' prop.
   const el = asTag
-    ? (create({
+    ? (create<ParentNode>({
         jsxTag: asTag,
         attrs,
-      } as unknown as SingleJSXElement) as ChildNode & ParentNode)
+      } as SingleJSXElement))
     : new VirtualFragment();
 
   let cachedThen: DocumentFragment | undefined;

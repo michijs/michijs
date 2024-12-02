@@ -4,6 +4,7 @@ import type {
   AnyObject,
   CreateFCResult,
   CreateFunctionalComponent,
+  FCProps,
 } from "../types";
 import { unproxify } from "../utils/unproxify";
 
@@ -23,6 +24,6 @@ export function createFunctionalComponent<
       },
       {},
     );
-    return callback(newProps as any, contextElement, contextNamespace);
+    return callback(newProps as FCProps<T>, contextElement, contextNamespace);
   };
 }

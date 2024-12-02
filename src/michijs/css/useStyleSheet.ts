@@ -81,13 +81,14 @@ export function cssObjectToText(
       let queries = "";
 
       if (valueIsObject) {
-        let valueToStringify;
+        const valueAsCssObject: CSSObject = value as CSSObject;
+        let valueToStringify: CSSObject;
         // Preudo selectors doesnt support @media inside
         if (key.includes("::")) {
           valueToStringify = {};
           // Separate media from the rest
           for (const [key, internalValue] of Object.entries(
-            value as CSSObject,
+            valueAsCssObject,
           )) {
             if (key.startsWith("@"))
               queries += `${key}{${newKey}{${cssObjectToText(
@@ -96,10 +97,10 @@ export function cssObjectToText(
               )}}}`;
             else valueToStringify[key] = internalValue;
           }
-        } else valueToStringify = value;
+        } else valueToStringify = valueAsCssObject;
 
         newValue = `{${cssObjectToText(
-          valueToStringify as CSSObject,
+          valueToStringify,
           isChild || !isQueryResult,
         )}}`;
       } else {

@@ -122,7 +122,7 @@ export class Target<V> {
         ? Math.max(len + relativeStart, 0)
         : Math.min(relativeStart, len);
 
-    let item: ChildNode | null = this.element.childNodes.item(k),
+    let item: ChildNode | null = this.element.childNodes[k],
       count = 0;
     while (item && count < deleteCount) {
       const nextSibling = item.nextSibling;

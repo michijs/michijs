@@ -1,21 +1,6 @@
 import { forEachChildren } from "../DOM/forEachChildren";
 import { isElement } from "../typeWards/isElement";
 
-export class VirtualChildNodes
-  extends Array<ChildNode>
-  implements NodeListOf<ChildNode>
-{
-  item(index: number): ChildNode {
-    return this.at(index) ?? (null as unknown as ChildNode);
-  }
-  override forEach(
-    callbackfn: (value: ChildNode, key: number, parent: any) => void,
-    thisArg?: any,
-  ): void {
-    super.forEach(callbackfn, thisArg);
-  }
-}
-
 export class VirtualFragment
   implements
     Pick<
@@ -26,7 +11,6 @@ export class VirtualFragment
       | "replaceChildren"
       | "firstChild"
       | "lastChild"
-      | "childNodes"
       | "appendChild"
       | "insertBefore"
     >,
@@ -97,8 +81,8 @@ export class VirtualFragment
     const previousSibling = this.endItem.previousSibling;
     return previousSibling !== this.startItem ? previousSibling : null;
   }
-  get childNodes(): VirtualChildNodes {
-    const childNodes = new VirtualChildNodes();
+  get childNodes(): ChildNode[] {
+    const childNodes: ChildNode[] = [];
     forEachChildren(
       this.startItem.nextSibling,
       (node) => {

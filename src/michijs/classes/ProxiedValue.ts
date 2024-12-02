@@ -45,7 +45,7 @@ export class ProxiedValue<T>
         this,
         this,
         args,
-      )) as unknown as ObservableGettersAndSetters<T, T>,
+      )),
   ) {
     super(setterAndGetterFunction);
     this.handler = handler;

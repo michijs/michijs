@@ -29,6 +29,6 @@ export class ObservableFromEventListener<
 > extends Observable<T> {
   constructor(obj: ObjectWithAddEventListener<T>, key: string) {
     super();
-    obj.addEventListener(key, (e) => this.notify(e as T));
+    obj.addEventListener(key, (e) => this.notify(e));
   }
 }
