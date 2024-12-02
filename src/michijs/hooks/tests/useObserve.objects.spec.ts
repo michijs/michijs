@@ -13,7 +13,7 @@ const exampleValue2 = 2;
 const mockCallback = jest.fn((x) => x);
 
 const objectTests = (initialValue: () => AnyObject | unknown[]) => {
-  useObserveMutationTests(initialValue)
+  useObserveMutationTests(initialValue);
   describe("object tests", () => {
     let nonProxiedObject;
     let object: ObservableType<any>;
@@ -233,7 +233,7 @@ describe("Observe tests", () => {
       date.subscribe(mockCallback);
     });
 
-  useObserveMutationTests(() => new Date())
+    useObserveMutationTests(() => new Date());
     it("Setting the same value two times must call its callback just one time", () => {
       const newExampleValue = date.getTime() + 1;
       date.setTime(newExampleValue);
