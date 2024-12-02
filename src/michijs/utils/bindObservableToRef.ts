@@ -42,7 +42,10 @@ export const bindObservableToRef = <T, E extends WeakKey>(
   if (extendsObject(observable)) {
     const observables = getObservables(observable);
     if (observables.length > 0) {
-      const finalObservable = useComputedObservePrimitive(() => observable, observables);
+      const finalObservable = useComputedObservePrimitive(
+        () => observable,
+        observables,
+      );
       overrideAndCallCallback(
         finalObservable as T,
         el,
