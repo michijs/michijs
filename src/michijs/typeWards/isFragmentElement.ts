@@ -6,13 +6,11 @@ import type {
   ObjectJSXElement,
 } from "../types";
 
-export function isFragmentElement(
+export const isFragmentElement = (
   jsx:
     | ObjectJSXElement
     | FunctionJSXElement
     | FragmentJSXElement
     | ClassJSXElement
     | DOMElementJSXElement,
-): jsx is FragmentJSXElement {
-  return !jsx.jsxTag;
-}
+): jsx is FragmentJSXElement => !jsx.jsxTag;

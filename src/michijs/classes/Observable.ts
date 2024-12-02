@@ -6,6 +6,7 @@ import type {
 } from "../types";
 
 // Bypass Content-Security-Policy by creating a "Callable" object instead of using function
+// @ts-ignore
 class Callable implements Function {
   constructor(setterAndGetterFunction: Function = () => {}) {
     const result = Object.setPrototypeOf(
@@ -17,16 +18,6 @@ class Callable implements Function {
     delete result["name"];
     return result;
   }
-  apply: (this: Function, thisArg: any, argArray?: number) => void;
-  call: (this: Function, thisArg: any, ...argArray: number[]) => void;
-  bind: (this: Function, thisArg: any, ...argArray: number[]) => void;
-  prototype: any;
-  length: number;
-  arguments: number;
-  caller: Function;
-  name: string;
-  [Symbol.hasInstance]: (value: any) => boolean;
-  [Symbol.metadata]: DecoratorMetadataObject | null;
 }
 
 export class Observable<T> extends Callable implements ObservableLike<T> {

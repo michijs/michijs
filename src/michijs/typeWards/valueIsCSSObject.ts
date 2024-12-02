@@ -1,8 +1,6 @@
 import type { CSSObject, CSSProperty } from "../types";
 
-export function valueIsCSSObject(value: CSSProperty): value is CSSObject {
-  return Boolean(
-    value && typeof value === "object" && !value[Symbol.toPrimitive],
-  );
+export const valueIsCSSObject = (value: CSSProperty): value is CSSObject => Boolean(
   // When value is background: yourvariable
-}
+  value && typeof value === "object" && !value[Symbol.toPrimitive],
+);

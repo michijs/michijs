@@ -1,5 +1,3 @@
-export function isElement(
+export const isElement = (
   el: Element | ParentNode | ChildNode | Node,
-): el is Element {
-  return "setAttribute" in el;
-}
+): el is Element => "setAttribute" in el;

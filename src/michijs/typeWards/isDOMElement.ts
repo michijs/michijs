@@ -5,12 +5,10 @@ import type {
   ObjectJSXElement,
 } from "../types";
 
-export function isDOMElement(
+export const isDOMElement = (
   jsx:
     | ObjectJSXElement
     | FunctionJSXElement
     | ClassJSXElement
     | DOMElementJSXElement,
-): jsx is DOMElementJSXElement {
-  return typeof jsx.jsxTag === "object";
-}
+): jsx is DOMElementJSXElement => typeof jsx.jsxTag === "object";

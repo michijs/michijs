@@ -1,7 +1,5 @@
 import type { MichiCustomElement } from "../types";
 
-export function isMichiCustomElement(
+export const isMichiCustomElement = (
   param: Element | MichiCustomElement,
-): param is MichiCustomElement {
-  return !!(param as MichiCustomElement).$michi;
-}
+): param is MichiCustomElement => !!(param as MichiCustomElement).$michi;

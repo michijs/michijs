@@ -4,8 +4,6 @@ import type {
   ObjectJSXElement,
 } from "../types";
 
-export function isFunctionOrClassJSXElement(
+export const isFunctionOrClassJSXElement = (
   jsx: FunctionJSXElement | ClassJSXElement | ObjectJSXElement,
-): jsx is ClassJSXElement | FunctionJSXElement {
-  return typeof jsx.jsxTag === "function";
-}
+): jsx is ClassJSXElement | FunctionJSXElement => typeof jsx.jsxTag === "function";

@@ -12,6 +12,8 @@ export const config: ServerConfigFactory<"TESTING" | DefaultEnvironment> = ({
       path: "./tests/public",
     },
     esbuildOptions: {
+      // Forcing options so testing works like in production
+      minify: true,
       entryPoints: ["./tests/index.tsx"],
       tsconfig:
         environment === "DISTRIBUTION" ? "dist.tsconfig.json" : "tsconfig.json",

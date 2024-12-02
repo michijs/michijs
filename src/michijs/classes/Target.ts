@@ -6,9 +6,9 @@ import type { VirtualFragment } from "./VirtualFragment";
 export class Target<V> {
   private element: VirtualFragment | ParentNode;
   private renderItem: FC<V>;
-  contextElement?: Element;
-  contextNamespace?: string;
-  template?: Node;
+  private contextElement?: Element;
+  private contextNamespace?: string;
+  private template?: Node;
 
   constructor(
     element: VirtualFragment | ParentNode,
@@ -82,10 +82,6 @@ export class Target<V> {
     this.element.insertBefore(node2, node1);
     if (node2NextSibling) this.element.insertBefore(node1, node2NextSibling);
     else this.element.appendChild(node1); // If no nextSibling, append node1 at the end
-  }
-
-  replaceNode(el: ChildNode, value: V): void {
-    el.replaceWith(this.create(value));
   }
 
   pop(): void {

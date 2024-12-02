@@ -1,7 +1,5 @@
 import type { ClassJSXElement, FunctionJSXElement } from "../types";
 
-export function isClassJSXElement(
+export const isClassJSXElement = (
   param: FunctionJSXElement | ClassJSXElement,
-): param is ClassJSXElement {
-  return "tag" in param.jsxTag.valueOf();
-}
+): param is ClassJSXElement => "tag" in param.jsxTag.valueOf();

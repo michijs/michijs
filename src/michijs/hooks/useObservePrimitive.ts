@@ -6,6 +6,4 @@ import type { PrimitiveObservableType } from "../types";
  * @param item The value to be observed.
  * @returns A new primitive observable
  */
-export function useObservePrimitive<T>(item?: T): PrimitiveObservableType<T> {
-  return new PrimitiveValue<any>(item) as unknown as PrimitiveObservableType<T>;
-}
+export const useObservePrimitive = <T>(item?: T): PrimitiveObservableType<T> => new PrimitiveValue<any>(item) as unknown as PrimitiveObservableType<T>;

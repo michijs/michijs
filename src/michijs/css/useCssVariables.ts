@@ -1,8 +1,7 @@
 import type { CssVariablesObject, AnyObject } from "../types";
 import { formatToKebabCase } from "../utils/formatToKebabCase";
 
-function getProxyGetter<T>(parent = "-") {
-  return new Proxy(Function as unknown as CssVariablesObject<T>, {
+const getProxyGetter = <T>(parent = "-") => new Proxy(Function as unknown as CssVariablesObject<T>, {
     apply(_, _2, args) {
       const defaultValue = args[0];
       return `var(${parent}${
@@ -16,8 +15,5 @@ function getProxyGetter<T>(parent = "-") {
         return getProxyGetter(`${parent}-${formatToKebabCase(p.toString())}`);
     },
   }) as CssVariablesObject<T>;
-}
 
-export function useCssVariables<T extends AnyObject>(): CssVariablesObject<T> {
-  return getProxyGetter<T>();
-}
+export const useCssVariables = <T extends AnyObject>(): CssVariablesObject<T> => getProxyGetter<T>();

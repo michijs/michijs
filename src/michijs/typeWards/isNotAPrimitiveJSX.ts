@@ -8,7 +8,7 @@ import type {
   SingleJSXElement,
 } from "../types";
 
-export function isNotAPrimitiveJSX(
+export const isNotAPrimitiveJSX = (
   jsx: SingleJSXElement,
 ): jsx is
   | FunctionJSXElement
@@ -17,6 +17,4 @@ export function isNotAPrimitiveJSX(
   | FragmentJSXElement
   | DOMElementJSXElement
   | Node
-  | ObservableNonNullablePrimitiveType {
-  return typeof jsx === "object";
-}
+  | ObservableNonNullablePrimitiveType => typeof jsx === "object";
