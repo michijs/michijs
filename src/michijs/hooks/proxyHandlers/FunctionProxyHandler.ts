@@ -1,5 +1,8 @@
 import type { ProxiedValue } from "../../classes/ProxiedValue";
-import type { ObservableType, ObservableProxyHandlerInterface } from "../../types";
+import type {
+  ObservableType,
+  ObservableProxyHandlerInterface,
+} from "../../types";
 import { useComputedObserve } from "../useComputedObserve";
 
 export class FunctionProxyHandler
