@@ -20,12 +20,15 @@ type EventsMap<T extends EventTarget> = {
     : unknown;
 };
 
+interface ObjectWithAddEventListener<T> {
+  addEventListener(key: string, callback: (e: T) => any): any
+}
+
 export class ObservableFromEventListener<
-  const T extends EventTarget,
-  K extends keyof EventsMap<T>,
-> extends Observable<EventsMap<T>[K]> {
-  constructor(obj: T, key: K) {
+  T = unknown,
+> extends Observable<T> {
+  constructor(obj: ObjectWithAddEventListener<T>, key: string) {
     super();
-    obj.addEventListener(key, (e) => this.notify(e as EventsMap<T>[K]));
+    obj.addEventListener(key, (e) => this.notify(e as T));
   }
 }

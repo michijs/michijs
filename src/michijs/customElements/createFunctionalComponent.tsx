@@ -12,8 +12,6 @@ export function createFunctionalComponent<
   S extends Element = Element,
 >(callback: CreateFCResult<T, S>): CreateFunctionalComponent<T> {
   return (props, contextElement?: S, contextNamespace?: string) => {
-    // TODO: Not sure why ts compiler is complaining here
-    // @ts-ignore
     const newProps = Object.entries(props).reduce(
       (previousValue, [key, value]) => {
         if (key === "children") previousValue[key] = value;

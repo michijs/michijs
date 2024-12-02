@@ -48,7 +48,7 @@ export function useStorage<T extends object>(
           newObservable[key as string] = getStorageValue(key);
     });
   } else {
-    const windowObservable = new ObservableFromEventListener(window, "storage");
+    const windowObservable = new ObservableFromEventListener<StorageEvent>(window, "storage");
 
     windowObservable.subscribe((ev) => {
       if (

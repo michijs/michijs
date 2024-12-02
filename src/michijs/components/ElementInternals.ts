@@ -60,7 +60,6 @@ export const ElementInternals: FC<ElementInternalsProps> = (
       bindObservableToRef(errorObservable, self, (newValue, self) => {
         const error = unproxify(newValue.errorMessage);
         self.$michi.internals!.setValidity(
-          // @ts-ignore
           error ? unproxify(validityStateFlags) : undefined,
           error,
         );

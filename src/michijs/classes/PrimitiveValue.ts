@@ -1,11 +1,11 @@
+import type { ObservableGettersAndSetters } from "../types";
 import { hasToJSON } from "../typeWards/hasToJSON";
 import { Observable } from "./Observable";
 
 export class PrimitiveValue<T> extends Observable<T> {
   $value: T;
   constructor(initialValue: T) {
-    // @ts-ignore
-    super((...args) => {
+    super((((...args: [T]): undefined | T => {
       if (args.length > 0) {
         const newValue = args[0];
         this.$value = newValue;
@@ -13,7 +13,7 @@ export class PrimitiveValue<T> extends Observable<T> {
         return;
       }
       return this.$value;
-    });
+    }) as unknown as ObservableGettersAndSetters<T, T>));
     this.$value = initialValue;
   }
 

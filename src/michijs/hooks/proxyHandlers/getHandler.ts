@@ -11,6 +11,7 @@ import { MapProxyHandler } from "./MapProxyHandler";
 import { SetProxyHandler } from "./SetProxyHandler";
 import { ArrayProxyHandler } from "./ArrayProxyHandler";
 import { CommonObjectProxyHandler } from "./CommonObjectProxyHandler";
+import type { ProxiedValue } from "../../classes";
 
 export const getObjectHandler = (
   value: unknown,
@@ -37,8 +38,7 @@ export const getHandler = (
   parentSubscription?: ParentSubscription<any>,
   rootObservableCallback?: () => ObservableType<any>,
 ): ObservableProxyHandlerInterface<any> => {
-  // @ts-ignore
-  const typeOfValue = typeof (value?.$value ?? value);
+  const typeOfValue = typeof ((value as ProxiedValue<unknown>)?.$value ?? value);
 
   switch (typeOfValue) {
     // Intentional order

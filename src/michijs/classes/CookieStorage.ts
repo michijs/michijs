@@ -28,8 +28,10 @@ let currentCookies = document.cookie;
 const cookieStoreObservable = new Observable<string[]>();
 // @ts-ignore
 if (window.cookieStore) {
-  // @ts-ignore
-  const cookieStoreChange = new ObservableFromEventListener(
+  const cookieStoreChange = new ObservableFromEventListener<{
+    changed: {name: string}[],
+    deleted: {name: string}[]
+  }>(
     // @ts-ignore
     cookieStore,
     "change",
@@ -39,11 +41,8 @@ if (window.cookieStore) {
     if (document.cookie !== currentCookies) {
       currentCookies = document.cookie;
       mainCookieStorage = getCookies();
-      // @ts-ignore
       cookieStoreObservable.notify([
-        // @ts-ignore
         ...e.changed.map((x) => x.name),
-        // @ts-ignore
         ...e.deleted.map((x) => x.name),
       ]);
     }
