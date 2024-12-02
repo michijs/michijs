@@ -1,6 +1,4 @@
-import type {
-  ObservableType,
-} from "../../types";
+import type { ObservableType } from "../../types";
 import { useObserve } from "../useObserve";
 import { describe, it, expect, jest, beforeEach, afterEach } from "bun:test";
 
