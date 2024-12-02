@@ -43,10 +43,10 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
   contextNamespace?: string,
 ): Node => {
   const el = asTag
-    ? (create<ParentNode>({
+    ? create<ParentNode>({
         jsxTag: asTag,
         attrs,
-      } as SingleJSXElement))
+      } as SingleJSXElement)
     : new VirtualFragment();
 
   // If a loading component is provided, append it to the element.

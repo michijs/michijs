@@ -267,7 +267,11 @@ export interface MichiProperties
 export interface CustomElementWithCallbacks extends HTMLElement {
   disconnectedCallback?(): void;
   connectedCallback?(): void;
-  attributeChangedCallback?(name: string, oldValue: unknown, newValue: unknown): void;
+  attributeChangedCallback?(
+    name: string,
+    oldValue: unknown,
+    newValue: unknown,
+  ): void;
 }
 
 export interface MichiCustomElement extends HTMLElement, MichiProperties {}

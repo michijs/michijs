@@ -87,9 +87,7 @@ export function cssObjectToText(
         if (key.includes("::")) {
           valueToStringify = {};
           // Separate media from the rest
-          for (const [key, internalValue] of Object.entries(
-            valueAsCssObject,
-          )) {
+          for (const [key, internalValue] of Object.entries(valueAsCssObject)) {
             if (key.startsWith("@"))
               queries += `${key}{${newKey}{${cssObjectToText(
                 internalValue as CSSObject,

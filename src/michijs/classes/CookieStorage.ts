@@ -29,8 +29,8 @@ const cookieStoreObservable = new Observable<string[]>();
 // @ts-ignore
 if (window.cookieStore) {
   const cookieStoreChange = new ObservableFromEventListener<{
-    changed: {name: string}[],
-    deleted: {name: string}[]
+    changed: { name: string }[];
+    deleted: { name: string }[];
   }>(
     // @ts-ignore
     cookieStore,
