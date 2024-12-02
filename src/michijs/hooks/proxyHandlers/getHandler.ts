@@ -38,7 +38,9 @@ export const getHandler = (
   parentSubscription?: ParentSubscription<any>,
   rootObservableCallback?: () => ObservableType<any>,
 ): ObservableProxyHandlerInterface<any> => {
-  const typeOfValue = typeof ((value as ProxiedValue<unknown>)?.$value ?? value);
+  const typeOfValue = typeof (
+    (value as ProxiedValue<unknown>)?.$value ?? value
+  );
 
   switch (typeOfValue) {
     // Intentional order
