@@ -27,7 +27,7 @@ export class VirtualFragment
     forEachChildren(
       this.startItem.nextSibling,
       callback,
-      (node) => node === this.endItem
+      (node) => node === this.endItem,
     );
   }
 
@@ -38,8 +38,7 @@ export class VirtualFragment
   }
 
   insertBefore<T extends Node>(node: T, child: Node | null): T {
-    if (!child || child === this.endItem)
-      return this.appendChild(node);
+    if (!child || child === this.endItem) return this.appendChild(node);
     this.processChildren((currentNode) => {
       if (currentNode === child) {
         child.parentNode?.insertBefore(node, child);
@@ -55,8 +54,7 @@ export class VirtualFragment
   }
 
   remove(): void {
-    if (this.startItem.isConnected)
-      this.updateInitialFragment();
+    if (this.startItem.isConnected) this.updateInitialFragment();
   }
 
   prepend(...nodes: (string | Node)[]): void {

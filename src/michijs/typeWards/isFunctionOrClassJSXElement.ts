@@ -6,4 +6,5 @@ import type {
 
 export const isFunctionOrClassJSXElement = (
   jsx: FunctionJSXElement | ClassJSXElement | ObjectJSXElement,
-): jsx is ClassJSXElement | FunctionJSXElement => typeof jsx.jsxTag === "function";
+): jsx is ClassJSXElement | FunctionJSXElement =>
+  typeof jsx.jsxTag === "function";

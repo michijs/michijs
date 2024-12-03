@@ -9,10 +9,14 @@ export const bindObservableToRef = <T, E extends WeakKey>(
   observable: T,
   el: E,
   callback: RefSubscription<T extends ObservableLike<infer Y> ? Y : T, E>,
-  shouldIgnoreFirstCallback?: boolean
+  shouldIgnoreFirstCallback?: boolean,
 ): void => {
   if (isObservableType(observable)) {
-    const overriddenCallback = overrideCallbackWithRef(observable, el, callback);
+    const overriddenCallback = overrideCallbackWithRef(
+      observable,
+      el,
+      callback,
+    );
     if (!shouldIgnoreFirstCallback)
       // @ts-ignore
       overriddenCallback(observable.valueOf());
@@ -22,8 +26,15 @@ export const bindObservableToRef = <T, E extends WeakKey>(
   if (extendsObject(observable)) {
     const observables = getObservables(observable);
     if (observables.length > 0) {
-      const finalObservable = useComputedObservePrimitive(() => observable, observables);
-      const overriddenCallback = overrideCallbackWithRef(finalObservable as T & ObservableLike<unknown>, el, callback);
+      const finalObservable = useComputedObservePrimitive(
+        () => observable,
+        observables,
+      );
+      const overriddenCallback = overrideCallbackWithRef(
+        finalObservable as T & ObservableLike<unknown>,
+        el,
+        callback,
+      );
       if (!shouldIgnoreFirstCallback)
         // @ts-ignore
         overriddenCallback(finalObservable.valueOf());
