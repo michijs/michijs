@@ -471,30 +471,34 @@ export interface UseComputedObservePrimitive {
   ): PrimitiveObservableType<T>;
 }
 
+export interface ObservableDate extends PrimitiveObservableValue<Date> , Omit<Date, 'valueOf'>{}
+
 // Needs to be partial to allow asignation operation
-export type ObservableType<Y, T = NonNullable<Y>> = IsAny<T> extends true
-  ? any
-  : // Intentional - otherwise it doesnt work
-    [Y] extends [ObservableLike<any>]
-    ? Y
-    : [T] extends [Array<infer V>]
-      ? ObservableArray<V>
-      : [T] extends [Promise<infer V>]
-        ? ObservableComplexObject<Promise<V>>
-        : [T] extends [(...args: infer A) => infer R]
-          ? (...args: A) => ObservableType<R>
-          : [T] extends [Map<infer K, infer V>]
-            ? ObservableMap<K, V>
-            : [T] extends [Set<infer V>]
-              ? ObservableSet<V>
-              : [T] extends [Date]
-                ? PrimitiveObservableValue<Y> & Date
-                : [T] extends [object]
-                  ? // ? ExtendsObject<T> extends true
-                    ObservableObject<Y>
-                  : // : ObservableComplexObject<Y>
-                    PrimitiveObservableValue<GetPrimitiveType<Y>> &
-                      GetPrimitiveTypeClass<T>;
+export type ObservableTypeHelper<Y, T = NonNullable<Y>> = IsAny<T> extends true
+? any
+: // Intentional - otherwise it doesnt work
+  [Y] extends [ObservableLike<any>]
+  ? Y
+  : [T] extends [Array<infer V>]
+    ? ObservableArray<V>
+    : [T] extends [Promise<infer V>]
+      ? ObservableComplexObject<Promise<V>>
+      : [T] extends [(...args: infer A) => infer R]
+        ? (...args: A) => ObservableType<R>
+        : [T] extends [Map<infer K, infer V>]
+          ? ObservableMap<K, V>
+          : [T] extends [Set<infer V>]
+            ? ObservableSet<V>
+            : [T] extends [Date]
+              ? ObservableDate
+              : [T] extends [object]
+                ? // ? ExtendsObject<T> extends true
+                  ObservableObject<Y>
+                : // : ObservableComplexObject<Y>
+                  PrimitiveObservableValue<GetPrimitiveType<Y>> &
+                    GetPrimitiveTypeClass<T>;
+
+export type ObservableType<Y> = ObservableTypeHelper<Y>;
 
 export type Unproxify<T> = IsAny<T> extends true
   ? any
@@ -512,12 +516,16 @@ export type ObservableComplexObject<
   // RV & PrimitiveObservableValue<RV>
 > = PrimitiveObservableValue<RV>;
 
+export type ObservableObjectHelper<
+RV,
+SV = {
+  [K in keyof RV]-?: ObservableType<RV[K]>;
+},
+> = SV & ObservableValue<RV, SV>
+
 export type ObservableObject<
   RV,
-  SV = {
-    [K in keyof RV]-?: ObservableType<RV[K]>;
-  },
-> = SV & ObservableValue<RV, SV>;
+> = ObservableObjectHelper<RV>;
 
 export type MutableArrayNewItemsProperties =
   | "push"
