@@ -10,8 +10,14 @@ import { useComputedObserve } from "./useComputedObserve";
 export const useStringTemplate: UseStringTemplate = (
   templateStringsArray,
   ...props
-) => useComputedObserve(
-  () => templateStringsArray.raw.reduce(
-    (previousValue, currentValue, i) => `${previousValue}${currentValue}${props[i] ? (props[i].valueOf() ?? "") : ""}`
-    // The accumulator takes the first value if you don't pass a value as the second argument:
-    , ""), props);
+) =>
+  useComputedObserve(
+    () =>
+      templateStringsArray.raw.reduce(
+        (previousValue, currentValue, i) =>
+          `${previousValue}${currentValue}${props[i] ? (props[i].valueOf() ?? "") : ""}`,
+        // The accumulator takes the first value if you don't pass a value as the second argument:
+        "",
+      ),
+    props,
+  );

@@ -7,10 +7,7 @@ import { useWatch } from "./useWatch";
  * @param deps An array of dependencies that the callback function depends on
  * @returns A memoized function
  */
-export const usePureFunction: UsePureFunction = (
-  callback,
-  deps,
-) => {
+export const usePureFunction: UsePureFunction = (callback, deps) => {
   let value = undefined as ReturnType<typeof callback>;
   let outdated = true;
 

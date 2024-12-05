@@ -13,4 +13,4 @@ export const useComputedObserve: UseComputedObserve = (
   callback,
   deps,
   options,
-) => useSharedComputedObserve(useObserve, callback, deps, options);;
+) => useSharedComputedObserve(useObserve, callback, deps, options);
