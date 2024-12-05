@@ -1,10 +1,5 @@
-import type { SearchParams } from "../routing/types";
 import type {
-  FetchResult,
-  AnyObject,
-  UseFetchOptions,
-  UseFetchCallback,
-  usePromiseShouldWait,
+  UseFetch,
 } from "../types";
 import { doFetch } from "../utils/doFetch";
 import { usePromise } from "./usePromise";
@@ -20,13 +15,8 @@ import { usePromise } from "./usePromise";
  * @template S Type of the optional search parameters.
  * @template B Type of the optional body.
  */
-export const useFetch = <
-  R,
-  S extends SearchParams = undefined,
-  B extends AnyObject | undefined | string = undefined,
->(
-  callback: UseFetchCallback<S, B>,
-  shouldWait?: usePromiseShouldWait,
-  options?: UseFetchOptions<R>,
-): FetchResult<R> =>
-  usePromise(async () => doFetch(await callback(), options), shouldWait);
+export const useFetch: UseFetch = (
+  callback,
+  shouldWait,
+  options,
+) => usePromise(async () => doFetch(await callback(), options), shouldWait);

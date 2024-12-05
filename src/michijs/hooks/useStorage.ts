@@ -1,6 +1,6 @@
 import { CookieStorage } from "../classes/CookieStorage";
 import { ObservableFromEventListener } from "../classes/ObservableFromEventListener";
-import type { ObservableType } from "../types";
+import type { UseStorage } from "../types";
 import { useObserveInternal } from "./useObserve";
 import { isNil } from "../utils/isNil";
 
@@ -10,10 +10,10 @@ import { isNil } from "../utils/isNil";
  * @param storage The storage object to be used (defaults to localStorage if not provided)
  * @returns A new observable
  */
-export function useStorage<T extends object>(
-  item: T,
-  storage: Storage = localStorage,
-): ObservableType<T> {
+export const useStorage: UseStorage = (
+  item,
+  storage = localStorage,
+) => {
   function getStorageValue(key: string) {
     const localStorageValue = storage.getItem(key);
     if (localStorageValue)
@@ -24,13 +24,13 @@ export function useStorage<T extends object>(
       }
     else return item[key];
   }
-  const newObservable = useObserveInternal<T>(
+  const newObservable = useObserveInternal(
     Object.keys(item).reduce(
       (previousValue, key) => ({
         ...previousValue,
         [key]: getStorageValue(key),
       }),
-      {} as T,
+      {},
     ),
   );
 
@@ -63,5 +63,5 @@ export function useStorage<T extends object>(
     });
   }
 
-  return newObservable;
+  return newObservable as any;
 }

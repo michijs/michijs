@@ -1,6 +1,6 @@
 import { useObservePrimitive } from "./useObservePrimitive";
-import type { ObservableType, UseComputedObservePrimitive } from "../types";
-import { useWatch } from "./useWatch";
+import { useSharedComputedObserve } from "./useSharedComputedObserve";
+import type { UseComputedObservePrimitive } from "../types";
 
 /**
  * It is used for computing a value and observing its changes. Primitive version of useComputedObserve
@@ -13,20 +13,4 @@ export const useComputedObservePrimitive: UseComputedObservePrimitive = (
   callback,
   deps,
   options,
-) => {
-  const newObservable = useObservePrimitive(callback());
-
-  const listener = () => {
-    try {
-      const callbackResult = callback();
-      options?.onBeforeUpdate?.();
-      (newObservable as ObservableType<object>)(callbackResult as object);
-      options?.onAfterUpdate?.();
-    } catch (ex) {
-      console.error(ex);
-    }
-  };
-  useWatch(listener, deps);
-
-  return newObservable;
-};
+) => useSharedComputedObserve(useObservePrimitive, callback, deps, options);

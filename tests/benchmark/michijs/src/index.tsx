@@ -1,14 +1,14 @@
 import {
-  type PrimitiveObservableType,
+  type ObservablePrimitiveType,
   useObservePrimitive,
   ProxiedArray,
   create,
 } from "@michijs/michijs";
 
 interface Row {
-  label: PrimitiveObservableType<string>;
+  label: ObservablePrimitiveType<string>;
   id: number;
-  selected: PrimitiveObservableType<string | null>;
+  selected: ObservablePrimitiveType<string | null>;
 }
 const adjectives = [
     "pretty",

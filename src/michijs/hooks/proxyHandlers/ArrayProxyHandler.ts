@@ -100,6 +100,9 @@ export class ArrayProxyHandler<T extends ProxiedArray<any>>
   get(target: ProxiedValue<T>, property) {
     if (property in target) return Reflect.get(target, property);
     const targetProperty = Reflect.get(target.$value, property);
+    // Proxies are also functions. This is an easier way to know if its a proxy item or a function
+    if (Number.isInteger(Number(property)))
+      return targetProperty
     const bindedTargetProperty =
       typeof targetProperty === "function"
         ? (targetProperty as Function).bind(target.$value)

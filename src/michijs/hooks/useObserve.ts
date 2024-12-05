@@ -1,28 +1,26 @@
 import { ProxiedValue } from "../classes/ProxiedValue";
-import type { ObservableType, ParentSubscription } from "../types";
+import type { ObservableType, UseObserve, UseObserveInternal } from "../types";
 import { ObservableProxyHandler } from "./proxyHandlers/ObservableProxyHandler";
 
 const observableProxyHandler = new ObservableProxyHandler();
-export function useObserveInternal<T>(
-  item?: T,
-  parentSubscription?: ParentSubscription<T>,
+export const useObserveInternal: UseObserveInternal = (
+  item,
+  parentSubscription,
   /**
    * For functions inside an observable
    */
-  rootObservableCallback?: () => ObservableType<unknown>,
-): ObservableType<T> {
-  return new Proxy(
-    new ProxiedValue<any>(item, parentSubscription, rootObservableCallback),
-    observableProxyHandler,
-  ) as unknown as ObservableType<T>;
-}
+  rootObservableCallback,
+) => new Proxy(
+  new ProxiedValue<any>(item, parentSubscription, rootObservableCallback),
+  observableProxyHandler,
+) as any;
 
 /**
  * Responsible for observing changes on different types of values.
  * @param item The value to be observed.
  * @returns A new observable
  */
-export function useObserve<T>(item?: T): ObservableType<T> {
+export const useObserve: UseObserve = (item) => {
   const rootObservableCallback = () => result;
   const result = useObserveInternal(item, undefined, rootObservableCallback);
   return result;

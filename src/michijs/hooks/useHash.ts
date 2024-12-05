@@ -1,6 +1,6 @@
 import { useComputedObserve } from "./useComputedObserve";
 import { HistoryManager } from "../classes/HistoryManager";
-import type { ObservableType } from "../types";
+import type { UseHash } from "../types";
 
 // hashchange does not work properly
 // const hashListener = new ObservableFromEventListener(window, 'hashchange')
@@ -19,8 +19,7 @@ const Hash = useComputedObserve(
  * It is designed to manage the hash portion of the URL. Provides a way to manage and observe changes in the hash portion of the URL, ensuring synchronization between the hash value and the observable state.
  * @returns An observable with keys of type T and boolean values.
  */
-export const useHash = <T extends string = string>() =>
-  Hash as ObservableType<Record<T, boolean | undefined>>;
+export const useHash: UseHash = () => Hash as any;
 
 Hash.subscribe((newValue) => {
   const hashes = Object.entries(newValue).filter(([_, value]) =>

@@ -1,5 +1,5 @@
-import type { PromiseResult, usePromiseShouldWait } from "../types";
-import { useObserveInternal } from "./useObserve";
+import type { PromiseResult, UsePromise } from "../types";
+import { useObservePrimitive } from "./useObservePrimitive";
 import { useWatch } from "./useWatch";
 
 /**
@@ -10,21 +10,21 @@ import { useWatch } from "./useWatch";
  * @returns An Observable that emits the result of the promise operation.
  * @template R Type of the expected response data.
  */
-export const usePromise = <R>(
-  callback: () => Promise<R>,
-  shouldWait?: usePromiseShouldWait,
-): PromiseResult<R> => {
-  let internalPromiseWithResolvers = Promise.withResolvers<R>();
+export const usePromise: UsePromise = (
+  callback,
+  shouldWait,
+) => {
+  let internalPromiseWithResolvers = Promise.withResolvers();
   let loading = false;
 
   const result = {
-    promise: useObserveInternal(internalPromiseWithResolvers.promise),
+    promise: useObservePrimitive(internalPromiseWithResolvers.promise),
     async recall() {
       if (!loading) {
         try {
           await result.promise();
         } catch {}
-        internalPromiseWithResolvers = Promise.withResolvers<R>();
+        internalPromiseWithResolvers = Promise.withResolvers();
         result.promise(internalPromiseWithResolvers.promise);
       }
       await tryToResolvePromiseCallback();
@@ -58,5 +58,5 @@ export const usePromise = <R>(
 
   useWatch(result.recall, shouldWait);
 
-  return result as unknown as PromiseResult<R>;
+  return result as any;
 };

@@ -1,4 +1,4 @@
-import type { useWatchDeps } from "../types";
+import type { UsePureFunction } from "../types";
 import { useWatch } from "./useWatch";
 
 /**
@@ -7,11 +7,11 @@ import { useWatch } from "./useWatch";
  * @param deps An array of dependencies that the callback function depends on
  * @returns A memoized function
  */
-export const usePureFunction = <T>(
-  callback: () => T,
-  deps: useWatchDeps,
-): (() => T) => {
-  let value: T = undefined as T;
+export const usePureFunction: UsePureFunction = (
+  callback,
+  deps,
+) => {
+  let value = undefined as ReturnType<typeof callback>;
   let outdated = true;
 
   const listener = () => (outdated = true);
