@@ -1,6 +1,4 @@
-import type {
-  UseFetch,
-} from "../types";
+import type { UseFetch } from "../types";
 import { doFetch } from "../utils/doFetch";
 import { usePromise } from "./usePromise";
 
@@ -15,8 +13,5 @@ import { usePromise } from "./usePromise";
  * @template S Type of the optional search parameters.
  * @template B Type of the optional body.
  */
-export const useFetch: UseFetch = (
-  callback,
-  shouldWait,
-  options,
-) => usePromise(async () => doFetch(await callback(), options), shouldWait);
+export const useFetch: UseFetch = (callback, shouldWait, options) =>
+  usePromise(async () => doFetch(await callback(), options), shouldWait);

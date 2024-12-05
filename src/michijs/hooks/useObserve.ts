@@ -1,5 +1,5 @@
 import { ProxiedValue } from "../classes/ProxiedValue";
-import type { ObservableType, UseObserve, UseObserveInternal } from "../types";
+import type { UseObserve, UseObserveInternal } from "../types";
 import { ObservableProxyHandler } from "./proxyHandlers/ObservableProxyHandler";
 
 const observableProxyHandler = new ObservableProxyHandler();
@@ -10,10 +10,11 @@ export const useObserveInternal: UseObserveInternal = (
    * For functions inside an observable
    */
   rootObservableCallback,
-) => new Proxy(
-  new ProxiedValue<any>(item, parentSubscription, rootObservableCallback),
-  observableProxyHandler,
-) as any;
+) =>
+  new Proxy(
+    new ProxiedValue<any>(item, parentSubscription, rootObservableCallback),
+    observableProxyHandler,
+  ) as any;
 
 /**
  * Responsible for observing changes on different types of values.
@@ -24,4 +25,4 @@ export const useObserve: UseObserve = (item) => {
   const rootObservableCallback = () => result;
   const result = useObserveInternal(item, undefined, rootObservableCallback);
   return result;
-}
+};

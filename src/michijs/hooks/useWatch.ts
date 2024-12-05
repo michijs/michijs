@@ -7,4 +7,4 @@ import type { UseWatch } from "../types";
  */
 export const useWatch: UseWatch = (callback, deps) => {
   if (deps) for (const x of deps) x?.subscribe?.(callback);
-}
+};

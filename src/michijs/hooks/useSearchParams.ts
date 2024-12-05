@@ -23,7 +23,7 @@ const SearchParams = useComputedObserve(
  * It facilitates the management and observation of search parameters in the URL, providing a reactive way to handle changes and update the URL accordingly.
  * @returns A new observable
  */
-export const useSearchParams: UseSearchParams = () => (SearchParams as any);
+export const useSearchParams: UseSearchParams = () => SearchParams as any;
 
 SearchParams.subscribe((newValue) => {
   // Prevents pushing new urls while updating search params

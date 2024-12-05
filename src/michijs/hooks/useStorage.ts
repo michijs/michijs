@@ -10,10 +10,7 @@ import { isNil } from "../utils/isNil";
  * @param storage The storage object to be used (defaults to localStorage if not provided)
  * @returns A new observable
  */
-export const useStorage: UseStorage = (
-  item,
-  storage = localStorage,
-) => {
+export const useStorage: UseStorage = (item, storage = localStorage) => {
   function getStorageValue(key: string) {
     const localStorageValue = storage.getItem(key);
     if (localStorageValue)
@@ -64,4 +61,4 @@ export const useStorage: UseStorage = (
   }
 
   return newObservable as any;
-}
+};

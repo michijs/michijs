@@ -1,4 +1,4 @@
-import type { PromiseResult, UsePromise } from "../types";
+import type { UsePromise } from "../types";
 import { useObservePrimitive } from "./useObservePrimitive";
 import { useWatch } from "./useWatch";
 
@@ -10,10 +10,7 @@ import { useWatch } from "./useWatch";
  * @returns An Observable that emits the result of the promise operation.
  * @template R Type of the expected response data.
  */
-export const usePromise: UsePromise = (
-  callback,
-  shouldWait,
-) => {
+export const usePromise: UsePromise = (callback, shouldWait) => {
   let internalPromiseWithResolvers = Promise.withResolvers();
   let loading = false;
 
