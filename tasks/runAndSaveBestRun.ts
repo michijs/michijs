@@ -32,16 +32,19 @@ for (let i = 0; i < times; i++) {
     JSON.parse(readFileSync(michijsJsonPath, "utf-8"))[packagejson.version] ||
     {};
 
-  bestResults = Object.entries(newResults).reduce(
-    (previousValue, [key, newResultsValue]) => {
-      previousValue[key] = Math.min(
-        newResultsValue as number,
-        bestResults[key] ?? Number.POSITIVE_INFINITY,
-      );
-      return previousValue;
-    },
-    {},
-  );
+  if (bestResults)
+    bestResults = Object.entries(newResults).reduce(
+      (previousValue, [key, newResultsValue]) => {
+        previousValue[key] = Math.min(
+          newResultsValue as number,
+          bestResults[key] ?? Number.POSITIVE_INFINITY,
+        );
+        return previousValue;
+      },
+      {},
+    );
+  else
+    bestResults = newResults
 
   const resultsString = JSON.stringify(
     {

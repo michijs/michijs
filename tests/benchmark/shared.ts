@@ -2,6 +2,7 @@ import type { ElementHandle, Page, Browser } from "playwright-core";
 import { it, expect } from "bun:test";
 import { exec } from "child_process";
 import packagejson from "../../package.json";
+import type { AnyObject } from "@michijs/michijs/index";
 
 export type Result =
   | "create1000Rows"
@@ -13,6 +14,23 @@ export type Result =
   | "createManyRows"
   | "appendRowsToLargeTable"
   | "clearRows";
+
+  
+interface Trace {
+  traceEvents: TimingResult[]
+}
+
+interface TimingResult {
+  type: string;
+  ts: number;
+  name?: string;
+  args?: AnyObject;
+  dur?: number;
+  end?: number;
+  mem?: number;
+  pid: number;
+  cat: string;
+}
 
 const getRowId = async (element: ElementHandle<Element>) => {
   const td = await element.$("td");
@@ -67,12 +85,12 @@ export async function makePerformanceTests(
     await browser().startTracing(page());
     await functionToMeasure();
     const traceBuffer = await browser().stopTracing();
-    const trace = JSON.parse(traceBuffer.toString());
+    const trace: Trace = JSON.parse(traceBuffer.toString());
     // console.log(traceBuffer.toString())
     const duration =
-      trace.traceEvents.find(
+      (trace.traceEvents.find(
         (x) => x?.name === "EventDispatch" && x?.args?.data?.type === "click",
-      ).dur / 1000;
+      )?.dur ?? 0) / 1000;
     results[key] = Number(duration.toFixed(2));
   };
   it("creates 1000 rows when clicking run", async () => {
