@@ -43,8 +43,7 @@ for (let i = 0; i < times; i++) {
       },
       {},
     );
-  else
-    bestResults = newResults
+  else bestResults = newResults;
 
   const resultsString = JSON.stringify(
     {

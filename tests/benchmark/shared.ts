@@ -15,9 +15,8 @@ export type Result =
   | "appendRowsToLargeTable"
   | "clearRows";
 
-  
 interface Trace {
-  traceEvents: TimingResult[]
+  traceEvents: TimingResult[];
 }
 
 interface TimingResult {
