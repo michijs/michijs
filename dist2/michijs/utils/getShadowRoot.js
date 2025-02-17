@@ -8,6 +8,6 @@
  */
 export function getShadowRoot(self) {
   return self
-    ? self.shadowRoot ?? ("$michi" in self ? self.$michi?.shadowRoot : null)
+    ? (self.shadowRoot ?? ("$michi" in self ? self.$michi?.shadowRoot : null))
     : null;
 }
