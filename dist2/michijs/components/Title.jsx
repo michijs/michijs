@@ -18,7 +18,7 @@ const title = useTitle();
  * @returns {*}
  */
 export const Title = ({ children }) => {
-  let el = undefined;
+  let el;
 
   // bindObservable(children, updateTitleCallback)
   return (
