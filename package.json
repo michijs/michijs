@@ -62,15 +62,15 @@
     "Autonomous custom elements"
   ],
   "devDependencies": {
-    "@happy-dom/global-registrator": "15.11.7",
+    "@happy-dom/global-registrator": "17.1.0",
     "@michijs/dev-server": "0.7.26",
     "@michijs/htmltype": "0.2.18",
     "@michijs/tsconfig": "0.0.4",
-    "@reduxjs/toolkit": "2.5.0",
-    "@types/bun": "1.1.14",
-    "playwright-core": "1.49.1",
+    "@reduxjs/toolkit": "2.5.1",
+    "@types/bun": "1.2.2",
+    "playwright-core": "1.50.1",
     "redux": "5.0.1",
-    "typescript": "5.7.2"
+    "typescript": "5.7.3"
   },
   "peerDependencies": {
     "csstype": "^3.1.3"
