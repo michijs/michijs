@@ -1,6 +1,7 @@
 import { useObserve } from "./useObserve";
 import type { ObservableType, UseAsyncComputedObserve } from "../types";
 import { useWatch } from "./useWatch";
+import { CancellablePromise } from "../classes/CancellablePromise";
 
 /**
  * It is used for async computing a value and observing its changes.
@@ -17,19 +18,17 @@ export const useAsyncComputedObserve: UseAsyncComputedObserve = (
   options,
 ) => {
   const newObservable = useObserve(initialValue);
-  let lastCall: number;
+  let cancellablePromise: CancellablePromise<any> | undefined;
 
   const listener = async () => {
     try {
-      const currentCall = Date.now();
-      lastCall = currentCall;
-      const callbackResult = await callback();
       // Should cancel any update before the last call
-      if (lastCall === currentCall) {
+      cancellablePromise?.cancel();
+      cancellablePromise = new CancellablePromise(callback(), (callbackResult) => {
         options?.onBeforeUpdate?.();
         (newObservable as ObservableType<object>)(callbackResult as object);
         options?.onAfterUpdate?.();
-      }
+      })
     } catch (ex) {
       console.error(ex);
     }
