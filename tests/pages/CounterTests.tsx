@@ -5,6 +5,7 @@ import { SimpleCounter } from "../SimpleCounter";
 import { StoredObservableCounter } from "../StoredObservableCounter";
 import { IndexedDBCounter } from "../IndexedDBCounter";
 import { ColorSelector } from "../ColorSelector";
+import { CacheCounter } from "../CacheCounter";
 
 const TestCustomElement = createCustomElement("test-custom-element", {
   reflectedAttributes: {
@@ -74,6 +75,9 @@ const CounterTests = () => (
     <h1>Stored attribute counter</h1>
     <StoredObservableCounter />
     <StoredObservableCounter />
+    <h1>Cache counter</h1>
+    <CacheCounter />
+    <CacheCounter />
     <h1>Built-in component</h1>
     <BuiltInButton>Sample customized button</BuiltInButton>
     <TestCustomElement />

@@ -17,13 +17,19 @@ export const useAsyncComputedObserve: UseAsyncComputedObserve = (
   options,
 ) => {
   const newObservable = useObserve(initialValue);
+  let lastCall: number;
 
   const listener = async () => {
     try {
+      const currentCall = Date.now();
+      lastCall = currentCall;
       const callbackResult = await callback();
-      options?.onBeforeUpdate?.();
-      (newObservable as ObservableType<object>)(callbackResult as object);
-      options?.onAfterUpdate?.();
+      // Should cancel any update before the last call
+      if (lastCall === currentCall) {
+        options?.onBeforeUpdate?.();
+        (newObservable as ObservableType<object>)(callbackResult as object);
+        options?.onAfterUpdate?.();
+      }
     } catch (ex) {
       console.error(ex);
     }
