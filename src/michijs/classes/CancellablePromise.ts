@@ -12,7 +12,7 @@ export class CancellablePromise<T = any> {
    */
   constructor(abortController: AbortController, promise: Promise<T>, callback: (result: T) => void) {
     const fakePromise = Promise.withResolvers<T>();
-    abortController.signal.onabort = () => fakePromise.resolve()
+    abortController.signal.addEventListener('abort', () => fakePromise.resolve())
     Promise.race([promise, fakePromise.promise])
       .then((result) => {
         if (!abortController.signal.aborted) callback(result);
