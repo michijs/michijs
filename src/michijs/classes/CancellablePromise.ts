@@ -7,6 +7,7 @@ export class CancellablePromise<T = any> {
   /**
    * Creates a cancellable promise.
    *
+   * @param abortController The abort controller to use
    * @param promise The original promise to wrap.
    * @param callback A callback to handle the resolved value, unless cancelled.
    */
