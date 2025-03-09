@@ -604,7 +604,7 @@ export interface UseObservePrimitive {
 
 export interface UseAsyncComputedObserve {
   <T>(
-    callback: () => Promise<T>,
+    callback: (abortSignal: AbortSignal) => Promise<T>,
     initialValue?: T,
     deps?: useWatchDeps,
     options?: UseComputedObserveOptions,

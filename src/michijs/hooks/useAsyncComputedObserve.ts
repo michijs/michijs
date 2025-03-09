@@ -18,14 +18,16 @@ export const useAsyncComputedObserve: UseAsyncComputedObserve = (
   options,
 ) => {
   const newObservable = useObserve(initialValue);
-  let cancellablePromise: CancellablePromise<any> | undefined;
+  let abortController: AbortController | undefined;
 
   const listener = async () => {
     try {
       // Should cancel any update before the last call
-      cancellablePromise?.cancel();
-      cancellablePromise = new CancellablePromise(
-        callback(),
+      abortController?.abort();
+      abortController = new AbortController();
+      new CancellablePromise(
+        abortController,
+        callback(abortController.signal),
         (callbackResult) => {
           options?.onBeforeUpdate?.();
           (newObservable as ObservableType<object>)(callbackResult as object);
