@@ -1,7 +1,6 @@
 import { useObserve } from "./useObserve";
 import type { ObservableType, UseAsyncComputedObserve } from "../types";
 import { useWatch } from "./useWatch";
-import { CancellablePromise } from "../classes/CancellablePromise";
 
 /**
  * It is used for async computing a value and observing its changes.
@@ -25,15 +24,14 @@ export const useAsyncComputedObserve: UseAsyncComputedObserve = (
       // Should cancel any update before the last call
       abortController?.abort();
       abortController = new AbortController();
-      new CancellablePromise(
-        abortController,
-        callback(abortController.signal),
-        (callbackResult) => {
-          options?.onBeforeUpdate?.();
-          (newObservable as ObservableType<object>)(callbackResult as object);
-          options?.onAfterUpdate?.();
-        },
-      );
+      const currentAbortController = abortController;
+
+      const callbackResult = await callback(currentAbortController.signal);
+      if (!currentAbortController.signal.aborted) {
+        options?.onBeforeUpdate?.();
+        (newObservable as ObservableType<object>)(callbackResult as object);
+        options?.onAfterUpdate?.();
+      }
     } catch (ex) {
       console.error(ex);
     }
