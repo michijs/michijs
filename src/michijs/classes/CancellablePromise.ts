@@ -10,9 +10,15 @@ export class CancellablePromise<T = any> {
    * @param promise The original promise to wrap.
    * @param callback A callback to handle the resolved value, unless cancelled.
    */
-  constructor(abortController: AbortController, promise: Promise<T>, callback: (result: T) => void) {
+  constructor(
+    abortController: AbortController,
+    promise: Promise<T>,
+    callback: (result: T) => void,
+  ) {
     const fakePromise = Promise.withResolvers<T>();
-    abortController.signal.addEventListener('abort', () => fakePromise.resolve())
+    abortController.signal.addEventListener("abort", () =>
+      fakePromise.resolve(),
+    );
     Promise.race([promise, fakePromise.promise])
       .then((result) => {
         if (!abortController.signal.aborted) callback(result);
