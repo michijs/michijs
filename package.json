@@ -66,7 +66,7 @@
     "@michijs/dev-server": "0.8.0",
     "@michijs/htmltype": "0.2.18",
     "@michijs/tsconfig": "0.0.4",
-    "@reduxjs/toolkit": "2.6.0",
+    "@reduxjs/toolkit": "2.6.1",
     "@types/bun": "1.2.4",
     "playwright-core": "1.51.0",
     "redux": "5.0.1",
