@@ -11,3 +11,8 @@ export const trustedTypePolicy: TrustedTypePolicy =
     ?
     window.trustedTypes.createPolicy("michijs", trustedTypeObject)
     : (trustedTypeObject as unknown as TrustedTypePolicy);
+
+export const makeMichijsTheDefaultTrustedPolicy = () => {
+  if (window.trustedTypes)
+    window.trustedTypes.createPolicy("default", trustedTypeObject)
+}
