@@ -62,7 +62,7 @@
     "Autonomous custom elements"
   ],
   "devDependencies": {
-    "@happy-dom/global-registrator": "17.1.8",
+    "@happy-dom/global-registrator": "17.4.3",
     "@michijs/dev-server": "0.8.0",
     "@michijs/htmltype": "0.2.18",
     "@michijs/tsconfig": "0.0.4",
