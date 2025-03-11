@@ -20,12 +20,11 @@ export const useAsyncComputedObserve: UseAsyncComputedObserve = (
   let abortController: AbortController | undefined;
 
   const listener = async () => {
+    abortController?.abort();
+    abortController = new AbortController();
+    const currentAbortController = abortController;
     try {
       // Should cancel any update before the last call
-      abortController?.abort();
-      abortController = new AbortController();
-      const currentAbortController = abortController;
-
       const callbackResult = await callback(currentAbortController.signal);
       if (!currentAbortController.signal.aborted) {
         options?.onBeforeUpdate?.();
@@ -33,6 +32,7 @@ export const useAsyncComputedObserve: UseAsyncComputedObserve = (
         options?.onAfterUpdate?.();
       }
     } catch (ex) {
+      currentAbortController?.abort();
       console.error(ex);
     }
   };
