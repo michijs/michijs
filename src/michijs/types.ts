@@ -433,8 +433,8 @@ export type UseFetchCallback<
   B extends AnyObject | undefined | string = undefined,
 > = () => DoFetchProps<S, B> | Promise<DoFetchProps<S, B>>;
 
-export interface UseFetchOptions<T> {
-  transform?(value: T): T;
+export interface UseFetchOptions<T, R = T> {
+  transform?(value: T): R;
 }
 export interface UseComputedObserveOptions {
   onBeforeUpdate?(): void;
