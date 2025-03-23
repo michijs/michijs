@@ -19,9 +19,11 @@ const getErrorMessage = async (response: Response): Promise<string> => {
 export const doGenericFetch = async <
   S extends SearchParams = undefined,
   B extends AnyObject | undefined | string = undefined,
->(
-  { input, searchParams, ...init }: DoFetchProps<S, B>
-): Promise<Response> => {
+>({
+  input,
+  searchParams,
+  ...init
+}: DoFetchProps<S, B>): Promise<Response> => {
   const url = createURL(input, {
     baseURL: input.startsWith("/") ? location.origin : undefined,
     searchParams,
@@ -36,5 +38,5 @@ export const doGenericFetch = async <
 
   if (!response.ok) throw await getErrorMessage(response);
 
-  return response
+  return response;
 };
