@@ -59,7 +59,7 @@ export const useAnimation = (
       value?.forEach((x, i) => {
         const index = getOffset(i, value.length, offset?.[i]);
         keyframesCssObject[index] = {
-          ...(keyframesCssObject[index] ?? {}),
+          ...keyframesCssObject[index],
           [key]: x,
         };
       });

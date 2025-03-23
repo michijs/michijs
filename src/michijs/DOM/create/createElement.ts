@@ -25,7 +25,7 @@ export function createElement<
     {
       jsxTag: tagName,
       attrs: {
-        ...(attributes ?? {}),
+        ...attributes,
         is,
       },
     },
