@@ -11,6 +11,7 @@ export { pick } from "./pick";
 export { unproxify } from "./unproxify";
 export { isNil } from "./isNil";
 export { doFetch } from "./doFetch";
+export { doGenericFetch } from "./doGenericFetch";
 export { doBlobFetch } from "./doBlobFetch";
 export { throttle } from "./throttle";
 export { debounce } from "./debounce";
