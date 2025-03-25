@@ -13,5 +13,5 @@ export const doBlobFetch = async <
   const response = await doGenericFetch(request);
 
   const blobResult = await response.blob();
-  return (options?.transform?.(blobResult) ?? blobResult) as R;
+  return (options?.transform?.(blobResult, response) ?? blobResult) as R;
 };

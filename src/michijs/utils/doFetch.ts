@@ -13,5 +13,5 @@ export const doFetch = async <
   const response = await doGenericFetch(request);
 
   const jsonResult = (await response.json()) as R;
-  return options?.transform?.(jsonResult) ?? jsonResult;
+  return options?.transform?.(jsonResult, response) ?? jsonResult;
 };

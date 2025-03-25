@@ -434,7 +434,7 @@ export type UseFetchCallback<
 > = () => DoFetchProps<S, B> | Promise<DoFetchProps<S, B>>;
 
 export interface UseFetchOptions<T, R = T> {
-  transform?(value: T): R;
+  transform?(value: T, response: Response): R;
 }
 export interface UseComputedObserveOptions {
   onBeforeUpdate?(): void;
