@@ -68,7 +68,7 @@
     "@michijs/tsconfig": "0.0.4",
     "@reduxjs/toolkit": "2.6.1",
     "@types/bun": "1.2.5",
-    "playwright-core": "1.51.0",
+    "playwright-core": "1.51.1",
     "redux": "5.0.1",
     "typescript": "5.8.2"
   },
