@@ -8,8 +8,7 @@ export class PrimitiveValue<T> extends Observable<T> {
     super(((...args: [T]): undefined | T => {
       if (args.length > 0) {
         const newValue = args[0];
-        if (newValue === this.$value)
-          return;
+        if (newValue === this.$value) return;
         this.$value = newValue;
         this.notify(newValue);
         return;
