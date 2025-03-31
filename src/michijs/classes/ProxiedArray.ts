@@ -54,7 +54,7 @@ export class ProxiedArray<V>
       enumerable: false,
       configurable: true,
       value: new Array<Target<V>>(),
-    })
+    });
   }
 
   List: <const E = FC>(

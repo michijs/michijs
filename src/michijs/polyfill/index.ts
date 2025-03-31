@@ -1,5 +1,8 @@
 import { getBrowser } from "../utils/getBrowser";
-import { overrideDocumentCreateElement, safariDefine } from "./safariBuiltInElements"
+import {
+  overrideDocumentCreateElement,
+  safariDefine,
+} from "./safariBuiltInElements";
 
 const isSafari = ["safari", "iphone"].includes(getBrowser());
 
