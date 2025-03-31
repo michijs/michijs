@@ -1,13 +1,9 @@
 import type { HistoryManagerType } from "../../types";
 
-let HistoryManager: HistoryManagerType;
+let HistoryManager: Promise<HistoryManagerType>;
 if (window.navigation && window.URLPattern)
-  HistoryManager = new (
-    await import("./ModernHistoryManager")
-  ).ModernHistoryManager();
+  HistoryManager = import("./ModernHistoryManager").then(({ ModernHistoryManager }) => new ModernHistoryManager())
 else
-  HistoryManager = new (
-    await import("./LegacyHistoryManager")
-  ).LegacyHistoryManager();
+  HistoryManager = import("./LegacyHistoryManager").then(({ LegacyHistoryManager }) => new LegacyHistoryManager())
 
 export { HistoryManager };
