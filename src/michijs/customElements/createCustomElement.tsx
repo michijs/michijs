@@ -58,8 +58,8 @@ export function createCustomElement<O extends MichiElementOptions>(
 
   const mappedAdoptedStyleSheets = adoptedStyleSheets
     ? Object.values(adoptedStyleSheets).map((x) =>
-      typeof x === "function" ? x(internalCssSelector) : x,
-    )
+        typeof x === "function" ? x(internalCssSelector) : x,
+      )
     : undefined;
 
   if (events)
@@ -74,7 +74,8 @@ export function createCustomElement<O extends MichiElementOptions>(
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
-    implements MichiCustomElement {
+    implements MichiCustomElement
+  {
     $michi: MichiCustomElement["$michi"];
     connected;
     willMount;
@@ -303,16 +304,9 @@ export function createCustomElement<O extends MichiElementOptions>(
 
   try {
     if (extendsTag) {
-      if (createBuiltInElement)
-        createBuiltInElement.then((fn) => {
-          fn(tag, MichiCustomElementResult, {
-            extends: extendsTag,
-          })
-        });
-      else
-        window.customElements.define(tag, MichiCustomElementResult, {
-          extends: extendsTag,
-        })
+      createBuiltInElement(tag, MichiCustomElementResult, {
+        extends: extendsTag,
+      });
     } else {
       window.customElements.define(tag, MichiCustomElementResult);
     }

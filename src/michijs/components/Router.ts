@@ -3,9 +3,9 @@ import type { SingleJSXElement } from "../types";
 import { VirtualFragment } from "../classes/VirtualFragment";
 import { bindObservable } from "../utils/bindObservable";
 import { create } from "../DOM/create/create";
+import { useComputedObserve } from "../hooks/useComputedObserve";
 import { HistoryManager } from "../classes/HistoryManager";
 import { urlFn } from "../routing/utils/urlFn";
-import { useAsyncComputedObserve } from "../hooks/useAsyncComputedObserve";
 
 export const Router = <const T>(
   { as: asTag, routes, parentRoute, enableCache, ...attrs }: RouterProps<T>,
@@ -14,18 +14,17 @@ export const Router = <const T>(
 ) => {
   const el = asTag
     ? create<ParentNode>({
-      jsxTag: asTag,
-      attrs,
-    } as SingleJSXElement)
+        jsxTag: asTag,
+        attrs,
+      } as SingleJSXElement)
     : new VirtualFragment();
   const cache: Record<string, DocumentFragment> = {};
 
-  const matchedRoute = useAsyncComputedObserve(async () => {
-    const manager = await HistoryManager;
+  const matchedRoute = useComputedObserve(() => {
     return Object.keys(routes ?? {}).find((key) =>
-      manager.matches(urlFn(key, parentRoute)().pathname, true),
+      HistoryManager.matches(urlFn(key, parentRoute)().pathname, true),
     );
-  }, undefined, [HistoryManager]);
+  }, [HistoryManager]);
   let currentRoute: string | undefined = matchedRoute.valueOf();
 
   bindObservable(matchedRoute, (newMatchedRoute) => {
