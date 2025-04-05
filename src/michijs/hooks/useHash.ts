@@ -9,8 +9,8 @@ const Hash = useComputedObserve(
   () =>
     location.hash
       ? {
-          [location.hash]: true,
-        }
+        [location.hash]: true,
+      }
       : {},
   [HistoryManager],
 );
@@ -21,7 +21,8 @@ const Hash = useComputedObserve(
  */
 export const useHash: UseHash = () => Hash as any;
 
-Hash.subscribe((newValue) => {
+Hash.subscribe(async (newValue) => {
+  const historyManager = await HistoryManager;
   const hashes = Object.entries(newValue).filter(([_, value]) =>
     value?.valueOf(),
   );
@@ -31,6 +32,6 @@ Hash.subscribe((newValue) => {
     const [newHash] = hashes[0] ?? [""];
     const newUrl = new URL(location.href);
     newUrl.hash = newHash;
-    if (location.hash !== newUrl.hash) HistoryManager.push(newUrl);
+    if (location.hash !== newUrl.hash) historyManager.push(newUrl);
   }
 });

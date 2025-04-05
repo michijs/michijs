@@ -33,7 +33,7 @@ if (window.cookieStore) {
     deleted: { name: string }[];
   }>(
     // @ts-ignore
-    cookieStore,
+    window.cookieStore,
     "change",
   );
 

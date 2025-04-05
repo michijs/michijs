@@ -17,7 +17,7 @@ export const Redirect: FC<RedirectProps> = ({ to }) => (
     onelementconnected={async () => {
       const toValue = unproxify(to);
       await wait(0);
-      HistoryManager.push(
+      (await HistoryManager).push(
         typeof toValue === "function"
           ? (toValue as () => string | URL)()
           : toValue,

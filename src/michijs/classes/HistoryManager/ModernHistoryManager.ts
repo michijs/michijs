@@ -14,7 +14,7 @@ export class ModernHistoryManager
     super();
     window.addEventListener("beforeunload", (e) => {
       const isFormEvent =
-        window.navigation?.currentEntry?.url ===
+        window.navigation!.currentEntry?.url ===
           this.lastNavigationEvent?.destination.url &&
         this.lastNavigationEvent?.formData;
       if (isFormEvent || !this.shouldShowUnloadPrompt?.()) {
@@ -24,7 +24,7 @@ export class ModernHistoryManager
       return "Changes that you made may not be saved";
     });
     window.navigation!.addEventListener("navigate", (e) => {
-      const previousNavigationEvent = navigation?.currentEntry;
+      const previousNavigationEvent =window.navigation!.currentEntry;
       this.lastNavigationEvent = e;
 
       handleNavigation(e, () => {
@@ -54,7 +54,7 @@ export class ModernHistoryManager
     });
   }
   canGoBack(fallbackUrl?: ObservableOrConst<string | URL>): boolean {
-    if (window.navigation?.canGoBack) return window.navigation?.canGoBack;
+    if (window.navigation!.canGoBack) return window.navigation!.canGoBack;
     let matchesFallbackUrl = false;
     if (fallbackUrl) {
       const urlValue = unproxify(fallbackUrl);
@@ -66,7 +66,7 @@ export class ModernHistoryManager
 
   back(fallbackUrl?: ObservableOrConst<string | URL>): void {
     if (this.canGoBack()) {
-      navigation?.back();
+     window.navigation!.back();
       return;
     }
 
@@ -79,19 +79,19 @@ export class ModernHistoryManager
 
   // forward(): void {
   //   if (this.canGoForward()) {
-  //     navigation?.forward();
+  //    window.navigation!.forward();
   //     return;
   //   }
   // }
 
   replaceCurrentUrl(url: ObservableOrConst<string | URL>): void {
     const urlValue = unproxify(url);
-    navigation?.navigate(urlValue, { history: "replace" });
+   window.navigation!.navigate(urlValue, { history: "replace" });
   }
 
   push(url: ObservableOrConst<string | URL>): void {
     const urlValue = unproxify(url);
-    navigation?.navigate(urlValue);
+   window.navigation!.navigate(urlValue);
   }
 
   matches(url: ObservableOrConst<string>): boolean {

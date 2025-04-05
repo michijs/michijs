@@ -1,10 +1,11 @@
-export enum Namespaces {
-  SVG = "http://www.w3.org/2000/svg",
-  MATHML = "http://www.w3.org/1998/Math/MathML",
-  HTML = "http://www.w3.org/1999/xhtml",
+const NamespacesPrefix = 'http://www.w3.org';
+export const Namespaces = {
+  SVG: `${NamespacesPrefix}/2000/svg`,
+  MATHML: `${NamespacesPrefix}/1998/Math/MathML`,
+  HTML: `${NamespacesPrefix}/1999/xhtml`,
 }
 
-export enum RootTags {
-  SVG = "svg",
-  MATHML = "math",
+export const RootTags = {
+  SVG: "svg",
+  MATHML: "math",
 }
