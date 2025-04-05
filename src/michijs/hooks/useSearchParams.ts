@@ -25,12 +25,11 @@ const SearchParams = useComputedObserve(
  */
 export const useSearchParams: UseSearchParams = () => SearchParams as any;
 
-SearchParams.subscribe(async (newValue) => {
-  const historyManager = await HistoryManager;
+SearchParams.subscribe((newValue) => {
   // Prevents pushing new urls while updating search params
   if (!isUpdating) {
     const newUrl = new URL(location.href);
     for (const x in newValue) setSearchParam(newUrl, x, newValue[x]);
-    if (location.href !== newUrl.href) historyManager.push(newUrl);
+    if (location.href !== newUrl.href) HistoryManager.push(newUrl);
   }
 });
