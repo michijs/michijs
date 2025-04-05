@@ -10,7 +10,8 @@ export const createObject = (
   contextElement?: Element,
   contextNamespace?: string,
 ): Element => {
-  const newNamespace = Namespaces[jsxTag] ?? contextNamespace ?? Namespaces.HTML;
+  const newNamespace =
+    Namespaces[jsxTag] ?? contextNamespace ?? Namespaces.HTML;
 
   const el = document.createElementNS(newNamespace, jsxTag, {
     is: attrs?.is,

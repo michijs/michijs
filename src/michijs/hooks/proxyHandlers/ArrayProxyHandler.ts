@@ -126,6 +126,8 @@ export class ArrayProxyHandler<T extends ProxiedArray<any>>
   }
 
   override ownKeys(target: ProxiedValue<T>) {
-    return Reflect.ownKeys(target.$value).filter((x) => typeof x === "string" ? !["List", "targets"].includes(x): x);
+    return Reflect.ownKeys(target.$value).filter((x) =>
+      typeof x === "string" ? !["List", "targets"].includes(x) : x,
+    );
   }
 }
