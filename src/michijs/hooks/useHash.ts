@@ -9,8 +9,8 @@ const Hash = useComputedObserve(
   () =>
     location.hash
       ? {
-        [location.hash]: true,
-      }
+          [location.hash]: true,
+        }
       : {},
   [HistoryManager],
 );

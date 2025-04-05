@@ -24,7 +24,7 @@ export class ModernHistoryManager
       return "Changes that you made may not be saved";
     });
     window.navigation!.addEventListener("navigate", (e) => {
-      const previousNavigationEvent =window.navigation!.currentEntry;
+      const previousNavigationEvent = window.navigation!.currentEntry;
       this.lastNavigationEvent = e;
 
       handleNavigation(e, () => {
@@ -66,7 +66,7 @@ export class ModernHistoryManager
 
   back(fallbackUrl?: ObservableOrConst<string | URL>): void {
     if (this.canGoBack()) {
-     window.navigation!.back();
+      window.navigation!.back();
       return;
     }
 
@@ -86,12 +86,12 @@ export class ModernHistoryManager
 
   replaceCurrentUrl(url: ObservableOrConst<string | URL>): void {
     const urlValue = unproxify(url);
-   window.navigation!.navigate(urlValue, { history: "replace" });
+    window.navigation!.navigate(urlValue, { history: "replace" });
   }
 
   push(url: ObservableOrConst<string | URL>): void {
     const urlValue = unproxify(url);
-   window.navigation!.navigate(urlValue);
+    window.navigation!.navigate(urlValue);
   }
 
   matches(url: ObservableOrConst<string>): boolean {

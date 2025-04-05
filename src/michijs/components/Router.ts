@@ -14,18 +14,22 @@ export const Router = <const T>(
 ) => {
   const el = asTag
     ? create<ParentNode>({
-      jsxTag: asTag,
-      attrs,
-    } as SingleJSXElement)
+        jsxTag: asTag,
+        attrs,
+      } as SingleJSXElement)
     : new VirtualFragment();
   const cache: Record<string, DocumentFragment> = {};
 
-  const matchedRoute = useAsyncComputedObserve(async () => {
-    const manager = await HistoryManager;
-    return Object.keys(routes ?? {}).find((key) =>
-      manager.matches(urlFn(key, parentRoute)().pathname, true),
-    );
-  }, undefined, [HistoryManager]);
+  const matchedRoute = useAsyncComputedObserve(
+    async () => {
+      const manager = await HistoryManager;
+      return Object.keys(routes ?? {}).find((key) =>
+        manager.matches(urlFn(key, parentRoute)().pathname, true),
+      );
+    },
+    undefined,
+    [HistoryManager],
+  );
   let currentRoute: string | undefined = matchedRoute.valueOf();
 
   bindObservable(matchedRoute, (newMatchedRoute) => {
