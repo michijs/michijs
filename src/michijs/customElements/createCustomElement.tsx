@@ -236,7 +236,7 @@ export function createCustomElement<O extends MichiElementOptions>(
         this.willMount?.();
         if (this.render) {
           const newChildren = create(this.render(), this);
-          getMountPoint(this).append(newChildren);
+          getMountPoint(this).prepend(newChildren);
         }
         this.$michi.alreadyRendered = true;
         this.didMount?.();
