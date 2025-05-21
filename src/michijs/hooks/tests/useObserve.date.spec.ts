@@ -11,7 +11,7 @@ describe("Observe date tests", () => {
   beforeEach(() => {
     mockCallback.mockClear();
     nonProxiedDate = new Date();
-    date = useObserve(new Date());
+    date = useObserve(nonProxiedDate);
     date.subscribe(mockCallback);
   });
 
