@@ -2,7 +2,7 @@
   "name": "@michijs/michijs",
   "author": "Lucas M. Segurado",
   "license": "MIT",
-  "version": "2.1.17",
+  "version": "2.1.18",
   "files": [
     "dist/",
     "jsx-runtime/"
@@ -66,7 +66,7 @@
     "@michijs/dev-server": "0.8.5",
     "@michijs/htmltype": "0.3.0",
     "@michijs/tsconfig": "0.0.4",
-    "@reduxjs/toolkit": "2.8.1",
+    "@reduxjs/toolkit": "2.8.2",
     "@types/bun": "1.2.13",
     "playwright-core": "1.52.0",
     "redux": "5.0.1",
