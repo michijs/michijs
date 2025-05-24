@@ -17,6 +17,7 @@ export type { TypedPromiseRejectionEvent } from "./TypedPromiseRejectionEvent";
 export type { TypedSubmitEvent } from "./TypedSubmitEvent";
 export type { TypedSecurityPolicyViolationEvent } from "./TypedSecurityPolicyViolationEvent";
 export type { TypedStorageEvent } from "./TypedStorageEvent";
+export type { TypedToggleEvent } from "./TypedToggleEvent";
 export type { TypedTouchEvent } from "./TypedTouchEvent";
 export type { TypedTransitionEvent } from "./TypedTransitionEvent";
 export type { TypedUIEvent } from "./TypedUIEvent";
