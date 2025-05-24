@@ -1,6 +1,3 @@
-import type { TypedClipboardEvent } from "./TypedEvents/TypedClipboardEvent";
-export interface TypedDocumentAndElementEventHandlers<T> {
-  oncopy?(ev: TypedClipboardEvent<T>): unknown;
-  oncut?(ev: TypedClipboardEvent<T>): unknown;
-  onpaste?(ev: TypedClipboardEvent<T>): unknown;
+import type { AllEvents } from "./AllEvents";
+export interface TypedDocumentAndElementEventHandlers<T extends EventTarget> extends Pick<AllEvents<T>, "oncopy" | "oncut" | "onpaste"> {
 }

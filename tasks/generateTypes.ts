@@ -93,10 +93,10 @@ generateTypes({
       valueSets.attributes.forEach((attribute) => {
         attribute.values = [
           {
-            name: `ObservableOrConst<${attribute.values
+            name: `ObservableOrConst<${attribute.values ? attribute.values
               .map((x) => x.name)
               .concat("undefined")
-              .join(" | ")}>`,
+              .join(" | "): "undefined"}>`,
           },
         ];
       });

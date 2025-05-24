@@ -1,5 +1,3 @@
-import type { TypedEvent } from "./TypedEvents/TypedEvent";
-export interface TypedElementEvent<T> {
-  onfullscreenchange?(ev: TypedEvent<T>): unknown;
-  onfullscreenerror?(ev: TypedEvent<T>): unknown;
+import type { AllEvents } from "./AllEvents";
+export interface TypedElementEvent<T extends EventTarget> extends Pick<AllEvents<T>, "onfullscreenchange" | "onfullscreenerror"> {
 }
