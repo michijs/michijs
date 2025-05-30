@@ -1,17 +1,7 @@
 import { IdGenerator } from "../classes/IdGenerator";
-import type { CSSObject } from "../types";
-import type { CSSProperties } from "../generated/htmlType";
+import type { CSSObject, UseAnimation } from "../types";
 import { formatToKebabCase } from "../utils/formatToKebabCase";
 import { removeNullableFromObject } from "../utils/removeNullableFromObject";
-
-/**
- * Represents keyframes for CSS animations.
- */
-type TransitionKeyframes =
-  | ({
-      [k in keyof Omit<CSSProperties, "offset">]?: CSSProperties[k][];
-    } & { offset?: number[] })
-  | (Omit<CSSProperties, "offset"> & { offset?: number })[];
 
 const idGenerator = new IdGenerator();
 
@@ -26,15 +16,10 @@ const getOffset = (i: number, length: number, offset?: number) =>
  * @param options - Options for the animation.
  * @returns An array containing CSS keyframes and animation properties.
  */
-export const useAnimation = (
-  keyframes: TransitionKeyframes,
-  options: Pick<
-    KeyframeAnimationOptions,
-    "id" | "delay" | "direction" | "duration" | "easing" | "fill"
-  > & {
-    iterations?: "infinite" | number;
-  },
-): [CSSObject, CSSObject] => {
+export const useAnimation: UseAnimation = (
+  keyframes,
+  options,
+) => {
   const keyframeId = options.id ?? `keyframe-${idGenerator.generateId(1)}`;
   const keyframesIsArray = Array.isArray(keyframes);
   const properties = keyframesIsArray
