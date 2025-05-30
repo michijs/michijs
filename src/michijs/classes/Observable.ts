@@ -28,9 +28,8 @@ export class Observable<T> extends Callable implements ObservableLike<T> {
   }
 
   notify(value: T, observers: NotifiableObservers<T> = this.observers): void {
-    for (const observer of observers) {
+    for (const observer of observers)
       observer(value);
-    }
   }
 
   subscribe(observer: Subscription<T>): void {

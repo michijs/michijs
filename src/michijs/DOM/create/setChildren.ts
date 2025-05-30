@@ -12,7 +12,7 @@ export const setChildren = (
   contextElement?: Element,
   contextNamespace?: string,
 ) => {
-  if (children) {
+  if (children !== undefined) {
     const callback = appendChildCallback(
       node,
       contextElement,
