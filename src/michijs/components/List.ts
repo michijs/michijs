@@ -16,7 +16,7 @@ export const List = <const T = unknown>(
     const data = (props.data) as unknown as ProxiedArray<T>;
     return data.List({renderItem: props.renderItem}, contextElement, contextNamespace);
   }
-  return (props.data as T[]).map((x) =>
+  return props.data.map((x) =>
     props.renderItem(x, contextElement, contextNamespace),
   );
 };
