@@ -1,5 +1,5 @@
 import { useObserveInternal } from "../hooks/useObserve";
-import { isObservableType } from "../typeWards/isObservableType";
+import { isObservable } from "../typeWards/isObservable";
 import type {
   AnyObject,
   CreateFCResult,
@@ -16,7 +16,7 @@ export function createFunctionalComponent<
     const newProps = Object.entries(props).reduce(
       (previousValue, [key, value]) => {
         if (key === "children") previousValue[key] = value;
-        else if (isObservableType(value)) {
+        else if (isObservable(value)) {
           previousValue[key] = useObserveInternal(unproxify(value));
           value.subscribe((newValue) => (previousValue[key] = newValue));
         } else previousValue[key] = useObserveInternal(value);

@@ -1,9 +1,9 @@
-import { isObservableType } from "../typeWards/isObservableType";
+import { isObservable } from "../typeWards/isObservable";
 import type { ObservableType } from "../types";
 
 export function getObservables<T>(obj: T): ObservableType<T>[] {
   if (obj) {
-    if (isObservableType(obj)) return [obj as ObservableType<T>];
+    if (isObservable(obj)) return [obj as ObservableType<T>];
 
     // It needs to include arrays also
     if (typeof obj === "object") {

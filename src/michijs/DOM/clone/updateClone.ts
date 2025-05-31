@@ -8,7 +8,7 @@ import { isDOMElement } from "../../typeWards/isDOMElement";
 import { isFragmentElement } from "../../typeWards/isFragmentElement";
 import { isFunctionOrClassJSXElement } from "../../typeWards/isFunctionOrClassJSXElement";
 import { isNotAPrimitiveJSX } from "../../typeWards/isNotAPrimitiveJSX";
-import { isObservableType } from "../../typeWards/isObservableType";
+import { isObservable } from "../../typeWards/isObservable";
 import { classJSXToObjectJSXElement } from "../../utils/classJSXToObjectJSXElement";
 import { updateClonedDomElementOrObjectJSXElement } from "./updateClonedDomElementOrObjectJSXElement";
 import { updateObservableTextElement } from "./updateObservableTextElement";
@@ -65,7 +65,7 @@ export const updateClone = (
       }
       throw "Nodes are not supported yet";
     }
-    if (isObservableType(jsx))
+    if (isObservable(jsx))
       return updateObservableTextElement(
         clonedNode as Text,
         jsx as unknown as ObservableNonNullablePrimitiveType,

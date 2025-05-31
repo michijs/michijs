@@ -1,4 +1,4 @@
-import { isObservableType } from "../typeWards/isObservableType";
+import { isObservable } from "../typeWards/isObservable";
 import type { ObservableLike, RefSubscription } from "../types";
 import { getObservables } from "./getObservables";
 import { extendsObject } from "./extendsObject";
@@ -11,7 +11,7 @@ export const bindObservableToRef = <T, E extends WeakKey>(
   callback: RefSubscription<T extends ObservableLike<infer Y> ? Y : T, E>,
   shouldIgnoreFirstCallback?: boolean,
 ): void => {
-  if (isObservableType(observable)) {
+  if (isObservable(observable)) {
     const overriddenCallback = overrideCallbackWithRef(
       observable,
       el,

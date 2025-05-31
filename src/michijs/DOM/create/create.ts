@@ -11,7 +11,7 @@ import { classJSXToObjectJSXElement } from "../../utils/classJSXToObjectJSXEleme
 import { createDOMElement } from "./createDOMElement";
 import { createObject } from "./createObject";
 import { createTextElement } from "./createTextElement";
-import { isObservableType } from "../../typeWards/isObservableType";
+import { isObservable } from "../../typeWards/isObservable";
 import { createObservableTextElement } from "./createObservableTextElement";
 import { createDOMFragment } from "./createDOMFragment";
 import { isFragmentElement } from "../../typeWards/isFragmentElement";
@@ -58,7 +58,7 @@ export function create<T = Node>(
       }
       return jsx as T;
     }
-    if (isObservableType(jsx))
+    if (isObservable(jsx))
       return createObservableTextElement(
         jsx as unknown as ObservableNonNullablePrimitiveType,
       ) as T;

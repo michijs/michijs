@@ -7,7 +7,7 @@ import type {
   SingleJSXElement,
   ObservableOrConst,
 } from "../types";
-import { isObservableType } from "../typeWards/isObservableType";
+import { isObservable } from "../typeWards/isObservable";
 import { bindObservable } from "../utils/bindObservable";
 
 // Define a type for the return value of promises, which can be a JSX element, a function component, or a DOM element.
@@ -87,7 +87,7 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
         } else throw e;
       });
 
-  if (isObservableType(promise)) bindObservable(promise, renderCallback);
+  if (isObservable(promise)) bindObservable(promise, renderCallback);
   else renderCallback(promise);
 
   // Return the rendered element.

@@ -1,4 +1,4 @@
-import { createCustomElement, If, Title } from "@michijs/michijs";
+import { createCustomElement, If, List, Title } from "@michijs/michijs";
 import { BuiltInButton } from "../BuiltInButton";
 import { CounterWithReduxStore } from "../CounterWithReduxStore";
 import { SimpleCounter } from "../SimpleCounter";
@@ -50,6 +50,8 @@ const TestCustomElement = createCustomElement("test-custom-element", {
           as="div"
           renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}
         />
+        <List data={this.arrayTest} renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}/>
+        <List data={this.arrayTest()} renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}/>
         <ColorSelector />
       </>
     );
