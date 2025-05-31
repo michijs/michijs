@@ -15,7 +15,7 @@ export const List = <const T = unknown>
   ) => {
   if (isObservable(props.data)) {
     const data = (props.data) as unknown as ProxiedArray<T>;
-    return <data.List renderItem={props.renderItem} />
+    return data.List({renderItem: props.renderItem}, contextElement, contextNamespace);
   }
   return (props.data as T[]).map(x => props.renderItem(x, contextElement, contextNamespace))
 }
