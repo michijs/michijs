@@ -1,5 +1,5 @@
 import { IdGenerator } from "../classes/IdGenerator";
-import type { CSSObject, UseAnimation } from "../types";
+import type { UseAnimation } from "../types";
 import { formatToKebabCase } from "../utils/formatToKebabCase";
 import { removeNullableFromObject } from "../utils/removeNullableFromObject";
 
@@ -16,10 +16,7 @@ const getOffset = (i: number, length: number, offset?: number) =>
  * @param options - Options for the animation.
  * @returns An array containing CSS keyframes and animation properties.
  */
-export const useAnimation: UseAnimation = (
-  keyframes,
-  options,
-) => {
+export const useAnimation: UseAnimation = (keyframes, options) => {
   const keyframeId = options.id ?? `keyframe-${idGenerator.generateId(1)}`;
   const keyframesIsArray = Array.isArray(keyframes);
   const properties = keyframesIsArray

@@ -50,8 +50,14 @@ const TestCustomElement = createCustomElement("test-custom-element", {
           as="div"
           renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}
         />
-        <List data={this.arrayTest} renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}/>
-        <List data={this.arrayTest()} renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}/>
+        <List
+          data={this.arrayTest}
+          renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}
+        />
+        <List
+          data={this.arrayTest()}
+          renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}
+        />
         <ColorSelector />
       </>
     );
