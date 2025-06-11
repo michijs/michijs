@@ -1,7 +1,6 @@
 import {
   useSearchParams,
   useHash,
-  useComputedObserve,
   Title,
 } from "@michijs/michijs";
 import { SimpleCounter } from "../SimpleCounter";
@@ -12,9 +11,7 @@ const SearchParamsAndHash = () => {
     textParam: string;
   }>();
   const hash = useHash<"#hashTest">();
-  const hashTestText = useComputedObserve(() => {
-    return `hash test is ${hash["#hashTest"].toBoolean()}`;
-  }, [hash]);
+  const hashTestText = hash["#hashTest"].compute((v) => `hash test is ${Boolean(v)}`);
 
   return (
     <>
@@ -23,7 +20,7 @@ const SearchParamsAndHash = () => {
         onclick={() => {
           // Just to test '#'
           if (hash["#hashTest"]()) hash[""](true);
-          else hash["#hashTest"](hash["#hashTest"].not());
+          else hash["#hashTest"](!hash["#hashTest"]());
           console.log(hash);
         }}
       >

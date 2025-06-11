@@ -51,6 +51,9 @@ export class ProxiedValue<T>
     // this[Symbol.toStringTag] = () => this.toString();
     // this[Symbol.toPrimitive] = () => this.valueOf();
   }
+  compute<V>(callback: (value: T) => V): ObservableType<V> {
+    return useComputedObserve(() => callback(this.$value), [this])
+  }
 
   notifyCurrentValue(): void {
     if (this.onTransaction) this.needsToNotify = true;
@@ -75,20 +78,8 @@ export class ProxiedValue<T>
     return unproxify(this.$value) as T;
   }
 
-  public toObservableString(): ObservableType<string> {
-    return useComputedObserve(() => this.toString(), [this]);
-  }
-
-  public toBoolean(): boolean {
-    return Boolean(this.$value);
-  }
-
-  public not(): boolean {
-    return !this.$value;
-  }
-
-  public is(anotherValue: unknown): boolean {
-    return this.$value === anotherValue?.valueOf();
+  public is(anotherValue: unknown): ObservableType<boolean> {
+    return useComputedObserve(() => this.$value === anotherValue?.valueOf(), [this, anotherValue]);
   }
 
   toJSON(): any {

@@ -53,8 +53,8 @@ export const A11YCounter = createCustomElement("a11y-counter", {
     );
     return (
       <ElementInternals
-        ariaValueText={this.value.toObservableString()}
-        formValue={this.value.toObservableString()}
+        ariaValueText={this.value.compute(v => v.toString())}
+        formValue={this.value.compute(v => v.toString())}
         errorMessage={errorMessage}
       >
         <button type="button" onpointerup={this.decrementCount}>

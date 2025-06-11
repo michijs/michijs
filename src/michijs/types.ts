@@ -336,12 +336,10 @@ export type NotifiableObservers<T> = Set<Subscription<T>> | undefined;
 export interface ProxiedValueInterface<RV> extends ObservableLike<RV> {
   $value: RV;
   notifyCurrentValue(notifiableObservers?: NotifiableObservers<RV>): void;
-  toObservableString(): ObservableType<string>;
-  toBoolean(): boolean;
+  compute<V>(callback: (value: RV)=> V): ObservableType<V>;
   toString(): string;
   handler: ObservableProxyHandlerInterface<RV>;
-  not(): boolean;
-  is(anotherValue: unknown): boolean;
+  is(anotherValue: unknown): ObservableType<boolean>;
   typeof(): Typeof;
   unproxify(): RV;
   valueOf(): RV;
@@ -1129,6 +1127,9 @@ export interface UseAnimation {
 }
 
 declare global {
+  
+  const disableTest: boolean | undefined
+
   interface Window {
     msCrypto?: Crypto;
 

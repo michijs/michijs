@@ -18,7 +18,8 @@ const TestCustomElement = createCustomElement("test-custom-element", {
   shadow: false,
   methods: {
     toggleShowExample() {
-      this.showExample(this.showExample.not());
+      this.count(this.count() + 1)
+      this.showExample(!this.showExample());
     },
     onClickArray() {
       this.arrayTest.push(7, 8);
@@ -33,6 +34,7 @@ const TestCustomElement = createCustomElement("test-custom-element", {
   render() {
     return (
       <>
+        {this.count.compute(v => v.toFixed(2))}
         <math display="block" onclick={this.toggleShowExample}>
           <mfrac>
             <mn>{this.arrayTest.length}</mn>

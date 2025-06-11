@@ -48,7 +48,7 @@ export const If = <const T = CreateFCResult>(
 
   const conditionAsBoolean = useComputedObservePrimitive(
     () =>
-      condition instanceof ProxiedValue ? condition.toBoolean() : condition,
+      condition instanceof ProxiedValue ? Boolean(condition.valueOf()) : condition,
     [condition],
   );
 
