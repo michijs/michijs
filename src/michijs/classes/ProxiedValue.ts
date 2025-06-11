@@ -52,7 +52,7 @@ export class ProxiedValue<T>
     // this[Symbol.toPrimitive] = () => this.valueOf();
   }
   compute<V>(callback: (value: T) => V): ObservableType<V> {
-    return useComputedObserve(() => callback(this.$value), [this])
+    return useComputedObserve(() => callback(this.$value), [this]);
   }
 
   notifyCurrentValue(): void {
@@ -79,7 +79,10 @@ export class ProxiedValue<T>
   }
 
   public is(anotherValue: unknown): ObservableType<boolean> {
-    return useComputedObserve(() => this.$value === anotherValue?.valueOf(), [this, anotherValue]);
+    return useComputedObserve(
+      () => this.$value === anotherValue?.valueOf(),
+      [this, anotherValue],
+    );
   }
 
   toJSON(): any {
