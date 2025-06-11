@@ -97,9 +97,9 @@ generateTypes({
               attribute.values
                 ? attribute.values
                     .map((x) => x.name)
-                    .concat("undefined")
+                    .concat("undefined", "null")
                     .join(" | ")
-                : "undefined"
+                : "undefined | null"
             }>`,
           },
         ];

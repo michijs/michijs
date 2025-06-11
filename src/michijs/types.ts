@@ -843,7 +843,7 @@ export type CustomElementTag = `${string}-${string}`;
 export type AnyObject = Record<string, any>;
 
 export type OptionalRecord<K extends keyof any, T> = {
-  [P in K]?: T;
+  [P in K]?: T | null;
 };
 
 export type AttributesType = OptionalRecord<string, PrimitiveType | AnyObject>;
@@ -1127,8 +1127,6 @@ export interface UseAnimation {
 }
 
 declare global {
-  const disableTest: boolean | undefined;
-
   interface Window {
     msCrypto?: Crypto;
 
