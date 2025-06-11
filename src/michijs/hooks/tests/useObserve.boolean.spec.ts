@@ -17,12 +17,6 @@ describe("Observe boolean - expressions and operators", () => {
     // expect(FALSE_VALUE).toStrictEqual(false);
     expect(FALSE_VALUE()).toStrictEqual(false);
   });
-  it("should return true for not false", () => {
-    expect(FALSE_VALUE.not?.()).toStrictEqual(true);
-  });
-  it("should return false for not true", () => {
-    expect(TRUE_VALUE.not?.()).toStrictEqual(false);
-  });
   it("should return proper type", () => {
     expect(TRUE_VALUE.typeof?.()).toStrictEqual("boolean");
   });

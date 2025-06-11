@@ -53,7 +53,7 @@ describe("Observe number - expressions and operators", () => {
   });
 
   it("should return true for OBSERVE_NUM1.is(NUM1)", () => {
-    expect(OBSERVE_NUM1.is?.(NUM1)).toBe(true);
+    expect(OBSERVE_NUM1.is(NUM1)()).toBe(true);
   });
 
   it("should return true for OBSERVE_NUM1 <= NUM1", () => {
@@ -74,6 +74,6 @@ describe("Observe number - expressions and operators", () => {
     expect(Math.abs(OBSERVE_NUM3)).toBe(NUM1);
   });
   it("should return proper type", () => {
-    expect(OBSERVE_NUM1.typeof?.()).toStrictEqual("number");
+    expect(OBSERVE_NUM1.typeof()).toStrictEqual("number");
   });
 });
