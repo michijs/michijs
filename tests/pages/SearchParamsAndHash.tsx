@@ -1,8 +1,4 @@
-import {
-  useSearchParams,
-  useHash,
-  Title,
-} from "@michijs/michijs";
+import { useSearchParams, useHash, Title } from "@michijs/michijs";
 import { SimpleCounter } from "../SimpleCounter";
 
 const SearchParamsAndHash = () => {
@@ -11,7 +7,9 @@ const SearchParamsAndHash = () => {
     textParam: string;
   }>();
   const hash = useHash<"#hashTest">();
-  const hashTestText = hash["#hashTest"].compute((v) => `hash test is ${Boolean(v)}`);
+  const hashTestText = hash["#hashTest"].compute(
+    (v) => `hash test is ${Boolean(v)}`,
+  );
 
   return (
     <>
