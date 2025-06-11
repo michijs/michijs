@@ -18,6 +18,6 @@ describe("Observe boolean - expressions and operators", () => {
     expect(FALSE_VALUE()).toStrictEqual(false);
   });
   it("should return proper type", () => {
-    expect(TRUE_VALUE.typeof?.()).toStrictEqual("boolean");
+    expect(TRUE_VALUE.typeof()).toStrictEqual("boolean");
   });
 });

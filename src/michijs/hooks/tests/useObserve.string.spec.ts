@@ -23,6 +23,6 @@ describe("Observe string - expressions and operators", () => {
     expect(OBSERVE_STR1[4]).toStrictEqual("o");
   });
   it("should return proper type", () => {
-    expect(OBSERVE_STR1.typeof?.()).toStrictEqual("string");
+    expect(OBSERVE_STR1.typeof()).toStrictEqual("string");
   });
 });

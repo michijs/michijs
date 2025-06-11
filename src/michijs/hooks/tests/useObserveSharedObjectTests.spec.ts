@@ -85,7 +85,7 @@ export const sharedObjectTests = (
     });
 
     it("should return proper type", () => {
-      expect(object.typeof?.()).toStrictEqual("object");
+      expect(object.typeof()).toStrictEqual("object");
     });
     afterEach(() => {
       expect(object.valueOf()).toStrictEqual(nonProxiedObject);
