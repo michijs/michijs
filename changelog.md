@@ -1,6 +1,7 @@
 ## 2.3.0
 - Updated If to be aligned with new CSS if API. Now it works like a switch and is not a component anymore
 - Deprecated primitive hooks - now they are available in the options of useObserve / useComputedObserve / useAsyncComputedObserve
+- Separated legacy cookie storage from modern one
 
 ## 2.2.0
 - Added compute 

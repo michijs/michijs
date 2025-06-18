@@ -1,4 +1,3 @@
-import { CookieStorage } from "../classes/CookieStorage";
 import { ObservableFromEventListener } from "../classes/ObservableFromEventListener";
 import type { UseStorage } from "../types";
 import { useObserveInternal } from "./useObserve";
@@ -11,15 +10,18 @@ import { isNil } from "../utils/isNil";
  * @returns A new observable
  */
 export const useStorage: UseStorage = (item, storage = localStorage) => {
-  function getStorageValue(key: string) {
-    const localStorageValue = storage.getItem(key);
-    if (localStorageValue)
+  function parseStorageValue(key, value: string | null) {
+    if (value)
       try {
-        return JSON.parse(localStorageValue);
+        return JSON.parse(value);
       } catch {
-        return localStorageValue;
+        return value;
       }
     else return item[key];
+  }
+  function getStorageValue(key: string) {
+    const localStorageValue = storage.getItem(key);
+    return parseStorageValue(key, localStorageValue);
   }
   const newObservable = useObserveInternal(
     Object.keys(item).reduce(
@@ -38,13 +40,7 @@ export const useStorage: UseStorage = (item, storage = localStorage) => {
     });
   }
 
-  if (storage instanceof CookieStorage) {
-    CookieStorage.cookieStoreObservable.subscribe((ev) => {
-      for (const key in item)
-        if (ev.includes(key))
-          newObservable[key as string] = getStorageValue(key);
-    });
-  } else {
+  if ([localStorage, sessionStorage].includes(storage)) {
     const windowObservable = new ObservableFromEventListener<StorageEvent>(
       window,
       "storage",
@@ -58,6 +54,16 @@ export const useStorage: UseStorage = (item, storage = localStorage) => {
       )
         newObservable[ev.key] = getStorageValue(ev.key);
     });
+  } else if ('cookieStore' in window) {
+    import("../classes/CookieStorage/ModernCookieStorage").then(({ ModernCookieStorage }) => {
+      if (storage instanceof ModernCookieStorage) {
+        storage.observable.subscribe(async (changes) => {
+          for (const key in item)
+            if (changes.includes(key))
+              newObservable[key as string] = parseStorageValue(key, storage.getItem(key));
+        });
+      }
+    })
   }
 
   return newObservable as any;

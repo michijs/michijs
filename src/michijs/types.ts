@@ -1120,6 +1120,9 @@ export interface UseAnimation {
   ): [CSSObject, CSSObject];
 }
 
+export interface CookieStorageConstructor extends Omit<CookieInit, 'name' | 'value'> {
+}
+
 declare global {
   interface Window {
     msCrypto?: Crypto;
@@ -1142,7 +1145,7 @@ declare global {
   interface CookieStore extends EventTarget {
     get(name: string): Promise<CookieListItem | null>;
     get(options: CookieStoreGetOptions): Promise<CookieListItem | null>;
-    getAll(name: string): Promise<CookieList>;
+    getAll(name?: string): Promise<CookieList>;
     getAll(options: CookieStoreGetOptions): Promise<CookieList>;
     set(name: string, value: string): Promise<void>;
     set(options: CookieInit): Promise<void>;

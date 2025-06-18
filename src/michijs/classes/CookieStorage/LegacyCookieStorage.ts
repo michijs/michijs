@@ -1,14 +1,5 @@
-import { Observable } from "./Observable";
-import { ObservableFromEventListener } from "./ObservableFromEventListener";
-import { formatToKebabCase } from "../utils/formatToKebabCase";
-
-export interface CookieStorageConstructor {
-  path?: string;
-  domain?: string;
-  maxAge?: number;
-  expires?: string;
-  sameSite?: "lax" | "strict";
-}
+import { formatToKebabCase } from "../../utils/formatToKebabCase";
+import type { CookieStorageConstructor } from "../../types";
 
 const getCookies = () =>
   document.cookie.split(";").reduce((previousValue, x) => {
@@ -22,36 +13,10 @@ const getCookies = () =>
     return previousValue;
   }, {});
 
-let mainCookieStorage = getCookies();
-let currentCookies = document.cookie;
+const mainCookieStorage = getCookies();
 
-const cookieStoreObservable = new Observable<string[]>();
-// @ts-ignore
-if (window.cookieStore) {
-  const cookieStoreChange = new ObservableFromEventListener<{
-    changed: { name: string }[];
-    deleted: { name: string }[];
-  }>(
-    // @ts-ignore
-    window.cookieStore,
-    "change",
-  );
-
-  cookieStoreChange.subscribe((e) => {
-    if (document.cookie !== currentCookies) {
-      currentCookies = document.cookie;
-      mainCookieStorage = getCookies();
-      cookieStoreObservable.notify([
-        ...e.changed.map((x) => x.name),
-        ...e.deleted.map((x) => x.name),
-      ]);
-    }
-  });
-}
-
-export class CookieStorage implements Storage {
-  static cookieStoreObservable: Observable<string[]> = cookieStoreObservable;
-  setOptions: string | undefined;
+export class LegacyCookieStorage implements Storage {
+  private setOptions: string | undefined;
   [name: string]: any;
   get length(): number {
     return Object.keys(mainCookieStorage).length;
@@ -78,7 +43,6 @@ export class CookieStorage implements Storage {
   removeItem(key: string): void {
     const trimKey = key.trim();
     document.cookie = `${trimKey}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
-    currentCookies = document.cookie;
     delete mainCookieStorage[trimKey];
   }
   setItem(key: string, value: string): void {
@@ -88,7 +52,6 @@ export class CookieStorage implements Storage {
       document.cookie = `${trimKey}=${encodeURIComponent(value)}${
         this.setOptions
       }`;
-      currentCookies = document.cookie;
     } else this.removeItem(key);
   }
 }
