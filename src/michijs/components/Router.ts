@@ -1,51 +1,32 @@
 import type { RouterProps } from "../routing/types";
-import type { SingleJSXElement } from "../types";
-import { VirtualFragment } from "../classes/VirtualFragment";
-import { bindObservable } from "../utils/bindObservable";
-import { create } from "../DOM/create/create";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { HistoryManager } from "../classes/HistoryManager";
 import { urlFn } from "../routing/utils/urlFn";
+import { If } from "./If";
 
 export const Router = <const T>(
-  { as: asTag, routes, parentRoute, enableCache, ...attrs }: RouterProps<T>,
-  contextElement,
-  contextNamespace,
-) => {
-  const el = asTag
-    ? create<ParentNode>({
-        jsxTag: asTag,
-        attrs,
-      } as SingleJSXElement)
-    : new VirtualFragment();
-  const cache: Record<string, DocumentFragment> = {};
+  { as: asTag, routes, parentRoute, enableCache, ...attrs }: RouterProps<T>) => {
+  const finalRoutes = routes ?? {};
+  const finalRoutesKeys = Object.keys(finalRoutes);
+  const finalRoutesValues = Object.values(finalRoutes).map<[number, JSX.Element]>((x, i) => [i, x]);
 
-  const matchedRoute = useComputedObserve(() => {
-    return Object.keys(routes ?? {}).find((key) =>
-      HistoryManager.matches(urlFn(key, parentRoute)().pathname, true),
-    );
-  }, [HistoryManager]);
-  let currentRoute: string | undefined = matchedRoute.valueOf();
+  if (!parentRoute) {
+    const defaultRoute = finalRoutesKeys.at(-1);
+    if (defaultRoute)
+      finalRoutesValues.push([-1, finalRoutes[defaultRoute]])
+  }
 
-  bindObservable(matchedRoute, (newMatchedRoute) => {
-    const newCache = el.childNodes.length
-      ? Array.from(el.childNodes)
-      : undefined;
-    if (currentRoute && newCache) {
-      const fragment = new DocumentFragment();
-      fragment.append(...newCache);
-      if (enableCache) cache[currentRoute] = fragment;
+  const matchedRoute = useComputedObserve(() => finalRoutesKeys.findIndex((key) =>
+    HistoryManager.matches(urlFn(key, parentRoute)().pathname, true),
+  ), [HistoryManager], { usePrimitive: true });
+
+  return If<T, typeof matchedRoute>(matchedRoute,
+    finalRoutesValues, undefined,
+    {
+      enableCache,
+      as: asTag,
+      // @ts-ignore
+      attrs
     }
-
-    if (newMatchedRoute) {
-      if (cache[newMatchedRoute]) el.replaceChildren(cache[newMatchedRoute]);
-      else {
-        const component = routes?.[newMatchedRoute];
-        el.replaceChildren(create(component, contextElement, contextNamespace));
-      }
-    }
-    currentRoute = newMatchedRoute;
-  });
-
-  return el.valueOf() as Node;
+  )
 };

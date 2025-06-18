@@ -12,7 +12,7 @@ import { unproxify } from "../utils/unproxify";
 import { useCssVariables } from "./useCssVariables";
 import { ProxiedValue } from "../classes/ProxiedValue";
 import { formatToKebabCase } from "../utils/formatToKebabCase";
-import { useComputedObservePrimitive } from "../hooks/useComputedObservePrimitive";
+import { useComputedObserve } from "../hooks/useComputedObserve";
 
 const hostSelectors = [":host", ":host-context"];
 
@@ -119,9 +119,10 @@ const styleSheetFromCSSObject = (
 ) => {
   const styleSheet = new CSSStyleSheet();
   const observables = getObservables(getCSSObject());
-  const stringResult = useComputedObservePrimitive(
+  const stringResult = useComputedObserve(
     () => cssObjectToText(getCSSObject()),
     [...observables, ...additionalObservers],
+    {usePrimitive: true}
   );
   bindObservable(stringResult, (formattedObject) => {
     // Jest fix

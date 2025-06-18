@@ -414,16 +414,13 @@ It provides more flexibility in organizing code and separates concerns by allowi
 
 ### Basic hooks
 #### useObserve
-Responsible for observing changes on different types of values. Takes one argument:
+Responsible for observing changes on different types of values. Takes two arguments:
 - **item**: The value to be observed.
+- **isPrimitive**: If you want an unproxied version of useObserve. Similar to [tc39 signals proposal](https://github.com/tc39/proposal-signals)
 
 This is the most basic hook and it is the basis of the entire component structure.
 
 If the item contains a function, it will return an observable that observes for changes in the object itself. 
-
-#### useObservePrimitive
-Unproxied version of useObserve. Similar to [tc39 signals proposal](https://github.com/tc39/proposal-signals). Takes one argument:
-- **item**: The value to be observed.
 
 **A function in an observable should never mutate the observable.**
 
@@ -451,7 +448,7 @@ It is used for computing a value and observing its changes. Takes four arguments
 - **callback**: A function that returns a promise of type T.
 - **initialValue**: Initial value of type T.
 - **deps**: Dependencies to watch for changes.
-- **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions.
+- **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions. Also includes an option usePrimitive if you want an unproxied version of useAsyncComputedObserve. Similar to [tc39 signals proposal](https://github.com/tc39/proposal-signals)
 
 <details>
   <summary><b>Example:</b></summary>
@@ -478,7 +475,7 @@ const fetchData = useAsyncComputedObserve(
 It is used for computing a value and observing its changes. Takes three arguments:
 - **callback**: A function that returns a value of type T.
 - **deps**: Dependencies to watch for changes.
-- **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions.
+- **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions. Also includes an option usePrimitive if you want an unproxied version of useComputedObserve. Similar to [tc39 signals proposal](https://github.com/tc39/proposal-signals)
 
 
 <details>
@@ -499,12 +496,6 @@ console.log(sum()); // Outputs the computed sum
 ```
 
 </details>
-
-#### useComputedObservePrimitive
-Unproxied version of useComputedObserve. Similar to [tc39 signals proposal](https://github.com/tc39/proposal-signals). Takes three arguments:
-- **callback**: A function that returns a value of type T.
-- **deps**: Dependencies to watch for changes.
-- **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions.
 
 #### useStringTemplate
 It is used to create a string template by interpolating dynamic values.
@@ -869,14 +860,16 @@ We do not provide support for this functionality yet as ESBuild does not support
 
 ## Components
 
-### If
-Conditional rendering component. This is the only way to do it dynamically.
-
 ### Title
 Title component for dynamically updating the document's title.
 
 ### Redirect
 Redirect component for navigating to a different URL or location.
+
+### List
+A generic list rendering component that supports both static arrays and observable arrays.
+
+If the `data` is an observable array, the component delegates rendering to the array's internal `.List` method. Otherwise, it directly maps through the array and renders each item.
 
 ### Host
 Allows to set attributes and event listeners to the host element itself.
@@ -939,6 +932,53 @@ el.className = 'test';
 el.setAttribute('class', 'test')
 ```
 In this way the jsx syntax of MichiJS is more similar to HTML.
+
+## If - Conditional Rendering
+The If utility provides a declarative, unified, and reactive way to handle conditional rendering across CSS and JSX. It’s especially useful in reactive UI frameworks or libraries where you want fine-grained control over conditional logic. This is the only way to do it dynamically.
+
+### Features
+- Dual mode support: JSX rendering and CSS conditional string generation
+- Reactivity via observables
+- Optional DOM fragment caching
+
+### CSS mode
+It is designed to work like the new CSS if function:
+```css
+  background: if(
+    style(--theme:dark): #000;
+    style(--theme:system): var(--system-color);
+    else: #fff)
+```
+
+The same code can be translated like
+```tsx
+  const cssVariables = useCssVariables<{ theme: string, systemColor: string }>();
+
+  const style = useStyleSheet({
+    background: If(cssVariables.theme, [
+      ["dark", "#000"],
+      ["system", cssVariables.systemColor()],
+    ], "#fff");
+  })
+```
+
+### JS mode
+In jsx you can use it the same way
+```tsx
+  <div>
+    {If(
+      someObservable, [                           // condition
+        [true, <div>Visible</div>]
+      ], 
+      <div>Hidden</div>,                          // elseValue
+      {
+        as: "section",                            // Optional wrapper element
+        enableCache: true,                        // Optional caching
+        attrs: { class: "wrapper" }               // Optional props for the wrapper
+      }
+    )}
+  </div>
+```
 
 ## Lists
 There are 2 ways to create a list

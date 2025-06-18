@@ -1,6 +1,6 @@
 import {
   type ObservablePrimitiveType,
-  useObservePrimitive,
+  useObserve,
   ProxiedArray,
   create,
 } from "@michijs/michijs";
@@ -73,10 +73,10 @@ const adjectives = [
     const data = new Array<Row>(count);
     for (let i = 0; i < count; i++)
       data[i] = {
-        selected: useObservePrimitive<string | null>(null),
+        selected: useObserve<string | null>(null, true),
         id: nextId++,
-        label: useObservePrimitive(
-          `${adjectives[_random(adjectivesLength)]} ${colours[_random(coloursLength)]} ${nouns[_random(nounsLength)]}`,
+        label: useObserve(
+          `${adjectives[_random(adjectivesLength)]} ${colours[_random(coloursLength)]} ${nouns[_random(nounsLength)]}`, true
         ),
       };
     return data;

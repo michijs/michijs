@@ -1,7 +1,7 @@
 import {
   createCustomElement,
   Host,
-  useComputedObservePrimitive,
+  useComputedObserve,
 } from "@michijs/michijs";
 import { buttonStyle } from "./BuiltInButton.css";
 
@@ -25,9 +25,12 @@ export const BuiltInButton = createCustomElement("built-in-button", {
   computedStyleSheet(selector: string) {
     return {
       [selector]: {
-        margin: useComputedObservePrimitive(
+        margin: useComputedObserve(
           () => `${this.counter}px`,
           [this.counter],
+          {
+            usePrimitive: true
+          }
         ),
       },
     };

@@ -3,7 +3,7 @@ import type { ObservableLike, RefSubscription } from "../types";
 import { getObservables } from "./getObservables";
 import { extendsObject } from "./extendsObject";
 import { overrideCallbackWithRef } from "./overrideCallbackWithRef";
-import { useComputedObservePrimitive } from "../hooks/useComputedObservePrimitive";
+import { useComputedObserve } from "../hooks/useComputedObserve";
 
 export const bindObservableToRef = <T, E extends WeakKey>(
   observable: T,
@@ -26,9 +26,10 @@ export const bindObservableToRef = <T, E extends WeakKey>(
   if (extendsObject(observable)) {
     const observables = getObservables(observable);
     if (observables.length > 0) {
-      const finalObservable = useComputedObservePrimitive(
+      const finalObservable = useComputedObserve(
         () => observable,
         observables,
+        { usePrimitive: true }
       );
       const overriddenCallback = overrideCallbackWithRef(
         finalObservable as T & ObservableLike<unknown>,

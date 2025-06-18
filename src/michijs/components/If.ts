@@ -1,99 +1,106 @@
 import { create } from "../DOM/create/create";
 import { bindObservable } from "../utils/bindObservable";
 import type {
-  ExtendableComponentWithoutChildren,
-  CreateFCResult,
   SingleJSXElement,
+  CSSVar,
+  GetElementProps,
+  Unproxify,
 } from "../types";
-import { useComputedObservePrimitive } from "../hooks/useComputedObservePrimitive";
 import { VirtualFragment } from "../classes/VirtualFragment";
-import { ProxiedValue } from "../classes/ProxiedValue";
+import { isCSSVariable } from "../typeWards/isCSSVariable"
 
-type IfProps<T> = ExtendableComponentWithoutChildren<T> & {
-  /** The condition to evaluate for rendering content. */
-  condition: any;
-  /** The content to render when the condition is truthy. */
-  then?: JSX.Element | (() => JSX.Element);
-  /** The content to render when the condition is falsy. */
-  else?: JSX.Element | (() => JSX.Element);
-  /** Allows to caché then / else components. */
-  enableCache?: boolean;
-};
+interface CSSIfType {
+  (condition: CSSVar<string>, values: [any, any][], elseValue?: any, options?: never): string
+}
+interface JSIfType {
+  <const T, const V>(condition: V, values: [Unproxify<V>, (JSX.Element | (() => JSX.Element))][], elseValue?: (JSX.Element | (() => JSX.Element)), options?: {
+    /** Allows to caché components. */
+    enableCache?: boolean,
+    as?: T;
+    attrs?: GetElementProps<T>
+  }): JSX.Element
+}
+export interface IfType extends CSSIfType, JSIfType {
+}
 
 /**
- * Conditional rendering component. This is the only way to do it dynamically.
+ * Converts conditional logic into a CSS-style string. Used when the condition is a CSSVar<string>.
  */
-export const If = <const T = CreateFCResult>(
-  {
-    as: asTag,
-    condition,
-    then,
-    else: elseComponent,
-    enableCache,
-    ...attrs
-  }: IfProps<T>,
-  contextElement?: Element,
-  contextNamespace?: string,
-) => {
-  // Create an element or a virtual fragment depending on the 'asTag' prop.
-  const el = asTag
-    ? create<ParentNode>({
+const cssIf: CSSIfType = (condition, values, elseValue) => {
+  const valuesMap = new Map(values);
+  const result = Array.from(valuesMap.entries()).map(([key, value]) => `style(${condition}:${key}):${value}`);
+  if (elseValue)
+    result.push(`else:${elseValue}`)
+
+  return `if(${result.join(';')})`
+}
+
+/**
+ * Creates a dynamic and reactive DOM element or fragment based on observable condition. Caches DOM fragments if enableCache is true.
+ */
+const jsIf: JSIfType = (condition, values, elseValue, { as: asTag, enableCache, attrs } = {}) => ({
+  attrs: {},
+  jsxTag(_, contextElement, contextNamespace) {
+    const valuesMap = new Map<unknown, (JSX.Element | (() => JSX.Element))>(values);
+    const cacheMap = new Map<unknown, DocumentFragment>();
+    let cachedElse: DocumentFragment | undefined;
+    // Create an element or a virtual fragment depending on the 'asTag' prop.
+    const el = asTag
+      ? create<ParentNode>({
         jsxTag: asTag,
-        attrs,
+        attrs: attrs ?? {},
       } as SingleJSXElement)
-    : new VirtualFragment();
+      : new VirtualFragment();
 
-  let cachedThen: DocumentFragment | undefined;
-  let cachedElse: DocumentFragment | undefined;
+    let oldMapValue: unknown | undefined;
+    let oldJsx: unknown | undefined;
+    let isFirstRender = true;
 
-  const conditionAsBoolean = useComputedObservePrimitive(
-    () =>
-      condition instanceof ProxiedValue
-        ? Boolean(condition.valueOf())
-        : condition,
-    [condition],
-  );
+    // Bind the observable 'condition' to monitor changes.
+    bindObservable<unknown>(condition, (newValue) => {
+      let cacheFound: DocumentFragment | undefined;
+      const jsxFoundOnMap = valuesMap.get(newValue);
+      const jsx = jsxFoundOnMap ?? elseValue;
 
-  // Bind the observable 'condition' to monitor changes.
-  bindObservable(conditionAsBoolean, (newValue) => {
-    const newCache = el.childNodes.length
-      ? Array.from(el.childNodes)
-      : undefined;
-    if (newValue) {
-      if (newCache) {
-        const fragment = new DocumentFragment();
-        fragment.append(...newCache);
-        if (enableCache) cachedElse = fragment;
-      }
-      if (cachedThen) el.replaceChildren(cachedThen);
-      else if (then)
-        el.replaceChildren(
-          create(
-            typeof then === "function" ? then() : then,
+      if (jsx !== oldJsx) {
+        if (enableCache) {
+          if (!isFirstRender) {
+            cacheFound = jsxFoundOnMap ? cacheMap.get(newValue) : cachedElse;
+            const fragment = new DocumentFragment();
+            fragment.append(...el.childNodes);
+            if (oldJsx === elseValue)
+              cachedElse = fragment;
+            else
+              cacheMap.set(oldMapValue, fragment);
+          }
+          oldMapValue = newValue;
+        }
+        let newChildren;
+        if (cacheFound)
+          newChildren = cacheFound
+        else
+          newChildren = create(
+            typeof jsx === "function"
+              ? jsx()
+              : jsx,
             contextElement,
             contextNamespace,
-          ),
-        );
-    } else {
-      if (newCache) {
-        const fragment = new DocumentFragment();
-        fragment.append(...newCache);
-        if (enableCache) cachedThen = fragment;
+          )
+        el.replaceChildren(newChildren)
+        oldJsx = jsx;
+        isFirstRender = false;
       }
-      if (cachedElse) el.replaceChildren(cachedElse);
-      else if (elseComponent)
-        el.replaceChildren(
-          create(
-            typeof elseComponent === "function"
-              ? elseComponent()
-              : elseComponent,
-            contextElement,
-            contextNamespace,
-          ),
-        );
-    }
-  });
+    })
 
-  // Return the rendered element.
-  return el.valueOf() as Node;
-};
+    return el.valueOf() as ParentNode;
+  }
+})
+
+/**
+ * Conditional rendering function. This is the only way to do it dynamically.
+ * @returns A conditional JSX element (reactive) or a CSS conditional string.
+ */
+// @ts-ignore
+export const If: IfType = (condition, values, elseValue, options) => {
+  return isCSSVariable(condition) ? cssIf(condition, values, elseValue) : jsIf(condition, values, elseValue, options)
+}

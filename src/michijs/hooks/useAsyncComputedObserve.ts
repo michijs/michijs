@@ -16,7 +16,7 @@ export const useAsyncComputedObserve: UseAsyncComputedObserve = (
   deps,
   options,
 ) => {
-  const newObservable = useObserve(initialValue);
+  const newObservable = useObserve(initialValue, options?.usePrimitive);
   let abortController: AbortController | undefined;
 
   const listener = async () => {

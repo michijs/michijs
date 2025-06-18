@@ -43,11 +43,9 @@ const TestCustomElement = createCustomElement("test-custom-element", {
             </msqrt>
           </mfrac>
         </math>
-        <If
-          as="div"
-          condition={this.showExample}
-          then={<div onclick={this.onClickArray}>{this.arrayTest}</div>}
-        />
+        {If(this.showExample,[
+          [true, <div onclick={this.onClickArray}>{this.arrayTest}</div>]
+        ], undefined,{as: 'div'})}
         <this.arrayTest.List
           as="div"
           renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}

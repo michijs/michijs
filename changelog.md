@@ -1,3 +1,20 @@
+## 2.3.0
+- Updated If to be aligned with new CSS if API. Now it works like a switch and is not a component anymore
+- Deprecated primitive hooks - now they are available in the options of useObserve / useComputedObserve / useAsyncComputedObserve
+
+## 2.2.0
+- Added compute 
+- deprecated not 
+- deprecated toBoolean 
+- .is() now returns an observableType
+
+## 2.1.21
+- Added List component
+
+## 2.1.0
+- Added useObservePrimitive
+- Added useComputedObservePrimitive
+
 ## 2.0.0
 
 ### Added

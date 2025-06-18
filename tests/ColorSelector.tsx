@@ -1,4 +1,4 @@
-import { createCustomElement, css, useComputedObserve } from "@michijs/michijs";
+import { createCustomElement, css, useComputedObserve, useStyleSheet } from "@michijs/michijs";
 
 const style = css`
     color-selector{

@@ -1,5 +1,5 @@
 import type { CSSProperty } from "../types";
-import { valueIsCSSObject } from "../typeWards/valueIsCSSObject";
+import { isCSSObject } from "../typeWards/isCSSObject";
 import { formatToKebabCase } from "../utils/formatToKebabCase";
 
 export const convertCssObjectToCssVariablesObject = (
@@ -11,7 +11,7 @@ export const convertCssObjectToCssVariablesObject = (
   for (const [key, value] of Object.entries<CSSProperty>(
     notObservableCssObject,
   )) {
-    if (valueIsCSSObject(value))
+    if (isCSSObject(value))
       obj = {
         ...obj,
         ...convertCssObjectToCssVariablesObject(value, properties.concat(key)),
