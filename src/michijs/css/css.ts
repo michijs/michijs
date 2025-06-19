@@ -13,6 +13,8 @@ export function css(
 ): CSSStyleSheet {
   const template = useStringTemplate(cssObject, ...props);
   const styleSheet = new CSSStyleSheet();
-  bindObservableToRef(template, styleSheet, (newValue, styleSheet) => styleSheet.replaceSync(newValue));
+  bindObservableToRef(template, styleSheet, (newValue, styleSheet) =>
+    styleSheet.replaceSync(newValue),
+  );
   return styleSheet;
 }

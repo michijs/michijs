@@ -57,15 +57,10 @@ function jsIfThenModeTests(enableCache: boolean) {
   let replaceChildren: Mock<any>;
 
   const nodeReturn = create(
-    If(
-      observable,
-      "True",
-      "False",
-      {
-        as: "div",
-        enableCache,
-      },
-    ),
+    If(observable, "True", "False", {
+      as: "div",
+      enableCache,
+    }),
   ) as ParentNode;
   const TrueNode = nodeReturn.childNodes[0];
 
