@@ -21,7 +21,7 @@ interface ListComponentProps<T> {
 
 /**
  * A generic list rendering component that supports both static arrays and observable arrays.
- * 
+ *
  * If the `data` is an observable array, the component delegates rendering
  * to the array's internal `.List` method. Otherwise, it directly maps through the array and renders each item.
  *

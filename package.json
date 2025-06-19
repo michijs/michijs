@@ -2,7 +2,7 @@
   "name": "@michijs/michijs",
   "author": "Lucas M. Segurado",
   "license": "MIT",
-  "version": "2.2.1",
+  "version": "2.2.2-beta.0",
   "files": [
     "dist/",
     "jsx-runtime/"
@@ -62,13 +62,13 @@
     "Autonomous custom elements"
   ],
   "devDependencies": {
-    "@happy-dom/global-registrator": "17.6.3",
+    "@happy-dom/global-registrator": "18.0.1",
     "@michijs/dev-server": "0.8.6",
     "@michijs/htmltype": "0.4.2",
     "@michijs/tsconfig": "0.0.4",
     "@reduxjs/toolkit": "2.8.2",
     "@types/bun": "1.2.16",
-    "playwright-core": "1.52.0",
+    "playwright-core": "1.53.1",
     "redux": "5.0.1",
     "typescript": "5.8.3",
     "vscode-html-languageservice": "5.5.0"

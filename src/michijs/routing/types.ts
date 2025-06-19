@@ -7,10 +7,7 @@ export type Hash = `#${string}` | "" | undefined;
 export type UrlFunction<
   S extends SearchParams = SearchParams,
   H extends Hash = Hash,
-> = (searchParamsAndHash?: {
-  searchParams?: S;
-  hash?: H;
-}) => URL;
+> = (searchParamsAndHash?: { searchParams?: S; hash?: H }) => URL;
 
 export type RouterProps<T> = ExtendableComponentWithoutChildren<T> & {
   routes?: Record<string, JSX.Element>;

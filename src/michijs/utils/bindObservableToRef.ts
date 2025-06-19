@@ -29,7 +29,7 @@ export const bindObservableToRef = <T, E extends WeakKey>(
       const finalObservable = useComputedObserve(
         () => observable,
         observables,
-        { usePrimitive: true }
+        { usePrimitive: true },
       );
       const overriddenCallback = overrideCallbackWithRef(
         finalObservable as T & ObservableLike<unknown>,
