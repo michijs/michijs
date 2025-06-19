@@ -12,8 +12,8 @@ const { count } = useStorage(
     count: 0,
   },
   new CookieStorage({
-    // Ten years
-    maxAge: 10 * 365 * 24 * 60 * 60,
+    //(400 days)
+    expires: Date.now() + 400 * 24 * 60 * 60 * 1000,
   }),
 );
 

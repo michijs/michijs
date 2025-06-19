@@ -8,12 +8,13 @@ import type {
 } from "../types";
 import { VirtualFragment } from "../classes/VirtualFragment";
 import { isCSSVariable } from "../typeWards/isCSSVariable"
+import { useComputedObserve } from "../hooks";
 
 interface CSSIfType {
   (condition: CSSVar<string>, values: [any, any][], elseValue?: any, options?: never): string
 }
 interface JSIfType {
-  <const T, const V>(condition: V, values: [Unproxify<V>, (JSX.Element | (() => JSX.Element))][], elseValue?: (JSX.Element | (() => JSX.Element)), options?: {
+  <const T, const V>(condition: V, values: [Unproxify<V>, (JSX.Element | (() => JSX.Element))][] | (JSX.Element | (() => JSX.Element)), elseValue?: (JSX.Element | (() => JSX.Element)), options?: {
     /** Allows to caché components. */
     enableCache?: boolean,
     as?: T;
@@ -41,7 +42,9 @@ const cssIf: CSSIfType = (condition, values, elseValue) => {
 const jsIf: JSIfType = (condition, values, elseValue, { as: asTag, enableCache, attrs } = {}) => ({
   attrs: {},
   jsxTag(_, contextElement, contextNamespace) {
-    const valuesMap = new Map<unknown, (JSX.Element | (() => JSX.Element))>(values);
+    const isSwitchMode = Array.isArray(values);
+    // @ts-ignore
+    const valuesMap = new Map<unknown, (JSX.Element | (() => JSX.Element))>(isSwitchMode ? values: [[true, values]]);
     const cacheMap = new Map<unknown, DocumentFragment>();
     let cachedElse: DocumentFragment | undefined;
     // Create an element or a virtual fragment depending on the 'asTag' prop.
@@ -56,8 +59,10 @@ const jsIf: JSIfType = (condition, values, elseValue, { as: asTag, enableCache, 
     let oldJsx: unknown | undefined;
     let isFirstRender = true;
 
+    const finalCondition = isSwitchMode ? condition : useComputedObserve(() => Boolean(condition?.valueOf()), [condition], {usePrimitive: true})
+
     // Bind the observable 'condition' to monitor changes.
-    bindObservable<unknown>(condition, (newValue) => {
+    bindObservable<unknown>(finalCondition, (newValue) => {
       let cacheFound: DocumentFragment | undefined;
       const jsxFoundOnMap = valuesMap.get(newValue);
       const jsx = jsxFoundOnMap ?? elseValue;

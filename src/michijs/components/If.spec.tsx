@@ -47,6 +47,39 @@ function jsIfTests(enableCache: boolean) {
   });
 
 }
+function jsIfThenModeTests(enableCache: boolean) {
+  const observable = useObserve<boolean | undefined | 1>(true);
+  let replaceChildren: Mock<any>;
+
+  const nodeReturn = create(If(observable, () => "True", () => "False", {
+    as: 'div',
+    enableCache
+  })) as ParentNode
+  const TrueNode = nodeReturn.childNodes[0];
+
+  beforeEach(() => {
+    replaceChildren?.mockRestore();
+    replaceChildren = spyOn(nodeReturn, 'replaceChildren');
+  })
+
+  it("should return the expected value", () => {
+    expect(nodeReturn.textContent).toBe("True");
+  });
+  it("if the value mutates, the content should mutate too", () => {
+    observable(undefined)
+    expect(nodeReturn.textContent).toBe("False");
+    expect(replaceChildren).toBeCalledTimes(1);
+  });
+  it("if the value evaluates 'true' the new value should rerender", () => {
+    observable(1);
+    expect(nodeReturn.textContent).toBe("True");
+    expect(replaceChildren).toBeCalledTimes(1);
+  });
+  it("caché should work properly", () => {
+    observable(true);
+    expect(nodeReturn.childNodes[0] === TrueNode).toBe(enableCache);
+  });
+}
 
 describe("If", () => {
   describe("When the condition is a css variable", () => {
@@ -61,11 +94,21 @@ describe("If", () => {
     });
   })
   describe("When the condition is an observable", () => {
-    describe("When caché is enabled", () => {
-      jsIfTests(true);
+    describe("When values is in switch mode", () => {
+      describe("When caché is enabled", () => {
+        jsIfTests(true);
+      })
+      describe("When caché is disabled", () => {
+        jsIfTests(false);
+      })
     })
-    describe("When caché is disabled", () => {
-      jsIfTests(false);
+    describe("When values is in then mode", () => {
+      describe("When caché is enabled", () => {
+        jsIfThenModeTests(true);
+      })
+      describe("When caché is disabled", () => {
+        jsIfThenModeTests(false);
+      })
     })
   })
 })

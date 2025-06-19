@@ -978,6 +978,18 @@ In jsx you can use it the same way
       }
     )}
   </div>
+  // Or
+  <div>
+    {If(
+      someObservable, <div>Visible</div>, 
+      <div>Hidden</div>,                          // elseValue
+      {
+        as: "section",                            // Optional wrapper element
+        enableCache: true,                        // Optional caching
+        attrs: { class: "wrapper" }               // Optional props for the wrapper
+      }
+    )}
+  </div>
 ```
 
 ## Lists
