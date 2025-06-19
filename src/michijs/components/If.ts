@@ -22,9 +22,9 @@ interface JSIfType {
   <const T, const V>(
     condition: V,
     values:
-      | [Unproxify<V>, JSX.Element | (() => JSX.Element)][]
-      | (JSX.Element | (() => JSX.Element)),
-    elseValue?: JSX.Element | (() => JSX.Element),
+      | [Unproxify<V>, JSX.Element][]
+      | JSX.Element,
+    elseValue?: JSX.Element,
     options?: {
       /** Allows to caché components. */
       enableCache?: boolean;
@@ -61,7 +61,7 @@ const jsIf: JSIfType = (
   attrs: {},
   jsxTag(_, contextElement, contextNamespace) {
     const isSwitchMode = Array.isArray(values);
-    const valuesMap = new Map<unknown, JSX.Element | (() => JSX.Element)>(
+    const valuesMap = new Map<unknown, JSX.Element>(
       // @ts-ignore
       isSwitchMode ? values : [[true, values]],
     );
@@ -105,7 +105,7 @@ const jsIf: JSIfType = (
         const newChildren: Node = cacheFound
           ? cacheFound
           : create(
-              typeof jsx === "function" ? jsx() : jsx,
+              jsx,
               contextElement,
               contextNamespace,
             );
