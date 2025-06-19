@@ -7,7 +7,7 @@ import type {
   Unproxify,
 } from "../types";
 import { VirtualFragment } from "../classes/VirtualFragment";
-import { isCSSVariable } from "../typeWards/isCSSVariable"
+import { isCSSVariable } from "../typeWards/isCSSVariable";
 import { useComputedObserve } from "../hooks";
 
 interface CSSIfType {
@@ -19,15 +19,21 @@ interface CSSIfType {
   ): string;
 }
 interface JSIfType {
-  <const T, const V>(condition: V, values: [Unproxify<V>, (JSX.Element | (() => JSX.Element))][] | (JSX.Element | (() => JSX.Element)), elseValue?: (JSX.Element | (() => JSX.Element)), options?: {
-    /** Allows to caché components. */
-    enableCache?: boolean,
-    as?: T;
-    attrs?: GetElementProps<T>
-  }): JSX.Element
+  <const T, const V>(
+    condition: V,
+    values:
+      | [Unproxify<V>, JSX.Element | (() => JSX.Element)][]
+      | (JSX.Element | (() => JSX.Element)),
+    elseValue?: JSX.Element | (() => JSX.Element),
+    options?: {
+      /** Allows to caché components. */
+      enableCache?: boolean;
+      as?: T;
+      attrs?: GetElementProps<T>;
+    },
+  ): JSX.Element;
 }
-export interface IfType extends CSSIfType, JSIfType {
-}
+export interface IfType extends CSSIfType, JSIfType {}
 export interface IfType extends CSSIfType, JSIfType {}
 
 /**
@@ -56,7 +62,9 @@ const jsIf: JSIfType = (
   jsxTag(_, contextElement, contextNamespace) {
     const isSwitchMode = Array.isArray(values);
     // @ts-ignore
-    const valuesMap = new Map<unknown, (JSX.Element | (() => JSX.Element))>(isSwitchMode ? values: [[true, values]]);
+    const valuesMap = new Map<unknown, JSX.Element | (() => JSX.Element)>(
+      isSwitchMode ? values : [[true, values]],
+    );
     const cacheMap = new Map<unknown, DocumentFragment>();
     let cachedElse: DocumentFragment | undefined;
     // Create an element or a virtual fragment depending on the 'asTag' prop.
@@ -71,7 +79,11 @@ const jsIf: JSIfType = (
     let oldJsx: unknown | undefined;
     let isFirstRender = true;
 
-    const finalCondition = isSwitchMode ? condition : useComputedObserve(() => Boolean(condition?.valueOf()), [condition], {usePrimitive: true})
+    const finalCondition = isSwitchMode
+      ? condition
+      : useComputedObserve(() => Boolean(condition?.valueOf()), [condition], {
+          usePrimitive: true,
+        });
 
     // Bind the observable 'condition' to monitor changes.
     bindObservable<unknown>(finalCondition, (newValue) => {
