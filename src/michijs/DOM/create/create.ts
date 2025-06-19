@@ -53,7 +53,7 @@ export function create<T = Node>(
             contextElement,
             contextNamespace,
           );
-        } 
+        }
         return createObject(jsx, contextElement, contextNamespace) as T;
       }
       return jsx as T;
