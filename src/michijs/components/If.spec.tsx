@@ -12,10 +12,10 @@ function jsIfTests(enableCache: boolean) {
     If(
       observable,
       [
-        [true, () => "True"],
-        [undefined, () => "Undefined"],
+        [true, "True"],
+        [undefined, "Undefined"],
       ],
-      () => "False",
+      "False",
       {
         as: "div",
         enableCache,
@@ -59,8 +59,8 @@ function jsIfThenModeTests(enableCache: boolean) {
   const nodeReturn = create(
     If(
       observable,
-      () => "True",
-      () => "False",
+      "True",
+      "False",
       {
         as: "div",
         enableCache,

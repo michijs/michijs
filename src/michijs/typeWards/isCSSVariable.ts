@@ -1,4 +1,4 @@
+import { Observable } from "../classes";
 import type { CSSVar } from "../types";
 
-export const isCSSVariable = (value: any): value is CSSVar<string> =>
-  Boolean(value?.[Symbol.toPrimitive]);
+export const isCSSVariable = (value: any): value is CSSVar<string> => typeof value === 'function' && !(value instanceof Observable);
