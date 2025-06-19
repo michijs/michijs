@@ -61,8 +61,8 @@ const jsIf: JSIfType = (
   attrs: {},
   jsxTag(_, contextElement, contextNamespace) {
     const isSwitchMode = Array.isArray(values);
-    // @ts-ignore
     const valuesMap = new Map<unknown, JSX.Element | (() => JSX.Element)>(
+      // @ts-ignore
       isSwitchMode ? values : [[true, values]],
     );
     const cacheMap = new Map<unknown, DocumentFragment>();
