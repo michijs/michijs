@@ -56,22 +56,29 @@ function jsIfThenModeTests(enableCache: boolean) {
   const observable = useObserve<boolean | undefined | 1>(true);
   let replaceChildren: Mock<any>;
 
-  const nodeReturn = create(If(observable, () => "True", () => "False", {
-    as: 'div',
-    enableCache
-  })) as ParentNode
+  const nodeReturn = create(
+    If(
+      observable,
+      () => "True",
+      () => "False",
+      {
+        as: "div",
+        enableCache,
+      },
+    ),
+  ) as ParentNode;
   const TrueNode = nodeReturn.childNodes[0];
 
   beforeEach(() => {
     replaceChildren?.mockRestore();
-    replaceChildren = spyOn(nodeReturn, 'replaceChildren');
-  })
+    replaceChildren = spyOn(nodeReturn, "replaceChildren");
+  });
 
   it("should return the expected value", () => {
     expect(nodeReturn.textContent).toBe("True");
   });
   it("if the value mutates, the content should mutate too", () => {
-    observable(undefined)
+    observable(undefined);
     expect(nodeReturn.textContent).toBe("False");
     expect(replaceChildren).toBeCalledTimes(1);
   });
@@ -108,18 +115,18 @@ describe("If", () => {
     describe("When values is in switch mode", () => {
       describe("When caché is enabled", () => {
         jsIfTests(true);
-      })
+      });
       describe("When caché is disabled", () => {
         jsIfTests(false);
-      })
-    })
+      });
+    });
     describe("When values is in then mode", () => {
       describe("When caché is enabled", () => {
         jsIfThenModeTests(true);
-      })
+      });
       describe("When caché is disabled", () => {
         jsIfThenModeTests(false);
-      })
-    })
-  })
-})
+      });
+    });
+  });
+});
