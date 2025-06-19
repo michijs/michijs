@@ -76,7 +76,8 @@ const adjectives = [
         selected: useObserve<string | null>(null, true),
         id: nextId++,
         label: useObserve(
-          `${adjectives[_random(adjectivesLength)]} ${colours[_random(coloursLength)]} ${nouns[_random(nounsLength)]}`, true
+          `${adjectives[_random(adjectivesLength)]} ${colours[_random(coloursLength)]} ${nouns[_random(nounsLength)]}`,
+          true,
         ),
       };
     return data;

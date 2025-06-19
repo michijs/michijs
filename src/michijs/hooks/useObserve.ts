@@ -23,8 +23,7 @@ export const useObserveInternal: UseObserveInternal = (
  * @returns A new observable
  */
 export const useObserve: UseObserve = (item, usePrimitive) => {
-  if (usePrimitive)
-    return new PrimitiveValue(item) as any
+  if (usePrimitive) return new PrimitiveValue(item) as any;
   const rootObservableCallback = () => result;
   const result = useObserveInternal(item, undefined, rootObservableCallback);
   return result;

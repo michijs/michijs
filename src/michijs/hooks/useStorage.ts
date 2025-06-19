@@ -54,16 +54,21 @@ export const useStorage: UseStorage = (item, storage = localStorage) => {
       )
         newObservable[ev.key] = getStorageValue(ev.key);
     });
-  } else if ('cookieStore' in window) {
-    import("../classes/CookieStorage/ModernCookieStorage").then(({ ModernCookieStorage }) => {
-      if (storage instanceof ModernCookieStorage) {
-        storage.observable.subscribe(async (changes) => {
-          for (const key in item)
-            if (changes.includes(key))
-              newObservable[key as string] = parseStorageValue(key, storage.getItem(key));
-        });
-      }
-    })
+  } else if ("cookieStore" in window) {
+    import("../classes/CookieStorage/ModernCookieStorage").then(
+      ({ ModernCookieStorage }) => {
+        if (storage instanceof ModernCookieStorage) {
+          storage.observable.subscribe(async (changes) => {
+            for (const key in item)
+              if (changes.includes(key))
+                newObservable[key as string] = parseStorageValue(
+                  key,
+                  storage.getItem(key),
+                );
+          });
+        }
+      },
+    );
   }
 
   return newObservable as any;

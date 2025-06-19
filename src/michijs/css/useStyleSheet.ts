@@ -122,7 +122,7 @@ const styleSheetFromCSSObject = (
   const stringResult = useComputedObserve(
     () => cssObjectToText(getCSSObject()),
     [...observables, ...additionalObservers],
-    {usePrimitive: true}
+    { usePrimitive: true },
   );
   bindObservable(stringResult, (formattedObject) => {
     // Jest fix
