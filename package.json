@@ -63,11 +63,11 @@
   ],
   "devDependencies": {
     "@happy-dom/global-registrator": "17.6.3",
-    "@michijs/dev-server": "0.8.5",
+    "@michijs/dev-server": "0.8.6",
     "@michijs/htmltype": "0.4.2",
     "@michijs/tsconfig": "0.0.4",
     "@reduxjs/toolkit": "2.8.2",
-    "@types/bun": "1.2.15",
+    "@types/bun": "1.2.16",
     "playwright-core": "1.52.0",
     "redux": "5.0.1",
     "typescript": "5.8.3",
