@@ -21,9 +21,7 @@ interface CSSIfType {
 interface JSIfType {
   <const T, const V>(
     condition: V,
-    values:
-      | [Unproxify<V>, JSX.Element][]
-      | JSX.Element,
+    values: [Unproxify<V>, JSX.Element][] | JSX.Element,
     elseValue?: JSX.Element,
     options?: {
       /** Allows to caché components. */
@@ -104,11 +102,7 @@ const jsIf: JSIfType = (
         }
         const newChildren: Node = cacheFound
           ? cacheFound
-          : create(
-              jsx,
-              contextElement,
-              contextNamespace,
-            );
+          : create(jsx, contextElement, contextNamespace);
         el.replaceChildren(newChildren);
         oldJsx = jsx;
         isFirstRender = false;
