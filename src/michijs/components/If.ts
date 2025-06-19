@@ -75,17 +75,13 @@ const jsIf: JSIfType = (condition, values, elseValue, { as: asTag, enableCache, 
           }
           oldMapValue = newValue;
         }
-        let newChildren;
-        if (cacheFound)
-          newChildren = cacheFound
-        else
-          newChildren = create(
-            typeof jsx === "function"
-              ? jsx()
-              : jsx,
-            contextElement,
-            contextNamespace,
-          )
+        const newChildren: Node = cacheFound ? cacheFound : create(
+          typeof jsx === "function"
+            ? jsx()
+            : jsx,
+          contextElement,
+          contextNamespace,
+        );
         el.replaceChildren(newChildren)
         oldJsx = jsx;
         isFirstRender = false;
