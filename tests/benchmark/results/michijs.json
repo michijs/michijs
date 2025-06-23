@@ -10,6 +10,17 @@
     "appendRowsToLargeTable": 21.91,
     "clearRows": 6.28
   },
+  "2.1.4": {
+    "create1000Rows": 34.97,
+    "replaceAllRows": 31.36,
+    "partialUpdate": 0.63,
+    "selectRow": 0.16,
+    "swapRows": 0.33,
+    "removeRow": 0.56,
+    "createManyRows": 240.51,
+    "appendRowsToLargeTable": 18.91,
+    "clearRows": 6.14
+  },
   "2.1.3": {
     "create1000Rows": 30.36,
     "replaceAllRows": 27.32,
