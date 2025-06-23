@@ -9,14 +9,14 @@ export class NonProxiedArrayTarget<V> {
   constructor(
     element: VirtualFragment | ParentNode,
     renderItem: FC<V>,
-    factory: ElementFactoryType
+    factory: ElementFactoryType,
   ) {
     this.element = element;
     this.renderItem = renderItem;
     this.factory = factory;
   }
-  create(item: V){
-    return this.factory.create(this.renderItem(item, this.factory))
+  create(item: V) {
+    return this.factory.create(this.renderItem(item, this.factory));
   }
 
   $clear(): void {
@@ -49,13 +49,14 @@ export class NonProxiedArrayTarget<V> {
       if (indexA > indexB) [indexA, indexB] = [indexB, indexA];
 
       if (indexB > this.element.childElementCount)
-        throw `Index ${indexB} is out of bound`
+        throw `Index ${indexB} is out of bound`;
     }
 
     const node1 = this.element.childNodes[indexA],
-    node2 = this.element.childNodes[indexB],
-    node1NextSibling = node1.nextSibling;
-    
-    this.element.insertBefore(node1, node2), this.element.insertBefore(node2, node1NextSibling)
+      node2 = this.element.childNodes[indexB],
+      node1NextSibling = node1.nextSibling;
+
+    this.element.insertBefore(node1, node2),
+      this.element.insertBefore(node2, node1NextSibling);
   }
 }

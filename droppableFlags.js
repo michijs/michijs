@@ -9,9 +9,10 @@ export const droppableFlags = {
   removeDeepBindingObservableObjects: "removeDeepBindingObservableObjects",
   removeBooleanAndObjectAttributes: "removeBooleanAndObjectAttributes",
   removeSpecialAttributes: "removeSpecialAttributes",
-  removeSupportForNonHTMLNamespacesAndBuiltInElements: "removeSupportForNonHTMLNamespacesAndBuiltInElements",
+  removeSupportForNonHTMLNamespacesAndBuiltInElements:
+    "removeSupportForNonHTMLNamespacesAndBuiltInElements",
   removeBindFunction: "removeBindFunction",
   removeObservablesGarbageCollection: "removeObservablesGarbageCollection",
   removeCallableDeletions: "removeCallableDeletions",
   removeSwapValidations: "removeSwapValidations",
-}
+};

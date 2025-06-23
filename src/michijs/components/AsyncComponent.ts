@@ -50,8 +50,7 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
     : new VirtualFragment();
 
   // If a loading component is provided, append it to the element.
-  if (loadingComponent)
-    el.append(factory.create(loadingComponent));
+  if (loadingComponent) el.append(factory.create(loadingComponent));
 
   // Function to render the component when the promise resolves.
   const render = (promiseResult: P) => {
@@ -70,7 +69,7 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
           ? then(Res as P)
           : Res && typeof Res === "function"
             ? jsx(Res)
-            : Res
+            : Res,
       ) as ChildNode & ParentNode,
     );
   };

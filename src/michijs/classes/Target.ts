@@ -10,11 +10,11 @@ export class Target<V> extends NonProxiedArrayTarget<V> {
   }
 
   insertItemsAt(i: number, items: V[]): void {
-    this.insertChildNodesAt(i, ...items.map(this.create,this));
+    this.insertChildNodesAt(i, ...items.map(this.create, this));
   }
 
   prependItems(items: V[]): void {
-    this.element.prepend(...items.map(this.create,this));
+    this.element.prepend(...items.map(this.create, this));
   }
 
   reverse(): void {

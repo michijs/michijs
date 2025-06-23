@@ -106,7 +106,10 @@ let nextId = 1,
 
 export const TableBody = create(
   rows.List({
-    as: "tbody", id: "tbody", useTemplate: true, renderItem: (row) => (
+    as: "tbody",
+    id: "tbody",
+    useTemplate: true,
+    renderItem: (row) => (
       <tr class={row.selected}>
         <td _={{ className: "col-md-1" }}>{row.id}</td>
         <td _={{ className: "col-md-4" }}>
@@ -124,9 +127,8 @@ export const TableBody = create(
         </td>
         <td _={{ className: "col-md-6" }} />
       </tr>
-    )
+    ),
   }),
-  
 );
 document.querySelector("table")?.appendChild(TableBody);
 

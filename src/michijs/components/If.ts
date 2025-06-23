@@ -100,9 +100,7 @@ const jsIf: JSIfType = (
           }
           oldMapValue = newValue;
         }
-        const newChildren: Node = cacheFound
-          ? cacheFound
-          : factory.create(jsx);
+        const newChildren: Node = cacheFound ? cacheFound : factory.create(jsx);
         el.replaceChildren(newChildren);
         oldJsx = jsx;
         isFirstRender = false;

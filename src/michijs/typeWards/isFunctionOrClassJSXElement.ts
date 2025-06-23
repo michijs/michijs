@@ -6,6 +6,10 @@ import type {
 } from "../types";
 
 export const isFunctionOrClassJSXElement = (
-  jsx: FunctionJSXElement | ClassJSXElement | ObjectJSXElement | DOMElementJSXElement,
+  jsx:
+    | FunctionJSXElement
+    | ClassJSXElement
+    | ObjectJSXElement
+    | DOMElementJSXElement,
 ): jsx is ClassJSXElement | FunctionJSXElement =>
   typeof jsx.jsxTag === "function";

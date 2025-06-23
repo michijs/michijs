@@ -10,7 +10,7 @@ export const overrideCallbackWithRef = <
 ): Subscription<T extends ObservableLike<infer Y> ? Y : T> => {
   let overridenCallback: Subscription<
     T extends ObservableLike<infer Y> ? Y : T
-  >
+  >;
   removeObservablesGarbageCollection: {
     const ref = new WeakRef(val);
     overridenCallback = (signal) => {

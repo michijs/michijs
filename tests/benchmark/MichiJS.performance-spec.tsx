@@ -47,11 +47,7 @@ describe("Performance tests - MichiJS", () => {
       2,
     );
     writeFileSync("./tests/benchmark/results/michijs.json", resultsString);
-    console.log("Results: ", JSON.stringify(
-      results,
-      undefined,
-      2,
-    ));
+    console.log("Results: ", JSON.stringify(results, undefined, 2));
     updateDiff(results);
     serverProcess.kill(2);
     browser.close();
