@@ -96,6 +96,10 @@ export class VirtualFragment
     this.replaceChildren(content);
   }
 
+  get childElementCount() {
+    return this.childNodes.length;
+  }
+
   valueOf(): Node {
     this.remove();
     return this.initialFragment;

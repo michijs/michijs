@@ -4,21 +4,14 @@ export function setAttribute(
   newValue: any,
 ): void {
   const value = newValue?.valueOf();
-  switch (true) {
-    case value === null:
-    case value === undefined:
-    case typeof value === "boolean": {
-      if (value) element.setAttribute(key, "");
-      else element.removeAttribute(key);
-      break;
-    }
-    case typeof value === "object": {
-      if (value instanceof URL) element.setAttribute(key, value.href);
-      else element.setAttribute(key, JSON.stringify(value));
-      break;
-    }
-    default: {
-      element.setAttribute(key, value);
-    }
+  if (value === null || value === undefined)
+    return element.removeAttribute(key);
+  removeBooleanAndObjectAttributes: {
+    const typeofValue = typeof value;
+    if (typeofValue === 'boolean')
+      return value ? element.setAttribute(key, "") : element.removeAttribute(key);
+    if (typeofValue === 'object')
+      return value instanceof URL ? element.setAttribute(key, value.href) : element.setAttribute(key, JSON.stringify(value));
   }
+  return element.setAttribute(key, value);;
 }

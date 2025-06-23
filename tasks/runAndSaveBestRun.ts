@@ -4,7 +4,7 @@ import { readFileSync, writeFileSync } from "fs";
 import { omit } from "../src/michijs/utils/omit";
 import { updateDiff } from "../tests/benchmark/updateDiff";
 
-const times = 100;
+const times = 1000;
 
 const run = () =>
   new Promise<void>((resolve) => {

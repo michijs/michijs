@@ -1,7 +1,7 @@
 import {
   type ObservablePrimitiveType,
   useObserve,
-  ProxiedArray,
+  NonProxiedArray,
   create,
 } from "@michijs/michijs";
 
@@ -82,7 +82,7 @@ const adjectives = [
       };
     return data;
   },
-  rows = new ProxiedArray<Row>(),
+  rows = new NonProxiedArray<Row>(),
   run = () => rows.$replace(...buildData()),
   runLots = () => rows.$replace(...buildData(10000)),
   add = () => rows.push(...buildData()),
@@ -105,11 +105,8 @@ let nextId = 1,
   selectedItem: Row | null = null;
 
 export const TableBody = create(
-  <rows.List
-    as="tbody"
-    id="tbody"
-    useTemplate
-    renderItem={(row) => (
+  rows.List({
+    as: "tbody", id: "tbody", useTemplate: true, renderItem: (row) => (
       <tr class={row.selected}>
         <td _={{ className: "col-md-1" }}>{row.id}</td>
         <td _={{ className: "col-md-4" }}>
@@ -127,8 +124,9 @@ export const TableBody = create(
         </td>
         <td _={{ className: "col-md-6" }} />
       </tr>
-    )}
-  />,
+    )
+  }),
+  
 );
 document.querySelector("table")?.appendChild(TableBody);
 

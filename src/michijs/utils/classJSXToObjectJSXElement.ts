@@ -1,19 +1,11 @@
 import type { ClassJSXElement, ObjectJSXElement } from "../types";
 
-export const classJSXToObjectJSXElement = ({
-  jsxTag,
-  attrs,
-}: ClassJSXElement): ObjectJSXElement => {
-  if (jsxTag.extends)
-    return {
-      jsxTag: jsxTag.extends,
-      attrs: {
-        ...attrs,
-        is: jsxTag.tag,
-      },
-    };
-  return {
-    jsxTag: jsxTag.tag,
-    attrs,
-  };
+export const classJSXToObjectJSXElement = (jsx: ClassJSXElement): ObjectJSXElement => {
+  if (jsx.jsxTag.extends) {
+    jsx.attrs.is = jsx.jsxTag.tag;
+    (jsx as unknown as ObjectJSXElement).jsxTag = jsx.jsxTag.extends;
+    return (jsx as unknown as ObjectJSXElement);
+  }
+  (jsx as unknown as ObjectJSXElement).jsxTag = jsx.jsxTag.tag;
+  return (jsx as unknown as ObjectJSXElement);
 };

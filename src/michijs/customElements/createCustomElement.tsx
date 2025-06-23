@@ -17,14 +17,13 @@ import { getMountPoint } from "../DOM/getMountPoint";
 import { defineReflectedAttributes } from "./properties/defineReflectedAttributes";
 import { useStyleSheet } from "../css/useStyleSheet";
 import { convertCssObjectToCssVariablesObject } from "../css/convertCssObjectToCssVariablesObject";
-import { create } from "../DOM/create/create";
-import { setProperty } from "../DOM/attributes/setProperty";
 import { MappedIdGenerator } from "../classes/MappedIdGenerator";
 import { IdGenerator } from "../classes/IdGenerator";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { useObserveInternal } from "../hooks/useObserve";
 import { createBuiltInElement } from "../polyfill";
 import { getShadowRoot } from "../utils/getShadowRoot";
+import { ElementFactory } from "../DOM/create/ElementFactory";
 
 let classesIdGenerator: undefined | IdGenerator;
 
@@ -226,16 +225,18 @@ export function createCustomElement<O extends MichiElementOptions>(
       }
       this.connected?.();
       if (!this.$michi.alreadyRendered) {
+        // TODO: what if svg?
+        const factory = new ElementFactory();
         for (const key in {
           ...reflectedAttributes,
           ...reflectedCssVariables,
         }) {
           const standarizedAttributeName = formatToKebabCase(key);
-          setProperty(this, standarizedAttributeName, this[key], this);
+          factory.setProperty(this, standarizedAttributeName, this[key]);
         }
         this.willMount?.();
         if (this.render) {
-          const newChildren = create(this.render(), this);
+          const newChildren = factory.create(this.render());
           getMountPoint(this).prepend(newChildren);
         }
         this.$michi.alreadyRendered = true;

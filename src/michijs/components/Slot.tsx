@@ -70,14 +70,14 @@ const MichiSlot = createCustomElement("michi-slot", {
  * When nodes are added, it checks if they have a slot attribute matching the slot's name or if no name is set, appending them to the MichiSlot and triggering a slotchange event.
  * The main difference between the standard slot aned the MichiSlot is that the parent does not have a shadow DOM so **every** child appended to the parent is moved to the slot.
  */
-export const Slot: FCC<HTMLElements["slot"]> = (attrs, contextElement) =>
-  getShadowRoot(contextElement) ? (
+export const Slot: FCC<HTMLElements["slot"]> = (attrs, factory) =>
+  getShadowRoot(factory.contextElement) ? (
     <slot {...attrs} />
   ) : (
     <MichiSlot
       {...attrs}
       _={{
-        hostElement: contextElement,
+        hostElement: factory.contextElement,
         // @ts-ignore
         defaultChildren: attrs.children,
       }}

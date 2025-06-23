@@ -3,6 +3,7 @@
   "compilerOptions": {
     "checkJs": false,
     "noEmit": true,
+    "allowUnusedLabels": true,
     "paths": {
       "@michijs/michijs/*": [
         "./src/*"

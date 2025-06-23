@@ -57,7 +57,7 @@ const jsIf: JSIfType = (
   { as: asTag, enableCache, attrs } = {},
 ) => ({
   attrs: {},
-  jsxTag(_, contextElement, contextNamespace) {
+  jsxTag(_, factory) {
     const isSwitchMode = Array.isArray(values);
     const valuesMap = new Map<unknown, JSX.Element>(
       // @ts-ignore
@@ -102,7 +102,7 @@ const jsIf: JSIfType = (
         }
         const newChildren: Node = cacheFound
           ? cacheFound
-          : create(jsx, contextElement, contextNamespace);
+          : factory.create(jsx);
         el.replaceChildren(newChildren);
         oldJsx = jsx;
         isFirstRender = false;

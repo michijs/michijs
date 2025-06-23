@@ -1,5 +1,5 @@
 import type { ProxiedArray } from "../classes";
-import type { FC, ObservableTypeOrConst } from "../types";
+import type { ElementFactoryType, FC, ObservableTypeOrConst } from "../types";
 import { isObservable } from "../typeWards/isObservable";
 
 /**
@@ -27,24 +27,21 @@ interface ListComponentProps<T> {
  *
  * @template T - The type of items in the list.
  * @param props - The list component props.
- * @param contextElement - Optional DOM element used for contextual rendering.
- * @param contextNamespace - Optional namespace used for scoping render operations.
+ * @param factory - The element factory to use
  * @returns The rendered list, either by using the observable's `.List` method or via a direct map.
  */
 export const List = <const T = unknown>(
   props: ListComponentProps<T>,
-  contextElement?: Element,
-  contextNamespace?: string,
+  factory: ElementFactoryType
 ) => {
   if (isObservable(props.data)) {
     const data = props.data as unknown as ProxiedArray<T>;
     return data.List(
       { renderItem: props.renderItem },
-      contextElement,
-      contextNamespace,
+      factory
     );
   }
   return props.data.map((x) =>
-    props.renderItem(x, contextElement, contextNamespace),
+    props.renderItem(x, factory),
   );
 };

@@ -8,14 +8,16 @@ import type {
 // Bypass Content-Security-Policy by creating a "Callable" object instead of using function
 // @ts-ignore
 class Callable implements Function {
-  constructor(setterAndGetterFunction: Function = () => {}) {
+  constructor(setterAndGetterFunction: Function = () => { }) {
     const result = Object.setPrototypeOf(
       setterAndGetterFunction,
       new.target.prototype,
     );
-    // Intentional it should not disturb arrays or strings
-    delete result["length"];
-    delete result["name"];
+    removeCallableDeletions: {
+      // Intentional it should not disturb arrays or strings
+      delete result["length"];
+      delete result["name"];
+    }
     return result;
   }
 }

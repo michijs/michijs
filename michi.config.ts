@@ -3,6 +3,7 @@ import type {
   ServerConfigFactory,
   DefaultEnvironment,
 } from "@michijs/dev-server";
+import { droppableFlags } from './droppableFlags'
 
 export const config: ServerConfigFactory<"TESTING" | DefaultEnvironment> = ({
   environment,
@@ -24,6 +25,10 @@ export const config: ServerConfigFactory<"TESTING" | DefaultEnvironment> = ({
     defaultConfig.openBrowser = false;
     defaultConfig.esbuildOptions = {
       ...defaultConfig.esbuildOptions,
+      legalComments: 'none',
+      define: undefined,
+      minify: false,
+      dropLabels: Object.values(droppableFlags)
     };
     if (environment === "TESTING") {
       defaultConfig.port = 3000;

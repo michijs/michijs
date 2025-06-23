@@ -2,28 +2,26 @@ import type { CookieStorageConstructor } from "../../types";
 import { Observable } from "../Observable";
 import { ObservableFromEventListener } from "../ObservableFromEventListener";
 
-const mainCookieStorage = (await cookieStore.getAll()).reduce(
-  (previousValue, currentValue) => {
-    previousValue[currentValue.name] = currentValue.value;
-    return previousValue;
-  },
-  {},
-);
+const mainCookieStorage = new Map<string, string | undefined>();
+
+removeTopLevelAwaits: {
+  (await cookieStore.getAll()).forEach(
+    (x) => mainCookieStorage.set(x.name, x.value),
+  );
+}
 
 const cookieStoreChange = new ObservableFromEventListener<{
   changed: CookieListItem[];
   deleted: CookieListItem[];
-}>(window.cookieStore, "change");
+}>(cookieStore, "change");
 
 const observable = new Observable<string[]>();
 
 cookieStoreChange.subscribe(async (e) => {
-  for (const { name } of e.changed) {
-    mainCookieStorage[name] = (await cookieStore.get(name))?.value;
-  }
-  for (const { name } of e.deleted) {
-    delete mainCookieStorage[name];
-  }
+  for (const { name } of e.changed)
+    mainCookieStorage.set(name,(await cookieStore.get(name))?.value);
+  for (const { name } of e.deleted) 
+    mainCookieStorage.delete(name)
   observable.notify(e.changed.concat(e.deleted).map((x) => x.name));
 });
 
@@ -32,27 +30,28 @@ export class ModernCookieStorage implements Storage {
   private setOptions: CookieStorageConstructor | undefined;
   [name: string]: any;
   get length(): number {
-    return Object.keys(mainCookieStorage).length;
+    return mainCookieStorage.size;
   }
 
   constructor(setOptions?: CookieStorageConstructor) {
     this.setOptions = setOptions;
   }
   clear(): void {
-    Object.keys(mainCookieStorage).forEach((x) => this.removeItem(x));
+    mainCookieStorage.clear();
+    mainCookieStorage.forEach((_, key) => cookieStore.delete(key))
   }
   getItem(key: string): string | null {
-    return mainCookieStorage[key] ?? null;
+    return mainCookieStorage.get(key) ?? null;
   }
   key(index: number): string | null {
-    return Object.keys(mainCookieStorage)[index] ?? null;
+    return mainCookieStorage.get(mainCookieStorage.keys()[index]) ?? null;
   }
   removeItem(key: string): void {
-    delete mainCookieStorage[key];
+    mainCookieStorage.delete(key)
     cookieStore.delete(key);
   }
   setItem(key: string, value: string): void {
-    mainCookieStorage[key] = value;
+    mainCookieStorage.set(key, value)
     cookieStore.set({ name: key, value, ...(this.setOptions ?? {}) });
   }
 }

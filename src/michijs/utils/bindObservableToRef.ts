@@ -23,26 +23,27 @@ export const bindObservableToRef = <T, E extends WeakKey>(
     return;
   }
 
-  if (extendsObject(observable)) {
-    const observables = getObservables(observable);
-    if (observables.length > 0) {
-      const finalObservable = useComputedObserve(
-        () => observable,
-        observables,
-        { usePrimitive: true },
-      );
-      const overriddenCallback = overrideCallbackWithRef(
-        finalObservable as T & ObservableLike<unknown>,
-        el,
-        callback,
-      );
-      if (!shouldIgnoreFirstCallback)
-        // @ts-ignore
-        overriddenCallback(finalObservable.valueOf());
-      return;
+  removeDeepBindingObservableObjects: {
+    if (extendsObject(observable)) {
+      const observables = getObservables(observable);
+      if (observables.length > 0) {
+        const finalObservable = useComputedObserve(
+          () => observable,
+          observables,
+          { usePrimitive: true },
+        );
+        const overriddenCallback = overrideCallbackWithRef(
+          finalObservable as T & ObservableLike<unknown>,
+          el,
+          callback,
+        );
+        if (!shouldIgnoreFirstCallback)
+          // @ts-ignore
+          overriddenCallback(finalObservable.valueOf());
+        return;
+      }
     }
   }
-
   if (!shouldIgnoreFirstCallback)
     callback(observable as T extends ObservableLike<infer Y> ? Y : T, el);
 };

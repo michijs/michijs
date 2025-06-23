@@ -6,6 +6,7 @@ import type {
   CreateFCResult,
   SingleJSXElement,
   ObservableOrConst,
+  ElementFactoryType,
 } from "../types";
 import { isObservable } from "../typeWards/isObservable";
 import { bindObservable } from "../utils/bindObservable";
@@ -39,11 +40,10 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
     then,
     ...attrs
   }: AsyncComponentProps<P, T>,
-  contextElement?: Element,
-  contextNamespace?: string,
+  factory: ElementFactoryType<Element>,
 ): Node => {
   const el = asTag
-    ? create<ParentNode>({
+    ? factory.create<ParentNode>({
         jsxTag: asTag,
         attrs,
       } as SingleJSXElement)
@@ -51,7 +51,7 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
 
   // If a loading component is provided, append it to the element.
   if (loadingComponent)
-    el.append(create(loadingComponent, contextElement, contextNamespace));
+    el.append(factory.create(loadingComponent));
 
   // Function to render the component when the promise resolves.
   const render = (promiseResult: P) => {
@@ -65,14 +65,12 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
 
     // Create and replace the element with the resolved component.
     el.replaceChildren(
-      create(
+      factory.create(
         then
           ? then(Res as P)
           : Res && typeof Res === "function"
             ? jsx(Res)
-            : Res,
-        contextElement,
-        contextNamespace,
+            : Res
       ) as ChildNode & ParentNode,
     );
   };

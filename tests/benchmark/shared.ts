@@ -1,7 +1,7 @@
 import type { ElementHandle, Page, Browser } from "playwright-core";
 import { it, expect } from "bun:test";
 import { exec } from "child_process";
-import packagejson from "../../package.json";
+import packageJson from "../../package.json";
 import type { AnyObject } from "@michijs/michijs/index";
 
 export type Result =
@@ -184,7 +184,7 @@ export async function makePerformanceTests(
 }
 
 export async function installPlaywright() {
-  const playwrightVersion = `playwright@${packagejson.devDependencies["playwright-core"]}`;
+  const playwrightVersion = `playwright@${packageJson.devDependencies["playwright-core"]}`;
   console.log(`Installing ${playwrightVersion}...`);
 
   return new Promise<void>((resolve, reject) => {

@@ -1,6 +1,7 @@
 {
   "extends": "@michijs/tsconfig/tsconfig.json",
   "compilerOptions": {
+    "allowUnusedLabels": true,
     "paths": {
       "@michijs/michijs/*": [
         "./src/*"

@@ -1,4 +1,5 @@
 import type {
+  ArrayJSXElement,
   ClassJSXElement,
   DOMElementJSXElement,
   FragmentJSXElement,
@@ -16,5 +17,6 @@ export const isNotAPrimitiveJSX = (
   | ObjectJSXElement
   | FragmentJSXElement
   | DOMElementJSXElement
+  | ArrayJSXElement
   | Node
   | ObservableNonNullablePrimitiveType => typeof jsx === "object";

@@ -45,7 +45,7 @@ export const ElementInternals: FC<ElementInternalsProps> = (
     validityStateFlags = { customError: true },
     ...aria
   },
-  self,
+  {contextElement: self},
 ) => {
   if (self && isMichiCustomElement(self) && self.$michi.internals) {
     if (errorMessage) {

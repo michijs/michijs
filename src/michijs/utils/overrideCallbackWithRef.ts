@@ -8,15 +8,19 @@ export const overrideCallbackWithRef = <
   val: E,
   callback: RefSubscription<T extends ObservableLike<infer Y> ? Y : T, E>,
 ): Subscription<T extends ObservableLike<infer Y> ? Y : T> => {
-  const ref = new WeakRef(val);
-  const overridenCallback: Subscription<
+  let overridenCallback: Subscription<
     T extends ObservableLike<infer Y> ? Y : T
-  > = (signal: T extends ObservableLike<infer Y> ? Y : T) => {
-    const el = ref.deref();
+  >
+  removeObservablesGarbageCollection: {
+    const ref = new WeakRef(val);
+    overridenCallback = (signal) => {
+      const el = ref.deref();
 
-    if (el) callback(signal, el);
-    else observable.unsubscribe(overridenCallback);
-  };
+      if (el) callback(signal, el);
+      else observable.unsubscribe(overridenCallback);
+    };
+  }
+  overridenCallback ??= (signal) => callback(signal, val);
   observable.subscribe(overridenCallback);
   return overridenCallback;
 };
