@@ -20,7 +20,7 @@ export class ProxiedArray<V>
       configurable: true,
       value: <const E = FC>(
         { as: asTag, renderItem, useTemplate, ...attrs }: ListProps<E, V>,
-        factory: ElementFactoryType
+        factory: ElementFactoryType = new ElementFactory()
       ): Node => {
         const el: ParentNode | VirtualFragment = asTag ? factory.create<ParentNode>(
           {
@@ -32,7 +32,7 @@ export class ProxiedArray<V>
         const newTarget = new Target<V>(
           el,
           renderItem,
-          useTemplate ? new CloneFactory() : factory ?? new ElementFactory()
+          useTemplate ? new CloneFactory() : factory
         );
 
         this.targets.push(newTarget);
