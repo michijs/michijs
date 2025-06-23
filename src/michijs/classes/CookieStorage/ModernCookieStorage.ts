@@ -5,8 +5,8 @@ import { ObservableFromEventListener } from "../ObservableFromEventListener";
 const mainCookieStorage = new Map<string, string | undefined>();
 
 removeTopLevelAwaits: {
-  (await cookieStore.getAll()).forEach(
-    (x) => mainCookieStorage.set(x.name, x.value),
+  (await cookieStore.getAll()).forEach((x) =>
+    mainCookieStorage.set(x.name, x.value),
   );
 }
 
@@ -19,9 +19,8 @@ const observable = new Observable<string[]>();
 
 cookieStoreChange.subscribe(async (e) => {
   for (const { name } of e.changed)
-    mainCookieStorage.set(name,(await cookieStore.get(name))?.value);
-  for (const { name } of e.deleted) 
-    mainCookieStorage.delete(name)
+    mainCookieStorage.set(name, (await cookieStore.get(name))?.value);
+  for (const { name } of e.deleted) mainCookieStorage.delete(name);
   observable.notify(e.changed.concat(e.deleted).map((x) => x.name));
 });
 
@@ -38,7 +37,7 @@ export class ModernCookieStorage implements Storage {
   }
   clear(): void {
     mainCookieStorage.clear();
-    mainCookieStorage.forEach((_, key) => cookieStore.delete(key))
+    mainCookieStorage.forEach((_, key) => cookieStore.delete(key));
   }
   getItem(key: string): string | null {
     return mainCookieStorage.get(key) ?? null;
@@ -47,11 +46,11 @@ export class ModernCookieStorage implements Storage {
     return mainCookieStorage.get(mainCookieStorage.keys()[index]) ?? null;
   }
   removeItem(key: string): void {
-    mainCookieStorage.delete(key)
+    mainCookieStorage.delete(key);
     cookieStore.delete(key);
   }
   setItem(key: string, value: string): void {
-    mainCookieStorage.set(key, value)
+    mainCookieStorage.set(key, value);
     cookieStore.set({ name: key, value, ...(this.setOptions ?? {}) });
   }
 }

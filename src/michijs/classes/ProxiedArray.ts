@@ -1,5 +1,5 @@
 import { NonProxiedArray } from "./NonProxiedArray";
-import { Target } from './Target';
+import { Target } from "./Target";
 import type {
   ElementFactoryType,
   FC,
@@ -9,8 +9,7 @@ import type {
 import { VirtualFragment } from "./VirtualFragment";
 import { CloneFactory, ElementFactory } from "../DOM/create/ElementFactory";
 
-export class ProxiedArray<V>
-  extends NonProxiedArray<V> {
+export class ProxiedArray<V> extends NonProxiedArray<V> {
   declare targets: Array<Target<V>>;
 
   constructor(...items: V[]) {
@@ -20,19 +19,19 @@ export class ProxiedArray<V>
       configurable: true,
       value: <const E = FC>(
         { as: asTag, renderItem, useTemplate, ...attrs }: ListProps<E, V>,
-        factory: ElementFactoryType
+        factory: ElementFactoryType,
       ): Node => {
-        const el: ParentNode | VirtualFragment = asTag ? factory.create<ParentNode>(
-          {
-            jsxTag: asTag,
-            attrs,
-          } as SingleJSXElement
-        ) : new VirtualFragment()
+        const el: ParentNode | VirtualFragment = asTag
+          ? factory.create<ParentNode>({
+              jsxTag: asTag,
+              attrs,
+            } as SingleJSXElement)
+          : new VirtualFragment();
 
         const newTarget = new Target<V>(
           el,
           renderItem,
-          useTemplate ? new CloneFactory() : factory ?? new ElementFactory()
+          useTemplate ? new CloneFactory() : (factory ?? new ElementFactory()),
         );
 
         this.targets.push(newTarget);
@@ -106,5 +105,4 @@ export class ProxiedArray<V>
     }
     return this;
   }
-  
 }
