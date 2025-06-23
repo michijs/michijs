@@ -1,6 +1,6 @@
 import type { CookieStorageConstructor } from "../../types";
 
-let CookieStorage: { new(props: CookieStorageConstructor): Storage };
+let CookieStorage: { new (props: CookieStorageConstructor): Storage };
 
 removeTopLevelAwaits: {
   if ("cookieStore" in window)
