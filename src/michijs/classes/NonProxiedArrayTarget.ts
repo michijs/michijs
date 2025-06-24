@@ -57,7 +57,7 @@ export class NonProxiedArrayTarget<V> {
       node1NextSibling = node1.nextSibling;
     removeSwapValidations: {
       if (node1NextSibling === node2) {
-        node1NextSibling.after(node1)
+        node1NextSibling.after(node1);
         return;
       }
     }

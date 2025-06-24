@@ -4,7 +4,7 @@ import { omit } from "../src/michijs/utils/omit";
 import { currentVersion } from "./currentVersion";
 
 const times = 1000;
-const fw: "michijs" | "vanillajs" = "michijs"
+const fw: "michijs" | "vanillajs" = "michijs";
 
 const run = () =>
   new Promise<void>((resolve) => {
@@ -29,8 +29,7 @@ let bestResults = jsonContent[currentVersion];
 for (let i = 0; i < times; i++) {
   await run();
   const newResults =
-    JSON.parse(readFileSync(fwJsonPath, "utf-8"))[currentVersion] ||
-    {};
+    JSON.parse(readFileSync(fwJsonPath, "utf-8"))[currentVersion] || {};
 
   if (bestResults)
     bestResults = Object.entries(newResults).reduce(

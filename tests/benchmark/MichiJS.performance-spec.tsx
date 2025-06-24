@@ -5,7 +5,7 @@ import { spawn } from "child_process";
 import { omit } from "@michijs/michijs";
 import { writeFileSync } from "fs";
 import michijs from "./results/michijs.json";
-import {currentVersion} from '../../tasks/currentVersion'
+import { currentVersion } from "../../tasks/currentVersion";
 import { updateDiff } from "./updateDiff";
 const serverProcess = spawn("bun", ["run", "start"], {
   stdio: "inherit",
