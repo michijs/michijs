@@ -1,51 +1,8 @@
 import { NonProxiedArray } from "./NonProxiedArray";
 import { Target } from "./Target";
-import type {
-  ElementFactoryType,
-  FC,
-  ListProps,
-  SingleJSXElement,
-} from "../types";
-import { VirtualFragment } from "./VirtualFragment";
-import { CloneFactory, ElementFactory } from "../DOM/create/ElementFactory";
-
-export class ProxiedArray<V> extends NonProxiedArray<V> {
-  declare targets: Array<Target<V>>;
-
+export class ProxiedArray<V> extends NonProxiedArray<V, Target<V>> {
   constructor(...items: V[]) {
-    super(...items);
-    Object.defineProperty(this, "List", {
-      enumerable: false,
-      configurable: true,
-      value: <const E = FC>(
-        { as: asTag, renderItem, useTemplate, ...attrs }: ListProps<E, V>,
-        factory: ElementFactoryType = new ElementFactory(),
-      ): Node => {
-        const el: ParentNode | VirtualFragment = asTag
-          ? factory.create<ParentNode>({
-              jsxTag: asTag,
-              attrs,
-            } as SingleJSXElement)
-          : new VirtualFragment();
-
-        const newTarget = new Target<V>(
-          el,
-          renderItem,
-          useTemplate ? new CloneFactory() : factory,
-        );
-
-        this.targets.push(newTarget);
-
-        newTarget.push(this);
-
-        return el.valueOf() as Node;
-      },
-    });
-    Object.defineProperty(this, "targets", {
-      enumerable: false,
-      configurable: true,
-      value: new Array<Target<V>>(),
-    });
+    super(Target, ...items);
   }
 
   override pop(): V | undefined {

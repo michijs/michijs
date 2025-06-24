@@ -8,10 +8,10 @@ import { VirtualFragment } from "./VirtualFragment";
 import { CloneFactory, ElementFactory } from "../DOM/create/ElementFactory";
 import { NonProxiedArrayTarget } from "./NonProxiedArrayTarget";
 
-export class NonProxiedArray<V> extends Array<V> {
-  targets: Array<NonProxiedArrayTarget<V>>;
+export class NonProxiedArray<V, T extends NonProxiedArrayTarget<V> = NonProxiedArrayTarget<V>> extends Array<V> {
+  declare targets: Array<T>;
 
-  constructor(...items: V[]) {
+  constructor(TargetConstructor: typeof NonProxiedArrayTarget<V> = NonProxiedArrayTarget, ...items: V[]) {
     super(...items);
     Object.defineProperty(this, "List", {
       enumerable: false,
@@ -20,18 +20,22 @@ export class NonProxiedArray<V> extends Array<V> {
         { as: asTag, renderItem, useTemplate, ...attrs }: ListProps<E, V>,
         factory: ElementFactoryType = new ElementFactory(),
       ): Node => {
-        const el: ParentNode | VirtualFragment = asTag
-          ? factory.create<ParentNode>({
-              jsxTag: asTag,
-              attrs,
-            } as SingleJSXElement)
-          : new VirtualFragment();
+        let el: ParentNode | VirtualFragment;
+        if (asTag)
+          el = factory.create<ParentNode>({
+            jsxTag: asTag,
+            attrs,
+          } as SingleJSXElement)
+        else
+          removeVirtualFragmentOnProxiedArrays: {
+            el = new VirtualFragment();
+          }
 
-        const newTarget = new NonProxiedArrayTarget(
+        const newTarget = new TargetConstructor(
           el,
           renderItem,
           useTemplate ? new CloneFactory() : factory,
-        );
+        ) as T;
 
         this.targets.push(newTarget);
 
@@ -43,11 +47,11 @@ export class NonProxiedArray<V> extends Array<V> {
     Object.defineProperty(this, "targets", {
       enumerable: false,
       configurable: true,
-      value: new Array<NonProxiedArrayTarget<V>>(),
+      value: new Array<T>(),
     });
   }
 
-  List: <const E = FC>(
+  declare List: <const E = FC>(
     { as, renderItem, useTemplate, ...attrs }: ListProps<E, V>,
     factory?: ElementFactoryType,
   ) => Node;

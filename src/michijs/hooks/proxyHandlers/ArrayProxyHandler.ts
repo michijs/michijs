@@ -77,7 +77,7 @@ export class ArrayProxyHandler<T extends ProxiedArray<any>>
   apply(target: ProxiedValue<T>, _: any, args: any[]) {
     if (args.length > 0) return this.applyNewValue(target, unproxify(args[0]));
     // For some reason now is enumerating List and targets
-    return JSON.parse(JSON.stringify(target));
+    return target.valueOf();
   }
   applyNewValue(target: ProxiedValue<T>, unproxifiedValue: T) {
     if (Array.isArray(unproxifiedValue)) {
