@@ -32,16 +32,11 @@ interface ListComponentProps<T> {
  */
 export const List = <const T = unknown>(
   props: ListComponentProps<T>,
-  factory: ElementFactoryType
+  factory: ElementFactoryType,
 ) => {
   if (isObservable(props.data)) {
     const data = props.data as unknown as ProxiedArray<T>;
-    return data.List(
-      { renderItem: props.renderItem },
-      factory
-    );
+    return data.List({ renderItem: props.renderItem }, factory);
   }
-  return props.data.map((x) =>
-    props.renderItem(x, factory),
-  );
+  return props.data.map((x) => props.renderItem(x, factory));
 };

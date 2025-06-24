@@ -8,8 +8,7 @@ import { VirtualFragment } from "./VirtualFragment";
 import { CloneFactory, ElementFactory } from "../DOM/create/ElementFactory";
 import { NonProxiedArrayTarget } from "./NonProxiedArrayTarget";
 
-export class NonProxiedArray<V>
-  extends Array<V> {
+export class NonProxiedArray<V> extends Array<V> {
   targets: Array<NonProxiedArrayTarget<V>>;
 
   constructor(...items: V[]) {
@@ -19,19 +18,19 @@ export class NonProxiedArray<V>
       configurable: true,
       value: <const E = FC>(
         { as: asTag, renderItem, useTemplate, ...attrs }: ListProps<E, V>,
-        factory: ElementFactoryType = new ElementFactory()
+        factory: ElementFactoryType = new ElementFactory(),
       ): Node => {
-        const el: ParentNode | VirtualFragment = asTag ? factory.create<ParentNode>(
-          {
-            jsxTag: asTag,
-            attrs,
-          } as SingleJSXElement
-        ) : new VirtualFragment()
+        const el: ParentNode | VirtualFragment = asTag
+          ? factory.create<ParentNode>({
+              jsxTag: asTag,
+              attrs,
+            } as SingleJSXElement)
+          : new VirtualFragment();
 
         const newTarget = new NonProxiedArrayTarget(
           el,
           renderItem,
-          useTemplate ? new CloneFactory() : factory
+          useTemplate ? new CloneFactory() : factory,
         );
 
         this.targets.push(newTarget);
@@ -47,16 +46,15 @@ export class NonProxiedArray<V>
       value: new Array<NonProxiedArrayTarget<V>>(),
     });
   }
-  
+
   List: <const E = FC>(
     { as, renderItem, useTemplate, ...attrs }: ListProps<E, V>,
-    factory?: ElementFactoryType
+    factory?: ElementFactoryType,
   ) => Node;
 
   // Critical functions
   override push(...items: V[]): number {
-    if (items.length > 0)
-      for (const target of this.targets) target.push(items);
+    if (items.length > 0) for (const target of this.targets) target.push(items);
     return super.push(...items);
   }
 
