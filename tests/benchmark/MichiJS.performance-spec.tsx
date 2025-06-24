@@ -5,7 +5,7 @@ import { spawn } from "child_process";
 import { omit } from "@michijs/michijs";
 import { writeFileSync } from "fs";
 import michijs from "./results/michijs.json";
-import packagejson from "../../package.json";
+import {currentVersion} from '../../tasks/currentVersion'
 import { updateDiff } from "./updateDiff";
 const serverProcess = spawn("bun", ["run", "start"], {
   stdio: "inherit",
@@ -40,15 +40,15 @@ describe("Performance tests - MichiJS", () => {
     const results = await resultsPromise;
     const resultsString = JSON.stringify(
       {
-        [packagejson.version]: results,
-        ...omit(michijs, [packagejson.version]),
+        [currentVersion]: results,
+        ...omit(michijs, [currentVersion]),
       },
       undefined,
       2,
     );
     writeFileSync("./tests/benchmark/results/michijs.json", resultsString);
     console.log("Results: ", JSON.stringify(results, undefined, 2));
-    updateDiff(results);
+    updateDiff();
     serverProcess.kill(2);
     browser.close();
   });

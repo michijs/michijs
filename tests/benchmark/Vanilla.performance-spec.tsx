@@ -3,6 +3,10 @@ import { installPlaywright, makePerformanceTests } from "./shared";
 import { describe, beforeEach, afterAll } from "bun:test";
 import { spawn } from "child_process";
 import { writeFileSync } from "fs";
+import vanillajs from "./results/vanillajs.json";
+import { omit } from "@michijs/michijs/michijs/utils/omit";
+import { updateDiff } from "./updateDiff";
+import {currentVersion} from '../../tasks/currentVersion'
 const serverProcess = spawn("bun", ["run", "start"], {
   stdio: "inherit",
   env: { ...process.env, NODE_ENV: "TESTING_VANILLA" },
@@ -21,15 +25,24 @@ describe("Performance tests - vanilla-js", () => {
       waitUntil: "domcontentloaded",
     });
   });
-  const results = makePerformanceTests(
+  
+  const resultsPromise = makePerformanceTests(
     () => browser,
     () => page,
   );
   afterAll(async () => {
-    writeFileSync(
-      "./tests/benchmark/results/vanillajs.json",
-      JSON.stringify(await results, undefined, 2),
+    const results = await resultsPromise;
+    const resultsString = JSON.stringify(
+      {
+        [currentVersion]: results,
+        ...omit(vanillajs, [currentVersion]),
+      },
+      undefined,
+      2,
     );
+    writeFileSync("./tests/benchmark/results/vanillajs.json", resultsString);
+    console.log("Results: ", JSON.stringify(results, undefined, 2));
+    updateDiff();
     serverProcess.kill(2);
     browser.close();
   });

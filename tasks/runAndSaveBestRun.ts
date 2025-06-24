@@ -1,14 +1,14 @@
 import { spawn } from "child_process";
-import packagejson from "../package.json";
 import { readFileSync, writeFileSync } from "fs";
 import { omit } from "../src/michijs/utils/omit";
-import { updateDiff } from "../tests/benchmark/updateDiff";
+import { currentVersion } from "./currentVersion";
 
 const times = 1000;
+const fw: "michijs" | "vanillajs" = "michijs"
 
 const run = () =>
   new Promise<void>((resolve) => {
-    const process = spawn("bun", ["run", "benchmark-michijs"], {
+    const process = spawn("bun", ["run", `benchmark-${fw}`], {
       stdio: "inherit",
     });
 
@@ -22,14 +22,14 @@ const run = () =>
     });
   });
 
-const michijsJsonPath = "./tests/benchmark/results/michijs.json";
-const jsonContent = JSON.parse(readFileSync(michijsJsonPath, "utf-8"));
-let bestResults = jsonContent[packagejson.version];
+const fwJsonPath = `./tests/benchmark/results/${fw}.json`;
+const jsonContent = JSON.parse(readFileSync(fwJsonPath, "utf-8"));
+let bestResults = jsonContent[currentVersion];
 
 for (let i = 0; i < times; i++) {
   await run();
   const newResults =
-    JSON.parse(readFileSync(michijsJsonPath, "utf-8"))[packagejson.version] ||
+    JSON.parse(readFileSync(fwJsonPath, "utf-8"))[currentVersion] ||
     {};
 
   if (bestResults)
@@ -47,12 +47,11 @@ for (let i = 0; i < times; i++) {
 
   const resultsString = JSON.stringify(
     {
-      [packagejson.version]: bestResults,
-      ...omit(jsonContent, [packagejson.version]),
+      [currentVersion]: bestResults,
+      ...omit(jsonContent, [currentVersion]),
     },
     undefined,
     2,
   );
-  writeFileSync(michijsJsonPath, resultsString);
+  writeFileSync(fwJsonPath, resultsString);
 }
-updateDiff(bestResults);

@@ -1,5 +1,5 @@
 {
-  "2.2.2-beta.3": {
+  "2.2.2-beta.3-playwright@1.53.1": {
     "create1000Rows": 31.17,
     "replaceAllRows": 31.57,
     "partialUpdate": 0.59,
@@ -10,7 +10,7 @@
     "appendRowsToLargeTable": 21.91,
     "clearRows": 6.28
   },
-  "2.1.4": {
+  "2.1.4-playwright@1.53.1": {
     "create1000Rows": 34.97,
     "replaceAllRows": 31.36,
     "partialUpdate": 0.63,
