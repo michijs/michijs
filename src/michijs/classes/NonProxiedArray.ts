@@ -8,10 +8,16 @@ import { VirtualFragment } from "./VirtualFragment";
 import { CloneFactory, ElementFactory } from "../DOM/create/ElementFactory";
 import { NonProxiedArrayTarget } from "./NonProxiedArrayTarget";
 
-export class NonProxiedArray<V, T extends NonProxiedArrayTarget<V> = NonProxiedArrayTarget<V>> extends Array<V> {
+export class NonProxiedArray<
+  V,
+  T extends NonProxiedArrayTarget<V> = NonProxiedArrayTarget<V>,
+> extends Array<V> {
   declare targets: Array<T>;
 
-  constructor(TargetConstructor: typeof NonProxiedArrayTarget<V> = NonProxiedArrayTarget, ...items: V[]) {
+  constructor(
+    TargetConstructor: typeof NonProxiedArrayTarget<V> = NonProxiedArrayTarget,
+    ...items: V[]
+  ) {
     super(...items);
     Object.defineProperty(this, "List", {
       enumerable: false,
@@ -25,7 +31,7 @@ export class NonProxiedArray<V, T extends NonProxiedArrayTarget<V> = NonProxiedA
           el = factory.create<ParentNode>({
             jsxTag: asTag,
             attrs,
-          } as SingleJSXElement)
+          } as SingleJSXElement);
         else
           removeVirtualFragmentOnProxiedArrays: {
             el = new VirtualFragment();
