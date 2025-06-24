@@ -55,6 +55,12 @@ export class NonProxiedArrayTarget<V> {
     const node1 = this.element.childNodes[indexA],
       node2 = this.element.childNodes[indexB],
       node1NextSibling = node1.nextSibling;
+    removeSwapValidations: {
+      if (node1NextSibling === node2) {
+        node1NextSibling.after(node1)
+        return;
+      }
+    }
 
     this.element.insertBefore(node1, node2),
       this.element.insertBefore(node2, node1NextSibling);

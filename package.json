@@ -40,7 +40,7 @@
   },
   "description": "Typescript library to build web components",
   "scripts": {
-    "start": "michi-server --start --env=TESTING",
+    "start": "michi-server --start",
     "dist": "michi-server --dist",
     "build": "michi-server --build",
     "dist-w": "michi-server --dist --w",

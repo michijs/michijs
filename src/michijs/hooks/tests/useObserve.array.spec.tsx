@@ -63,10 +63,11 @@ describe("Observe array tests", () => {
   });
   it("Sort function should work for array and the node as expected", () => {
     array.push(5, 4, 3, 6, 9, 8);
+    const result = [exampleValue, 5, 4, 3, 6, 9, 8].sort();
     array.sort();
-    expectResult([1, 3, 4, 5, 6, 8, 9]);
+    expectResult(result);
     array.sort((a, b) => b() - a());
-    expectResult([9, 8, 6, 5, 4, 3, 1]);
+    expectResult(result.sort((a, b) => b - a));
   });
   it("Splice function should work for array and the node as expected", () => {
     array.push(2, 8, 4, 5, 6);

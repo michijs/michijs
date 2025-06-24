@@ -27,7 +27,7 @@ export const config: ServerConfigFactory<"TESTING" | DefaultEnvironment> = ({
       ...defaultConfig.esbuildOptions,
       legalComments: "none",
       define: undefined,
-      minify: false,
+      // minify: false,
       dropLabels: Object.values(droppableFlags),
     };
     if (environment === "TESTING") {
