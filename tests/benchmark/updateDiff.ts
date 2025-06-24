@@ -5,7 +5,9 @@ import { currentVersion } from "../../tasks/currentVersion";
 import type { Result } from "./shared";
 
 export const updateDiff = () => {
-  const diff = Object.entries(michijs[currentVersion] as Partial<Record<Result, number>>).reduce((previousValue, [key, value]) => {
+  const diff = Object.entries(
+    michijs[currentVersion] as Partial<Record<Result, number>>,
+  ).reduce((previousValue, [key, value]) => {
     // Bigger values are worst
     previousValue[key] = Math.max(
       0,
