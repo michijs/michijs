@@ -94,7 +94,7 @@ const jsIf: JSIfType = (
           if (!isFirstRender) {
             cacheFound = jsxFoundOnMap ? cacheMap.get(newValue) : cachedElse;
             const fragment = new DocumentFragment();
-            fragment.append(...Array.from(el.childNodes));
+            fragment.append(...el.childNodes);
             if (oldJsx === elseValue) cachedElse = fragment;
             else cacheMap.set(oldMapValue, fragment);
           }

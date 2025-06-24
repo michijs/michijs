@@ -69,7 +69,7 @@
     "@happy-dom/global-registrator": "18.0.1",
     "@michijs/dev-server": "0.8.6",
     "@michijs/htmltype": "0.4.2",
-    "@michijs/tsconfig": "0.0.4",
+    "@michijs/tsconfig": "0.0.5",
     "@reduxjs/toolkit": "2.8.2",
     "@types/bun": "1.2.16",
     "playwright-core": "1.53.1",

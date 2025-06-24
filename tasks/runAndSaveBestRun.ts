@@ -23,7 +23,7 @@ const run = () =>
   });
 
 const fwJsonPath = `./tests/benchmark/results/${fw}.json`;
-const jsonContent = JSON.parse(readFileSync(fwJsonPath, "utf-8"));
+const jsonContent = (await import(`.${fwJsonPath}`)).default;
 let bestResults = jsonContent[currentVersion];
 
 for (let i = 0; i < times; i++) {
