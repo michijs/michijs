@@ -6,7 +6,7 @@ import { writeFileSync } from "fs";
 import vanillajs from "./results/vanillajs.json";
 import { omit } from "@michijs/michijs/michijs/utils/omit";
 import { updateDiff } from "./updateDiff";
-import {currentVersion} from '../../tasks/currentVersion'
+import { currentVersion } from "../../tasks/currentVersion";
 const serverProcess = spawn("bun", ["run", "start"], {
   stdio: "inherit",
   env: { ...process.env, NODE_ENV: "TESTING_VANILLA" },
@@ -25,7 +25,7 @@ describe("Performance tests - vanilla-js", () => {
       waitUntil: "domcontentloaded",
     });
   });
-  
+
   const resultsPromise = makePerformanceTests(
     () => browser,
     () => page,
