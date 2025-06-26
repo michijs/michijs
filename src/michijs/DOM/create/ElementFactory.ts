@@ -41,25 +41,25 @@ export class ElementFactory<S extends Element>
     newValue: any,
     shouldValidateInitialValue?: boolean,
   ): void {
-    // priority to properties and events
-    if (name === "_") {
-      for (const propertyName in newValue)
-        bindObservableToRef(
-          newValue[propertyName],
-          el,
-          updatePropertyCallback(propertyName),
-          shouldValidateInitialValue &&
-          el[propertyName] === (newValue[propertyName] as any).valueOf(),
-        );
-      return;
+    removePropertiesSupport: {
+      // priority to properties and events
+      if (name === "_") {
+        for (const propertyName in newValue)
+          bindObservableToRef(
+            newValue[propertyName],
+            el,
+            updatePropertyCallback(propertyName),
+            shouldValidateInitialValue &&
+            el[propertyName] === (newValue[propertyName] as any).valueOf(),
+          );
+        return;
+      }
     }
-    removeAttributeEvents: {
-      if (name.startsWith("on"))
-        return el.addEventListener(
-          name.slice(2),
-          bindFunction(this.contextElement, newValue),
-        );
-    }
+    if (name.startsWith("on"))
+      return el.addEventListener(
+        name.slice(2),
+        bindFunction(this.contextElement, newValue),
+      );
     removeSpecialAttributes: {
       if (name === "style" && typeof newValue === "object")
         return setStyle(el, newValue as CSSProperties);

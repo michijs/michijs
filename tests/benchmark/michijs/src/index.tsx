@@ -3,6 +3,7 @@ import {
   useObserve,
   NonProxiedArray,
   create,
+  type TypedMouseEvent,
 } from "@michijs/michijs";
 
 interface Row {
@@ -106,106 +107,44 @@ let nextId = 1,
 
 export const TableBody = rows.List({
   as: "tbody",
-  _: {
-    id: "tbody",
-  },
+  id: "tbody",
   useTemplate: true,
   renderItem: (row) => (
     <tr class={row.selected}>
-      <td _={{ className: "col-md-1" }}>{row.id}</td>
-      <td _={{ className: "col-md-4" }}>
-        <a _={{ onclick: () => select(row) }}>{row.label}</a>
+      <td class="col-md-1">{row.id}</td>
+      <td class="col-md-4">
+        <a onclick={() => select(row)}>{row.label}</a>
       </td>
-      <td _={{ className: "col-md-1" }}>
-        <a _={{ onclick: () => deleteItem(row.id) }}>
+      <td class="col-md-1">
+        <a onclick={() => deleteItem(row.id)}>
           <span
-            _={{
-              className: "glyphicon glyphicon-remove",
-              ariaHidden: "true",
-            }}
+            class="glyphicon glyphicon-remove"
+            aria-hidden="true"
           />
         </a>
       </td>
-      <td _={{ className: "col-md-6" }} />
+      <td class="col-md-6" />
     </tr>
   ),
 });
 document.querySelector("table")?.appendChild(TableBody);
 
+const rowButton = (id: string, event: (ev: TypedMouseEvent<HTMLButtonElement>) => any, label: string) => (
+  <div class="col-sm-6 smallpad">
+    <button type="button" class="btn btn-primary btn-block" id={id} onclick={event}>
+      {label}
+    </button>
+  </div>
+)
+
 export const TableManager = create(
-  <div _={{ className: "row" }}>
-    <div _={{ className: "col-sm-6 smallpad" }}>
-      <button
-        _={{
-          type: "button",
-          className: "btn btn-primary btn-block",
-          id: "run",
-          onclick: run,
-        }}
-      >
-        Create 1,000 rows
-      </button>
-    </div>
-    <div _={{ className: "col-sm-6 smallpad" }}>
-      <button
-        _={{
-          type: "button",
-          className: "btn btn-primary btn-block",
-          id: "runlots",
-          onclick: runLots,
-        }}
-      >
-        Create 10,000 rows
-      </button>
-    </div>
-    <div _={{ className: "col-sm-6 smallpad" }}>
-      <button
-        _={{
-          type: "button",
-          className: "btn btn-primary btn-block",
-          id: "add",
-          onclick: add,
-        }}
-      >
-        Append 1,000 rows
-      </button>
-    </div>
-    <div _={{ className: "col-sm-6 smallpad" }}>
-      <button
-        _={{
-          type: "button",
-          className: "btn btn-primary btn-block",
-          id: "update",
-          onclick: update,
-        }}
-      >
-        Update every 10th row
-      </button>
-    </div>
-    <div _={{ className: "col-sm-6 smallpad" }}>
-      <button
-        _={{
-          type: "button",
-          className: "btn btn-primary btn-block",
-          id: "clear",
-          onclick: clear,
-        }}
-      >
-        Clear
-      </button>
-    </div>
-    <div _={{ className: "col-sm-6 smallpad" }}>
-      <button
-        _={{
-          type: "button",
-          className: "btn btn-primary btn-block",
-          id: "swaprows",
-          onclick: swapRows,
-        }}
-      >
-        Swap Rows
-      </button>
-    </div>
+  <div class="row">
+    {rowButton("run",run,"Create 1,000 rows")}
+    {rowButton("runlots",runLots,"Create 10,000 rows")}
+    {rowButton("add",add,"Append 1,000 rows")}
+    {rowButton("update",update,"Update every 10th row")}
+    {rowButton("clear",clear,"Clear")}
+    {rowButton("swaprows",swapRows,"Swap Rows")}
   </div>,
 );
 document.getElementById("table-manager")?.appendChild(TableManager);
