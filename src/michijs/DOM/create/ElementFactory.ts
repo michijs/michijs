@@ -28,7 +28,8 @@ import { updateObservableTextElement } from "./updateObservableTextElement";
 import { updateTextElement } from "./updateTextElement";
 
 export class ElementFactory<S extends Element>
-  implements ElementFactoryType<S> {
+  implements ElementFactoryType<S>
+{
   contextElement?: S;
 
   constructor(contextElement?: S) {
@@ -49,7 +50,7 @@ export class ElementFactory<S extends Element>
           el,
           updatePropertyCallback(propertyName),
           shouldValidateInitialValue &&
-          el[propertyName] === (newValue[propertyName] as any).valueOf(),
+            el[propertyName] === (newValue[propertyName] as any).valueOf(),
         );
       return;
     }
@@ -73,7 +74,7 @@ export class ElementFactory<S extends Element>
       el,
       updateAttributeCallback(name),
       shouldValidateInitialValue &&
-      el.getAttribute(name) === newValue.valueOf(),
+        el.getAttribute(name) === newValue.valueOf(),
     );
   }
 
@@ -99,8 +100,7 @@ export class ElementFactory<S extends Element>
 
   protected createInternal(jsx: SingleJSXElement) {
     removeNilJSXElements: {
-      if (!jsx)
-        return createTextElement(jsx);
+      if (!jsx) return createTextElement(jsx);
     }
     if (isNotAPrimitiveJSX(jsx)) {
       removeArrayJSXElements: {
@@ -111,8 +111,7 @@ export class ElementFactory<S extends Element>
         }
       }
       removeNodeJSXElements: {
-        if (!("jsxTag" in jsx))
-          return jsx;
+        if (!("jsxTag" in jsx)) return jsx;
       }
       removeFragmentJSXElements: {
         //Fix for non-jsx objects
@@ -208,7 +207,8 @@ export class ElementFactoryWithNamespace<
 
 export class CloneFactory<S extends Element>
   extends ElementFactory<S>
-  implements CloneFactoryType<S> {
+  implements CloneFactoryType<S>
+{
   private template: Node;
   clone<T = Node>(jsx: SingleJSXElement): T {
     const clonedNode = this.template.cloneNode(true);
@@ -223,16 +223,14 @@ export class CloneFactory<S extends Element>
 
   updateClone(clonedNode: Node, jsx: SingleJSXElement) {
     removeNilJSXElements: {
-      if (!jsx)
-        return updateTextElement(clonedNode as Text, jsx);
+      if (!jsx) return updateTextElement(clonedNode as Text, jsx);
     }
     if (isNotAPrimitiveJSX(jsx)) {
       removeArrayJSXElements: {
         if (Array.isArray(jsx)) throw "Arrays are not supported yet";
       }
       removeNodeJSXElements: {
-        if (!("jsxTag" in jsx))
-          return;
+        if (!("jsxTag" in jsx)) return;
       }
       removeFragmentJSXElements: {
         if (isFragmentElement(jsx)) throw "Fragments are not supported yet";
