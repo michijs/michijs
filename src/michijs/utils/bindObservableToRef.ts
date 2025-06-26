@@ -37,10 +37,10 @@ export const bindObservableToRef = <T, E extends WeakKey>(
           el,
           callback,
         );
-        if (!shouldIgnoreFirstCallback)
-          // @ts-ignore
-          overriddenCallback(finalObservable.valueOf());
-        return;
+        if (shouldIgnoreFirstCallback)
+          return;
+        // @ts-ignore
+        overriddenCallback(finalObservable.valueOf());
       }
     }
   }

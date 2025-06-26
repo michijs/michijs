@@ -18,5 +18,4 @@ export const isNotAPrimitiveJSX = (
   | FragmentJSXElement
   | DOMElementJSXElement
   | ArrayJSXElement
-  | Node
-  | ObservableNonNullablePrimitiveType => typeof jsx === "object";
+  | Node => typeof jsx === "object";

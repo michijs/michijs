@@ -9,12 +9,12 @@ import type {
   ObservableProxyHandlerInterface,
 } from "../types";
 import { useComputedObserve } from "../hooks/useComputedObserve";
-import { Observable } from "./Observable";
+import { CallableObservable } from "./Observable";
 import { unproxify } from "../utils/unproxify";
 import { getHandler } from "../hooks/proxyHandlers/getHandler";
 
 export class ProxiedValue<T>
-  extends Observable<T>
+  extends CallableObservable<T>
   implements ProxiedValueInterface<T>
 {
   $value: T;

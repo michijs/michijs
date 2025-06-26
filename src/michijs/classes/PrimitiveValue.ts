@@ -1,14 +1,14 @@
 import type { ObservableGettersAndSetters } from "../types";
 import { hasToJSON } from "../typeWards/hasToJSON";
-import { Observable } from "./Observable";
+import { CallableObservable } from "./Observable";
 
-export class PrimitiveValue<T> extends Observable<T> {
+export class PrimitiveValue<T> extends CallableObservable<T> {
   $value: T;
   constructor(initialValue: T) {
     super(((...args: [T]): undefined | T => {
       if (args.length > 0) {
         const newValue = args[0];
-        removePrimitiveValueValidations: {
+        removeObservableWithValueValidations: {
           if (newValue === this.$value) return;
         }
         this.$value = newValue;

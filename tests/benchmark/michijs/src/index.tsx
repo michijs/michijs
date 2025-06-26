@@ -11,32 +11,32 @@ interface Row {
   selected: ObservablePrimitiveType<string | null>;
 }
 const adjectives = [
-    "pretty",
-    "large",
-    "big",
-    "small",
-    "tall",
-    "short",
-    "long",
-    "handsome",
-    "plain",
-    "quaint",
-    "clean",
-    "elegant",
-    "easy",
-    "angry",
-    "crazy",
-    "helpful",
-    "mushy",
-    "odd",
-    "unsightly",
-    "adorable",
-    "important",
-    "inexpensive",
-    "cheap",
-    "expensive",
-    "fancy",
-  ],
+  "pretty",
+  "large",
+  "big",
+  "small",
+  "tall",
+  "short",
+  "long",
+  "handsome",
+  "plain",
+  "quaint",
+  "clean",
+  "elegant",
+  "easy",
+  "angry",
+  "crazy",
+  "helpful",
+  "mushy",
+  "odd",
+  "unsightly",
+  "adorable",
+  "important",
+  "inexpensive",
+  "cheap",
+  "expensive",
+  "fancy",
+],
   colours = [
     "red",
     "yellow",
@@ -104,32 +104,30 @@ const adjectives = [
 let nextId = 1,
   selectedItem: Row | null = null;
 
-export const TableBody = create(
-  rows.List({
-    as: "tbody",
-    id: "tbody",
-    useTemplate: true,
-    renderItem: (row) => (
-      <tr class={row.selected}>
-        <td _={{ className: "col-md-1" }}>{row.id}</td>
-        <td _={{ className: "col-md-4" }}>
-          <a _={{ onclick: () => select(row) }}>{row.label}</a>
-        </td>
-        <td _={{ className: "col-md-1" }}>
-          <a _={{ onclick: () => deleteItem(row.id) }}>
-            <span
-              _={{
-                className: "glyphicon glyphicon-remove",
-                ariaHidden: "true",
-              }}
-            />
-          </a>
-        </td>
-        <td _={{ className: "col-md-6" }} />
-      </tr>
-    ),
-  }),
-);
+export const TableBody = rows.List({
+  as: "tbody",
+  id: "tbody",
+  useTemplate: true,
+  renderItem: (row) => (
+    <tr class={row.selected}>
+      <td _={{ className: "col-md-1" }}>{row.id}</td>
+      <td _={{ className: "col-md-4" }}>
+        <a _={{ onclick: () => select(row) }}>{row.label}</a>
+      </td>
+      <td _={{ className: "col-md-1" }}>
+        <a _={{ onclick: () => deleteItem(row.id) }}>
+          <span
+            _={{
+              className: "glyphicon glyphicon-remove",
+              ariaHidden: "true",
+            }}
+          />
+        </a>
+      </td>
+      <td _={{ className: "col-md-6" }} />
+    </tr>
+  ),
+});
 document.querySelector("table")?.appendChild(TableBody);
 
 export const TableManager = create(

@@ -1,8 +1,10 @@
 export const droppableFlags = {
   removeTopLevelAwaits: "removeTopLevelAwaits",
   removeNonPrimitive: "removeNonPrimitive",
-  removePrimitiveValueValidations: "removePrimitiveValueValidations",
+  removeObservableWithValueValidations: "removeObservableWithValueValidations",
   removeFunctionAndClassJSXElements: "removeFunctionAndClassJSXElements",
+  removeNilJSXElements: "removeNilJSXElements",
+  removeNodeJSXElements: "removeNodeJSXElements",
   removeDOMJSXElements: "removeDOMJSXElements",
   removeArrayJSXElements: "removeArrayJSXElements",
   removeFragmentJSXElements: "removeFragmentJSXElements",
@@ -13,7 +15,7 @@ export const droppableFlags = {
   removeSupportForNonHTMLNamespacesAndBuiltInElements:
     "removeSupportForNonHTMLNamespacesAndBuiltInElements",
   removeBindFunction: "removeBindFunction",
+  removeDeletionsFromCallableObservable: "removeDeletionsFromCallableObservable",
   removeObservablesGarbageCollection: "removeObservablesGarbageCollection",
-  removeCallableDeletions: "removeCallableDeletions",
   removeSwapValidations: "removeSwapValidations",
 };

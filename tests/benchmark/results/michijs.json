@@ -1,4 +1,37 @@
 {
+  "2.2.2-beta.6-playwright@1.53.1": {
+    "create1000Rows": 25.47,
+    "replaceAllRows": 27.24,
+    "partialUpdate": 0.61,
+    "selectRow": 0.17,
+    "swapRows": 0.28,
+    "removeRow": 0.53,
+    "createManyRows": 198.11,
+    "appendRowsToLargeTable": 17.83,
+    "clearRows": 6.18
+  },
+  "2.2.2-beta.5-playwright@1.53.1": {
+    "create1000Rows": 33.39,
+    "replaceAllRows": 31.54,
+    "partialUpdate": 0.69,
+    "selectRow": 0.19,
+    "swapRows": 0.32,
+    "removeRow": 0.55,
+    "createManyRows": 232.41,
+    "appendRowsToLargeTable": 22.79,
+    "clearRows": 6.48
+  },
+  "2.2.2-beta.4-playwright@1.53.1": {
+    "create1000Rows": 31.98,
+    "replaceAllRows": 31.4,
+    "partialUpdate": 0.63,
+    "selectRow": 0.17,
+    "swapRows": 0.3,
+    "removeRow": 0.54,
+    "createManyRows": 229.76,
+    "appendRowsToLargeTable": 21.96,
+    "clearRows": 6.25
+  },
   "2.2.2-beta.3-playwright@1.53.1": {
     "create1000Rows": 31.17,
     "replaceAllRows": 31.57,

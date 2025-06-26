@@ -2,7 +2,7 @@
   "name": "@michijs/michijs",
   "author": "Lucas M. Segurado",
   "license": "MIT",
-  "version": "2.2.2-beta.3",
+  "version": "2.2.2-beta.6",
   "files": [
     "dist/",
     "jsx-runtime/"
@@ -41,6 +41,7 @@
   "description": "Typescript library to build web components",
   "scripts": {
     "start": "michi-server --start",
+    "start-testing": "michi-server --start --env=TESTING",
     "dist": "michi-server --dist",
     "build": "michi-server --build",
     "dist-w": "michi-server --dist --w",
