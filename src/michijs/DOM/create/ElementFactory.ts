@@ -53,11 +53,13 @@ export class ElementFactory<S extends Element>
         );
       return;
     }
-    if (name.startsWith("on"))
-      return el.addEventListener(
-        name.slice(2),
-        bindFunction(this.contextElement, newValue),
-      );
+    removeAttributeEvents: {
+      if (name.startsWith("on"))
+        return el.addEventListener(
+          name.slice(2),
+          bindFunction(this.contextElement, newValue),
+        );
+    }
     removeSpecialAttributes: {
       if (name === "style" && typeof newValue === "object")
         return setStyle(el, newValue as CSSProperties);

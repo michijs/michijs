@@ -17,5 +17,6 @@ export const droppableFlags = {
   removeBindFunction: "removeBindFunction",
   removeDeletionsFromCallableObservable: "removeDeletionsFromCallableObservable",
   removeObservablesGarbageCollection: "removeObservablesGarbageCollection",
+  removeAttributeEvents: "removeAttributeEvents",
   removeSwapValidations: "removeSwapValidations",
 };

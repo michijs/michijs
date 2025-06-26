@@ -106,7 +106,9 @@ let nextId = 1,
 
 export const TableBody = rows.List({
   as: "tbody",
-  id: "tbody",
+  _: {
+    id: "tbody",
+  },
   useTemplate: true,
   renderItem: (row) => (
     <tr class={row.selected}>
