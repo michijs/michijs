@@ -5,7 +5,6 @@ import type {
   ObservableGettersAndSetters,
 } from "@michijs/michijs";
 
-
 export class Observable<T> implements ObservableLike<T> {
   observers: Set<Subscription<T>> = new Set();
 

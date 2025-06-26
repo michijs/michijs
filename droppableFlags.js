@@ -15,7 +15,8 @@ export const droppableFlags = {
   removeSupportForNonHTMLNamespacesAndBuiltInElements:
     "removeSupportForNonHTMLNamespacesAndBuiltInElements",
   removeBindFunction: "removeBindFunction",
-  removeDeletionsFromCallableObservable: "removeDeletionsFromCallableObservable",
+  removeDeletionsFromCallableObservable:
+    "removeDeletionsFromCallableObservable",
   removeObservablesGarbageCollection: "removeObservablesGarbageCollection",
   removeSwapValidations: "removeSwapValidations",
 };
