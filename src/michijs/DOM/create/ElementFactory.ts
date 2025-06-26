@@ -54,8 +54,10 @@ export class ElementFactory<S extends Element>
       return;
     }
     if (name.startsWith("on"))
-      return bindFunction(this.contextElement, newValue);
-
+      return el.addEventListener(
+        name.slice(2),
+        bindFunction(this.contextElement, newValue),
+      );
     removeSpecialAttributes: {
       if (name === "style" && typeof newValue === "object")
         return setStyle(el, newValue as CSSProperties);
@@ -207,7 +209,7 @@ export class ElementFactoryWithNamespace<
 export class CloneFactory<S extends Element>
   extends ElementFactory<S>
   implements CloneFactoryType<S> {
-  template: Node;
+  private template: Node;
   clone<T = Node>(jsx: SingleJSXElement): T {
     const clonedNode = this.template.cloneNode(true);
     this.updateClone(clonedNode, jsx);
