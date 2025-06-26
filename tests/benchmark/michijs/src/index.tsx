@@ -12,32 +12,32 @@ interface Row {
   selected: ObservablePrimitiveType<string | null>;
 }
 const adjectives = [
-  "pretty",
-  "large",
-  "big",
-  "small",
-  "tall",
-  "short",
-  "long",
-  "handsome",
-  "plain",
-  "quaint",
-  "clean",
-  "elegant",
-  "easy",
-  "angry",
-  "crazy",
-  "helpful",
-  "mushy",
-  "odd",
-  "unsightly",
-  "adorable",
-  "important",
-  "inexpensive",
-  "cheap",
-  "expensive",
-  "fancy",
-],
+    "pretty",
+    "large",
+    "big",
+    "small",
+    "tall",
+    "short",
+    "long",
+    "handsome",
+    "plain",
+    "quaint",
+    "clean",
+    "elegant",
+    "easy",
+    "angry",
+    "crazy",
+    "helpful",
+    "mushy",
+    "odd",
+    "unsightly",
+    "adorable",
+    "important",
+    "inexpensive",
+    "cheap",
+    "expensive",
+    "fancy",
+  ],
   colours = [
     "red",
     "yellow",
@@ -117,10 +117,7 @@ export const TableBody = rows.List({
       </td>
       <td class="col-md-1">
         <a onclick={() => deleteItem(row.id)}>
-          <span
-            class="glyphicon glyphicon-remove"
-            aria-hidden="true"
-          />
+          <span class="glyphicon glyphicon-remove" aria-hidden="true" />
         </a>
       </td>
       <td class="col-md-6" />
@@ -129,22 +126,31 @@ export const TableBody = rows.List({
 });
 document.querySelector("table")?.appendChild(TableBody);
 
-const rowButton = (id: string, event: (ev: TypedMouseEvent<HTMLButtonElement>) => any, label: string) => (
+const rowButton = (
+  id: string,
+  event: (ev: TypedMouseEvent<HTMLButtonElement>) => any,
+  label: string,
+) => (
   <div class="col-sm-6 smallpad">
-    <button type="button" class="btn btn-primary btn-block" id={id} onclick={event}>
+    <button
+      type="button"
+      class="btn btn-primary btn-block"
+      id={id}
+      onclick={event}
+    >
       {label}
     </button>
   </div>
-)
+);
 
 export const TableManager = create(
   <div class="row">
-    {rowButton("run",run,"Create 1,000 rows")}
-    {rowButton("runlots",runLots,"Create 10,000 rows")}
-    {rowButton("add",add,"Append 1,000 rows")}
-    {rowButton("update",update,"Update every 10th row")}
-    {rowButton("clear",clear,"Clear")}
-    {rowButton("swaprows",swapRows,"Swap Rows")}
+    {rowButton("run", run, "Create 1,000 rows")}
+    {rowButton("runlots", runLots, "Create 10,000 rows")}
+    {rowButton("add", add, "Append 1,000 rows")}
+    {rowButton("update", update, "Update every 10th row")}
+    {rowButton("clear", clear, "Clear")}
+    {rowButton("swaprows", swapRows, "Swap Rows")}
   </div>,
 );
 document.getElementById("table-manager")?.appendChild(TableManager);
