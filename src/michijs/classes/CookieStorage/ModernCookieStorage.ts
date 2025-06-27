@@ -40,7 +40,8 @@ export class ModernCookieStorage implements Storage {
     mainCookieStorage.forEach((_, key) => cookieStore.delete(key));
   }
   getItem(key: string): string | null {
-    return mainCookieStorage.get(key) ?? null;
+    const value = mainCookieStorage.get(key);
+    return value ? decodeURIComponent(value) : null;
   }
   key(index: number): string | null {
     return mainCookieStorage.get(mainCookieStorage.keys()[index]) ?? null;
@@ -50,7 +51,8 @@ export class ModernCookieStorage implements Storage {
     cookieStore.delete(key);
   }
   setItem(key: string, value: string): void {
-    mainCookieStorage.set(key, value);
-    cookieStore.set({ name: key, value, ...(this.setOptions ?? {}) });
+    const encodedValue = encodeURIComponent(value)
+    mainCookieStorage.set(key, encodedValue);
+    cookieStore.set({ name: key, value: encodedValue, ...(this.setOptions ?? {}) });
   }
 }
