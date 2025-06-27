@@ -7,6 +7,9 @@ import type {
   NotifiableObservers,
   ParentSubscription,
   ObservableProxyHandlerInterface,
+  ObservablePrimitiveType,
+  ObservableTypeHelper,
+  ObservableLike,
 } from "../types";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { CallableObservable } from "./Observable";
@@ -15,8 +18,7 @@ import { getHandler } from "../hooks/proxyHandlers/getHandler";
 
 export class ProxiedValue<T>
   extends CallableObservable<T>
-  implements ProxiedValueInterface<T>
-{
+  implements ProxiedValueInterface<T> {
   $value: T;
   handler: ObservableProxyHandlerInterface<T>;
   parentSubscription: ParentSubscription<T> | undefined;
@@ -51,8 +53,10 @@ export class ProxiedValue<T>
     // this[Symbol.toStringTag] = () => this.toString();
     // this[Symbol.toPrimitive] = () => this.valueOf();
   }
-  compute<V>(callback: (value: T) => V): ObservableType<V> {
-    return useComputedObserve(() => callback(this.$value), [this]);
+  compute<V>(callback: (value: T) => V, usePrimitive?: false): ObservableTypeHelper<V, NonNullable<V>>;
+  compute<V>(callback: (value: T) => V, usePrimitive: true): ObservablePrimitiveType<V>;
+  compute<V>(callback: (value: T) => V, usePrimitive?: any): ObservableLike<V> {
+    return useComputedObserve(() => callback(this.$value), [this], { usePrimitive });
   }
 
   notifyCurrentValue(): void {

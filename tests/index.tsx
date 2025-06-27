@@ -1,4 +1,4 @@
-import { createCustomElement, Host } from "@michijs/michijs";
+import { createCustomElement, Host, useObserve } from "@michijs/michijs";
 import { Router } from "./routes";
 // import sheet from './a.css' assert { type: 'css' };
 // console.log(sheet)
