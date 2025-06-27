@@ -14,9 +14,9 @@ export class ObservableWithValue<T> extends Observable<T> {
     this.notify(newValue);
   }
   get value(): T {
-    return this.$value
+    return this.$value;
   }
   override valueOf(): T {
-    return this.$value
+    return this.$value;
   }
 }

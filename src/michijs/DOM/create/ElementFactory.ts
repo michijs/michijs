@@ -32,7 +32,7 @@ export class AttributeManager<S extends Element> {
   private gc: GarbageCollectableObject<Element>;
   constructor(element: Element, contextElement?: S) {
     this.contextElement = contextElement;
-    this.gc = new GarbageCollectableObject(element)
+    this.gc = new GarbageCollectableObject(element);
   }
 
   setProperty(
@@ -45,9 +45,12 @@ export class AttributeManager<S extends Element> {
       if (name === "_") {
         for (const propertyName in newValue)
           bindObservable(newValue[propertyName], (newValue) => {
-            if (!shouldValidateInitialValue || this.gc[propertyName] !== newValue[propertyName])
-              this.gc[propertyName] = newValue
-          })
+            if (
+              !shouldValidateInitialValue ||
+              this.gc[propertyName] !== newValue[propertyName]
+            )
+              this.gc[propertyName] = newValue;
+          });
         return;
       }
     }
@@ -64,8 +67,12 @@ export class AttributeManager<S extends Element> {
             // Manual Update is faster than Object.assign
             bindObservable(value, (newValue) => {
               if (!isNil(newValue))
-                (this.gc.ref as HTMLElement).style.setProperty(formattedKey, (value as NonNullable<unknown>).toString());
-              else (this.gc.ref as HTMLElement).style.removeProperty(formattedKey);
+                (this.gc.ref as HTMLElement).style.setProperty(
+                  formattedKey,
+                  (value as NonNullable<unknown>).toString(),
+                );
+              else
+                (this.gc.ref as HTMLElement).style.removeProperty(formattedKey);
             });
           }
         return;
@@ -81,9 +88,12 @@ export class AttributeManager<S extends Element> {
       }
     }
     return bindObservable(newValue, (newValue) => {
-      if (!shouldValidateInitialValue || this.gc.ref.getAttribute(name) !== newValue?.valueOf?.())
+      if (
+        !shouldValidateInitialValue ||
+        this.gc.ref.getAttribute(name) !== newValue?.valueOf?.()
+      )
         setAttribute(this.gc.ref, name, newValue);
-    })
+    });
   }
 
   setProperties(
@@ -96,7 +106,8 @@ export class AttributeManager<S extends Element> {
 }
 
 export class ElementFactory<S extends Element>
-  implements ElementFactoryType<S> {
+  implements ElementFactoryType<S>
+{
   contextElement?: S;
 
   constructor(contextElement?: S) {
@@ -108,7 +119,7 @@ export class ElementFactory<S extends Element>
     attributes: AnyObject,
     shouldValidateInitialValue?: boolean,
   ): void {
-    const manager = new AttributeManager(el, this.contextElement)
+    const manager = new AttributeManager(el, this.contextElement);
     for (const name in attributes)
       manager.setProperty(name, attributes[name], shouldValidateInitialValue);
   }
@@ -126,8 +137,7 @@ export class ElementFactory<S extends Element>
 
   protected createInternal(jsx: SingleJSXElement) {
     removeNilJSXElements: {
-      if (!jsx)
-        return createTextElement(jsx);
+      if (!jsx) return createTextElement(jsx);
     }
     if (isNotAPrimitiveJSX(jsx)) {
       removeArrayJSXElements: {
@@ -138,8 +148,7 @@ export class ElementFactory<S extends Element>
         }
       }
       removeNodeJSXElements: {
-        if (!("jsxTag" in jsx))
-          return jsx;
+        if (!("jsxTag" in jsx)) return jsx;
       }
       removeFragmentJSXElements: {
         //Fix for non-jsx objects
@@ -243,7 +252,8 @@ export class ElementFactoryWithNamespace<
 
 export class CloneFactory<S extends Element>
   extends ElementFactory<S>
-  implements CloneFactoryType<S> {
+  implements CloneFactoryType<S>
+{
   private template: Node;
   clone<T = Node>(jsx: SingleJSXElement): T {
     const clonedNode = this.template.cloneNode(true);
@@ -258,16 +268,14 @@ export class CloneFactory<S extends Element>
 
   updateClone(clonedNode: Node, jsx: SingleJSXElement) {
     removeNilJSXElements: {
-      if (!jsx)
-        return updateTextElement(clonedNode as Text, jsx);
+      if (!jsx) return updateTextElement(clonedNode as Text, jsx);
     }
     if (isNotAPrimitiveJSX(jsx)) {
       removeArrayJSXElements: {
         if (Array.isArray(jsx)) throw "Arrays are not supported yet";
       }
       removeNodeJSXElements: {
-        if (!("jsxTag" in jsx))
-          return;
+        if (!("jsxTag" in jsx)) return;
       }
       removeFragmentJSXElements: {
         if (isFragmentElement(jsx)) throw "Fragments are not supported yet";

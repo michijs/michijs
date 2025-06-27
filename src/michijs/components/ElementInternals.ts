@@ -49,7 +49,7 @@ export const ElementInternals: FC<ElementInternalsProps> = (
   { contextElement: self },
 ) => {
   if (self && isMichiCustomElement(self) && self.$michi.internals) {
-    const gc = new GarbageCollectableObject(self)
+    const gc = new GarbageCollectableObject(self);
     if (errorMessage) {
       const errorObservable = useComputedObserve(
         () => ({
@@ -58,32 +58,34 @@ export const ElementInternals: FC<ElementInternalsProps> = (
         }),
         getObservables([validityStateFlags, errorMessage]),
       );
-      
+
       bindObservable(errorObservable, (newValue) => {
         const error = unproxify(newValue.errorMessage);
         gc.ref.$michi.internals!.setValidity(
           error ? unproxify(validityStateFlags) : undefined,
           error,
         );
-      })
+      });
     }
 
     if (formValue)
       bindObservable(formValue, (newValue) => {
         gc.ref.$michi.internals!.setFormValue(newValue);
-      })
+      });
     Object.entries({ tabIndex, ...aria }).forEach(([key, value]) => {
       if (gc.ref.$michi.internals)
         if (key in gc.ref.$michi.internals)
-            bindObservable(value, (newValue) => {
-              gc.ref.$michi.internals![key] = newValue;
-            })
+          bindObservable(value, (newValue) => {
+            gc.ref.$michi.internals![key] = newValue;
+          });
         else if (key in gc.ref)
-          bindObservable(value, (newValue) => gc.ref[key] = newValue)
+          bindObservable(value, (newValue) => (gc.ref[key] = newValue));
         // Some browsers still dont support internals
         else {
           const formattedKey = key.toLowerCase().replace("aria", "aria-");
-          bindObservable(value, (newValue) => setAttribute(gc.ref, formattedKey, newValue))
+          bindObservable(value, (newValue) =>
+            setAttribute(gc.ref, formattedKey, newValue),
+          );
         }
     });
   }

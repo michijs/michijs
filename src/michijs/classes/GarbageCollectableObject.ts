@@ -8,13 +8,11 @@ export class GarbageCollectableObject<T extends object> {
       Object.defineProperty(this, "ref", {
         get() {
           const deref = ref.deref();
-          if (!deref)
-            throw new GarbageCollectedEvent()
+          if (!deref) throw new GarbageCollectedEvent();
           return deref;
-        }
-      })
+        },
+      });
     }
-    if (!this.ref)
-      this.ref = obj;
+    if (!this.ref) this.ref = obj;
   }
 }

@@ -18,8 +18,7 @@ export class Observable<T> implements ObservableLike<T> {
           if (e instanceof GarbageCollectedEvent) {
             this.unsubscribe(observer);
             continue;
-          } else
-            throw e;
+          } else throw e;
         }
         // @ts-ignore
         throw e;

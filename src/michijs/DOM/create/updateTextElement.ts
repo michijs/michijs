@@ -8,6 +8,5 @@ export const updateTextElement = (
 ): void => {
   const newText = createTextNodeContentCallback(jsx);
   // In objects it will be always not correct
-  if (clonedNode.nodeValue !== newText)
-    clonedNode.nodeValue = newText
+  if (clonedNode.nodeValue !== newText) clonedNode.nodeValue = newText;
 };

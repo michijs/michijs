@@ -9,6 +9,9 @@ export const createObservableTextElement = (
 ): Text => {
   const textNode = createTextElement(jsx.valueOf());
   const gc = new GarbageCollectableObject(textNode);
-  bindObservable(jsx, (newValue) => gc.ref.nodeValue = createTextNodeContentCallback(newValue))
+  bindObservable(
+    jsx,
+    (newValue) => (gc.ref.nodeValue = createTextNodeContentCallback(newValue)),
+  );
   return textNode;
 };
