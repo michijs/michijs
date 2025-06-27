@@ -11,5 +11,6 @@ export const updateObservableTextElement = (
   const gc = new GarbageCollectableObject(clonedNode);
   // Updates text as soon as binded
   bindObservable(jsx, (newValue) => {
-    (gc.ref.nodeValue = createTextNodeContentCallback(newValue))});
+    gc.ref.nodeValue = createTextNodeContentCallback(newValue);
+  });
 };

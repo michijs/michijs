@@ -32,10 +32,7 @@ describe("Performance tests - vanilla-js", () => {
   );
   afterAll(async () => {
     const results = await resultsPromise;
-    const resultsString = JSON.stringify(results,
-      undefined,
-      2,
-    );
+    const resultsString = JSON.stringify(results, undefined, 2);
     writeFileSync("./tests/benchmark/results/vanillajs.json", resultsString);
     console.log("Results: ", JSON.stringify(results, undefined, 2));
     updateDiff();

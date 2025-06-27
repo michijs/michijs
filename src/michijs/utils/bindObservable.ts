@@ -7,7 +7,7 @@ import { getObservables } from "./getObservables";
 export const bindObservable = <T>(
   observable: T,
   callback: Subscription<T extends ObservableLike<infer Y> ? Y : T>,
-  enableDeepBinding?: boolean
+  enableDeepBinding?: boolean,
 ): T => {
   if (isObservable(observable)) {
     observable.subscribe(callback as Subscription<unknown>);
@@ -28,7 +28,7 @@ export const bindObservable = <T>(
         return finalObservable;
       }
     }
-  };
-  callback(observable as T extends ObservableLike<infer Y> ? Y : T)
+  }
+  callback(observable as T extends ObservableLike<infer Y> ? Y : T);
   return observable;
 };

@@ -14,7 +14,7 @@ export function css(
 ): CSSStyleSheet {
   const template = useStringTemplate(cssObject, ...props);
   const styleSheet = new CSSStyleSheet();
-  const gc = new GarbageCollectableObject(styleSheet)
+  const gc = new GarbageCollectableObject(styleSheet);
   bindObservable(template, (newValue) => gc.ref.replaceSync(newValue));
   return styleSheet;
 }
