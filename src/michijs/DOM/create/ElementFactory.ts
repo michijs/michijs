@@ -47,9 +47,9 @@ export class AttributeManager<S extends Element> {
           bindObservable(newValue[propertyName], (newValue) => {
             if (
               !shouldValidateInitialValue ||
-              this.gc[propertyName] !== newValue[propertyName]
+              this.gc.ref[propertyName] !== newValue[propertyName]
             )
-              this.gc[propertyName] = newValue;
+              this.gc.ref[propertyName] = newValue;
           });
         return;
       }
