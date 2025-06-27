@@ -1,5 +1,10 @@
 import { useComputedObserve } from "../hooks/useComputedObserve";
-import type { ObservableGettersAndSetters, ObservableLike, ObservablePrimitiveType, ObservableTypeHelper } from "../types";
+import type {
+  ObservableGettersAndSetters,
+  ObservableLike,
+  ObservablePrimitiveType,
+  ObservableTypeHelper,
+} from "../types";
 import { hasToJSON } from "../typeWards/hasToJSON";
 import { CallableObservable } from "./Observable";
 
@@ -29,10 +34,18 @@ export class PrimitiveValue<T> extends CallableObservable<T> {
     return this.$value;
   }
 
-  compute<V>(callback: (value: T) => V, usePrimitive?: false): ObservableTypeHelper<V, NonNullable<V>>;
-  compute<V>(callback: (value: T) => V, usePrimitive: true): ObservablePrimitiveType<V>;
+  compute<V>(
+    callback: (value: T) => V,
+    usePrimitive?: false,
+  ): ObservableTypeHelper<V, NonNullable<V>>;
+  compute<V>(
+    callback: (value: T) => V,
+    usePrimitive: true,
+  ): ObservablePrimitiveType<V>;
   compute<V>(callback: (value: T) => V, usePrimitive?: any): ObservableLike<V> {
-    return useComputedObserve(() => callback(this.$value), [this], { usePrimitive });
+    return useComputedObserve(() => callback(this.$value), [this], {
+      usePrimitive,
+    });
   }
 
   override toString(): string {
