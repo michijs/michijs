@@ -51,8 +51,12 @@ export class ModernCookieStorage implements Storage {
     cookieStore.delete(key);
   }
   setItem(key: string, value: string): void {
-    const encodedValue = encodeURIComponent(value)
+    const encodedValue = encodeURIComponent(value);
     mainCookieStorage.set(key, encodedValue);
-    cookieStore.set({ name: key, value: encodedValue, ...(this.setOptions ?? {}) });
+    cookieStore.set({
+      name: key,
+      value: encodedValue,
+      ...(this.setOptions ?? {}),
+    });
   }
 }
