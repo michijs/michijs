@@ -5,6 +5,7 @@
   "version": "2.3.0",
   "files": [
     "dist/",
+    "droppableFlags.js",
     "jsx-runtime/"
   ],
   "packageManager": "bun@1.1.30",
