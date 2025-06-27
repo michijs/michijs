@@ -33,7 +33,7 @@ export const useAsyncComputedObserve: UseAsyncComputedObserve = (
       }
     } catch (ex) {
       currentAbortController?.abort();
-      console.error(ex);
+      throw ex;
     }
   };
   listener();

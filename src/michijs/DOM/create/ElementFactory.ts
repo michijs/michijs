@@ -1,5 +1,4 @@
 import { Namespaces } from "../../constants/namespaces";
-import type { CSSProperties } from "../../generated/htmlType";
 import type {
   ElementFactoryType,
   SingleJSXElement,
@@ -8,6 +7,7 @@ import type {
   AnyObject,
   CloneFactoryType,
 } from "../../types";
+import { isHTMLElement } from "../../typeWards/isHTMLElement";
 import { isClassJSXElement } from "../../typeWards/isClassJSXElement";
 import { isDOMElement } from "../../typeWards/isDOMElement";
 import { isFragmentElement } from "../../typeWards/isFragmentElement";
@@ -15,17 +15,85 @@ import { isFunctionOrClassJSXElement } from "../../typeWards/isFunctionOrClassJS
 import { isMichiCustomElement } from "../../typeWards/isMichiCustomElement";
 import { isNotAPrimitiveJSX } from "../../typeWards/isNotAPrimitiveJSX";
 import { isObservable } from "../../typeWards/isObservable";
+import { bindObservable } from "../../utils/bindObservable";
+import { formatToKebabCase } from "../../utils/formatToKebabCase";
 import { bindFunction } from "../../utils/bindFunction";
-import { bindObservableToRef } from "../../utils/bindObservableToRef";
 import { classJSXToObjectJSXElement } from "../../utils/classJSXToObjectJSXElement";
-import { setStyle } from "../attributes/setStyle";
-import { updateAttributeCallback } from "../callbacks/updateAttributeCallback";
-import { updateClassCallback } from "../callbacks/updateClassCallback";
-import { updatePropertyCallback } from "../callbacks/updatePropertyCallback";
 import { createObservableTextElement } from "./createObservableTextElement";
 import { createTextElement } from "./createTextElement";
 import { updateObservableTextElement } from "./updateObservableTextElement";
 import { updateTextElement } from "./updateTextElement";
+import { isNil } from "../../utils/isNil";
+import { setAttribute } from "../attributes/setAttribute";
+import { GarbageCollectableObject } from "../../classes/GarbageCollectableObject";
+
+export class AttributeManager<S extends Element> {
+  contextElement?: S;
+  private gc: GarbageCollectableObject<Element>;
+  constructor(element: Element, contextElement?: S) {
+    this.contextElement = contextElement;
+    this.gc = new GarbageCollectableObject(element)
+  }
+
+  setProperty(
+    name: string,
+    newValue: any,
+    shouldValidateInitialValue?: boolean,
+  ): void {
+    removePropertiesSupport: {
+      // priority to properties and events
+      if (name === "_") {
+        for (const propertyName in newValue)
+          bindObservable(newValue[propertyName], (newValue) => {
+            if (!shouldValidateInitialValue || this.gc[propertyName] !== newValue[propertyName])
+              this.gc[propertyName] = newValue
+          })
+        return;
+      }
+    }
+    if (name.startsWith("on"))
+      return this.gc.ref.addEventListener(
+        name.slice(2),
+        bindFunction(this.contextElement, newValue),
+      );
+    removeSpecialAttributes: {
+      if (name === "style" && typeof newValue === "object") {
+        if (isHTMLElement(this.gc.ref))
+          for (const [key, value] of Object.entries(newValue)) {
+            const formattedKey = formatToKebabCase(key);
+            // Manual Update is faster than Object.assign
+            bindObservable(value, (newValue) => {
+              if (!isNil(newValue))
+                (this.gc.ref as HTMLElement).style.setProperty(formattedKey, (value as NonNullable<unknown>).toString());
+              else (this.gc.ref as HTMLElement).style.removeProperty(formattedKey);
+            });
+          }
+        return;
+      }
+      if (
+        name === "class" &&
+        isMichiCustomElement(this.gc.ref) &&
+        this.gc.ref.$michi.styles.className
+      ) {
+        const newValueWithClassName = `${newValue} ${this.gc.ref.$michi.styles.className}`;
+        setAttribute(this.gc.ref, "class", newValueWithClassName);
+        return;
+      }
+    }
+    return bindObservable(newValue, (newValue) => {
+      if (!shouldValidateInitialValue || this.gc.ref.getAttribute(name) !== newValue?.valueOf?.())
+        setAttribute(this.gc.ref, name, newValue);
+    })
+  }
+
+  setProperties(
+    attributes: AnyObject,
+    shouldValidateInitialValue?: boolean,
+  ): void {
+    for (const name in attributes)
+      this.setProperty(name, attributes[name], shouldValidateInitialValue);
+  }
+}
 
 export class ElementFactory<S extends Element>
   implements ElementFactoryType<S> {
@@ -35,57 +103,14 @@ export class ElementFactory<S extends Element>
     this.contextElement = contextElement;
   }
 
-  setProperty(
-    el: Element,
-    name: string,
-    newValue: any,
-    shouldValidateInitialValue?: boolean,
-  ): void {
-    removePropertiesSupport: {
-      // priority to properties and events
-      if (name === "_") {
-        for (const propertyName in newValue)
-          bindObservableToRef(
-            newValue[propertyName],
-            el,
-            updatePropertyCallback(propertyName),
-            shouldValidateInitialValue &&
-            el[propertyName] === (newValue[propertyName] as any).valueOf(),
-          );
-        return;
-      }
-    }
-    if (name.startsWith("on"))
-      return el.addEventListener(
-        name.slice(2),
-        bindFunction(this.contextElement, newValue),
-      );
-    removeSpecialAttributes: {
-      if (name === "style" && typeof newValue === "object")
-        return setStyle(el, newValue as CSSProperties);
-      if (
-        name === "class" &&
-        isMichiCustomElement(el) &&
-        el.$michi.styles.className
-      )
-        return bindObservableToRef(newValue, el, updateClassCallback);
-    }
-    return bindObservableToRef(
-      newValue,
-      el,
-      updateAttributeCallback(name),
-      shouldValidateInitialValue &&
-      el.getAttribute(name) === newValue.valueOf(),
-    );
-  }
-
   setProperties(
     el: Element,
     attributes: AnyObject,
     shouldValidateInitialValue?: boolean,
   ): void {
+    const manager = new AttributeManager(el, this.contextElement)
     for (const name in attributes)
-      this.setProperty(el, name, attributes[name], shouldValidateInitialValue);
+      manager.setProperty(name, attributes[name], shouldValidateInitialValue);
   }
 
   protected setChildren(
@@ -139,12 +164,20 @@ export class ElementFactory<S extends Element>
           else return this.createInternal(jsx.jsxTag(jsx.attrs, this));
         }
       }
+      // Observables with values
+      if (isObservable(jsx))
+        return createObservableTextElement(
+          jsx as unknown as ObservableNonNullablePrimitiveType,
+        );
       return this.createObject(jsx);
     }
-    if (isObservable(jsx))
-      return createObservableTextElement(
-        jsx as unknown as ObservableNonNullablePrimitiveType,
-      );
+    // Observables - functions
+    removeFunctionObservablesSupport: {
+      if (isObservable(jsx))
+        return createObservableTextElement(
+          jsx as unknown as ObservableNonNullablePrimitiveType,
+        );
+    }
     return createTextElement(jsx);
   }
 
@@ -177,7 +210,7 @@ export class ElementFactory<S extends Element>
 export class ElementFactoryWithNamespace<
   S extends Element,
 > extends ElementFactory<S> {
-  contextNamespace: string;
+  private contextNamespace: string;
   constructor(contextNamespace: string, contextElement?: S) {
     super(contextElement);
     this.contextNamespace = contextNamespace;
@@ -245,6 +278,11 @@ export class CloneFactory<S extends Element>
           throw "Functions are not supported yet";
         }
       }
+      if (isObservable(jsx))
+        return updateObservableTextElement(
+          clonedNode as Text,
+          jsx as unknown as ObservableNonNullablePrimitiveType,
+        );
       const { children, ...attrs } = jsx.attrs;
       if (children)
         if (Array.isArray(children)) {
@@ -257,11 +295,13 @@ export class CloneFactory<S extends Element>
       this.setProperties(clonedNode as Element, attrs, true);
       return clonedNode;
     }
-    if (isObservable(jsx))
-      return updateObservableTextElement(
-        clonedNode as Text,
-        jsx as unknown as ObservableNonNullablePrimitiveType,
-      );
+    removeFunctionObservablesSupport: {
+      if (isObservable(jsx))
+        return updateObservableTextElement(
+          clonedNode as Text,
+          jsx as unknown as ObservableNonNullablePrimitiveType,
+        );
+    }
     return updateTextElement(clonedNode as Text, jsx);
   }
 }

@@ -23,7 +23,7 @@ import { useComputedObserve } from "../hooks/useComputedObserve";
 import { useObserveInternal } from "../hooks/useObserve";
 import { createBuiltInElement } from "../polyfill";
 import { getShadowRoot } from "../utils/getShadowRoot";
-import { ElementFactory } from "../DOM/create/ElementFactory";
+import { AttributeManager, ElementFactory } from "../DOM/create/ElementFactory";
 
 let classesIdGenerator: undefined | IdGenerator;
 
@@ -226,16 +226,17 @@ export function createCustomElement<O extends MichiElementOptions>(
       this.connected?.();
       if (!this.$michi.alreadyRendered) {
         // TODO: what if svg?
-        const factory = new ElementFactory();
+        const attributeManager = new AttributeManager(this, this);
         for (const key in {
           ...reflectedAttributes,
           ...reflectedCssVariables,
         }) {
           const standarizedAttributeName = formatToKebabCase(key);
-          factory.setProperty(this, standarizedAttributeName, this[key]);
+          attributeManager.setProperty(standarizedAttributeName, this[key]);
         }
         this.willMount?.();
         if (this.render) {
+          const factory = new ElementFactory(this);
           const newChildren = factory.create(this.render());
           getMountPoint(this).prepend(newChildren);
         }

@@ -801,12 +801,6 @@ export type FCProps<T = {}> = {
 
 export interface ElementFactoryType<S extends Element = Element> {
   contextElement?: S;
-  setProperty(
-    el: Element,
-    name: string,
-    newValue: any,
-    shouldValidateInitialValue?: boolean,
-  ): void;
   setProperties(
     el: Element,
     attributes: AnyObject,

@@ -4,8 +4,9 @@ import { isMichiCustomElement } from "../typeWards/isMichiCustomElement";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import type { FC, ObservableOrConst } from "../types";
 import { getObservables } from "../utils/getObservables";
-import { bindObservableToRef } from "../utils/bindObservableToRef";
 import { unproxify } from "../utils/unproxify";
+import { GarbageCollectableObject } from "../classes/GarbageCollectableObject";
+import { bindObservable } from "../utils/bindObservable";
 
 type ObservableAriaMixin = {
   [k in keyof Omit<ARIAMixin, "role">]?: ObservableOrConst<ARIAMixin[k]>;
@@ -48,6 +49,7 @@ export const ElementInternals: FC<ElementInternalsProps> = (
   { contextElement: self },
 ) => {
   if (self && isMichiCustomElement(self) && self.$michi.internals) {
+    const gc = new GarbageCollectableObject(self)
     if (errorMessage) {
       const errorObservable = useComputedObserve(
         () => ({
@@ -56,41 +58,32 @@ export const ElementInternals: FC<ElementInternalsProps> = (
         }),
         getObservables([validityStateFlags, errorMessage]),
       );
-
-      bindObservableToRef(errorObservable, self, (newValue, self) => {
+      
+      bindObservable(errorObservable, (newValue) => {
         const error = unproxify(newValue.errorMessage);
-        self.$michi.internals!.setValidity(
+        gc.ref.$michi.internals!.setValidity(
           error ? unproxify(validityStateFlags) : undefined,
           error,
         );
-      });
+      })
     }
 
     if (formValue)
-      bindObservableToRef(formValue, self, (newValue, self) => {
-        self?.$michi.internals!.setFormValue(newValue);
-      });
-
+      bindObservable(formValue, (newValue) => {
+        gc.ref.$michi.internals!.setFormValue(newValue);
+      })
     Object.entries({ tabIndex, ...aria }).forEach(([key, value]) => {
-      if (self.$michi.internals)
-        if (key in self.$michi.internals)
-          bindObservableToRef(
-            value,
-            self,
-            (newValue, self) => (self.$michi.internals![key] = newValue),
-          );
-        else if (key in self)
-          bindObservableToRef(
-            value,
-            self,
-            (newValue, self) => (self[key] = newValue),
-          );
+      if (gc.ref.$michi.internals)
+        if (key in gc.ref.$michi.internals)
+            bindObservable(value, (newValue) => {
+              gc.ref.$michi.internals![key] = newValue;
+            })
+        else if (key in gc.ref)
+          bindObservable(value, (newValue) => gc.ref[key] = newValue)
         // Some browsers still dont support internals
         else {
           const formattedKey = key.toLowerCase().replace("aria", "aria-");
-          bindObservableToRef(value, self, (newValue, self) =>
-            setAttribute(self, formattedKey, newValue),
-          );
+          bindObservable(value, (newValue) => setAttribute(gc.ref, formattedKey, newValue))
         }
     });
   }

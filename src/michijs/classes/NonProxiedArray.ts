@@ -33,7 +33,7 @@ export class NonProxiedArray<
             attrs,
           } as SingleJSXElement);
         else
-          removeVirtualFragmentOnProxiedArrays: {
+          removeVirtualFragmentOnNonProxiedArrays: {
             el = new VirtualFragment();
           }
 

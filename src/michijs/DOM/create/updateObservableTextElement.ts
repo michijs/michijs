@@ -1,12 +1,15 @@
+import { GarbageCollectableObject } from "../../classes/GarbageCollectableObject";
 import type { ObservableNonNullablePrimitiveType } from "../../types";
-import { bindObservableToRef } from "../../utils";
-import { updateTextCallback } from "../callbacks/updateTextCallback";
+import { bindObservable } from "../../utils/bindObservable";
+import { createTextNodeContentCallback } from "../callbacks/createTextNodeContentCallback";
 
 export const updateObservableTextElement = (
   clonedNode: Text,
   // This has a lot of performance improvement for some reason
   jsx: ObservableNonNullablePrimitiveType,
 ): void => {
+  const gc = new GarbageCollectableObject(clonedNode);
   // Updates text as soon as binded
-  bindObservableToRef(jsx, clonedNode, updateTextCallback);
+  bindObservable(jsx, (newValue) => {
+    (gc.ref.nodeValue = createTextNodeContentCallback(newValue))});
 };

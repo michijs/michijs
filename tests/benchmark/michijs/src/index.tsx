@@ -1,15 +1,14 @@
 import {
-  type ObservablePrimitiveType,
-  useObserve,
+  ObservableWithValue,
   NonProxiedArray,
   create,
   type TypedMouseEvent,
 } from "@michijs/michijs";
 
 interface Row {
-  label: ObservablePrimitiveType<string>;
+  label: ObservableWithValue<string>;
   id: number;
-  selected: ObservablePrimitiveType<string | null>;
+  selected: ObservableWithValue<string | null>;
 }
 const adjectives = [
   "pretty",
@@ -74,11 +73,10 @@ const adjectives = [
     const data = new Array<Row>(count);
     for (let i = 0; i < count; i++)
       data[i] = {
-        selected: useObserve<string | null>(null, true),
+        selected: new ObservableWithValue<string | null>(null),
         id: nextId++,
-        label: useObserve(
-          `${adjectives[_random(adjectivesLength)]} ${colours[_random(coloursLength)]} ${nouns[_random(nounsLength)]}`,
-          true,
+        label: new ObservableWithValue(
+          `${adjectives[_random(adjectivesLength)]} ${colours[_random(coloursLength)]} ${nouns[_random(nounsLength)]}`
         ),
       };
     return data;
@@ -90,13 +88,13 @@ const adjectives = [
   update = () => {
     for (let i = 0; i < rows.length; i += 10) {
       const label = rows[i].label;
-      label(`${label()} !!!`);
+      label.value = (`${label.value} !!!`);
     }
   },
   clear = () => rows.$clear(),
   select = (row: Row) => {
-    row.selected("danger");
-    if (selectedItem) selectedItem.selected(null);
+    row.selected.value = "danger";
+    if (selectedItem) selectedItem.selected.value = null;
     selectedItem = row;
   },
   deleteItem = (id: number) => rows.$remove(rows.findIndex((x) => x.id === id)),

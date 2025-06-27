@@ -1,6 +1,7 @@
+import { GarbageCollectableObject } from "../classes/GarbageCollectableObject";
 import { useStringTemplate } from "../hooks/useStringTemplate";
 import type { ObservableType } from "../types";
-import { bindObservableToRef } from "../utils/bindObservableToRef";
+import { bindObservable } from "../utils/bindObservable";
 
 /**
  * Allows to create a Constructable Stylesheet with a Template String.
@@ -13,8 +14,7 @@ export function css(
 ): CSSStyleSheet {
   const template = useStringTemplate(cssObject, ...props);
   const styleSheet = new CSSStyleSheet();
-  bindObservableToRef(template, styleSheet, (newValue, styleSheet) =>
-    styleSheet.replaceSync(newValue),
-  );
+  const gc = new GarbageCollectableObject(styleSheet)
+  bindObservable(template, (newValue) => gc.ref.replaceSync(newValue));
   return styleSheet;
 }

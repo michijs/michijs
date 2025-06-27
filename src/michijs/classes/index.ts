@@ -9,3 +9,6 @@ export { MappedIdGenerator } from "./MappedIdGenerator";
 export { IdGenerator } from "./IdGenerator";
 export { ProxiedArray } from "./ProxiedArray";
 export { NonProxiedArray } from "./NonProxiedArray";
+export { ObservableWithValue } from "./ObservableWithValue";
+export { GarbageCollectableObject } from "./GarbageCollectableObject";
+export { GarbageCollectedEvent } from "./GarbageCollectedEvent";

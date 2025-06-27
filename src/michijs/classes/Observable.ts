@@ -3,14 +3,27 @@ import type {
   ObservableLike,
   Subscription,
   ObservableGettersAndSetters,
-} from "@michijs/michijs";
-
+} from "../types";
+import { GarbageCollectedEvent } from "./GarbageCollectedEvent";
 
 export class Observable<T> implements ObservableLike<T> {
   observers: Set<Subscription<T>> = new Set();
 
   notify(value: T, observers: NotifiableObservers<T> = this.observers): void {
-    for (const observer of observers) observer(value);
+    for (const observer of observers)
+      try {
+        observer(value);
+      } catch (e) {
+        removeObservablesGarbageCollection: {
+          if (e instanceof GarbageCollectedEvent) {
+            this.unsubscribe(observer);
+            continue;
+          } else
+            throw e;
+        }
+        // @ts-ignore
+        throw e;
+      }
   }
 
   subscribe(observer: Subscription<T>): void {
@@ -36,13 +49,11 @@ export class CallableObservable<T> extends Observable<T> implements Function {
     // @ts-ignore
     Object.assign(setterAndGetterFunction, observableInstance);
 
-    removeDeletionsFromCallableObservable: {
-      // Intentional it should not disturb arrays or strings
-      // @ts-ignore
-      delete setterAndGetterFunction["length"];
-      // @ts-ignore
-      delete setterAndGetterFunction["name"];
-    }
+    // Intentional it should not disturb arrays or strings
+    // @ts-ignore
+    delete setterAndGetterFunction["length"];
+    // @ts-ignore
+    delete setterAndGetterFunction["name"];
     // @ts-ignore
     return setterAndGetterFunction;
   }

@@ -1,12 +1,14 @@
 import type { ObservableNonNullablePrimitiveType } from "../../types";
-import { overrideCallbackWithRef } from "../../utils/overrideCallbackWithRef";
 import { createTextElement } from "./createTextElement";
-import { updateTextCallback } from "../callbacks/updateTextCallback";
+import { bindObservable } from "../../utils";
+import { GarbageCollectableObject } from "../../classes/GarbageCollectableObject";
+import { createTextNodeContentCallback } from "../callbacks/createTextNodeContentCallback";
 
 export const createObservableTextElement = (
   jsx: ObservableNonNullablePrimitiveType,
 ): Text => {
   const textNode = createTextElement(jsx.valueOf());
-  overrideCallbackWithRef(jsx, textNode, updateTextCallback);
+  const gc = new GarbageCollectableObject(textNode);
+  bindObservable(jsx, (newValue) => gc.ref.nodeValue = createTextNodeContentCallback(newValue))
   return textNode;
 };

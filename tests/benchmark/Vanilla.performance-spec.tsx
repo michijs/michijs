@@ -32,11 +32,7 @@ describe("Performance tests - vanilla-js", () => {
   );
   afterAll(async () => {
     const results = await resultsPromise;
-    const resultsString = JSON.stringify(
-      {
-        [currentVersion]: results,
-        ...omit(vanillajs, [currentVersion]),
-      },
+    const resultsString = JSON.stringify(results,
       undefined,
       2,
     );

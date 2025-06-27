@@ -24,9 +24,7 @@ export const useObserveInternal: UseObserveInternal = (
 export const useObserve: UseObserve = (item, usePrimitive) => {
   if (usePrimitive) return new PrimitiveValue(item) as any;
 
-  removeNonPrimitive: {
-    const rootObservableCallback = () => result;
-    const result = useObserveInternal(item, undefined, rootObservableCallback);
-    return result;
-  }
+  const rootObservableCallback = () => result;
+  const result = useObserveInternal(item, undefined, rootObservableCallback);
+  return result;
 };
