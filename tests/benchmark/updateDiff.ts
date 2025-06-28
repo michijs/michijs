@@ -1,10 +1,11 @@
 import vanillajs from "./results/vanillajs.json";
-import michijs from "./results/michijs.json";
 import { writeFileSync } from "fs";
 import { currentVersion } from "../../tasks/currentVersion";
 import type { Result } from "./shared";
 
-export const updateDiff = () => {
+export const updateDiff = async () => {
+
+  const michijs = await import("./results/michijs.json");
   const diff = Object.entries(
     michijs[currentVersion] as Partial<Record<Result, number>>,
   ).reduce((previousValue, [key, value]) => {
