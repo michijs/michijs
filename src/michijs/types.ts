@@ -329,8 +329,14 @@ export type NotifiableObservers<T> = Set<Subscription<T>> | undefined;
 export interface ProxiedValueInterface<RV> extends ObservableLike<RV> {
   $value: RV;
   notifyCurrentValue(notifiableObservers?: NotifiableObservers<RV>): void;
-  compute<V>(callback: (value: RV) => V, usePrimitive?: false): ObservableType<V>;
-  compute<V>(callback: (value: RV) => V, usePrimitive: true): ObservablePrimitiveType<V>;
+  compute<V>(
+    callback: (value: RV) => V,
+    usePrimitive?: false,
+  ): ObservableType<V>;
+  compute<V>(
+    callback: (value: RV) => V,
+    usePrimitive: true,
+  ): ObservablePrimitiveType<V>;
   toString(): string;
   handler: ObservableProxyHandlerInterface<RV>;
   is(anotherValue: unknown): ObservablePrimitiveType<boolean>;
@@ -362,6 +368,14 @@ export interface ObservablePrimitiveType<RV>
 }
 
 export interface PrimitiveObservableValue<RV> extends ObservableValue<RV, RV> {
+  compute<V>(
+    callback: (value: RV) => V,
+    usePrimitive?: false,
+  ): ObservableType<V>;
+  compute<V>(
+    callback: (value: RV) => V,
+    usePrimitive: true,
+  ): ObservablePrimitiveType<V>;
 }
 
 type GetPrimitiveTypeClass<T> = T extends boolean

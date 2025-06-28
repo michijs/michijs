@@ -29,10 +29,18 @@ export class PrimitiveValue<T> extends CallableObservable<T> implements Pimitive
     return this.$value;
   }
 
-  compute<V>(callback: (value: T) => V, usePrimitive?: false): ObservableTypeHelper<V, NonNullable<V>>;
-  compute<V>(callback: (value: T) => V, usePrimitive: true): ObservablePrimitiveType<V>;
+  compute<V>(
+    callback: (value: T) => V,
+    usePrimitive?: false,
+  ): ObservableTypeHelper<V, NonNullable<V>>;
+  compute<V>(
+    callback: (value: T) => V,
+    usePrimitive: true,
+  ): ObservablePrimitiveType<V>;
   compute<V>(callback: (value: T) => V, usePrimitive?: any): ObservableLike<V> {
-    return useComputedObserve(() => callback(this.$value), [this], { usePrimitive });
+    return useComputedObserve(() => callback(this.$value), [this], {
+      usePrimitive,
+    });
   }
 
   override toString(): string {
