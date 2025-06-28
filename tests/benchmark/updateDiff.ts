@@ -4,7 +4,6 @@ import { currentVersion } from "../../tasks/currentVersion";
 import type { Result } from "./shared";
 
 export const updateDiff = async () => {
-
   const michijs = await import("./results/michijs.json");
   const diff = Object.entries(
     michijs[currentVersion] as Partial<Record<Result, number>>,
