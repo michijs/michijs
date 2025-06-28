@@ -95,7 +95,8 @@ export class ProxiedValue<T>
     return useComputedObserve(
       () => this.$value === anotherValue?.valueOf(),
       [this, anotherValue],
-     {usePrimitive: true});
+      { usePrimitive: true },
+    );
   }
 
   toJSON(): any {

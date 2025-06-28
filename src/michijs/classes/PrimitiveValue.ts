@@ -1,9 +1,18 @@
 import { useComputedObserve } from "../hooks/useComputedObserve";
-import type { ObservableGettersAndSetters, ObservableLike, ObservablePrimitiveType, ObservableTypeHelper, PimitiveValueInterface } from "../types";
+import type {
+  ObservableGettersAndSetters,
+  ObservableLike,
+  ObservablePrimitiveType,
+  ObservableTypeHelper,
+  PimitiveValueInterface,
+} from "../types";
 import { hasToJSON } from "../typeWards/hasToJSON";
 import { CallableObservable } from "./Observable";
 
-export class PrimitiveValue<T> extends CallableObservable<T> implements PimitiveValueInterface<T> {
+export class PrimitiveValue<T>
+  extends CallableObservable<T>
+  implements PimitiveValueInterface<T>
+{
   $value: T;
   constructor(initialValue: T) {
     super(((...args: [T]): undefined | T => {
@@ -52,6 +61,7 @@ export class PrimitiveValue<T> extends CallableObservable<T> implements Pimitive
     return useComputedObserve(
       () => this.$value === anotherValue?.valueOf(),
       [this, anotherValue],
-     {usePrimitive: true});
+      { usePrimitive: true },
+    );
   }
 }
