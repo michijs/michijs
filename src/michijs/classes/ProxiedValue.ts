@@ -82,11 +82,11 @@ export class ProxiedValue<T>
     return unproxify(this.$value) as T;
   }
 
-  public is(anotherValue: unknown): ObservableType<boolean> {
+  public is(anotherValue: unknown): ObservablePrimitiveType<boolean> {
     return useComputedObserve(
       () => this.$value === anotherValue?.valueOf(),
       [this, anotherValue],
-    );
+     {usePrimitive: true});
   }
 
   toJSON(): any {
