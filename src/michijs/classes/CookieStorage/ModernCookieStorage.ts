@@ -41,7 +41,11 @@ export class ModernCookieStorage implements Storage {
   }
   getItem(key: string): string | null {
     const value = mainCookieStorage.get(key);
-    return value ? decodeURIComponent(value) : null;
+    try {
+      return value ? decodeURIComponent(value) : null;
+    } catch {
+      return value ?? null;
+    }
   }
   key(index: number): string | null {
     return mainCookieStorage.get(mainCookieStorage.keys()[index]) ?? null;
