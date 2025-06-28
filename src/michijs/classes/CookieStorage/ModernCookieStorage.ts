@@ -2,11 +2,19 @@ import type { CookieStorageConstructor } from "../../types";
 import { Observable } from "../Observable";
 import { ObservableFromEventListener } from "../ObservableFromEventListener";
 
-const mainCookieStorage = new Map<string, string | undefined>();
+const mainCookieStorage = new Map<string, string | null>();
+
+const getCookieValue = (value: string | null | undefined): string | null => {
+  try {
+    return value ? decodeURIComponent(value) : null;
+  } catch {
+    return value ?? null;
+  }
+}
 
 removeTopLevelAwaits: {
   (await cookieStore.getAll()).forEach((x) =>
-    mainCookieStorage.set(x.name, x.value),
+    mainCookieStorage.set(x.name, getCookieValue(x.value)),
   );
 }
 
@@ -19,7 +27,7 @@ const observable = new Observable<string[]>();
 
 cookieStoreChange.subscribe(async (e) => {
   for (const { name } of e.changed)
-    mainCookieStorage.set(name, (await cookieStore.get(name))?.value);
+    mainCookieStorage.set(name, getCookieValue((await cookieStore.get(name))?.value));
   for (const { name } of e.deleted) mainCookieStorage.delete(name);
   observable.notify(e.changed.concat(e.deleted).map((x) => x.name));
 });
@@ -40,12 +48,7 @@ export class ModernCookieStorage implements Storage {
     mainCookieStorage.forEach((_, key) => cookieStore.delete(key));
   }
   getItem(key: string): string | null {
-    const value = mainCookieStorage.get(key);
-    try {
-      return value ? decodeURIComponent(value) : null;
-    } catch {
-      return value ?? null;
-    }
+    return mainCookieStorage.get(key) ?? null;
   }
   key(index: number): string | null {
     return mainCookieStorage.get(mainCookieStorage.keys()[index]) ?? null;
