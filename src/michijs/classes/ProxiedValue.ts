@@ -63,7 +63,7 @@ export class ProxiedValue<T>
     usePrimitive: true,
   ): ObservablePrimitiveType<V>;
   compute<V>(callback: (value: T) => V, usePrimitive?: any): ObservableLike<V> {
-    return useComputedObserve(() => callback(this.$value), [this], {
+    return useComputedObserve(() => callback(this.valueOf()), [this], {
       usePrimitive,
     });
   }
@@ -93,7 +93,7 @@ export class ProxiedValue<T>
 
   public is(anotherValue: unknown): ObservablePrimitiveType<boolean> {
     return useComputedObserve(
-      () => this.$value === anotherValue?.valueOf(),
+      () => this.valueOf() === anotherValue?.valueOf(),
       [this, anotherValue],
       { usePrimitive: true },
     );
@@ -107,7 +107,7 @@ export class ProxiedValue<T>
 
   override toString(): string {
     // @ts-ignore
-    return this.$value.toString();
+    return this.valueOf().toString();
   }
   unproxify(): T {
     return this.valueOf();
