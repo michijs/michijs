@@ -32,8 +32,7 @@ export const doGenericFetch = async <
   const response = await fetch(url, {
     cache: "no-cache",
     ...init,
-    body:
-      typeof init?.body === "object" ? JSON.stringify(init.body) : init?.body,
+    body: JSON.stringify(init?.body),
   });
 
   if (!response.ok) throw await getErrorMessage(response);
