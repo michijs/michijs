@@ -439,9 +439,7 @@ export interface HistoryManagerType extends Observable<string | URL> {
 export interface DoFetchProps<
   S extends SearchParams = undefined,
   B extends AnyObject | undefined | string = undefined,
-> extends RequestInitUseFetch<
-    ObservableOrConst<B>
-  > {
+> extends RequestInitUseFetch<ObservableOrConst<B>> {
   input: string;
   searchParams?: { [k in keyof S]: ObservableOrConst<S[k]> };
 }
