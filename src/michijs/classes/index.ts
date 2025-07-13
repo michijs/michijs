@@ -1,5 +1,5 @@
 export { ProxiedValue } from "./ProxiedValue";
-export { CallableObservable, Observable } from "./Observable";
+export { Callable, CallableObservable, Observable } from "./Observable";
 export { CookieStorage } from "./CookieStorage";
 export { EventDispatcher } from "./EventDispatcher";
 export { ObservableFromEventListener } from "./ObservableFromEventListener";
