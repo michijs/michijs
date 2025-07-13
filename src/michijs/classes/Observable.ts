@@ -36,24 +36,33 @@ export class Observable<T> implements ObservableLike<T> {
 
 // Bypass Content-Security-Policy by creating a "Callable" object instead of using function
 // @ts-ignore
+export class Callable implements Function {
+  constructor(setterAndGetterFunction: Function = () => {}) {
+    const result = Object.setPrototypeOf(
+      setterAndGetterFunction,
+      new.target.prototype,
+    );
+    // Intentional it should not disturb arrays or strings
+    delete result["length"];
+    delete result["name"];
+    return result;
+  }
+}
+
+// @ts-ignore
 export class CallableObservable<T> extends Observable<T> implements Function {
   constructor(setterAndGetterFunction?: ObservableGettersAndSetters<T, T>) {
     // Create a dummy observable to inherit its behavior
     const observableInstance = super();
 
+    const callable = new Callable(setterAndGetterFunction);
     // Assign the prototype and Observable properties to the callable function
-    Object.setPrototypeOf(setterAndGetterFunction, new.target.prototype);
+    Object.setPrototypeOf(callable, new.target.prototype);
 
     // Copy instance properties from the observable
-    // @ts-ignore
-    Object.assign(setterAndGetterFunction, observableInstance);
+    Object.assign(callable, observableInstance);
 
-    // Intentional it should not disturb arrays or strings
     // @ts-ignore
-    delete setterAndGetterFunction["length"];
-    // @ts-ignore
-    delete setterAndGetterFunction["name"];
-    // @ts-ignore
-    return setterAndGetterFunction;
+    return callable;
   }
 }
