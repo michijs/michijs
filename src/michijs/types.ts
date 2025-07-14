@@ -354,7 +354,7 @@ export interface ObservableValue<RV, SV = RV>
   extends ProxiedValueInterface<RV>,
     ObservableGettersAndSetters<RV, SV> {}
 
-export interface PimitiveValueInterface<RV> extends ObservableLike<RV> {
+export interface PrimitiveValueInterface<RV> extends ObservableLike<RV> {
   is(anotherValue: unknown): ObservablePrimitiveType<boolean>;
   compute<V>(
     callback: (value: RV) => V,
@@ -368,7 +368,7 @@ export interface PimitiveValueInterface<RV> extends ObservableLike<RV> {
 }
 
 export interface ObservablePrimitiveType<RV>
-  extends PimitiveValueInterface<RV>,
+  extends PrimitiveValueInterface<RV>,
     ObservableGettersAndSetters<RV, RV> {}
 
 export interface PrimitiveObservableValue<RV> extends ObservableValue<RV, RV> {

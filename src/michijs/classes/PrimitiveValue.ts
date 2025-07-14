@@ -4,14 +4,14 @@ import type {
   ObservableLike,
   ObservablePrimitiveType,
   ObservableTypeHelper,
-  PimitiveValueInterface,
+  PrimitiveValueInterface,
 } from "../types";
 import { hasToJSON } from "../typeWards/hasToJSON";
 import { CallableObservable } from "./Observable";
 
 export class PrimitiveValue<T>
   extends CallableObservable<T>
-  implements PimitiveValueInterface<T>
+  implements PrimitiveValueInterface<T>
 {
   $value: T;
   constructor(initialValue: T) {
