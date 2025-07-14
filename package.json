@@ -2,7 +2,7 @@
   "name": "@michijs/michijs",
   "author": "Lucas M. Segurado",
   "license": "MIT",
-  "version": "2.3.11",
+  "version": "2.3.12",
   "files": [
     "dist/",
     "droppableFlags.js",
@@ -74,7 +74,7 @@
     "@michijs/tsconfig": "0.0.5",
     "@reduxjs/toolkit": "2.8.2",
     "@types/bun": "1.2.18",
-    "playwright-core": "1.53.2",
+    "playwright-core": "1.54.1",
     "redux": "5.0.1",
     "typescript": "5.8.3",
     "vscode-html-languageservice": "5.5.1"
