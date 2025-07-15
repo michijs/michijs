@@ -358,13 +358,11 @@ export interface ObservableValue<RV, SV = RV>
   extends ProxiedValueInterface<RV>,
     ObservableGettersAndSetters<RV, SV> {}
 
-
 export interface ObservablePrimitiveType<RV>
   extends PrimitiveValueInterface<RV>,
     ObservableGettersAndSetters<RV, RV> {}
 
-export interface PrimitiveObservable<RV> extends ObservableValue<RV, RV> {
-}
+export interface PrimitiveObservable<RV> extends ObservableValue<RV, RV> {}
 
 type GetPrimitiveTypeClass<T> = T extends boolean
   ? Boolean
