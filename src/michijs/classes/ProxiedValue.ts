@@ -22,7 +22,11 @@ export class PrimitiveValue<T>
   implements PrimitiveValueInterface<T>
 {
   $value: T;
-  constructor(initialValue: T, setterAndGetterFunction: ObservableGettersAndSetters<T, T> = ((...args: [T]): undefined | T => {
+  constructor(
+    initialValue: T,
+    setterAndGetterFunction: ObservableGettersAndSetters<T, T> = ((
+      ...args: [T]
+    ): undefined | T => {
       if (args.length > 0) {
         const newValue = args[0];
         if (newValue === this.$value) return;
@@ -31,13 +35,14 @@ export class PrimitiveValue<T>
         return;
       }
       return this.$value;
-    }) as unknown as ObservableGettersAndSetters<T, T>) {
+    }) as unknown as ObservableGettersAndSetters<T, T>,
+  ) {
     super(setterAndGetterFunction);
     this.$value = initialValue;
   }
 
-  notifyCurrentValue(notifiableObservers?: NotifiableObservers<T>){
-    return this.notify(this.$value, notifiableObservers)
+  notifyCurrentValue(notifiableObservers?: NotifiableObservers<T>) {
+    return this.notify(this.$value, notifiableObservers);
   }
 
   override valueOf(): T {
@@ -77,7 +82,6 @@ export class PrimitiveValue<T>
     );
   }
 }
-
 
 export class ProxiedValue<T>
   extends PrimitiveValue<T>
