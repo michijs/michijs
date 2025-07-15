@@ -1,4 +1,4 @@
-import { PrimitiveValue } from "../classes/PrimitiveValue";
+import { PrimitiveValue } from "../classes/ProxiedValue";
 import { ProxiedValue } from "../classes/ProxiedValue";
 import type { UseObserve, UseObserveInternal } from "../types";
 import { ObservableProxyHandler } from "./proxyHandlers/ObservableProxyHandler";

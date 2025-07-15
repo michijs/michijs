@@ -10,17 +10,79 @@ import type {
   ObservablePrimitiveType,
   ObservableTypeHelper,
   ObservableLike,
+  PrimitiveValueInterface,
 } from "../types";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { CallableObservable } from "./Observable";
 import { unproxify } from "../utils/unproxify";
 import { getHandler } from "../hooks/proxyHandlers/getHandler";
 
-export class ProxiedValue<T>
+export class PrimitiveValue<T>
   extends CallableObservable<T>
-  implements ProxiedValueInterface<T>
+  implements PrimitiveValueInterface<T>
 {
   $value: T;
+  constructor(initialValue: T, setterAndGetterFunction: ObservableGettersAndSetters<T, T> = ((...args: [T]): undefined | T => {
+      if (args.length > 0) {
+        const newValue = args[0];
+        if (newValue === this.$value) return;
+        this.$value = newValue;
+        this.notify(newValue);
+        return;
+      }
+      return this.$value;
+    }) as unknown as ObservableGettersAndSetters<T, T>) {
+    super(setterAndGetterFunction);
+    this.$value = initialValue;
+  }
+
+  notifyCurrentValue(notifiableObservers?: NotifiableObservers<T>){
+    return this.notify(this.$value, notifiableObservers)
+  }
+
+  override valueOf(): T {
+    return this.$value;
+  }
+
+  toJSON(): any {
+    if (this.$value && hasToJSON(this.$value)) return this.$value.toJSON();
+
+    return this.$value;
+  }
+
+  compute<V>(
+    callback: (value: T) => V,
+    usePrimitive?: false,
+  ): ObservableTypeHelper<V, NonNullable<V>>;
+  compute<V>(
+    callback: (value: T) => V,
+    usePrimitive: true,
+  ): ObservablePrimitiveType<V>;
+  compute<V>(callback: (value: T) => V, usePrimitive?: any): ObservableLike<V> {
+    return useComputedObserve(() => callback(this.$value), [this], {
+      usePrimitive,
+    });
+  }
+
+  override toString(): string {
+    // @ts-ignore
+    return this.$value.toString();
+  }
+
+  public is(anotherValue: unknown): ObservablePrimitiveType<boolean> {
+    return useComputedObserve(
+      () => this.valueOf() === anotherValue?.valueOf(),
+      [this, anotherValue],
+      { usePrimitive: true },
+    );
+  }
+}
+
+
+export class ProxiedValue<T>
+  extends PrimitiveValue<T>
+  implements ProxiedValueInterface<T>
+{
   handler: ObservableProxyHandlerInterface<T>;
   parentSubscription: ParentSubscription<T> | undefined;
   needsToNotify: boolean | undefined;
@@ -46,7 +108,7 @@ export class ProxiedValue<T>
     setterAndGetterFunction: ObservableGettersAndSetters<T, T> = (...args) =>
       this.handler.apply(this, this, args),
   ) {
-    super(setterAndGetterFunction);
+    super(initialValue, setterAndGetterFunction);
     this.handler = handler;
     this.$value = handler.getInitialValue?.(this, initialValue) ?? initialValue;
     this.parentSubscription = parentSubscription;
@@ -54,21 +116,8 @@ export class ProxiedValue<T>
     // this[Symbol.toStringTag] = () => this.toString();
     // this[Symbol.toPrimitive] = () => this.valueOf();
   }
-  compute<V>(
-    callback: (value: T) => V,
-    usePrimitive?: false,
-  ): ObservableTypeHelper<V, NonNullable<V>>;
-  compute<V>(
-    callback: (value: T) => V,
-    usePrimitive: true,
-  ): ObservablePrimitiveType<V>;
-  compute<V>(callback: (value: T) => V, usePrimitive?: any): ObservableLike<V> {
-    return useComputedObserve(() => callback(this.valueOf()), [this], {
-      usePrimitive,
-    });
-  }
 
-  notifyCurrentValue(): void {
+  override notifyCurrentValue(): void {
     if (this.onTransaction) this.needsToNotify = true;
     else {
       const notifiableObservers = this.notifiableObservers;
@@ -89,20 +138,6 @@ export class ProxiedValue<T>
 
   override valueOf(): T {
     return unproxify(this.$value) as T;
-  }
-
-  public is(anotherValue: unknown): ObservablePrimitiveType<boolean> {
-    return useComputedObserve(
-      () => this.valueOf() === anotherValue?.valueOf(),
-      [this, anotherValue],
-      { usePrimitive: true },
-    );
-  }
-
-  toJSON(): any {
-    if (this.$value && hasToJSON(this.$value)) return this.$value.toJSON();
-
-    return this.$value;
   }
 
   override toString(): string {

@@ -209,6 +209,7 @@ export type ObservableTypeOrConst<T> =
 export type ObservableOrConst<T> = ObservableLike<T> | T;
 export interface ObservableLike<T> {
   subscribe(observer: Subscription<T>): void;
+  notify(value: T, observers: NotifiableObservers<T>): void;
   unsubscribe(observer: Subscription<T>): void;
 }
 export interface CompatibleObservableLike {
@@ -326,8 +327,9 @@ export type Typeof =
 
 export type NotifiableObservers<T> = Set<Subscription<T>> | undefined;
 
-export interface ProxiedValueInterface<RV> extends ObservableLike<RV> {
+export interface PrimitiveValueInterface<RV> extends ObservableLike<RV> {
   $value: RV;
+  is(anotherValue: unknown): ObservablePrimitiveType<boolean>;
   notifyCurrentValue(notifiableObservers?: NotifiableObservers<RV>): void;
   compute<V>(
     callback: (value: RV) => V,
@@ -337,12 +339,14 @@ export interface ProxiedValueInterface<RV> extends ObservableLike<RV> {
     callback: (value: RV) => V,
     usePrimitive: true,
   ): ObservablePrimitiveType<V>;
+  valueOf(): RV;
   toString(): string;
+}
+
+export interface ProxiedValueInterface<RV> extends PrimitiveValueInterface<RV> {
   handler: ObservableProxyHandlerInterface<RV>;
-  is(anotherValue: unknown): ObservablePrimitiveType<boolean>;
   typeof(): Typeof;
   unproxify(): RV;
-  valueOf(): RV;
 }
 
 export interface ObservableGettersAndSetters<RV, SV> {
@@ -354,32 +358,12 @@ export interface ObservableValue<RV, SV = RV>
   extends ProxiedValueInterface<RV>,
     ObservableGettersAndSetters<RV, SV> {}
 
-export interface PrimitiveValueInterface<RV> extends ObservableLike<RV> {
-  is(anotherValue: unknown): ObservablePrimitiveType<boolean>;
-  compute<V>(
-    callback: (value: RV) => V,
-    usePrimitive?: false,
-  ): ObservableType<V>;
-  compute<V>(
-    callback: (value: RV) => V,
-    usePrimitive: true,
-  ): ObservablePrimitiveType<V>;
-  valueOf(): RV;
-}
 
 export interface ObservablePrimitiveType<RV>
   extends PrimitiveValueInterface<RV>,
     ObservableGettersAndSetters<RV, RV> {}
 
-export interface PrimitiveObservableValue<RV> extends ObservableValue<RV, RV> {
-  compute<V>(
-    callback: (value: RV) => V,
-    usePrimitive?: false,
-  ): ObservableType<V>;
-  compute<V>(
-    callback: (value: RV) => V,
-    usePrimitive: true,
-  ): ObservablePrimitiveType<V>;
+export interface PrimitiveObservable<RV> extends ObservableValue<RV, RV> {
 }
 
 type GetPrimitiveTypeClass<T> = T extends boolean
@@ -661,7 +645,7 @@ export interface UseStringTemplate {
 }
 
 export interface ObservableDate
-  extends PrimitiveObservableValue<Date>,
+  extends PrimitiveObservable<Date>,
     Omit<Date, "valueOf"> {}
 
 // Needs to be partial to allow asignation operation
@@ -686,7 +670,7 @@ export type ObservableTypeHelper<Y, T = NonNullable<Y>> = IsAny<T> extends true
                   ? // ? ExtendsObject<T> extends true
                     ObservableObject<Y>
                   : // : ObservableComplexObject<Y>
-                    PrimitiveObservableValue<GetPrimitiveType<Y>> &
+                    PrimitiveObservable<GetPrimitiveType<Y>> &
                       GetPrimitiveTypeClass<T>;
 
 export type ObservableType<Y> = ObservableTypeHelper<Y>;
@@ -705,7 +689,7 @@ export type ObservableComplexObject<
   // Example ObservableComplexObject<File | undefined> Gets File & PrimitiveObservableValue<File | undefined>;
   // It should be Gets (File | undefined) & PrimitiveObservableValue<File | undefined>
   // RV & PrimitiveObservableValue<RV>
-> = PrimitiveObservableValue<RV>;
+> = PrimitiveObservable<RV>;
 
 export type ObservableObjectHelper<
   RV,
