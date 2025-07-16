@@ -35,9 +35,8 @@ export class Observable<T> implements ObservableLike<T> {
 }
 
 // Bypass Content-Security-Policy by creating a "Callable" object instead of using function
-// @ts-ignore
 export class Callable implements Function {
-  constructor(setterAndGetterFunction: Function = () => {}) {
+  constructor(setterAndGetterFunction: Function = () => { }) {
     const result = Object.setPrototypeOf(
       setterAndGetterFunction,
       new.target.prototype,
@@ -47,9 +46,18 @@ export class Callable implements Function {
     delete result["name"];
     return result;
   }
+  declare apply: (this: Function, thisArg: any, argArray?: any) => void;
+  declare call: (this: Function, thisArg: any, ...argArray: any[]) => void;
+  declare bind: (this: Function, thisArg: any, ...argArray: any[]) => void;
+  declare prototype: any;
+  declare length: number;
+  declare arguments: any;
+  declare caller: Function;
+  declare name: string;
+  declare [Symbol.hasInstance]: (value: any) => boolean;
+  declare [Symbol.metadata]: DecoratorMetadataObject | null;
 }
 
-// @ts-ignore
 export class CallableObservable<T> extends Observable<T> implements Function {
   constructor(setterAndGetterFunction?: ObservableGettersAndSetters<T, T>) {
     // Create a dummy observable to inherit its behavior
@@ -65,4 +73,14 @@ export class CallableObservable<T> extends Observable<T> implements Function {
     // @ts-ignore
     return callable;
   }
+  declare apply: (this: Function, thisArg: any, argArray?: any) => void;
+  declare call: (this: Function, thisArg: any, ...argArray: any[]) => void;
+  declare bind: (this: Function, thisArg: any, ...argArray: any[]) => void;
+  declare prototype: any;
+  declare length: number;
+  declare arguments: any;
+  declare caller: Function;
+  declare name: string;
+  declare [Symbol.hasInstance]: (value: any) => boolean;
+  declare [Symbol.metadata]: DecoratorMetadataObject | null;
 }

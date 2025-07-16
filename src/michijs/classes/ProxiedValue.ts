@@ -64,7 +64,7 @@ export class PrimitiveValue<T>
     usePrimitive: true,
   ): ObservablePrimitiveType<V>;
   compute<V>(callback: (value: T) => V, usePrimitive?: any): ObservableLike<V> {
-    return useComputedObserve(() => callback(this.$value), [this], {
+    return useComputedObserve(() => callback(this.valueOf()), [this], {
       usePrimitive,
     });
   }
