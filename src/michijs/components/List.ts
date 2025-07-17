@@ -1,6 +1,13 @@
 import { GarbageCollectableObject, VirtualFragment } from "../classes";
 import { create } from "../DOM/create/create";
-import type { ElementFactoryType, FC, ObservablePrimitiveType, ObservableType, ObservableTypeOrConst, ObservableArray } from "../types";
+import type {
+  ElementFactoryType,
+  FC,
+  ObservablePrimitiveType,
+  ObservableType,
+  ObservableTypeOrConst,
+  ObservableArray,
+} from "../types";
 import { isObservable } from "../typeWards/isObservable";
 import { bindObservable } from "../utils";
 
@@ -18,7 +25,13 @@ interface ListComponentProps<T extends ObservableTypeOrConst<any[]>> {
   /**
    * A function that renders each item in the list.
    */
-  renderItem: FC<[T] extends [ObservableArray<(infer Y)>] ? ObservableType<Y> : ([T] extends [ObservablePrimitiveType<(infer Z)[]>] ? Z: T[any])>;
+  renderItem: FC<
+    [T] extends [ObservableArray<infer Y>]
+      ? ObservableType<Y>
+      : [T] extends [ObservablePrimitiveType<(infer Z)[]>]
+        ? Z
+        : T[any]
+  >;
 }
 
 /**
@@ -37,12 +50,17 @@ export const List = <const T extends ObservableTypeOrConst<any[]>>(
   factory: ElementFactoryType,
 ) => {
   if (isObservable(data)) {
-    if ("List" in data)
-      return data.List({ renderItem }, factory);
+    if ("List" in data) return data.List({ renderItem }, factory);
     else {
       const el = new VirtualFragment();
       const gc = new GarbageCollectableObject(el);
-      bindObservable(data, (data) => gc.ref.append(...(data as ObservablePrimitiveType<any[]>)().map(x => create(renderItem(x, factory), factory.contextElement))))
+      bindObservable(data, (data) =>
+        gc.ref.append(
+          ...(data as ObservablePrimitiveType<any[]>)().map((x) =>
+            create(renderItem(x, factory), factory.contextElement),
+          ),
+        ),
+      );
       return el;
     }
   }
