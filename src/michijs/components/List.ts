@@ -55,13 +55,13 @@ export const List = <const T extends ObservableTypeOrConst<any[]>>(
       const el = new VirtualFragment();
       const gc = new GarbageCollectableObject(el);
       bindObservable(data, (data) =>
-        gc.ref.append(
+        gc.ref.replaceChildren(
           ...(data as ObservablePrimitiveType<any[]>)().map((x) =>
             create(renderItem(x, factory), factory.contextElement),
           ),
         ),
       );
-      return el;
+      return el.valueOf();
     }
   }
   return data.map((x) => renderItem(x, factory));
