@@ -75,7 +75,7 @@ export const Slot: FCC<HTMLElements["slot"]> = (attrs, factory) =>
     <slot {...attrs} />
   ) : (
     <MichiSlot
-      {...attrs as GetElementProps<typeof MichiSlot>}
+      {...(attrs as GetElementProps<typeof MichiSlot>)}
       _={{
         hostElement: factory.contextElement,
         defaultChildren: attrs.children,
