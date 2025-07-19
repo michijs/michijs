@@ -50,7 +50,8 @@ export const List = <const T extends ObservableTypeOrConst<any[]>>(
   factory: ElementFactoryType,
 ) => {
   if (isObservable(data)) {
-    if (data['List']) return (data as ObservableArray<any>).List({ renderItem }, factory);
+    if (data["List"])
+      return (data as ObservableArray<any>).List({ renderItem }, factory);
     else {
       const el = new VirtualFragment();
       const gc = new GarbageCollectableObject(el);
