@@ -2,7 +2,7 @@ import { EventDispatcher } from "../classes/EventDispatcher";
 import { useStyleSheet } from "../css/useStyleSheet";
 import { createCustomElement } from "../customElements/createCustomElement";
 import type { HTMLElements } from "../generated/htmlType";
-import type { FCC } from "../types";
+import type { FCC, GetElementProps } from "../types";
 import { isElement } from "../typeWards/isElement";
 import { getShadowRoot } from "../utils/getShadowRoot";
 
@@ -12,7 +12,7 @@ const MichiSlot = createCustomElement("michi-slot", {
   },
   attributes: {
     hostElement: undefined as Element | undefined,
-    defaultChildren: undefined as any,
+    defaultChildren: undefined as JSX.Element,
   },
   lifecycle: {
     didMount() {
@@ -75,10 +75,9 @@ export const Slot: FCC<HTMLElements["slot"]> = (attrs, factory) =>
     <slot {...attrs} />
   ) : (
     <MichiSlot
-      {...attrs}
+      {...attrs as GetElementProps<typeof MichiSlot>}
       _={{
         hostElement: factory.contextElement,
-        // @ts-ignore
         defaultChildren: attrs.children,
       }}
     />
