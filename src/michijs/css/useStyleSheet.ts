@@ -51,11 +51,11 @@ export const hostToText = (
   const thisRunSelector =
     thisRunObjectSelectorEntries.length > 0
       ? `${parentSelector}{${thisRunObjectSelectorEntries.reduce(
-          (previousValue, [key, value]) => {
-            return `${previousValue}${key}:${value};`;
-          },
-          "",
-        )}}`
+        (previousValue, [key, value]) => {
+          return `${previousValue}${key}:${value};`;
+        },
+        "",
+      )}}`
       : "";
 
   return `${otherRunsSelectors}${thisRunSelector}`;
@@ -116,8 +116,9 @@ export function cssObjectToText(
 const styleSheetFromCSSObject = (
   getCSSObject: () => CSSObject,
   additionalObservers: any[] = [],
+  $window: Window & typeof globalThis = window as Window & typeof globalThis,
 ) => {
-  const styleSheet = new CSSStyleSheet();
+  const styleSheet = new $window!.CSSStyleSheet();
   const observables = getObservables(getCSSObject());
   const stringResult = useComputedObserve(
     () => cssObjectToText(getCSSObject()),
@@ -133,6 +134,7 @@ const styleSheetFromCSSObject = (
 /**Allows to create a Constructable Stylesheet with a CSSObject */
 export const useStyleSheet = ((
   cssObject: UseStyleSheetCallback<AnyObject> | CSSObject,
+  $window: Window & typeof globalThis = window as Window & typeof globalThis
 ) => {
   if (typeof cssObject === "function" && !(cssObject instanceof ProxiedValue)) {
     const tags = useObserveInternal(new Set<string>());
@@ -144,10 +146,11 @@ export const useStyleSheet = ((
         styleSheet = styleSheetFromCSSObject(
           () => cssObject(Array.from(tags).join(","), cssVariables),
           [tags],
+          $window
         );
       }
       return styleSheet as (tag: string) => CSSStyleSheet;
     };
   }
-  return styleSheetFromCSSObject(() => cssObject as CSSObject);
+  return styleSheetFromCSSObject(() => cssObject as CSSObject, [], $window);
 }) as UseStyleSheet;

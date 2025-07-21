@@ -20,5 +20,5 @@ export { isPrototypeOfObject } from "./isPrototypeOfObject";
 export * from "./getBrowser";
 export * from "./clone";
 export * from "./getPlatform";
-export * from "./getAdoptedStyleSheetText";
+export * from "./getCSSStyleSheetText";
 export * from "./asyncForEach";

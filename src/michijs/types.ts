@@ -238,11 +238,13 @@ export interface MichiProperties
   readonly $michi: {
     store: ObservableType<AttributesType>;
     alreadyRendered: boolean;
-    shadowRoot?: ShadowRoot;
+    adoptedBy?: Window & typeof globalThis;
+    shadowRoot?: ShadowRoot | null;
     styles: {
       className?: string;
       cssVariables?: CSSStyleSheet;
       computedStyleSheet?: CSSStyleSheet;
+      mappedAdoptedStyleSheets?: CSSStyleSheet[];
     };
     idGen?: MappedIdGenerator["getId"];
     internals?: ElementInternals;
@@ -1021,6 +1023,8 @@ export interface MichiElementClass<O extends MichiElementOptions> {
 export interface Lifecycle {
   /**This method is called at the start of constructor.*/
   willConstruct?(): void;
+  /**This method is called when the element is adopted by another document.*/
+  adopted(document: Document, newDocument: Document): void;
   /**This method is called at the end of constructor.*/
   didConstruct?(): void;
   /**This method is called when a component is connected to the DOM.*/
@@ -1095,8 +1099,8 @@ export type UseStyleSheetCallback<T> = (
 ) => CSSObject;
 
 export interface UseStyleSheet {
-  <T>(props: UseStyleSheetCallback<T>): (tag: string) => CSSStyleSheet;
-  (props: CSSObject): CSSStyleSheet;
+  <T>(props: UseStyleSheetCallback<T>, $window?: Window & typeof globalThis): (tag: string) => CSSStyleSheet;
+  (props: CSSObject, $window?: Window & typeof globalThis): CSSStyleSheet;
 }
 
 /**

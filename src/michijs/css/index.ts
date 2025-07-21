@@ -1,3 +1,4 @@
+export { cloneStylesheet } from "./cloneStylesheet";
 export { useStyleSheet, cssObjectToText } from "./useStyleSheet";
 export { useCssVariables } from "./useCssVariables";
 export { useAnimation } from "./useAnimation";

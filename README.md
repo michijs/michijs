@@ -162,9 +162,9 @@ A component consists of the following properties:
       <td colspan="3">Function that renders the component.</td>
     </tr>
     <tr>
-      <td rowspan="15">lifecycle</td>
+      <td rowspan="16">lifecycle</td>
       <tr>
-        <td rowspan="9">Custom Element related</td>
+        <td rowspan="10">Custom Element related</td>
         <tr>
           <td>willConstruct</td>
           <td>This method is called at the start of the constructor.</td>
@@ -172,6 +172,10 @@ A component consists of the following properties:
         <tr>
           <td>didConstruct</td>
           <td>This method is called at the end of the constructor.</td>
+        </tr>
+        <tr>
+          <td>adopted</td>
+          <td>This method is called when the element is adopted by another document.</td>
         </tr>
         <tr>
           <td>connected</td>
@@ -253,6 +257,8 @@ If the extends field is not provided an [Autonomous custom element](https://deve
 stateDiagram-v2
     [*] --> willConstruct
     willConstruct --> didConstruct
+    didConstruct --> adopted: If the element was adopted by another document
+    adopted --> connected
     didConstruct --> connected
     connected --> willMount: Only the first time
     willMount --> didMount

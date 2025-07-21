@@ -1,4 +1,4 @@
-import { getCSSStyleSheetText } from "./getAdoptedStyleSheetText";
+import { getCSSStyleSheetText } from "./getCSSStyleSheetText";
 
 export const addStylesheetsToDocumentOrShadowRoot = (
   target: DocumentOrShadowRoot,
