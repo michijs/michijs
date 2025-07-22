@@ -1024,7 +1024,7 @@ export interface Lifecycle {
   /**This method is called at the start of constructor.*/
   willConstruct?(): void;
   /**This method is called when the element is adopted by another document.*/
-  adopted(document: Document, newDocument: Document): void;
+  adopted?(document: Document, newDocument: Document): void;
   /**This method is called at the end of constructor.*/
   didConstruct?(): void;
   /**This method is called when a component is connected to the DOM.*/
