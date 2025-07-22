@@ -165,9 +165,15 @@ export type DelimiterCase<
 export interface MichiAttributes<E> {
   children?: JSX.Element;
   _?: {
-    [k in keyof E]?: ObservableTypeOrConst<Unproxify<E[k]> | undefined | null>;
+    [k in WritableKeys<E>]?: ObservableTypeOrConst<E[k] | undefined | null>;
   };
 }
+export interface MichiAttributesCustomElement<E> {
+    children?: JSX.Element;
+    _?: {
+        [k in WritableKeys<E>]?: E[k] extends ObservableComplexObject<infer U> ? (ObservableLike<U | undefined | null> | U | undefined | null) : ObservableTypeOrConst<E[k] | undefined | null> | undefined | null;
+    };
+};
 
 export type KebabCase<Value> = DelimiterCase<Value, "-">;
 
@@ -999,7 +1005,7 @@ type MichiElementProps<
       ? CEEvent<D>
       : never;
   } & { name?: string } & GlobalEvents<S>,
-  _ = MichiAttributes<
+  _ = MichiAttributesCustomElement<
     O["attributes"] &
       O["reflectedAttributes"] &
       O["cssVariables"] &
