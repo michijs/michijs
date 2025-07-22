@@ -169,11 +169,13 @@ export interface MichiAttributes<E> {
   };
 }
 export interface MichiAttributesCustomElement<E> {
-    children?: JSX.Element;
-    _?: {
-        [k in WritableKeys<E>]?: E[k] extends ObservableComplexObject<infer U> ? (ObservableLike<U | undefined | null> | U | undefined | null) : ObservableTypeOrConst<E[k] | undefined | null> | undefined | null;
-    };
-};
+  children?: JSX.Element;
+  _?: {
+    [k in WritableKeys<E>]?: E[k] extends ObservableComplexObject<infer U>
+      ? ObservableLike<U | undefined | null> | U | undefined | null
+      : ObservableTypeOrConst<E[k] | undefined | null> | undefined | null;
+  };
+}
 
 export type KebabCase<Value> = DelimiterCase<Value, "-">;
 
