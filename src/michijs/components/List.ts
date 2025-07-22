@@ -55,9 +55,9 @@ export const List = <const T extends ObservableTypeOrConst<any[]>>(
     else {
       const el = new VirtualFragment();
       const gc = new GarbageCollectableObject(el);
-      bindObservable(data, (data) =>
+      bindObservable<T>(data, (data) =>
         gc.ref.replaceChildren(
-          ...(data as ObservablePrimitiveType<any[]>)().map((x) =>
+          ...data.map((x) =>
             create(renderItem(x, factory), factory.contextElement),
           ),
         ),
