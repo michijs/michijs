@@ -1099,7 +1099,10 @@ export type UseStyleSheetCallback<T> = (
 ) => CSSObject;
 
 export interface UseStyleSheet {
-  <T>(props: UseStyleSheetCallback<T>, $window?: Window & typeof globalThis): (tag: string) => CSSStyleSheet;
+  <T>(
+    props: UseStyleSheetCallback<T>,
+    $window?: Window & typeof globalThis,
+  ): (tag: string) => CSSStyleSheet;
   (props: CSSObject, $window?: Window & typeof globalThis): CSSStyleSheet;
 }
 
