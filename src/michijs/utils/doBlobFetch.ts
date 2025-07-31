@@ -7,8 +7,8 @@ export const doBlobFetch = async <
   S extends SearchParams = undefined,
   B extends AnyObject | undefined | string = undefined,
 >(
-  request: DoFetchProps<S, B>
+  request: DoFetchProps<S, B>,
 ): Promise<R> => {
   const response = await doGenericFetch(request);
-  return await response.blob() as R;
+  return (await response.blob()) as R;
 };
