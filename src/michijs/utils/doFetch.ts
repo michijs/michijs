@@ -1,17 +1,9 @@
-import type { SearchParams } from "../routing/types";
-import type { AnyObject, DoFetchProps, UseFetchOptions } from "../types";
+import type { DoFetch } from "../types";
 import { doGenericFetch } from "./doGenericFetch";
 
-export const doFetch = async <
-  R,
-  S extends SearchParams = undefined,
-  B extends AnyObject | undefined | string = undefined,
->(
-  request: DoFetchProps<S, B>,
-  options?: UseFetchOptions<R>,
-): Promise<R> => {
+export const doFetch: DoFetch = async (
+  request,
+) => {
   const response = await doGenericFetch(request);
-
-  const jsonResult = (await response.json()) as R;
-  return options?.transform?.(jsonResult, response) ?? jsonResult;
+  return (await response.json());
 };

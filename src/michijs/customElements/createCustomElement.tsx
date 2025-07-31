@@ -58,8 +58,8 @@ export function createCustomElement<O extends MichiElementOptions>(
 
   const mappedAdoptedStyleSheets = adoptedStyleSheets
     ? Object.values(adoptedStyleSheets).map((x) =>
-        typeof x === "function" ? x(internalCssSelector) : x,
-      )
+      typeof x === "function" ? x(internalCssSelector) : x,
+    )
     : undefined;
 
   if (events)
@@ -74,8 +74,7 @@ export function createCustomElement<O extends MichiElementOptions>(
 
   class MichiCustomElementResult
     extends (classToExtend as CustomElementConstructor)
-    implements MichiCustomElement
-  {
+    implements MichiCustomElement {
     $michi: MichiCustomElement["$michi"];
     connected;
     willMount;
@@ -156,38 +155,38 @@ export function createCustomElement<O extends MichiElementOptions>(
         store: useObserveInternal(storeInit),
         alreadyRendered: false,
         styles: this.$michi?.styles ?? {},
-        idGen: undefined,
+        idGen: void 0,
         adoptedBy: this.$michi?.adoptedBy,
-        internals: undefined,
+        internals: void 0
       };
+      if (!this.$michi.adoptedBy) {
+        this.render = render;
+        for (const key in storeInit) {
+          definePropertyFromObservable(this, key, this.$michi.store);
+        }
+        defineReflectedAttributes(this, this.$michi.store, reflectedCssVariables);
+        defineReflectedAttributes(this, this.$michi.store, reflectedAttributes);
+      }
+
       if (shadow) {
         const attachedShadow = this.shadowRoot ?? this.attachShadow(shadow);
         this.$michi.shadowRoot = attachedShadow;
         this.addInitialStyleSheets(":host", attachedShadow);
       }
-      if (this.$michi.adoptedBy) return;
-      this.render = render as MichiCustomElement["render"];
 
-      for (const key in storeInit) {
-        definePropertyFromObservable(this, key, this.$michi.store);
+      if (!this.$michi.adoptedBy) {
+        if (lifecycle)
+          for (const [key, value] of Object.entries(lifecycle)) this[key] = value;
+        this.willConstruct?.();
+        if (methods)
+          for (const [key, value] of Object.entries(methods))
+            defineMethod(this, key, value);
+        if (events)
+          for (const [key, value] of Object.entries(events))
+            defineEvent(this, key, value);
+        if (formAssociated) this.$michi.internals = this.attachInternals();
+        this.didConstruct?.();
       }
-      defineReflectedAttributes(this, this.$michi.store, reflectedCssVariables);
-      defineReflectedAttributes(this, this.$michi.store, reflectedAttributes);
-
-      if (lifecycle)
-        for (const [key, value] of Object.entries(lifecycle)) this[key] = value;
-      this.willConstruct?.();
-
-      if (methods)
-        for (const [key, value] of Object.entries(methods))
-          defineMethod(this, key, value);
-      if (events)
-        for (const [key, value] of Object.entries(events))
-          defineEvent(this, key, value);
-
-      if (formAssociated) this.$michi.internals = this.attachInternals();
-
-      this.didConstruct?.();
     }
 
     attributeChangedCallback(name: string, oldValue, newValue) {
@@ -225,13 +224,14 @@ export function createCustomElement<O extends MichiElementOptions>(
     addStylesWithoutShadowRoot(
       root: DocumentOrShadowRoot = this.getRootNode() as unknown as DocumentOrShadowRoot,
     ) {
-      if (
-        cssVariables ||
+      const thereAreDynamicStyles = cssVariables ||
         reflectedCssVariables ||
-        computedStyleSheet ||
+        computedStyleSheet;
+      if (
+        thereAreDynamicStyles ||
         mappedAdoptedStyleSheets
       ) {
-        if (cssVariables || reflectedCssVariables || computedStyleSheet) {
+        if (thereAreDynamicStyles) {
           classesIdGenerator ??= new IdGenerator();
           this.$michi.styles.className ??= `michijs-${classesIdGenerator.generateId(
             1,
@@ -244,9 +244,8 @@ export function createCustomElement<O extends MichiElementOptions>(
     }
 
     connectedCallback() {
-      if (!this.$michi.shadowRoot) {
+      if (!this.$michi.shadowRoot)
         this.addStylesWithoutShadowRoot();
-      }
       this.connected?.();
       if (!this.$michi.alreadyRendered) {
         // TODO: what if svg?
