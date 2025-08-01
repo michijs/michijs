@@ -106,8 +106,7 @@ export class AttributeManager<S extends Element> {
 }
 
 export class ElementFactory<S extends Element>
-  implements ElementFactoryType<S>
-{
+  implements ElementFactoryType<S> {
   contextElement?: S;
 
   constructor(contextElement?: S) {
@@ -140,6 +139,17 @@ export class ElementFactory<S extends Element>
       if (!jsx) return createTextElement(jsx);
     }
     if (isNotAPrimitiveJSX(jsx)) {
+      removePromiseJSXElements: {
+        if (jsx instanceof Promise) {
+          let fragment: ChildNode = document.createComment("<promise/>");
+          jsx.then(x => {
+            const result = this.create(x) as ChildNode;
+            fragment.replaceWith(result)
+            fragment = result
+          })
+          return fragment;
+        }
+      }
       removeArrayJSXElements: {
         if (Array.isArray(jsx)) {
           const el = document.createDocumentFragment();
@@ -252,8 +262,7 @@ export class ElementFactoryWithNamespace<
 
 export class CloneFactory<S extends Element>
   extends ElementFactory<S>
-  implements CloneFactoryType<S>
-{
+  implements CloneFactoryType<S> {
   private template: Node;
   clone<T = Node>(jsx: SingleJSXElement): T {
     const clonedNode = this.template.cloneNode(true);
@@ -271,6 +280,9 @@ export class CloneFactory<S extends Element>
       if (!jsx) return updateTextElement(clonedNode as Text, jsx);
     }
     if (isNotAPrimitiveJSX(jsx)) {
+      removePromiseJSXElements: {
+        if (jsx instanceof Promise) throw "Promises are not supported yet";
+      }
       removeArrayJSXElements: {
         if (Array.isArray(jsx)) throw "Arrays are not supported yet";
       }

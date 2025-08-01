@@ -211,6 +211,7 @@ export type ObservableTypeOrConst<T> =
   | ObservableType<T>
   | T;
 export type ObservableOrConst<T> = ObservableLike<T> | T;
+export type ObservableOrConstOrPromise<T> = ObservableOrConst<T> | Promise<T>;
 export interface ObservableLike<T> {
   subscribe(observer: Subscription<T>): void;
   notify(value: T, observers: NotifiableObservers<T>): void;
@@ -798,6 +799,7 @@ export type SingleJSXElement =
   | ArrayJSXElement
   | DOMElementJSXElement
   | Node
+  | Promise<any>
   | ObservableLike<unknown>;
 // | {};
 export type ArrayJSXElement = SingleJSXElement[];
@@ -998,11 +1000,11 @@ type MichiElementProps<
   O extends MichiElementOptions,
   S extends HTMLElement = MichiElementSelf<O>,
   Attrs = {
-    [k in keyof O["reflectedAttributes"] as KebabCase<k>]?: ObservableOrConst<
+    [k in keyof O["reflectedAttributes"] as KebabCase<k>]?: ObservableOrConstOrPromise<
       GetPrimitiveType<O["reflectedAttributes"][k]> | undefined
     >;
   } & {
-    [k in keyof O["reflectedCssVariables"] as KebabCase<k>]?: ObservableOrConst<
+    [k in keyof O["reflectedCssVariables"] as KebabCase<k>]?: ObservableOrConstOrPromise<
       GetPrimitiveType<O["reflectedCssVariables"][k]> | undefined
     >;
   } & {

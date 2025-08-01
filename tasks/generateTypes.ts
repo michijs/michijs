@@ -93,7 +93,7 @@ generateTypes({
       valueSets.attributes.forEach((attribute) => {
         attribute.values = [
           {
-            name: `ObservableOrConst<${
+            name: `ObservableOrConstOrPromise<${
               attribute.values
                 ? attribute.values
                     .map((x) => x.name)
@@ -106,7 +106,7 @@ generateTypes({
       });
     },
     valueSetsAdditionalImports: [
-      'import type { ObservableOrConst } from "../../../types"',
+      'import type { ObservableOrConstOrPromise } from "../../../types"',
     ],
   },
   typesFactoryProps: {

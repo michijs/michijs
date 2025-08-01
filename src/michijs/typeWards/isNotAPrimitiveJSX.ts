@@ -5,7 +5,6 @@ import type {
   FragmentJSXElement,
   FunctionJSXElement,
   ObjectJSXElement,
-  ObservableNonNullablePrimitiveType,
   SingleJSXElement,
 } from "../types";
 

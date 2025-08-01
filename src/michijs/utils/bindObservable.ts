@@ -14,6 +14,12 @@ export const bindObservable = <T>(
     callback(observable.valueOf() as T extends ObservableLike<infer Y> ? Y : T);
     return observable;
   }
+  removePromiseAttributes: {
+    if (observable instanceof Promise) {
+      observable.then(callback)
+      return observable;
+    }
+  }
   removeDeepBindingObservableObjects: {
     if (enableDeepBinding && extendsObject(observable)) {
       const observables = getObservables(observable);

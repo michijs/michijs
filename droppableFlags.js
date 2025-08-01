@@ -5,8 +5,10 @@ export const droppableFlags = {
   removeNilJSXElements: "removeNilJSXElements",
   removeNodeJSXElements: "removeNodeJSXElements",
   removeDOMJSXElements: "removeDOMJSXElements",
+  removePromiseJSXElements: "removePromiseJSXElements",
   removeArrayJSXElements: "removeArrayJSXElements",
   removeFragmentJSXElements: "removeFragmentJSXElements",
+  removePromiseAttributes: "removePromiseAttributes",
   removeDeepBindingObservableObjects: "removeDeepBindingObservableObjects",
   removeBooleanAndObjectAttributes: "removeBooleanAndObjectAttributes",
   removeVirtualFragmentOnNonProxiedArrays:

@@ -1,4 +1,4 @@
-import { createCustomElement, If, List, Title } from "@michijs/michijs";
+import { createCustomElement, If, List, Title, wait } from "@michijs/michijs";
 import { BuiltInButton } from "../BuiltInButton";
 import { CounterWithReduxStore } from "../CounterWithReduxStore";
 import { SimpleCounter } from "../SimpleCounter";
@@ -6,6 +6,11 @@ import { StoredObservableCounter } from "../StoredObservableCounter";
 import { IndexedDBCounter } from "../IndexedDBCounter";
 import { ColorSelector } from "../ColorSelector";
 import { CacheCounter } from "../CacheCounter";
+
+const testCount = new Promise<number>(async resolve => {
+  await wait(2000);
+  resolve(2034234)
+})
 
 const TestCustomElement = createCustomElement("test-custom-element", {
   reflectedAttributes: {
@@ -72,6 +77,7 @@ const CounterTests = () => (
     <Title>Counter tests Page</Title>
     <h1> Simple counter</h1>
     <SimpleCounter
+      count={testCount}
       oncountchanged={(ev) => {
         console.log(ev.detail);
       }}
