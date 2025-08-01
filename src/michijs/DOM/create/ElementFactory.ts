@@ -106,7 +106,8 @@ export class AttributeManager<S extends Element> {
 }
 
 export class ElementFactory<S extends Element>
-  implements ElementFactoryType<S> {
+  implements ElementFactoryType<S>
+{
   contextElement?: S;
 
   constructor(contextElement?: S) {
@@ -142,11 +143,11 @@ export class ElementFactory<S extends Element>
       removePromiseJSXElements: {
         if (jsx instanceof Promise) {
           let fragment: ChildNode = document.createComment("<promise/>");
-          jsx.then(x => {
+          jsx.then((x) => {
             const result = this.create(x) as ChildNode;
-            fragment.replaceWith(result)
-            fragment = result
-          })
+            fragment.replaceWith(result);
+            fragment = result;
+          });
           return fragment;
         }
       }
@@ -262,7 +263,8 @@ export class ElementFactoryWithNamespace<
 
 export class CloneFactory<S extends Element>
   extends ElementFactory<S>
-  implements CloneFactoryType<S> {
+  implements CloneFactoryType<S>
+{
   private template: Node;
   clone<T = Node>(jsx: SingleJSXElement): T {
     const clonedNode = this.template.cloneNode(true);

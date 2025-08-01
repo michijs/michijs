@@ -16,7 +16,7 @@ export const bindObservable = <T>(
   }
   removePromiseAttributes: {
     if (observable instanceof Promise) {
-      observable.then(callback)
+      observable.then(callback);
       return observable;
     }
   }
