@@ -1,6 +1,6 @@
-import type { CookieStorageConstructor } from "../../types";
-import { Observable } from "../Observable";
-import { ObservableFromEventListener } from "../ObservableFromEventListener";
+import type { CookieStorageConstructor } from "../types";
+import { Observable } from "./Observable";
+import { ObservableFromEventListener } from "./ObservableFromEventListener";
 
 const mainCookieStorage = new Map<string, string | null>();
 
@@ -13,9 +13,10 @@ const getCookieValue = (value: string | null | undefined): string | null => {
 };
 
 removeTopLevelAwaits: {
-  (await cookieStore.getAll()).forEach((x) =>
-    mainCookieStorage.set(x.name, getCookieValue(x.value)),
-  );
+  (await cookieStore.getAll()).forEach((x) => {
+    if (x.name)
+      mainCookieStorage.set(x.name, getCookieValue(x.value))
+  });
 }
 
 const cookieStoreChange = new ObservableFromEventListener<{
@@ -27,15 +28,19 @@ const observable = new Observable<string[]>();
 
 cookieStoreChange.subscribe(async (e) => {
   for (const { name } of e.changed)
-    mainCookieStorage.set(
-      name,
-      getCookieValue((await cookieStore.get(name))?.value),
-    );
-  for (const { name } of e.deleted) mainCookieStorage.delete(name);
-  observable.notify(e.changed.concat(e.deleted).map((x) => x.name));
+    if (name)
+      mainCookieStorage.set(
+        name,
+        getCookieValue((await cookieStore.get(name))?.value),
+      );
+  for (const { name } of e.deleted) {
+    if (name)
+      mainCookieStorage.delete(name)
+  };
+  observable.notify(e.changed.concat(e.deleted).filter(x => x.name).map((x) => (x as { name: string }).name));
 });
 
-export class ModernCookieStorage implements Storage {
+export class CookieStorage implements Storage {
   observable = observable;
   private setOptions: CookieStorageConstructor | undefined;
   [name: string]: any;

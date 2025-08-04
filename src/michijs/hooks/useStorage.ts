@@ -2,7 +2,7 @@ import { ObservableFromEventListener } from "../classes/ObservableFromEventListe
 import type { UseStorage } from "../types";
 import { useObserveInternal } from "./useObserve";
 import { isNil } from "../utils/isNil";
-import { storageIsModernCookieStorage } from "../typeWards/storageIsModernCookieStorage";
+import { storageIsCookieStorage } from "../typeWards/storageIsCookieStorage";
 
 /**
  * Allows for observing changes in an object and synchronizing it with the browser's storage (such as localStorage).
@@ -55,7 +55,7 @@ export const useStorage: UseStorage = (item, storage = localStorage) => {
       )
         newObservable[ev.key] = getStorageValue(ev.key);
     });
-  } else if ("cookieStore" in window && storageIsModernCookieStorage(storage)) {
+  } else if (storageIsCookieStorage(storage)) {
     storage.observable.subscribe(async (changes) => {
       for (const key in item)
         if (changes.includes(key))
