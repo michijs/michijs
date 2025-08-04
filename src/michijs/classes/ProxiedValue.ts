@@ -66,10 +66,19 @@ export class PrimitiveValue<T>
     initialValue: V,
     usePrimitive: true,
   ): ObservablePrimitiveType<V>;
-  asyncCompute<V>(callback: (value: T, abortSignal: AbortSignal) => Promise<V>, initialValue: V, usePrimitive?: any): ObservableLike<V> {
-    return useAsyncComputedObserve((abortSignal) => callback(this.valueOf(), abortSignal), initialValue, [this], {
-      usePrimitive,
-    }) as ObservableLike<V>;
+  asyncCompute<V>(
+    callback: (value: T, abortSignal: AbortSignal) => Promise<V>,
+    initialValue: V,
+    usePrimitive?: any,
+  ): ObservableLike<V> {
+    return useAsyncComputedObserve(
+      (abortSignal) => callback(this.valueOf(), abortSignal),
+      initialValue,
+      [this],
+      {
+        usePrimitive,
+      },
+    ) as ObservableLike<V>;
   }
   compute<V>(
     callback: (value: T) => V,
