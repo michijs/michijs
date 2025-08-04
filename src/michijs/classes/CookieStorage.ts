@@ -14,8 +14,7 @@ const getCookieValue = (value: string | null | undefined): string | null => {
 
 removeTopLevelAwaits: {
   (await cookieStore.getAll()).forEach((x) => {
-    if (x.name)
-      mainCookieStorage.set(x.name, getCookieValue(x.value))
+    if (x.name) mainCookieStorage.set(x.name, getCookieValue(x.value));
   });
 }
 
@@ -34,10 +33,14 @@ cookieStoreChange.subscribe(async (e) => {
         getCookieValue((await cookieStore.get(name))?.value),
       );
   for (const { name } of e.deleted) {
-    if (name)
-      mainCookieStorage.delete(name)
-  };
-  observable.notify(e.changed.concat(e.deleted).filter(x => x.name).map((x) => (x as { name: string }).name));
+    if (name) mainCookieStorage.delete(name);
+  }
+  observable.notify(
+    e.changed
+      .concat(e.deleted)
+      .filter((x) => x.name)
+      .map((x) => (x as { name: string }).name),
+  );
 });
 
 export class CookieStorage implements Storage {
