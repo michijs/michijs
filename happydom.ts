@@ -8,10 +8,8 @@ const globalAny = globalThis as any;
 
 // Add your globals
 globalAny.cookieStore = {
-  getAll(){
-    return []
+  getAll() {
+    return [];
   },
-  addEventListener(){
-    
-  }
+  addEventListener() {},
 };
