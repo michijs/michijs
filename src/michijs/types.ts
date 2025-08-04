@@ -338,6 +338,21 @@ export interface PrimitiveValueInterface<RV> extends ObservableLike<RV> {
   $value: RV;
   is(anotherValue: unknown): ObservablePrimitiveType<boolean>;
   notifyCurrentValue(notifiableObservers?: NotifiableObservers<RV>): void;
+
+  asyncCompute<T>(
+    callback: (value: RV, abortSignal: AbortSignal) => Promise<T>,
+    initialValue: T,
+    usePrimitive?: false,
+  ): ObservableType<T>;
+  asyncCompute<T>(
+    callback: (value: RV, abortSignal: AbortSignal) => Promise<T>,
+    initialValue: T,
+    usePrimitive: true,
+  ): ObservablePrimitiveType<T>;
+  compute<V>(
+    callback: (value: RV) => V,
+    usePrimitive: true,
+  ): ObservablePrimitiveType<V>;
   compute<V>(
     callback: (value: RV) => V,
     usePrimitive?: false,

@@ -5,8 +5,8 @@ import { useWatch } from "./useWatch";
 /**
  * It is used for async computing a value and observing its changes.
  * @param callback A function that returns a promise of type T.
- * @param deps Dependencies to watch for changes.
  * @param initialValue Initial value of type T.
+ * @param deps Dependencies to watch for changes.
  * @param options An optional object that may contain onBeforeUpdate and onAfterUpdate callback functions.
  * @returns A new observable
  */

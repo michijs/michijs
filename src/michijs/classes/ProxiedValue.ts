@@ -16,6 +16,7 @@ import { useComputedObserve } from "../hooks/useComputedObserve";
 import { CallableObservable } from "./Observable";
 import { unproxify } from "../utils/unproxify";
 import { getHandler } from "../hooks/proxyHandlers/getHandler";
+import { useAsyncComputedObserve } from "../hooks/useAsyncComputedObserve";
 
 export class PrimitiveValue<T>
   extends CallableObservable<T>
@@ -55,6 +56,21 @@ export class PrimitiveValue<T>
     return this.$value;
   }
 
+  asyncCompute<V>(
+    callback: (value: T, abortSignal: AbortSignal) => Promise<V>,
+    initialValue: V,
+    usePrimitive?: false,
+  ): ObservableTypeHelper<V, NonNullable<V>>;
+  asyncCompute<V>(
+    callback: (value: T, abortSignal: AbortSignal) => Promise<V>,
+    initialValue: V,
+    usePrimitive: true,
+  ): ObservablePrimitiveType<V>;
+  asyncCompute<V>(callback: (value: T, abortSignal: AbortSignal) => Promise<V>, initialValue: V, usePrimitive?: any): ObservableLike<V> {
+    return useAsyncComputedObserve((abortSignal) => callback(this.valueOf(), abortSignal), initialValue, [this], {
+      usePrimitive,
+    }) as ObservableLike<V>;
+  }
   compute<V>(
     callback: (value: T) => V,
     usePrimitive?: false,
