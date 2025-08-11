@@ -17,6 +17,9 @@ on:
       release-notes:
         description: "Release notes"
         type: string
+      release-notes-path:
+        description: "Release notes path"
+        type: string
   push:
     branches:
       - master
@@ -30,6 +33,7 @@ jobs:
     name: 'Call Workflow'
     uses: "michijs/.github/.github/workflows/release-package.yml@main"
     with:
+      release-notes-path: ${{ github.event.inputs.release-notes-path }}
       release-type: ${{ github.event.inputs.release-type || 'prerelease' }}
       release-notes: ${{ github.event.inputs.release-notes || 'Automatic release' }}
     secrets: inherit
