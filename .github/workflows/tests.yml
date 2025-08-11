@@ -1,17 +1,30 @@
 name: "Tests"
-
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches:
+      - '*'
+      - '!production'
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      ref:
+        description: "Branch to run the script"
+        type: string
+        required: false
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ inputs.ref || github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  call-workflow:
-    strategy:
-      matrix:
-        scripts: [{script: test-tsc, name: "Typescript"}, {script: test, name: "Library"}, {script: benchmark-vanillajs, name: "Vanilla benchmark"}]
-    uses: michijs/.github/.github/workflows/execute-script.yml@main
-    name: "Run ${{matrix.scripts.name}} tests"
+  run-tests:
+    uses: michijs/.github/.github/workflows/run-tests.yml@main
     with:
-      script-name: ${{ matrix.scripts.script }}
+      scripts: |
+        [
+          {script: test-tsc, name: "Typescript"}, 
+          {script: test, name: "Library"}, 
+          {script: benchmark-vanillajs, name: "Vanilla benchmark"}
+        ]
+      ref: ${{ inputs.ref }}
+    

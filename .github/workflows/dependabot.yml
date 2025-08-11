@@ -1,0 +1,22 @@
+name: "Michijs Dependabot"
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'  # Every Monday at 00:00 UTC
+  workflow_dispatch:      # Allows manual triggering from the Actions tab
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  run-dependabot:
+    uses: michijs/.github/.github/workflows/dependabot.yml@main
+    name: "Run dependabot"
+    secrets: inherit
+  run-tests:
+    uses: ./.github/workflows/tests.yml
+    secrets: inherit
+    needs: run-dependabot
+    with:
+      ref: "michijs-dependabot"
