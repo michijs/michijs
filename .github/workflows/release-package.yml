@@ -40,13 +40,5 @@ jobs:
       release-type: ${{ github.event.inputs.release-type || 'prerelease' }}
       release-notes: ${{ github.event.inputs.release-notes || 'Automatic release' }}
     secrets: inherit
-  Deploy-docs:
-    name: "Deploy docs"
-    runs-on: ubuntu-latest
-    if: startsWith(github.event.inputs.release-type || 'prerelease', 'pre') != true
-    needs: call-workflow
-    steps: 
-      - name: "Call github script"
-        uses: ./update-docs.yml
         with:
           github-token: ${{ secrets.PAT }}
