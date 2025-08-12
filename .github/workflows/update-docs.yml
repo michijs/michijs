@@ -1,8 +1,11 @@
 name: "Update Docs"
 
 on: 
-  push:
+  workflow_run:
+    workflows: ["Release package"]
     branches: [master]
+    types:
+      - completed
   workflow_dispatch:
 
 concurrency:
