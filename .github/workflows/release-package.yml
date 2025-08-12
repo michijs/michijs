@@ -20,11 +20,11 @@ on:
       release-notes-path:
         description: "Release notes path"
         type: string
-  push:
-    branches:
-      - master
-    paths:
-      - '/src/**'
+  workflow_run:
+    workflows: ["Tests"]
+    branches: [master]
+    types:
+      - completed
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -33,6 +33,7 @@ concurrency:
 jobs:
   call-workflow:
     name: 'Call Workflow'
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     uses: "michijs/.github/.github/workflows/release-package.yml@main"
     with:
       release-notes-path: ${{ github.event.inputs.release-notes-path }}
