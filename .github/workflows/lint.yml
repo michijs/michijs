@@ -10,10 +10,5 @@ jobs:
   lint:
     uses: michijs/.github/.github/workflows/lint.yml@main
     name: "Run lint"
-    secrets: inherit
-  run-tests:
-    uses: ./.github/workflows/tests.yml
-    secrets: inherit
-    needs: lint
-    with:
-      ref: lint/${{ github.head_ref || github.ref_name }}
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.PAT }}
