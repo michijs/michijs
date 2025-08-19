@@ -30,6 +30,11 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+permissions:
+  id-token: write
+  contents: write
+  packages: write
+
 jobs:
   release-package:
     runs-on: ubuntu-latest
