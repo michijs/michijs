@@ -1,0 +1,5 @@
+[
+  {script: "test-tsc", name: "Typescript"}, 
+  {script: "test", name: "Library"}, 
+  {script: "benchmark-vanillajs", name: "Vanilla benchmark"}
+]
