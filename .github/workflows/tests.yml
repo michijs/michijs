@@ -1,4 +1,4 @@
-name: "Tests"
+name: Tests
 on:
   push:
     branches:
@@ -18,13 +18,10 @@ concurrency:
 
 jobs:
   run-tests:
-    uses: michijs/.github/.github/workflows/run-tests.yml@main
-    with:
-      scripts: |
-        [
-          {script: "test-tsc", name: "Typescript"}, 
-          {script: "test", name: "Library"}, 
-          {script: "benchmark-vanillajs", name: "Vanilla benchmark"}
-        ]
-      ref: ${{ inputs.ref }}
-    
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Run tests"
+        uses: michijs/.github/.github/actions/run-tests@main
+        with:
+          ref: ${{ inputs.ref }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
