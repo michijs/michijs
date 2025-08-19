@@ -43,7 +43,7 @@ jobs:
       - name: release-package
         uses: michijs/.github/.github/actions/release-package@main
         with:
-          github_token: ${{ secrets.PAT }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           release-notes-path: ${{ github.event.inputs.release-notes-path }}
           release-type: ${{ github.event.inputs.release-type }}
           release-notes: ${{ github.event.inputs.release-notes }}
