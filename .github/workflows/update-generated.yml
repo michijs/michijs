@@ -14,14 +14,15 @@ jobs:
         uses: michijs/.github/.github/actions/execute-script@main
         with: 
           script-name: "generate-types"
+          michijs_bot_app_id: ${{ vars.MICHIJS_BOT_APP_ID }}
+          michijs_bot_private_key: ${{ secrets.MICHIJS_BOT_PRIVATE_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      # Configure Git
-      - name: Git configuration
-        uses: michijs/.github/.github/actions/set-git-config-github-actions@main
-
+          
       - name: Run formatter
         uses: michijs/.github/.github/actions/lint@main
-        with:
+        with: 
+          michijs_bot_app_id: ${{ vars.MICHIJS_BOT_APP_ID }}
+          michijs_bot_private_key: ${{ secrets.MICHIJS_BOT_PRIVATE_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       # Commit changes
@@ -29,8 +30,9 @@ jobs:
         uses: michijs/.github/.github/actions/commit-if-changes@main
         with:
           message: "Updated generated types"
+          
       # Push repository changes
       - name: Push changes
         uses: michijs/.github/.github/actions/pull-and-push@main
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ env.GITHUB_TOKEN }}
