@@ -19,4 +19,6 @@ jobs:
       - name: lint
         uses: michijs/.github/.github/actions/lint@main
         with:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+          michijs_bot_app_id: ${{ vars.MICHIJS_BOT_APP_ID }}
+          michijs_bot_private_key: ${{ secrets.MICHIJS_BOT_PRIVATE_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
