@@ -74,7 +74,7 @@
     "@michijs/tsconfig": "0.0.5",
     "@reduxjs/toolkit": "2.8.2",
     "@types/bun": "1.2.20",
-    "playwright-core": "1.54.2",
+    "playwright-core": "1.55.0",
     "redux": "5.0.1",
     "typescript": "5.9.2",
     "vscode-html-languageservice": "5.5.1"
