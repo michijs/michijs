@@ -8,7 +8,7 @@
     "droppableFlags.js",
     "jsx-runtime/"
   ],
-  "packageManager": "bun@1.2.20",
+  "packageManager": "bun@1.2.21",
   "sideEffects": false,
   "main": "dist/index.js",
   "module": "dist/index.js",
