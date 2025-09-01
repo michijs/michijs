@@ -1,4 +1,4 @@
-export * from './index.node'
+export * from "./index.node";
 export { useHash } from "./useHash";
 export { useStorage } from "./useStorage";
 export { useIndexedDB } from "./useIndexedDB";
