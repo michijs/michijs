@@ -11,28 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Execute script
-        uses: michijs/.github/.github/actions/execute-script@main
+        uses: michijs/.github/.github/actions/execute-and-lint@main
         with: 
           script-name: "generate-types"
           michijs_bot_app_id: ${{ vars.MICHIJS_BOT_APP_ID }}
           michijs_bot_private_key: ${{ secrets.MICHIJS_BOT_PRIVATE_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Run formatter
-        uses: michijs/.github/.github/actions/lint@main
-        with: 
-          michijs_bot_app_id: ${{ vars.MICHIJS_BOT_APP_ID }}
-          michijs_bot_private_key: ${{ secrets.MICHIJS_BOT_PRIVATE_KEY }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      # Commit changes
-      - name: Commit changes
-        uses: michijs/.github/.github/actions/commit-if-changes@main
-        with:
-          message: "Updated generated types"
-          
-      # Push repository changes
-      - name: Push changes
-        uses: michijs/.github/.github/actions/pull-and-push@main
-        with:
-          github_token: ${{ env.GITHUB_TOKEN }}
