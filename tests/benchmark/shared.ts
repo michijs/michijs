@@ -1,8 +1,8 @@
 import type { ElementHandle, Page, Browser } from "playwright-core";
 import { it, expect } from "bun:test";
-import { exec } from "child_process";
 import packageJson from "../../package.json";
 import type { AnyObject } from "@michijs/michijs/index";
+import {$} from 'bun'
 
 export type Result =
   | "create1000Rows"
@@ -187,22 +187,5 @@ export async function installPlaywright() {
   const playwrightVersion = `playwright@${packageJson.devDependencies["playwright-core"]}`;
   console.log(`Installing ${playwrightVersion}...`);
 
-  return new Promise<void>((resolve, reject) => {
-    const runners = ["bunx", "npx"];
-    exec(
-      runners
-        .map((x) => `${x} ${playwrightVersion} install chromium --with-deps`)
-        .join(" || "),
-      (error, stdout, stderr) => {
-        if (error) {
-          console.error(
-            `Error during Playwright installation: ${error.message}`,
-          );
-          return reject(error);
-        }
-        console.log(stdout);
-        resolve();
-      },
-    );
-  });
+  return $`bun x ${playwrightVersion} install chromium --with-deps`
 }

@@ -1,14 +1,13 @@
 import { type Browser, chromium, type Page } from "playwright-core";
 import { installPlaywright, makePerformanceTests } from "./shared";
 import { describe, beforeEach, afterAll } from "bun:test";
-import { spawn } from "child_process";
+import { spawn } from 'bun';
 import { writeFileSync } from "fs";
-import vanillajs from "./results/vanillajs.json";
-import { omit } from "@michijs/michijs/michijs/utils/omit";
 import { updateDiff } from "./updateDiff";
-import { currentVersion } from "../../tasks/currentVersion";
-const serverProcess = spawn("bun", ["run", "start"], {
-  stdio: "inherit",
+
+const serverProcess = spawn([process.execPath, "run", "start"], {
+  stdout: "inherit",
+  stderr: "inherit",
   env: { ...process.env, NODE_ENV: "TESTING_VANILLA" },
 });
 
@@ -17,9 +16,7 @@ describe("Performance tests - vanilla-js", () => {
   let browser: Browser;
   let page: Page;
   beforeEach(async () => {
-    browser = await chromium.launch({
-      headless: true,
-    });
+    browser = await chromium.launch();
     page = await browser.newPage();
     await page.goto("http://localhost:3001", {
       waitUntil: "domcontentloaded",

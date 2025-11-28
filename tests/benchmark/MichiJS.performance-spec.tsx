@@ -1,14 +1,16 @@
 import { type Browser, chromium, type Page } from "playwright-core";
 import { installPlaywright, makePerformanceTests } from "./shared";
 import { describe, it, expect, beforeEach, afterAll } from "bun:test";
-import { spawn } from "child_process";
-import { omit } from "@michijs/michijs";
 import { writeFileSync } from "fs";
 import michijs from "./results/michijs.json";
 import { currentVersion } from "../../tasks/currentVersion";
 import { updateDiff } from "./updateDiff";
-const serverProcess = spawn("bun", ["run", "start"], {
-  stdio: "inherit",
+import { spawn } from 'bun';
+import { omit } from '../../src/michijs/utils'
+
+const serverProcess = spawn([process.execPath, "run", "start"], {
+  stdout: "inherit",
+  stderr: "inherit",
   env: { ...process.env, NODE_ENV: "TESTING" },
 });
 await installPlaywright();
@@ -16,9 +18,7 @@ describe("Performance tests - MichiJS", () => {
   let browser: Browser;
   let page: Page;
   beforeEach(async () => {
-    browser = await chromium.launch({
-      headless: true,
-    });
+    browser = await chromium.launch();
     page = await browser.newPage();
     await page.goto("http://localhost:3000", {
       waitUntil: "domcontentloaded",
