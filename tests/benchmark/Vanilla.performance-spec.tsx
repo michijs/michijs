@@ -11,12 +11,19 @@ const serverProcess = spawn([process.execPath, "run", "start"], {
   env: { ...process.env, NODE_ENV: "TESTING_VANILLA" },
 });
 
-await installPlaywright();
+let browser: Browser;
+if (Bun.env.CI) {
+  browser = await chromium.launch({
+    executablePath: "/usr/bin/chromium",
+    args: ['--no-sandbox', '--single-process', '--no-zygote', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu'],
+  });
+} else {
+  await installPlaywright();
+  browser = await chromium.launch();
+}
 describe("Performance tests - vanilla-js", () => {
-  let browser: Browser;
   let page: Page;
   beforeEach(async () => {
-    browser = await chromium.launch();
     page = await browser.newPage();
     await page.goto("http://localhost:3001", {
       waitUntil: "domcontentloaded",
