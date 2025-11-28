@@ -48,7 +48,6 @@
     "start": "michi-server --start",
     "start-testing": "michi-server --start --env=TESTING",
     "dist": "michi-server --dist",
-    "build": "michi-server --build",
     "dist-w": "michi-server --dist --w",
     "bun-link": "bun link --force",
     "link": "bunx concurrently bun:dist-w bun:bun-link",
