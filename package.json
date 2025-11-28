@@ -56,14 +56,14 @@
     "run-benchmark-and-save-best-result": "bun run ./tasks/runAndSaveBestRun.ts",
     "benchmark-michijs": "bun test --update-snapshots --timeout 30000 ./tests/benchmark/MichiJS.performance-spec.tsx",
     "benchmark-vanillajs": "bun test --update-snapshots --timeout 30000 ./tests/benchmark/Vanilla.performance-spec.tsx",
-    "benchmark": "bun run benchmark-michijs && bun run benchmark-vanillajs",
+    "e2e": "bun run benchmark-michijs && bun run benchmark-vanillajs",
     "coverage": "bun test --collect-coverage",
     "test-tsc": "michi-server --test-tsc",
     "test-tsc-w": "tsc --noEmit --skipLibCheck -w",
     "test": "bun test",
     "test-w": "bun test --watch",
     "usnap": "bun test --update-snapshots",
-    "run-all-tests": "bunx concurrently bun:test-tsc bun:test bun:benchmark"
+    "run-all-tests": "bunx concurrently bun:test-tsc bun:test bun:e2e"
   },
   "keywords": [
     "web-components",
