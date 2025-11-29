@@ -26,7 +26,7 @@ export class FunctionProxyHandler
         () => target.$value(...args),
         [this.rootObservableCallback()],
       );
-    else return target.$value(...args);
+    return target.$value(...args);
   }
   get(target: ProxiedValue<Function>, p: string | symbol, receiver) {
     if (p in target) return Reflect.get(target, p, receiver);

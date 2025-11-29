@@ -7,10 +7,7 @@ import { IndexedDBCounter } from "../IndexedDBCounter";
 import { ColorSelector } from "../ColorSelector";
 import { CacheCounter } from "../CacheCounter";
 
-const testCount = new Promise<number>(async (resolve) => {
-  await wait(2000);
-  resolve(2034234);
-});
+const testCount = wait(2000).then(() => 2034234);
 
 const TestCustomElement = createCustomElement("test-custom-element", {
   reflectedAttributes: {

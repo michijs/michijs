@@ -14,7 +14,7 @@ export class CommonObjectProxyHandler<T extends object>
       const unproxifiedValue = unproxify(args[0]);
       if (unproxifiedValue && extendsObject(unproxifiedValue))
         return this.applyNewValue(target, unproxifiedValue);
-      else return this.updateHandlerAndValue(target, unproxifiedValue);
+      return this.updateHandlerAndValue(target, unproxifiedValue);
     }
     return target.valueOf();
   }

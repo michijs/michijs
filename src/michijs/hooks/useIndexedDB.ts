@@ -58,7 +58,7 @@ export const useIndexedDB: UseIndexedDB = (name, objectsStore, version = 1) => {
         return new Proxy(
           {},
           {
-            get(_, method: keyof TypedIDBObjectStore<AnyObject>) {
+            async get(_, method: keyof TypedIDBObjectStore<AnyObject>) {
               let transactionMode: IDBTransactionMode = "readonly";
               switch (method) {
                 case "add":
@@ -78,15 +78,13 @@ export const useIndexedDB: UseIndexedDB = (name, objectsStore, version = 1) => {
                   "transaction",
                 ].includes(method)
               ) {
-                return new Promise(async (resolve) => {
-                  const db = await dbPromise;
-                  const transaction = db.transaction(p, transactionMode);
-                  resolve(transaction.objectStore(p)[method]);
-                });
+                const db = await dbPromise;
+                const transaction = db.transaction(p, transactionMode);
+                return transaction.objectStore(p)[method];
               }
-              return (...args) =>
-                new Promise(async (resolve, reject) => {
-                  const db = await dbPromise;
+              return async (...args) => {
+                const db = await dbPromise;
+                new Promise((resolve, reject) => {
                   const transaction = db.transaction(p, transactionMode);
                   const result = (
                     transaction.objectStore(p)[method] as Function
@@ -106,6 +104,7 @@ export const useIndexedDB: UseIndexedDB = (name, objectsStore, version = 1) => {
                     resolve(result);
                   }
                 });
+              };
             },
           },
         );

@@ -44,7 +44,7 @@ export class ProxiedArray<V> extends NonProxiedArray<V, Target<V>> {
           }
           return previousValue;
         },
-        new Array<{ currentIndex: number; newIndex: number }>(),
+        [] as { currentIndex: number; newIndex: number }[],
       );
 
       for (const target of this.targets)

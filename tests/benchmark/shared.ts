@@ -2,7 +2,7 @@ import type { ElementHandle, Page, Browser } from "playwright-core";
 import { it, expect } from "bun:test";
 import packageJson from "../../package.json";
 import type { AnyObject } from "@michijs/michijs/index";
-import {$} from 'bun'
+import { $ } from "bun";
 
 export type Result =
   | "create1000Rows"
@@ -60,14 +60,14 @@ export async function makePerformanceTests(
   };
   const select = async (index: number) => {
     const tableBody = await getTableBody();
-    const linkToClick = await tableBody[index].$("a");
+    const linkToClick = await tableBody[index]?.$("a");
     if (!linkToClick) throw "linkToClick not found";
     await linkToClick.click();
   };
   const deleteRow = async (index: number) => {
     const tableBody = await getTableBody();
-    const linkToClick = await tableBody[index].$$("a");
-    await linkToClick[1].evaluate((e) => e.click());
+    const linkToClick = await tableBody[index]?.$$("a");
+    await linkToClick![1]!.evaluate((e) => e.click());
   };
   const getTableBody = async () => {
     return await page().$$("tr");
@@ -131,14 +131,14 @@ export async function makePerformanceTests(
     await create1000Rows();
     await saveResult("selectRow", () => select(999));
     const tableBody = await getTableBody();
-    const classNameProperty = await tableBody[999].getProperty("className");
+    const classNameProperty = await tableBody[999]!.getProperty("className");
     const className = await classNameProperty.jsonValue();
     expect(className).toEqual("danger");
     await select(998);
 
     const tableBodySecondTime = await getTableBody();
     const classNamePropertySecondTime =
-      await tableBodySecondTime[999].getProperty("className");
+      await tableBodySecondTime[999]!.getProperty("className");
     const classNameSecondTime = await classNamePropertySecondTime.jsonValue();
     expect(classNameSecondTime).not.toBe("danger");
   });
@@ -146,15 +146,15 @@ export async function makePerformanceTests(
     await create1000Rows();
     await saveResult("swapRows", swapRows);
     const tableBody = await getTableBody();
-    const firstRowId = await getRowId(tableBody[1]);
+    const firstRowId = await getRowId(tableBody[1]!);
     expect(firstRowId).toEqual(999);
-    const secondRowId = await getRowId(tableBody[998]);
+    const secondRowId = await getRowId(tableBody[998]!);
     expect(secondRowId).toEqual(2);
   });
   it("remove a row (1000 rows)", async () => {
     await create1000Rows();
     const tableBody = await getTableBody();
-    const rowToDeleteId = await getRowId(tableBody[996]);
+    const rowToDeleteId = await getRowId(tableBody[996]!);
     await saveResult("removeRow", async () => await deleteRow(996));
     const newTable = await getTableBody();
 
@@ -187,5 +187,5 @@ export async function installPlaywright() {
   const playwrightVersion = `playwright@${packageJson.devDependencies["playwright-core"]}`;
   console.log(`Installing ${playwrightVersion}...`);
 
-  return $`bun x ${playwrightVersion} install chromium --with-deps`
+  return $`bun x ${playwrightVersion} install chromium --with-deps`;
 }

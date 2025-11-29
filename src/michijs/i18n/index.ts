@@ -63,7 +63,7 @@ export class I18n<K extends string = string> extends ProxiedValue<K> {
   }
 
   get defaultLanguage() {
-    return this.supportedLanguages[0];
+    return this.supportedLanguages[0]!;
   }
 
   createTranslation<T>(

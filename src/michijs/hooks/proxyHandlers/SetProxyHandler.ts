@@ -39,7 +39,7 @@ export class SetProxyHandler<T extends Set<any>>
       const unproxifiedValue = unproxify(args[0]);
       if (unproxifiedValue instanceof Set)
         return this.applyNewValue(target, unproxifiedValue);
-      else return this.updateHandlerAndValue(target, unproxifiedValue);
+      return this.updateHandlerAndValue(target, unproxifiedValue);
     }
     return target.valueOf();
   }

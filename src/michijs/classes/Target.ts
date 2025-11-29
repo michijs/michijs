@@ -25,6 +25,8 @@ export class Target<V> extends NonProxiedArrayTarget<V> {
 
   insertChildNodesAt(i: number, ...childNodes: Node[]): void {
     if (i === 0) this.element.prepend(...childNodes);
+    // It should throw an error if its undefined
+    // @ts-expect-error
     else this.element.childNodes[i - 1].after(...childNodes);
   }
   splice(start: number, deleteCount: number, items: V[]): void {
@@ -35,7 +37,7 @@ export class Target<V> extends NonProxiedArrayTarget<V> {
         ? Math.max(len + relativeStart, 0)
         : Math.min(relativeStart, len);
 
-    let item: ChildNode | null = this.element.childNodes[k],
+    let item: ChildNode | undefined | null = this.element.childNodes[k],
       count = 0;
     while (item && count < deleteCount) {
       const nextSibling = item.nextSibling;

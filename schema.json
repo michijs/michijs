@@ -38,29 +38,18 @@
         },
         "shadow": {
           "description": "Allows you to add a Shadow DOM. By default, it uses open mode on Autonomous Custom elements and does not use Shadow DOM on Customized built-in elements. Only the following elements are allowed to use Shadow DOM. Default: {mode: 'open'} on Autonomous Custom elements and false on Customized built-in elements",
-          "type": [
-            "boolean",
-            "object"
-          ],
+          "type": ["boolean", "object"],
           "additionalProperties": false,
-          "required": [
-            "mode"
-          ],
+          "required": ["mode"],
           "properties": {
             "delegatesFocus": {
               "type": "boolean"
             },
             "mode": {
-              "enum": [
-                "closed",
-                "open"
-              ]
+              "enum": ["closed", "open"]
             },
             "slotAssignment": {
-              "enum": [
-                "manual",
-                "named"
-              ]
+              "enum": ["manual", "named"]
             }
           }
         }

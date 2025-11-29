@@ -1,9 +1,5 @@
 {
-  "extends": "@michijs/tsconfig/tsconfig.json",
-  "include": [
-    "tasks"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "extends": "@michijs/shared-configs/tsconfig",
+  "include": ["tasks"],
+  "exclude": ["node_modules"]
 }

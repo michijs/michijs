@@ -102,7 +102,7 @@ describe("If", () => {
 
     it("should return the expected string", () => {
       expect(cssIfReturn).toBe(
-        `if(style(--rotation:180deg):red;style(--rotation:360deg):green;else:blue)`,
+        "if(style(--rotation:180deg):red;style(--rotation:360deg):green;else:blue)",
       );
     });
   });

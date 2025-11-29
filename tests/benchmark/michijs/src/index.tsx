@@ -87,7 +87,7 @@ const adjectives = [
   add = () => rows.push(...buildData()),
   update = () => {
     for (let i = 0; i < rows.length; i += 10) {
-      const label = rows[i].label;
+      const label = rows[i]!.label;
       label.value = `${label.value} !!!`;
     }
   },
@@ -114,9 +114,11 @@ export const TableBody = rows.List({
         <a onclick={() => select(row)}>{row.label}</a>
       </td>
       <td class="col-md-1">
+        {/* biome-ignore-start lint/a11y/useAnchorContent: Intentional */}
         <a onclick={() => deleteItem(row.id)}>
           <span class="glyphicon glyphicon-remove" aria-hidden="true" />
         </a>
+        {/* biome-ignore-end  lint/a11y/useAnchorContent: Intentional */}
       </td>
       <td class="col-md-6" />
     </tr>
