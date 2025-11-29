@@ -3,7 +3,7 @@ dist/
 www/
 build/
 bun.lockb
-supported
+generated/*
 
 *~
 *.sw[mnpcod]
@@ -30,3 +30,4 @@ UserInterfaceState.xcuserstate
 package-lock.json
 .eslintcache
 coverage
+
