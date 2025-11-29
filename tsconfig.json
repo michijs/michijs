@@ -1,7 +1,9 @@
 {
   "extends": "@michijs/shared-configs/tsconfig",
   "compilerOptions": {
+    "checkJs": false,
     "noEmit": true,
+    "allowUnusedLabels": true,
     "paths": {
       "@michijs/michijs/*": ["./src/*"],
       "@michijs/michijs": ["./src/index"]
