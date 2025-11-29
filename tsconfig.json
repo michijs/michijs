@@ -5,7 +5,9 @@
     "paths": {
       "@michijs/michijs/*": ["./src/*"],
       "@michijs/michijs": ["./src/index"]
-    }
+    },
+    "jsx": "react-jsx",
+    "jsxImportSource": "@michijs/michijs"
   },
   "include": ["src/**/*.spec.ts", "src/**/*.spec.tsx", "tests"],
   "exclude": ["node_modules", "dist", "build"]
