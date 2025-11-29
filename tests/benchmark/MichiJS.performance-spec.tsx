@@ -1,4 +1,9 @@
-import { type Browser, type LaunchOptions, chromium, type Page } from "playwright-core";
+import {
+  type Browser,
+  type LaunchOptions,
+  chromium,
+  type Page,
+} from "playwright-core";
 import { installPlaywright, makePerformanceTests } from "./shared";
 import { describe, it, expect, beforeEach, afterAll } from "bun:test";
 import { writeFileSync } from "fs";
@@ -13,7 +18,7 @@ const serverProcess = spawn([process.execPath, "run", "start"], {
   stderr: "inherit",
   env: { ...process.env, NODE_ENV: "TESTING" },
 });
-let browserOptions: LaunchOptions | undefined
+let browserOptions: LaunchOptions | undefined;
 if (Bun.env.CI) {
   browserOptions = {
     executablePath: "/usr/bin/chromium",
