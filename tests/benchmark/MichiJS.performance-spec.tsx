@@ -1,4 +1,4 @@
-import { type Browser, chromium, type Page } from "playwright-core";
+import { type Browser, type LaunchOptions, chromium, type Page } from "playwright-core";
 import { installPlaywright, makePerformanceTests } from "./shared";
 import { describe, it, expect, beforeEach, afterAll } from "bun:test";
 import { writeFileSync } from "fs";
@@ -13,9 +13,9 @@ const serverProcess = spawn([process.execPath, "run", "start"], {
   stderr: "inherit",
   env: { ...process.env, NODE_ENV: "TESTING" },
 });
-let browser: Browser;
+let browserOptions: LaunchOptions | undefined
 if (Bun.env.CI) {
-  browser = await chromium.launch({
+  browserOptions = {
     executablePath: "/usr/bin/chromium",
     args: [
       "--no-sandbox",
@@ -25,14 +25,15 @@ if (Bun.env.CI) {
       "--disable-dev-shm-usage",
       "--disable-gpu",
     ],
-  });
+  };
 } else {
   await installPlaywright();
-  browser = await chromium.launch();
 }
 describe("Performance tests - MichiJS", () => {
+  let browser: Browser;
   let page: Page;
   beforeEach(async () => {
+    browser = await chromium.launch(browserOptions);
     page = await browser.newPage();
     await page.goto("http://localhost:3000", {
       waitUntil: "domcontentloaded",
