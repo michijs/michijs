@@ -55,7 +55,7 @@
     "run-benchmark-and-save-best-result": "bun run ./tasks/runAndSaveBestRun.ts",
     "benchmark-michijs": "bun test --update-snapshots --timeout 30000 ./tests/benchmark/MichiJS.performance-spec.tsx",
     "benchmark-vanillajs": "bun test --update-snapshots --timeout 30000 ./tests/benchmark/Vanilla.performance-spec.tsx",
-    "e2e": "bun run benchmark-michijs && bun run benchmark-vanillajs",
+    "e2e": "bun x concurrently bun:benchmark-michijs bun:benchmark-vanillajs",
     "coverage": "bun test --collect-coverage",
     "test-tsc": "michi-server --test-tsc",
     "test-tsc-w": "tsc --noEmit --skipLibCheck -w",
