@@ -44,10 +44,9 @@ export abstract class ObjectProxyHandler<T extends object>
     if (p in target.$value) {
       target.$value[p](unproxifiedValue);
       return true;
-    } else {
-      target.$value[p] = this.createProxyChild(target, unproxifiedValue);
-      target.$value[p].notifyCurrentValue();
-      return true;
     }
+    target.$value[p] = this.createProxyChild(target, unproxifiedValue);
+    target.$value[p].notifyCurrentValue();
+    return true;
   }
 }

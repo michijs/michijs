@@ -2,11 +2,11 @@ import { type Browser, chromium, type Page } from "playwright-core";
 import { installPlaywright, makePerformanceTests } from "./shared";
 import { describe, it, expect, beforeEach, afterAll } from "bun:test";
 import { writeFileSync } from "fs";
-import michijs from "./results/michijs.json";
+import michijs from "./generated/michijs.json";
 import { currentVersion } from "../../tasks/currentVersion";
 import { updateDiff } from "./updateDiff";
-import { spawn } from 'bun';
-import { omit } from '../../src/michijs/utils'
+import { spawn } from "bun";
+import { omit } from "../../src/michijs/utils";
 
 const serverProcess = spawn([process.execPath, "run", "start"], {
   stdout: "inherit",
@@ -17,7 +17,14 @@ let browser: Browser;
 if (Bun.env.CI) {
   browser = await chromium.launch({
     executablePath: "/usr/bin/chromium",
-    args: ['--no-sandbox', '--single-process', '--no-zygote', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu'],
+    args: [
+      "--no-sandbox",
+      "--single-process",
+      "--no-zygote",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+    ],
   });
 } else {
   await installPlaywright();
@@ -53,7 +60,7 @@ describe("Performance tests - MichiJS", () => {
       undefined,
       2,
     );
-    writeFileSync("./tests/benchmark/results/michijs.json", resultsString);
+    writeFileSync("./tests/benchmark/generated/michijs.json", resultsString);
     console.log("Results: ", JSON.stringify(results, undefined, 2));
     updateDiff();
     serverProcess.kill(2);

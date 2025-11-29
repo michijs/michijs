@@ -52,18 +52,17 @@ export const List = <const T extends ObservableTypeOrConst<any[]>>(
   if (isObservable(data)) {
     if (data["List"])
       return (data as ObservableArray<any>).List({ renderItem }, factory);
-    else {
-      const el = new VirtualFragment();
-      const gc = new GarbageCollectableObject(el);
-      bindObservable<T>(data, (data) =>
-        gc.ref.replaceChildren(
-          ...data.map((x) =>
-            create(renderItem(x, factory), factory.contextElement),
-          ),
+
+    const el = new VirtualFragment();
+    const gc = new GarbageCollectableObject(el);
+    bindObservable<T>(data, (data) =>
+      gc.ref.replaceChildren(
+        ...data.map((x) =>
+          create(renderItem(x, factory), factory.contextElement),
         ),
-      );
-      return el.valueOf();
-    }
+      ),
+    );
+    return el.valueOf();
   }
   return data.map((x) => renderItem(x, factory));
 };

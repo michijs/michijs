@@ -9,10 +9,10 @@ export const extendedElements: Record<
 
 export const safariDefine: typeof window.customElements.define = (
   name,
-  constructor,
+  elementConstructor,
   options,
 ) => {
-  extendedElements[name] = [constructor, options!.extends!];
+  extendedElements[name] = [elementConstructor, options!.extends!];
 };
 
 export const overrideDocumentCreateElement = () => {
@@ -42,7 +42,7 @@ export const overrideDocumentCreateElement = () => {
     ) as CustomElementWithCallbacks;
 
     if (options?.is) {
-      const [customElement, customElementTag] = extendedElements[options.is];
+      const [customElement, customElementTag] = extendedElements[options.is]!;
       Object.setPrototypeOf(newEl, customElement.prototype);
       newEl.setAttribute("is", customElementTag);
 

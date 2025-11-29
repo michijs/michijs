@@ -12,7 +12,7 @@ export class DateProxyHandler
       const unproxifiedValue = unproxify(args[0]);
       if (unproxifiedValue instanceof Date)
         return this.applyNewValue(target, unproxifiedValue);
-      else return this.updateHandlerAndValue(target, unproxifiedValue);
+      return this.updateHandlerAndValue(target, unproxifiedValue);
     }
     return target.valueOf();
   }

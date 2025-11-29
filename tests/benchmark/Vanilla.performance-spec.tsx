@@ -1,7 +1,7 @@
 import { type Browser, chromium, type Page } from "playwright-core";
 import { installPlaywright, makePerformanceTests } from "./shared";
 import { describe, beforeEach, afterAll } from "bun:test";
-import { spawn } from 'bun';
+import { spawn } from "bun";
 import { writeFileSync } from "fs";
 import { updateDiff } from "./updateDiff";
 
@@ -15,7 +15,14 @@ let browser: Browser;
 if (Bun.env.CI) {
   browser = await chromium.launch({
     executablePath: "/usr/bin/chromium",
-    args: ['--no-sandbox', '--single-process', '--no-zygote', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu'],
+    args: [
+      "--no-sandbox",
+      "--single-process",
+      "--no-zygote",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+    ],
   });
 } else {
   await installPlaywright();
@@ -37,7 +44,7 @@ describe("Performance tests - vanilla-js", () => {
   afterAll(async () => {
     const results = await resultsPromise;
     const resultsString = JSON.stringify(results, undefined, 2);
-    writeFileSync("./tests/benchmark/results/vanillajs.json", resultsString);
+    writeFileSync("./tests/benchmark/generated/vanillajs.json", resultsString);
     console.log("Results: ", JSON.stringify(results, undefined, 2));
     updateDiff();
     serverProcess.kill(2);

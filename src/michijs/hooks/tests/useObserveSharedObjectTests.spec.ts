@@ -11,11 +11,10 @@ export const sharedObjectTests = (
 ) => {
   useObserveMutationTests(initialValue);
   describe("shared object tests", () => {
-    let nonProxiedObject;
+    let nonProxiedObject: ReturnType<typeof initialValue>;
     let object: ObservableType<any>;
     beforeEach(() => {
       mockCallback.mockClear();
-      nonProxiedObject = undefined;
       nonProxiedObject = initialValue();
       object = undefined;
       object = useObserve(initialValue());

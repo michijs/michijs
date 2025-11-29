@@ -2,7 +2,7 @@ import type { ElementHandle, Page, Browser } from "playwright-core";
 import { it, expect } from "bun:test";
 import packageJson from "../../package.json";
 import type { AnyObject } from "@michijs/michijs/index";
-import {$} from 'bun'
+import { $ } from "bun";
 
 export type Result =
   | "create1000Rows"
@@ -187,5 +187,5 @@ export async function installPlaywright() {
   const playwrightVersion = `playwright@${packageJson.devDependencies["playwright-core"]}`;
   console.log(`Installing ${playwrightVersion}...`);
 
-  return $`bun x ${playwrightVersion} install chromium --with-deps`
+  return $`bun x ${playwrightVersion} install chromium --with-deps`;
 }

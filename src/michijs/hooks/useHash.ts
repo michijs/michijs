@@ -26,7 +26,7 @@ Hash.subscribe((newValue) => {
     value?.valueOf(),
   );
   if (hashes.length > 1) {
-    Hash[location.hash](false);
+    Hash[location.hash]?.(false);
   } else {
     const [newHash] = hashes[0] ?? [""];
     const newUrl = new URL(location.href);

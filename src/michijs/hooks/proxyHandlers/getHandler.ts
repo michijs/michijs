@@ -47,6 +47,7 @@ export const getHandler = (
     case "function": {
       return new FunctionProxyHandler(rootObservableCallback);
     }
+    // biome-ignore-start lint/suspicious/noFallthroughSwitchClause: Intentional
     case "object": {
       if (value) {
         const newHandler = getObjectHandler(
@@ -57,6 +58,7 @@ export const getHandler = (
         if (newHandler) return newHandler;
       }
     }
+    // biome-ignore-end lint/suspicious/noFallthroughSwitchClause: Intentional
     default:
       return new PrimitiveProxyHandler(
         parentSubscription,

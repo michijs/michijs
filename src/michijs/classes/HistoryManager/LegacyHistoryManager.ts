@@ -100,7 +100,7 @@ export class LegacyHistoryManager
       locationPaths.length === urlPaths.length &&
       !locationPaths.find(
         (locationPath, index) =>
-          !urlPaths[index].startsWith(":") && locationPath !== urlPaths[index],
+          !urlPaths[index]?.startsWith(":") && locationPath !== urlPaths[index],
       )
     );
   }

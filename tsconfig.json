@@ -1,28 +1,12 @@
 {
-  "extends": "@michijs/tsconfig/tsconfig.json",
+  "extends": "@michijs/shared-configs/tsconfig",
   "compilerOptions": {
-    "checkJs": false,
     "noEmit": true,
-    "allowUnusedLabels": true,
     "paths": {
-      "@michijs/michijs/*": [
-        "./src/*"
-      ],
-      "@michijs/michijs": [
-        "./src/index"
-      ],
-    },
-    "jsx": "react-jsx",
-    "jsxImportSource": "@michijs/michijs",
+      "@michijs/michijs/*": ["./src/*"],
+      "@michijs/michijs": ["./src/index"]
+    }
   },
-  "include": [
-    "src/**/*.spec.ts",
-    "src/**/*.spec.tsx",
-    "tests"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "build"
-  ]
+  "include": ["src/**/*.spec.ts", "src/**/*.spec.tsx", "tests"],
+  "exclude": ["node_modules", "dist", "build"]
 }

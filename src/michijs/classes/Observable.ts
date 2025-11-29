@@ -18,7 +18,8 @@ export class Observable<T> implements ObservableLike<T> {
           if (e instanceof GarbageCollectedEvent) {
             this.unsubscribe(observer);
             continue;
-          } else throw e;
+          }
+          throw e;
         }
         // @ts-ignore
         throw e;
@@ -42,8 +43,8 @@ export class Callable implements Function {
       new.target.prototype,
     );
     // Intentional it should not disturb arrays or strings
-    delete result["length"];
-    delete result["name"];
+    delete result.length;
+    delete result.name;
     return result;
   }
   declare apply: (this: Function, thisArg: any, argArray?: any) => void;
