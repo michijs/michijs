@@ -52,8 +52,8 @@ export class NonProxiedArrayTarget<V> {
         throw `Index ${indexB} is out of bound`;
     }
 
-    const node1 = this.element.childNodes[indexA],
-      node2 = this.element.childNodes[indexB],
+    const node1 = this.element.childNodes[indexA]!,
+      node2 = this.element.childNodes[indexB]!,
       node1NextSibling = node1.nextSibling;
     removeSwapValidations: {
       if (node1NextSibling === node2) {

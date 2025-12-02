@@ -3,7 +3,7 @@ dist/
 www/
 build/
 bun.lockb
-supported
+generated/*
 
 *~
 *.sw[mnpcod]
@@ -31,4 +31,3 @@ package-lock.json
 .eslintcache
 coverage
 
-rome.json

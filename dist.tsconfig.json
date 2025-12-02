@@ -1,22 +1,13 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@michijs/tsconfig/tsconfig.json",
+  "extends": "@michijs/shared-configs/tsconfig",
   "compilerOptions": {
     "allowUnusedLabels": true,
     "paths": {
-      "@michijs/michijs/*": [
-        "./src/*"
-      ],
-      "@michijs/michijs": [
-        "./src/index"
-      ]
+      "@michijs/michijs/*": ["./src/*"],
+      "@michijs/michijs": ["./src/index"]
     }
   },
-  "include": [
-    "src"
-  ],
-  "exclude" : [
-    "src/**/*.spec.ts",
-    "src/**/*.spec.tsx"
-  ]
+  "include": ["src"],
+  "exclude": ["src/**/*.spec.ts", "src/**/*.spec.tsx"]
 }

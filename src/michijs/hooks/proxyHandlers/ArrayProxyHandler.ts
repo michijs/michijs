@@ -86,7 +86,8 @@ export class ArrayProxyHandler<T extends ProxiedArray<any>>
         target.$value.$replace.bind(target.$value),
       )(...unproxifiedValue);
       return;
-    } else return this.updateHandlerAndValue(target, unproxifiedValue);
+    }
+    return this.updateHandlerAndValue(target, unproxifiedValue);
   }
   getInitialValue(target: ProxiedValue<T>, unproxifiedValue: Array<any>): T {
     return new ProxiedArray(

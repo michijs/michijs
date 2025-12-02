@@ -77,7 +77,7 @@ export function cssObjectToText(
       const valueIsObject = typeof value === "object";
       const isQueryResult = isQuery(key);
       let newKey = isChild && !isQueryResult && valueIsObject ? `&${key}` : key;
-      let newValue;
+      let newValue: string;
       let queries = "";
 
       if (valueIsObject) {
@@ -138,7 +138,7 @@ export const useStyleSheet = ((
 ) => {
   if (typeof cssObject === "function" && !(cssObject instanceof ProxiedValue)) {
     const tags = useObserveInternal(new Set<string>());
-    let styleSheet;
+    let styleSheet: CSSStyleSheet | ((tag: string) => CSSStyleSheet);
     return (tag) => {
       tags.add(tag);
       if (!styleSheet) {
@@ -149,7 +149,7 @@ export const useStyleSheet = ((
           $window,
         );
       }
-      return styleSheet as (tag: string) => CSSStyleSheet;
+      return styleSheet;
     };
   }
   return styleSheetFromCSSObject(() => cssObject as CSSObject, [], $window);

@@ -155,13 +155,13 @@ export class ProxiedValue<T>
   }
 
   get notifiableObservers(): NotifiableObservers<T> {
-    let allObservers;
+    let allObservers: NotifiableObservers<T>;
     if (this.parentSubscription?.shouldNotify?.()) {
-      allObservers = Array.from(this.observers);
-      allObservers.push(this.parentSubscription);
+      allObservers = new Set([...this.observers]);
+      allObservers.add(this.parentSubscription);
     } else allObservers = this.observers;
 
-    if (allObservers.length === 0) return;
+    if (allObservers.size === 0) return;
     return allObservers;
   }
 

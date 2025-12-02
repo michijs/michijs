@@ -15,7 +15,7 @@ describe("Observe array tests", () => {
   sharedObjectTests(() => []);
 
   beforeEach(() => {
-    array = useObserve(new Array<number>());
+    array = useObserve([] as number[]);
     array.push(exampleValue);
     node = array.List({
       as: "div",
@@ -32,7 +32,7 @@ describe("Observe array tests", () => {
     expect(jsonNode.textContent).toBe(JSON.stringify(result));
   }
   it("First item should return the expected value", () => {
-    expect(array[0]()).toBe(exampleValue);
+    expect(array[0]?.()).toBe(exampleValue);
   });
   it("Pop function should work for array and the node as expected", () => {
     array.push(exampleValue2);

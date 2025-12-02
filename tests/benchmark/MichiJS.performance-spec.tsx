@@ -1,31 +1,44 @@
-import { type Browser, chromium, type Page } from "playwright-core";
+import {
+  type Browser,
+  type LaunchOptions,
+  chromium,
+  type Page,
+} from "playwright-core";
 import { installPlaywright, makePerformanceTests } from "./shared";
 import { describe, it, expect, beforeEach, afterAll } from "bun:test";
 import { writeFileSync } from "fs";
-import michijs from "./results/michijs.json";
+import michijs from "./generated/michijs.json";
 import { currentVersion } from "../../tasks/currentVersion";
 import { updateDiff } from "./updateDiff";
-import { spawn } from 'bun';
-import { omit } from '../../src/michijs/utils'
+import { spawn } from "bun";
+import { omit } from "../../src/michijs/utils";
 
 const serverProcess = spawn([process.execPath, "run", "start"], {
   stdout: "inherit",
   stderr: "inherit",
   env: { ...process.env, NODE_ENV: "TESTING" },
 });
-let browser: Browser;
+let browserOptions: LaunchOptions | undefined;
 if (Bun.env.CI) {
-  browser = await chromium.launch({
+  browserOptions = {
     executablePath: "/usr/bin/chromium",
-    args: ['--no-sandbox', '--single-process', '--no-zygote', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu'],
-  });
+    args: [
+      "--no-sandbox",
+      "--single-process",
+      "--no-zygote",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+    ],
+  };
 } else {
   await installPlaywright();
-  browser = await chromium.launch();
 }
 describe("Performance tests - MichiJS", () => {
+  let browser: Browser;
   let page: Page;
   beforeEach(async () => {
+    browser = await chromium.launch(browserOptions);
     page = await browser.newPage();
     await page.goto("http://localhost:3000", {
       waitUntil: "domcontentloaded",
@@ -53,7 +66,7 @@ describe("Performance tests - MichiJS", () => {
       undefined,
       2,
     );
-    writeFileSync("./tests/benchmark/results/michijs.json", resultsString);
+    writeFileSync("./tests/benchmark/generated/michijs.json", resultsString);
     console.log("Results: ", JSON.stringify(results, undefined, 2));
     updateDiff();
     serverProcess.kill(2);

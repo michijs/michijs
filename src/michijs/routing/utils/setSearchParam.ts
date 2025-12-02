@@ -5,13 +5,13 @@ export const setSearchParam = (
   name: string,
   value: unknown,
 ): void => {
-  const valueOf = value?.valueOf();
-  if (isNil(valueOf)) url.searchParams.delete(name);
+  const valueOfResult = value?.valueOf();
+  if (isNil(valueOfResult)) url.searchParams.delete(name);
   else
     url.searchParams.set(
       name,
-      typeof valueOf === "object"
-        ? JSON.stringify(valueOf)
-        : (valueOf as string),
+      typeof valueOfResult === "object"
+        ? JSON.stringify(valueOfResult)
+        : (valueOfResult as string),
     );
 };

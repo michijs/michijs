@@ -53,7 +53,7 @@ export class NonProxiedArray<
     Object.defineProperty(this, "targets", {
       enumerable: false,
       configurable: true,
-      value: new Array<T>(),
+      value: [] as T[],
     });
   }
 
@@ -91,9 +91,9 @@ export class NonProxiedArray<
     return this.length;
   }
 
-  $swap(indexA: number, indexB: number): boolean | void {
+  $swap(indexA: number, indexB: number): boolean {
     for (const target of this.targets) target.$swap(indexA, indexB);
-    [this[indexA], this[indexB]] = [this[indexB], this[indexA]];
+    [this[indexA], this[indexB]] = [this[indexB]!, this[indexA]!];
     return true;
   }
 }

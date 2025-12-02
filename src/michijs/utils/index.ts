@@ -21,4 +21,3 @@ export * from "./getBrowser";
 export * from "./clone";
 export * from "./getPlatform";
 export * from "./getCSSStyleSheetText";
-export * from "./asyncForEach";

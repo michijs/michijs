@@ -1,4 +1,15 @@
 {
+  "2.3.26-playwright@1.57.0": {
+    "create1000Rows": 197.98,
+    "replaceAllRows": 177.71,
+    "partialUpdate": 7.34,
+    "selectRow": 1.42,
+    "swapRows": 0.69,
+    "removeRow": 1.16,
+    "createManyRows": 584.38,
+    "appendRowsToLargeTable": 77.61,
+    "clearRows": 31.08
+  },
   "2.2.2-beta.10-playwright@1.53.1": {
     "create1000Rows": 22.05,
     "replaceAllRows": 23.41,
