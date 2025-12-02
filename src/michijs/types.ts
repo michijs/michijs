@@ -1051,14 +1051,14 @@ type MichiElementProps<
 > = Omit<EA, keyof Attrs | "_"> & Attrs & _;
 
 export interface MichiElementClass<O extends MichiElementOptions> {
-    new (props: MichiElementProps<O>): MichiElementSelf<O>;
-    readonly tag: string;
-    readonly extends?: string;
-    readonly observedAttributes: Readonly<string[]>;
-    readonly elementOptions: O;
-    readonly cssSelector: string;
-    readonly internalCssSelector: string;
-    formAssociated: boolean;
+  new (props: MichiElementProps<O>): MichiElementSelf<O>;
+  readonly tag: string;
+  readonly extends?: string;
+  readonly observedAttributes: Readonly<string[]>;
+  readonly elementOptions: O;
+  readonly cssSelector: string;
+  readonly internalCssSelector: string;
+  formAssociated: boolean;
 }
 export interface Lifecycle {
   /**This method is called at the start of constructor.*/
