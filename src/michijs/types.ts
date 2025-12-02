@@ -1057,7 +1057,7 @@ type MichiElementProps<
 > = Omit<EA, keyof Attrs | '_'> & Attrs & _;
 
 export interface MichiElementClass<O extends MichiElementOptions> {
-    new(props?: MichiElementProps<O>): MichiElementSelf<O>;
+    new (props: MichiElementProps<O>): MichiElementSelf<O>;
     readonly tag: string;
     readonly extends?: string;
     readonly observedAttributes: Readonly<string[]>;
