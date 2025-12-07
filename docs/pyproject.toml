@@ -1,0 +1,4 @@
+[project]
+name = "michijs-main-page"
+version = "0.1.0"
+dependencies = ["mkdocs-material[imaging]==9.7.0", "mkdocs==1.6.1", "mike==2.1.3"]

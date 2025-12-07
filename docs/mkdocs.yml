@@ -1,0 +1,58 @@
+site_name: "MichiJS"
+site_author: Lucas Segurado
+site_url: "https://michijs.com"
+repo_url: https://github.com/michijs/michijs
+theme:
+  name: material
+  font: false
+  language: en
+  favicon: https://raw.githubusercontent.com/michijs/art/refs/heads/main/logo-with-background-round.svg
+  logo: https://raw.githubusercontent.com/michijs/art/refs/heads/main/logo-with-background-round.svg
+  palette:
+    - scheme: slate          # modo oscuro al switchear
+      primary: slate
+      accent: slate
+  icon:
+    repo: fontawesome/brands/github
+
+  features:
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.tabs
+    - navigation.expand
+    - navigation.path
+    - navigation.prune
+    - toc.integrate
+    - toc.follow
+    - navigation.top
+    - navigation.sections
+    - navigation.tabs.sticky
+    - navigation.tracking
+    - navigation.instant.preview
+    - search.highlight
+    - search.suggest
+nav:
+  - Develop with MichiJS: index.md
+  # - Products: products.md
+  # - Support: support.md
+extra_css:
+  - stylesheets/extra.css
+extra:
+  generator: false
+  version:
+    provider: mike
+    alias: true
+    version_selector: true
+plugins: 
+  - offline
+markdown_extensions:
+  - def_list:
+  - toc:
+      toc_depth: 3
+  - md_in_html:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format

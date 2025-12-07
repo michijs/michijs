@@ -8,7 +8,7 @@
     "droppableFlags.js",
     "jsx-runtime/"
   ],
-  "packageManager": "bun@1.2.21",
+  "packageManager": "bun@1.3.3",
   "sideEffects": false,
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -46,6 +46,8 @@
   "description": "Typescript library to build web components",
   "scripts": {
     "start": "michi-server --start",
+    "install-docs": "cd docs && pip install .",
+    "start-page": "cd docs && py -m mkdocs serve --livereload -w ./docs -w ./mkdocs.yml",
     "start-testing": "michi-server --start --env=TESTING",
     "dist": "michi-server --dist",
     "dist-w": "michi-server --dist --w",

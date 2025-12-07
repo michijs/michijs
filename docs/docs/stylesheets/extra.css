@@ -1,0 +1,263 @@
+:root>* {
+  font-optical-sizing: auto;
+  --accent: #ebbf4ad0;
+  --dark-accent: #ebc04a6e;
+  --text-color: #d4d4d4;
+  --background-color: #0d1117;
+  --surface-color: #201F22;
+  --keyword-color: var(--accent);
+  --string-color: #ce9178;
+  --number-color: #b5cea8;
+  --variable-color: var(--accent);
+  --comment-color: #6a9955;
+  --error-text-color: #f44747;
+  --error-background-color: #ac4142;
+  --code-background: #ffffff1a;
+  --md-admonition-bg-color: var(--code-background);
+  --md-hue: 40deg;
+  --md-default-bg-color: var(--background-color);
+  --md-default-fg-color: var(--text-color);
+  /* --md-typeset-a-color: var(--accent); */
+  --md-accent-fg-color: var(--accent);
+  --md-primary-fg-color: var(--accent);
+  --md-typeset-mark-color: var(--dark-accent);
+  --md-code-bg-color: var(--code-background);
+  --md-code-fg-color: var(--text-color);
+  /* --md-accent-fg-color: var(--md-default-fg-color);
+  --md-accent-bg-color: var(--md-default-bg-color);
+   */
+  --md-text-font: "Noto Sans", sans-serif;
+  --md-code-font: "Fira Code", monospace;
+  --md-mermaid-sequence-actor-bg-color: var(--md-mermaid-node-bg-color);
+  --md-mermaid-node-bg-color: #1f2020;
+  --md-mermaid-sequence-box-bg-color: var(--code-background);
+  --md-primary-fg-color--dark: var(--background-color);
+  /* --md-default-fg-color--lightest: var(--accent);
+  --md-default-fg-color--light: var(--md-primary-bg-color); */
+
+
+}
+
+@media screen and (max-width: 76.2344em) {
+
+  .md-nav__title,
+  .md-nav>* {
+    box-shadow: none!important;
+    background-color: var(--surface-color) !important;
+  }
+}
+
+.md-nav__title {
+  color: var(--text-color) !important;
+}
+
+.mermaid {
+  text-align: center;
+}
+
+.md-nav__list,
+.md-nav__item {
+  box-shadow: none !important;
+  border-top: none !important;
+}
+
+rect {
+  fill: var(--md-mermaid-node-bg-color) !important;
+}
+
+:target {
+  background-color: var(--dark-accent);
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-left: -5px !important;
+  padding-left: 5px;
+  border-radius: 6px;
+
+  a {
+    color: var(--text-color);
+  }
+}
+
+.md-typeset {
+  font-size: 16px !important;
+}
+
+
+h2 {
+  font-size: 24px !important;
+  font-weight: bold !important;
+}
+
+h3 {
+  font-size: 18px !important;
+  font-weight: bold !important;
+}
+
+h4 {
+  font-size: 14px !important;
+}
+
+h5 {
+  font-size: 12px !important;
+  text-transform: uppercase !important;
+  margin: 0 0 5px 0 !important;
+}
+
+h6 {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #999;
+  margin: 0 0 5px 0;
+}
+
+summary {
+  &::before {
+    background-color: var(--accent) !important;
+  }
+
+  background-color: transparent !important;
+}
+
+details {
+  border-color: var(--accent) !important;
+
+
+  & code {
+    padding: 0 !important;
+    background-color: transparent !important;
+  }
+}
+
+.md-tabs,
+.md-header {
+  background-color: var(--surface-color);
+}
+
+*::selection {
+  background-color: var(--dark-accent);
+}
+
+h1 {
+  display: none;
+}
+
+.highlight {
+  border-radius: 6px;
+  color: var(--text-color);
+
+  /* .w {
+      color: var(--text-color);
+  } */
+
+  .err {
+    color: var(--error-text-color);
+    background-color: var(--error-background-color);
+  }
+
+  .c,
+  .cd,
+  .cm,
+  .c1,
+  .cs {
+    color: var(--comment-color);
+  }
+
+  .p,
+  .pi {
+    color: var(--text-color);
+  }
+
+  .gi {
+    color: var(--variable-color);
+  }
+
+  .gd {
+    color: var(--error-background-color);
+  }
+
+  .gh {
+    color: #6a9fb5;
+    font-weight: bold;
+  }
+
+  .si,
+  .se,
+  .cp,
+  .o,
+  .ow,
+  .k,
+  .kn,
+  .kp,
+  .kr,
+  .kc,
+  .kt,
+  .kd,
+  .kv {
+    color: var(--keyword-color);
+  }
+
+  .s,
+  .sb,
+  .sc,
+  .sd,
+  .s2,
+  .sh,
+  .sx,
+  .s1 {
+    color: var(--string-color);
+  }
+
+  .sr {
+    color: var(--string-color);
+  }
+
+  .mi {
+    color: var(--number-color);
+  }
+
+  .nt,
+  .nn,
+  .nc,
+  .no {
+    color: var(--variable-color);
+  }
+
+  .dl,
+  .m,
+  .mf,
+  .mh,
+  .il,
+  .mo,
+  .mb,
+  .mx {
+    color: var(--string-color);
+  }
+
+  .ss {
+    color: var(--string-color);
+  }
+}
+
+
+@font-face {
+  font-family: "Fira Code";
+  src: url("../fonts/FiraCode-VF.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Noto Sans";
+  font-style: italic;
+  src: url("../fonts/NotoSans-Italic-VariableFont_wdth.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Noto Sans";
+  src: url("../fonts/NotoSans-VariableFont_wdth.ttf") format("truetype");
+}

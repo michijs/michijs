@@ -31,3 +31,4 @@ package-lock.json
 .eslintcache
 coverage
 
+*.egg-info
