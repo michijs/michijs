@@ -46,8 +46,8 @@
   "description": "Typescript library to build web components",
   "scripts": {
     "start": "michi-server --start",
-    "install-docs": "cd docs && pip install .",
-    "start-page": "cd docs && py -m mkdocs serve --livereload -w ./docs -w ./mkdocs.yml",
+    "install-docs": "pip install .",
+    "start-page": "cd docs && py -m zensical serve",
     "start-testing": "michi-server --start --env=TESTING",
     "dist": "michi-server --dist",
     "dist-w": "michi-server --dist --w",

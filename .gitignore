@@ -32,3 +32,4 @@ package-lock.json
 coverage
 
 *.egg-info
+docs/site
