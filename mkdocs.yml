@@ -2,8 +2,9 @@ site_name: "MichiJS"
 site_author: Lucas Segurado
 site_url: "https://michijs.com"
 repo_url: https://github.com/michijs/michijs
+site_dir: build
 theme:
-  name: material
+  name: mkdocs
   font: false
   language: en
   favicon: https://raw.githubusercontent.com/michijs/art/refs/heads/main/logo-with-background-round.svg
@@ -34,6 +35,7 @@ theme:
     - search.suggest
 nav:
   - Develop with MichiJS: index.md
+  - Changelog: changelog.md
   # - Products: products.md
   # - Support: support.md
 extra_css:
@@ -44,8 +46,6 @@ extra:
     provider: mike
     alias: true
     version_selector: true
-plugins: 
-  - offline
 markdown_extensions:
   - def_list:
   - toc:

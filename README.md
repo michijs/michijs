@@ -12,9 +12,7 @@
     <img src="https://img.shields.io/npm/dt/@michijs/michijs" alt="Downloads">
     <img src="https://img.shields.io/github/repo-size/michijs/michijs" alt="Repo size">
     <img src="https://img.shields.io/bundlephobia/minzip/@michijs/michijs" alt="Minzipped size">
-    <a href="https://github.com/michijs/michijs/actions/workflows/tests.yml" rel="nofollow">
-      <img src="https://github.com/michijs/michijs/actions/workflows/tests.yml/badge.svg" alt="Tests">
-    </a>
+    <img src="https://img.shields.io/github/check-runs/michijs/michijs/master" alt="Checks">
   </p>
 </div>
 
