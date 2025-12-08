@@ -3,6 +3,7 @@ site_author: Lucas Segurado
 site_url: "https://michijs.com"
 repo_url: https://github.com/michijs/michijs
 site_dir: build
+copyright: "Copyright &copy; 2020 MichiJS"
 theme:
   name: mkdocs
   font: false
@@ -41,6 +42,17 @@ nav:
 extra_css:
   - stylesheets/extra.css
 extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/michijs
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/michijs
+    - icon: fontawesome/brands/x-twitter
+      link: https://x.com/@michijs_
+    - icon: fontawesome/brands/facebook
+      link: https://www.facebook.com/michijs.fw
+    - icon: fontawesome/brands/instagram
+      link: https://www.instagram.com/michijs_
   generator: false
   version:
     provider: mike
