@@ -47,7 +47,7 @@
   "scripts": {
     "start": "michi-server --start",
     "install-docs": "pip install .",
-    "start-page": "cd docs && py -m zensical serve",
+    "start-page": "cp README.md docs/docs/index.md && cd docs && python -m zensical serve",
     "start-testing": "michi-server --start --env=TESTING",
     "dist": "michi-server --dist",
     "dist-w": "michi-server --dist --w",
