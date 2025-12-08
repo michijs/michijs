@@ -1,10 +1,10 @@
-:root>* {
+:root > * {
   font-optical-sizing: auto;
   --accent: #ebbf4ad0;
   --dark-accent: #ebc04a6e;
   --text-color: #d4d4d4;
   --background-color: #0d1117;
-  --surface-color: #201F22;
+  --surface-color: #201f22;
   --keyword-color: var(--accent);
   --string-color: #ce9178;
   --number-color: #b5cea8;
@@ -35,8 +35,6 @@
   --md-primary-fg-color--dark: var(--background-color);
   /* --md-default-fg-color--lightest: var(--accent);
   --md-default-fg-color--light: var(--md-primary-bg-color); */
-
-
 }
 
 .md-typeset a {
@@ -54,7 +52,7 @@
 }
 
 @media screen and (max-width: 76.2344em) {
-  [data-md-toggle=drawer]:checked~.md-container .md-sidebar--primary {
+  [data-md-toggle="drawer"]:checked ~ .md-container .md-sidebar--primary {
     transform: translateX(360px) !important;
   }
 
@@ -67,7 +65,7 @@
   }
 
   .md-nav__title,
-  .md-nav>* {
+  .md-nav > * {
     box-shadow: none !important;
     background-color: var(--surface-color) !important;
   }
@@ -95,7 +93,6 @@ rect {
   background-color: var(--dark-accent);
 }
 
-
 h1,
 h2,
 h3,
@@ -114,7 +111,6 @@ h6 {
 .md-typeset {
   font-size: 16px !important;
 }
-
 
 h2 {
   font-size: 24px !important;
@@ -182,7 +178,6 @@ h1 {
   border-radius: 6px;
   color: var(--text-color);
 
-
   .err {
     color: var(--error-text-color);
     background-color: var(--error-background-color);
@@ -201,7 +196,6 @@ h1 {
   .pi {
     color: var(--text-color);
   }
-
 
   .gd {
     color: var(--error-background-color);
@@ -262,7 +256,6 @@ h1 {
     color: var(--string-color);
   }
 }
-
 
 @font-face {
   font-family: "Fira Code";
