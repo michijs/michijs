@@ -46,7 +46,7 @@
   "description": "Typescript library to build web components",
   "scripts": {
     "start": "michi-server --start",
-    "install-docs": "pip install .",
+    "install-docs": "python -m pip install .",
     "start-page": "cp LICENSE.md docs/license.md && cp README.md docs/index.md && cp changelog.md docs/changelog.md && python -m zensical serve",
     "start-testing": "michi-server --start --env=TESTING",
     "build": "python -m zensical build",
