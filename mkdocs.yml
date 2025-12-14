@@ -37,10 +37,13 @@ theme:
 nav:
   - Develop with MichiJS: index.md
   - Changelog: changelog.md
+  - License: license.md
   # - Products: products.md
-  # - Support: support.md
+  - Support: support.md
 extra_css:
   - stylesheets/extra.css
+watch:
+  - docs/*
 extra:
   social:
     - icon: fontawesome/brands/github
@@ -63,6 +66,10 @@ markdown_extensions:
   - toc:
       toc_depth: 3
   - md_in_html:
+  - attr_list:
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid

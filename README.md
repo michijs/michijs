@@ -885,6 +885,7 @@ Creates a virtual node that wrapps elements
 *(Only available if formAssociated is true)*
 
 It allows to:
+
 - Make the element accessible to the browser
 - Access element internals 
 - Validate and assign values to forms
@@ -941,6 +942,7 @@ In this way the jsx syntax of MichiJS is more similar to HTML.
 The If utility provides a declarative, unified, and reactive way to handle conditional rendering across CSS and JSX. It’s especially useful in reactive UI frameworks or libraries where you want fine-grained control over conditional logic. This is the only way to do it dynamically.
 
 ### Features
+
 - Dual mode support: JSX rendering and CSS conditional string generation
 - Reactivity via observables
 - Optional DOM fragment caching
@@ -1162,6 +1164,7 @@ export const MyComponent = createCustomElement('my-component', {
 ## Limitations
 ### Observable objects
 Because some objects are not proxy compatible we limit the observable objects to:
+
 - Arrays
 - Dates
 - Maps
@@ -1188,6 +1191,7 @@ If you REALLY need polyfills i recommend you to read this topics:
 We provide partial support for Safari's built-in elements by emulating their behavior with a custom element, michi-generic-element. This is necessary to manage the element's lifecycle and support adoptedStyleSheets.
 
 ## Browser Support
+
 - **Customized built-in elements**: [Chrome feature status](https://www.chromestatus.com/feature/4670146924773376)
 - **Autonomous custom elements**: [Chrome feature status](https://www.chromestatus.com/feature/4696261944934400) [WebComponents.org](https://www.webcomponents.org/)
 - **Framework Compatibility**: [Custom Elements Everywhere](https://custom-elements-everywhere.com)
@@ -1212,4 +1216,5 @@ Support us with a donation and help us continue our activities. [[Contribute](ht
 Become a sponsor and get your logo on our README on GitHub with a link to your site. [[Become a sponsor](https://opencollective.com/ls-element#sponsor)] -->
 
 ## License
+
  - [MIT](https://github.com/michijs/michijs/blob/master/LICENSE.md)
