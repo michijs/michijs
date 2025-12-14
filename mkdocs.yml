@@ -37,9 +37,9 @@ theme:
 nav:
   - Develop with MichiJS: index.md
   - Changelog: changelog.md
-  - License: license.md
   # - Products: products.md
   - Support: support.md
+  - License: license.md
 extra_css:
   - stylesheets/extra.css
 watch:
