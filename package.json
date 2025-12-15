@@ -78,7 +78,7 @@
     "@happy-dom/global-registrator": "20.0.11",
     "@michijs/dev-server": "0.8.12",
     "@michijs/htmltype": "0.4.6",
-    "@michijs/shared-configs": "0.0.32",
+    "@michijs/shared-configs": "0.0.33",
     "@reduxjs/toolkit": "2.11.0",
     "@types/bun": "1.3.3",
     "playwright-core": "1.55.0",
