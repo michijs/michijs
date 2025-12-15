@@ -35,3 +35,4 @@ coverage
 docs/index.md
 docs/changelog.md
 docs/license.md
+.venv
