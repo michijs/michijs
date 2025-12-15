@@ -47,7 +47,7 @@
   "scripts": {
     "start": "michi-server --start",
     "install-docs": "python3 -m venv .venv && .venv/scripts/pip install . --no-color",
-    "copy-md": "cp LICENSE.md docs/license.md && cp README.md docs/index.md && cp changelog.md docs/changelog.md",
+    "copy-md": "node -e \"require('fs').copyFileSync('LICENSE.md','docs/license.md'); require('fs').copyFileSync('README.md','docs/index.md'); require('fs').copyFileSync('changelog.md','docs/changelog.md')\"",
     "start-page": "bun run copy-md && python -m zensical serve",
     "start-testing": "michi-server --start --env=TESTING",
     "build": "bun run copy-md && .venv/bin/zensical build",
