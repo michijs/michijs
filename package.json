@@ -49,7 +49,7 @@
     "install-docs": "python3 -m pip install .",
     "start-page": "cp LICENSE.md docs/license.md && cp README.md docs/index.md && cp changelog.md docs/changelog.md && python -m zensical serve",
     "start-testing": "michi-server --start --env=TESTING",
-    "build-local": "python3 -m zensical build",
+    "build-local": ".venv/bin/python -m zensical build",
     "build": "zensical build",
     "dist": "michi-server --dist",
     "dist-w": "michi-server --dist --w",
