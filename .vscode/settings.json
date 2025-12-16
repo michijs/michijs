@@ -2,7 +2,7 @@
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
-    "package.json": "changelog.md, README.md,.gitignore, bunfig.toml, happydom.ts, tsconfig.json, *.tsconfig.json, LICENSE.md, package-lock.json, michi.config.ts",
+    "package.json": "mkdocs.yml, biome.json, pyproject.toml, changelog.md, README.md,.gitignore, bunfig.toml, happydom.ts, tsconfig.json, *.tsconfig.json, LICENSE.md, package-lock.json, michi.config.ts",
     "*.tsx": "$(capture).css, $(capture).css.ts, $(capture).html, $(capture).spec.ts, $(capture).spec.tsx"
   }
 }
