@@ -293,9 +293,11 @@ graph TD;
 ```
 
 This approach brings three major issues:
+
 - Any update on the store will trigger an update on a component, even if the property that changed in the store has no relation to the component. Every tag, attribute, etc., will need to be checked for changes in every re-render.
 - Any update on a component will trigger an update on the children, which might be unnecessary.
 - There is no way to set static properties in a dynamic environment. Take this React example:
+
 ```tsx
 const [value, setValue] = useState(0);
 <input type="number" value={value} onChange={(e) => setValue(e.target.value)}/>
@@ -410,6 +412,7 @@ We do not support boolean operators since proxies are objects:
 
 ## Hooks
 There are several differences between our hooks and traditional ones:
+
 - Can be used in various contexts, including top-level script code, functional components, and custom hooks. This flexibility allows developers to encapsulate logic and state management using hooks in different parts of their application.
 - Most of them return observables.
 
@@ -419,6 +422,7 @@ It provides more flexibility in organizing code and separates concerns by allowi
 ### Basic hooks
 #### useObserve
 Responsible for observing changes on different types of values. Takes two arguments:
+
 - **item**: The value to be observed.
 - **isPrimitive**: If you want an unproxied version of useObserve. Similar to [tc39 signals proposal](https://github.com/tc39/proposal-signals)
 
@@ -430,6 +434,7 @@ If the item contains a function, it will return an observable that observes for 
 
 #### usePureFunction
 It is used to create a memoized function that encapsulates the result of the provided callback function and updates it only when any of the dependencies change. Takes two arguments:
+
 - **callback**: A function that returns a value of type T.
 - **deps**: An array of dependencies that the callback function depends on.
 
@@ -449,6 +454,7 @@ console.log(sum(1, 2)); // Outputs 3 - without calling the callback - returning 
 
 #### useAsyncComputedObserve
 It is used for computing a value and observing its changes. Takes four arguments:
+
 - **callback**: A function that returns a promise of type T.
 - **initialValue**: Initial value of type T.
 - **deps**: Dependencies to watch for changes.
@@ -477,6 +483,7 @@ const fetchData = useAsyncComputedObserve(
 
 #### useComputedObserve
 It is used for computing a value and observing its changes. Takes three arguments:
+
 - **callback**: A function that returns a value of type T.
 - **deps**: Dependencies to watch for changes.
 - **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions. Also includes an option usePrimitive if you want an unproxied version of useComputedObserve. Similar to [tc39 signals proposal](https://github.com/tc39/proposal-signals)
@@ -518,6 +525,7 @@ It is used to create a string template by interpolating dynamic values.
 
 #### useWatch
 A simple mechanism for watching dependencies and invoking a callback when any of them change. Takes two parameters:
+
 - **callback**: A function that returns a value of type T. This is the function that will be invoked when any dependency changes.
 - **deps**: Optional array of dependencies to watch for changes.
 
@@ -542,11 +550,13 @@ count(1); // Outputs: Count has changed to: 1
 
 #### useFetch
 Fetches data from a URL, parses the response as JSON, and allows managing the result as an observable. Takes three parameters:
+
 - **callback**: A function that returns the request options.
 - **shouldWait**: An optional array of promises that should resolve before executing the fetch.
 - **options**: Additional options for the fetch operation.
 
 Returns: An object of type `FetchResult<R>`, which includes:
+
 - **promise**: An observable representing the fetch promise.
 - **recall()**: A method to call the promise again, available after the first call.
 
@@ -588,10 +598,12 @@ recall();
 
 #### usePromise
 Uses a promise and allows managing the result as an observable. Takes two parameters:
+
 - **callback**: The operation that returns a promise.
 - **shouldWait**: An optional array of promises that should resolve before executing the promise.
 
 Returns: A `PromiseResult` object, which includes:
+
 - **promise**: An observable representing the promise.
 - **recall()**: A method to call the promise again, available after the first call.
 
@@ -684,6 +696,7 @@ title('test')
 ### Storage hooks
 #### useStorage
 Allows for observing changes in an object and synchronizing it with the browser's storage (such as localStorage). Takes two parameters:
+
 - **item**: The object to be observed and synchronized with storage.
 - **storage**: (Optional) The storage object to be used, defaults to `localStorage`.
 
@@ -705,6 +718,7 @@ const { lang } = useStorage({
 
 #### useIndexedDB
 It sets up event listeners for changes in the IndexedDB database. It returns a Proxy object that intercepts property accesses and performs corresponding IndexedDB operations. IndexedDB operations are performed asynchronously and return Promises. Takes three arguments:
+
 - **name**: Specifies the name of the IndexedDB database to be used or created.
 - **objectsStore**: Is a generic type that describes the structure of the object stores. It's defined as an object where each key represents the name of a property in the stored objects, and the value represents the configuration options for that property.
 - **version**: (Optional) specifies the version number of the IndexedDB database. If the database with the specified name already exists and its version is lower than the provided version, it will perform any necessary upgrades.
