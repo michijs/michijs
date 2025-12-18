@@ -2,3 +2,6 @@
 name = "michijs-main-page"
 version = "0.1.0"
 dependencies = ["zensical==0.0.11", "mike==2.1.3"]
+
+[tool.setuptools.packages.find]
+exclude = ["node_modules*", "overrides*"]
