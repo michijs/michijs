@@ -3,7 +3,7 @@ site_author: Lucas Segurado
 site_url: "https://michijs.com"
 repo_url: https://github.com/michijs/michijs
 site_dir: build
-copyright: "Copyright &copy; 2020 MichiJS"
+copyright: "Copyright &copy; 2020 MichiJS <br/><a href=\"https://michijs.com/privacy-policy\" target=\"_blank\" rel=\"noopener\">Privacy policy</a>"
 theme:
   name: mkdocs
   font: false
