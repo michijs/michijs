@@ -5,7 +5,7 @@ import type {
 } from "@michijs/dev-server";
 import { droppableFlags } from "./droppableFlags";
 
-export const config: ServerConfigFactory<"TESTING" | DefaultEnvironment> = ({
+export const config: ServerConfigFactory<"TESTING" | "WEB" | DefaultEnvironment> = ({
   environment,
 }) => {
   const defaultConfig: ServerConfig = {
@@ -42,6 +42,12 @@ export const config: ServerConfigFactory<"TESTING" | DefaultEnvironment> = ({
       defaultConfig.esbuildOptions.entryPoints = [
         "./tests/benchmark/vanillajs/src/index.js",
       ];
+    }
+  } else {
+    if (environment === "WEB") {
+      defaultConfig.esbuildOptions!.entryPoints = ['./docs/index.ts'];
+      defaultConfig.public = undefined;
+      defaultConfig.esbuildOptions!.outdir = './docs/javascripts'
     }
   }
   return defaultConfig;

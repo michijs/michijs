@@ -7,9 +7,10 @@ copyright: "Copyright &copy; 2020 MichiJS"
 theme:
   name: mkdocs
   font: false
+  custom_dir: overrides
   language: en
-  favicon: https://raw.githubusercontent.com/michijs/art/refs/heads/main/logo-with-background-round.svg
-  logo: https://raw.githubusercontent.com/michijs/art/refs/heads/main/logo-with-background-round.svg
+  favicon: https://raw.githubusercontent.com/michijs/art/main/logo-with-background-round.svg
+  logo: https://raw.githubusercontent.com/michijs/art/main/logo-with-background-round.svg
   palette:
     - scheme: slate          # modo oscuro al switchear
       primary: slate
@@ -39,9 +40,12 @@ nav:
   - Changelog: changelog.md
   # - Products: products.md
   - Support: support.md
-  - License: license.md
+  - Contact: contact.md
 extra_css:
   - stylesheets/extra.css
+extra_javascript:
+  - path: javascripts/index.js
+    type: module
 watch:
   - docs/*
 extra:
@@ -57,10 +61,6 @@ extra:
     - icon: fontawesome/brands/instagram
       link: https://www.instagram.com/michijs_
   generator: false
-  version:
-    provider: mike
-    alias: true
-    version_selector: true
 markdown_extensions:
   - def_list:
   - toc:
