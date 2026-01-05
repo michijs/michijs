@@ -5,9 +5,9 @@ import type {
 } from "@michijs/dev-server";
 import { droppableFlags } from "./droppableFlags";
 
-export const config: ServerConfigFactory<"TESTING" | "WEB" | DefaultEnvironment> = ({
-  environment,
-}) => {
+export const config: ServerConfigFactory<
+  "TESTING" | "WEB" | DefaultEnvironment
+> = ({ environment }) => {
   const defaultConfig: ServerConfig = {
     public: {
       path: "./tests/public",
@@ -45,9 +45,9 @@ export const config: ServerConfigFactory<"TESTING" | "WEB" | DefaultEnvironment>
     }
   } else {
     if (environment === "WEB") {
-      defaultConfig.esbuildOptions!.entryPoints = ['./docs/index.ts'];
+      defaultConfig.esbuildOptions!.entryPoints = ["./docs/index.ts"];
       defaultConfig.public = undefined;
-      defaultConfig.esbuildOptions!.outdir = './docs/javascripts'
+      defaultConfig.esbuildOptions!.outdir = "./docs/javascripts";
     }
   }
   return defaultConfig;
