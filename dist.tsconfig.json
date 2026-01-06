@@ -4,8 +4,11 @@
   "compilerOptions": {
     "allowUnusedLabels": true,
     "paths": {
-      "@michijs/michijs/*": ["./src/*"],
-      "@michijs/michijs": ["./src/index"]
+      "@domain/*": ["./src/domain/*"],
+      "@application/*": ["./src/application/*"],
+      "@infrastructure/*": ["./src/infrastructure/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@ports/*": ["./src/ports/*"]
     }
   },
   "include": ["src"],

@@ -1,4 +1,5 @@
-export { PrimitiveValue, ProxiedValue } from "./ProxiedValue";
+export { PrimitiveValue } from "../../domain/reactive/PrimitiveValue";
+export { ProxiedValue } from "../../domain/reactive/ProxiedValue";
 export { Callable, CallableObservable, Observable } from "./Observable";
 export { CookieStorage } from "./CookieStorage";
 export { EventDispatcher } from "./EventDispatcher";

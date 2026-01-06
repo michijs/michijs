@@ -1,0 +1,84 @@
+import { EventDispatcher } from "../../shared/classes/EventDispatcher";
+import { useStyleSheet } from "../../infrastructure/styling/useStyleSheet";
+import { createCustomElement } from "../../domain/component/createCustomElement";
+import type { HTMLElements } from "../../shared/generated/htmlType";
+import type { FCC, GetElementProps } from "../../shared/types/types";
+import { isElement } from "../../shared/utils/typeWards/isElement";
+import { getShadowRoot } from "../../shared/utils/getShadowRoot";
+
+const MichiSlot = createCustomElement("michi-slot", {
+  reflectedAttributes: {
+    name: null as string | null,
+  },
+  attributes: {
+    hostElement: undefined as Element | undefined,
+    defaultChildren: undefined as JSX.Element,
+  },
+  lifecycle: {
+    didMount() {
+      const hostElement = this.hostElement();
+
+      const callback = (nodeList: NodeList) => {
+        const name = this.name();
+        // This cast is only neccesary for gh actions
+        for (const x of nodeList as unknown as Node[]) {
+          if (
+            [this.nodeName, "MICHI-GENERIC-ELEMENT", "STYLE"].includes(
+              x.nodeName,
+            )
+          )
+            return;
+          if (!x.contains(this))
+            if (isElement(x)) {
+              if (x.getAttribute("slot") === name) {
+                this.append(x);
+                this.slotchange();
+                return;
+              }
+            } else if (!name) {
+              this.append(x);
+              this.slotchange();
+            }
+        }
+      };
+
+      if (hostElement) {
+        const observer = new MutationObserver((mutations) => {
+          for (const mutation of mutations)
+            if (mutation.addedNodes.length > 0) callback(mutation.addedNodes);
+        });
+        observer.observe(hostElement, {
+          childList: true,
+        });
+        callback(hostElement.childNodes);
+      }
+    },
+  },
+  adoptedStyleSheets: {
+    styles: useStyleSheet({ ":host": { display: "contents" } }),
+  },
+  events: {
+    slotchange: new EventDispatcher<void>(),
+  },
+  render() {
+    return <slot>{this.defaultChildren()}</slot>;
+  },
+});
+
+/**
+ * Checks if the context element has a shadow root and renders either a standard <slot> or a MichiSlot custom element, passing along attributes and children.
+ * When nodes are added, it checks if they have a slot attribute matching the slot's name or if no name is set, appending them to the MichiSlot and triggering a slotchange event.
+ * The main difference between the standard slot aned the MichiSlot is that the parent does not have a shadow DOM so **every** child appended to the parent is moved to the slot.
+ */
+export const Slot: FCC<HTMLElements["slot"]> = (attrs, factory) =>
+  getShadowRoot(factory.contextElement) ? (
+    <slot {...attrs} />
+  ) : (
+    <MichiSlot
+      {...(attrs as GetElementProps<typeof MichiSlot>)}
+      _={{
+        hostElement: factory.contextElement,
+        defaultChildren: attrs.children,
+      }}
+    />
+  );
