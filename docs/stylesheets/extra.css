@@ -1,4 +1,4 @@
-:root > * {
+:root>* {
   font-optical-sizing: auto;
   --accent: #ebbf4ad0;
   --button-color: var(--accent);
@@ -56,6 +56,7 @@
 
 [data-md-component="sidebar"] {
   width: 360px !important;
+
   .md-sidebar__inner {
     padding-right: 0 !important;
   }
@@ -69,26 +70,46 @@
   font-weight: 500;
   place-items: center;
   display: inline-flex !important;
+
   .twemoji {
     padding-right: 8px;
     vertical-align: baseline;
   }
+
   &.github {
     --button-color: #f0f6fc;
     --background-color: #010409;
   }
+
   &.paypal {
     --button-color: #ffffff;
     --background-color: #002992;
   }
+
   &.open-collective {
     --button-color: #0c2d66;
     --background-color: white;
   }
 }
 
+.team {
+  li {
+    display: flex!important;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-content: start;
+  }
+  div {
+    min-width: 220px;
+    max-width: calc(100% - 270px);
+    h2 {
+      margin-top: 0;
+    }
+  }
+}
+
 @media screen and (max-width: 76.2344em) {
-  [data-md-toggle="drawer"]:checked ~ .md-container .md-sidebar--primary {
+  [data-md-toggle="drawer"]:checked~.md-container .md-sidebar--primary {
     transform: translateX(360px) !important;
   }
 
@@ -100,7 +121,7 @@
   }
 
   .md-nav__title,
-  .md-nav > * {
+  .md-nav>* {
     box-shadow: none !important;
     background-color: var(--surface-color) !important;
   }
