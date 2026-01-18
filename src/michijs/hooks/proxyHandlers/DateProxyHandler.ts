@@ -1,6 +1,6 @@
-import type { ProxiedValue } from "../../classes/ProxiedValue";
+import type { ProxiedValue } from "../../../domain/entities/ProxiedValue";
 import type { ObservableProxyHandlerInterface } from "../../types";
-import { unproxify } from "../../utils/unproxify";
+import { unproxify } from "../../../shared/utils/unproxify";
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 
 export class DateProxyHandler

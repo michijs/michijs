@@ -1,11 +1,11 @@
 import type { AllAttributes } from "../generated/htmlType";
 import { setAttribute } from "../DOM/attributes/setAttribute";
-import { isMichiCustomElement } from "../typeWards/isMichiCustomElement";
+import { isMichiCustomElement } from "../../domain/typeWards/isMichiCustomElement";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import type { FC, ObservableOrConst } from "../types";
-import { getObservables } from "../utils/getObservables";
-import { unproxify } from "../utils/unproxify";
-import { GarbageCollectableObject } from "../classes/GarbageCollectableObject";
+import { getObservables } from "../../shared/utils/getObservables";
+import { unproxify } from "../../shared/utils/unproxify";
+import { GarbageCollectableObject } from "../../domain/entities/GarbageCollectableObject";
 import { bindObservable } from "../utils/bindObservable";
 
 type ObservableAriaMixin = {

@@ -1,4 +1,4 @@
-import { create } from "../DOM/create/create";
+import { create } from "../../infrastructure/DOM/create/create";
 import { bindObservable } from "../utils/bindObservable";
 import type {
   SingleJSXElement,
@@ -6,8 +6,8 @@ import type {
   GetElementProps,
   Unproxify,
 } from "../types";
-import { VirtualFragment } from "../classes/VirtualFragment";
-import { isCSSVariable } from "../typeWards/isCSSVariable";
+import { VirtualFragment } from "../../infrastructure/DOM/VirtualFragment";
+import { isCSSVariable } from "../../domain/typeWards/isCSSVariable";
 import { useComputedObserve } from "../hooks";
 
 interface CSSIfType {

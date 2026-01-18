@@ -1,5 +1,5 @@
 import { jsx } from "../h";
-import { VirtualFragment } from "../classes/VirtualFragment";
+import { VirtualFragment } from "../../infrastructure/DOM/VirtualFragment";
 import type {
   ExtendableComponentWithoutChildren,
   CreateFCResult,
@@ -7,7 +7,7 @@ import type {
   ObservableOrConst,
   ElementFactoryType,
 } from "../types";
-import { isObservable } from "../typeWards/isObservable";
+import { isObservable } from "../../domain/typeWards/isObservable";
 import { bindObservable } from "../utils/bindObservable";
 
 // Define a type for the return value of promises, which can be a JSX element, a function component, or a DOM element.

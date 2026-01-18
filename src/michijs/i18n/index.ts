@@ -1,6 +1,6 @@
-import { ProxiedValue } from "../classes/ProxiedValue";
+import { ProxiedValue } from "../../domain/entities/ProxiedValue";
 import type { ObservableOrConst, ObservableType } from "../types";
-import { unproxify } from "../utils/unproxify";
+import { unproxify } from "../../shared/utils/unproxify";
 import { bindObservable } from "../utils/bindObservable";
 import { useAsyncComputedObserve } from "../hooks";
 

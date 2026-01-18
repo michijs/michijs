@@ -1,5 +1,5 @@
 import type { CssVariablesObject, AnyObject } from "../types";
-import { formatToKebabCase } from "../utils/formatToKebabCase";
+import { formatToKebabCase } from "../../shared/utils/formatToKebabCase";
 
 const getProxyGetter = <T>(parent = "-") =>
   new Proxy(Function as unknown as CssVariablesObject<T>, {

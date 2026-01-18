@@ -11,7 +11,7 @@ import michijs from "./generated/michijs.json";
 import { currentVersion } from "../../tasks/currentVersion";
 import { updateDiff } from "./updateDiff";
 import { spawn } from "bun";
-import { omit } from "../../src/michijs/utils";
+import { omit } from "../../src/shared/utils";
 
 const serverProcess = spawn([process.execPath, "run", "start"], {
   stdout: "inherit",

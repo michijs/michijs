@@ -5,13 +5,13 @@ import type {
 } from "../../types";
 import { PrimitiveProxyHandler } from "./PrimitiveProxyHandler";
 import { FunctionProxyHandler } from "./FunctionProxyHandler";
-import { isPrototypeOfObject } from "../../utils";
+import { isPrototypeOfObject } from "../../../shared/utils";
 import { DateProxyHandler } from "./DateProxyHandler";
 import { MapProxyHandler } from "./MapProxyHandler";
 import { SetProxyHandler } from "./SetProxyHandler";
 import { ArrayProxyHandler } from "./ArrayProxyHandler";
 import { CommonObjectProxyHandler } from "./CommonObjectProxyHandler";
-import type { ProxiedValue } from "../../classes";
+import type { ProxiedValue } from "../../../domain/entities";
 
 export const getObjectHandler = (
   value: unknown,

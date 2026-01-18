@@ -1,7 +1,7 @@
 import { useTitle } from "../hooks/useTitle";
 import { useWatch } from "../hooks/useWatch";
 import type { FC, ObservableOrConst } from "../types";
-import { unproxify } from "../utils/unproxify";
+import { unproxify } from "../../shared/utils/unproxify";
 import { GenericElement } from "./GenericElement";
 
 export interface TitleProps {

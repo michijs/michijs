@@ -1,0 +1,6 @@
+import type { PrimitiveType } from "../../../michijs/types";
+
+export const createTextNodeContentCallback = (
+  jsx: PrimitiveType | {},
+): string =>
+  (typeof jsx === "object" ? JSON.stringify(jsx) : jsx?.toString()) ?? "";

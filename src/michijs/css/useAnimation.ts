@@ -1,7 +1,7 @@
-import { IdGenerator } from "../classes/IdGenerator";
+import { IdGenerator } from "../../domain/entities/IdGenerator";
 import type { UseAnimation } from "../types";
-import { formatToKebabCase } from "../utils/formatToKebabCase";
-import { removeNullableFromObject } from "../utils/removeNullableFromObject";
+import { formatToKebabCase } from "../../shared/utils/formatToKebabCase";
+import { removeNullableFromObject } from "../../shared/utils/removeNullableFromObject";
 
 const idGenerator = new IdGenerator();
 

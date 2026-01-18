@@ -1,9 +1,9 @@
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
-import type { ProxiedValue } from "../../classes/ProxiedValue";
+import type { ProxiedValue } from "../../../domain/entities/ProxiedValue";
 import type { ObservableProxyHandlerInterface } from "../../types";
-import { unproxify } from "../../utils/unproxify";
-import { extendsObject } from "../../utils/extendsObject";
-import { cloneCommonObject } from "../../utils/clone/cloneCommonObject";
+import { unproxify } from "../../../shared/utils/unproxify";
+import { extendsObject } from "../../../shared/utils/extendsObject";
+import { cloneCommonObject } from "../../../shared/utils/clone/cloneCommonObject";
 
 export class CommonObjectProxyHandler<T extends object>
   extends ObjectProxyHandler<T>

@@ -1,5 +1,5 @@
 import type { ObservableType } from "../../types";
-import type { ProxiedValue } from "../../classes/ProxiedValue";
+import type { ProxiedValue } from "../../../domain/entities/ProxiedValue";
 
 export const customMapAndSetDelete = (
   target: ProxiedValue<Map<any, any>> | ProxiedValue<Set<any>>,

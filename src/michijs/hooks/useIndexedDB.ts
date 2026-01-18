@@ -1,4 +1,4 @@
-import { Observable } from "../classes/Observable";
+import { Observable } from "../../domain/entities/Observable";
 import type {
   AnyObject,
   IndexeddbObservableResult,

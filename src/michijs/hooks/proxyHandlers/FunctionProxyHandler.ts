@@ -1,4 +1,4 @@
-import type { ProxiedValue } from "../../classes/ProxiedValue";
+import type { ProxiedValue } from "../../../domain/entities/ProxiedValue";
 import type {
   ObservableType,
   ObservableProxyHandlerInterface,

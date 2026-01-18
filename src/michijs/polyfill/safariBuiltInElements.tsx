@@ -1,5 +1,5 @@
 import { GenericElement } from "../components/GenericElement";
-import { create } from "../DOM/create/create";
+import { create } from "../../infrastructure/DOM/create/create";
 import type { CustomElementWithCallbacks } from "../types";
 
 export const extendedElements: Record<

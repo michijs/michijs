@@ -1,7 +1,7 @@
-import { HistoryManager } from "../classes/HistoryManager";
+import { HistoryManager } from "../../infrastructure/HistoryManager";
 import type { FC, ObservableOrConst } from "../types";
-import { unproxify } from "../utils/unproxify";
-import { wait } from "../utils/wait";
+import { unproxify } from "../../shared/utils/unproxify";
+import { wait } from "../../shared/utils/wait";
 import { GenericElement } from "./GenericElement";
 
 export interface RedirectProps {

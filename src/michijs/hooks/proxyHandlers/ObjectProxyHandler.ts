@@ -1,5 +1,5 @@
-import type { ProxiedValue } from "../../classes/ProxiedValue";
-import { unproxify } from "../../utils";
+import type { ProxiedValue } from "../../../domain/entities/ProxiedValue";
+import { unproxify } from "../../../shared/utils";
 import { SharedProxyHandler } from "./SharedProxyHandler";
 
 export abstract class ObjectProxyHandler<T extends object>

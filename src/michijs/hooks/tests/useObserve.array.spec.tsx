@@ -1,4 +1,4 @@
-import { create } from "../../DOM/create/create";
+import { create } from "../../../infrastructure/DOM/create/create";
 import type { ObservableType } from "../../types";
 import { useObserve } from "../useObserve";
 import { describe, it, expect, beforeEach } from "bun:test";
