@@ -1,5 +1,5 @@
 import type { UseTransition } from "../types";
-import { removeNullableFromObject } from "../utils/removeNullableFromObject";
+import { removeNullableFromObject } from "../../shared/utils/removeNullableFromObject";
 
 /**
  * Hook to generate CSS transition properties based on the provided configuration.

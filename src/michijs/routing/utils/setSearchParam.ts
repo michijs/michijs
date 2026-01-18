@@ -1,4 +1,4 @@
-import { isNil } from "../../utils/isNil";
+import { isNil } from "../../../shared/utils/isNil";
 
 export const setSearchParam = (
   url: URL,

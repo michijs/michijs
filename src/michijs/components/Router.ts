@@ -1,6 +1,6 @@
 import type { RouterProps } from "../routing/types";
 import { useComputedObserve } from "../hooks/useComputedObserve";
-import { HistoryManager } from "../classes/HistoryManager";
+import { HistoryManager } from "../../infrastructure/HistoryManager";
 import { urlFn } from "../routing/utils/urlFn";
 import { If } from "./If";
 

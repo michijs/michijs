@@ -1,8 +1,8 @@
 import { useComputedObserve } from "../hooks/useComputedObserve";
-import { isObservable } from "../typeWards/isObservable";
+import { isObservable } from "../../domain/typeWards/isObservable";
 import type { ObservableLike, Subscription } from "../types";
-import { extendsObject } from "./extendsObject";
-import { getObservables } from "./getObservables";
+import { extendsObject } from "../../shared/utils/extendsObject";
+import { getObservables } from "../../shared/utils/getObservables";
 
 export const bindObservable = <T>(
   observable: T,

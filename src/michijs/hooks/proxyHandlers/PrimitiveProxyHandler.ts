@@ -1,10 +1,10 @@
-import type { ProxiedValue } from "../../classes/ProxiedValue";
+import type { ProxiedValue } from "../../../domain/entities/ProxiedValue";
 import type { ObservableProxyHandlerInterface } from "../../types";
 import { getObjectHandler } from "./getHandler";
 import { SharedProxyHandler } from "./SharedProxyHandler";
 import { FunctionProxyHandler } from "./FunctionProxyHandler";
-import { unproxify } from "../../utils/unproxify";
-import { isNil } from "../../utils/isNil";
+import { unproxify } from "../../../shared/utils/unproxify";
+import { isNil } from "../../../shared/utils/isNil";
 
 export class PrimitiveProxyHandler<T>
   extends SharedProxyHandler<T>

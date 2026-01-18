@@ -6,12 +6,12 @@ import type {
   UseStyleSheetCallback,
 } from "../types";
 import { bindObservable } from "../utils/bindObservable";
-import { getObservables } from "../utils/getObservables";
-import { isNil } from "../utils/isNil";
-import { unproxify } from "../utils/unproxify";
+import { getObservables } from "../../shared/utils/getObservables";
+import { isNil } from "../../shared/utils/isNil";
+import { unproxify } from "../../shared/utils/unproxify";
 import { useCssVariables } from "./useCssVariables";
-import { ProxiedValue } from "../classes/ProxiedValue";
-import { formatToKebabCase } from "../utils/formatToKebabCase";
+import { ProxiedValue } from "../../domain/entities/ProxiedValue";
+import { formatToKebabCase } from "../../shared/utils/formatToKebabCase";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 
 const hostSelectors = [":host", ":host-context"];

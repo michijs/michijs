@@ -7,24 +7,24 @@ import type {
   CSSObject,
   NoExtraProperties,
 } from "../types";
-import { formatToKebabCase } from "../utils/formatToKebabCase";
+import { formatToKebabCase } from "../../shared/utils/formatToKebabCase";
 import { addStylesheetsToDocumentOrShadowRoot } from "../utils/addStylesheetsToDocumentOrShadowRoot";
 import { defineEvent } from "./properties/defineEvent";
 import { definePropertyFromObservable } from "./properties/definePropertyFromObservable";
 import { defineMethod } from "./properties/defineMethod";
 import { getAttributeValue } from "../DOM/attributes/getAttributeValue";
-import { getMountPoint } from "../DOM/getMountPoint";
+import { getMountPoint } from "../../infrastructure/DOM/getMountPoint";
 import { defineReflectedAttributes } from "./properties/defineReflectedAttributes";
 import { useStyleSheet } from "../css/useStyleSheet";
 import { convertCssObjectToCssVariablesObject } from "../css/convertCssObjectToCssVariablesObject";
-import { MappedIdGenerator } from "../classes/MappedIdGenerator";
-import { IdGenerator } from "../classes/IdGenerator";
+import { MappedIdGenerator } from "../../domain/entities/MappedIdGenerator";
+import { IdGenerator } from "../../domain/entities/IdGenerator";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 import { useObserveInternal } from "../hooks/useObserve";
 import { createBuiltInElement } from "../polyfill";
 import { getShadowRoot } from "../utils/getShadowRoot";
 import { cloneStylesheet } from "../css/cloneStylesheet";
-import { AttributeManager, ElementFactory } from "../DOM/create/ElementFactory";
+import { AttributeManager, ElementFactory } from "../../infrastructure/DOM/create/ElementFactory";
 
 let classesIdGenerator: undefined | IdGenerator;
 

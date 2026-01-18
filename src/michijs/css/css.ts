@@ -1,4 +1,4 @@
-import { GarbageCollectableObject } from "../classes/GarbageCollectableObject";
+import { GarbageCollectableObject } from "../../domain/entities/GarbageCollectableObject";
 import { useStringTemplate } from "../hooks/useStringTemplate";
 import type { ObservableType } from "../types";
 import { bindObservable } from "../utils/bindObservable";

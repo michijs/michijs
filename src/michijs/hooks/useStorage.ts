@@ -1,8 +1,8 @@
-import { ObservableFromEventListener } from "../classes/ObservableFromEventListener";
+import { ObservableFromEventListener } from "../../domain/entities/ObservableFromEventListener";
 import type { UseStorage } from "../types";
 import { useObserveInternal } from "./useObserve";
-import { isNil } from "../utils/isNil";
-import { storageIsCookieStorage } from "../typeWards/storageIsCookieStorage";
+import { isNil } from "../../shared/utils/isNil";
+import { storageIsCookieStorage } from "../../domain/typeWards/storageIsCookieStorage";
 
 /**
  * Allows for observing changes in an object and synchronizing it with the browser's storage (such as localStorage).

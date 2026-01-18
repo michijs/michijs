@@ -1,5 +1,5 @@
 import { useComputedObserve } from "./useComputedObserve";
-import { HistoryManager } from "../classes/HistoryManager";
+import { HistoryManager } from "../../infrastructure/HistoryManager";
 import type { UseHash } from "../types";
 
 // hashchange does not work properly

@@ -1,6 +1,6 @@
-import type { EventDispatcher } from "./classes/EventDispatcher";
-import type { MappedIdGenerator } from "./classes/MappedIdGenerator";
-import type { Observable } from "./classes/Observable";
+import type { EventDispatcher } from "../domain/entities/EventDispatcher";
+import type { MappedIdGenerator } from "../domain/entities/MappedIdGenerator";
+import type { Observable } from "../domain/entities/Observable";
 import type {
   HTMLElements,
   CSSProperties,

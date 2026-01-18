@@ -4,7 +4,7 @@ import type {
   ObservableType,
   ReflectedAttributesType,
 } from "../../types";
-import { formatToKebabCase } from "../../utils/formatToKebabCase";
+import { formatToKebabCase } from "../../../shared/utils/formatToKebabCase";
 import { definePropertyFromObservable } from "./definePropertyFromObservable";
 
 export const defineReflectedAttributes = (

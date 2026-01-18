@@ -1,4 +1,4 @@
-import type { ProxiedValue } from "../../classes";
+import type { ProxiedValue } from "../../../domain/entities";
 import type { ParentSubscription } from "../../types";
 
 export const createParentSubscription = <T>(

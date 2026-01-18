@@ -1,4 +1,4 @@
-import { EventDispatcher } from "../classes/EventDispatcher";
+import { EventDispatcher } from "../../domain/entities/EventDispatcher";
 import { useStyleSheet } from "../css/useStyleSheet";
 import { createCustomElement } from "../customElements/createCustomElement";
 

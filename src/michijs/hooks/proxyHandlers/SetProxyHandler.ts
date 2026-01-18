@@ -1,10 +1,10 @@
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 import { customMapAndSetClear } from "./customMapAndSetClear";
-import type { ProxiedValue } from "../../classes/ProxiedValue";
+import type { ProxiedValue } from "../../../domain/entities/ProxiedValue";
 import { customMapAndSetDelete } from "./customMapAndSetDelete";
 import type { ObservableProxyHandlerInterface } from "../../types";
-import { cloneMap } from "../../utils/clone/cloneMap";
-import { unproxify } from "../../utils/unproxify";
+import { cloneMap } from "../../../shared/utils/clone/cloneMap";
+import { unproxify } from "../../../shared/utils/unproxify";
 
 export class SetProxyHandler<T extends Set<any>>
   extends ObjectProxyHandler<T>

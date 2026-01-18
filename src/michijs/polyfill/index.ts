@@ -1,4 +1,4 @@
-import { getBrowser } from "../utils/getBrowser";
+import { getBrowser } from "../../shared/utils/getBrowser";
 
 const isSafari = ["safari", "iphone"].includes(getBrowser());
 

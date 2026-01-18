@@ -1,5 +1,5 @@
-import { PrimitiveValue } from "../classes/ProxiedValue";
-import { ProxiedValue } from "../classes/ProxiedValue";
+import { PrimitiveValue } from "../../domain/entities/ProxiedValue";
+import { ProxiedValue } from "../../domain/entities/ProxiedValue";
 import type { UseObserve, UseObserveInternal } from "../types";
 import { ObservableProxyHandler } from "./proxyHandlers/ObservableProxyHandler";
 

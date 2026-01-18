@@ -1,9 +1,9 @@
-import { EventDispatcher } from "../classes/EventDispatcher";
+import { EventDispatcher } from "../../domain/entities/EventDispatcher";
 import { useStyleSheet } from "../css/useStyleSheet";
 import { createCustomElement } from "../customElements/createCustomElement";
 import type { HTMLElements } from "../generated/htmlType";
 import type { FCC, GetElementProps } from "../types";
-import { isElement } from "../typeWards/isElement";
+import { isElement } from "../../domain/typeWards/isElement";
 import { getShadowRoot } from "../utils/getShadowRoot";
 
 const MichiSlot = createCustomElement("michi-slot", {
