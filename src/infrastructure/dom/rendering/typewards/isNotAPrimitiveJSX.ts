@@ -6,7 +6,7 @@ import type {
   FunctionJSXElement,
   ObjectJSXElement,
   SingleJSXElement,
-} from "../../../../michijs/types";
+} from "../types";
 
 export const isNotAPrimitiveJSX = (
   jsx: SingleJSXElement,

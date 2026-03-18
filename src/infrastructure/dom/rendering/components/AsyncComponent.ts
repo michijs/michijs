@@ -4,11 +4,9 @@ import type {
   ExtendableComponentWithoutChildren,
   CreateFCResult,
   SingleJSXElement,
-  ObservableOrConst,
   ElementFactoryType,
-} from "../../../../michijs/types";
-import { isObservable } from "../../../../domain/typewards/isObservable";
-import { bindObservable } from "../../../../domain/utils/bindObservable";
+} from "../types";
+import { isObservable, bindObservable, type ReactiveValuePort } from "@domain";
 
 // Define a type for the return value of promises, which can be a JSX element, a function component, or a DOM element.
 type PromiseType<P> =
@@ -20,7 +18,7 @@ type PromiseType<P> =
 // Define props for the AsyncComponent.
 type AsyncComponentProps<P, T> = ExtendableComponentWithoutChildren<T> & {
   // The promise that resolves to the component to render asynchronously.
-  promise: ObservableOrConst<PromiseType<P>>;
+  promise: ReactiveValuePort<PromiseType<P>>;
   // An optional loading component to display while the async component is loading.
   loadingComponent?: JSX.Element;
   then?(promiseResult: P): JSX.Element;

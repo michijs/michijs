@@ -1,8 +1,7 @@
-import type { ObservableNonNullablePrimitiveType } from "../../../../domain/ports/types";
+import type { ObservableNonNullablePrimitiveType } from "./types";
 import { createTextElement } from "./createTextElement";
-import { bindObservable } from "../../../../shared/utils";
-import { GarbageCollectableObject } from "../../../domain/entities/GarbageCollectableObject";
-import { createTextNodeContentCallback } from "../utils/createTextNodeContentCallback";
+import { GarbageCollectableObject, bindObservable } from "@domain";
+import { createTextNodeContentCallback } from "./createTextNodeContentCallback";
 
 export const createObservableTextElement = (
   jsx: ObservableNonNullablePrimitiveType,

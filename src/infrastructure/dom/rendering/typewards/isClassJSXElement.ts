@@ -1,4 +1,4 @@
-import type { ClassJSXElement, FunctionJSXElement } from "../../../../michijs/types";
+import type { ClassJSXElement, FunctionJSXElement } from "../types";
 
 export const isClassJSXElement = (
   param: FunctionJSXElement | ClassJSXElement,

@@ -1,5 +1,5 @@
 import { EventDispatcher } from "../../../platform/entities/EventDispatcher";
-import { useStyleSheet } from "../../../../michijs/css/useStyleSheet";
+import { useStyleSheet } from "../../styles/hooks/useStyleSheet";
 import { createCustomElement } from "../../custom-elements/createCustomElement";
 
 export const GenericElement = createCustomElement("michi-generic-element", {

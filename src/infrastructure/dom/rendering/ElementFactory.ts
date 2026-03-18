@@ -4,28 +4,24 @@ import type {
   SingleJSXElement,
   ObservableNonNullablePrimitiveType,
   ObjectJSXElement,
-  AnyObject,
   CloneFactoryType,
-} from "../../../michijs/types2";
-import { isHTMLElement } from "../../typeWards/isHTMLElement";
-import { isClassJSXElement } from "../../typeWards/isClassJSXElement";
-import { isDOMElement } from "../../typeWards/isDOMElement";
-import { isFragmentElement } from "../../typeWards/isFragmentElement";
-import { isFunctionOrClassJSXElement } from "../../typeWards/isFunctionOrClassJSXElement";
-import { isMichiCustomElement } from "../../typeWards/isMichiCustomElement";
-import { isNotAPrimitiveJSX } from "../../typeWards/isNotAPrimitiveJSX";
-import { isObservable } from "../../typeWards/isObservable";
-import { bindObservable } from "../utils/bindObservable";
-import { formatToKebabCase } from "../../../shared/utils/formatToKebabCase";
-import { bindFunction } from "../../../shared/utils/bindFunction";
-import { classJSXToObjectJSXElement } from "../utils/classJSXToObjectJSXElement";
-import { createObservableTextElement } from "../temp/create/createObservableTextElement";
-import { createTextElement } from "../temp/create/createTextElement";
-import { updateObservableTextElement } from "../temp/create/updateObservableTextElement";
-import { updateTextElement } from "../temp/create/updateTextElement";
-import { isNil } from "../../../shared/utils/isNil";
+} from "./types";
+import type { AnyObject } from "@shared";
+import { isHTMLElement } from "./typewards/isHTMLElement";
+import { isClassJSXElement } from "./typewards/isClassJSXElement";
+import { isDOMElement } from "./typewards/isDOMElement";
+import { isFragmentElement } from "./typewards/isFragmentElement";
+import { isFunctionOrClassJSXElement } from "./typewards/isFunctionOrClassJSXElement";
+import { isNotAPrimitiveJSX } from "./typewards/isNotAPrimitiveJSX";
+import { isMichiCustomElement } from "../custom-elements/typewards/isMichiCustomElement";
+import { isObservable, bindObservable, GarbageCollectableObject } from "@domain";
+import { formatToKebabCase, bindFunction, isNil } from "@shared";
+import { classJSXToObjectJSXElement } from "./classJSXToObjectJSXElement";
+import { createObservableTextElement } from "./createObservableTextElement";
+import { createTextElement } from "./createTextElement";
+import { updateObservableTextElement } from "./updateObservableTextElement";
+import { updateTextElement } from "./updateTextElement";
 import { setAttribute } from "./setAttribute";
-import { GarbageCollectableObject } from "../../../domain/entities/GarbageCollectableObject";
 
 export class AttributeManager<S extends Element> {
   contextElement?: S;

@@ -4,7 +4,7 @@ import type {
   FragmentJSXElement,
   FunctionJSXElement,
   ObjectJSXElement,
-} from "../../../../michijs/types";
+} from "../types";
 
 export const isFragmentElement = (
   jsx:

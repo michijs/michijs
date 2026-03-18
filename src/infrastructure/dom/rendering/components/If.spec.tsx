@@ -1,6 +1,6 @@
-import { useCssVariables } from "../../../../michijs/css/useCssVariables";
-import { create } from "../../infrastructure/DOM/create/create";
-import { useObserve } from "../../../../domain/use-cases/hooks/useObserve";
+import { useCssVariables } from "../../styles/hooks/useCssVariables";
+import { create } from "../../rendering/create";
+import { useObserve } from "@domain";
 import { If } from "./If";
 import { describe, it, expect, spyOn, beforeEach, type Mock } from "bun:test";
 

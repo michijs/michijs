@@ -1,5 +1,5 @@
 import type { VirtualFragmentPort } from "@domain";
-import { forEachChildren } from "../../../shared";
+import { forEachChildren } from "@shared";
 
 export class VirtualFragment
   implements

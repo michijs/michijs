@@ -1,5 +1,5 @@
 import { CloneFactory } from "infrastructure/dom/rendering/ElementFactory";
-import { GarbageCollectableObject, VirtualFragment } from "../../../../domain/entities";
+import { GarbageCollectableObject, VirtualFragment, isObservable, ReactiveArray, bindObservable } from "@domain";
 import { create } from "../create";
 import type {
   ElementFactoryType,
@@ -10,9 +10,7 @@ import type {
   ObservableArray,
   ExtendableComponent,
   SingleJSXElement,
-} from "../../../../michijs/types";
-import { isObservable } from "../../../../domain/typewards/isObservable";
-import { NonProxiedArray } from "@domain";
+} from "../types";
 
 /**
  * Props for the List component.
@@ -61,7 +59,8 @@ export const List = <const T extends ObservableTypeOrConst<any[]>, E = FC>(
   factory: ElementFactoryType,
 ) => {
   if (isObservable(data)) {
-    if (data instanceof NonProxiedArray) {
+    if ((data as any) instanceof ReactiveArray) {
+      const castedData = data as ReactiveArray<any>
       let el: ParentNode | VirtualFragment;
       if (asTag)
         el = factory.create<ParentNode>({
@@ -73,13 +72,13 @@ export const List = <const T extends ObservableTypeOrConst<any[]>, E = FC>(
           el = new VirtualFragment();
         }
 
-      const newTarget = new data.TargetConstructor(
+      const newTarget = new castedData.TargetConstructor(
         el,
         renderItem,
         useTemplate ? new CloneFactory() : factory,
       ) as T;
 
-      this.targets.push(newTarget);
+      castedData.targets.push(newTarget);
 
       newTarget.push(this);
 

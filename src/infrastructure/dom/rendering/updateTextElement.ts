@@ -1,5 +1,5 @@
-import type { PrimitiveType } from "../../../../domain/ports/types";
-import { createTextNodeContentCallback } from "../utils/createTextNodeContentCallback";
+import type { PrimitiveType } from "@shared";
+import { createTextNodeContentCallback } from "./createTextNodeContentCallback";
 
 export const updateTextElement = (
   clonedNode: Text,

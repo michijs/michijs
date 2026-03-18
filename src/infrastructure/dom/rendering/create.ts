@@ -1,4 +1,4 @@
-import type { SingleJSXElement } from "../temp/types";
+import type { SingleJSXElement } from "./types";
 import { ElementFactory } from "./ElementFactory";
 
 export function create<T = Node>(

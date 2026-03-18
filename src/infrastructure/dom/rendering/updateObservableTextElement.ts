@@ -1,7 +1,6 @@
-import { GarbageCollectableObject } from "../../../domain/entities/GarbageCollectableObject";
-import type { ObservableNonNullablePrimitiveType } from "../../../../domain/ports/types";
-import { bindObservable } from "../utils/bindObservable";
-import { createTextNodeContentCallback } from "../utils/createTextNodeContentCallback";
+import { bindObservable, GarbageCollectableObject } from "@domain";
+import type { ObservableNonNullablePrimitiveType } from "./types";
+import { createTextNodeContentCallback } from "./createTextNodeContentCallback";
 
 export const updateObservableTextElement = (
   clonedNode: Text,

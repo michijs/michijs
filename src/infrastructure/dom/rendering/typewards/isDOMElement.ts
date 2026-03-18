@@ -3,7 +3,7 @@ import type {
   DOMElementJSXElement,
   FunctionJSXElement,
   ObjectJSXElement,
-} from "../../../../michijs/types";
+} from "../types";
 
 export const isDOMElement = (
   jsx:

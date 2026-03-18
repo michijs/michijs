@@ -1,14 +1,14 @@
 import { create } from "../create";
-import { bindObservable } from "../../../../domain/utils/bindObservable";
+import { bindObservable } from "@domain";
 import type {
   SingleJSXElement,
   CSSVar,
   GetElementProps,
   Unproxify,
-} from "../../../../michijs/types";
+} from "../types";
 import { VirtualFragment } from "../VirtualFragment";
-import { isCSSVariable } from "../../../../domain/typewards/isCSSVariable";
-import { useComputedObserve } from "../../../../michijs/hooks";
+import { isCSSVariable } from "../../styles/typewards/isCSSVariable";
+import { useComputedObserve } from "@domain";
 
 interface CSSIfType {
   (
