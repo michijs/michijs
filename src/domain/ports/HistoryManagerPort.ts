@@ -1,6 +1,6 @@
-import { type ObservableLike, type ObservableOrConst } from './types'
+import type { ObservablePort, ObservableOrConst } from '@ports'
 
-export interface HistoryManagerPort extends ObservableLike<string | URL> {
+export interface HistoryManagerPort extends ObservablePort<string | URL> {
   ignoreHashes?: boolean;
   canGoBack(fallbackUrl?: ObservableOrConst<string | URL>): boolean;
   back(fallbackUrl?: ObservableOrConst<string | URL>): void;

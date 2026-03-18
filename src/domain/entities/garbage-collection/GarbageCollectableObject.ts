@@ -1,4 +1,4 @@
-import defer * as GarbageCollectedEventModule from "./GarbageCollectedEvent";
+import { GarbageCollectedEvent } from "./GarbageCollectedEvent";
 
 export class GarbageCollectableObject<T extends object> {
   declare ref: T;
@@ -8,7 +8,7 @@ export class GarbageCollectableObject<T extends object> {
       Object.defineProperty(this, "ref", {
         get() {
           const deref = ref.deref();
-          if (!deref) throw new GarbageCollectedEventModule.GarbageCollectedEvent();
+          if (!deref) throw new GarbageCollectedEvent();
           return deref;
         },
       });

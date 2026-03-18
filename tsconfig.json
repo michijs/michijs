@@ -6,6 +6,7 @@
     "baseUrl": "./src",
     "allowUnusedLabels": true,
     "paths": {
+      "@ports": ["./domain/ports/index"],
       "@domain": ["./domain/index"],
       "@infrastructure": ["./src/infrastructure/index"],
       "@shared": ["./shared/index"],

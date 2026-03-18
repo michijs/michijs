@@ -1,8 +1,7 @@
-import type { Router } from "../components/Router";
-import type { AnyObject, ExtendableComponentWithoutChildren } from "../types";
-
-export type SearchParams = AnyObject | undefined;
-export type Hash = `#${string}` | "" | undefined;
+import type { Router } from "../../infrastructure/dom/routing/components/Router";
+import type { ExtendableComponentWithoutChildren } from "../types";
+import type { Hash } from "../../shared/types/Hash";
+import type { SearchParams } from "../../shared/types/SearchParams";
 
 export type UrlFunction<
   S extends SearchParams = SearchParams,

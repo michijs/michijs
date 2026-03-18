@@ -1,4 +1,4 @@
-import type { EventDispatcher } from "../domain/entities/EventDispatcher";
+import type { EventDispatcher } from "../infrastructure/platform/entities/EventDispatcher";
 import type { MappedIdGenerator } from "../domain/entities/MappedIdGenerator";
 import type { Observable } from "../domain/entities/Observable";
 import type {
@@ -6,7 +6,7 @@ import type {
   CSSProperties,
   GlobalEvents,
 } from "./generated/htmlType";
-import type { SearchParams } from "./routing/types";
+import type { SearchParams } from "../shared/types/SearchParams";
 
 export type Platform =
   | "ios"
@@ -217,9 +217,6 @@ export interface ObservableLike<T> {
   notify(value: T, observers: NotifiableObservers<T>): void;
   unsubscribe(observer: Subscription<T>): void;
 }
-export interface CompatibleObservableLike {
-  subscribe(observer: CompatibleSubscription): void;
-}
 
 export interface ObservableProxyHandlerInterface<T>
   extends Required<Pick<ProxyHandler<ProxiedValueInterface<T>>, "apply">>,
@@ -293,7 +290,7 @@ export type ListProps<E, SV> = ExtendableComponentWithoutChildren<E> & {
   useTemplate?: boolean;
 };
 
-export interface ProxiedArrayInterface<RV, SV = ObservableType<RV>> {
+export interface ReactiveArrayPort<RV, SV = ObservableType<RV>> {
   /**
    * Removes all the list elements
    */
@@ -448,28 +445,11 @@ export interface DoFetchProps<
   searchParams?: { [k in keyof S]: ObservableOrConst<S[k]> };
 }
 
-export type usePromiseShouldWait = ObservableTypeOrConst<Promise<any>>[];
-
 export type UseFetchCallback<
   S extends SearchParams = undefined,
   B extends AnyObject | undefined | string = undefined,
 > = () => DoFetchProps<S, B> | Promise<DoFetchProps<S, B>>;
 
-export interface UseComputedObserveSharedOptions {
-  onBeforeUpdate?(): void;
-  onAfterUpdate?(): void;
-}
-export interface UseComputedObservePrimitiveOptions
-  extends UseComputedObserveSharedOptions {
-  usePrimitive: true;
-}
-export interface UseComputedObserveOptions
-  extends UseComputedObserveSharedOptions {
-  usePrimitive?: false;
-}
-export interface UseWatch {
-  <T>(callback: () => T, deps?: useWatchDeps): void;
-}
 
 export interface UsePureFunction {
   <T>(callback: () => T, deps: useWatchDeps): () => T;
@@ -566,7 +546,6 @@ export type IndexeddbObservableResult<T extends AnyObject> = {
   [k in keyof T]: PromisableTypedIDBObjectStore<T[k]>;
 } & ObservableLike<keyof T>;
 
-export type useWatchDeps = any[];
 
 export interface DoFetch {
   <
@@ -589,84 +568,12 @@ export interface UseFetch {
   ): PromiseResult<Promise<R>>;
 }
 
-export interface UsePromise {
-  <R>(
-    callback: () => Promise<R>,
-    shouldWait?: usePromiseShouldWait,
-  ): PromiseResult<Promise<R>>;
-}
-
 export interface UseStorage {
   <T extends object>(item: T, storage?: Storage): ObservableType<T>;
 }
 
 export interface UseHash {
   <T extends string = string>(): ObservableType<Record<T, boolean | undefined>>;
-}
-
-/**
- * Interface representing the result of a fetch operation.
- * @template R Type of the expected response data.
- */
-export interface PromiseResult<R> {
-  /**
-   * The promise
-   */
-  promise: ObservablePrimitiveType<R>;
-  /**
-   * Call again the promise. Available after first call
-   */
-  recall(): void;
-}
-
-export interface UseObserveInternal {
-  <T>(
-    item?: T,
-    parentSubscription?: ParentSubscription<T>,
-    /**
-     * For functions inside an observable
-     */
-    rootObservableCallback?: () => ObservableType<unknown>,
-  ): ObservableType<T>;
-}
-
-export interface UseObserve {
-  <T>(item: T, usePrimitive?: false): ObservableType<T>;
-  <T>(item: T, usePrimitive: true): ObservablePrimitiveType<T>;
-}
-
-export interface UseAsyncComputedObserve {
-  <T>(
-    callback: (abortSignal: AbortSignal) => Promise<T>,
-    initialValue: T,
-    deps: useWatchDeps,
-    options?: UseComputedObserveOptions,
-  ): ObservableType<T>;
-  <T>(
-    callback: (abortSignal: AbortSignal) => Promise<T>,
-    initialValue: T,
-    deps: useWatchDeps,
-    options?: UseComputedObservePrimitiveOptions,
-  ): ObservablePrimitiveType<T>;
-}
-
-export interface UseComputedObserve {
-  <T>(
-    callback: () => T,
-    deps: useWatchDeps,
-    options: UseComputedObservePrimitiveOptions,
-  ): ObservablePrimitiveType<T>;
-  <T>(
-    callback: () => T,
-    deps: useWatchDeps,
-    options?: UseComputedObserveOptions,
-  ): ObservableType<T>;
-}
-export interface UseStringTemplate {
-  (
-    templateStringsArray: TemplateStringsArray,
-    ...props: ObservableOrConst<string | number | undefined>[]
-  ): ObservableType<string>;
 }
 
 export interface ObservableDate
@@ -751,7 +658,7 @@ export interface ReadWriteSet<RV, SV>
 
 interface ObservableArrayHelper<RV, SV = ObservableType<RV>>
   extends ReadWriteArray<RV, SV>,
-    ProxiedArrayInterface<RV, SV>,
+    ReactiveArrayPort<RV, SV>,
     ProxiedValueInterface<RV[]>,
     ObservableGettersAndSetters<RV[], SV[]> {}
 
@@ -868,16 +775,6 @@ export interface FCC<T = {}, S extends Element = Element>
 
 export type PropertyKey = string | number | symbol;
 
-export type CSSProperty =
-  | CSSObject
-  | CSSProperties
-  | string
-  | number
-  | undefined
-  | null;
-export interface CSSObject {
-  [key: string]: ObservableOrConst<CSSProperty>;
-}
 
 export type CustomElementTag = `${string}-${string}`;
 
@@ -1123,15 +1020,6 @@ export interface ElementFactory {
   ): ChildNode | ParentNode;
 }
 
-export type GetElementProps<El> = El extends (...args: infer Y) => any
-  ? Y[0]
-  : El extends {
-        new (...args: infer T): any;
-      }
-    ? T[0]
-    : El extends keyof JSX.IntrinsicElements
-      ? JSX.IntrinsicElements[El]
-      : {};
 
 export type UseStyleSheetCallback<T> = (
   tags: string,
