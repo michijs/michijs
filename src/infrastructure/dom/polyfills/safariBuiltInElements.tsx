@@ -1,6 +1,6 @@
-import { GenericElement } from "../../infrastructure/dom/rendering/components/GenericElement";
-import { create } from "../../infrastructure/dom/rendering/create";
-import type { CustomElementWithCallbacks } from "../types";
+import { GenericElement } from "../rendering/components/GenericElement";
+import { create } from "../rendering/create";
+import type { CustomElementWithCallbacks } from "../custom-elements/types";
 
 export const extendedElements: Record<
   string,

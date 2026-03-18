@@ -1,15 +1,15 @@
-import { getAttributeValue } from "../../DOM/attributes/getAttributeValue";
+import { getAttributeValue } from "../../rendering/getAttributeValue";
 import type {
   MichiCustomElement,
-  ObservableType,
   ReflectedAttributesType,
-} from "../../../../michijs/types";
-import { formatToKebabCase } from "../../../../shared/utils/formatToKebabCase";
+} from "../types";
+import type { ObservableProxyPort } from "@ports";
+import { formatToKebabCase } from "@shared";
 import { definePropertyFromObservable } from "./definePropertyFromObservable";
 
 export const defineReflectedAttributes = (
   self: MichiCustomElement,
-  observable: ObservableType<any>,
+  observable: ObservableProxyPort<any>,
   reflectedAttributes?: ReflectedAttributesType,
 ): void => {
   if (reflectedAttributes)

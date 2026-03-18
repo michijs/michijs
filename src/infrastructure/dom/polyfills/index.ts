@@ -1,4 +1,4 @@
-import { getBrowser } from "../../shared/utils/getBrowser";
+import { getBrowser } from "../../../shared/utils/getBrowser";
 
 const isSafari = ["safari", "iphone"].includes(getBrowser());
 
@@ -6,7 +6,7 @@ let createBuiltInElement: typeof window.customElements.define;
 removeTopLevelAwaits: {
   if (isSafari) {
     const { overrideDocumentCreateElement, safariDefine } = await import(
-      "./polyfill/safariBuiltInElements"
+      "./safariBuiltInElements"
     );
     createBuiltInElement = safariDefine;
     overrideDocumentCreateElement();

@@ -4,7 +4,7 @@ import type {
   MichiElementOptions,
   MichiElementSelf,
   NoExtraProperties,
-} from "../../../michijs/types";
+} from "./types";
 import { createCustomElement } from "./createCustomElement";
 
 export function customElement(tag: TemplateStringsArray) {

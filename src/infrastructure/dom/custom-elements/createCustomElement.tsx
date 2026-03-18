@@ -4,24 +4,21 @@ import type {
   MichiElementOptions,
   MichiElementClass,
   MichiElementSelf,
-  CSSObject,
   NoExtraProperties,
-} from "../../../michijs/types";
-import { formatToKebabCase } from "../../../shared/utils/formatToKebabCase";
+} from "./types";
+import type { CSSObject } from "../styles/types";
+import { formatToKebabCase } from "@shared";
 import { addStylesheetsToDocumentOrShadowRoot } from "../styles/addStylesheetsToDocumentOrShadowRoot";
 import { defineEvent } from "./properties/defineEvent";
 import { definePropertyFromObservable } from "./properties/definePropertyFromObservable";
 import { defineMethod } from "./properties/defineMethod";
-import { getAttributeValue } from "../DOM/attributes/getAttributeValue";
+import { getAttributeValue } from "../rendering/getAttributeValue";
 import { getMountPoint } from "./getMountPoint";
 import { defineReflectedAttributes } from "./properties/defineReflectedAttributes";
-import { useStyleSheet } from "../css/useStyleSheet";
+import { useStyleSheet } from "../styles/hooks/useStyleSheet";
 import { convertCssObjectToCssVariablesObject } from "../styles/convertCssObjectToCssVariablesObject";
-import { MappedIdGenerator } from "../../../domain/entities/MappedIdGenerator";
-import { IdGenerator } from "../../../domain/entities/IdGenerator";
-import { useComputedObserve } from "../../../domain/use-cases/hooks/useComputedObserve";
-import { useObserveInternal } from "../../../domain/use-cases/hooks/useObserve";
-import { createBuiltInElement } from "../../../michijs/polyfill";
+import { MappedIdGenerator, IdGenerator, useComputedObserve, useObserveInternal, type ObservableProxiedObject } from "@domain";
+import { createBuiltInElement } from "../polyfills";
 import { getShadowRoot } from "./getShadowRoot";
 import { cloneStylesheet } from "../styles/cloneStylesheet";
 import { AttributeManager, ElementFactory } from "../rendering/ElementFactory";
@@ -123,7 +120,7 @@ export function createCustomElement<O extends MichiElementOptions>(
         );
         addStylesheetsToDocumentOrShadowRoot(
           target,
-          this.$michi.styles.cssVariables,
+          this.$michi.styles.cssVariables!,
         );
       }
       if (computedStyleSheet) {
@@ -133,7 +130,7 @@ export function createCustomElement<O extends MichiElementOptions>(
         );
         addStylesheetsToDocumentOrShadowRoot(
           target,
-          this.$michi.styles.computedStyleSheet,
+          this.$michi.styles.computedStyleSheet!,
         );
       }
       if (mappedAdoptedStyleSheets) {
@@ -153,7 +150,7 @@ export function createCustomElement<O extends MichiElementOptions>(
 
     fakeConstructor() {
       this.$michi = {
-        store: useObserveInternal(storeInit),
+        store: useObserveInternal(storeInit) as ObservableProxiedObject<any>,
         alreadyRendered: false,
         styles: this.$michi?.styles ?? {},
         idGen: void 0,

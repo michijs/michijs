@@ -1,4 +1,4 @@
-import type { MichiCustomElement } from "../../../../michijs/types";
+import type { MichiCustomElement } from "../types";
 
 export const isMichiCustomElement = (
   param: Element | MichiCustomElement,

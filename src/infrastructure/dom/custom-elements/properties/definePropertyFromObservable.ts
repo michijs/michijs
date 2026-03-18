@@ -1,9 +1,10 @@
-import type { MichiCustomElement, ObservableType } from "../../../../michijs/types";
+import type { MichiCustomElement } from "../types";
+import type { ObservableProxyPort } from "@ports";
 
 export function definePropertyFromObservable(
   self: MichiCustomElement,
   propertyKey: string,
-  observable: ObservableType<any>,
+  observable: ObservableProxyPort<any>,
   observableKey: string = propertyKey,
 ): void {
   Object.defineProperty(self, propertyKey, {

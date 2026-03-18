@@ -1,4 +1,4 @@
-import type { MichiCustomElement } from "../../../michijs/types";
+import type { MichiCustomElement } from "./types";
 import { getShadowRoot } from "./getShadowRoot";
 
 export function getMountPoint(
