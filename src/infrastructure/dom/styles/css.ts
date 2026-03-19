@@ -1,7 +1,5 @@
-import { GarbageCollectableObject } from "../../domain/entities/GarbageCollectableObject";
-import { useStringTemplate } from "../../../domain/use-cases/hooks/useStringTemplate";
-import type { ObservableType } from "../../../michijs/types";
-import { bindObservable } from "../../../domain/utils/bindObservable";
+import { GarbageCollectableObject, useStringTemplate, bindObservable } from "@domain";
+import type { ObservableProxyPort } from "@domain";
 
 /**
  * Allows to create a Constructable Stylesheet with a Template String.
@@ -10,7 +8,7 @@ import { bindObservable } from "../../../domain/utils/bindObservable";
  */
 export function css(
   cssObject: TemplateStringsArray,
-  ...props: (ObservableType<string | number> | string | number)[]
+  ...props: (ObservableProxyPort<string | number> | string | number)[]
 ): CSSStyleSheet {
   const template = useStringTemplate(cssObject, ...props);
   const styleSheet = new CSSStyleSheet();

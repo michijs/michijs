@@ -29,3 +29,63 @@ export type CSSProperty =
 export interface CSSObject {
   [key: string]: ObservableOrConst<CSSProperty>;
 }
+
+export type UseStyleSheetCallback<T> = (
+  tags: string,
+  cssVariables: CssVariablesObject<T>,
+) => CSSObject;
+
+export interface UseStyleSheet {
+  <T>(
+    props: UseStyleSheetCallback<T>,
+    $window?: Window & typeof globalThis,
+  ): (tag: string) => CSSStyleSheet;
+  (props: CSSObject, $window?: Window & typeof globalThis): CSSStyleSheet;
+}
+
+/**
+ * Represents transition properties for CSS animations.
+ */
+interface Transition {
+  /**
+   * The CSS properties to apply the transition to.
+   */
+  property: string[];
+  /**
+   * The duration of the transition.
+   */
+  duration?: string;
+  /**
+   * The timing function for the transition.
+   */
+  timingFunction?: string;
+  /**
+   * The delay before the transition starts.
+   */
+  delay?: string;
+}
+
+export interface UseTransition {
+  (props: Transition): CSSObject;
+}
+
+/**
+ * Represents keyframes for CSS animations.
+ */
+type TransitionKeyframes =
+  | ({
+    [k in keyof Omit<CSSProperties, "offset">]?: CSSProperties[k][];
+  } & { offset?: number[] })
+  | (Omit<CSSProperties, "offset"> & { offset?: number })[];
+
+export interface UseAnimation {
+  (
+    keyframes: TransitionKeyframes,
+    options: Pick<
+      KeyframeAnimationOptions,
+      "id" | "delay" | "direction" | "duration" | "easing" | "fill"
+    > & {
+      iterations?: "infinite" | number;
+    },
+  ): [CSSObject, CSSObject];
+}

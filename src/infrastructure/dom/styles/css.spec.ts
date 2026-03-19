@@ -1,5 +1,5 @@
-import { useStringTemplate } from "../../../michijs/hooks/useStringTemplate";
-import { useCssVariables } from "../../../michijs/css/useCssVariables";
+import { useStringTemplate } from "@domain";
+import { useCssVariables } from "./hooks/useCssVariables";
 import { describe, it, expect } from "bun:test";
 
 const cssVariables = useCssVariables();
