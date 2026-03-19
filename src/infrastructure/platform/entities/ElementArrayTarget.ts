@@ -1,4 +1,5 @@
-import type { ElementFactoryType, FC, VirtualFragmentPort, ReactiveArrayTargetPort } from "../../../domain/ports";
+import type { VirtualFragmentPort, ReactiveArrayTargetPort } from "@domain";
+import type { ElementFactoryType, FC } from "../../dom/rendering/types";
 
 export class ElementArrayTarget<V> implements ReactiveArrayTargetPort<V, Node> {
   protected element: VirtualFragmentPort | ParentNode;

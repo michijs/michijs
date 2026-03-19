@@ -1,14 +1,14 @@
-import { ProxiedValue } from "../../domain/entities/ProxiedValue";
-import type { ObservableOrConst, ObservableType } from "../../../michijs/types";
-import { unproxify } from "../../../shared/utils/unproxify";
+import { ReactiveValue } from "../../entities/reactive/core/ReactiveValue";
+import { unproxify } from "@shared";
 import { bindObservable } from "../../utils/bindObservable";
-import { useAsyncComputedObserve } from "../../../michijs/hooks";
+import type { CallableReactiveValuePort, ObservableOrConst } from "@ports";
+import { useAsyncComputedObserve } from "../hooks/useAsyncComputedObserve";
 
 export type Translation<K extends string, T> = {
   [key in K]: T | (() => Promise<{ default: T }>) | (() => Promise<T>);
 };
 
-export class I18n<K extends string = string> extends ProxiedValue<K> {
+export class I18n<K extends string = string> extends ReactiveValue<K> {
   private isUsingSystemLanguage = true;
   public supportedLanguages: K[];
 
@@ -68,11 +68,11 @@ export class I18n<K extends string = string> extends ProxiedValue<K> {
 
   createTranslation<T>(
     translation: Translation<K, T>,
-  ): ObservableType<Partial<T>> {
+  ): CallableReactiveValuePort<Partial<T>> {
     return useAsyncComputedObserve<Partial<T>>(
       async () => await this.getCurrentTranslation(translation),
       translation[this.defaultLanguage] as Partial<T>,
-      [this],
+      [this]
     );
   }
 

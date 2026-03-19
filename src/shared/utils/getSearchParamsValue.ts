@@ -1,4 +1,4 @@
-import type { AnyObject } from "../../michijs/types";
+import type { AnyObject } from "@shared";
 
 export const getSearchParamsValue = <T extends AnyObject = AnyObject>(
   search: string = location.search,

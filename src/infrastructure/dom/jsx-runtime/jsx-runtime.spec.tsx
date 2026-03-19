@@ -1,12 +1,12 @@
 // Changed because of bun test
 import { jsx as jsxAlias } from "./index";
-import { createCustomElement } from "../customElements/createCustomElement";
+import { createCustomElement } from "../custom-elements/createCustomElement";
 // import { Fragment } from "../components/Fragment";
 import type {
   FragmentJSXElement,
   FunctionJSXElement,
   ObjectJSXElement,
-} from "../../../michijs/types";
+} from "../rendering/types";
 import { describe, it, expect } from "bun:test";
 
 const testChild = "child";

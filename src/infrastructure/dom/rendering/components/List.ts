@@ -1,5 +1,5 @@
 import { CloneFactory } from "infrastructure/dom/rendering/ElementFactory";
-import { GarbageCollectableObject, VirtualFragment, isObservable, ReactiveArray, bindObservable } from "@domain";
+import { GarbageCollectableObject, isObservable, ReactiveArray, bindObservable } from "@domain";
 import { create } from "../create";
 import type {
   ElementFactoryType,
@@ -11,6 +11,8 @@ import type {
   ExtendableComponent,
   SingleJSXElement,
 } from "../types";
+import { ElementArrayTarget } from "infrastructure/platform/entities/ElementArrayTarget";
+import { VirtualFragment } from "../VirtualFragment";
 
 /**
  * Props for the List component.
@@ -60,7 +62,7 @@ export const List = <const T extends ObservableTypeOrConst<any[]>, E = FC>(
 ) => {
   if (isObservable(data)) {
     if ((data as any) instanceof ReactiveArray) {
-      const castedData = data as ReactiveArray<any>
+      const castedData = data as unknown as ReactiveArray<any>
       let el: ParentNode | VirtualFragment;
       if (asTag)
         el = factory.create<ParentNode>({
@@ -72,11 +74,11 @@ export const List = <const T extends ObservableTypeOrConst<any[]>, E = FC>(
           el = new VirtualFragment();
         }
 
-      const newTarget = new castedData.TargetConstructor(
+      const newTarget = new ElementArrayTarget(
         el,
         renderItem,
         useTemplate ? new CloneFactory() : factory,
-      ) as T;
+      );
 
       castedData.targets.push(newTarget);
 

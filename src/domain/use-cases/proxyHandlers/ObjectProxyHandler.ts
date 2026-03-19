@@ -1,12 +1,12 @@
-import type { ProxiedValue } from "../../../domain/entities/ProxiedValue";
-import { unproxify } from "../../../shared/utils";
+import type { ProxiedValuePort } from "@ports";
+import { unproxify } from "@shared";
 import { SharedProxyHandler } from "./SharedProxyHandler";
 
 export abstract class ObjectProxyHandler<T extends object>
   extends SharedProxyHandler<T>
-  implements ProxyHandler<ProxiedValue<T>>
+  implements ProxyHandler<ProxiedValuePort<T>>
 {
-  deleteProperty(target: ProxiedValue<T>, p: string | symbol) {
+  deleteProperty(target: ProxiedValuePort<T>, p: string | symbol) {
     if (p in target) return Reflect.deleteProperty(target, p);
     const deletedProperty = target.$value[p];
     if (deletedProperty) {
@@ -17,11 +17,11 @@ export abstract class ObjectProxyHandler<T extends object>
     return false;
   }
 
-  ownKeys(target: ProxiedValue<T>) {
+  ownKeys(target: ProxiedValuePort<T>) {
     return Reflect.ownKeys(target.$value);
   }
 
-  getOwnPropertyDescriptor(target: ProxiedValue<T>, p: string | symbol) {
+  getOwnPropertyDescriptor(target: ProxiedValuePort<T>, p: string | symbol) {
     return {
       ...Reflect.getOwnPropertyDescriptor(target, p),
       enumerable: true,
@@ -29,15 +29,15 @@ export abstract class ObjectProxyHandler<T extends object>
     };
   }
 
-  has(target: ProxiedValue<T>, p: string | symbol) {
+  has(target: ProxiedValuePort<T>, p: string | symbol) {
     return this.ownKeys(target).includes(p);
   }
 
-  set(target: ProxiedValue<T>, p: string | symbol, newValue: any): boolean {
+  set(target: ProxiedValuePort<T>, p: string | symbol, newValue: any): boolean {
     return this.setNewValue(target, p, unproxify(newValue));
   }
   setNewValue(
-    target: ProxiedValue<T>,
+    target: ProxiedValuePort<T>,
     p: string | symbol,
     unproxifiedValue: any,
   ): boolean {

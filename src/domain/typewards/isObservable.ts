@@ -1,5 +1,5 @@
-import type { ObservableLike } from "../../michijs/types";
+import type { ObservablePort } from "@ports";
 
 // "in" does not work with primitive types
-export const isObservable = (jsx: any): jsx is ObservableLike<unknown> =>
-  !!(jsx as ObservableLike<unknown>)?.subscribe;
+export const isObservable = (jsx: any): jsx is ObservablePort<unknown> =>
+  !!(jsx as ObservablePort<unknown>)?.subscribe;

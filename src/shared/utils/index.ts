@@ -1,6 +1,7 @@
+export * from "./bindFunction";
 export { formatToKebabCase } from "./formatToKebabCase";
 export { getFormData } from "./getFormData";
-export { getObservables } from "../../domain/utils/getObservables";
+export { getObservables } from "@domain";
 export { getSearchParamsValue } from "./getSearchParamsValue";
 export { wait } from "./wait";
 export { forEachChildren } from "./forEachChildren";

@@ -1,4 +1,4 @@
-import type { Platform } from "../../michijs/types";
+import type { Platform } from "@shared";
 
 export const getPlatform = (): Platform => {
   const { userAgent } = navigator;

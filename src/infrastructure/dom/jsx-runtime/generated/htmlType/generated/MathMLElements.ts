@@ -4,7 +4,7 @@
        import type { ValueSets } from "./ValueSets"
        import type { MathMLEvents } from "../Events"
 import type { DataGlobalAttributes } from "../DataGlobalAttributes"
-import type { MichiAttributes } from "../../../types"
+import type { MichiAttributes } from "../../../../custom-elements/types"
        interface GlobalAttributes extends Pick<AllAttributes, "displaystyle" | "href" | "id" | "mathvariant" | "scriptlevel"> {
   
 /**

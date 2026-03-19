@@ -1,18 +1,17 @@
-import type { ProxiedValue } from "../../../domain/entities/ProxiedValue";
-import type { ObservableProxyHandlerInterface } from "../../../michijs/types";
+import type { ProxiedValuePort, ProxyHandlerPort } from "@ports";
 
 export class ObservableProxyHandler<T>
-  implements ObservableProxyHandlerInterface<T>
+  implements ProxyHandlerPort<T>
 {
-  callIfExists(name: keyof ProxyHandler<ProxiedValue<T>>, ...args: unknown[]) {
-    const target = args[0] as ProxiedValue<T>;
+  callIfExists(name: keyof ProxyHandler<ProxiedValuePort<T>>, ...args: unknown[]) {
+    const target = args[0] as ProxiedValuePort<T>;
     return target.handler[name]
       ? // @ts-ignore
         target.handler[name](...args)
       : // @ts-ignore
         Reflect[name](...args);
   }
-  set(target: ProxiedValue<T>, property, newValue, receiver) {
+  set(target: ProxiedValuePort<T>, property, newValue, receiver) {
     return (
       target.handler.set?.(target, property, newValue, receiver) ??
       Reflect.set(target, property, newValue, receiver)

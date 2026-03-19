@@ -1,4 +1,4 @@
-import type { Browser } from "../../michijs/types";
+import type { Browser } from "@shared";
 
 export const getBrowser = (): Browser => {
   const { userAgent } = navigator;

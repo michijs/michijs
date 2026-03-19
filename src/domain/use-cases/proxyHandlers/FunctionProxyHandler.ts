@@ -1,20 +1,20 @@
-import type { ProxiedValue } from "../../../domain/entities/ProxiedValue";
 import type {
-  ObservableType,
-  ObservableProxyHandlerInterface,
-} from "../../../michijs/types";
+  ProxiedValuePort,
+  ObservableProxyPort,
+  ProxyHandlerPort,
+} from "@ports";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 
 export class FunctionProxyHandler
-  implements ObservableProxyHandlerInterface<Function>
+  implements ProxyHandlerPort<Function>
 {
-  rootObservableCallback?: () => ObservableType<any>;
+  rootObservableCallback?: () => ObservableProxyPort<any>;
 
-  constructor(rootObservableCallback?: () => ObservableType<any>) {
+  constructor(rootObservableCallback?: () => ObservableProxyPort<any>) {
     this.rootObservableCallback = rootObservableCallback;
   }
 
-  apply(target: ProxiedValue<Function>, _, args) {
+  apply(target: ProxiedValuePort<Function>, _, args) {
     // Functions cant change their type - another function was set
     if (args.length === 1 && typeof args[0] === "function") {
       target.$value = args[0];
@@ -28,7 +28,7 @@ export class FunctionProxyHandler
       );
     return target.$value(...args);
   }
-  get(target: ProxiedValue<Function>, p: string | symbol, receiver) {
+  get(target: ProxiedValuePort<Function>, p: string | symbol, receiver) {
     if (p in target) return Reflect.get(target, p, receiver);
     return target.$value[p];
   }

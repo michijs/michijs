@@ -1,13 +1,12 @@
-import type { ProxiedValue } from "../../../domain/entities/ProxiedValue";
-import type { ObservableProxyHandlerInterface } from "../../../michijs/types";
-import { unproxify } from "../../../shared/utils/unproxify";
+import type { ProxiedValuePort, ProxyHandlerPort } from "@ports";
+import { unproxify } from "@shared";
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 
 export class DateProxyHandler
   extends ObjectProxyHandler<Date>
-  implements ObservableProxyHandlerInterface<Date>
+  implements ProxyHandlerPort<Date>
 {
-  apply(target: ProxiedValue<Date>, _, args: any[]) {
+  apply(target: ProxiedValuePort<Date>, _, args: any[]) {
     if (args.length > 0) {
       const unproxifiedValue = unproxify(args[0]);
       if (unproxifiedValue instanceof Date)
@@ -16,13 +15,13 @@ export class DateProxyHandler
     }
     return target.valueOf();
   }
-  applyNewValue(target: ProxiedValue<Date>, unproxifiedValue: Date) {
+  applyNewValue(target: ProxiedValuePort<Date>, unproxifiedValue: Date) {
     const newTime = unproxifiedValue.getTime();
     const oldValue = target.$value.getTime();
     target.$value.setTime(newTime);
     if (newTime !== oldValue) target.notifyCurrentValue();
   }
-  get(target: ProxiedValue<Date>, property: string | symbol) {
+  get(target: ProxiedValuePort<Date>, property: string | symbol) {
     if (property in target) return Reflect.get(target, property);
     const targetProperty = Reflect.get(target.$value, property);
     if (typeof property === "string" && property.startsWith("set")) {

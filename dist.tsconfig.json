@@ -7,12 +7,13 @@
     "paths": {
       "@michijs/michijs/*": ["./*"],
       "@michijs/michijs": ["./index"],
+      "@ports": ["./domain/ports/index"],
       "@domain": ["./domain/index"],
       "@domain/*": ["./domain/*"],
       "@application/*": ["./src/application/*"],
       "@infrastructure/*": ["./src/infrastructure/*"],
       "@shared/*": ["./shared/*"],
-      "@shared": ["./shared/index.ts"],
+      "@shared": ["./shared/index.ts"]
     }
   },
   "include": ["src"],

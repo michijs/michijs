@@ -1,20 +1,18 @@
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 import { customMapAndSetClear } from "./customMapAndSetClear";
-import type { ProxiedValue } from "../../../domain/entities/ProxiedValue";
 import { customMapAndSetDelete } from "./customMapAndSetDelete";
-import type { ObservableProxyHandlerInterface } from "../../../michijs/types";
-import { cloneMap } from "../../../shared/utils/clone/cloneMap";
-import { unproxify } from "../../../shared/utils/unproxify";
+import type { ProxiedValuePort, ProxyHandlerPort } from "@ports";
+import { cloneMap, unproxify } from "@shared";
 
 export class SetProxyHandler<T extends Set<any>>
   extends ObjectProxyHandler<T>
-  implements ObservableProxyHandlerInterface<T>
+  implements ProxyHandlerPort<T>
 {
   $overrides = {
     clear: customMapAndSetClear,
     add:
       (
-        target: ProxiedValue<T>,
+        target: ProxiedValuePort<T>,
         bindedTargetProperty: Map<any, any>["set"],
       ): Set<any>["add"] =>
       (newValue) => {
@@ -29,12 +27,12 @@ export class SetProxyHandler<T extends Set<any>>
       },
     delete: customMapAndSetDelete,
   };
-  applyNewValue(target: ProxiedValue<T>, unproxifiedValue: Set<any>) {
+  applyNewValue(target: ProxiedValuePort<T>, unproxifiedValue: Set<any>) {
     target.$value = this.getInitialValue(target, unproxifiedValue);
     target.notifyCurrentValue();
     return;
   }
-  apply(target: ProxiedValue<T>, _: any, args: any[]) {
+  apply(target: ProxiedValuePort<T>, _: any, args: any[]) {
     if (args.length > 0) {
       const unproxifiedValue = unproxify(args[0]);
       if (unproxifiedValue instanceof Set)
@@ -43,12 +41,12 @@ export class SetProxyHandler<T extends Set<any>>
     }
     return target.valueOf();
   }
-  getInitialValue(target: ProxiedValue<T>, unproxifiedValue: Set<any>): T {
+  getInitialValue(target: ProxiedValuePort<T>, unproxifiedValue: Set<any>): T {
     return cloneMap(unproxifiedValue, (value) =>
       this.createProxyChild(target, value),
     ) as unknown as T;
   }
-  get(target: ProxiedValue<T>, p: string | symbol) {
+  get(target: ProxiedValuePort<T>, p: string | symbol) {
     if (p in target) return Reflect.get(target, p);
     const targetProperty = Reflect.get(target.$value, p === "add" ? "set" : p);
     const bindedTargetProperty =

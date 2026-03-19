@@ -1,16 +1,14 @@
-import type { ProxiedValue } from "../../../domain/entities/ProxiedValue";
-import type { ObservableProxyHandlerInterface } from "../../../michijs/types";
+import type { ProxiedValuePort, ProxyHandlerPort } from "@ports";
 import { getObjectHandler } from "./getHandler";
 import { SharedProxyHandler } from "./SharedProxyHandler";
 import { FunctionProxyHandler } from "./FunctionProxyHandler";
-import { unproxify } from "../../../shared/utils/unproxify";
-import { isNil } from "../../../shared/utils/isNil";
+import { unproxify, isNil } from "@shared";
 
 export class PrimitiveProxyHandler<T>
   extends SharedProxyHandler<T>
-  implements ObservableProxyHandlerInterface<T>
+  implements ProxyHandlerPort<T>
 {
-  apply(target: ProxiedValue<T>, _, args: any[]) {
+  apply(target: ProxiedValuePort<T>, _, args: any[]) {
     if (args.length > 0) {
       const value = unproxify(args[0]);
       switch (typeof value) {
@@ -43,14 +41,14 @@ export class PrimitiveProxyHandler<T>
     }
     return target.valueOf();
   }
-  applyNewValue(target: ProxiedValue<T>, unproxifiedValue: T) {
+  applyNewValue(target: ProxiedValuePort<T>, unproxifiedValue: T) {
     const oldValue = target.$value;
     target.$value = unproxifiedValue;
 
     if (unproxifiedValue !== oldValue) target.notifyCurrentValue();
   }
 
-  get(target: ProxiedValue<T>, p: string | symbol, receiver) {
+  get(target: ProxiedValuePort<T>, p: string | symbol, receiver) {
     if (p in target) return Reflect.get(target, p, receiver);
     // Trying to get a property on an nil value will return an object with a nil property
     if (isNil(target.$value))

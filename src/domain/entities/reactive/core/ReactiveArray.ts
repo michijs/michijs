@@ -5,14 +5,11 @@ export class ReactiveArray<
   T extends ReactiveArrayTargetPort<V, unknown> = ReactiveArrayTargetPort<V, unknown>,
 > extends Array<V> implements ReactiveArrayPort<V> {
   declare targets: Array<T>;
-  declare TargetConstructor: T;
 
   constructor(
-    TargetConstructor: T,
     ...items: V[]
   ) {
     super(...items);
-    this.TargetConstructor = TargetConstructor;
     Object.defineProperty(this, "targets", {
       enumerable: false,
       configurable: true,

@@ -1,23 +1,23 @@
 import type {
-  ObservableProxyHandlerInterface,
-  ObservableType,
+  ProxiedValuePort,
+  ProxyHandlerPort,
+  ObservableProxyPort,
   ParentSubscription,
-} from "../../../michijs/types";
+} from "@ports";
 import { PrimitiveProxyHandler } from "./PrimitiveProxyHandler";
 import { FunctionProxyHandler } from "./FunctionProxyHandler";
-import { isPrototypeOfObject } from "../../../shared/utils";
+import { isPrototypeOfObject } from "@shared";
 import { DateProxyHandler } from "./DateProxyHandler";
 import { MapProxyHandler } from "./MapProxyHandler";
 import { SetProxyHandler } from "./SetProxyHandler";
 import { ArrayProxyHandler } from "./ArrayProxyHandler";
 import { CommonObjectProxyHandler } from "./CommonObjectProxyHandler";
-import type { ProxiedValue } from "../../entities";
 
 export const getObjectHandler = (
   value: unknown,
   parentSubscription?: ParentSubscription<any>,
-  rootObservableCallback?: () => ObservableType<any>,
-): ObservableProxyHandlerInterface<any> | void => {
+  rootObservableCallback?: () => ObservableProxyPort<any>,
+): ProxyHandlerPort<any> | undefined => {
   if (isPrototypeOfObject(value))
     return new CommonObjectProxyHandler(
       parentSubscription,
@@ -36,10 +36,10 @@ export const getObjectHandler = (
 export const getHandler = (
   value: unknown,
   parentSubscription?: ParentSubscription<any>,
-  rootObservableCallback?: () => ObservableType<any>,
-): ObservableProxyHandlerInterface<any> => {
+  rootObservableCallback?: () => ObservableProxyPort<any>,
+): ProxyHandlerPort<any> => {
   const typeOfValue = typeof (
-    (value as ProxiedValue<unknown>)?.$value ?? value
+    (value as ProxiedValuePort<unknown>)?.$value ?? value
   );
 
   switch (typeOfValue) {

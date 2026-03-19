@@ -4,7 +4,7 @@
        import type { ValueSets } from "./ValueSets"
        import type { SVGEvents, WindowEvents } from "../Events"
 import type { DataGlobalAttributes } from "../DataGlobalAttributes"
-import type { MichiAttributes } from "../../../types"
+import type { MichiAttributes } from "../../../../custom-elements/types"
        interface GlobalAttributes extends Pick<AllAttributes, "class" | "id" | "lang" | "style" | "systemLanguage" | "tabindex"> {}
        interface AnimationAdditionAttributes extends Pick<AllAttributes, "accumulate" | "additive"> {}
 interface AnimationAttributeTargetAttributes extends Pick<AllAttributes, "attributeName" | "attributeType"> {}

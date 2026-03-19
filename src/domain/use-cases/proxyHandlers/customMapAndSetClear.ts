@@ -1,7 +1,7 @@
-import type { ProxiedValue } from "../../../domain/entities/ProxiedValue";
+import type { ProxiedValuePort } from "@ports";
 
 export const customMapAndSetClear = (
-  target: ProxiedValue<Map<any, any>> | ProxiedValue<Set<any>>,
+  target: ProxiedValuePort<Map<any, any>> | ProxiedValuePort<Set<any>>,
   clearFn: Map<any, any>["clear"] | Set<any>["clear"],
 ): Map<any, any>["clear"] | Set<any>["clear"] => {
   return () => {

@@ -1,8 +1,7 @@
-import type { ProxiedValue } from "../../entities";
-import type { ParentSubscription } from "../../../michijs/types";
+import type { ParentSubscription, ProxiedValuePort } from "@ports";
 
 export const createParentSubscription = <T>(
-  proxiedValue: ProxiedValue<T>,
+  proxiedValue: ProxiedValuePort<T>,
 ): ParentSubscription<T> => {
   const subscription: ParentSubscription<T> = () =>
     proxiedValue.notifyCurrentValue();

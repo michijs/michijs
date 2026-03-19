@@ -1,14 +1,13 @@
-import type { ObservableType } from "../../../michijs/types";
-import type { ProxiedValue } from "../../../domain/entities/ProxiedValue";
+import type { ObservableProxyPort, ProxiedValuePort } from "@ports";
 
 export const customMapAndSetDelete = (
-  target: ProxiedValue<Map<any, any>> | ProxiedValue<Set<any>>,
+  target: ProxiedValuePort<Map<any, any>> | ProxiedValuePort<Set<any>>,
   deleteFn:
-    | Map<unknown, ObservableType<unknown>>["delete"]
-    | Set<ObservableType<unknown>>["delete"],
+    | Map<unknown, ObservableProxyPort<unknown>>["delete"]
+    | Set<ObservableProxyPort<unknown>>["delete"],
 ):
-  | Map<unknown, ObservableType<unknown>>["delete"]
-  | Set<ObservableType<unknown>>["delete"] => {
+  | Map<unknown, ObservableProxyPort<unknown>>["delete"]
+  | Set<ObservableProxyPort<unknown>>["delete"] => {
   //In Map is key, in Set is value
   return (key) => {
     const result = deleteFn(key?.valueOf?.());

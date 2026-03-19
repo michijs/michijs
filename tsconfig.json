@@ -8,8 +8,11 @@
     "paths": {
       "@ports": ["./domain/ports/index"],
       "@domain": ["./domain/index"],
-      "@infrastructure": ["./src/infrastructure/index"],
-      "@shared": ["./shared/index"],
+      "@domain/*": ["./domain/*"],
+      "@application/*": ["./src/application/*"],
+      "@infrastructure/*": ["./src/infrastructure/*"],
+      "@shared/*": ["./shared/*"],
+      "@shared": ["./shared/index.ts"]
     }
   },
   "include": ["src"],

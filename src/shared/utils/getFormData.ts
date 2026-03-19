@@ -1,4 +1,4 @@
-import type { TypedEvent } from "../../michijs/generated/htmlType";
+import type { TypedEvent } from "../../infrastructure/dom/jsx-runtime/generated/htmlType";
 
 export const getFormData = <T extends object>(
   formOrEvent: TypedEvent<HTMLFormElement> | HTMLFormElement,
