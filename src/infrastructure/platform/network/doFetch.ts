@@ -1,5 +1,5 @@
-import type { DoFetch } from "../../../michijs/types";
-import { doGenericFetch } from "../../../michijs/utils/doGenericFetch";
+import type { DoFetch } from "./types";
+import { doGenericFetch } from "./doGenericFetch";
 
 export const doFetch: DoFetch = async (request) => {
   const response = await doGenericFetch(request);

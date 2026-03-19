@@ -1,6 +1,6 @@
-import type { UseFetch } from "../../../../michijs/types";
+import type { UseFetch } from "../types";
 import { doFetch } from "../doFetch";
-import { usePromise } from "../../../../domain/use-cases/hooks/usePromise";
+import { usePromise } from "@domain";
 
 /**
  * Fetches data from a URL, parses the response as JSON and allows to manage the result as an observable.

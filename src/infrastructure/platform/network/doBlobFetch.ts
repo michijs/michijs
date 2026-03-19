@@ -1,5 +1,5 @@
-import type { SearchParams } from "@shared";
-import type { AnyObject, DoFetchProps } from "../../../michijs/types";
+import type { AnyObject, SearchParams } from "@shared";
+import type { DoFetchProps } from "./types";
 import { doGenericFetch } from "./doGenericFetch";
 
 export const doBlobFetch = async <

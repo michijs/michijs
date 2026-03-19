@@ -1,6 +1,6 @@
-import type { SearchParams } from "shared/types/SearchParams";
-import { createURL } from "../../dom/routing/utils/createURL";
-import type { AnyObject, DoFetchProps } from "../../../michijs/types";
+import type { AnyObject, SearchParams } from "@shared";
+import { createURL } from "../../dom/url/utils/createURL";
+import type { DoFetchProps } from "./types";
 
 const getErrorMessage = async (response: Response): Promise<string> => {
   if (response.statusText) return response.statusText;
