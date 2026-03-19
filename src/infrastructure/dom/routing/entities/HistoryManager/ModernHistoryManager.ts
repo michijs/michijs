@@ -1,13 +1,10 @@
-import type { ObservableOrConst } from "../../domain/ports/types";
-import defer * as UnproxyModule from "../../shared/utils/unproxify";
-import { Observable } from "../../domain/entities/reactive/core/Observable";
+import { unproxify } from "@shared";
+import { Observable, type ObservableOrConst, type HistoryManagerPort } from "@domain";
 import { handleNavigation } from "./handleNavigation";
-import type { HistoryManagerPort } from "@domain";
 
 export class ModernHistoryManager
   extends Observable<string | URL>
-  implements HistoryManagerPort
-{
+  implements HistoryManagerPort {
   shouldShowUnloadPrompt?: () => boolean;
   ignoreHashes = true;
   private lastNavigationEvent?: NavigateEvent;
@@ -16,7 +13,7 @@ export class ModernHistoryManager
     window.addEventListener("beforeunload", (e) => {
       const isFormEvent =
         window.navigation!.currentEntry?.url ===
-          this.lastNavigationEvent?.destination.url &&
+        this.lastNavigationEvent?.destination.url &&
         this.lastNavigationEvent?.formData;
       if (isFormEvent || !this.shouldShowUnloadPrompt?.()) {
         return undefined;
@@ -58,7 +55,7 @@ export class ModernHistoryManager
     if (window.navigation!.canGoBack) return window.navigation!.canGoBack;
     let matchesFallbackUrl = false;
     if (fallbackUrl) {
-      const urlValue = UnproxyModule.unproxify(fallbackUrl);
+      const urlValue = unproxify(fallbackUrl);
       const finalUrlValue = urlValue instanceof URL ? urlValue.href : urlValue;
       matchesFallbackUrl = this.matches(finalUrlValue);
     }
@@ -86,17 +83,17 @@ export class ModernHistoryManager
   // }
 
   replaceCurrentUrl(url: ObservableOrConst<string | URL>): void {
-    const urlValue = UnproxyModule.unproxify(url);
+    const urlValue = unproxify(url);
     window.navigation!.navigate(urlValue, { history: "replace" });
   }
 
   push(url: ObservableOrConst<string | URL>): void {
-    const urlValue = UnproxyModule.unproxify(url);
+    const urlValue = unproxify(url);
     window.navigation!.navigate(urlValue);
   }
 
   matches(url: ObservableOrConst<string>): boolean {
-    const urlValue = UnproxyModule.unproxify(url);
+    const urlValue = unproxify(url);
     const p = new window.URLPattern!({
       pathname: `${urlValue.endsWith("/") ? urlValue.slice(-1, 1) : urlValue}*`,
       baseURL: location.origin,

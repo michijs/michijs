@@ -1,7 +1,7 @@
-import type { RouterProps } from "../../../../michijs/routing/types";
-import { useComputedObserve } from "../../../../domain/use-cases/hooks/useComputedObserve";
-import { HistoryManager } from "../../infrastructure/HistoryManager";
-import { urlFn } from "../utils/urlFn";
+import type { RouterProps } from "../types";
+import { useComputedObserve } from "@domain";
+import { HistoryManager } from "../entities/HistoryManager";
+import { urlFn } from "../../url/utils/urlFn";
 import { If } from "../../rendering/components/If";
 
 export const Router = <const T>({
@@ -28,7 +28,6 @@ export const Router = <const T>({
         HistoryManager.matches(urlFn(key, parentRoute)().pathname, true),
       ),
     [HistoryManager],
-    { usePrimitive: true },
   );
 
   return If<T, typeof matchedRoute>(

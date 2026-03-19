@@ -1,13 +1,10 @@
-import type { ObservableOrConst } from "../../domain/ports/types";
 import { handleNavigation } from "./handleNavigation";
-import defer * as UnproxyModule from "../../shared/utils/unproxify";
-import { Observable } from "../../domain/entities/reactive/core/Observable";
-import type { HistoryManagerPort } from "@domain";
+import { unproxify } from "@shared";
+import { Observable, type HistoryManagerPort, type ObservableOrConst } from "@domain";
 
 export class LegacyHistoryManager
   extends Observable<string | URL>
-  implements HistoryManagerPort
-{
+  implements HistoryManagerPort {
   private readonly history: (string | URL)[] = [location.pathname];
   shouldShowUnloadPrompt?: () => boolean;
 
@@ -45,7 +42,7 @@ export class LegacyHistoryManager
     if (this.history.length > 0) return true;
     let matchesFallbackUrl = false;
     if (fallbackUrl) {
-      const urlValue = UnproxyModule.unproxify(fallbackUrl);
+      const urlValue = unproxify(fallbackUrl);
       const finalUrlValue = urlValue instanceof URL ? urlValue.href : urlValue;
       matchesFallbackUrl = this.matches(finalUrlValue);
     }
@@ -63,7 +60,7 @@ export class LegacyHistoryManager
   }
 
   replaceCurrentUrl(url: ObservableOrConst<string | URL>): void {
-    const urlValue = UnproxyModule.unproxify(url);
+    const urlValue = unproxify(url);
     try {
       // This will trigger an exception if its an external link string
       history.replaceState(undefined, "", urlValue);
@@ -77,7 +74,7 @@ export class LegacyHistoryManager
   }
 
   push(url: ObservableOrConst<string | URL>): void {
-    const urlValue = UnproxyModule.unproxify(url);
+    const urlValue = unproxify(url);
     try {
       // This will trigger an exception if its an string
       history.pushState(undefined, "", urlValue);
@@ -91,7 +88,7 @@ export class LegacyHistoryManager
   }
 
   matches(url: ObservableOrConst<string>, flexible = false): boolean {
-    const urlValue = UnproxyModule.unproxify(url);
+    const urlValue = unproxify(url);
     const urlPaths = urlValue.split("/").filter((x) => x !== "");
     let locationPaths = location.pathname.split("/").filter((x) => x !== "");
     if (flexible) {

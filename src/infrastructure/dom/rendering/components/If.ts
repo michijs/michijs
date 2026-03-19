@@ -2,13 +2,13 @@ import { create } from "../create";
 import { bindObservable } from "@domain";
 import type {
   SingleJSXElement,
-  CSSVar,
   GetElementProps,
   Unproxify,
 } from "../types";
 import { VirtualFragment } from "../VirtualFragment";
 import { isCSSVariable } from "../../styles/typewards/isCSSVariable";
 import { useComputedObserve } from "@domain";
+import type { CSSVar } from "../../styles/types";
 
 interface CSSIfType {
   (
@@ -79,9 +79,7 @@ const jsIf: JSIfType = (
 
     const finalCondition = isSwitchMode
       ? condition
-      : useComputedObserve(() => Boolean(condition?.valueOf()), [condition], {
-          usePrimitive: true,
-        });
+      : useComputedObserve(() => Boolean(condition?.valueOf()), [condition]);
 
     // Bind the observable 'condition' to monitor changes.
     bindObservable<unknown>(finalCondition, (newValue) => {

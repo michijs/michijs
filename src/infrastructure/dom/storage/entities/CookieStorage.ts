@@ -1,6 +1,5 @@
-import type { CookieStorageConstructor } from "../../../../michijs/types2";
-import { Observable } from "../../../../domain/entities/reactive/core/Observable";
-import { ObservableFromEventListener } from "../../../../shared/utils/ObservableFromEventListener";
+import type { CookieStorageConstructor } from "../types";
+import { Observable, ObservableFromEventListener } from "@domain";
 
 const mainCookieStorage = new Map<string, string | null>();
 

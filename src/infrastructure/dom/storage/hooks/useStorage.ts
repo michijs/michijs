@@ -1,7 +1,6 @@
-import { ObservableFromEventListener } from "../../domain/entities/ObservableFromEventListener";
-import type { UseStorage } from "../../../../michijs/types";
-import { useObserveInternal } from "../../../../domain/use-cases/hooks/useObserve";
-import { isNil } from "../../../../shared/utils/isNil";
+import { ObservableFromEventListener, useObserveInternal } from "@domain";
+import type { UseStorage } from "../types";
+import { isNil } from "@shared";
 import { storageIsCookieStorage } from "../typewards/storageIsCookieStorage";
 
 /**
@@ -26,10 +25,10 @@ export const useStorage: UseStorage = (item, storage = localStorage) => {
   }
   const newObservable = useObserveInternal(
     Object.keys(item).reduce(
-      (previousValue, key) => ({
-        ...previousValue,
-        [key]: getStorageValue(key),
-      }),
+      (previousValue, key) => {
+        previousValue[key] = getStorageValue(key)
+        return previousValue
+      },
       {},
     ),
   );

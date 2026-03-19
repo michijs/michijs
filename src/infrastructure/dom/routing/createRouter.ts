@@ -1,7 +1,7 @@
 import { Router } from "./components/Router";
 import { jsx } from "../jsx-runtime";
-import type { CreateRouterResult, UrlFunction } from "../../../michijs/routing/types";
-import { urlFn } from "./utils/urlFn";
+import type { CreateRouterResult, UrlFunction } from "./types";
+import { urlFn } from "../url/utils/urlFn";
 
 export function createRouter<R extends Record<string, JSX.Element>>(
   routes: R,

@@ -1,11 +1,11 @@
-import { Observable } from "../../domain/entities/Observable";
+import { Observable } from "@domain";
 import type {
-  AnyObject,
   IndexeddbObservableResult,
   InitDb,
   TypedIDBObjectStore,
   UseIndexedDB,
-} from "../../../../michijs/types";
+} from "../types";
+import type { AnyObject } from "@shared";
 
 const initDb: InitDb = (name, objectsStore, version = 1) => {
   return new Promise((resolve) => {
