@@ -1,8 +1,8 @@
-import { useComputedObserve } from "../../../../domain/use-cases/hooks/useComputedObserve";
-import { HistoryManager } from "../../infrastructure/HistoryManager";
-import { setSearchParam } from "../../routing/utils/setSearchParam";
-import type { UseSearchParams } from "../../../../michijs/types";
-import { getSearchParamsValue } from "../../../../shared/utils/getSearchParamsValue";
+import { useComputedObserve } from "@domain";
+import { HistoryManager } from "../../routing/entities/HistoryManager";
+import { setSearchParam } from "../utils/setSearchParam";
+import type { UseSearchParams } from "../types";
+import { getSearchParamsValue } from "@shared";
 
 let isUpdating = false;
 

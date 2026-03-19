@@ -1,4 +1,4 @@
-import type { CallableProxiedValuePort, CallableReactiveValuePort, ParentSubscription } from "@ports";
+import type { ObservableProxyPort, CallableReactiveValuePort, ParentSubscription } from "@ports";
 
 export interface UseObserveInternal {
   <T>(
@@ -7,12 +7,12 @@ export interface UseObserveInternal {
     /**
      * For functions inside an observable
      */
-    rootObservableCallback?: () => CallableReactiveValuePort<unknown>,
-  ): CallableReactiveValuePort<T>;
+    rootObservableCallback?: () => ObservableProxyPort<unknown>,
+  ): ObservableProxyPort<T>;
 }
 
 export interface UseObservePort {
-  <T>(item: T, useProxied: true): CallableProxiedValuePort<T>;
+  <T>(item: T, useProxied: true): ObservableProxyPort<T>;
   <T>(item: T, useProxied?: false): CallableReactiveValuePort<T>;
 }
 

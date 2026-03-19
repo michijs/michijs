@@ -1,18 +1,17 @@
-import { HistoryManager } from "../../infrastructure/HistoryManager";
-import type { FC, ObservableOrConst } from "../../../../michijs/types";
-import { unproxify } from "../../../../shared/utils/unproxify";
-import { wait } from "../../../../shared/utils/wait";
+import { HistoryManager } from "../../routing/entities/HistoryManager";
+import { unproxify, wait } from "@shared";
 import { GenericElement } from "../../rendering/components/GenericElement";
+import type { CallableReactiveOrConst } from "@ports";
 
 export interface RedirectProps {
   /**The target URL or location. */
-  to: ObservableOrConst<URL | string | (() => URL | string)>;
+  to: CallableReactiveOrConst<URL | string | (() => URL | string)>;
 }
 
 /**
  * Redirect component for navigating to a different URL or location.
  **/
-export const Redirect: FC<RedirectProps> = ({ to }) => (
+export const Redirect = ({ to }: RedirectProps) => (
   <GenericElement
     onelementconnected={async () => {
       const toValue = unproxify(to);

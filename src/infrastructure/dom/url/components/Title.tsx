@@ -1,18 +1,17 @@
 import { useTitle } from "../hooks/useTitle";
-import { useWatch } from "../../../../domain/use-cases/hooks/useWatch";
-import type { FC, ObservableOrConst } from "../../../../michijs/types";
-import { unproxify } from "../../../../shared/utils/unproxify";
+import { useWatch, type CallableReactiveOrConst } from "@domain";
+import { unproxify } from "@shared";
 import { GenericElement } from "../../rendering/components/GenericElement";
 
 export interface TitleProps {
-  children: ObservableOrConst<string | undefined>;
+  children: CallableReactiveOrConst<string | undefined>;
 }
 
 const title = useTitle();
 /**
  * Title component for dynamically updating the document's title.
  */
-export const Title: FC<TitleProps> = ({ children }) => {
+export const Title = ({ children }: TitleProps) => {
   let el: HTMLElement | undefined;
 
   const updateTitleCallback = () => {

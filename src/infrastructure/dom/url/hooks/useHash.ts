@@ -1,6 +1,6 @@
-import { useComputedObserve } from "../../../../domain/use-cases/hooks/useComputedObserve";
-import { HistoryManager } from "../../infrastructure/HistoryManager";
-import type { UseHash } from "../../../../michijs/types";
+import { useComputedObserve } from "@domain";
+import { HistoryManager } from "../../routing/entities/HistoryManager";
+import type { UseHash } from "../types";
 
 // hashchange does not work properly
 // const hashListener = new ObservableFromEventListener(window, 'hashchange')

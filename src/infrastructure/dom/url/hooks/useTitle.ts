@@ -1,7 +1,6 @@
-import type { ObservableType } from "../../../../michijs/types";
-import { useObserveInternal } from "../../../../domain/use-cases/hooks/useObserve";
+import { useObserve, type CallableReactiveValuePort } from "@domain";
 
-const observer = useObserveInternal(document.title);
+const observer = useObserve(document.title);
 
 observer.subscribe((newValue) => (document.title = newValue));
 
@@ -9,4 +8,4 @@ observer.subscribe((newValue) => (document.title = newValue));
  * Allows to observe the document title. Do not use document.title use this hook instead
  * @returns An Observable
  */
-export const useTitle = (): ObservableType<string> => observer;
+export const useTitle = (): CallableReactiveValuePort<string> => observer;
