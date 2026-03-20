@@ -5,6 +5,7 @@
     "baseUrl": "./src",
     "allowUnusedLabels": true,
     "paths": {
+      "@michijs/michijs/jsx-runtime": ["./infrastructure/dom/jsx-runtime/index"],
       "@michijs/michijs/*": ["./*"],
       "@michijs/michijs": ["./index"],
       "@ports": ["./domain/ports/index"],
