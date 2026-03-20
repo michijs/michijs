@@ -13,4 +13,4 @@ export const isFragmentElement = (
     | FragmentJSXElement
     | ClassJSXElement
     | DOMElementJSXElement,
-): jsx is FragmentJSXElement => !jsx.jsxTag;
+): jsx is FragmentJSXElement => jsx.jsxTag === null;

@@ -1,4 +1,3 @@
-import { CloneFactory } from "infrastructure/dom/rendering/ElementFactory";
 import { GarbageCollectableObject, isObservable, ReactiveArray, bindObservable } from "@domain";
 import { create } from "../create";
 import type {
@@ -11,7 +10,7 @@ import type {
   ExtendableComponent,
   SingleJSXElement,
 } from "../types";
-import { ElementArrayTarget } from "infrastructure/platform/entities/ElementArrayTarget";
+import { ElementArrayTarget } from "../../../platform/entities/ElementArrayTarget";
 import { VirtualFragment } from "../VirtualFragment";
 
 /**
@@ -35,14 +34,7 @@ type ListComponentProps<T extends ObservableTypeOrConst<any[]>, E> = ExtendableC
     ? Z
     : T[any]
   >;
-  /**
-   * Uses cloneNode instead of creating every item separately. It is twice as fast as not using a template
-   *
-   * **Warning:** It only works with plain objectJSXElements or classJSXElements
-   *
-   * Do not use conditions, arrays or fragments on the renderItem function if this is enabled
-   */
-  useTemplate?: boolean;
+  elementFactory?: ElementFactoryType
 }
 
 /**
@@ -57,42 +49,41 @@ type ListComponentProps<T extends ObservableTypeOrConst<any[]>, E> = ExtendableC
  * @returns The rendered list, either by using the observable's `.List` method or via a direct map.
  */
 export const List = <const T extends ObservableTypeOrConst<any[]>, E = FC>(
-  { data, renderItem, as: asTag, useTemplate, ...attrs }: ListComponentProps<T, E>,
+  { data, renderItem, as: asTag, elementFactory, ...attrs }: ListComponentProps<T, E>,
   factory: ElementFactoryType,
 ) => {
+  const finalFactory = elementFactory ?? factory
+  if ((data as any) instanceof ReactiveArray) {
+    const castedData = data as unknown as ReactiveArray<any>
+    let el: ParentNode | VirtualFragment;
+    if (asTag)
+      el = factory.create<ParentNode>({
+        jsxTag: asTag,
+        attrs,
+      } as SingleJSXElement);
+    else
+      removeVirtualFragmentOnNonProxiedArrays: {
+        el = new VirtualFragment();
+      }
+
+    const newTarget = new ElementArrayTarget(
+      el,
+      renderItem,
+      finalFactory,
+    );
+
+    castedData.targets.push(newTarget);
+
+    return el.valueOf() as Node;
+  }
+
   if (isObservable(data)) {
-    if ((data as any) instanceof ReactiveArray) {
-      const castedData = data as unknown as ReactiveArray<any>
-      let el: ParentNode | VirtualFragment;
-      if (asTag)
-        el = factory.create<ParentNode>({
-          jsxTag: asTag,
-          attrs,
-        } as SingleJSXElement);
-      else
-        removeVirtualFragmentOnNonProxiedArrays: {
-          el = new VirtualFragment();
-        }
-
-      const newTarget = new ElementArrayTarget(
-        el,
-        renderItem,
-        useTemplate ? new CloneFactory() : factory,
-      );
-
-      castedData.targets.push(newTarget);
-
-      newTarget.push(this);
-
-      return el.valueOf() as Node;
-    }
-
     const el = new VirtualFragment();
     const gc = new GarbageCollectableObject(el);
     bindObservable<T>(data, (data) =>
       gc.ref.replaceChildren(
         ...data.map((x) =>
-          create(renderItem(x, factory), factory.contextElement),
+          create(renderItem(x, finalFactory), finalFactory.contextElement),
         ),
       ),
     );

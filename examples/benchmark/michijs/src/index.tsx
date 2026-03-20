@@ -4,6 +4,7 @@ import {
   ReactiveArray,
   create,
   type TypedMouseEvent,
+  CloneFactory,
 } from "@michijs/michijs";
 
 interface Row {
@@ -105,7 +106,7 @@ let nextId = 1,
   selectedItem: Row | null = null;
 
 export const TableBody = create(
-  <List data={rows} as="tbody" id="tbody" useTemplate renderItem={(row) => (
+  <List data={rows} as="tbody" id="tbody" elementFactory={new CloneFactory()} renderItem={(row) => (
     <tr class={row.selected}>
       <td class="col-md-1">{row.id}</td>
       <td class="col-md-4">
