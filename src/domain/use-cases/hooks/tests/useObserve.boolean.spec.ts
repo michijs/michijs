@@ -2,8 +2,8 @@ import { useObserve } from "../useObserve";
 import { describe, it, expect } from "bun:test";
 import { useObserveMutationTests } from "./useObserveMutation.spec";
 
-const TRUE_VALUE = useObserve(true);
-const FALSE_VALUE = useObserve(false);
+const TRUE_VALUE = useObserve(true, true);
+const FALSE_VALUE = useObserve(false, true);
 
 describe("Observe boolean - expressions and operators", () => {
   useObserveMutationTests(() => false);

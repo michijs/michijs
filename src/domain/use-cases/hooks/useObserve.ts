@@ -24,6 +24,9 @@ export const useObserveInternal: UseObserveInternal = (
 /**
  * Responsible for observing changes on different types of values.
  * @param item The value to be observed.
+ * @param useProxied When `true`, returns a deep-proxy observable (`ObservableProxyPort<T>`) that intercepts
+ *   property access and mutations on complex objects. When `false` or omitted (default), returns a
+ *   lightweight `CallableReactiveValuePort<T>` (similar to TC39 signals).
  * @returns A new observable
  */
 export const useObserve: UseObservePort = (item, useProxied) => {

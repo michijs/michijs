@@ -1,5 +1,5 @@
 import { hasToJSON } from "@shared";
-import type { NotifiableObservers, ObservableGettersAndSetters, ReactiveValuePort } from "@ports";
+import type { CallableReactiveValuePort, NotifiableObservers, ObservableGettersAndSetters, ReactiveValuePort } from "@ports";
 import { CallableObservable } from "./CallableObservable";
 
 export class ReactiveValue<T>
@@ -24,6 +24,11 @@ export class ReactiveValue<T>
   ) {
     super(setterAndGetterFunction);
     this.$value = initialValue;
+  }
+  compute<V>(callback: (value: T) => V): CallableReactiveValuePort<V> {
+    const computedValue = new ReactiveValue(callback(this.$value));
+    this.subscribe(() => {computedValue(callback(this.$value))})
+    return computedValue as unknown as CallableReactiveValuePort<V>;
   }
 
   notifyCurrentValue(notifiableObservers?: NotifiableObservers<T>) {

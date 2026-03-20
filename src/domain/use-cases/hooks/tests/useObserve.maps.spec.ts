@@ -10,7 +10,7 @@ describe("Observe map tests", () => {
   beforeEach(() => {
     mockCallback.mockClear();
     nonProxiedMap = new Map();
-    map = useObserve(new Map());
+    map = useObserve(new Map(), true);
     map.subscribe(mockCallback);
   });
   it("Setting the same value two times must call its callback just one time", () => {

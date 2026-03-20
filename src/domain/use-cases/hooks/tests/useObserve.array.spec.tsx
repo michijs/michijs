@@ -15,7 +15,7 @@ describe("Observe array tests", () => {
   sharedObjectTests(() => []);
 
   beforeEach(() => {
-    array = useObserve([] as number[]);
+    array = useObserve([] as number[], true);
     array.push(exampleValue);
     node = array.List({
       as: "div",

@@ -6,7 +6,7 @@ const obj = useObserve({
   testFunction() {
     return obj.text();
   },
-});
+}, true);
 
 const effect = obj.testFunction();
 

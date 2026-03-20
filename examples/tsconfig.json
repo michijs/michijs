@@ -1,9 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "tsconfig.json",
+  "extends": "@michijs/shared-configs/tsconfig",
   "compilerOptions": {
-    "rootDir": ".",
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "allowUnusedLabels": true,
     "paths": {
       "@michijs/michijs/jsx-runtime": ["../src/infrastructure/dom/jsx-runtime/index"],
@@ -12,9 +11,10 @@
       "@ports": ["../src/domain/ports/index"],
       "@domain": ["../src/domain/index"],
       "@domain/*": ["../src/domain/*"],
+      "@infrastructure/*": ["../src/infrastructure/*"],
       "@shared/*": ["../src/shared/*"],
       "@shared": ["../src/shared/index.ts"]
     }
   },
-  "include": ["src/**/*.spec.ts", "src/**/*.spec.tsx"]
+  "include": ["./*"]
 }

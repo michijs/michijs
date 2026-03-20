@@ -10,7 +10,7 @@ describe("Observe set tests", () => {
   beforeEach(() => {
     mockCallback.mockClear();
     nonProxiedSet = new Set<number>();
-    set = useObserve(new Set<number>());
+    set = useObserve(new Set<number>(), true);
     set.subscribe(mockCallback);
   });
   // Non proxied set its not allowing assignations now for some reason

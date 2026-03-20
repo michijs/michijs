@@ -5,7 +5,9 @@ import { useWatch } from "./useWatch";
  * It is used for computing a value and observing its changes.
  * @param callback A function that returns a value of type T.
  * @param deps Dependencies to watch for changes.
- * @param options An optional object that may contain onBeforeUpdate and onAfterUpdate callback functions.
+ * @param options An optional object that may contain `onBeforeUpdate`, `onAfterUpdate` callbacks and `useProxied`.
+ *   When `options.useProxied` is `true`, the returned observable is a deep-proxy (`ObservableProxyPort<T>`).
+ *   When `false` or omitted (default), returns a lightweight `CallableReactiveValuePort<T>`.
  * @returns A new observable
  */
 

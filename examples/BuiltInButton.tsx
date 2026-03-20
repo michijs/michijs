@@ -25,9 +25,7 @@ export const BuiltInButton = createCustomElement("built-in-button", {
   computedStyleSheet(selector: string) {
     return {
       [selector]: {
-        margin: useComputedObserve(() => `${this.counter}px`, [this.counter], {
-          usePrimitive: true,
-        }),
+        margin: useComputedObserve(() => `${this.counter}px`, [this.counter]),
       },
     };
   },

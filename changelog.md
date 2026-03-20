@@ -1,3 +1,37 @@
+## 2.4.0
+
+### Architecture — Hexagonal migration
+The entire `src/michijs/` flat structure has been reorganized into a hexagonal (ports & adapters) architecture with three layers:
+
+- **`domain/`** — Core logic, zero infrastructure dependencies
+- **`shared/`** — Pure utilities, types, and type guards
+- **`infrastructure/`** — Platform adapters (`dom/`, `platform/`, `node/`)
+
+### Added
+- Port interfaces (`@ports`): `ProxyHandlerPort`, `ObservableProxyPort`, `ProxiedValuePort`, `UnproxifyPort`, `ObservablePort`, `ReactiveValuePort`, `ReactiveArrayPort`, `TargetPort`, `Subscription`, `ParentSubscription`, `HistoryManagerPort`, `VirtualFragmentPort`, `UseObservePort`, `UseComputedObservePort`, `UsePromisePort`, `UsePureFunctionPort`, `UseStringTemplatePort`, `UseWatchPort`, `UseAsyncComputedObservePort`, and more
+- TypeScript path aliases: `@domain`, `@domain/*`, `@ports`, `@shared`, `@shared/*`
+- Barrel files for each module: `domain/index.ts`, `domain/ports/index.ts`, `shared/index.ts`, `infrastructure/dom/index.ts`, `infrastructure/platform/index.ts`
+- Architecture documentation: `ARQUITECTURE.md` with directory tree, dependency rules, and Mermaid dependency diagram
+- Duck-type `isProxiedValue` type guard in `shared/typewards/` — avoids cross-layer `instanceof` checks
+- Reactive core entities extracted: `Callable`, `CallableObservable`, `Observable`, `ReactiveValue`, `ReactiveArray`, `ProxiedValue`
+- Shared types extracted: `AnyObject`, `PrimitiveType`, `KebabCase`, `SearchParams`, `DeepReadonly`, `PickWritable`, `IsAny`, `Typeof`, `Browser`, `Platform`, and more
+
+### Changed
+- **Breaking: `usePrimitive` renamed to `useProxied` with inverted default behavior.** `useObserve`, `useComputedObserve`, and `useAsyncComputedObserve` now return a lightweight reactive value (similar to tc39 signals) by default. Pass `useProxied: true` to opt into the deep-proxy observable that was previously the default. The old `PrimitiveValue` class has been renamed to `ReactiveValue`.
+- All source files moved from `src/michijs/` to `src/domain/`, `src/shared/`, or `src/infrastructure/`
+- Cross-layer imports now use path aliases (`@domain`, `@ports`, `@shared`) instead of relative paths
+- `getCSSStyleSheetText` moved from infrastructure to shared (pure function, zero DOM deps)
+- `getFormData` decoupled from infrastructure's `TypedEvent` — now uses native `Event` type
+- `unproxify` uses duck-type `isProxiedValue` instead of `instanceof ProxiedValue`
+- JSX runtime export paths updated in `package.json` to reflect new directory structure
+- Test files moved from `tests/` to `examples/` (non-unit-test examples)
+- `tests.tsconfig.json` and `examples.tsconfig.json` added for separate compilation scopes
+
+### Removed
+- `src/michijs/` directory — fully replaced by the new layered structure
+- `dist.tsconfig.json` — replaced by updated build configuration
+- `jsx-runtime/` top-level re-export directory — exports now point directly to `dist/infrastructure/dom/jsx-runtime/`
+
 ## 2.3.0
 - Updated If to be aligned with new CSS if API. Now it works like a switch and is not a component anymore
 - Deprecated primitive hooks - now they are available in the options of useObserve / useComputedObserve / useAsyncComputedObserve

@@ -18,7 +18,7 @@ export const sharedObjectTests = (
       mockCallback.mockClear();
       nonProxiedObject = initialValue();
       object = undefined;
-      object = useObserve(initialValue());
+      object = useObserve(initialValue(), true);
       object.subscribe(mockCallback);
     });
     it("Setting the same value two times must call its callback just one time", () => {

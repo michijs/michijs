@@ -48,7 +48,7 @@ type ListComponentProps<T extends ObservableTypeOrConst<any[]>, E> = ExtendableC
  * @param factory - The element factory to use
  * @returns The rendered list, either by using the observable's `.List` method or via a direct map.
  */
-export const List = <const T extends ObservableTypeOrConst<any[]>, E = FC>(
+export const List = <const T extends ObservableTypeOrConst<any[]>, const E = FC>(
   { data, renderItem, as: asTag, elementFactory, ...attrs }: ListComponentProps<T, E>,
   factory: ElementFactoryType,
 ) => {

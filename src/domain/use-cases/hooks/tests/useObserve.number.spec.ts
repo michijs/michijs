@@ -4,9 +4,9 @@ import { useObserveMutationTests } from "./useObserveMutation.spec";
 
 const NUM1 = 2;
 const NUM2 = 4;
-const OBSERVE_NUM1 = useObserve(NUM1);
-const OBSERVE_NUM2 = useObserve(NUM2);
-const OBSERVE_NUM3 = useObserve(-NUM1);
+const OBSERVE_NUM1 = useObserve(NUM1, true);
+const OBSERVE_NUM2 = useObserve(NUM2, true);
+const OBSERVE_NUM3 = useObserve(-NUM1, true);
 
 describe("Observe number - expressions and operators", () => {
   useObserveMutationTests(() => NUM1);

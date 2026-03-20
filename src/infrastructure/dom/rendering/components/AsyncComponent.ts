@@ -18,7 +18,7 @@ type PromiseType<P> =
 // Define props for the AsyncComponent.
 type AsyncComponentProps<P, T> = ExtendableComponentWithoutChildren<T> & {
   // The promise that resolves to the component to render asynchronously.
-  promise: ReactiveValuePort<PromiseType<P>>;
+  promise: ReactiveValuePort<PromiseType<P>> | PromiseType<P>;
   // An optional loading component to display while the async component is loading.
   loadingComponent?: JSX.Element;
   then?(promiseResult: P): JSX.Element;

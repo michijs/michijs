@@ -17,7 +17,7 @@ export const useObserveMutationTests = (initialValue: () => unknown) => {
       instanceType?: any,
     ) => {
       mockCallback.mockClear();
-      const object = useObserve(initialValue());
+      const object = useObserve(initialValue(), true);
       object.subscribe(mockCallback);
       const oldHandler = object.handler;
       object(newValue);

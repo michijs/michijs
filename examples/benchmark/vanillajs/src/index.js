@@ -94,6 +94,7 @@ const clear = () => ((TBODY.textContent = ""), (SEL = null));
 // @ts-ignore
 BUTTONS.forEach(
   function (b) {
+    // @ts-ignore - vanilla JS benchmark: Element.onclick and thisArg typing
     b.onclick = this[b.id];
   },
   {

@@ -4,10 +4,13 @@ import { useWatch } from "./useWatch";
 
 /**
  * It is used for async computing a value and observing its changes.
- * @param callback A function that returns a promise of type T.
+ * @param callback A function that returns a promise of type T. Receives an `AbortSignal` that is
+ *   aborted if a newer invocation starts before the current one resolves.
  * @param initialValue Initial value of type T.
  * @param deps Dependencies to watch for changes.
- * @param options An optional object that may contain onBeforeUpdate and onAfterUpdate callback functions.
+ * @param options An optional object that may contain `onBeforeUpdate`, `onAfterUpdate` callbacks and `useProxied`.
+ *   When `options.useProxied` is `true`, the returned observable is a deep-proxy (`ObservableProxyPort<T>`).
+ *   When `false` or omitted (default), returns a lightweight `CallableReactiveValuePort<T>`.
  * @returns A new observable
  */
 export const useAsyncComputedObserve: UseAsyncComputedObservePort = (

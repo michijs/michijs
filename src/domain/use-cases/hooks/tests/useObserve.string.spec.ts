@@ -5,7 +5,7 @@ import { useObserveMutationTests } from "./useObserveMutation.spec";
 const STR1 = "Hello, ";
 const STR2 = "World!";
 const SUBSTRING = "llo,";
-const OBSERVE_STR1 = useObserve(STR1);
+const OBSERVE_STR1 = useObserve(STR1, true);
 
 describe("Observe string - expressions and operators", () => {
   useObserveMutationTests(() => "test");

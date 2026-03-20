@@ -51,7 +51,8 @@ const TestCustomElement = createCustomElement("test-custom-element", {
           undefined,
           { as: "div" },
         )}
-        <this.arrayTest.List
+        <List
+          data={this.arrayTest}
           as="div"
           renderItem={(item) => <div onclick={this.onClickArray}>{item}</div>}
         />

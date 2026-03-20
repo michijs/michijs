@@ -12,12 +12,12 @@ describe("Observe object tests", () => {
   sharedObjectTests(() => ({}));
 
   it("Assigning a new value to the object should ensure its child properties remain observable", () => {
-    const a = useObserve({ test: 0 });
+    const a = useObserve({ test: 0 }, true);
     a({ test: 43 });
     expect(typeof a.test).toStrictEqual("function");
   });
   it("Setting two object values should only notify a single time", () => {
-    const a = useObserve({});
+    const a = useObserve({}, true);
     a.subscribe(mockCallback);
     a({ a: 1, b: 2 });
     expect(mockCallback).toHaveBeenCalledTimes(1);
@@ -31,7 +31,7 @@ describe("Observe object tests", () => {
           } | null;
         }
       | undefined
-    >(undefined);
+    >(undefined, true);
     it("Getting test doesnt throw exception", () => {
       expect(() => object.test.test2).not.toThrow();
       // @ts-ignore
@@ -47,7 +47,7 @@ describe("Observe object tests", () => {
   });
   describe("With Complex values", () => {
     const obj = useObserve<ObservableProxiedComplexObjectPort<File>>(
-      new File([""], "test") as unknown as ObservableProxiedComplexObjectPort<File>,
+      new File([""], "test") as unknown as ObservableProxiedComplexObjectPort<File>, true
     );
 
     it("Getting the value should return same instance type", () => {

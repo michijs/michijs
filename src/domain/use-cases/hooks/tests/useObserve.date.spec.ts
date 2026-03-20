@@ -11,7 +11,7 @@ describe("Observe date tests", () => {
   beforeEach(() => {
     mockCallback.mockClear();
     nonProxiedDate = new Date();
-    date = useObserve(nonProxiedDate);
+    date = useObserve(nonProxiedDate, true);
     date.subscribe(mockCallback);
   });
 
@@ -24,7 +24,7 @@ describe("Observe date tests", () => {
     expect(mockCallback).toHaveBeenCalledTimes(1);
   });
   it("Using useComputedObserve should keep it as a Date", () => {
-    const computedDate = useComputedObserve(() => date, [date]);
+    const computedDate = useComputedObserve(() => date, [date], { useProxied: true });
     expect(computedDate.getTime()).toEqual(nonProxiedDate.getTime());
   });
   afterEach(() => {

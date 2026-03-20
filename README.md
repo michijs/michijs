@@ -424,9 +424,11 @@ It provides more flexibility in organizing code and separates concerns by allowi
 Responsible for observing changes on different types of values. Takes two arguments:
 
 - **item**: The value to be observed.
-- **isPrimitive**: If you want an unproxied version of useObserve. Similar to [tc39 signals proposal](https://github.com/tc39/proposal-signals)
+- **useProxied**: If `true`, returns a deep-proxy observable that tracks property-level changes on objects, arrays, maps, sets, and dates. If omitted or `false` (the default), returns a lightweight reactive value — similar to the [tc39 signals proposal](https://github.com/tc39/proposal-signals).
 
 This is the most basic hook and it is the basis of the entire component structure.
+
+By default, `useObserve` returns a simple reactive value (getter/setter with subscriptions). Pass `useProxied: true` when you need deep property-level reactivity (e.g. tracking mutations inside arrays, maps, or nested objects).
 
 If the item contains a function, it will return an observable that observes for changes in the object itself. 
 
@@ -458,7 +460,7 @@ It is used for computing a value and observing its changes. Takes four arguments
 - **callback**: A function that returns a promise of type T.
 - **initialValue**: Initial value of type T.
 - **deps**: Dependencies to watch for changes.
-- **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions. Also includes an option usePrimitive if you want an unproxied version of useAsyncComputedObserve. Similar to [tc39 signals proposal](https://github.com/tc39/proposal-signals)
+- **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions. Also includes a `useProxied` option — when `true`, returns a deep-proxy observable; when omitted or `false` (the default), returns a lightweight reactive value similar to the [tc39 signals proposal](https://github.com/tc39/proposal-signals).
 
 <details>
   <summary><b>Example:</b></summary>
@@ -486,7 +488,7 @@ It is used for computing a value and observing its changes. Takes three argument
 
 - **callback**: A function that returns a value of type T.
 - **deps**: Dependencies to watch for changes.
-- **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions. Also includes an option usePrimitive if you want an unproxied version of useComputedObserve. Similar to [tc39 signals proposal](https://github.com/tc39/proposal-signals)
+- **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions. Also includes a `useProxied` option — when `true`, returns a deep-proxy observable; when omitted or `false` (the default), returns a lightweight reactive value similar to the [tc39 signals proposal](https://github.com/tc39/proposal-signals).
 
 
 <details>
@@ -1210,6 +1212,18 @@ We provide partial support for Safari's built-in elements by emulating their beh
 - **Autonomous custom elements**: [Chrome feature status](https://www.chromestatus.com/feature/4696261944934400) [WebComponents.org](https://www.webcomponents.org/)
 - **Framework Compatibility**: [Custom Elements Everywhere](https://custom-elements-everywhere.com)
 - **Element internals**: [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/attachInternals)
+
+## Architecture
+
+MichiJS follows a **hexagonal architecture** (ports & adapters) that separates the codebase into three layers:
+
+- **`domain/`** — Core logic with zero infrastructure dependencies: reactive primitives, observables, proxy handlers, hooks, i18n, and port interfaces (contracts).
+- **`shared/`** — Pure utilities, types, and type guards with no dependencies on domain or infrastructure.
+- **`infrastructure/`** — Platform adapters: `dom/` (browser DOM, custom elements, JSX, rendering, styles, routing, storage), `platform/` (JS APIs agnostic to the DOM), and `node/` (SSR).
+
+Cross-layer communication uses TypeScript path aliases (`@domain`, `@ports`, `@shared`) to enforce dependency rules at the import level.
+
+For the full directory tree, dependency rules, and architecture diagram, see [ARQUITECTURE.md](./ARQUITECTURE.md).
 
 ## Supporting MichiJS
 ### Sponsors
