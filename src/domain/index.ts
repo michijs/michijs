@@ -23,13 +23,3 @@ export * from "./use-cases/hooks/useAsyncComputedObserve"
 export * from "./utils/getObservables"
 export * from "./utils/bindObservable"
 export * from "./typewards/isObservable"
-// export { PrimitiveValue, ProxiedValue } from "./ProxiedValue";
-// export { Callable, CallableObservable, Observable } from "./Observable";
-// export { CookieStorage } from "../../infrastructure/dom/storage/entities/CookieStorage";
-// export { EventDispatcher } from "../../infrastructure/platform/entities/EventDispatcher";
-// export { ObservableFromEventListener } from "./ObservableFromEventListener";
-// export { HistoryManager } from "../../infrastructure/HistoryManager";
-// export { VirtualFragment } from "../../infrastructure/dom/rendering/VirtualFragment";
-// export { ProxiedArray } from "./ProxiedArray";
-// export { NonProxiedArray } from "./NonProxiedArray";
-// export { ObservableWithValue } from "./ObservableWithValue";

@@ -1,7 +1,5 @@
-import type { TypedEvent } from "../../infrastructure/dom/jsx-runtime/generated/htmlType";
-
 export const getFormData = <T extends object>(
-  formOrEvent: TypedEvent<HTMLFormElement> | HTMLFormElement,
+  formOrEvent: Event | HTMLFormElement,
 ): T => {
   const form = (
     formOrEvent instanceof Event ? formOrEvent.target : formOrEvent

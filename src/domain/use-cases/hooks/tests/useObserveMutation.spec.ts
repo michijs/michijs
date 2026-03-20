@@ -1,12 +1,12 @@
 import { describe, it, expect, jest } from "bun:test";
 import { useObserve } from "../useObserve";
-import { CommonObjectProxyHandler } from "../proxyHandlers/CommonObjectProxyHandler";
-import { ArrayProxyHandler } from "../proxyHandlers/ArrayProxyHandler";
-import { PrimitiveProxyHandler } from "../proxyHandlers/PrimitiveProxyHandler";
-import { DateProxyHandler } from "../proxyHandlers/DateProxyHandler";
-import { SetProxyHandler } from "../proxyHandlers/SetProxyHandler";
-import { MapProxyHandler } from "../proxyHandlers/MapProxyHandler";
-import { FunctionProxyHandler } from "../proxyHandlers/FunctionProxyHandler";
+import { CommonObjectProxyHandler } from "../../proxyHandlers/CommonObjectProxyHandler";
+import { ArrayProxyHandler } from "../../proxyHandlers/ArrayProxyHandler";
+import { PrimitiveProxyHandler } from "../../proxyHandlers/PrimitiveProxyHandler";
+import { DateProxyHandler } from "../../proxyHandlers/DateProxyHandler";
+import { SetProxyHandler } from "../../proxyHandlers/SetProxyHandler";
+import { MapProxyHandler } from "../../proxyHandlers/MapProxyHandler";
+import { FunctionProxyHandler } from "../../proxyHandlers/FunctionProxyHandler";
 const mockCallback = jest.fn((x) => x);
 
 export const useObserveMutationTests = (initialValue: () => unknown) => {

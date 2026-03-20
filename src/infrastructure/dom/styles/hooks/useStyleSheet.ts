@@ -1,10 +1,10 @@
-import { useObserveInternal, bindObservable, useComputedObserve, ProxiedValue } from "@domain";
+import { useObserveInternal, bindObservable, useComputedObserve, getObservables } from "@domain";
 import type {
   CSSObject,
   UseStyleSheet,
   UseStyleSheetCallback,
 } from "../types";
-import { getObservables, isNil, unproxify, formatToKebabCase, type AnyObject } from "@shared";
+import { isNil, unproxify, formatToKebabCase, isProxiedValue, type AnyObject } from "@shared";
 import { useCssVariables } from "./useCssVariables";
 
 const hostSelectors = [":host", ":host-context"];
@@ -128,7 +128,7 @@ export const useStyleSheet = ((
   cssObject: UseStyleSheetCallback<AnyObject> | CSSObject,
   $window: Window & typeof globalThis = window as Window & typeof globalThis,
 ) => {
-  if (typeof cssObject === "function" && !(cssObject instanceof ProxiedValue)) {
+  if (typeof cssObject === "function" && !isProxiedValue(cssObject)) {
     const tags = useObserveInternal(new Set<string>());
     let styleSheet: CSSStyleSheet | ((tag: string) => CSSStyleSheet);
     return (tag) => {

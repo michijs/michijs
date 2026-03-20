@@ -1,5 +1,5 @@
-import { create } from "../../../infrastructure/DOM/create/create";
-import type { ObservableType } from "../../types";
+import { create } from "../../../../infrastructure/dom/rendering/create";
+import type { ObservableProxyPort } from "@ports";
 import { useObserve } from "../useObserve";
 import { describe, it, expect, beforeEach } from "bun:test";
 import { sharedObjectTests } from "./useObserveSharedObjectTests.spec";
@@ -8,7 +8,7 @@ const exampleValue = 1;
 const exampleValue2 = 2;
 
 describe("Observe array tests", () => {
-  let array: ObservableType<Array<number>>;
+  let array: ObservableProxyPort<Array<number>>;
   let node: Node;
   let jsonNode: Node;
 

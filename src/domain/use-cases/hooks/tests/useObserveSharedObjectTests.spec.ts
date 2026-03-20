@@ -1,4 +1,5 @@
-import type { AnyObject, ObservableType } from "../../../../michijs/types";
+import type { AnyObject } from "@shared";
+import type { ObservableProxyPort } from "@ports";
 import { useObserve } from "../useObserve";
 import { useObserveMutationTests } from "./useObserveMutation.spec";
 import { describe, it, expect, beforeEach, jest, afterEach } from "bun:test";
@@ -12,7 +13,7 @@ export const sharedObjectTests = (
   useObserveMutationTests(initialValue);
   describe("shared object tests", () => {
     let nonProxiedObject: ReturnType<typeof initialValue>;
-    let object: ObservableType<any>;
+    let object: ObservableProxyPort<any>;
     beforeEach(() => {
       mockCallback.mockClear();
       nonProxiedObject = initialValue();

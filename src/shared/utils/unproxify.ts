@@ -4,14 +4,14 @@ import { cloneCommonObject } from "./clone/cloneCommonObject";
 import { cloneDate } from "./clone/cloneDate";
 import { cloneMap } from "./clone/cloneMap";
 import { cloneSet } from "./clone/cloneSet";
-import { ProxiedValue } from "@domain";
+import { isProxiedValue } from "../typewards/isProxiedValue";
 import { isPrototypeOfObject } from "./isPrototypeOfObject";
 
 /**
  * Converts any proxy into a common value
  */
 export function unproxify<T>(val: T): UnproxifyPort<T> {
-  const item = val instanceof ProxiedValue ? val.$value : (val as T);
+  const item = isProxiedValue(val) ? val.$value : (val as T);
   if (item && typeof item === "object") {
     if (isPrototypeOfObject(item))
       return cloneCommonObject(item, unproxify) as UnproxifyPort<T>;

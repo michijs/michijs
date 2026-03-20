@@ -1,6 +1,7 @@
 import {
+  List,
   ObservableWithValue,
-  NonProxiedArray,
+  ReactiveArray,
   create,
   type TypedMouseEvent,
 } from "@michijs/michijs";
@@ -11,32 +12,32 @@ interface Row {
   selected: ObservableWithValue<string | null>;
 }
 const adjectives = [
-    "pretty",
-    "large",
-    "big",
-    "small",
-    "tall",
-    "short",
-    "long",
-    "handsome",
-    "plain",
-    "quaint",
-    "clean",
-    "elegant",
-    "easy",
-    "angry",
-    "crazy",
-    "helpful",
-    "mushy",
-    "odd",
-    "unsightly",
-    "adorable",
-    "important",
-    "inexpensive",
-    "cheap",
-    "expensive",
-    "fancy",
-  ],
+  "pretty",
+  "large",
+  "big",
+  "small",
+  "tall",
+  "short",
+  "long",
+  "handsome",
+  "plain",
+  "quaint",
+  "clean",
+  "elegant",
+  "easy",
+  "angry",
+  "crazy",
+  "helpful",
+  "mushy",
+  "odd",
+  "unsightly",
+  "adorable",
+  "important",
+  "inexpensive",
+  "cheap",
+  "expensive",
+  "fancy",
+],
   colours = [
     "red",
     "yellow",
@@ -81,7 +82,7 @@ const adjectives = [
       };
     return data;
   },
-  rows = new NonProxiedArray<Row>(),
+  rows = new ReactiveArray<Row>(),
   run = () => rows.$replace(...buildData()),
   runLots = () => rows.$replace(...buildData(10000)),
   add = () => rows.push(...buildData()),
@@ -103,11 +104,8 @@ const adjectives = [
 let nextId = 1,
   selectedItem: Row | null = null;
 
-export const TableBody = rows.List({
-  as: "tbody",
-  id: "tbody",
-  useTemplate: true,
-  renderItem: (row) => (
+export const TableBody = create(
+  <List data={rows} as="tbody" id="tbody" useTemplate renderItem={(row) => (
     <tr class={row.selected}>
       <td class="col-md-1">{row.id}</td>
       <td class="col-md-4">
@@ -122,9 +120,12 @@ export const TableBody = rows.List({
       </td>
       <td class="col-md-6" />
     </tr>
-  ),
-});
-document.querySelector("table")?.appendChild(TableBody);
+  )} />
+);
+
+document.querySelector("table")?.appendChild(
+  TableBody
+);
 
 const rowButton = (
   id: string,

@@ -1,4 +1,4 @@
-import type { ObservableComplexObject } from "../../types";
+import type { ObservableProxiedComplexObjectPort } from "@ports";
 import { useObserve } from "../useObserve";
 import { describe, it, expect, jest, beforeEach } from "bun:test";
 import { sharedObjectTests } from "./useObserveSharedObjectTests.spec";
@@ -46,8 +46,8 @@ describe("Observe object tests", () => {
     });
   });
   describe("With Complex values", () => {
-    const obj = useObserve<ObservableComplexObject<File>>(
-      new File([""], "test") as unknown as ObservableComplexObject<File>,
+    const obj = useObserve<ObservableProxiedComplexObjectPort<File>>(
+      new File([""], "test") as unknown as ObservableProxiedComplexObjectPort<File>,
     );
 
     it("Getting the value should return same instance type", () => {

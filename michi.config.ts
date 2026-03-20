@@ -10,14 +10,14 @@ export const config: ServerConfigFactory<
 > = ({ environment }) => {
   const defaultConfig: ServerConfig = {
     public: {
-      path: "./tests/public",
+      path: "./examples/public",
     },
     esbuildOptions: {
       // Forcing options so testing works like in production
       minify: true,
-      entryPoints: ["./tests/index.tsx"],
+      entryPoints: ["./examples/index.tsx"],
       tsconfig:
-        environment === "DISTRIBUTION" ? "dist.tsconfig.json" : "tsconfig.json",
+        environment === "DISTRIBUTION" ? "tsconfig.json" : "examples.tsconfig.json",
       splitting: true,
     },
   };

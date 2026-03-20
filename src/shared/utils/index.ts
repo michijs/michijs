@@ -1,7 +1,6 @@
 export * from "./bindFunction";
 export { formatToKebabCase } from "./formatToKebabCase";
 export { getFormData } from "./getFormData";
-export { getObservables } from "@domain";
 export { getSearchParamsValue } from "./getSearchParamsValue";
 export { wait } from "./wait";
 export { forEachChildren } from "./forEachChildren";
@@ -17,4 +16,4 @@ export { isPrototypeOfObject } from "./isPrototypeOfObject";
 export * from "./getBrowser";
 export * from "./clone";
 export * from "./getPlatform";
-export * from "../../infrastructure/dom/styles/getCSSStyleSheetText";
+export * from "./getCSSStyleSheetText";

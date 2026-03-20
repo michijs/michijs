@@ -1,4 +1,4 @@
-import type { ObservableType } from "../../types";
+import type { ObservableProxyPort } from "@ports";
 import { useObserve } from "../useObserve";
 import { describe, it, expect, jest, beforeEach, afterEach } from "bun:test";
 import { useObserveMutationTests } from "./useObserveMutation.spec";
@@ -7,7 +7,7 @@ import { useComputedObserve } from "../useComputedObserve";
 const mockCallback = jest.fn((x) => x);
 describe("Observe date tests", () => {
   let nonProxiedDate: Date;
-  let date: ObservableType<Date>;
+  let date: ObservableProxyPort<Date>;
   beforeEach(() => {
     mockCallback.mockClear();
     nonProxiedDate = new Date();

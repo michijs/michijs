@@ -1,4 +1,4 @@
-import type { ObservableType } from "../../types";
+import type { ObservableProxyPort } from "@ports";
 import { useObserve } from "../useObserve";
 import { describe, it, expect, jest, beforeEach, afterEach } from "bun:test";
 
@@ -6,7 +6,7 @@ const exampleValue = 1;
 const mockCallback = jest.fn((x) => x);
 describe("Observe map tests", () => {
   let nonProxiedMap: Map<any, any>;
-  let map: ObservableType<Map<any, any>>;
+  let map: ObservableProxyPort<Map<any, any>>;
   beforeEach(() => {
     mockCallback.mockClear();
     nonProxiedMap = new Map();

@@ -1,5 +1,5 @@
 import type { CSSProperties } from '../types';
-      import type { ObservableOrConstOrPromise } from "../../../types"
+      import type { ObservableOrConstOrPromise } from "@ports"
       export interface ValueSets {
   45?: ObservableOrConstOrPromise<"ltr" | "rtl" | undefined | null>;
 46?: ObservableOrConstOrPromise<"block" | "inline" | undefined | null>;

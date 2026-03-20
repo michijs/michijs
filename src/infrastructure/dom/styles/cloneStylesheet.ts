@@ -1,4 +1,4 @@
-import { getCSSStyleSheetText } from "./getCSSStyleSheetText";
+import { getCSSStyleSheetText } from "@shared";
 
 interface CloneStylesheet {
   (

@@ -1,4 +1,4 @@
-import { hasToJSON } from "../../../../shared/typewards/hasToJSON";
+import { hasToJSON } from "@shared";
 import type { NotifiableObservers, ObservableGettersAndSetters, ReactiveValuePort } from "@ports";
 import { CallableObservable } from "./CallableObservable";
 
