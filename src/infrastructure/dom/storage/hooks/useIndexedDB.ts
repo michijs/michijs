@@ -1,5 +1,7 @@
+/** biome-ignore-all lint/suspicious/noAsyncPromiseExecutor: <explanation> */
 import { Observable } from "@domain";
 import type {
+  AnyObject,
   IndexeddbObservableResult,
   InitDb,
   TypedIDBObjectStore,
@@ -58,7 +60,7 @@ export const useIndexedDB: UseIndexedDB = (name, objectsStore, version = 1) => {
         return new Proxy(
           {},
           {
-            async get(_, method: keyof TypedIDBObjectStore<AnyObject>) {
+            get(_, method: keyof TypedIDBObjectStore<AnyObject>) {
               let transactionMode: IDBTransactionMode = "readonly";
               switch (method) {
                 case "add":
@@ -78,13 +80,15 @@ export const useIndexedDB: UseIndexedDB = (name, objectsStore, version = 1) => {
                   "transaction",
                 ].includes(method)
               ) {
-                const db = await dbPromise;
-                const transaction = db.transaction(p, transactionMode);
-                return transaction.objectStore(p)[method];
+                return new Promise(async (resolve) => {
+                  const db = await dbPromise;
+                  const transaction = db.transaction(p, transactionMode);
+                  resolve(transaction.objectStore(p)[method]);
+                });
               }
-              return async (...args) => {
-                const db = await dbPromise;
-                new Promise((resolve, reject) => {
+              return (...args) =>
+                new Promise(async (resolve, reject) => {
+                  const db = await dbPromise;
                   const transaction = db.transaction(p, transactionMode);
                   const result = (
                     transaction.objectStore(p)[method] as Function
@@ -104,7 +108,7 @@ export const useIndexedDB: UseIndexedDB = (name, objectsStore, version = 1) => {
                     resolve(result);
                   }
                 });
-              };
+
             },
           },
         );
