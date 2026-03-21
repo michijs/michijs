@@ -6,7 +6,7 @@
     "baseUrl": "./src",
     "allowUnusedLabels": true,
     "paths": {
-      "@michijs/michijs/jsx-runtime": ["./infrastructure/dom/jsx-runtime/index"],
+      "@michijs/michijs/jsx-runtime": ["./infrastructure/node/jsx-runtime/index"],
       "@ports": ["./domain/ports/index"],
       "@domain": ["./domain/index"],
       "@domain/*": ["./domain/*"],
@@ -15,5 +15,5 @@
     }
   },
   "include": ["src"],
-  "exclude": ["src/**/*.spec.ts", "src/**/*.spec.tsx", "src/infrastructure/node"]
+  "exclude": ["src/**/*.spec.ts", "src/**/*.spec.tsx", "src/infrastructure/dom"]
 }

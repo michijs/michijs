@@ -4,6 +4,7 @@ import type {
   DefaultEnvironment,
 } from "@michijs/dev-server";
 import { droppableFlags } from "./droppableFlags";
+// import {michiJSXPlugin} from './src/infrastructure/plugin'
 
 export const config: ServerConfigFactory<
   "TESTING" | "WEB" | DefaultEnvironment
@@ -13,11 +14,12 @@ export const config: ServerConfigFactory<
       path: "./examples/public",
     },
     esbuildOptions: {
+      // plugins: [michiJSXPlugin()],
       // Forcing options so testing works like in production
       minify: true,
       entryPoints: ["./examples/index.tsx"],
       tsconfig:
-        environment === "DISTRIBUTION" ? "tsconfig.json" : "examples.tsconfig.json",
+        environment === "DISTRIBUTION" ? "tsconfig.json" : "./examples/tsconfig.json",
       splitting: true,
     },
   };

@@ -14,10 +14,18 @@
   "module": "dist/index.js",
   "exports": {
     "./jsx-runtime": {
+      "node": {
+        "import": "./dist/infrastructure/node/jsx-runtime/index.js",
+        "require": "./dist/infrastructure/node/jsx-runtime/index.js"
+      },
       "import": "./dist/infrastructure/dom/jsx-runtime/index.js",
       "require": "./dist/infrastructure/dom/jsx-runtime/index.js"
     },
     "./jsx-dev-runtime": {
+      "node": {
+        "import": "./dist/infrastructure/node/jsx-runtime/index.js",
+        "require": "./dist/infrastructure/node/jsx-runtime/index.js"
+      },
       "import": "./dist/infrastructure/dom/jsx-runtime/index.js",
       "require": "./dist/infrastructure/dom/jsx-runtime/index.js"
     },
