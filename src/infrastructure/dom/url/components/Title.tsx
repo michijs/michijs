@@ -1,6 +1,5 @@
 import { useTitle } from "../hooks/useTitle";
-import { useWatch, type CallableReactiveOrConst } from "@domain";
-import { unproxify } from "@shared";
+import { useWatch, type CallableReactiveOrConst, unproxify } from "@domain";
 import { GenericElement } from "../../rendering/components/GenericElement";
 
 export interface TitleProps {

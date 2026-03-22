@@ -18,6 +18,11 @@ const TestCustomElement = createCustomElement("test-custom-element", {
     showExample: true,
   },
   shadow: false,
+  lifecycle: {
+    didMount(){
+
+    }
+  },
   methods: {
     toggleShowExample() {
       this.count(this.count() + 1);
@@ -34,6 +39,7 @@ const TestCustomElement = createCustomElement("test-custom-element", {
     },
   },
   render() {
+    console.log(this.arrayTest())
     return (
       <>
         {this.count.compute((v) => v.toFixed(2))}

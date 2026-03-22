@@ -5,7 +5,6 @@ export { getSearchParamsValue } from "./getSearchParamsValue";
 export { wait } from "./wait";
 export { forEachChildren } from "./forEachChildren";
 export { pick } from "./pick";
-export { unproxify } from "./unproxify";
 export { isNil } from "./isNil";
 export { throttle } from "./throttle";
 export { debounce } from "./debounce";

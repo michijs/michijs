@@ -1,5 +1,4 @@
-import { unproxify } from "@shared";
-import { Observable, type ObservableOrConst, type HistoryManagerPort } from "@domain";
+import { Observable, type ObservableOrConst, type HistoryManagerPort, unproxify } from "@domain";
 import { handleNavigation } from "./handleNavigation";
 
 export class ModernHistoryManager

@@ -1,6 +1,7 @@
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 import type { ProxyHandlerPort, ProxiedValuePort } from "@ports";
-import { unproxify, cloneArray } from "@shared";
+import { unproxify } from "../../utils/unproxify";
+import { cloneArray } from "@shared";
 import { ProxiedArray } from "../../entities/reactive/proxied/ProxiedArray";
 
 export class ArrayProxyHandler<T extends ProxiedArray<any>>

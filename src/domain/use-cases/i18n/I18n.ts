@@ -1,5 +1,5 @@
 import { ReactiveValue } from "../../entities/reactive/core/ReactiveValue";
-import { unproxify } from "@shared";
+import { unproxify } from "../../utils/unproxify";
 import { bindObservable } from "../../utils/bindObservable";
 import type { CallableReactiveValuePort, ObservableOrConst } from "@ports";
 import { useAsyncComputedObserve } from "../hooks/useAsyncComputedObserve";

@@ -1,17 +1,17 @@
 import type { UnproxifyPort } from "@ports";
-import { cloneArray } from "./clone/cloneArray";
-import { cloneCommonObject } from "./clone/cloneCommonObject";
-import { cloneDate } from "./clone/cloneDate";
-import { cloneMap } from "./clone/cloneMap";
-import { cloneSet } from "./clone/cloneSet";
-import { isProxiedValue } from "../typewards/isProxiedValue";
-import { isPrototypeOfObject } from "./isPrototypeOfObject";
+import { cloneArray } from "../../shared/utils/clone/cloneArray";
+import { cloneCommonObject } from "../../shared/utils/clone/cloneCommonObject";
+import { cloneDate } from "../../shared/utils/clone/cloneDate";
+import { cloneMap } from "../../shared/utils/clone/cloneMap";
+import { cloneSet } from "../../shared/utils/clone/cloneSet";
+import { isPrototypeOfObject } from "../../shared/utils/isPrototypeOfObject";
+import { isReactiveValue } from "@domain/typewards/isReactiveValue";
 
 /**
  * Converts any proxy into a common value
  */
 export function unproxify<T>(val: T): UnproxifyPort<T> {
-  const item = isProxiedValue(val) ? val.$value : (val as T);
+  const item = isReactiveValue(val) ? val.$value : (val as T);
   if (item && typeof item === "object") {
     if (isPrototypeOfObject(item))
       return cloneCommonObject(item, unproxify) as UnproxifyPort<T>;

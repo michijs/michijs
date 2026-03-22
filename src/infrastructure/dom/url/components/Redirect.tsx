@@ -1,5 +1,6 @@
 import { HistoryManager } from "../../routing/entities/HistoryManager";
-import { unproxify, wait } from "@shared";
+import { wait } from "@shared";
+import { unproxify } from "@domain";
 import { GenericElement } from "../../rendering/components/GenericElement";
 import type { CallableReactiveOrConst } from "@ports";
 

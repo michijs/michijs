@@ -1,6 +1,5 @@
 import { handleNavigation } from "./handleNavigation";
-import { unproxify } from "@shared";
-import { Observable, type HistoryManagerPort, type ObservableOrConst } from "@domain";
+import { Observable, type HistoryManagerPort, type ObservableOrConst, unproxify } from "@domain";
 
 export class LegacyHistoryManager
   extends Observable<string | URL>

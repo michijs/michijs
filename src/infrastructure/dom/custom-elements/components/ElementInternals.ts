@@ -1,8 +1,7 @@
 import type { AllAttributes } from "../../jsx-runtime/generated/htmlType";
 import { setAttribute } from "../../rendering/setAttribute";
 import { isMichiCustomElement } from "../typewards/isMichiCustomElement";
-import { useComputedObserve, getObservables, GarbageCollectableObject,  type CallableReactiveOrConst, bindObservable } from "@domain";
-import { unproxify } from "@shared";
+import { useComputedObserve, getObservables, GarbageCollectableObject,  type CallableReactiveOrConst, bindObservable, unproxify } from "@domain";
 
 type ObservableAriaMixin = {
   [k in keyof Omit<ARIAMixin, "role">]?: CallableReactiveOrConst<ARIAMixin[k]>;

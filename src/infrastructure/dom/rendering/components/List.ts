@@ -52,7 +52,7 @@ export const List = <const T extends ObservableTypeOrConst<any[]>, const E = FC>
   { data, renderItem, as: asTag, elementFactory, ...attrs }: ListComponentProps<T, E>,
   factory: ElementFactoryType,
 ) => {
-  const finalFactory = elementFactory ?? factory
+  const finalFactory = elementFactory ?? factory;
   if ((data as any) instanceof ReactiveArray) {
     const castedData = data as unknown as ReactiveArray<any>
     let el: ParentNode | VirtualFragment;

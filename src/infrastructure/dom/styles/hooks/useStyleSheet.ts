@@ -1,10 +1,10 @@
-import { useObserveInternal, bindObservable, useComputedObserve, getObservables } from "@domain";
+import { useObserveInternal, bindObservable, useComputedObserve, getObservables, unproxify } from "@domain";
 import type {
   CSSObject,
   UseStyleSheet,
   UseStyleSheetCallback,
 } from "../types";
-import { isNil, unproxify, formatToKebabCase, isProxiedValue, type AnyObject } from "@shared";
+import { isNil, formatToKebabCase, isProxiedValue, type AnyObject } from "@shared";
 import { useCssVariables } from "./useCssVariables";
 
 const hostSelectors = [":host", ":host-context"];

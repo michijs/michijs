@@ -22,4 +22,5 @@ export * from "./use-cases/hooks/useComputedObserve"
 export * from "./use-cases/hooks/useAsyncComputedObserve"
 export * from "./utils/getObservables"
 export * from "./utils/bindObservable"
+export * from "./utils/unproxify";
 export * from "./typewards/isObservable"

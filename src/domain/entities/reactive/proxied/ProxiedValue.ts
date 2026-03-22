@@ -1,4 +1,4 @@
-import { unproxify, type Typeof } from "@shared";
+import type { Typeof } from "@shared";
 import type {
   ProxiedValuePort,
   ObservableGettersAndSetters,
@@ -6,6 +6,7 @@ import type {
   ParentSubscription,
   ProxyHandlerPort,
 } from "@ports";
+import {unproxify} from '../../../utils/unproxify'
 import { ReactiveValue } from "../core/ReactiveValue";
 
 export class ProxiedValue<V>

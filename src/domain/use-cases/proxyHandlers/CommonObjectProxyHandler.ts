@@ -1,11 +1,11 @@
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 import type { ProxiedValuePort, ProxyHandlerPort } from "@ports";
-import { unproxify, extendsObject, cloneCommonObject } from "@shared";
+import { extendsObject, cloneCommonObject } from "@shared";
+import { unproxify } from '../../utils/unproxify'
 
 export class CommonObjectProxyHandler<T extends object>
   extends ObjectProxyHandler<T>
-  implements ProxyHandlerPort<T>
-{
+  implements ProxyHandlerPort<T> {
   apply(target: ProxiedValuePort<T>, _: any, args: any[]) {
     if (args.length > 0) {
       const unproxifiedValue = unproxify(args[0]);
