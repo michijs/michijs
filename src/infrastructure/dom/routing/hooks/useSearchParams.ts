@@ -10,6 +10,7 @@ const SearchParams = useComputedObserve(
   () => getSearchParamsValue(),
   [HistoryManager],
   {
+    useProxied: true,
     onBeforeUpdate() {
       isUpdating = true;
     },
