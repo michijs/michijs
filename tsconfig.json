@@ -16,6 +16,9 @@
       "@michijs/michijs/jsx-runtime": [
         "./src/infrastructure/dom/jsx-runtime/index"
       ],
+      "@michijs/michijs/jsx-dev-runtime": [
+        "./src/infrastructure/dom/jsx-runtime/index"
+      ],
       "@domain/*": ["./src/domain/*"],
       "@shared/*": ["./src/shared/*"],
       "@michijs/michijs/*": ["./src/*"],

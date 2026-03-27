@@ -13,6 +13,9 @@
       "@michijs/michijs/jsx-runtime": [
         "./src/infrastructure/node/jsx-runtime/index"
       ],
+      "@michijs/michijs/jsx-dev-runtime": [
+        "./src/infrastructure/node/jsx-runtime/index"
+      ],
       "@ports": ["./src/domain/ports/index"],
       "@domain": ["./src/domain/index"],
       "@domain/*": ["./src/domain/*"],

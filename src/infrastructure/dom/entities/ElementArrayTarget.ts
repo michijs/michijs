@@ -1,11 +1,16 @@
 import type { VirtualFragmentPort } from "@domain";
-import type { TargetPort, ElementFactoryPort } from "@ports";
+import type { ReactiveArrayTargetPort, ElementFactoryPort } from "@ports";
 import type { FC, SingleJSXElement } from "../rendering/types";
 
-export class ElementArrayTarget<V> implements TargetPort<V, Node> {
+/**
+ * Lightweight DOM target for ReactiveArray rendering.
+ * Implements only ReactiveArrayTargetPort — used for benchmarks
+ * and non-proxied arrays where the full TargetPort is unnecessary.
+ */
+export class ElementArrayTarget<V> implements ReactiveArrayTargetPort<V, Node> {
   protected element: VirtualFragmentPort | ParentNode;
-  private factory: ElementFactoryPort<Element, SingleJSXElement>;
-  private renderItem: FC<V>;
+  protected factory: ElementFactoryPort<Element, SingleJSXElement>;
+  protected renderItem: FC<V>;
 
   constructor(
     element: VirtualFragmentPort | ParentNode,
@@ -16,6 +21,7 @@ export class ElementArrayTarget<V> implements TargetPort<V, Node> {
     this.renderItem = renderItem;
     this.factory = factory;
   }
+
   create(item: V) {
     return this.factory.create(this.renderItem(item, this.factory));
   }
@@ -65,76 +71,5 @@ export class ElementArrayTarget<V> implements TargetPort<V, Node> {
 
     this.element.insertBefore(node1, node2),
       this.element.insertBefore(node2, node1NextSibling);
-  }
-
-  pop(): void {
-    this.element.lastChild?.remove();
-  }
-
-  shift(): void {
-    this.element.firstChild?.remove();
-  }
-
-  insertItemsAt(i: number, items: V[]): void {
-    this.insertChildNodesAt(i, ...items.map(this.create, this));
-  }
-
-  prependItems(items: V[]): void {
-    this.element.prepend(...items.map(this.create, this));
-  }
-
-  reverse(): void {
-    this.element.replaceChildren(
-      ...Array.from(this.element.childNodes).reverse(),
-    );
-  }
-
-  insertChildNodesAt(i: number, ...childNodes: Node[]): void {
-    if (i === 0) this.element.prepend(...childNodes);
-    // It should throw an error if its undefined
-    // @ts-expect-error
-    else this.element.childNodes[i - 1].after(...childNodes);
-  }
-
-  splice(start: number, deleteCount: number, items: V[]): void {
-    const len = this.element.childNodes.length;
-    const relativeStart = start >> 0;
-    const k =
-      relativeStart < 0
-        ? Math.max(len + relativeStart, 0)
-        : Math.min(relativeStart, len);
-
-    let item: ChildNode | undefined | null = this.element.childNodes[k],
-      count = 0;
-    while (item && count < deleteCount) {
-      const nextSibling: ChildNode | null = item.nextSibling;
-      item.remove();
-      item = nextSibling;
-      count++;
-    }
-    if (items.length > 0) this.insertItemsAt(k, items);
-  }
-
-  fill(value: V, start = 0, end?: number): void {
-    const len = this.element.childNodes.length;
-    const relativeStart = start >> 0;
-
-    let k =
-      relativeStart < 0
-        ? Math.max(len + relativeStart, 0)
-        : Math.min(relativeStart, len);
-
-    const relativeEnd = end === undefined ? len : end >> 0;
-
-    const final =
-      relativeEnd < 0
-        ? Math.max(len + relativeEnd, 0)
-        : Math.min(relativeEnd, len);
-
-    while (k < final) {
-      this.$remove(k);
-      this.insertItemsAt(k, [value]);
-      k++;
-    }
   }
 }

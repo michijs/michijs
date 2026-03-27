@@ -1,4 +1,4 @@
-import { GarbageCollectableObject, isObservable, ReactiveArray, bindObservable, type ElementFactoryPort } from "@domain";
+import { GarbageCollectableObject, isObservable, ReactiveArray, ProxiedArray, bindObservable, type ElementFactoryPort } from "@domain";
 import { create } from "../create";
 import { ElementFactory } from "../ElementFactory";
 import type {
@@ -11,6 +11,7 @@ import type {
   SingleJSXElement,
 } from "../types";
 import { ElementArrayTarget } from "../../entities/ElementArrayTarget";
+import { ElementProxiedArrayTarget } from "../../entities/ElementProxiedArrayTarget";
 import { VirtualFragment } from "../VirtualFragment";
 
 /**
@@ -67,11 +68,9 @@ export const List = <const T extends ObservableTypeOrConst<any[]>, const E = FC>
         el = new VirtualFragment();
       }
 
-    const newTarget = new ElementArrayTarget(
-      el,
-      renderItem,
-      resolvedFactory,
-    );
+    const newTarget = underlyingData instanceof ProxiedArray
+      ? new ElementProxiedArrayTarget(el, renderItem, resolvedFactory)
+      : new ElementArrayTarget(el, renderItem, resolvedFactory);
 
     castedData.targets.push(newTarget);
 

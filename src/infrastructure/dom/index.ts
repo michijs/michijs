@@ -102,3 +102,4 @@ export { createBuiltInElement } from "./polyfills";
 import "./jsx-runtime/generated/JSX";
 
 export { ElementArrayTarget } from "./entities/ElementArrayTarget";
+export { ElementProxiedArrayTarget } from "./entities/ElementProxiedArrayTarget";

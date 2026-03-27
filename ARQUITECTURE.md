@@ -14,12 +14,14 @@ src/
 │   │       └── proxied/                 # ProxiedValue, ProxiedArray
 │   │
 │   ├── ports/                           # Interfaces/contracts (importable by any layer)
+│   │   ├── ElementFactoryPort.ts        # Element creation factory interface
 │   │   ├── HistoryManagerPort.ts
 │   │   ├── VirtualFragmentPort.ts
 │   │   ├── hooks/                       # UseObservePort, UseComputedObservePort, UsePromisePort, etc.
 │   │   └── reactive/
 │   │       ├── core/                    # ObservablePort, ReactiveValuePort, ReactiveArrayPort,
-│   │       │                            # Subscription, TargetPort, ObservableOrConst, etc.
+│   │       │                            # Subscription, TargetPort, ReactiveArrayTargetPort,
+│   │       │                            # ObservableOrConst, etc.
 │   │       └── proxied/                 # ProxiedValuePort, ProxyHandlerPort, ObservableProxyPort,
 │   │                                    # ParentSubscription, UnproxifyPort, etc.
 │   │
@@ -47,7 +49,8 @@ src/
 ├── infrastructure/
 │   ├── dom/                             # Adapter — Browser DOM
 │   │   ├── index.ts                     # Barrel — exports entire DOM module
-│   │   ├── global-types.ts              # Global Window augmentation
+│   │   ├── entities/                    # ElementArrayTarget (lightweight, ReactiveArrayTargetPort),
+│   │   │                                # ElementProxiedArrayTarget (full TargetPort)
 │   │   ├── custom-elements/             # createCustomElement, customElement, createElementProperties
 │   │   │   ├── components/              # ElementInternals, Host, Slot
 │   │   │   ├── properties/              # defineEvent, defineMethod, definePropertyFromObservable,
@@ -58,11 +61,12 @@ src/
 │   │   │       └── htmlType/            # CSSProperties, DataGlobalAttributes, Events,
 │   │   │           ├── Events/          # AllEvents, GlobalEvents, TypedEvent, TypedMouseEvent, etc.
 │   │   │           └── generated/       # HTMLElements, SVGElements, MathMLElements, ValueSets
-│   │   ├── rendering/                   # create, render, renderSync
+│   │   ├── rendering/                   # create, render, ElementFactory, VirtualFragment
 │   │   │   ├── components/              # AsyncComponent, Fragment, GenericElement, If, List
 │   │   │   └── typewards/               # isElement, isDOMElement, isHTMLElement, etc.
 │   │   ├── routing/                     # createRouter
-│   │   │   ├── components/              # Router
+│   │   │   ├── components/              # Redirect, Router, Title
+│   │   │   ├── hooks/                   # useHash, useSearchParams, useTitle
 │   │   │   └── entities/HistoryManager/ # HistoryManager, ModernHistoryManager, LegacyHistoryManager
 │   │   ├── styles/                      # css
 │   │   │   ├── hooks/                   # useStyleSheet, useCssVariables, useAnimation, useTransition
@@ -71,34 +75,53 @@ src/
 │   │   │   ├── entities/                # CookieStorage
 │   │   │   ├── hooks/                   # useStorage, useIndexedDB
 │   │   │   └── typewards/               # storageIsCookieStorage
-│   │   ├── url/                         # URL types
-│   │   │   ├── components/              # Redirect, Title
-│   │   │   ├── hooks/                   # useHash, useSearchParams, useTitle
-│   │   │   └── utils/                   # urlFn, createURL, normalizeURL, setSearchParam
 │   │   ├── trusted-types/               # trustedTypePolicy, makeMichijsTheDefaultTrustedPolicy
 │   │   └── polyfills/                   # createBuiltInElement (Safari built-in elements)
 │   │
 │   ├── platform/                        # Adapter — DOM-agnostic JS APIs
 │   │   ├── index.ts                     # Barrel — exports entire platform module
 │   │   ├── constants/                   # Namespaces (SVG, MathML, etc.)
-│   │   ├── entities/                    # ElementArrayTarget, ElementProxiedArrayTarget, EventDispatcher
+│   │   ├── entities/                    # EventDispatcher
 │   │   ├── network/                     # doFetch, doBlobFetch, doGenericFetch
 │   │   │   └── hooks/                   # useFetch
-│   │   └── types/                       # GetJSXProps, WithChildren
+│   │   ├── types/                       # GetJSXProps, WithChildren
+│   │   └── url/                         # URL utilities
+│   │       ├── types.ts                 # UrlFunction type
+│   │       └── utils/                   # urlFn, createURL, normalizeURL, setSearchParam
 │   │
-│   └── node/                            # Adapter — Node.js
-│       └── rendering/                   # SSR: serialization to static HTML
-│
+│   ├── node/                            # Adapter — Node.js
+│   │   └── jsx-runtime/                 # SSR: Node JSX runtime
+│   │
 │   └── plugin/                          # Adapter — esbuild build plugin
 │       ├── index.ts                     # Barrel — exports michiJSXPlugin
-│       ├── michiJSXPlugin.ts            # esbuild Plugin (onLoad hook, two-phase transform)
-│       └── transformJSX.ts              # Core JSX-to-DOM transform engine
+│       ├── michiJSXPlugin.ts            # esbuild Plugin (onLoad hook)
+│       └── transform/                   # JSX-to-DOM transform engine
+│           ├── jsxVisitor.ts            # Core visitor
+│           ├── helperImports.ts         # Import generation
+│           └── astUtils.ts              # AST utilities
 │
 ├── index.ts                             # Main entry point (browser)
-├── index.node.ts                        # Node.js entry point
-├── jsx-runtime.tsx                      # Re-export JSX runtime
-└── jsx-dev-runtime.tsx                  # Re-export JSX dev runtime
+└── index.node.ts                        # Node.js entry point
 ```
+
+## Target architecture
+
+```
+ReactiveArrayTargetPort            TargetPort (extends ReactiveArrayTargetPort)
+     ▲                                  ▲
+     │                                  │
+ElementArrayTarget               ElementProxiedArrayTarget
+(lightweight — benchmarks,        (full — ProxiedArray rendering,
+ non-proxied ReactiveArray)        supports pop, shift, splice, etc.)
+```
+
+`ElementArrayTarget` implements only `ReactiveArrayTargetPort` — the minimal set of methods
+needed for benchmarks and non-proxied arrays: `create`, `$clear`, `$replace`, `push`, `$remove`, `$swap`.
+
+`ElementProxiedArrayTarget` extends `ElementArrayTarget` and implements `TargetPort` — adding
+`pop`, `shift`, `reverse`, `splice`, `fill`, `prependItems`, `insertItemsAt`, `insertChildNodesAt`.
+The `List` component uses `ElementProxiedArrayTarget` when the data is a `ProxiedArray`,
+and `ElementArrayTarget` for plain `ReactiveArray` data.
 
 ## Dependency rules between layers
 
@@ -130,11 +153,27 @@ Each main module exposes a barrel that re-exports all its public content:
 | Barrel | What it exports |
 |--------|----------------|
 | `src/domain/index.ts` | All domain entities, use-cases, utils and typewards + re-export of ports |
-| `src/domain/ports/index.ts` | All interfaces/contracts (36 exports) |
+| `src/domain/ports/index.ts` | All interfaces/contracts |
 | `src/shared/index.ts` | All shared utils, types and typewards |
-| `src/infrastructure/dom/index.ts` | Entire DOM module: custom-elements, jsx-runtime, rendering, styles, routing, storage, url, trusted-types, polyfills, typewards, global augmentations |
-| `src/infrastructure/platform/index.ts` | Entire platform module: constants, entities, network, types |
-| `src/infrastructure/plugin/index.ts` | esbuild plugin: `michiJSXPlugin`, `transformJSXCalls`, `generateHelperImports` |
+| `src/infrastructure/dom/index.ts` | Entire DOM module: entities, custom-elements, jsx-runtime, rendering, styles, routing, storage, trusted-types, polyfills |
+| `src/infrastructure/platform/index.ts` | Entire platform module: constants, entities, network, types, url |
+| `src/infrastructure/plugin/index.ts` | esbuild plugin: `michiJSXPlugin` |
+
+## TSConfig path aliases
+
+| Alias | Resolves to |
+|-------|-------------|
+| `@ports` | `./src/domain/ports/index` |
+| `@domain` | `./src/domain/index` |
+| `@domain/*` | `./src/domain/*` |
+| `@shared` | `./src/shared/index` |
+| `@shared/*` | `./src/shared/*` |
+| `@michijs/michijs/jsx-runtime` | `./src/infrastructure/dom/jsx-runtime/index` |
+| `@michijs/michijs/jsx-dev-runtime` | `./src/infrastructure/dom/jsx-runtime/index` |
+| `@michijs/michijs/*` | `./src/*` |
+| `@michijs/michijs` | `./src/index` |
+
+Base URL: `.` (project root)
 
 ## Dependency diagram
 
@@ -156,18 +195,19 @@ graph TD
 
     subgraph infrastructure["Infrastructure"]
         subgraph dom["dom/"]
+            dom_entities["entities/"]
             ce["custom-elements/"]
             jsx["jsx-runtime/"]
             rendering["rendering/"]
             styles["styles/"]
             routing["routing/"]
             storage["storage/"]
-            url["url/"]
             tt["trusted-types/"]
         end
         subgraph platform["platform/"]
             net["network/"]
             plat_entities["entities/"]
+            plat_url["url/"]
         end
         node_ssr["node/"]
         plugin["plugin/"]
