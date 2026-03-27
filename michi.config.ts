@@ -19,7 +19,9 @@ export const config: ServerConfigFactory<
       minify: true,
       entryPoints: ["./examples/index.tsx"],
       tsconfig:
-        environment === "DISTRIBUTION" ? "lib.tsconfig.json" : "./examples.tsconfig.json",
+        environment === "DISTRIBUTION"
+          ? "lib.tsconfig.json"
+          : "./examples.tsconfig.json",
       splitting: true,
     },
   };

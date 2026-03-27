@@ -2,7 +2,6 @@ import type { CallableReactiveOrConst, ReactiveValuePort } from "@ports";
 
 type usePromiseShouldWait = CallableReactiveOrConst<Promise<any>>[];
 
-
 /**
  * Interface representing the result of a fetch operation.
  * @template R Type of the expected response data.

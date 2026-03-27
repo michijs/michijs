@@ -73,7 +73,7 @@ export class I18n<K extends string = string> extends ReactiveValue<K> {
       async () => await this.getCurrentTranslation(translation),
       translation[this.defaultLanguage] as Partial<T>,
       [this],
-      { useProxied: true }
+      { useProxied: true },
     );
   }
 

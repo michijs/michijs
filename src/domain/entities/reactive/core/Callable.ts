@@ -1,4 +1,3 @@
-
 // Bypass Content-Security-Policy by creating a "Callable" object instead of using function
 export class Callable implements Function {
   constructor(setterAndGetterFunction: Function = () => {}) {

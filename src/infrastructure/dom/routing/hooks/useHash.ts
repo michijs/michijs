@@ -13,7 +13,7 @@ const Hash = useComputedObserve(
         }
       : {},
   [HistoryManager],
-  {useProxied: true}
+  { useProxied: true },
 );
 
 /**

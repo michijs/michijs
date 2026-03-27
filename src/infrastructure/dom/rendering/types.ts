@@ -1,4 +1,13 @@
-import type { ObservableProxyPort, ObservablePort, ObservableProxiedArray, ObservableProxiedPrimitivePort, ObservableProxyOrConst, ObservableNonNullableProxiedPrimitiveType, UnproxifyPort, ElementFactoryPort } from "@domain";
+import type {
+  ObservableProxyPort,
+  ObservablePort,
+  ObservableProxiedArray,
+  ObservableProxiedPrimitivePort,
+  ObservableProxyOrConst,
+  ObservableNonNullableProxiedPrimitiveType,
+  UnproxifyPort,
+  ElementFactoryPort,
+} from "@domain";
 import type { PrimitiveType } from "@shared";
 
 export interface CommonJSXAttrs<T> {
@@ -58,8 +67,8 @@ export interface FCC<T = {}, S extends Element = Element>
 export type GetElementProps<El> = El extends (...args: infer Y) => any
   ? Y[0]
   : El extends {
-      new (...args: infer T): any;
-    }
+        new (...args: infer T): any;
+      }
     ? T[0]
     : El extends keyof JSX.IntrinsicElements
       ? JSX.IntrinsicElements[El]
@@ -80,7 +89,8 @@ export type ObservableType<Y> = ObservableProxyPort<Y>;
 export type ObservablePrimitiveType<RV> = ObservableProxiedPrimitivePort<RV>;
 export type ObservableArray<RV> = ObservableProxiedArray<RV>;
 export type ObservableTypeOrConst<T> = ObservableProxyOrConst<T>;
-export type ObservableNonNullablePrimitiveType = ObservableNonNullableProxiedPrimitiveType;
+export type ObservableNonNullablePrimitiveType =
+  ObservableNonNullableProxiedPrimitiveType;
 export type Unproxify<T> = UnproxifyPort<T>;
 
 export type ListProps<E, SV> = ExtendableComponentWithoutChildren<E> & {

@@ -1,4 +1,3 @@
-
 export type GetJSXProps<El> = El extends (...args: infer Y) => any
   ? Y[0]
   : El extends {
