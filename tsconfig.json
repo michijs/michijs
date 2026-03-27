@@ -6,7 +6,6 @@
     "composite": true,
     "allowUnusedLabels": true,
     "jsx": "react-jsx",
-    "strict": false,
     "jsxImportSource": "@michijs/michijs",
     "types": ["@types/trusted-types"],
     "paths": {
