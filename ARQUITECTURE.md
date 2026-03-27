@@ -89,6 +89,11 @@ src/
 │   └── node/                            # Adapter — Node.js
 │       └── rendering/                   # SSR: serialization to static HTML
 │
+│   └── plugin/                          # Adapter — esbuild build plugin
+│       ├── index.ts                     # Barrel — exports michiJSXPlugin
+│       ├── michiJSXPlugin.ts            # esbuild Plugin (onLoad hook, two-phase transform)
+│       └── transformJSX.ts              # Core JSX-to-DOM transform engine
+│
 ├── index.ts                             # Main entry point (browser)
 ├── index.node.ts                        # Node.js entry point
 ├── jsx-runtime.tsx                      # Re-export JSX runtime
@@ -129,6 +134,7 @@ Each main module exposes a barrel that re-exports all its public content:
 | `src/shared/index.ts` | All shared utils, types and typewards |
 | `src/infrastructure/dom/index.ts` | Entire DOM module: custom-elements, jsx-runtime, rendering, styles, routing, storage, url, trusted-types, polyfills, typewards, global augmentations |
 | `src/infrastructure/platform/index.ts` | Entire platform module: constants, entities, network, types |
+| `src/infrastructure/plugin/index.ts` | esbuild plugin: `michiJSXPlugin`, `transformJSXCalls`, `generateHelperImports` |
 
 ## Dependency diagram
 
@@ -164,6 +170,7 @@ graph TD
             plat_entities["entities/"]
         end
         node_ssr["node/"]
+        plugin["plugin/"]
     end
 
     %% Dependency arrows

@@ -7,4 +7,4 @@ export const removeNullableFromObject: RemoveNullableFromObject = (obj) =>
     if (value !== undefined) previousValue[key] = value;
 
     return previousValue;
-  }, {}) as NonNullable<typeof obj>;
+  }, {} as Record<string, unknown>) as NonNullable<typeof obj>;

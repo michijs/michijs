@@ -4,9 +4,9 @@ import type {
   ExtendableComponentWithoutChildren,
   CreateFCResult,
   SingleJSXElement,
-  ElementFactoryType,
 } from "../types";
-import { isObservable, bindObservable, type ReactiveValuePort } from "@domain";
+import { isObservable, bindObservable, type ReactiveValuePort,
+  type ElementFactoryPort } from "@domain";
 
 // Define a type for the return value of promises, which can be a JSX element, a function component, or a DOM element.
 type PromiseType<P> =
@@ -37,7 +37,7 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
     then,
     ...attrs
   }: AsyncComponentProps<P, T>,
-  factory: ElementFactoryType<Element>,
+  factory: ElementFactoryPort<Element, SingleJSXElement>,
 ): Node => {
   const el = asTag
     ? factory.create<ParentNode>({

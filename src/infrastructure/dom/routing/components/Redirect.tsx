@@ -1,4 +1,4 @@
-import { HistoryManager } from "../../routing/entities/HistoryManager";
+import { HistoryManager } from "../entities/HistoryManager";
 import { wait } from "@shared";
 import { unproxify } from "@domain";
 import { GenericElement } from "../../rendering/components/GenericElement";

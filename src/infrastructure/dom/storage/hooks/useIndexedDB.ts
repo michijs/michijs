@@ -1,7 +1,6 @@
 /** biome-ignore-all lint/suspicious/noAsyncPromiseExecutor: <explanation> */
 import { Observable } from "@domain";
 import type {
-  AnyObject,
   IndexeddbObservableResult,
   InitDb,
   TypedIDBObjectStore,

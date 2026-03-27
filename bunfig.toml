@@ -2,3 +2,6 @@ telemetry = false
 
 [test]
 preload = "./happydom.ts"
+
+[test.resolve]
+conditions = ["browser", "import"]

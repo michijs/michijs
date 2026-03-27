@@ -1,5 +1,6 @@
 export * from './HistoryManagerPort'
 export * from './VirtualFragmentPort'
+export * from './ElementFactoryPort'
 export * from './hooks/UseAsyncComputedObservePort'
 export * from './hooks/UseComputedObservePort'
 export * from './hooks/UseObservePort'

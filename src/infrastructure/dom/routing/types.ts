@@ -1,11 +1,8 @@
 import type { Router } from "./components/Router";
 import type { ExtendableComponentWithoutChildren } from "../rendering/types";
-import type { Hash, SearchParams } from "@shared";
-
-export type UrlFunction<
-  S extends SearchParams = SearchParams,
-  H extends Hash = Hash,
-> = (searchParamsAndHash?: { searchParams?: S; hash?: H }) => URL;
+import type { UrlFunction } from "../../platform";
+import type { ObservableProxyPort } from '@domain'
+import type { AnyObject } from '@shared'
 
 export type RouterProps<T> = ExtendableComponentWithoutChildren<T> & {
   routes?: Record<string, JSX.Element>;
@@ -20,3 +17,16 @@ export type CreateRouterResult<R extends Record<string, JSX.Element>> = [
   },
   typeof Router,
 ];
+
+
+export interface UseSearchParams {
+  <
+    // Removed because it doesnt work with observables
+    // T extends Record<string, unknown> = Record<string, unknown>,
+    T = AnyObject,
+  >(): ObservableProxyPort<T>;
+}
+
+export interface UseHash {
+  <T extends string = string>(): ObservableProxyPort<Record<T, boolean | undefined>>;
+}

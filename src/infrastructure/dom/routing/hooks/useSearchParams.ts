@@ -1,6 +1,6 @@
 import { useComputedObserve } from "@domain";
-import { HistoryManager } from "../../routing/entities/HistoryManager";
-import { setSearchParam } from "../utils/setSearchParam";
+import { HistoryManager } from "../entities/HistoryManager";
+import { setSearchParam } from "../../../platform/url/utils/setSearchParam";
 import type { UseSearchParams } from "../types";
 import { getSearchParamsValue } from "@shared";
 

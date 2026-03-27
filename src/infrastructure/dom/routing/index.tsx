@@ -1,5 +1,9 @@
 export { createRouter } from "./createRouter";
-export { urlFn } from "../url/utils/urlFn";
-export { createURL } from "../url/utils/createURL";
-export { normalizeURL } from "../url/utils/normalizeURL";
+export { urlFn } from "../../platform/url/utils/urlFn";
+export { createURL } from "../../platform/url/utils/createURL";
+export { normalizeURL } from "../../platform/url/utils/normalizeURL";
 export * from "./types";
+export * from "./hooks/useTitle";
+export * from "./components/Title";
+export * from "./components/Router";
+export * from "./components/Redirect";

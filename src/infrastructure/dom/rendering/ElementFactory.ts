@@ -1,6 +1,5 @@
 import { Namespaces } from "../../platform/constants/namespaces";
 import type {
-  ElementFactoryType,
   SingleJSXElement,
   ObservableNonNullablePrimitiveType,
   ObjectJSXElement,
@@ -13,7 +12,7 @@ import { isFragmentElement } from "./typewards/isFragmentElement";
 import { isFunctionOrClassJSXElement } from "./typewards/isFunctionOrClassJSXElement";
 import { isNotAPrimitiveJSX } from "./typewards/isNotAPrimitiveJSX";
 import { isMichiCustomElement } from "../custom-elements/typewards/isMichiCustomElement";
-import { isObservable, bindObservable, GarbageCollectableObject } from "@domain";
+import { isObservable, bindObservable, GarbageCollectableObject, type ElementFactoryPort } from "@domain";
 import { formatToKebabCase, bindFunction, isNil } from "@shared";
 import { classJSXToObjectJSXElement } from "./classJSXToObjectJSXElement";
 import { createObservableTextElement } from "./createObservableTextElement";
@@ -99,7 +98,7 @@ export class AttributeManager<S extends Element> {
 }
 
 export class ElementFactory<S extends Element>
-  implements ElementFactoryType<S>
+  implements ElementFactoryPort<S, SingleJSXElement>
 {
   contextElement?: S;
 

@@ -70,21 +70,6 @@ export { useTransition } from "./styles/hooks/useTransition";
 export { isCSSObject } from "./styles/typewards/isCSSObject";
 export { isCSSVariable } from "./styles/typewards/isCSSVariable";
 
-// URL - types
-export * from "./url/types";
-
-// URL - components
-export { Redirect, type RedirectProps } from "./url/components/Redirect";
-export { Title, type TitleProps } from "./url/components/Title";
-
-// URL - hooks
-export { useHash } from "./url/hooks/useHash";
-export { useSearchParams } from "./url/hooks/useSearchParams";
-export { useTitle } from "./url/hooks/useTitle";
-
-// URL - utils
-export { setSearchParam } from "./url/utils/setSearchParam";
-
 // Storage - types
 export * from "./storage/types";
 
@@ -98,17 +83,22 @@ export { useIndexedDB } from "./storage/hooks/useIndexedDB";
 // Storage - typewards
 export { storageIsCookieStorage } from "./storage/typewards/storageIsCookieStorage";
 
-// Routing - internals
+// Routing
 export { HistoryManager } from "./routing/entities/HistoryManager";
 export { handleNavigation } from "./routing/entities/HistoryManager/handleNavigation";
 export { LegacyHistoryManager } from "./routing/entities/HistoryManager/LegacyHistoryManager";
 export { ModernHistoryManager } from "./routing/entities/HistoryManager/ModernHistoryManager";
 export { Router } from "./routing/components/Router";
+export { Redirect, type RedirectProps } from "./routing/components/Redirect";
+export { Title, type TitleProps } from "./routing/components/Title";
+export { useTitle } from "./routing/hooks/useTitle";
+export { useHash } from "./routing/hooks/useHash";
+export { useSearchParams } from "./routing/hooks/useSearchParams";
 
 // Polyfills (internal)
 export { createBuiltInElement } from "./polyfills";
 
 // Global type augmentations (side-effect imports)
 import "./jsx-runtime/generated/JSX";
-import "./routing/navigation-api-types";
-import "./global-types";
+
+export { ElementArrayTarget } from "./entities/ElementArrayTarget";

@@ -8,6 +8,16 @@ The entire `src/michijs/` flat structure has been reorganized into a hexagonal (
 - **`infrastructure/`** — Platform adapters (`dom/`, `platform/`, `node/`)
 
 ### Added
+- **esbuild plugin** (`@michijs/michijs/plugin`): Full JSX-to-DOM transform that converts `jsx()` runtime calls into direct `document.createElement` / `document.createElementNS` / `document.createDocumentFragment` calls at build time, eliminating `ElementFactory` runtime dispatching entirely. Features:
+  - Observable support — attribute values and children that are observables are bound reactively via `bindObservable` and `GarbageCollectableObject`
+  - SVG/MathML namespace propagation — children of `<svg>` and `<math>` elements are created with `createElementNS`
+  - Style object support — each style property individually reactive
+  - Event handling — `on*` attributes converted to `addEventListener`
+  - `_` property binding — direct DOM property assignment with observable support
+  - Promise children — placeholder comment nodes replaced on resolution
+  - Fragment support — `<>...</>` mapped to `DocumentFragment`
+  - Dynamic/function tags — runtime dispatch for component functions
+  - Per-file tree-shaken helpers — only injects the helper functions actually used
 - Port interfaces (`@ports`): `ProxyHandlerPort`, `ObservableProxyPort`, `ProxiedValuePort`, `UnproxifyPort`, `ObservablePort`, `ReactiveValuePort`, `ReactiveArrayPort`, `TargetPort`, `Subscription`, `ParentSubscription`, `HistoryManagerPort`, `VirtualFragmentPort`, `UseObservePort`, `UseComputedObservePort`, `UsePromisePort`, `UsePureFunctionPort`, `UseStringTemplatePort`, `UseWatchPort`, `UseAsyncComputedObservePort`, and more
 - TypeScript path aliases: `@domain`, `@domain/*`, `@ports`, `@shared`, `@shared/*`
 - Barrel files for each module: `domain/index.ts`, `domain/ports/index.ts`, `shared/index.ts`, `infrastructure/dom/index.ts`, `infrastructure/platform/index.ts`

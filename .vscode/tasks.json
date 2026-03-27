@@ -5,6 +5,7 @@
       "label": "run",
       "type": "npm",
       "script": "start",
+      "isBackground": true,
       "group": {
         "kind": "test",
         "isDefault": true

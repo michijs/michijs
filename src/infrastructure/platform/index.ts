@@ -2,8 +2,6 @@
 export { Namespaces } from "./constants/namespaces";
 
 // Entities
-export { ElementArrayTarget } from "./entities/ElementArrayTarget";
-export { ElementProxiedArrayTarget } from "./entities/ElementProxiedArrayTarget";
 export { EventDispatcher } from "./entities/EventDispatcher";
 
 // Network
@@ -16,3 +14,8 @@ export { useFetch } from "./network/hooks/useFetch";
 // Types
 export type { GetJSXProps } from "./types/GetJSXProps";
 export type { WithChildren } from "./types/WithChildren";
+// URL - types
+export * from "./url/types";
+
+// URL - utils
+export { setSearchParam } from "./url/utils/setSearchParam";

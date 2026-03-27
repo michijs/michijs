@@ -1,4 +1,5 @@
 import { create } from "../../../../infrastructure/dom/rendering/create";
+import { List } from "../../../../infrastructure/dom/rendering/components/List";
 import type { ObservableProxyPort } from "@ports";
 import { useObserve } from "../useObserve";
 import { describe, it, expect, beforeEach } from "bun:test";
@@ -17,10 +18,13 @@ describe("Observe array tests", () => {
   beforeEach(() => {
     array = useObserve([] as number[], true);
     array.push(exampleValue);
-    node = array.List({
-      as: "div",
-      renderItem: (item) => <div>{item}</div>,
-    });
+    node = create(
+      <List
+        data={array}
+        as="div"
+        renderItem={(item) => <div>{item}</div>}
+      />,
+    );
     jsonNode = create(<>{array}</>);
   });
   function expectResult(result: number[]) {

@@ -1,7 +1,7 @@
 import type { RouterProps } from "../types";
 import { useComputedObserve } from "@domain";
 import { HistoryManager } from "../entities/HistoryManager";
-import { urlFn } from "../../url/utils/urlFn";
+import { urlFn } from "../../../platform/url/utils/urlFn";
 import { If } from "../../rendering/components/If";
 
 export const Router = <const T>({

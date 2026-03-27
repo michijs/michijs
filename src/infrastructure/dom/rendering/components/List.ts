@@ -1,7 +1,7 @@
-import { GarbageCollectableObject, isObservable, ReactiveArray, bindObservable } from "@domain";
+import { GarbageCollectableObject, isObservable, ReactiveArray, bindObservable, type ElementFactoryPort } from "@domain";
 import { create } from "../create";
+import { ElementFactory } from "../ElementFactory";
 import type {
-  ElementFactoryType,
   FC,
   ObservablePrimitiveType,
   ObservableType,
@@ -10,7 +10,7 @@ import type {
   ExtendableComponent,
   SingleJSXElement,
 } from "../types";
-import { ElementArrayTarget } from "../../../platform/entities/ElementArrayTarget";
+import { ElementArrayTarget } from "../../entities/ElementArrayTarget";
 import { VirtualFragment } from "../VirtualFragment";
 
 /**
@@ -34,7 +34,7 @@ type ListComponentProps<T extends ObservableTypeOrConst<any[]>, E> = ExtendableC
     ? Z
     : T[any]
   >;
-  elementFactory?: ElementFactoryType
+  elementFactory?: ElementFactoryPort<Element, SingleJSXElement>
 }
 
 /**
@@ -50,14 +50,15 @@ type ListComponentProps<T extends ObservableTypeOrConst<any[]>, E> = ExtendableC
  */
 export const List = <const T extends ObservableTypeOrConst<any[]>, const E = FC>(
   { data, renderItem, as: asTag, elementFactory, ...attrs }: ListComponentProps<T, E>,
-  factory: ElementFactoryType,
+  factory?: ElementFactoryPort<Element, SingleJSXElement>,
 ) => {
-  const finalFactory = elementFactory ?? factory;
-  if ((data as any) instanceof ReactiveArray) {
-    const castedData = data as unknown as ReactiveArray<any>
+  const resolvedFactory = elementFactory ?? factory ?? new ElementFactory();
+  const underlyingData = (data as any)?.$value ?? data;
+  if (underlyingData instanceof ReactiveArray) {
+    const castedData = underlyingData as ReactiveArray<any>
     let el: ParentNode | VirtualFragment;
     if (asTag)
-      el = factory.create<ParentNode>({
+      el = resolvedFactory.create<ParentNode>({
         jsxTag: asTag,
         attrs,
       } as SingleJSXElement);
@@ -69,10 +70,13 @@ export const List = <const T extends ObservableTypeOrConst<any[]>, const E = FC>
     const newTarget = new ElementArrayTarget(
       el,
       renderItem,
-      finalFactory,
+      resolvedFactory,
     );
 
     castedData.targets.push(newTarget);
+
+    // Render existing items in the array
+    newTarget.push(castedData as unknown as any[]);
 
     return el.valueOf() as Node;
   }
@@ -83,11 +87,11 @@ export const List = <const T extends ObservableTypeOrConst<any[]>, const E = FC>
     bindObservable<T>(data, (data) =>
       gc.ref.replaceChildren(
         ...data.map((x) =>
-          create(renderItem(x, finalFactory), finalFactory.contextElement),
+          create(renderItem(x, resolvedFactory), resolvedFactory.contextElement),
         ),
       ),
     );
     return el.valueOf();
   }
-  return data.map((x) => renderItem(x, factory));
+  return data.map((x) => renderItem(x, resolvedFactory));
 };

@@ -1,5 +1,5 @@
-import type { ObservableProxyPort, ObservablePort, ObservableProxiedArray, ObservableProxiedPrimitivePort, ObservableProxyOrConst, ObservableNonNullableProxiedPrimitiveType, UnproxifyPort } from "@domain";
-import type { AnyObject, PrimitiveType } from "@shared";
+import type { ObservableProxyPort, ObservablePort, ObservableProxiedArray, ObservableProxiedPrimitivePort, ObservableProxyOrConst, ObservableNonNullableProxiedPrimitiveType, UnproxifyPort, ElementFactoryPort } from "@domain";
+import type { PrimitiveType } from "@shared";
 
 export interface CommonJSXAttrs<T> {
   attrs: Record<string, any> & {
@@ -34,17 +34,8 @@ export type FCProps<T = {}> = {
   [k in keyof T]: k extends "children" ? T[k] : ObservableProxyPort<T[k]>;
 };
 
-export interface ElementFactoryType<S extends Element = Element> {
-  contextElement?: S;
-  setProperties(
-    el: Element,
-    attributes: AnyObject,
-    shouldValidateInitialValue?: boolean,
-  ): void;
-  create<T = Node>(jsx: SingleJSXElement): T;
-}
 export interface CloneFactoryType<S extends Element = Element>
-  extends ElementFactoryType<S> {
+  extends ElementFactoryPort<S, SingleJSXElement> {
   clone<T = Node>(
     template: Node,
     jsx: SingleJSXElement,
@@ -54,12 +45,12 @@ export interface CloneFactoryType<S extends Element = Element>
 
 export type CreateFCResult<T = {}, S extends Element = Element> = (
   attrs: FCProps<T>,
-  factory: ElementFactoryType<S>,
+  factory: ElementFactoryPort<S, SingleJSXElement>,
 ) => SingleJSXElement;
 
 export type FC<T = {}, S extends Element = Element> = (
   attrs: T,
-  factory: ElementFactoryType<S>,
+  factory: ElementFactoryPort<S, SingleJSXElement>,
 ) => SingleJSXElement;
 export interface FCC<T = {}, S extends Element = Element>
   extends FC<T & { children?: JSX.Element }, S> {}

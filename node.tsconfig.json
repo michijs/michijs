@@ -1,19 +1,25 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@michijs/shared-configs/tsconfig",
-  "compilerOptions": {
+  "extends": "./tsconfig.json","compilerOptions": {
     "rootDir": ".",
-    "baseUrl": "./src",
+    "composite": true,
     "allowUnusedLabels": true,
+    "jsx": "react-jsx",
+    "strict": false,
+    "jsxImportSource": "@michijs/michijs",
     "paths": {
-      "@michijs/michijs/jsx-runtime": ["./infrastructure/node/jsx-runtime/index"],
-      "@ports": ["./domain/ports/index"],
-      "@domain": ["./domain/index"],
-      "@domain/*": ["./domain/*"],
-      "@shared/*": ["./shared/*"],
-      "@shared": ["./shared/index.ts"]
+      "@michijs/michijs/*": ["./src/*"],
+      "@michijs/michijs": ["./src/index"],
+      "@michijs/michijs/jsx-runtime": [
+        "./src/infrastructure/node/jsx-runtime/index"
+      ],
+      "@ports": ["./src/domain/ports/index"],
+      "@domain": ["./src/domain/index"],
+      "@domain/*": ["./src/domain/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@shared": ["./src/shared/index.ts"]
     }
   },
   "include": ["src"],
-  "exclude": ["src/**/*.spec.ts", "src/**/*.spec.tsx", "src/infrastructure/dom"]
+  "exclude": ["src/**/*.spec.ts", "src/**/*.spec.tsx", "dist", "build", "src/infrastructure/plugin", "src/infrastructure/dom", "src/index.ts"]
 }

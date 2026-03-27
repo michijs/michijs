@@ -1,5 +1,5 @@
 import { formatToKebabCase } from "@shared";
-import type { UrlFunction } from "../../routing/types";
+import type { UrlFunction } from "../types";
 import { createURL } from "./createURL";
 
 export const urlFn = (

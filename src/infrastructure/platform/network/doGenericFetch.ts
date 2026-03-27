@@ -1,5 +1,5 @@
 import type { AnyObject, SearchParams } from "@shared";
-import { createURL } from "../../dom/url/utils/createURL";
+import { createURL } from "../url/utils/createURL";
 import type { DoFetchProps } from "./types";
 
 const getErrorMessage = async (response: Response): Promise<string> => {

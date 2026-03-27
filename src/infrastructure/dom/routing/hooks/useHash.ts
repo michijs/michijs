@@ -1,5 +1,5 @@
 import { useComputedObserve } from "@domain";
-import { HistoryManager } from "../../routing/entities/HistoryManager";
+import { HistoryManager } from "../entities/HistoryManager";
 import type { UseHash } from "../types";
 
 // hashchange does not work properly

@@ -38,3 +38,5 @@ docs/license.md
 .venv
 
 docs/javascripts
+
+src/infrastructure/plugin

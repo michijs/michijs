@@ -3,17 +3,34 @@
   "extends": "@michijs/shared-configs/tsconfig",
   "compilerOptions": {
     "rootDir": ".",
-    "baseUrl": "./src",
+    "composite": true,
     "allowUnusedLabels": true,
+    "jsx": "react-jsx",
+    "strict": false,
+    "jsxImportSource": "@michijs/michijs",
+    "types": ["@types/trusted-types"],
     "paths": {
-      "@michijs/michijs/jsx-runtime": ["./infrastructure/dom/jsx-runtime/index"],
-      "@ports": ["./domain/ports/index"],
-      "@domain": ["./domain/index"],
-      "@domain/*": ["./domain/*"],
-      "@shared/*": ["./shared/*"],
-      "@shared": ["./shared/index.ts"]
+      "@shared": ["./src/shared/index"],
+      "@domain": ["./src/domain/index"],
+      "@ports": ["./src/domain/ports/index"],
+      "@michijs/michijs/jsx-runtime": [
+        "./src/infrastructure/dom/jsx-runtime/index"
+      ],
+      "@domain/*": ["./src/domain/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@michijs/michijs/*": ["./src/*"],
+      "@michijs/michijs": ["./src/index"],
     }
   },
-  "include": ["src"],
-  "exclude": ["src/**/*.spec.ts", "src/**/*.spec.tsx", "src/infrastructure/node"]
+  "references": [
+    {
+      "path": "./lib.tsconfig.json"
+    },
+    {
+      "path": "./tests.tsconfig.json"
+    },
+    {
+      "path": "./examples.tsconfig.json"
+    }
+  ]
 }
