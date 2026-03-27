@@ -1,9 +1,10 @@
 import type { ProxiedValuePort, ProxyHandlerPort } from "@ports";
 
-export class ObservableProxyHandler<T>
-  implements ProxyHandlerPort<T>
-{
-  callIfExists(name: keyof ProxyHandler<ProxiedValuePort<T>>, ...args: unknown[]) {
+export class ObservableProxyHandler<T> implements ProxyHandlerPort<T> {
+  callIfExists(
+    name: keyof ProxyHandler<ProxiedValuePort<T>>,
+    ...args: unknown[]
+  ) {
     const target = args[0] as ProxiedValuePort<T>;
     return target.handler[name]
       ? // @ts-ignore

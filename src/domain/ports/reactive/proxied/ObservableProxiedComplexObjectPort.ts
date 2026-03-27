@@ -1,6 +1,4 @@
 import type { ObservableProxiedPrimitivePort } from "@ports";
 
-
-export type ObservableProxiedComplexObjectPort<
-  RV
-> = ObservableProxiedPrimitivePort<RV>;
+export type ObservableProxiedComplexObjectPort<RV> =
+  ObservableProxiedPrimitivePort<RV>;

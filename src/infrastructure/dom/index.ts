@@ -12,7 +12,10 @@ export * from "./routing";
 export * from "./custom-elements";
 export { getMountPoint } from "./custom-elements/getMountPoint";
 export { getShadowRoot } from "./custom-elements/getShadowRoot";
-export { ElementInternals, type ElementInternalsProps } from "./custom-elements/components/ElementInternals";
+export {
+  ElementInternals,
+  type ElementInternalsProps,
+} from "./custom-elements/components/ElementInternals";
 export { Host } from "./custom-elements/components/Host";
 export { Slot } from "./custom-elements/components/Slot";
 export { defineEvent } from "./custom-elements/properties/defineEvent";
@@ -26,7 +29,11 @@ export * from "./rendering/render";
 export * from "./rendering/create";
 export * from "./rendering/types";
 export { VirtualFragment } from "./rendering/VirtualFragment";
-export { AttributeManager, ElementFactory, ElementFactoryWithNamespace } from "./rendering/ElementFactory";
+export {
+  AttributeManager,
+  ElementFactory,
+  ElementFactoryWithNamespace,
+} from "./rendering/ElementFactory";
 export { CloneFactory } from "./rendering/CloneFactory";
 export { setAttribute } from "./rendering/setAttribute";
 export { getAttributeValue } from "./rendering/getAttributeValue";

@@ -107,7 +107,6 @@ export const useIndexedDB: UseIndexedDB = (name, objectsStore, version = 1) => {
                     resolve(result);
                   }
                 });
-
             },
           },
         );

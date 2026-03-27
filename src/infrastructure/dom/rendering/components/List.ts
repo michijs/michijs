@@ -1,4 +1,11 @@
-import { GarbageCollectableObject, isObservable, ReactiveArray, ProxiedArray, bindObservable, type ElementFactoryPort } from "@domain";
+import {
+  GarbageCollectableObject,
+  isObservable,
+  ReactiveArray,
+  ProxiedArray,
+  bindObservable,
+  type ElementFactoryPort,
+} from "@domain";
 import { create } from "../create";
 import { ElementFactory } from "../ElementFactory";
 import type {
@@ -19,7 +26,10 @@ import { VirtualFragment } from "../VirtualFragment";
  *
  * @template T - The type of items in the data array.
  */
-type ListComponentProps<T extends ObservableTypeOrConst<any[]>, E> = ExtendableComponent<E> & {
+type ListComponentProps<
+  T extends ObservableTypeOrConst<any[]>,
+  E,
+> = ExtendableComponent<E> & {
   /**
    * The data source, which can be a regular array or an observable array.
    */
@@ -30,13 +40,13 @@ type ListComponentProps<T extends ObservableTypeOrConst<any[]>, E> = ExtendableC
    */
   renderItem: FC<
     [T] extends [ObservableArray<infer Y>]
-    ? ObservableType<Y>
-    : [T] extends [ObservablePrimitiveType<(infer Z)[]>]
-    ? Z
-    : T[any]
+      ? ObservableType<Y>
+      : [T] extends [ObservablePrimitiveType<(infer Z)[]>]
+        ? Z
+        : T[any]
   >;
-  elementFactory?: ElementFactoryPort<Element, SingleJSXElement>
-}
+  elementFactory?: ElementFactoryPort<Element, SingleJSXElement>;
+};
 
 /**
  * A generic list rendering component that supports both static arrays and observable arrays.
@@ -49,14 +59,23 @@ type ListComponentProps<T extends ObservableTypeOrConst<any[]>, E> = ExtendableC
  * @param factory - The element factory to use
  * @returns The rendered list, either by using the observable's `.List` method or via a direct map.
  */
-export const List = <const T extends ObservableTypeOrConst<any[]>, const E = FC>(
-  { data, renderItem, as: asTag, elementFactory, ...attrs }: ListComponentProps<T, E>,
+export const List = <
+  const T extends ObservableTypeOrConst<any[]>,
+  const E = FC,
+>(
+  {
+    data,
+    renderItem,
+    as: asTag,
+    elementFactory,
+    ...attrs
+  }: ListComponentProps<T, E>,
   factory?: ElementFactoryPort<Element, SingleJSXElement>,
 ) => {
   const resolvedFactory = elementFactory ?? factory ?? new ElementFactory();
   const underlyingData = (data as any)?.$value ?? data;
   if (underlyingData instanceof ReactiveArray) {
-    const castedData = underlyingData as ReactiveArray<any>
+    const castedData = underlyingData as ReactiveArray<any>;
     let el: ParentNode | VirtualFragment;
     if (asTag)
       el = resolvedFactory.create<ParentNode>({
@@ -68,9 +87,10 @@ export const List = <const T extends ObservableTypeOrConst<any[]>, const E = FC>
         el = new VirtualFragment();
       }
 
-    const newTarget = underlyingData instanceof ProxiedArray
-      ? new ElementProxiedArrayTarget(el, renderItem, resolvedFactory)
-      : new ElementArrayTarget(el, renderItem, resolvedFactory);
+    const newTarget =
+      underlyingData instanceof ProxiedArray
+        ? new ElementProxiedArrayTarget(el, renderItem, resolvedFactory)
+        : new ElementArrayTarget(el, renderItem, resolvedFactory);
 
     castedData.targets.push(newTarget);
 
@@ -86,7 +106,10 @@ export const List = <const T extends ObservableTypeOrConst<any[]>, const E = FC>
     bindObservable<T>(data, (data) =>
       gc.ref.replaceChildren(
         ...data.map((x) =>
-          create(renderItem(x, resolvedFactory), resolvedFactory.contextElement),
+          create(
+            renderItem(x, resolvedFactory),
+            resolvedFactory.contextElement,
+          ),
         ),
       ),
     );

@@ -1,14 +1,18 @@
 import type { ReactiveArrayTargetPort, ReactiveArrayPort } from "@ports";
 
 export class ReactiveArray<
-  V,
-  T extends ReactiveArrayTargetPort<V, unknown> = ReactiveArrayTargetPort<V, unknown>,
-> extends Array<V> implements ReactiveArrayPort<V> {
+    V,
+    T extends ReactiveArrayTargetPort<V, unknown> = ReactiveArrayTargetPort<
+      V,
+      unknown
+    >,
+  >
+  extends Array<V>
+  implements ReactiveArrayPort<V>
+{
   declare targets: Array<T>;
 
-  constructor(
-    ...items: V[]
-  ) {
+  constructor(...items: V[]) {
     super(...items);
     Object.defineProperty(this, "targets", {
       enumerable: false,

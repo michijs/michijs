@@ -3,7 +3,7 @@ import { customMapAndSetClear } from "./customMapAndSetClear";
 import { customMapAndSetDelete } from "./customMapAndSetDelete";
 import type { ProxiedValuePort, ProxyHandlerPort } from "@ports";
 import { cloneMap } from "@shared";
-import { unproxify } from '../../utils/unproxify';
+import { unproxify } from "../../utils/unproxify";
 
 export class MapProxyHandler<T extends Map<any, any>>
   extends ObjectProxyHandler<T>
@@ -42,7 +42,10 @@ export class MapProxyHandler<T extends Map<any, any>>
     target.$value = this.getInitialValue(target, unproxifiedValue);
     target.notifyCurrentValue();
   }
-  getInitialValue(target: ProxiedValuePort<T>, unproxifiedValue: Map<any, any>): T {
+  getInitialValue(
+    target: ProxiedValuePort<T>,
+    unproxifiedValue: Map<any, any>,
+  ): T {
     return cloneMap(unproxifiedValue, (value) =>
       this.createProxyChild(target, value),
     ) as T;
