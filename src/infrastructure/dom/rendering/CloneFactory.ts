@@ -1,7 +1,11 @@
 import { isObservable } from "@domain";
 import { classJSXToObjectJSXElement } from "./classJSXToObjectJSXElement";
 import { ElementFactory } from "./ElementFactory";
-import type { CloneFactoryType, SingleJSXElement, ObservableNonNullablePrimitiveType } from "./types";
+import type {
+  CloneFactoryType,
+  SingleJSXElement,
+  ObservableNonNullablePrimitiveType,
+} from "./types";
 import { isClassJSXElement } from "./typewards/isClassJSXElement";
 import { isFragmentElement } from "./typewards/isFragmentElement";
 import { isFunctionOrClassJSXElement } from "./typewards/isFunctionOrClassJSXElement";
@@ -9,10 +13,10 @@ import { isNotAPrimitiveJSX } from "./typewards/isNotAPrimitiveJSX";
 import { updateObservableTextElement } from "./updateObservableTextElement";
 import { updateTextElement } from "./updateTextElement";
 
-
 export class CloneFactory<S extends Element>
   extends ElementFactory<S>
-  implements CloneFactoryType<S> {
+  implements CloneFactoryType<S>
+{
   private template: Node;
   clone<T = Node>(jsx: SingleJSXElement): T {
     const clonedNode = this.template.cloneNode(true);
@@ -51,7 +55,7 @@ export class CloneFactory<S extends Element>
       if (isObservable(jsx))
         return updateObservableTextElement(
           clonedNode as Text,
-          jsx as unknown as ObservableNonNullablePrimitiveType
+          jsx as unknown as ObservableNonNullablePrimitiveType,
         );
       const { children, ...attrs } = jsx.attrs;
       if (children)
@@ -69,7 +73,7 @@ export class CloneFactory<S extends Element>
       if (isObservable(jsx))
         return updateObservableTextElement(
           clonedNode as Text,
-          jsx as unknown as ObservableNonNullablePrimitiveType
+          jsx as unknown as ObservableNonNullablePrimitiveType,
         );
     }
     return updateTextElement(clonedNode as Text, jsx);

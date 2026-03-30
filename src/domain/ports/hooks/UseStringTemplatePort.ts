@@ -1,6 +1,5 @@
 import type { CallableReactiveOrConst, CallableProxiedValuePort } from "@ports";
 
-
 export interface UseStringTemplatePort {
   (
     templateStringsArray: TemplateStringsArray,

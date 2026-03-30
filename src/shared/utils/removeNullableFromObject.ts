@@ -3,8 +3,11 @@ interface RemoveNullableFromObject {
 }
 
 export const removeNullableFromObject: RemoveNullableFromObject = (obj) =>
-  Object.entries(obj).reduce((previousValue, [key, value]) => {
-    if (value !== undefined) previousValue[key] = value;
+  Object.entries(obj).reduce(
+    (previousValue, [key, value]) => {
+      if (value !== undefined) previousValue[key] = value;
 
-    return previousValue;
-  }, {} as Record<string, unknown>) as NonNullable<typeof obj>;
+      return previousValue;
+    },
+    {} as Record<string, unknown>,
+  ) as NonNullable<typeof obj>;

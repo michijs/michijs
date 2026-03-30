@@ -21,7 +21,7 @@
       "@domain/*": ["./src/domain/*"],
       "@shared/*": ["./src/shared/*"],
       "@michijs/michijs/*": ["./src/*"],
-      "@michijs/michijs": ["./src/index"],
+      "@michijs/michijs": ["./src/index"]
     }
   },
   "references": [
