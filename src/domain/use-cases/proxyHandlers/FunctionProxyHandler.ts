@@ -5,9 +5,7 @@ import type {
 } from "@ports";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 
-export class FunctionProxyHandler
-  implements ProxyHandlerPort<Function>
-{
+export class FunctionProxyHandler implements ProxyHandlerPort<Function> {
   rootObservableCallback?: () => ObservableProxyPort<any>;
 
   constructor(rootObservableCallback?: () => ObservableProxyPort<any>) {

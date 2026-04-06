@@ -10,7 +10,8 @@ import { ElementArrayTarget } from "./ElementArrayTarget";
  */
 export class ElementProxiedArrayTarget<V>
   extends ElementArrayTarget<V>
-  implements TargetPort<V, Node> {
+  implements TargetPort<V, Node>
+{
   pop(): void {
     this.element.lastChild?.remove();
   }

@@ -7,14 +7,14 @@ export type StringArrayToDelimiterCase<
   Delimiter extends string,
 > = Parts extends [`${infer FirstPart}`, ...infer RemainingParts]
   ? `${StringPartToDelimiterCase<
-    FirstPart,
-    UsedWordSeparators,
-    UsedUpperCaseCharacters,
-    Delimiter
-  >}${StringArrayToDelimiterCase<
-    RemainingParts,
-    UsedWordSeparators,
-    UsedUpperCaseCharacters,
-    Delimiter
-  >}`
+      FirstPart,
+      UsedWordSeparators,
+      UsedUpperCaseCharacters,
+      Delimiter
+    >}${StringArrayToDelimiterCase<
+      RemainingParts,
+      UsedWordSeparators,
+      UsedUpperCaseCharacters,
+      Delimiter
+    >}`
   : "";

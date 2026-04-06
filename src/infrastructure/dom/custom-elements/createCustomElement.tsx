@@ -17,7 +17,13 @@ import { getMountPoint } from "./getMountPoint";
 import { defineReflectedAttributes } from "./properties/defineReflectedAttributes";
 import { useStyleSheet } from "../styles/hooks/useStyleSheet";
 import { convertCssObjectToCssVariablesObject } from "../styles/convertCssObjectToCssVariablesObject";
-import { MappedIdGenerator, IdGenerator, useComputedObserve, useObserveInternal, type ObservableProxiedObject } from "@domain";
+import {
+  MappedIdGenerator,
+  IdGenerator,
+  useComputedObserve,
+  useObserveInternal,
+  type ObservableProxiedObject,
+} from "@domain";
 import { createBuiltInElement } from "../polyfills";
 import { getShadowRoot } from "./getShadowRoot";
 import { cloneStylesheet } from "../styles/cloneStylesheet";
