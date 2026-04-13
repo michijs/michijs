@@ -81,11 +81,10 @@ try {
 mkdirSync(generatedPath, { recursive: true });
 
 // Copy base htmltype files
-cpSync(
-  "./node_modules/@michijs/htmltype/dist",
-  htmlTypePath,
-  { force: true, recursive: true },
-);
+cpSync("./node_modules/@michijs/htmltype/dist", htmlTypePath, {
+  force: true,
+  recursive: true,
+});
 renameFiles(htmlTypePath);
 
 // Generate types without MichiAttributes, Events, or Observables.
@@ -138,7 +137,10 @@ const eventsIndexPath = `${eventsPath}/index.ts`;
 let eventsIndexContent = readFileSync(eventsIndexPath, "utf-8");
 eventsIndexContent = eventsIndexContent
   .replace(/export \* from "\.\/TypedEvents";\n?/, "")
-  .replace(/export \* from "\.\/TypedEventHandlers\/TypedOnErrorEventHandler";\n?/, "");
+  .replace(
+    /export \* from "\.\/TypedEventHandlers\/TypedOnErrorEventHandler";\n?/,
+    "",
+  );
 writeFileSync(eventsIndexPath, eventsIndexContent);
 
 // Generate JSX.ts for Node (Element = string, no MichiAttributes, no SingleJSXElement)

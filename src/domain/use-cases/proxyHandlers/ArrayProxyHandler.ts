@@ -60,12 +60,13 @@ export class ArrayProxyHandler<T extends ProxiedArray<any>>
         if (deleteCount > 0 || items.length > 0) target.notifyCurrentValue();
         return result;
       },
-    $clear: (target: ProxiedValuePort<T>, bindedTargetProperty: Function) => () => {
-      if (target.$value.length > 0) {
-        bindedTargetProperty();
-        target.notifyCurrentValue();
-      }
-    },
+    $clear:
+      (target: ProxiedValuePort<T>, bindedTargetProperty: Function) => () => {
+        if (target.$value.length > 0) {
+          bindedTargetProperty();
+          target.notifyCurrentValue();
+        }
+      },
     $remove: this.$callAndNotifyIfLengthChangedCallback,
     $swap: this.$callAndNotifyIfTrueCallback,
     pop: this.$callAndNotifyIfTrueCallback,
@@ -88,7 +89,10 @@ export class ArrayProxyHandler<T extends ProxiedArray<any>>
     }
     return this.updateHandlerAndValue(target, unproxifiedValue);
   }
-  getInitialValue(target: ProxiedValuePort<T>, unproxifiedValue: Array<any>): T {
+  getInitialValue(
+    target: ProxiedValuePort<T>,
+    unproxifiedValue: Array<any>,
+  ): T {
     return new ProxiedArray(
       ...this.$cloneAndProxify(target, unproxifiedValue),
     ) as unknown as T;

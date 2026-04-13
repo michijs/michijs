@@ -53,24 +53,28 @@ function escapeHtml(value: string): string {
  * Vendor prefixes like `WebkitTransform` -> `-webkit-transform`.
  */
 function camelToKebab(str: string): string {
-  return str.replace(/[A-Z]/g, (match, offset) =>
-    `${offset > 0 ? "-" : ""}${match.toLowerCase()}`
+  return str.replace(
+    /[A-Z]/g,
+    (match, offset) => `${offset > 0 ? "-" : ""}${match.toLowerCase()}`,
   );
 }
 
 /**
  * Converts a CSSProperties-like object to an inline style string.
  */
-function styleToString(style: Record<string, string | number | null | undefined>): string {
+function styleToString(
+  style: Record<string, string | number | null | undefined>,
+): string {
   const parts: string[] = [];
   for (const key in style) {
     const value = style[key];
     if (value == null) continue;
     // CSS custom properties (--*) are used as-is
     const cssKey = key.startsWith("--") ? key : camelToKebab(key);
-    const cssValue = typeof value === "number" && value !== 0 && !cssKey.startsWith("--")
-      ? `${value}px`
-      : String(value);
+    const cssValue =
+      typeof value === "number" && value !== 0 && !cssKey.startsWith("--")
+        ? `${value}px`
+        : String(value);
     parts.push(`${cssKey}: ${cssValue}`);
   }
   return parts.join("; ");
@@ -109,7 +113,9 @@ function serializeAttrs(attrs: Record<string, unknown>): string {
       continue;
     }
     if (key === "style" && typeof value === "object") {
-      const styleStr = styleToString(value as Record<string, string | number | null | undefined>);
+      const styleStr = styleToString(
+        value as Record<string, string | number | null | undefined>,
+      );
       if (styleStr) parts.push(` style="${escapeAttr(styleStr)}"`);
       continue;
     }

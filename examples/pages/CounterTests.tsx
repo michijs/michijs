@@ -34,7 +34,7 @@ const TestCustomElement = createCustomElement("test-custom-element", {
     },
   },
   render() {
-    console.log(this.arrayTest())
+    console.log(this.arrayTest());
     return (
       <>
         {this.count.compute((v) => v.toFixed(2))}

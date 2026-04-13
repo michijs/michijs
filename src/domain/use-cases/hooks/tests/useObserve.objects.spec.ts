@@ -47,7 +47,11 @@ describe("Observe object tests", () => {
   });
   describe("With Complex values", () => {
     const obj = useObserve<ObservableProxiedComplexObjectPort<File>>(
-      new File([""], "test") as unknown as ObservableProxiedComplexObjectPort<File>, true
+      new File(
+        [""],
+        "test",
+      ) as unknown as ObservableProxiedComplexObjectPort<File>,
+      true,
     );
 
     it("Getting the value should return same instance type", () => {

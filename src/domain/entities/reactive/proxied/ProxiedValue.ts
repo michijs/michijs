@@ -6,7 +6,7 @@ import type {
   ParentSubscription,
   ProxyHandlerPort,
 } from "@ports";
-import {unproxify} from '../../../utils/unproxify'
+import { unproxify } from "../../../utils/unproxify";
 import { ReactiveValue } from "../core/ReactiveValue";
 
 export class ProxiedValue<V>

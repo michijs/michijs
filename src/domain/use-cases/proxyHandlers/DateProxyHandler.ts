@@ -1,5 +1,5 @@
 import type { ProxiedValuePort, ProxyHandlerPort } from "@ports";
-import { unproxify } from '../../utils/unproxify';
+import { unproxify } from "../../utils/unproxify";
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 
 export class DateProxyHandler

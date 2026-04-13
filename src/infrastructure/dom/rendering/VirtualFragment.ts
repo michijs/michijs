@@ -1,9 +1,7 @@
 import type { VirtualFragmentPort } from "@domain";
 import { forEachChildren } from "@shared";
 
-export class VirtualFragment
-  implements
-  VirtualFragmentPort {
+export class VirtualFragment implements VirtualFragmentPort {
   private startItem = document.createComment("<fragment>");
   private endItem = document.createComment("</fragment>");
   private initialFragment = new DocumentFragment();

@@ -1,5 +1,8 @@
-import type { CallableReactiveValuePort, CallableProxiedValuePort, UseWatchDepsPort } from "@ports";
-
+import type {
+  CallableReactiveValuePort,
+  CallableProxiedValuePort,
+  UseWatchDepsPort,
+} from "@ports";
 
 export interface UseComputedObservePortSharedOptions {
   onBeforeUpdate?(): void;
@@ -17,11 +20,11 @@ export interface UseComputedObservePort {
   <T>(
     callback: () => T,
     deps: UseWatchDepsPort,
-    options: UseComputedObservePortOptions
+    options: UseComputedObservePortOptions,
   ): CallableReactiveValuePort<T>;
   <T>(
     callback: () => T,
     deps: UseWatchDepsPort,
-    options?: UseProxiedComputedObservePortOptions
+    options?: UseProxiedComputedObservePortOptions,
   ): CallableProxiedValuePort<T>;
 }

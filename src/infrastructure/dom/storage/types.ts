@@ -90,4 +90,4 @@ export type IndexeddbObservableResult<T extends AnyObject> = {
 } & ObservablePort<keyof T>;
 
 export interface CookieStorageConstructor
-  extends Omit<CookieInit, "name" | "value"> { }
+  extends Omit<CookieInit, "name" | "value"> {}

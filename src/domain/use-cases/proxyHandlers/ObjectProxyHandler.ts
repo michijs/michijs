@@ -1,5 +1,5 @@
 import type { ProxiedValuePort } from "@ports";
-import { unproxify } from '../../utils/unproxify';
+import { unproxify } from "../../utils/unproxify";
 import { SharedProxyHandler } from "./SharedProxyHandler";
 
 export abstract class ObjectProxyHandler<T extends object>
