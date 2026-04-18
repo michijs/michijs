@@ -35,5 +35,6 @@
       "path": "./examples.tsconfig.json"
     }
   ],
+  "include": [],
   "exclude": ["node_modules"]
 }
