@@ -22,7 +22,9 @@ export const useComputedObserve: UseComputedObservePort = (
     try {
       const callbackResult = callback();
       options?.onBeforeUpdate?.();
-      (newObservable as CallableReactiveValuePort<object>)(callbackResult as object);
+      (newObservable as CallableReactiveValuePort<object>)(
+        callbackResult as object,
+      );
       options?.onAfterUpdate?.();
     } catch (ex) {
       throw ex;

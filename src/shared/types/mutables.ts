@@ -14,13 +14,10 @@ export type MutableArrayProperties =
 
 export interface ReadWriteArray<RV, SV>
   extends Pick<Array<RV | SV>, MutableArrayNewItemsProperties>,
-  Omit<Array<SV>, MutableArrayNewItemsProperties> { }
+    Omit<Array<SV>, MutableArrayNewItemsProperties> {}
 export interface ReadWriteMap<K, RV, SV>
   extends Pick<Map<K, RV | SV>, MutableMapNewItemsProperties>,
-  Omit<Map<K, SV>, MutableMapNewItemsProperties> { }
+    Omit<Map<K, SV>, MutableMapNewItemsProperties> {}
 export interface ReadWriteSet<RV, SV>
   extends Pick<Set<RV | SV>, MutableSetNewDeleteItemsProperties>,
-  Omit<Set<SV>, MutableSetNewDeleteItemsProperties> { }
-
-
-
+    Omit<Set<SV>, MutableSetNewDeleteItemsProperties> {}

@@ -12,7 +12,12 @@ import { isFragmentElement } from "./typewards/isFragmentElement";
 import { isFunctionOrClassJSXElement } from "./typewards/isFunctionOrClassJSXElement";
 import { isNotAPrimitiveJSX } from "./typewards/isNotAPrimitiveJSX";
 import { isMichiCustomElement } from "../custom-elements/typewards/isMichiCustomElement";
-import { isObservable, bindObservable, GarbageCollectableObject, type ElementFactoryPort } from "@domain";
+import {
+  isObservable,
+  bindObservable,
+  GarbageCollectableObject,
+  type ElementFactoryPort,
+} from "@domain";
 import { formatToKebabCase, bindFunction, isNil } from "@shared";
 import { classJSXToObjectJSXElement } from "./classJSXToObjectJSXElement";
 import { createObservableTextElement } from "./createObservableTextElement";
@@ -252,4 +257,3 @@ export class ElementFactoryWithNamespace<
     return el;
   };
 }
-

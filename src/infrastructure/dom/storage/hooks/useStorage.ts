@@ -24,13 +24,10 @@ export const useStorage: UseStorage = (item, storage = localStorage) => {
     return parseStorageValue(key, localStorageValue);
   }
   const newObservable = useObserveInternal(
-    Object.keys(item).reduce(
-      (previousValue, key) => {
-        previousValue[key] = getStorageValue(key)
-        return previousValue
-      },
-      {},
-    ),
+    Object.keys(item).reduce((previousValue, key) => {
+      previousValue[key] = getStorageValue(key);
+      return previousValue;
+    }, {}),
   );
 
   for (const [key, value] of Object.entries(newObservable)) {

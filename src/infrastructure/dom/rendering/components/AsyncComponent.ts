@@ -5,8 +5,12 @@ import type {
   CreateFCResult,
   SingleJSXElement,
 } from "../types";
-import { isObservable, bindObservable, type ReactiveValuePort,
-  type ElementFactoryPort } from "@domain";
+import {
+  isObservable,
+  bindObservable,
+  type ReactiveValuePort,
+  type ElementFactoryPort,
+} from "@domain";
 
 // Define a type for the return value of promises, which can be a JSX element, a function component, or a DOM element.
 type PromiseType<P> =
