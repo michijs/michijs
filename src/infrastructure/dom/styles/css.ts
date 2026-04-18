@@ -1,4 +1,9 @@
-import { GarbageCollectableObject, useStringTemplate, bindObservable, type ObservableProxyPort } from "@domain";
+import {
+  GarbageCollectableObject,
+  useStringTemplate,
+  bindObservable,
+  type ObservableProxyPort,
+} from "@domain";
 
 /**
  * Allows to create a Constructable Stylesheet with a Template String.

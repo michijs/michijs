@@ -1,12 +1,15 @@
 import { useObserve } from "../useObserve";
 import { describe, it, expect } from "bun:test";
 
-const obj = useObserve({
-  text: "a",
-  testFunction() {
-    return obj.text();
+const obj = useObserve(
+  {
+    text: "a",
+    testFunction() {
+      return obj.text();
+    },
   },
-}, true);
+  true,
+);
 
 const effect = obj.testFunction();
 

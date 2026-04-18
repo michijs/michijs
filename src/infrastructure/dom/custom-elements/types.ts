@@ -1,9 +1,24 @@
 import type { EventDispatcher } from "../../platform/entities/EventDispatcher";
-import type { HTMLElements, GlobalEvents } from "../jsx-runtime/generated/htmlType";
+import type {
+  HTMLElements,
+  GlobalEvents,
+} from "../jsx-runtime/generated/htmlType";
 import type { CSSObject } from "../styles/types";
-import type { ObservableProxyPort, ObservableProxiedComplexObjectPort, ObservableOrConstOrPromise, ObservablePort, ObservableProxyOrConst } from "@ports";
+import type {
+  ObservableProxyPort,
+  ObservableProxiedComplexObjectPort,
+  ObservableOrConstOrPromise,
+  ObservablePort,
+  ObservableProxyOrConst,
+} from "@ports";
 import type { MappedIdGenerator } from "@domain";
-import type { AnyObject, GetPrimitiveType, KebabCase, PrimitiveType, WritableKeys } from "@shared";
+import type {
+  AnyObject,
+  GetPrimitiveType,
+  KebabCase,
+  PrimitiveType,
+  WritableKeys,
+} from "@shared";
 
 export interface MichiAttributes<E> {
   children?: JSX.Element;
@@ -14,9 +29,11 @@ export interface MichiAttributes<E> {
 export interface MichiAttributesCustomElement<E> {
   children?: JSX.Element;
   _?: {
-    [k in WritableKeys<E>]?: E[k] extends ObservableProxiedComplexObjectPort<infer U>
-    ? ObservablePort<U | undefined | null> | U | undefined | null
-    : ObservableProxyOrConst<E[k] | undefined | null> | undefined | null;
+    [k in WritableKeys<E>]?: E[k] extends ObservableProxiedComplexObjectPort<
+      infer U
+    >
+      ? ObservablePort<U | undefined | null> | U | undefined | null
+      : ObservableProxyOrConst<E[k] | undefined | null> | undefined | null;
   };
 }
 
@@ -75,18 +92,18 @@ export interface LifecycleInternals {
 
 export interface MichiProperties
   extends Lifecycle,
-  LifecycleInternals,
-  Partial<
-    Pick<
-      ElementInternals,
-      | "checkValidity"
-      | "reportValidity"
-      | "form"
-      | "validity"
-      | "validationMessage"
-      | "willValidate"
-    >
-  > {
+    LifecycleInternals,
+    Partial<
+      Pick<
+        ElementInternals,
+        | "checkValidity"
+        | "reportValidity"
+        | "form"
+        | "validity"
+        | "validationMessage"
+        | "willValidate"
+      >
+    > {
   // props?: unknown,
   readonly $michi: {
     store: ObservableProxyPort<AttributesType>;
@@ -123,7 +140,7 @@ export interface CustomElementWithCallbacks extends HTMLElement {
   ): void;
 }
 
-export interface MichiCustomElement extends HTMLElement, MichiProperties { }
+export interface MichiCustomElement extends HTMLElement, MichiProperties {}
 
 export type CustomElementTag = `${string}-${string}`;
 
@@ -232,7 +249,9 @@ export type MichiElementSelf<O extends MichiElementOptions> = {
   [k in keyof O["reflectedAttributes"]]: ObservableProxyPort<
     O["reflectedAttributes"][k]
   >;
-} & { [k in keyof O["cssVariables"]]: ObservableProxyPort<O["cssVariables"][k]> } & {
+} & {
+  [k in keyof O["cssVariables"]]: ObservableProxyPort<O["cssVariables"][k]>;
+} & {
   [k in keyof O["reflectedCssVariables"]]: ObservableProxyPort<
     O["reflectedCssVariables"][k]
   >;

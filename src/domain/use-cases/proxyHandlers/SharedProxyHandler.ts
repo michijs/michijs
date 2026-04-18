@@ -1,4 +1,8 @@
-import type { ObservableProxyPort, ParentSubscription, ProxiedValuePort } from "@ports";
+import type {
+  ObservableProxyPort,
+  ParentSubscription,
+  ProxiedValuePort,
+} from "@ports";
 import { useObserveInternal } from "../hooks/useObserve";
 import { createParentSubscription } from "./createParentSubscription";
 import { getHandler } from "./getHandler";
@@ -10,7 +14,10 @@ export abstract class SharedProxyHandler<T> {
   getOwnSubscription(target: ProxiedValuePort<T>): ParentSubscription<T> {
     return (this.$ownSubscription ??= createParentSubscription(target));
   }
-  createProxyChild(target: ProxiedValuePort<T>, newValue): ObservableProxyPort<unknown> {
+  createProxyChild(
+    target: ProxiedValuePort<T>,
+    newValue,
+  ): ObservableProxyPort<unknown> {
     return useObserveInternal<any>(
       newValue,
       this.getOwnSubscription(target),

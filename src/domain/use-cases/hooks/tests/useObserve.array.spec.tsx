@@ -19,11 +19,7 @@ describe("Observe array tests", () => {
     array = useObserve([] as number[], true);
     array.push(exampleValue);
     node = create(
-      <List
-        data={array}
-        as="div"
-        renderItem={(item) => <div>{item}</div>}
-      />,
+      <List data={array} as="div" renderItem={(item) => <div>{item}</div>} />,
     );
     jsonNode = create(<>{array}</>);
   });

@@ -1,9 +1,15 @@
-import { Observable, type ObservableOrConst, type HistoryManagerPort, unproxify } from "@domain";
+import {
+  Observable,
+  type ObservableOrConst,
+  type HistoryManagerPort,
+  unproxify,
+} from "@domain";
 import { handleNavigation } from "./handleNavigation";
 
 export class ModernHistoryManager
   extends Observable<string | URL>
-  implements HistoryManagerPort {
+  implements HistoryManagerPort
+{
   shouldShowUnloadPrompt?: () => boolean;
   ignoreHashes = true;
   private lastNavigationEvent?: NavigateEvent;
@@ -12,7 +18,7 @@ export class ModernHistoryManager
     window.addEventListener("beforeunload", (e) => {
       const isFormEvent =
         window.navigation!.currentEntry?.url ===
-        this.lastNavigationEvent?.destination.url &&
+          this.lastNavigationEvent?.destination.url &&
         this.lastNavigationEvent?.formData;
       if (isFormEvent || !this.shouldShowUnloadPrompt?.()) {
         return undefined;

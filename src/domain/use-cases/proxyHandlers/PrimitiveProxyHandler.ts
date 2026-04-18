@@ -3,7 +3,7 @@ import { getObjectHandler } from "./getHandler";
 import { SharedProxyHandler } from "./SharedProxyHandler";
 import { FunctionProxyHandler } from "./FunctionProxyHandler";
 import { isNil } from "@shared";
-import { unproxify } from '../../utils/unproxify';
+import { unproxify } from "../../utils/unproxify";
 
 export class PrimitiveProxyHandler<T>
   extends SharedProxyHandler<T>
