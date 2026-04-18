@@ -13,32 +13,32 @@ interface Row {
   selected: ObservableWithValue<string | null>;
 }
 const adjectives = [
-  "pretty",
-  "large",
-  "big",
-  "small",
-  "tall",
-  "short",
-  "long",
-  "handsome",
-  "plain",
-  "quaint",
-  "clean",
-  "elegant",
-  "easy",
-  "angry",
-  "crazy",
-  "helpful",
-  "mushy",
-  "odd",
-  "unsightly",
-  "adorable",
-  "important",
-  "inexpensive",
-  "cheap",
-  "expensive",
-  "fancy",
-],
+    "pretty",
+    "large",
+    "big",
+    "small",
+    "tall",
+    "short",
+    "long",
+    "handsome",
+    "plain",
+    "quaint",
+    "clean",
+    "elegant",
+    "easy",
+    "angry",
+    "crazy",
+    "helpful",
+    "mushy",
+    "odd",
+    "unsightly",
+    "adorable",
+    "important",
+    "inexpensive",
+    "cheap",
+    "expensive",
+    "fancy",
+  ],
   colours = [
     "red",
     "yellow",
@@ -106,27 +106,31 @@ let nextId = 1,
   selectedItem: Row | null = null;
 
 export const TableBody = create(
-  <List data={rows} as="tbody" id="tbody" elementFactory={new CloneFactory()} renderItem={(row) => (
-    <tr class={row.selected}>
-      <td class="col-md-1">{row.id}</td>
-      <td class="col-md-4">
-        <a onclick={() => select(row)}>{row.label}</a>
-      </td>
-      <td class="col-md-1">
-        {/* biome-ignore-start lint/a11y/useAnchorContent: Intentional */}
-        <a onclick={() => deleteItem(row.id)}>
-          <span class="glyphicon glyphicon-remove" aria-hidden="true" />
-        </a>
-        {/* biome-ignore-end  lint/a11y/useAnchorContent: Intentional */}
-      </td>
-      <td class="col-md-6" />
-    </tr>
-  )} />
+  <List
+    data={rows}
+    as="tbody"
+    id="tbody"
+    elementFactory={new CloneFactory()}
+    renderItem={(row) => (
+      <tr class={row.selected}>
+        <td class="col-md-1">{row.id}</td>
+        <td class="col-md-4">
+          <a onclick={() => select(row)}>{row.label}</a>
+        </td>
+        <td class="col-md-1">
+          {/* biome-ignore-start lint/a11y/useAnchorContent: Intentional */}
+          <a onclick={() => deleteItem(row.id)}>
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" />
+          </a>
+          {/* biome-ignore-end  lint/a11y/useAnchorContent: Intentional */}
+        </td>
+        <td class="col-md-6" />
+      </tr>
+    )}
+  />,
 );
 
-document.querySelector("table")?.appendChild(
-  TableBody
-);
+document.querySelector("table")?.appendChild(TableBody);
 
 const rowButton = (
   id: string,

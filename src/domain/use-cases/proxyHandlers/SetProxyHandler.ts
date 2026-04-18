@@ -3,7 +3,7 @@ import { customMapAndSetClear } from "./customMapAndSetClear";
 import { customMapAndSetDelete } from "./customMapAndSetDelete";
 import type { ProxiedValuePort, ProxyHandlerPort } from "@ports";
 import { cloneMap } from "@shared";
-import { unproxify } from '../../utils/unproxify';
+import { unproxify } from "../../utils/unproxify";
 
 export class SetProxyHandler<T extends Set<any>>
   extends ObjectProxyHandler<T>

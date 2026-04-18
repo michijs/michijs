@@ -13,11 +13,11 @@ export const useObserveInternal: UseObserveInternal = (
   rootObservableCallback,
 ) =>
   new Proxy(
-    new ProxiedValue<any>(item, parentSubscription, getHandler(
+    new ProxiedValue<any>(
       item,
       parentSubscription,
-      rootObservableCallback,
-    )),
+      getHandler(item, parentSubscription, rootObservableCallback),
+    ),
     new ObservableProxyHandler(),
   ) as any;
 
@@ -34,5 +34,6 @@ export const useObserve: UseObservePort = (item, useProxied) => {
     const rootObservableCallback = () => result;
     const result = useObserveInternal(item, undefined, rootObservableCallback);
     return result;
-  } return new ReactiveValue(item) as any;
+  }
+  return new ReactiveValue(item) as any;
 };

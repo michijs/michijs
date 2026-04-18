@@ -1,4 +1,3 @@
-
 export type StringPartToDelimiterCase<
   StringPart extends string,
   UsedWordSeparators extends string,
@@ -7,5 +6,5 @@ export type StringPartToDelimiterCase<
 > = StringPart extends UsedWordSeparators
   ? Delimiter
   : StringPart extends UsedUpperCaseCharacters
-  ? `${Delimiter}${Lowercase<StringPart>}`
-  : StringPart;
+    ? `${Delimiter}${Lowercase<StringPart>}`
+    : StringPart;

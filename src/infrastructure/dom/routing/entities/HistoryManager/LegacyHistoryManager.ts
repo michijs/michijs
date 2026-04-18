@@ -1,9 +1,15 @@
 import { handleNavigation } from "./handleNavigation";
-import { Observable, type HistoryManagerPort, type ObservableOrConst, unproxify } from "@domain";
+import {
+  Observable,
+  type HistoryManagerPort,
+  type ObservableOrConst,
+  unproxify,
+} from "@domain";
 
 export class LegacyHistoryManager
   extends Observable<string | URL>
-  implements HistoryManagerPort {
+  implements HistoryManagerPort
+{
   private readonly history: (string | URL)[] = [location.pathname];
   shouldShowUnloadPrompt?: () => boolean;
 

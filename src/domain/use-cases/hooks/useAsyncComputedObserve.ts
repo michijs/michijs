@@ -1,5 +1,8 @@
 import { useObserve } from "./useObserve";
-import type { UseAsyncComputedObservePort, CallableReactiveValuePort } from "@ports";
+import type {
+  UseAsyncComputedObservePort,
+  CallableReactiveValuePort,
+} from "@ports";
 import { useWatch } from "./useWatch";
 
 /**
@@ -31,7 +34,9 @@ export const useAsyncComputedObserve: UseAsyncComputedObservePort = (
       const callbackResult = await callback(currentAbortController.signal);
       if (!currentAbortController.signal.aborted) {
         options?.onBeforeUpdate?.();
-        (newObservable as CallableReactiveValuePort<object>)(callbackResult as object);
+        (newObservable as CallableReactiveValuePort<object>)(
+          callbackResult as object,
+        );
         options?.onAfterUpdate?.();
       }
     } catch (ex) {

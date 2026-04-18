@@ -1,4 +1,8 @@
-import type { ObservableProxyPort, CallableReactiveValuePort, ParentSubscription } from "@ports";
+import type {
+  ObservableProxyPort,
+  CallableReactiveValuePort,
+  ParentSubscription,
+} from "@ports";
 
 export interface UseObserveInternal {
   <T>(
@@ -25,4 +29,3 @@ export interface UseObservePort {
   /** @param useProxied When omitted or `false`, returns a lightweight reactive value. */
   <T>(item: T, useProxied?: false): CallableReactiveValuePort<T>;
 }
-
