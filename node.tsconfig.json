@@ -31,6 +31,7 @@
     "build",
     "src/infrastructure/plugin",
     "src/infrastructure/dom",
-    "src/index.ts"
+    "src/index.ts",
+    "node_modules"
   ]
 }

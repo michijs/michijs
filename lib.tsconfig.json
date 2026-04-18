@@ -9,6 +9,7 @@
     "build",
     "src/infrastructure/plugin",
     "src/infrastructure/node",
-    "src/index.node.ts"
+    "src/index.node.ts",
+    "node_modules"
   ]
 }
