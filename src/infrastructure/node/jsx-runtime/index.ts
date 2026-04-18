@@ -15,7 +15,11 @@ const factory = new NodeElementFactory();
  * @returns An HTML string.
  */
 function jsx(
-  tag: string | ((props: Record<string, unknown>, factory: NodeElementFactory) => string) | null | undefined,
+  tag:
+    | string
+    | ((props: Record<string, unknown>, factory: NodeElementFactory) => string)
+    | null
+    | undefined,
   attrs: Record<string, unknown> = {},
 ): string {
   return factory.create({ jsxTag: tag as any, attrs });
