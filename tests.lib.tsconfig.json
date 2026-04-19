@@ -5,5 +5,12 @@
     "types": ["@types/bun"]
   },
   "include": ["src"],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "dist",
+    "build",
+    "src/infrastructure/plugin",
+    "src/infrastructure/node",
+    "src/index.node.ts",
+    "node_modules"
+  ]
 }
