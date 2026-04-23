@@ -1,8 +1,8 @@
-import type { CallableReactiveOrConst, CallableProxiedValuePort } from "@ports";
+import type { CallableReactiveOrConst, ObservableProxyPort } from "@ports";
 
 export interface UseStringTemplatePort {
   (
     templateStringsArray: TemplateStringsArray,
     ...props: CallableReactiveOrConst<string | number | undefined>[]
-  ): CallableProxiedValuePort<string>;
+  ): ObservableProxyPort<string>;
 }

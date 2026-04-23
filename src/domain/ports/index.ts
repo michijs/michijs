@@ -21,7 +21,6 @@ export * from "./reactive/core/ReactiveValuePort";
 export * from "./reactive/core/Subscription";
 export * from "./reactive/core/TargetPort";
 export * from "./reactive/core/ObservableGettersAndSetters";
-export * from "./reactive/proxied/CallableProxiedValuePort";
 export * from "./reactive/proxied/ObservableNonNullableProxiedPrimitiveType";
 export * from "./reactive/proxied/ObservableProxiedArray";
 export * from "./reactive/proxied/ObservableProxiedComplexObjectPort";

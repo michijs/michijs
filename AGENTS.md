@@ -86,9 +86,8 @@ state.a = 2;                                // triggers subscribers
 | `ObservablePort<T>` | Base observable interface (has `subscribe`, `notify`) |
 | `ReactiveValuePort<T>` | Lightweight reactive value |
 | `CallableReactiveValuePort<T>` | Callable reactive value — `obs(newValue)` to update |
-| `ObservableProxyPort<T>` | Deep-proxy observable |
+| `ObservableProxyPort<T>` | Deep-proxy observable (callable, dispatches to Date/Array/Map/Set/Object/Primitive variants) |
 | `ProxiedValuePort<T>` | Port for the proxied value entity |
-| `CallableProxiedValuePort<T>` | Callable deep-proxy value |
 | `ProxyHandlerPort<T>` | Proxy handler interface |
 | `ParentSubscription` | Parent subscription for nested proxied observables |
 | `UnproxifyPort<T>` | Type utility to unwrap proxied types |

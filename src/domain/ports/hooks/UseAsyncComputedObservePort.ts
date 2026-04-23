@@ -1,5 +1,5 @@
 import type {
-  CallableProxiedValuePort,
+  ObservableProxyPort,
   CallableReactiveValuePort,
   UseProxiedComputedObservePortOptions,
   UseComputedObservePortOptions,
@@ -12,7 +12,7 @@ export interface UseAsyncComputedObservePort {
     initialValue: T,
     deps: UseWatchDepsPort,
     options?: UseProxiedComputedObservePortOptions,
-  ): CallableProxiedValuePort<T>;
+  ): ObservableProxyPort<T>;
   <T>(
     callback: (abortSignal: AbortSignal) => Promise<T>,
     initialValue: T,

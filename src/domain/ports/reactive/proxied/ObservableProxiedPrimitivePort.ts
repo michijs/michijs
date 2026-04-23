@@ -1,4 +1,5 @@
-import type { CallableProxiedValuePort } from "@ports";
+import type { ProxiedValuePort, ObservableGettersAndSetters } from "@ports";
 
 export interface ObservableProxiedPrimitivePort<RV>
-  extends CallableProxiedValuePort<RV, RV> {}
+  extends ProxiedValuePort<RV>,
+    ObservableGettersAndSetters<RV, RV> {}
