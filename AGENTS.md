@@ -129,12 +129,15 @@ Creates an observable for a value.
 
 Computes a value and recomputes when `deps` change.
 
+- When `deps` is omitted, dependencies are **automatically detected** by tracking observable reads during callback execution (auto-tracking). Dependencies are re-detected on each recomputation using a diff-based approach — only newly discovered deps are subscribed and only removed deps are unsubscribed, avoiding unnecessary work.
 - `options.useProxied: true` → deep-proxy result
 - `options.onBeforeUpdate` / `options.onAfterUpdate` — lifecycle callbacks
 
 ### `useAsyncComputedObserve(callback, initialValue, deps, options?)`
 
 Async version of `useComputedObserve`. Callback receives an `AbortSignal` that aborts if a newer invocation starts.
+
+- When `deps` is omitted, dependencies are **automatically detected** by tracking synchronous observable reads during callback invocation (before the first `await`). Uses the same diff-based subscription management as `useComputedObserve`.
 
 ### `useWatch(callback, deps)`
 
@@ -434,6 +437,7 @@ From `@shared`:
 | `bindObservable(obs, callback)` | Binds a callback to an observable (handles both observable and plain values) |
 | `getObservables(obj)` | Extracts all observable properties from an object |
 | `isObservable(value)` | Type guard for observables |
+| `startTracking()` / `stopTracking()` / `trackAccess(obs)` | Dependency auto-tracking for `useComputedObserve` / `useAsyncComputedObserve`. Uses a stack of `Set<ObservablePort>` — `trackAccess` is called from `ReactiveValue.valueOf()`, `ReactiveValue.toString()`, `ProxiedValue.valueOf()` |
 
 ---
 

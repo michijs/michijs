@@ -2,7 +2,6 @@ import { useObserve } from "./useObserve";
 import type {
   UseAsyncComputedObservePort,
   CallableReactiveValuePort,
-  ObservablePort,
 } from "@ports";
 import { useWatch } from "./useWatch";
 import { startTracking, stopTracking } from "../../utils/dependencyTracker";
@@ -60,7 +59,6 @@ export const useAsyncComputedObserve: UseAsyncComputedObservePort = ((
   // Auto-tracking — detect deps by tracking synchronous observable reads
   const newObservable = useObserve(initialValue, options?.useProxied);
   let abortController: AbortController | undefined;
-  let trackedDeps = new Set<ObservablePort<any>>();
 
   const listener = async () => {
     abortController?.abort();
@@ -84,9 +82,10 @@ export const useAsyncComputedObserve: UseAsyncComputedObservePort = ((
       currentAbortController?.abort();
       throw ex;
     } finally {
-      trackedDeps = stopTracking();
-      // Subscribe to new deps
-      for (const dep of trackedDeps) dep.subscribe(listener);
+      const newDeps = stopTracking();
+
+      for (const dep of newDeps)
+        dep.subscribe(listener);
     }
   };
   listener();

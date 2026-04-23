@@ -1,7 +1,6 @@
 import type {
   UseComputedObservePort,
   CallableReactiveValuePort,
-  ObservablePort,
 } from "@ports";
 import { useObserve } from "./useObserve";
 import { useWatch } from "./useWatch";
@@ -46,12 +45,9 @@ export const useComputedObserve: UseComputedObservePort = ((
     return newObservable;
   }
 
-  // Auto-tracking — detect deps by tracking observable reads
-  let trackedDeps = new Set<ObservablePort<any>>();
-
   startTracking();
   const initialValue = callback();
-  trackedDeps = stopTracking();
+  const trackedDeps = stopTracking();
   const newObservable = useObserve(initialValue, options?.useProxied);
 
   const listener = () => {
@@ -65,8 +61,6 @@ export const useComputedObserve: UseComputedObservePort = ((
 
       for (const dep of newDeps)
         dep.subscribe(listener);
-
-      trackedDeps = newDeps;
     }
 
     options?.onBeforeUpdate?.();
