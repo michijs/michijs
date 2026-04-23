@@ -7,6 +7,7 @@ import type {
   ReactiveValuePort,
 } from "@ports";
 import { CallableObservable } from "./CallableObservable";
+import { trackAccess } from "../../../utils/dependencyTracker";
 
 export class ReactiveValue<T>
   extends CallableObservable<T>
@@ -25,6 +26,7 @@ export class ReactiveValue<T>
         this.notify(newValue);
         return;
       }
+      trackAccess(this);
       return this.$value;
     }) as unknown as ObservableGettersAndSetters<T, T>,
   ) {
@@ -52,6 +54,7 @@ export class ReactiveValue<T>
   }
 
   override valueOf(): T {
+    trackAccess(this);
     return this.$value;
   }
 
@@ -63,6 +66,6 @@ export class ReactiveValue<T>
 
   override toString(): string {
     // @ts-ignore
-    return this.$value.toString();
+    return this.valueOf().toString();
   }
 }

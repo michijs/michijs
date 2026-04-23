@@ -17,6 +17,7 @@ export interface UseComputedObservePortOptions
   useProxied?: false;
 }
 export interface UseComputedObservePort {
+  // With explicit deps
   <T>(
     callback: () => T,
     deps: UseWatchDepsPort,
@@ -25,6 +26,15 @@ export interface UseComputedObservePort {
   <T>(
     callback: () => T,
     deps: UseWatchDepsPort,
+    options?: UseProxiedComputedObservePortOptions,
+  ): ObservableProxyPort<T>;
+  // Auto-tracking (no deps)
+  <T>(
+    callback: () => T,
+    options: UseComputedObservePortOptions,
+  ): CallableReactiveValuePort<T>;
+  <T>(
+    callback: () => T,
     options?: UseProxiedComputedObservePortOptions,
   ): ObservableProxyPort<T>;
 }

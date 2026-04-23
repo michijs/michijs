@@ -7,6 +7,7 @@ import type {
 } from "@ports";
 
 export interface UseAsyncComputedObservePort {
+  // With explicit deps
   <T>(
     callback: (abortSignal: AbortSignal) => Promise<T>,
     initialValue: T,
@@ -17,6 +18,17 @@ export interface UseAsyncComputedObservePort {
     callback: (abortSignal: AbortSignal) => Promise<T>,
     initialValue: T,
     deps: UseWatchDepsPort,
+    options?: UseComputedObservePortOptions,
+  ): CallableReactiveValuePort<T>;
+  // Auto-tracking (no deps)
+  <T>(
+    callback: (abortSignal: AbortSignal) => Promise<T>,
+    initialValue: T,
+    options?: UseProxiedComputedObservePortOptions,
+  ): ObservableProxyPort<T>;
+  <T>(
+    callback: (abortSignal: AbortSignal) => Promise<T>,
+    initialValue: T,
     options?: UseComputedObservePortOptions,
   ): CallableReactiveValuePort<T>;
 }

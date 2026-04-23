@@ -7,6 +7,7 @@ import type {
   ProxyHandlerPort,
 } from "@ports";
 import { unproxify } from "../../../utils/unproxify";
+import { trackAccess } from "../../../utils/dependencyTracker";
 import { ReactiveValue } from "../core/ReactiveValue";
 
 export class ProxiedValue<V>
@@ -46,7 +47,7 @@ export class ProxiedValue<V>
     if (this.onTransaction) this.needsToNotify = true;
     else {
       const notifiableObservers = this.notifiableObservers;
-      if (notifiableObservers) this.notify(this.valueOf(), notifiableObservers);
+      if (notifiableObservers) this.notify(unproxify(this.$value) as V, notifiableObservers);
     }
   }
 
@@ -61,8 +62,13 @@ export class ProxiedValue<V>
     return allObservers;
   }
 
-  override valueOf(): V {
+  private rawValue(): V {
     return unproxify(this.$value) as V;
+  }
+
+  override valueOf(): V {
+    trackAccess(this);
+    return this.rawValue();
   }
 
   override toString(): string {
@@ -70,7 +76,7 @@ export class ProxiedValue<V>
     return this.valueOf().toString();
   }
   unproxify(): V {
-    return this.valueOf();
+    return this.rawValue();
   }
   typeof(): Typeof {
     return typeof this.$value;

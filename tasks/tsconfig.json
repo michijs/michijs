@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@michijs/shared-configs/tsconfig",
+  "compilerOptions": {
+    "ignoreDeprecations": "6.0",
+    "rootDir": "..",
+    "baseUrl": "..",
+    "composite": true,
+    "allowUnusedLabels": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "@michijs/michijs",
+    "types": ["@types/bun"],
+    "resolveJsonModule": true,
+    "paths": {
+      "@shared": ["./src/shared/index"],
+      "@domain": ["./src/domain/index"],
+      "@ports": ["./src/domain/ports/index"],
+      "@domain/*": ["./src/domain/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@michijs/michijs/*": ["./src/*"],
+      "@michijs/michijs": ["./src/index"]
+    }
+  },
+  "include": [
+    "./**/*.ts",
+    "../src/**/*.ts",
+    "../src/**/*.tsx",
+    "../package.json"
+  ],
+  "exclude": ["node_modules", "../src/infrastructure", "../src/index.ts", "../src/index.node.ts", "../src/**/*.spec.*"]
+}
