@@ -4,6 +4,4 @@ import type { CallableReactiveValuePort } from "@ports";
 // The (ReactiveValuePort<T> & { (): T }) branch is covariant (no setter call
 // signature), allowing CallableReactiveValuePort<string> to be assigned to
 // CallableReactiveOrConst<string | null>.
-export type CallableReactiveOrConst<T> =
-  | CallableReactiveValuePort<T>
-  | T;
+export type CallableReactiveOrConst<T> = CallableReactiveValuePort<T> | T;
