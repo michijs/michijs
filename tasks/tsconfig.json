@@ -1,9 +1,0 @@
-{
-  "extends": "@michijs/shared-configs/tsconfig",
-  "compilerOptions": {
-    "rootDir": "..",
-    "baseUrl": "./tasks"
-  },
-  "include": ["."],
-  "exclude": ["node_modules"]
-}

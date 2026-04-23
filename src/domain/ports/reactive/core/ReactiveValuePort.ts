@@ -12,4 +12,5 @@ export interface ReactiveValuePort<RV> extends ObservablePort<RV> {
   valueOf(): RV;
   toString(): string;
   compute<T>(callback: (value: RV) => T): CallableReactiveValuePort<T>;
+  is(anotherValue: unknown): CallableReactiveValuePort<boolean>;
 }

@@ -1,7 +1,7 @@
 import { ReactiveValue } from "../../entities/reactive/core/ReactiveValue";
 import { unproxify } from "../../utils/unproxify";
 import { bindObservable } from "../../utils/bindObservable";
-import type { CallableReactiveValuePort, ObservableOrConst } from "@ports";
+import type { ObservableOrConst, ObservableProxiedObject } from "@ports";
 import { useAsyncComputedObserve } from "../hooks/useAsyncComputedObserve";
 
 export type Translation<K extends string, T> = {
@@ -68,13 +68,13 @@ export class I18n<K extends string = string> extends ReactiveValue<K> {
 
   createTranslation<T>(
     translation: Translation<K, T>,
-  ): CallableReactiveValuePort<Partial<T>> {
+  ): ObservableProxiedObject<Partial<T>> {
     return useAsyncComputedObserve<Partial<T>>(
       async () => await this.getCurrentTranslation(translation),
       translation[this.defaultLanguage] as Partial<T>,
       [this],
       { useProxied: true },
-    );
+    ) as unknown as ObservableProxiedObject<Partial<T>>;
   }
 
   private getCurrentTranslation<T>(translation: Translation<K, T>): Promise<T> {

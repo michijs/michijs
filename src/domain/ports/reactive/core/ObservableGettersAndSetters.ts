@@ -1,4 +1,4 @@
 export interface ObservableGettersAndSetters<RV, SV> {
-  (newValue: SV | RV): void;
+  <T extends SV | RV>(newValue: T): void;
   (): RV;
 }

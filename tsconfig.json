@@ -29,7 +29,7 @@
       "path": "./lib.tsconfig.json"
     },
     {
-      "path": "./tests.tsconfig.json"
+      "path": "./tests.lib.tsconfig.json"
     },
     {
       "path": "./examples.tsconfig.json"

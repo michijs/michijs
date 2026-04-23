@@ -1,6 +1,6 @@
 import type {
   CallableReactiveValuePort,
-  CallableProxiedValuePort,
+  ObservableProxyPort,
   UseWatchDepsPort,
 } from "@ports";
 
@@ -26,5 +26,5 @@ export interface UseComputedObservePort {
     callback: () => T,
     deps: UseWatchDepsPort,
     options?: UseProxiedComputedObservePortOptions,
-  ): CallableProxiedValuePort<T>;
+  ): ObservableProxyPort<T>;
 }
