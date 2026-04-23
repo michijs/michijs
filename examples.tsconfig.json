@@ -1,7 +1,13 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "./tsconfig.json",
-  "include": ["examples", "examples/benchmark/generated/*.json", "src", "tasks", "package.json"],
+  "include": [
+    "examples",
+    "examples/benchmark/generated/*.json",
+    "src",
+    "tasks",
+    "package.json"
+  ],
   "exclude": [
     "dist",
     "build",
