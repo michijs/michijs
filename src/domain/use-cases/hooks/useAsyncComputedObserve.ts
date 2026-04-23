@@ -84,8 +84,7 @@ export const useAsyncComputedObserve: UseAsyncComputedObservePort = ((
     } finally {
       const newDeps = stopTracking();
 
-      for (const dep of newDeps)
-        dep.subscribe(listener);
+      for (const dep of newDeps) dep.subscribe(listener);
     }
   };
   listener();

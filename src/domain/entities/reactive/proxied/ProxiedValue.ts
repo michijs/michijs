@@ -47,7 +47,8 @@ export class ProxiedValue<V>
     if (this.onTransaction) this.needsToNotify = true;
     else {
       const notifiableObservers = this.notifiableObservers;
-      if (notifiableObservers) this.notify(unproxify(this.$value) as V, notifiableObservers);
+      if (notifiableObservers)
+        this.notify(unproxify(this.$value) as V, notifiableObservers);
     }
   }
 
