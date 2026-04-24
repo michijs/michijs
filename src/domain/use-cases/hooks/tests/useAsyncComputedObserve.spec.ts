@@ -7,22 +7,18 @@ const tick = () => new Promise((r) => setTimeout(r, 10));
 describe("useAsyncComputedObserve — explicit deps", () => {
   it("should resolve async callback and update observable", async () => {
     const count = useObserve(2);
-    const doubled = useAsyncComputedObserve(
-      async () => count() * 2,
-      0,
-      [count],
-    );
+    const doubled = useAsyncComputedObserve(async () => count() * 2, 0, [
+      count,
+    ]);
     await tick();
     expect(doubled()).toBe(4);
   });
 
   it("should recompute when a dependency changes", async () => {
     const count = useObserve(1);
-    const doubled = useAsyncComputedObserve(
-      async () => count() * 2,
-      0,
-      [count],
-    );
+    const doubled = useAsyncComputedObserve(async () => count() * 2, 0, [
+      count,
+    ]);
     await tick();
     expect(doubled()).toBe(2);
     count(5);
@@ -34,10 +30,7 @@ describe("useAsyncComputedObserve — explicit deps", () => {
 describe("useAsyncComputedObserve — auto-tracking", () => {
   it("should detect dependencies automatically", async () => {
     const count = useObserve(0);
-    const computed = useAsyncComputedObserve(
-      async () => `${count}px`,
-      "init",
-    );
+    const computed = useAsyncComputedObserve(async () => `${count}px`, "init");
     expect(computed()).toBe("init");
     await tick();
     expect(computed()).toBe("0px");

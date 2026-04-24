@@ -37,7 +37,9 @@ const DynamicRouteTests = () => (
         /users/1/profile
       </a>{" "}
       and then{" "}
-      <a href={dynamicRoutesUrls.profile({ params: { id: "2" } })}>/users/2/profile</a>{" "}
+      <a href={dynamicRoutesUrls.profile({ params: { id: "2" } })}>
+        /users/2/profile
+      </a>{" "}
       — the user ID updates reactively.
     </p>
     <DynamicRoutesRouter />
