@@ -27,5 +27,11 @@
     "../src/**/*.tsx",
     "../package.json"
   ],
-  "exclude": ["node_modules", "../src/infrastructure", "../src/index.ts", "../src/index.node.ts", "../src/**/*.spec.*"]
+  "exclude": [
+    "node_modules",
+    "../src/infrastructure",
+    "../src/index.ts",
+    "../src/index.node.ts",
+    "../src/**/*.spec.*"
+  ]
 }
