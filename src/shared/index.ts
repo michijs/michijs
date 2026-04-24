@@ -4,6 +4,7 @@ export * from "./types/ArrayWithOneOrMoreElements";
 export * from "./types/Browser";
 export * from "./types/DeepReadonly";
 export * from "./types/DelimiterCase";
+export * from "./types/ExtractParamKeys";
 export * from "./types/GetPrimitiveType";
 export * from "./types/GetPrimitiveTypeClass";
 export * from "./types/Hash";

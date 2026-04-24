@@ -97,10 +97,11 @@ export class ModernHistoryManager
     window.navigation!.navigate(urlValue);
   }
 
-  matches(url: ObservableOrConst<string>): boolean {
+  matches(url: ObservableOrConst<string>, flexible = false): boolean {
     const urlValue = unproxify(url);
+    const pathname = urlValue.endsWith("/") ? urlValue.slice(0, -1) : urlValue;
     const p = new window.URLPattern!({
-      pathname: `${urlValue.endsWith("/") ? urlValue.slice(-1, 1) : urlValue}*`,
+      pathname: flexible ? `${pathname}*` : pathname,
       baseURL: location.origin,
       search: "*",
       hash: "*",

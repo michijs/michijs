@@ -455,15 +455,35 @@ console.log(sum(1, 2)); // Outputs 3 - without calling the callback - returning 
 </details>
 
 #### useAsyncComputedObserve
-It is used for computing a value and observing its changes. Takes four arguments:
+It is used for computing a value and observing its changes. Takes up to four arguments:
 
 - **callback**: A function that returns a promise of type T.
 - **initialValue**: Initial value of type T.
-- **deps**: Dependencies to watch for changes.
+- **deps** *(optional)*: Dependencies to watch for changes. When omitted, dependencies are **automatically tracked** by detecting which observables are accessed during the synchronous portion of the callback. Tracked dependencies are recalculated on each invocation, so conditional branches are handled correctly.
 - **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions. Also includes a `useProxied` option — when `true`, returns a deep-proxy observable; when omitted or `false` (the default), returns a lightweight reactive value similar to the [tc39 signals proposal](https://github.com/tc39/proposal-signals).
 
 <details>
-  <summary><b>Example:</b></summary>
+  <summary><b>Example (auto-tracking):</b></summary>
+  
+```tsx
+import { useAsyncComputedObserve, useObserve } from "@michijs/michijs";
+
+const userId = useObserve(1);
+
+// deps are detected automatically — recomputes whenever userId changes
+const userData = useAsyncComputedObserve(
+  async () => {
+    const response = await fetch(`/api/users/${userId()}`);
+    return response.json();
+  },
+  null, // Initial value
+);
+```
+
+</details>
+
+<details>
+  <summary><b>Example (explicit deps):</b></summary>
   
 ```tsx
 import { useAsyncComputedObserve } from "@michijs/michijs";
@@ -484,18 +504,35 @@ const fetchData = useAsyncComputedObserve(
 </details>
 
 #### useComputedObserve
-It is used for computing a value and observing its changes. Takes three arguments:
+It is used for computing a value and observing its changes. Takes up to three arguments:
 
 - **callback**: A function that returns a value of type T.
-- **deps**: Dependencies to watch for changes.
+- **deps** *(optional)*: Dependencies to watch for changes. When omitted, dependencies are **automatically tracked** by detecting which observables are accessed during the callback execution. Tracked dependencies are recalculated on each invocation, so conditional branches are handled correctly.
 - **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions. Also includes a `useProxied` option — when `true`, returns a deep-proxy observable; when omitted or `false` (the default), returns a lightweight reactive value similar to the [tc39 signals proposal](https://github.com/tc39/proposal-signals).
 
 
 <details>
-  <summary><b>Example:</b></summary>
+  <summary><b>Example (auto-tracking):</b></summary>
   
 ```tsx
-import { useComputedObserve } from "@michijs/michijs";
+import { useComputedObserve, useObserve } from "@michijs/michijs";
+
+const a = useObserve(2);
+const b = useObserve(3);
+
+// deps are detected automatically — recomputes whenever a or b changes
+const sum = useComputedObserve(() => a() + b());
+
+console.log(sum()); // Outputs 5
+```
+
+</details>
+
+<details>
+  <summary><b>Example (explicit deps):</b></summary>
+  
+```tsx
+import { useComputedObserve, useObserve } from "@michijs/michijs";
 
 const a = useObserve(2);
 const b = useObserve(3);
@@ -691,6 +728,23 @@ import { useTitle } from "@michijs/michijs";
 const title = useTitle();
 
 title('test')
+```
+
+</details>
+
+#### useParams
+Reactively extracts dynamic route parameters from the current URL based on a route pattern. Re-computes whenever the URL changes via HistoryManager. Parameter names are inferred from the pattern string at the type level.
+
+
+<details>
+  <summary><b>Example:</b></summary>
+  
+```tsx
+import { useParams } from "@michijs/michijs";
+
+// Inside a component rendered at /users/42/profile
+const params = useParams("/users/:id/profile");
+// params.id reactively reflects the current :id value from the URL
 ```
 
 </details>
@@ -1085,19 +1139,22 @@ This will generate an element like:
 ## Routing
 The custom routing tool avoids using strings to represent URLs and instead utilizes modern APIs like the `URL` object. It also allows separating route components, promoting cleaner code.
 
+Route keys support dynamic segments with the `:param` syntax. When a route key contains dynamic segments, `params` is required and fully typed.
+
 <details>
   <summary><b>Example:</b></summary>
   
 ```tsx
 //Parent routes
-export const [urls, Router] = registerRoutes({
+export const [urls, Router] = createRouter({
   syncRoute: <div>Hello World</div>,
+  "users/:id": <UserPage />,
   //Redirect route
   '/': <Redirect to={url} />
 });
 
 //Child routes
-export const [urlsChild, RouterChild] = registerRoutes({
+export const [urlsChild, RouterChild] = createRouter({
   // Async route
   asyncChildRoute: (
     <AsyncComponent
@@ -1108,7 +1165,7 @@ export const [urlsChild, RouterChild] = registerRoutes({
   //The parent route
 }, urls.syncRoute);
 
-// Will generate this url: /sync-route/async-child-route?searchParam1=param+1&searchParam2=2#hash1
+// Static route — params is optional
 const generatedUrl = urlsChild.asyncChildRoute({ 
   searchParams: { 
     searchParam1: 'param 1', 
@@ -1116,6 +1173,11 @@ const generatedUrl = urlsChild.asyncChildRoute({
   }, 
   hash: '#hash1' 
 })
+// Will generate this url: /sync-route/async-child-route?searchParam1=param+1&searchParam2=2#hash1
+
+// Dynamic route — params is required and fully typed
+const userUrl = urls["users/:id"]({ params: { id: "42" } })
+// Will generate this url: /users/42
 ```
 Router and RouterChild are components representing the mount points for each registered route.
 
@@ -1137,6 +1199,22 @@ const AsyncChildExample: FC = () => {
 }
 
 export default AsyncChildExample
+```
+
+</details>
+
+### useParams
+Reactively extracts dynamic route parameters from the current URL based on a route pattern. Re-computes whenever the URL changes via HistoryManager. Fully typed — parameter names are inferred from the pattern string.
+
+<details>
+  <summary><b>Example:</b></summary>
+
+```tsx
+import { useParams } from "@michijs/michijs";
+
+// Inside a component rendered at /users/42/profile
+const params = useParams("/users/:id/profile");
+// params.id reactively reflects the current :id value from the URL
 ```
 
 </details>

@@ -14,6 +14,7 @@ export const [urls, Router] = createRouter({
   ),
   i18nTests: <AsyncComponent promise={() => import("./pages/I18nTests")} />,
   a11yTests: <AsyncComponent promise={() => import("./pages/A11YTests")} />,
+  "users/:id": <AsyncComponent promise={() => import("./pages/DynamicRouteTests")} />,
   "/": <Main />,
 });
 

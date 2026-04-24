@@ -7,3 +7,4 @@ export * from "./hooks/useTitle";
 export * from "./components/Title";
 export * from "./components/Router";
 export * from "./components/Redirect";
+export * from "./hooks/useParams";

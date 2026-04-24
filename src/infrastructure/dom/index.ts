@@ -101,6 +101,7 @@ export { Title, type TitleProps } from "./routing/components/Title";
 export { useTitle } from "./routing/hooks/useTitle";
 export { useHash } from "./routing/hooks/useHash";
 export { useSearchParams } from "./routing/hooks/useSearchParams";
+export { useParams } from "./routing/hooks/useParams";
 
 // Polyfills (internal)
 export { createBuiltInElement } from "./polyfills";

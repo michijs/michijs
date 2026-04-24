@@ -309,14 +309,19 @@ type CSSProperty = CSSObject | CSSProperties | string | number | undefined | nul
 const [urls, Router] = createRouter({
   "/home": <HomePage />,
   "/about": <AboutPage />,
+  "/users/:id": <UserPage />,
 });
 
 // urls.home() → URL object
 // urls.home({ searchParams: { q: "test" }, hash: "#section" })
+// urls["/users/:id"]({ params: { id: "42" } }) → URL with /users/42
+// urls["/users/:id"]({ params: { id: "42" }, searchParams: { tab: "bio" } })
 // <Router />
 ```
 
 Returns `[urlFunctions, RouterComponent]`.
+
+`UrlFunction` is fully typed: when a route key contains `:param` segments, the `params` argument is **required** with the exact param names. When the route has no dynamic segments, `params` is optional (useful for passing parent route params).
 
 ### URL Hooks
 
@@ -324,6 +329,7 @@ Returns `[urlFunctions, RouterComponent]`.
 |------|-------------|
 | `useHash()` | Observable for URL hash. Set keys to `true`/`false` |
 | `useSearchParams()` | Observable for URL search params |
+| `useParams(pattern, parentRoute?)` | Observable for dynamic route params extracted from the current URL. Pattern uses `:param` syntax (e.g. `"/users/:id"`). Fully typed — `useParams("/users/:id")` returns `ObservableProxyPort<Record<"id", string>>` |
 | `useTitle()` | Observable for `document.title` |
 
 ### `HistoryManager`

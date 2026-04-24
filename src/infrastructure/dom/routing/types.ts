@@ -1,19 +1,19 @@
 import type { Router } from "./components/Router";
 import type { ExtendableComponentWithoutChildren } from "../rendering/types";
-import type { UrlFunction } from "../../platform";
+import type { UrlFunction, ExtractParamKeys } from "../../platform";
 import type { ObservableProxyPort } from "@domain";
 import type { AnyObject } from "@shared";
 
 export type RouterProps<T> = ExtendableComponentWithoutChildren<T> & {
   routes?: Record<string, JSX.Element>;
-  parentRoute?: UrlFunction<any, any>;
+  parentRoute?: UrlFunction;
   /** Allows to caché then / else components. */
   enableCache?: boolean;
 };
 
 export type CreateRouterResult<R extends Record<string, JSX.Element>> = [
   {
-    [k in keyof R]: UrlFunction;
+    [k in keyof R]: k extends string ? UrlFunction<k> : UrlFunction;
   },
   typeof Router,
 ];
@@ -30,4 +30,11 @@ export interface UseHash {
   <T extends string = string>(): ObservableProxyPort<
     Record<T, boolean | undefined>
   >;
+}
+
+export interface UseParams {
+  <T extends string>(
+    pattern: T,
+    parentRoute?: UrlFunction,
+  ): ObservableProxyPort<Record<ExtractParamKeys<T>, string>>;
 }

@@ -9,6 +9,7 @@ export const Main = () => (
     <a href={urls.performanceTests()}>Performance tests</a>
     <a href={urls.i18nTests()}>I18n tests</a>
     <a href={urls.a11yTests()}>A11Y tests</a>
+    <a href={urls["users/:id"]({ params: { id: "1" } })}>Dynamic route tests</a>
     <a
       href={urls.searchParamsAndHash({
         searchParams: {
