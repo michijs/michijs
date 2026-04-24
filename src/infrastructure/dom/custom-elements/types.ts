@@ -55,7 +55,7 @@ export interface Lifecycle {
   /**This method is called after a component is removed from the DOM. */
   didUnmount?(): void;
   /**This method is called before a component does anything with an attribute. */
-  willReceiveAttributeCallback?(
+  willReceiveAttribute?(
     name: string,
     newValue: unknown,
     oldValue: unknown,
@@ -66,17 +66,17 @@ type FormStateRestoreCallbackMode = "restore" | "autocomplete";
 
 export interface LifecycleInternals {
   /**Called when the browser associates the element with a form element, or disassociates the element from a form element. */
-  formAssociatedCallback?(form: HTMLFormElement): void;
+  formAssociated?(form: HTMLFormElement): void;
   /**Called after the disabled state of the element changes, either because the disabled attribute of this element was added or removed;
    * or because the disabled state changed on a `<fieldset>` that's an ancestor of this element. The disabled parameter represents the new
    * disabled state of the element. The element may, for example, disable elements in its shadow DOM when it is disabled. */
-  formDisabledCallback?(disabled: boolean): void;
+  formDisabled?(disabled: boolean): void;
   /**
    * Called after the form is reset. The element should reset itself to some kind of default state.
    * For `<input>` elements, this usually involves setting the value property to match the value attribute set in markup (or in the case of a checkbox,
    * setting the checked property to match the checked attribute.
    */
-  formResetCallback?(): void;
+  formReset?(): void;
   /**
    * Called in one of two circumstances:
    * * When the browser restores the state of the element (for example, after a navigation, or when the browser restarts). The mode argument is "restore" in this case.
@@ -84,7 +84,7 @@ export interface LifecycleInternals {
    *
    * The type of the first argument depends on how the setFormValue() method was called.
    */
-  formStateRestoreCallback?(
+  formStateRestore?(
     state: string,
     mode: FormStateRestoreCallbackMode,
   ): void;

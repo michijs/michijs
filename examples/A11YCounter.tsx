@@ -26,17 +26,17 @@ export const A11YCounter = createCustomElement("a11y-counter", {
     willMount() {
       this.value = this.count;
     },
-    formAssociatedCallback(form) {
+    formAssociated(form) {
       console.log("Form associated", form);
     },
-    formDisabledCallback(disabled) {
+    formDisabled(disabled) {
       console.log("Form disabled", disabled);
     },
-    formResetCallback() {
+    formReset() {
       this.value = this.count;
       console.log("Form reset");
     },
-    formStateRestoreCallback(state, mode) {
+    formStateRestore(state, mode) {
       console.log("Form state restore", state, mode);
     },
   },

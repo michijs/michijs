@@ -54,14 +54,14 @@ export class CookieStorage implements Storage {
     this.setOptions = setOptions;
   }
   clear(): void {
-    mainCookieStorage.clear();
     mainCookieStorage.forEach((_, key) => cookieStore.delete(key));
+    mainCookieStorage.clear();
   }
   getItem(key: string): string | null {
     return mainCookieStorage.get(key) ?? null;
   }
   key(index: number): string | null {
-    return mainCookieStorage.get(mainCookieStorage.keys()[index]) ?? null;
+    return Array.from(mainCookieStorage.keys())[index] ?? null;
   }
   removeItem(key: string): void {
     mainCookieStorage.delete(key);

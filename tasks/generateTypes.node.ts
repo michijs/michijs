@@ -3,7 +3,7 @@ import {
   supportedMathMLElements,
   supportedSVGElements,
 } from "@michijs/htmltype/supported";
-import { generateTypes } from "@michijs/htmltype/bin";
+import { generateTypes } from "../node_modules/@michijs/htmltype/bin/tasks/index.js";
 import {
   writeFileSync,
   rmSync,
@@ -81,7 +81,7 @@ try {
 mkdirSync(generatedPath, { recursive: true });
 
 // Copy base htmltype files
-cpSync("./node_modules/@michijs/htmltype/dist", htmlTypePath, {
+cpSync("./node_modules/@michijs/htmltype/dist/src", htmlTypePath, {
   force: true,
   recursive: true,
 });

@@ -3,7 +3,7 @@ import {
   supportedMathMLElements,
   supportedSVGElements,
 } from "@michijs/htmltype/supported";
-import { generateTypes } from "@michijs/htmltype/bin";
+import { generateTypes } from "../node_modules/@michijs/htmltype/bin/tasks/index.js";
 import {
   writeFileSync,
   rmSync,
@@ -81,11 +81,11 @@ function renameFiles(directory) {
 }
 
 cpSync(
-  "./node_modules/@michijs/htmltype/dist",
-  "src/michijs/generated/htmlType",
+  "./node_modules/@michijs/htmltype/dist/src",
+  "src/infrastructure/dom/jsx-runtime/generated/htmlType",
   { force: true, recursive: true },
 );
-renameFiles("src/michijs/generated/htmlType");
+renameFiles("src/infrastructure/dom/jsx-runtime/generated/htmlType");
 
 generateTypes({
   generateAttributesAndValueSetsProps: {
@@ -110,7 +110,7 @@ generateTypes({
     ],
   },
   typesFactoryProps: {
-    generatedPath: "src/michijs/generated/htmlType/generated",
+    generatedPath: "src/infrastructure/dom/jsx-runtime/generated/htmlType/generated",
   },
   elements: {
     additionalImports: [
@@ -123,7 +123,7 @@ generateTypes({
 });
 
 try {
-  rmSync("./src/michijs/generated/JSX.ts", { recursive: true, force: true });
+  rmSync("./src/infrastructure/dom/jsx-runtime/generated/JSX.ts", { recursive: true, force: true });
 } catch {}
 
 const interfaceOverrideElements = Array.from(elements).filter(
@@ -131,7 +131,7 @@ const interfaceOverrideElements = Array.from(elements).filter(
 );
 
 writeFileSync(
-  "./src/michijs/generated/JSX.ts",
+  "./src/infrastructure/dom/jsx-runtime/generated/JSX.ts",
   ` import type { HTMLElements as HTMLElementsHTMLType, MathMLElements, SVGElements as SVGElementsHTMLType } from "./htmlType";
   import type { SingleJSXElement } from '../../rendering/types';
 

@@ -85,13 +85,13 @@ export function createCustomElement<O extends MichiElementOptions>(
     willConstruct;
     didConstruct;
     didMount;
-    willReceiveAttributeCallback;
+    willReceiveAttribute;
     didUnmount;
     disconnected;
-    associatedCallback;
-    disabledCallback;
-    resetCallback;
-    stateRestoreCallback;
+    formAssociated;
+    formDisabled;
+    formReset;
+    formStateRestore;
     adopted;
     render;
     child<T extends (new () => any) | HTMLElement = HTMLElement>(
@@ -202,7 +202,7 @@ export function createCustomElement<O extends MichiElementOptions>(
       // Running this even in the initial render because attributes can be setted before connected
       if (newValue !== oldValue) {
         const parsedNewValue = getAttributeValue(newValue);
-        this.willReceiveAttributeCallback?.(name, parsedNewValue, this[name]);
+        this.willReceiveAttribute?.(name, parsedNewValue, this[name]);
         this[name](parsedNewValue);
       }
     }
@@ -289,16 +289,16 @@ export function createCustomElement<O extends MichiElementOptions>(
 
     // Lifecycle
     formAssociatedCallback(form) {
-      this.formAssociatedCallback?.(form);
+      this.formAssociated?.(form);
     }
     formDisabledCallback(disabled) {
-      this.formDisabledCallback?.(disabled);
+      this.formDisabled?.(disabled);
     }
     formResetCallback() {
-      this.formResetCallback?.();
+      this.formReset?.();
     }
     formStateRestoreCallback(state, mode) {
-      this.formStateRestoreCallback(state, mode);
+      this.formStateRestore(state, mode);
     }
 
     // The following properties and methods aren't strictly required,

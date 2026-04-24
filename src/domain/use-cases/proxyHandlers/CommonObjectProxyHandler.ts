@@ -10,7 +10,7 @@ export class CommonObjectProxyHandler<T extends object>
   apply(target: ProxiedValuePort<T>, _: any, args: any[]) {
     if (args.length > 0) {
       const unproxifiedValue = unproxify(args[0]);
-      if (unproxifiedValue && extendsObject(unproxifiedValue))
+      if (extendsObject(unproxifiedValue))
         return this.applyNewValue(target, unproxifiedValue);
       return this.updateHandlerAndValue(target, unproxifiedValue);
     }

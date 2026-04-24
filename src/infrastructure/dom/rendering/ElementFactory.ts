@@ -66,7 +66,7 @@ export class AttributeManager<S extends Element> {
               if (!isNil(newValue))
                 (this.gc.ref as HTMLElement).style.setProperty(
                   formattedKey,
-                  (value as NonNullable<unknown>).toString(),
+                  (newValue as NonNullable<unknown>).toString(),
                 );
               else
                 (this.gc.ref as HTMLElement).style.removeProperty(formattedKey);

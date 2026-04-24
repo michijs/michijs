@@ -1,37 +1,25 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@michijs/shared-configs/tsconfig",
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "ignoreDeprecations": "6.0",
+    "composite": false,
     "rootDir": "..",
-    "baseUrl": "..",
-    "composite": true,
-    "allowUnusedLabels": true,
-    "jsx": "react-jsx",
-    "jsxImportSource": "@michijs/michijs",
-    "types": ["@types/bun"],
-    "resolveJsonModule": true,
+    "types": ["@types/bun", "@types/trusted-types"],
     "paths": {
-      "@shared": ["./src/shared/index"],
-      "@domain": ["./src/domain/index"],
-      "@ports": ["./src/domain/ports/index"],
-      "@domain/*": ["./src/domain/*"],
-      "@shared/*": ["./src/shared/*"],
-      "@michijs/michijs/*": ["./src/*"],
-      "@michijs/michijs": ["./src/index"]
+      "@michijs/michijs": ["../src/index"],
+      "@domain": ["../src/domain/index"],
+      "@domain/*": ["../src/domain/*"],
+      "@shared": ["../src/shared/index"],
+      "@shared/*": ["../src/shared/*"],
+      "@ports": ["../src/domain/ports/index"],
+      "@ports/*": ["../src/domain/ports/*"]
     }
   },
   "include": [
-    "./**/*.ts",
-    "../src/**/*.ts",
-    "../src/**/*.tsx",
-    "../package.json"
+    "./**/*.ts"
   ],
   "exclude": [
-    "node_modules",
     "../src/infrastructure",
     "../src/index.ts",
-    "../src/index.node.ts",
-    "../src/**/*.spec.*"
+    "../src/index.node.ts"
   ]
 }
