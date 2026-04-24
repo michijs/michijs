@@ -110,7 +110,8 @@ generateTypes({
     ],
   },
   typesFactoryProps: {
-    generatedPath: "src/infrastructure/dom/jsx-runtime/generated/htmlType/generated",
+    generatedPath:
+      "src/infrastructure/dom/jsx-runtime/generated/htmlType/generated",
   },
   elements: {
     additionalImports: [
@@ -123,7 +124,10 @@ generateTypes({
 });
 
 try {
-  rmSync("./src/infrastructure/dom/jsx-runtime/generated/JSX.ts", { recursive: true, force: true });
+  rmSync("./src/infrastructure/dom/jsx-runtime/generated/JSX.ts", {
+    recursive: true,
+    force: true,
+  });
 } catch {}
 
 const interfaceOverrideElements = Array.from(elements).filter(
