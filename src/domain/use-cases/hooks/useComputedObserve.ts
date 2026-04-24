@@ -1,7 +1,4 @@
-import type {
-  UseComputedObservePort,
-  CallableReactiveValuePort,
-} from "@ports";
+import type { UseComputedObservePort, CallableReactiveValuePort } from "@ports";
 import { useObserve } from "./useObserve";
 import { useWatch } from "./useWatch";
 import { startTracking, stopTracking } from "../../utils/dependencyTracker";
@@ -59,8 +56,7 @@ export const useComputedObserve: UseComputedObservePort = ((
     } finally {
       const newDeps = stopTracking();
 
-      for (const dep of newDeps)
-        dep.subscribe(listener);
+      for (const dep of newDeps) dep.subscribe(listener);
     }
 
     options?.onBeforeUpdate?.();

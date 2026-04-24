@@ -91,7 +91,11 @@ describe("LegacyHistoryManager.matches", () => {
     it("longest match wins (simulates Router logic)", () => {
       setPath("/users/42/settings");
 
-      const routes = ["/users/:id", "/users/:id/settings", "/users/:id/profile"];
+      const routes = [
+        "/users/:id",
+        "/users/:id/settings",
+        "/users/:id/profile",
+      ];
 
       let bestIndex = -1;
       let bestLength = -1;
@@ -108,7 +112,11 @@ describe("LegacyHistoryManager.matches", () => {
     it("falls back to shorter route when no specific match exists", () => {
       setPath("/users/42/unknown");
 
-      const routes = ["/users/:id", "/users/:id/settings", "/users/:id/profile"];
+      const routes = [
+        "/users/:id",
+        "/users/:id/settings",
+        "/users/:id/profile",
+      ];
 
       let bestIndex = -1;
       let bestLength = -1;
