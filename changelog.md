@@ -40,11 +40,19 @@ The entire `src/michijs/` flat structure has been reorganized into a hexagonal (
 - JSX runtime export paths updated in `package.json` to reflect new directory structure
 - Test files moved from `tests/` to `examples/` (non-unit-test examples)
 - `tests.tsconfig.json` and `examples.tsconfig.json` added for separate compilation scopes
+- **Breaking: Lifecycle callback renames** — `willReceiveAttributeCallback` → `willReceiveAttribute`, `associatedCallback` → `formAssociated`, `disabledCallback` → `formDisabled`, `resetCallback` → `formReset`, `stateRestoreCallback` → `formStateRestore`.
 
 ### Fixed
 - **`ModernHistoryManager.matches`** — Fixed `urlValue.slice(-1, 1)` (always returned `""`) to `slice(0, -1)`. Also fixed `flexible` parameter being ignored — now only appends wildcard when `flexible=true`.
 - **`CallableReactiveOrConst` variance** — Added covariant alternative so `CallableReactiveValuePort<string>` is assignable to `CallableReactiveOrConst<string | null>`.
 - **`CallableProxiedValuePort` removed** — Replaced by `ObservableProxyPort` across all port types for consistency.
+- **Form lifecycle callbacks** — Fixed infinite recursion in `formAssociatedCallback`, `formDisabledCallback`, `formResetCallback`, and `formStateRestoreCallback`. They were calling themselves instead of the user-defined lifecycle hooks. Renamed properties: `associatedCallback` → `formAssociated`, `disabledCallback` → `formDisabled`, `resetCallback` → `formReset`, `stateRestoreCallback` → `formStateRestore`, `willReceiveAttributeCallback` → `willReceiveAttribute`.
+- **Reactive style binding** — Fixed `bindObservable` callback in `ElementFactory` that passed the original observable (`value`) to `style.setProperty` instead of the resolved `newValue`. Reactive inline styles now update correctly.
+- **`CookieStorage.clear()`** — Fixed order of operations: now iterates the map to delete cookies from the store *before* clearing the in-memory map.
+- **`CookieStorage.key()`** — Fixed `Map.keys()[index]` (always returned `undefined`) to `Array.from(mainCookieStorage.keys())[index]`.
+- **`extendsObject`** — Added null guard to prevent `Object.getPrototypeOf(null)` crash.
+- **`generateTypes.ts`** — Fixed output paths from stale `src/michijs/` to `src/infrastructure/dom/jsx-runtime/generated/`. Fixed `cpSync` source from `dist` to `dist/src` to match upstream `@michijs/htmltype` package structure.
+- **`generateTypes.node.ts`** — Fixed import path for `@michijs/htmltype/bin` (upstream exports map bug) and `cpSync` source path.
 
 ### Removed
 - `src/michijs/` directory — fully replaced by the new layered structure

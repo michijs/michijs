@@ -188,7 +188,7 @@ A component consists of the following properties:
           <td>This method is called after the component has mounted.</td>
         </tr>
         <tr>
-          <td>willReceiveAttributeCallback</td>
+          <td>willReceiveAttribute</td>
           <td>This method is called before a component does anything with an attribute.</td>
         </tr>
         <tr>
@@ -203,19 +203,19 @@ A component consists of the following properties:
       <tr>
         <td rowspan="5">Form-associated Custom Element related</td>
         <tr>
-          <td>formAssociatedCallback</td>
+          <td>formAssociated</td>
           <td>Called when the browser associates the element with a form element or disassociates the element from a form element.</td>
         </tr>
         <tr>
-          <td>formDisabledCallback</td>
+          <td>formDisabled</td>
           <td>Called after the disabled state of the element changes, either because the disabled attribute of this element was added or removed; or because the disabled state changed on a fieldset that's an ancestor of this element. The disabled parameter represents the new disabled state of the element. The element may disable elements in its shadow DOM when it is disabled.</td>
         </tr>
         <tr>
-          <td>formResetCallback</td>
+          <td>formReset</td>
           <td>Called after the form is reset. The element should reset itself to some kind of default state. For input elements, this usually involves setting the value property to match the value attribute set in markup (or, in the case of a checkbox, setting the checked property to match the checked attribute).</td>
         </tr>
         <tr>
-          <td>formStateRestoreCallback</td>
+          <td>formStateRestore</td>
           <td>Called in one of two circumstances: when the browser restores the state of the element (for example, after a navigation, or when the browser restarts) or when the browser's input-assist features such as form autofilling sets a value. The type of the first argument depends on how the setFormValue() method was called.</td>
         </tr>
       </tr>

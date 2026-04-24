@@ -187,8 +187,12 @@ const MyComponent = createCustomElement("my-component", {
     didMount() {},
     disconnected() {},
     didUnmount() {},
-    willReceiveAttributeCallback(name, newValue, oldValue) {},
+    willReceiveAttribute(name, newValue, oldValue) {},
     adopted(document, newDocument) {},
+    formAssociated(form) {},
+    formDisabled(disabled) {},
+    formReset() {},
+    formStateRestore(state, mode) {},
   },
   render() {
     return <div>{this.count}</div>;
@@ -208,7 +212,8 @@ const MyComponent = createCustomElement("my-component", {
 
 1. `willConstruct` → 2. `didConstruct` → 3. `connected` → 4. `willMount` → 5. `render()` → 6. `didMount`
 7. On disconnect: `disconnected` → `didUnmount` (if removed from document)
-8. On attribute change: `willReceiveAttributeCallback`
+8. On attribute change: `willReceiveAttribute`
+9. Form callbacks: `formAssociated`, `formDisabled`, `formReset`, `formStateRestore`
 
 ### Components
 
