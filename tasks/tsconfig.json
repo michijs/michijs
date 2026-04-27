@@ -14,9 +14,7 @@
       "@ports/*": ["../src/domain/ports/*"]
     }
   },
-  "include": [
-    "./**/*.ts"
-  ],
+  "include": ["./**/*.ts"],
   "exclude": [
     "../src/infrastructure",
     "../src/index.ts",

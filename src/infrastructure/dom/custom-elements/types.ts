@@ -84,10 +84,7 @@ export interface LifecycleInternals {
    *
    * The type of the first argument depends on how the setFormValue() method was called.
    */
-  formStateRestore?(
-    state: string,
-    mode: FormStateRestoreCallbackMode,
-  ): void;
+  formStateRestore?(state: string, mode: FormStateRestoreCallbackMode): void;
 }
 
 export interface MichiProperties
