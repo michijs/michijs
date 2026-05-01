@@ -17,6 +17,13 @@
     "#shared": "./src/shared/index.ts",
     "#ports": "./src/domain/ports/index.ts"
   },
+  "publishConfig": {
+    "imports": {
+      "#domain": "./dist/domain/index.js",
+      "#shared": "./dist/shared/index.js",
+      "#ports": "./dist/domain/ports/index.js"
+    }
+  },
   "exports": {
     "./jsx-runtime": {
       "node": {
