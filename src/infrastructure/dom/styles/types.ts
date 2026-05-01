@@ -1,6 +1,6 @@
-import type { IsAny, KebabCase, StringKeyOf } from "@shared";
+import type { IsAny, KebabCase, StringKeyOf } from "#shared";
 import type { CSSProperties } from "../jsx-runtime/generated/htmlType";
-import type { ObservableOrConst } from "@ports";
+import type { ObservableOrConst } from "#ports";
 
 export type CSSVar<T extends string> = <
   V extends undefined | string | number = undefined,

@@ -7,8 +7,8 @@ import type {
   ObservableProxiedObject,
   ObservableProxiedPrimitivePort,
   ObservableProxiedComplexObjectPort,
-} from "@ports";
-import type { IsAny, GetPrimitiveType, GetPrimitiveTypeClass } from "@shared";
+} from "#ports";
+import type { IsAny, GetPrimitiveType, GetPrimitiveTypeClass } from "#shared";
 
 // Needs to be partial to allow asignation operation
 

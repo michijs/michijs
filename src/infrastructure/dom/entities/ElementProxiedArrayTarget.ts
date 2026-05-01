@@ -1,4 +1,4 @@
-import type { TargetPort } from "@ports";
+import type { TargetPort } from "#ports";
 import { ElementArrayTarget } from "./ElementArrayTarget";
 
 /**

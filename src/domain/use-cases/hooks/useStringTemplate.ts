@@ -1,4 +1,4 @@
-import type { UseStringTemplatePort } from "@ports";
+import type { UseStringTemplatePort } from "#ports";
 import { useComputedObserve } from "./useComputedObserve";
 
 /**

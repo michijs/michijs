@@ -1,5 +1,5 @@
 import { isObservable } from "../typewards/isObservable";
-import type { ObservablePort } from "@ports";
+import type { ObservablePort } from "#ports";
 
 export function getObservables<T>(obj: T): ObservablePort<T>[] {
   if (obj) {

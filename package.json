@@ -12,6 +12,11 @@
   "sideEffects": false,
   "main": "dist/index.js",
   "module": "dist/index.js",
+  "imports": {
+    "#domain": "./src/domain/index.ts",
+    "#shared": "./src/shared/index.ts",
+    "#ports": "./src/domain/ports/index.ts"
+  },
   "exports": {
     "./jsx-runtime": {
       "node": {

@@ -1,8 +1,8 @@
-import { useComputedObserve } from "@domain";
+import { useComputedObserve } from "#domain";
 import { HistoryManager } from "../entities/HistoryManager";
 import { setSearchParam } from "../../../platform/url/utils/setSearchParam";
 import type { UseSearchParams } from "../types";
-import { getSearchParamsValue } from "@shared";
+import { getSearchParamsValue } from "#shared";
 
 let isUpdating = false;
 

@@ -1,4 +1,4 @@
-import { formatToKebabCase } from "@shared";
+import { formatToKebabCase } from "#shared";
 import type { UrlFunction } from "../types";
 import { createURL } from "./createURL";
 

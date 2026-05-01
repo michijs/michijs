@@ -1,6 +1,6 @@
 import type { CSSProperty } from "./types";
 import { isCSSObject } from "./typewards/isCSSObject";
-import { formatToKebabCase } from "@shared";
+import { formatToKebabCase } from "#shared";
 
 export const convertCssObjectToCssVariablesObject = (
   cssObject: CSSProperty,

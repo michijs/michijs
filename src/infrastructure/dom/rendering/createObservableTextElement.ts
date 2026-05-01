@@ -1,6 +1,6 @@
 import type { ObservableNonNullablePrimitiveType } from "./types";
 import { createTextElement } from "./createTextElement";
-import { GarbageCollectableObject } from "@domain";
+import { GarbageCollectableObject } from "#domain";
 import { createTextNodeContentCallback } from "./createTextNodeContentCallback";
 
 export const createObservableTextElement = (

@@ -1,6 +1,6 @@
 import { create } from "../../../../infrastructure/dom/rendering/create";
 import { List } from "../../../../infrastructure/dom/rendering/components/List";
-import type { ObservableProxyPort } from "@ports";
+import type { ObservableProxyPort } from "#ports";
 import { useObserve } from "../useObserve";
 import { describe, it, expect, beforeEach } from "bun:test";
 import { sharedObjectTests } from "./useObserveSharedObjectTests.spec";

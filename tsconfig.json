@@ -9,17 +9,12 @@
     "jsxImportSource": "@michijs/michijs",
     "types": ["@types/trusted-types"],
     "paths": {
-      "@shared": ["./src/shared/index"],
-      "@domain": ["./src/domain/index"],
-      "@ports": ["./src/domain/ports/index"],
       "@michijs/michijs/jsx-runtime": [
         "./src/infrastructure/dom/jsx-runtime/index"
       ],
       "@michijs/michijs/jsx-dev-runtime": [
         "./src/infrastructure/dom/jsx-runtime/index"
       ],
-      "@domain/*": ["./src/domain/*"],
-      "@shared/*": ["./src/shared/*"],
       "@michijs/michijs/*": ["./src/*"],
       "@michijs/michijs": ["./src/index"]
     }

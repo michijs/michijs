@@ -1,4 +1,4 @@
-import type { PrimitiveType } from "@shared";
+import type { PrimitiveType } from "#shared";
 
 export const createTextNodeContentCallback = (
   jsx: PrimitiveType | {},

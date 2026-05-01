@@ -1,4 +1,4 @@
-import type { ObservablePort, ObservableOrConst } from "@ports";
+import type { ObservablePort, ObservableOrConst } from "#ports";
 
 export interface HistoryManagerPort extends ObservablePort<string | URL> {
   ignoreHashes?: boolean;

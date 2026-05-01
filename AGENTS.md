@@ -35,25 +35,23 @@ src/
 └── jsx-dev-runtime.tsx
 ```
 
-### TSConfig Path Aliases
+### Subpath Imports
 
-| Alias | Resolves to |
-|-------|-------------|
-| `@ports` | `./domain/ports/index` |
-| `@domain` | `./domain/index` |
-| `@domain/*` | `./domain/*` |
-| `@shared` | `./shared/index.ts` |
-| `@shared/*` | `./shared/*` |
+Defined in `package.json` `"imports"` field (Node.js subpath imports):
 
-Base URL: `./src`
+| Import | Resolves to |
+|--------|-------------|
+| `#ports` | `./src/domain/ports/index.ts` |
+| `#domain` | `./src/domain/index.ts` |
+| `#shared` | `./src/shared/index.ts` |
 
 ### Import Rules
 
 | Layer | Can import from | CANNOT import from |
 |-------|----------------|-------------------|
-| `shared/` | `@ports` (type-only only) | `@domain` (values), infrastructure |
-| `domain/` | `@shared`, `@ports`, relative within domain | infrastructure |
-| `infrastructure/` | `@domain`, `@ports`, `@shared` | relative paths crossing layers |
+| `shared/` | `#ports` (type-only only) | `#domain` (values), infrastructure |
+| `domain/` | `#shared`, `#ports`, relative within domain | infrastructure |
+| `infrastructure/` | `#domain`, `#ports`, `#shared` | relative paths crossing layers |
 
 Within the same layer, use **relative imports**. Cross-layer imports use **aliases**.
 

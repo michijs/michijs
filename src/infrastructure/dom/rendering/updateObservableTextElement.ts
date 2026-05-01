@@ -1,4 +1,4 @@
-import { GarbageCollectableObject } from "@domain";
+import { GarbageCollectableObject } from "#domain";
 import type { ObservableNonNullablePrimitiveType } from "./types";
 import { createTextNodeContentCallback } from "./createTextNodeContentCallback";
 

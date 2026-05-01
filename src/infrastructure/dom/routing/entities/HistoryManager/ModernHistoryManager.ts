@@ -3,7 +3,7 @@ import {
   type ObservableOrConst,
   type HistoryManagerPort,
   unproxify,
-} from "@domain";
+} from "#domain";
 import { handleNavigation } from "./handleNavigation";
 
 export class ModernHistoryManager

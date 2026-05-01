@@ -1,7 +1,7 @@
 import { ReactiveValue } from "../../entities/reactive/core/ReactiveValue";
 import { unproxify } from "../../utils/unproxify";
 import { bindObservable } from "../../utils/bindObservable";
-import type { ObservableOrConst, ObservableProxiedObject } from "@ports";
+import type { ObservableOrConst, ObservableProxiedObject } from "#ports";
 import { useAsyncComputedObserve } from "../hooks/useAsyncComputedObserve";
 
 export type Translation<K extends string, T> = {

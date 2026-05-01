@@ -2,7 +2,7 @@ import type {
   Subscription,
   ObservablePort,
   CallableReactiveValuePort,
-} from "@domain";
+} from "#domain";
 
 export type NotifiableObservers<T> = Set<Subscription<T>> | undefined;
 

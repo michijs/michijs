@@ -1,4 +1,4 @@
-import type { ReactiveValuePort, ObservableGettersAndSetters } from "@domain";
+import type { ReactiveValuePort, ObservableGettersAndSetters } from "#domain";
 
 export interface CallableReactiveValuePort<RV>
   extends ReactiveValuePort<RV>,

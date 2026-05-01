@@ -1,6 +1,6 @@
-import { ObservableFromEventListener, useObserveInternal } from "@domain";
+import { ObservableFromEventListener, useObserveInternal } from "#domain";
 import type { UseStorage } from "../types";
-import { isNil } from "@shared";
+import { isNil } from "#shared";
 import { storageIsCookieStorage } from "../typewards/storageIsCookieStorage";
 
 /**

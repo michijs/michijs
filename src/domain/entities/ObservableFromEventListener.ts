@@ -1,4 +1,4 @@
-import type { ObjectWithAddEventListener } from "@shared";
+import type { ObjectWithAddEventListener } from "#shared";
 import { Observable } from "./reactive/core/Observable";
 
 export class ObservableFromEventListener<T = unknown> extends Observable<T> {

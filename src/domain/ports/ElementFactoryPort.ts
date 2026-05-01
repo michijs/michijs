@@ -1,4 +1,4 @@
-import type { AnyObject } from "@shared";
+import type { AnyObject } from "#shared";
 
 export interface ElementFactoryPort<S = unknown, J = unknown> {
   contextElement?: S;

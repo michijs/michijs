@@ -1,9 +1,9 @@
-import type { ReadWriteMap } from "@shared";
+import type { ReadWriteMap } from "#shared";
 import type {
   ObservableProxyPort,
   ProxiedValuePort,
   ObservableGettersAndSetters,
-} from "@ports";
+} from "#ports";
 
 // TODO: we dont support common interfaces yet
 

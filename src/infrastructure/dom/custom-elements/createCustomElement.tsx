@@ -7,7 +7,7 @@ import type {
   NoExtraProperties,
 } from "./types";
 import type { CSSObject } from "../styles/types";
-import { formatToKebabCase } from "@shared";
+import { formatToKebabCase } from "#shared";
 import { addStylesheetsToDocumentOrShadowRoot } from "../styles/addStylesheetsToDocumentOrShadowRoot";
 import { defineEvent } from "./properties/defineEvent";
 import { definePropertyFromObservable } from "./properties/definePropertyFromObservable";
@@ -23,7 +23,7 @@ import {
   useComputedObserve,
   useObserveInternal,
   type ObservableProxiedObject,
-} from "@domain";
+} from "#domain";
 import { createBuiltInElement } from "../polyfills";
 import { getShadowRoot } from "./getShadowRoot";
 import { cloneStylesheet } from "../styles/cloneStylesheet";

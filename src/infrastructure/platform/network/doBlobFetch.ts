@@ -1,4 +1,4 @@
-import type { AnyObject, SearchParams } from "@shared";
+import type { AnyObject, SearchParams } from "#shared";
 import type { DoFetchProps } from "./types";
 import { doGenericFetch } from "./doGenericFetch";
 

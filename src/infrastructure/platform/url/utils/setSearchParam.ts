@@ -1,4 +1,4 @@
-import { isNil } from "@shared";
+import { isNil } from "#shared";
 
 export const setSearchParam = (
   url: URL,

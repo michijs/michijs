@@ -4,7 +4,7 @@ import type {
   UseProxiedComputedObservePortOptions,
   UseComputedObservePortOptions,
   UseWatchDepsPort,
-} from "@ports";
+} from "#ports";
 
 export interface UseAsyncComputedObservePort {
   // With explicit deps

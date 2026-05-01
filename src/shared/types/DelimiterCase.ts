@@ -3,7 +3,7 @@ import type {
   StringArrayToDelimiterCase,
   UpperCaseCharacters,
   WordSeparators,
-} from "@shared";
+} from "#shared";
 
 export type DelimiterCase<
   Value,

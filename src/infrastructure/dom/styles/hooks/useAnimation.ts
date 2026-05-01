@@ -1,6 +1,6 @@
-import { IdGenerator } from "@domain";
+import { IdGenerator } from "#domain";
 import type { UseAnimation } from "../types";
-import { formatToKebabCase, removeNullableFromObject } from "@shared";
+import { formatToKebabCase, removeNullableFromObject } from "#shared";
 
 const idGenerator = new IdGenerator();
 

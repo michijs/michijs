@@ -1,4 +1,4 @@
-import type { AnyObject, SearchParams } from "@shared";
+import type { AnyObject, SearchParams } from "#shared";
 import { createURL } from "../url/utils/createURL";
 import type { DoFetchProps } from "./types";
 

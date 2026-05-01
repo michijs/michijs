@@ -1,5 +1,5 @@
 import type { MichiCustomElement } from "../types";
-import type { ObservableProxyPort } from "@ports";
+import type { ObservableProxyPort } from "#ports";
 
 export function definePropertyFromObservable(
   self: MichiCustomElement,

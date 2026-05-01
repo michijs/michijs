@@ -1,4 +1,4 @@
-import type { CallableReactiveValuePort, ObservableProxyPort } from "@ports";
+import type { CallableReactiveValuePort, ObservableProxyPort } from "#ports";
 
 export type ObservableProxyOrConst<T> =
   | CallableReactiveValuePort<T>

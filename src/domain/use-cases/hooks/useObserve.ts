@@ -1,6 +1,6 @@
 import { ReactiveValue } from "../../entities/reactive/core/ReactiveValue";
 import { ProxiedValue } from "../../entities/reactive/proxied/ProxiedValue";
-import type { UseObservePort, UseObserveInternal } from "@ports";
+import type { UseObservePort, UseObserveInternal } from "#ports";
 import { ObservableProxyHandler } from "../proxyHandlers/ObservableProxyHandler";
 import { getHandler } from "../proxyHandlers/getHandler";
 

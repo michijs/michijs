@@ -10,15 +10,15 @@ import type {
   ObservableOrConstOrPromise,
   ObservablePort,
   ObservableProxyOrConst,
-} from "@ports";
-import type { MappedIdGenerator } from "@domain";
+} from "#ports";
+import type { MappedIdGenerator } from "#domain";
 import type {
   AnyObject,
   GetPrimitiveType,
   KebabCase,
   PrimitiveType,
   WritableKeys,
-} from "@shared";
+} from "#shared";
 
 export interface MichiAttributes<E> {
   children?: JSX.Element;

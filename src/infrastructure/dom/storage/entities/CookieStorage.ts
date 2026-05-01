@@ -1,5 +1,5 @@
 import type { CookieStorageConstructor } from "../types";
-import { Observable, ObservableFromEventListener } from "@domain";
+import { Observable, ObservableFromEventListener } from "#domain";
 
 const mainCookieStorage = new Map<string, string | null>();
 

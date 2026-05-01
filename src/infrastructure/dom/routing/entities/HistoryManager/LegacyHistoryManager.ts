@@ -4,7 +4,7 @@ import {
   type HistoryManagerPort,
   type ObservableOrConst,
   unproxify,
-} from "@domain";
+} from "#domain";
 
 export class LegacyHistoryManager
   extends Observable<string | URL>

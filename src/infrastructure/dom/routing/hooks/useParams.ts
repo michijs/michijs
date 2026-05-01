@@ -1,4 +1,4 @@
-import { useComputedObserve } from "@domain";
+import { useComputedObserve } from "#domain";
 import { HistoryManager } from "../entities/HistoryManager";
 import type { UseParams } from "../types";
 import type { UrlFunction } from "../../../platform";

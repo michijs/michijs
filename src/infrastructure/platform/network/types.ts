@@ -2,8 +2,8 @@ import type {
   CallableReactiveOrConst,
   ObservableOrConst,
   ReactiveValuePort,
-} from "@ports";
-import type { AnyObject, SearchParams } from "@shared";
+} from "#ports";
+import type { AnyObject, SearchParams } from "#shared";
 
 export interface RequestInitUseFetch<B> extends Omit<RequestInit, "body"> {
   body?: B;

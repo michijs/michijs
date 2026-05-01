@@ -1,5 +1,5 @@
-import type { ObservableProxyPort, ObservablePort } from "@domain";
-import type { AnyObject } from "@shared";
+import type { ObservableProxyPort, ObservablePort } from "#domain";
+import type { AnyObject } from "#shared";
 
 export interface UseStorage {
   <T extends object>(item: T, storage?: Storage): ObservableProxyPort<T>;

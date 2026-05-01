@@ -1,4 +1,4 @@
-import type { NotifiableObservers, Subscription } from "@ports";
+import type { NotifiableObservers, Subscription } from "#ports";
 
 export interface ObservablePort<T> {
   subscribe(observer: Subscription<T>): void;

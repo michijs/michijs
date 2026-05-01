@@ -1,4 +1,4 @@
-import type { ObservablePort } from "@ports";
+import type { ObservablePort } from "#ports";
 
 const trackingStack: Set<ObservablePort<any>>[] = [];
 

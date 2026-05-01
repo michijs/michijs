@@ -3,7 +3,7 @@ import {
   useStringTemplate,
   bindObservable,
   type ObservableProxyPort,
-} from "@domain";
+} from "#domain";
 
 /**
  * Allows to create a Constructable Stylesheet with a Template String.

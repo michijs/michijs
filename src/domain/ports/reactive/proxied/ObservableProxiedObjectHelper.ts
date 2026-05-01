@@ -2,7 +2,7 @@ import type {
   ObservableProxyPort,
   ProxiedValuePort,
   ObservableGettersAndSetters,
-} from "@ports";
+} from "#ports";
 
 export type ObservableProxiedObjectHelper<
   RV,

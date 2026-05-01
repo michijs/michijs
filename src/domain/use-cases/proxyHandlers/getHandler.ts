@@ -3,10 +3,10 @@ import type {
   ProxyHandlerPort,
   ObservableProxyPort,
   ParentSubscription,
-} from "@ports";
+} from "#ports";
 import { PrimitiveProxyHandler } from "./PrimitiveProxyHandler";
 import { FunctionProxyHandler } from "./FunctionProxyHandler";
-import { isPrototypeOfObject } from "@shared";
+import { isPrototypeOfObject } from "#shared";
 import { DateProxyHandler } from "./DateProxyHandler";
 import { MapProxyHandler } from "./MapProxyHandler";
 import { SetProxyHandler } from "./SetProxyHandler";

@@ -1,4 +1,4 @@
-import type { UsePureFunctionPort } from "@ports";
+import type { UsePureFunctionPort } from "#ports";
 import { useWatch } from "./useWatch";
 
 /**

@@ -1,6 +1,6 @@
 import type { WithChildren } from "../../../platform/types/WithChildren";
 import type { HTMLElements } from "../../jsx-runtime/generated/htmlType";
-import type { AnyObject } from "@shared";
+import type { AnyObject } from "#shared";
 
 type HostProps = HTMLElements["div"] & AnyObject;
 

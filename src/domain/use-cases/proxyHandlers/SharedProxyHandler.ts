@@ -2,7 +2,7 @@ import type {
   ObservableProxyPort,
   ParentSubscription,
   ProxiedValuePort,
-} from "@ports";
+} from "#ports";
 import { useObserveInternal } from "../hooks/useObserve";
 import { createParentSubscription } from "./createParentSubscription";
 import { getHandler } from "./getHandler";

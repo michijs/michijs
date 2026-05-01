@@ -1,4 +1,4 @@
-import type { Hash, SearchParams } from "@shared";
+import type { Hash, SearchParams } from "#shared";
 import { normalizeURL } from "./normalizeURL";
 import { setSearchParam } from "./setSearchParam";
 

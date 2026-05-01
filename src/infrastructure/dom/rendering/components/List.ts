@@ -5,7 +5,7 @@ import {
   ProxiedArray,
   bindObservable,
   type ElementFactoryPort,
-} from "@domain";
+} from "#domain";
 import { create } from "../create";
 import { ElementFactory } from "../ElementFactory";
 import type {

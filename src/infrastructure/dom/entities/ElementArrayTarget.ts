@@ -1,5 +1,5 @@
-import type { VirtualFragmentPort } from "@domain";
-import type { ReactiveArrayTargetPort, ElementFactoryPort } from "@ports";
+import type { VirtualFragmentPort } from "#domain";
+import type { ReactiveArrayTargetPort, ElementFactoryPort } from "#ports";
 import type { FC, SingleJSXElement } from "../rendering/types";
 
 /**

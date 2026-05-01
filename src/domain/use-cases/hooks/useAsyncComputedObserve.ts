@@ -2,7 +2,7 @@ import { useObserve } from "./useObserve";
 import type {
   UseAsyncComputedObservePort,
   CallableReactiveValuePort,
-} from "@ports";
+} from "#ports";
 import { useWatch } from "./useWatch";
 import { startTracking, stopTracking } from "../../utils/dependencyTracker";
 

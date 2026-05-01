@@ -1,3 +1,3 @@
-import type { NonNullablePrimitiveType } from "@shared";
+import type { NonNullablePrimitiveType } from "#shared";
 
 export type PrimitiveType = NonNullablePrimitiveType | null | undefined;

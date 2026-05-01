@@ -1,9 +1,9 @@
-import type { ReadWriteSet } from "@shared";
+import type { ReadWriteSet } from "#shared";
 import type {
   ObservableProxyPort,
   ProxiedValuePort,
   ObservableGettersAndSetters,
-} from "@ports";
+} from "#ports";
 
 export interface ObservableProxiedSetHelper<RV, SV = ObservableProxyPort<RV>>
   extends ReadWriteSet<RV, SV>,

@@ -1,4 +1,4 @@
-import type { CallableReactiveOrConst, ObservableProxyPort } from "@ports";
+import type { CallableReactiveOrConst, ObservableProxyPort } from "#ports";
 
 export interface UseStringTemplatePort {
   (

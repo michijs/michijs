@@ -2,8 +2,8 @@ import type {
   ReactiveValuePort,
   ProxyHandlerPort,
   NotifiableObservers,
-} from "@domain";
-import type { Typeof } from "@shared";
+} from "#domain";
+import type { Typeof } from "#shared";
 
 export interface ProxiedValuePort<RV> extends ReactiveValuePort<RV> {
   handler: ProxyHandlerPort<RV>;

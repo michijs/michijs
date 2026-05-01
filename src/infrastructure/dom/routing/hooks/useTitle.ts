@@ -1,4 +1,4 @@
-import { useObserve, type CallableReactiveValuePort } from "@domain";
+import { useObserve, type CallableReactiveValuePort } from "#domain";
 
 const observer = useObserve(document.title);
 

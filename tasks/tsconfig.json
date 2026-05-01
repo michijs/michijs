@@ -6,12 +6,7 @@
     "types": ["@types/bun", "@types/trusted-types"],
     "paths": {
       "@michijs/michijs": ["../src/index"],
-      "@domain": ["../src/domain/index"],
-      "@domain/*": ["../src/domain/*"],
-      "@shared": ["../src/shared/index"],
-      "@shared/*": ["../src/shared/*"],
-      "@ports": ["../src/domain/ports/index"],
-      "@ports/*": ["../src/domain/ports/*"]
+      "@michijs/michijs/*": ["../src/*"]
     }
   },
   "include": ["./**/*.ts"],

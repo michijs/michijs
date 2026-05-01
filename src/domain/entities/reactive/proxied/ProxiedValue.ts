@@ -1,11 +1,11 @@
-import type { Typeof } from "@shared";
+import type { Typeof } from "#shared";
 import type {
   ProxiedValuePort,
   ObservableGettersAndSetters,
   NotifiableObservers,
   ParentSubscription,
   ProxyHandlerPort,
-} from "@ports";
+} from "#ports";
 import { unproxify } from "../../../utils/unproxify";
 import { trackAccess } from "../../../utils/dependencyTracker";
 import { ReactiveValue } from "../core/ReactiveValue";

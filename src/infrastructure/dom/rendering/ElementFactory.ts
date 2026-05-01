@@ -4,7 +4,7 @@ import type {
   ObservableNonNullablePrimitiveType,
   ObjectJSXElement,
 } from "./types";
-import type { AnyObject } from "@shared";
+import type { AnyObject } from "#shared";
 import { isHTMLElement } from "./typewards/isHTMLElement";
 import { isClassJSXElement } from "./typewards/isClassJSXElement";
 import { isDOMElement } from "./typewards/isDOMElement";
@@ -17,8 +17,8 @@ import {
   bindObservable,
   GarbageCollectableObject,
   type ElementFactoryPort,
-} from "@domain";
-import { formatToKebabCase, bindFunction, isNil } from "@shared";
+} from "#domain";
+import { formatToKebabCase, bindFunction, isNil } from "#shared";
 import { classJSXToObjectJSXElement } from "./classJSXToObjectJSXElement";
 import { createObservableTextElement } from "./createObservableTextElement";
 import { createTextElement } from "./createTextElement";

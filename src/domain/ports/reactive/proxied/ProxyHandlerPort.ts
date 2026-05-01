@@ -1,4 +1,4 @@
-import type { ProxiedValuePort } from "@ports";
+import type { ProxiedValuePort } from "#ports";
 
 export interface ProxyHandlerPort<T>
   extends Required<Pick<ProxyHandler<ProxiedValuePort<T>>, "apply">>,

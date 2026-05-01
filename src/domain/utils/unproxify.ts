@@ -1,11 +1,11 @@
-import type { UnproxifyPort } from "@ports";
+import type { UnproxifyPort } from "#ports";
 import { cloneArray } from "../../shared/utils/clone/cloneArray";
 import { cloneCommonObject } from "../../shared/utils/clone/cloneCommonObject";
 import { cloneDate } from "../../shared/utils/clone/cloneDate";
 import { cloneMap } from "../../shared/utils/clone/cloneMap";
 import { cloneSet } from "../../shared/utils/clone/cloneSet";
 import { isPrototypeOfObject } from "../../shared/utils/isPrototypeOfObject";
-import { isReactiveValue } from "@domain/typewards/isReactiveValue";
+import { isReactiveValue } from "../typewards/isReactiveValue";
 
 /**
  * Converts any proxy into a common value

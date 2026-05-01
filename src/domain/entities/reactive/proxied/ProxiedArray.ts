@@ -1,4 +1,4 @@
-import type { TargetPort } from "@ports";
+import type { TargetPort } from "#ports";
 import { ReactiveArray } from "../core/ReactiveArray";
 export class ProxiedArray<V> extends ReactiveArray<V, TargetPort<V, any>> {
   override pop(): V | undefined {

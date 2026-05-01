@@ -4,14 +4,14 @@ import {
   useComputedObserve,
   getObservables,
   unproxify,
-} from "@domain";
+} from "#domain";
 import type { CSSObject, UseStyleSheet, UseStyleSheetCallback } from "../types";
 import {
   isNil,
   formatToKebabCase,
   isProxiedValue,
   type AnyObject,
-} from "@shared";
+} from "#shared";
 import { useCssVariables } from "./useCssVariables";
 
 const hostSelectors = [":host", ":host-context"];

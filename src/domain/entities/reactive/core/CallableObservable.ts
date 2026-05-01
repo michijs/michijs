@@ -1,4 +1,4 @@
-import type { ObservableGettersAndSetters } from "@ports";
+import type { ObservableGettersAndSetters } from "#ports";
 import { Callable } from "./Callable";
 import { Observable } from "./Observable";
 

@@ -1,8 +1,8 @@
-import type { ProxiedValuePort, ProxyHandlerPort } from "@ports";
+import type { ProxiedValuePort, ProxyHandlerPort } from "#ports";
 import { getObjectHandler } from "./getHandler";
 import { SharedProxyHandler } from "./SharedProxyHandler";
 import { FunctionProxyHandler } from "./FunctionProxyHandler";
-import { isNil } from "@shared";
+import { isNil } from "#shared";
 import { unproxify } from "../../utils/unproxify";
 
 export class PrimitiveProxyHandler<T>

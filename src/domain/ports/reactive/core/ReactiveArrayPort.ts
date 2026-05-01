@@ -1,4 +1,4 @@
-import type { ReactiveArrayTargetPort } from "@ports";
+import type { ReactiveArrayTargetPort } from "#ports";
 
 export interface ReactiveArrayPort<V> {
   targets: Array<ReactiveArrayTargetPort<any, any>>;

@@ -1,4 +1,4 @@
-import type { ProxiedValuePort, ProxyHandlerPort } from "@ports";
+import type { ProxiedValuePort, ProxyHandlerPort } from "#ports";
 import { unproxify } from "../../utils/unproxify";
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 

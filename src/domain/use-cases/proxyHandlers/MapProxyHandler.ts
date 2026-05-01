@@ -1,8 +1,8 @@
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
 import { customMapAndSetClear } from "./customMapAndSetClear";
 import { customMapAndSetDelete } from "./customMapAndSetDelete";
-import type { ProxiedValuePort, ProxyHandlerPort } from "@ports";
-import { cloneMap } from "@shared";
+import type { ProxiedValuePort, ProxyHandlerPort } from "#ports";
+import { cloneMap } from "#shared";
 import { unproxify } from "../../utils/unproxify";
 
 export class MapProxyHandler<T extends Map<any, any>>

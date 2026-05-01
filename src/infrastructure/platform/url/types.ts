@@ -1,4 +1,4 @@
-import type { Hash, SearchParams, ExtractParamKeys } from "@shared";
+import type { Hash, SearchParams, ExtractParamKeys } from "#shared";
 
 type UrlFunctionArgs<
   P extends string,

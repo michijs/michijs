@@ -1,4 +1,4 @@
-import { isObservable } from "@domain";
+import { isObservable } from "#domain";
 import { classJSXToObjectJSXElement } from "./classJSXToObjectJSXElement";
 import { ElementFactory } from "./ElementFactory";
 import type {

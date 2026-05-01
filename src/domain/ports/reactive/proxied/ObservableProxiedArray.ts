@@ -1,10 +1,10 @@
-import type { ReadWriteArray } from "@shared";
+import type { ReadWriteArray } from "#shared";
 import type {
   ObservableProxyPort,
   ObservableGettersAndSetters,
   ReactiveArrayPort,
   ProxiedValuePort,
-} from "@ports";
+} from "#ports";
 
 interface ObservableProxiedArrayHelper<RV, SV = ObservableProxyPort<RV>>
   extends ReadWriteArray<RV, SV>,

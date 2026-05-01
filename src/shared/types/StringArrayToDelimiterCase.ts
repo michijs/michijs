@@ -1,4 +1,4 @@
-import type { StringPartToDelimiterCase } from "@shared";
+import type { StringPartToDelimiterCase } from "#shared";
 
 export type StringArrayToDelimiterCase<
   Parts extends any[],

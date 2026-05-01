@@ -1,12 +1,12 @@
 /** biome-ignore-all lint/suspicious/noAsyncPromiseExecutor: <explanation> */
-import { Observable } from "@domain";
+import { Observable } from "#domain";
 import type {
   IndexeddbObservableResult,
   InitDb,
   TypedIDBObjectStore,
   UseIndexedDB,
 } from "../types";
-import type { AnyObject } from "@shared";
+import type { AnyObject } from "#shared";
 
 const initDb: InitDb = (name, objectsStore, version = 1) => {
   return new Promise((resolve) => {

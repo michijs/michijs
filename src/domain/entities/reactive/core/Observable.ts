@@ -1,4 +1,4 @@
-import type { NotifiableObservers, ObservablePort, Subscription } from "@ports";
+import type { NotifiableObservers, ObservablePort, Subscription } from "#ports";
 import { GarbageCollectedEvent } from "../../garbage-collection/GarbageCollectedEvent";
 
 export class Observable<T> implements ObservablePort<T> {

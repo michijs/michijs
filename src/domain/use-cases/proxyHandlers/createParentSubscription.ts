@@ -1,4 +1,4 @@
-import type { ParentSubscription, ProxiedValuePort } from "@ports";
+import type { ParentSubscription, ProxiedValuePort } from "#ports";
 
 export const createParentSubscription = <T>(
   proxiedValue: ProxiedValuePort<T>,

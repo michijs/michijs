@@ -1,7 +1,7 @@
 import { useComputedObserve } from "../use-cases/hooks/useComputedObserve";
 import { isObservable } from "../typewards/isObservable";
-import type { ObservablePort, Subscription } from "@ports";
-import { extendsObject } from "@shared";
+import type { ObservablePort, Subscription } from "#ports";
+import { extendsObject } from "#shared";
 import { getObservables } from "./getObservables";
 
 export const bindObservable = <T>(

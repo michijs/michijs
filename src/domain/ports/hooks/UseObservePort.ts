@@ -2,7 +2,7 @@ import type {
   ObservableProxyPort,
   CallableReactiveValuePort,
   ParentSubscription,
-} from "@ports";
+} from "#ports";
 
 export interface UseObserveInternal {
   <T>(

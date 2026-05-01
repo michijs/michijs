@@ -1,4 +1,4 @@
-import type { HistoryManagerPort } from "@domain";
+import type { HistoryManagerPort } from "#domain";
 
 let HistoryManager: HistoryManagerPort;
 removeTopLevelAwaits: {

@@ -2,7 +2,7 @@ import type {
   ProxiedValuePort,
   ObservableProxyPort,
   ProxyHandlerPort,
-} from "@ports";
+} from "#ports";
 import { useComputedObserve } from "../hooks/useComputedObserve";
 
 export class FunctionProxyHandler implements ProxyHandlerPort<Function> {

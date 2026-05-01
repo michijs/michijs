@@ -1,5 +1,5 @@
-import type { IsAny } from "@shared";
-import type { ObservablePort } from "@ports";
+import type { IsAny } from "#shared";
+import type { ObservablePort } from "#ports";
 
 export type UnproxifyPort<T> = IsAny<T> extends true
   ? any

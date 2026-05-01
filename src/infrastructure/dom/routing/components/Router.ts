@@ -1,5 +1,5 @@
 import type { RouterProps } from "../types";
-import { useComputedObserve } from "@domain";
+import { useComputedObserve } from "#domain";
 import { HistoryManager } from "../entities/HistoryManager";
 import { urlFn } from "../../../platform/url/utils/urlFn";
 import { If } from "../../rendering/components/If";

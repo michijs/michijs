@@ -1,11 +1,11 @@
-import { hasToJSON } from "@shared";
+import { hasToJSON } from "#shared";
 import type {
   CallableReactiveValuePort,
   NotifiableObservers,
   ObservableGettersAndSetters,
   ObservablePort,
   ReactiveValuePort,
-} from "@ports";
+} from "#ports";
 import { CallableObservable } from "./CallableObservable";
 import { trackAccess } from "../../../utils/dependencyTracker";
 

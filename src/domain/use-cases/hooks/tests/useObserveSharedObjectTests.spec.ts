@@ -1,5 +1,5 @@
-import type { AnyObject } from "@shared";
-import type { ObservableProxyPort } from "@ports";
+import type { AnyObject } from "#shared";
+import type { ObservableProxyPort } from "#ports";
 import { useObserve } from "../useObserve";
 import { useObserveMutationTests } from "./useObserveMutation.spec";
 import { describe, it, expect, beforeEach, jest, afterEach } from "bun:test";

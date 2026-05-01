@@ -1,7 +1,7 @@
 import { getAttributeValue } from "../../rendering/getAttributeValue";
 import type { MichiCustomElement, ReflectedAttributesType } from "../types";
-import type { ObservableProxyPort } from "@ports";
-import { formatToKebabCase } from "@shared";
+import type { ObservableProxyPort } from "#ports";
+import { formatToKebabCase } from "#shared";
 import { definePropertyFromObservable } from "./definePropertyFromObservable";
 
 export const defineReflectedAttributes = (

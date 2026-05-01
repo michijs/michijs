@@ -1,6 +1,6 @@
 import { ObjectProxyHandler } from "./ObjectProxyHandler";
-import type { ProxiedValuePort, ProxyHandlerPort } from "@ports";
-import { extendsObject, cloneCommonObject } from "@shared";
+import type { ProxiedValuePort, ProxyHandlerPort } from "#ports";
+import { extendsObject, cloneCommonObject } from "#shared";
 import { unproxify } from "../../utils/unproxify";
 
 export class CommonObjectProxyHandler<T extends object>

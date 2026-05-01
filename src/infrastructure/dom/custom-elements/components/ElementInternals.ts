@@ -8,7 +8,7 @@ import {
   type CallableReactiveOrConst,
   bindObservable,
   unproxify,
-} from "@domain";
+} from "#domain";
 
 type ObservableAriaMixin = {
   [k in keyof Omit<ARIAMixin, "role">]?: CallableReactiveOrConst<ARIAMixin[k]>;

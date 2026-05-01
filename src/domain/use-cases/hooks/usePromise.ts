@@ -1,4 +1,4 @@
-import type { UsePromisePort } from "@ports";
+import type { UsePromisePort } from "#ports";
 import { useObserve } from "./useObserve";
 import { useWatch } from "./useWatch";
 

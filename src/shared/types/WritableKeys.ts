@@ -1,4 +1,4 @@
-import type { IfEquals } from "@shared";
+import type { IfEquals } from "#shared";
 
 export type WritableKeys<T> = {
   [P in keyof T]-?: IfEquals<

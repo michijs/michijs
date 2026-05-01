@@ -10,7 +10,7 @@ import {
   bindObservable,
   type ReactiveValuePort,
   type ElementFactoryPort,
-} from "@domain";
+} from "#domain";
 
 // Define a type for the return value of promises, which can be a JSX element, a function component, or a DOM element.
 type PromiseType<P> =

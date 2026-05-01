@@ -1,4 +1,4 @@
-import type { ObservableProxiedComplexObjectPort } from "@ports";
+import type { ObservableProxiedComplexObjectPort } from "#ports";
 import { useObserve } from "../useObserve";
 import { describe, it, expect, jest, beforeEach } from "bun:test";
 import { sharedObjectTests } from "./useObserveSharedObjectTests.spec";

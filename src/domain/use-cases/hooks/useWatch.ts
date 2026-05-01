@@ -1,4 +1,4 @@
-import type { UseWatchPort } from "@ports";
+import type { UseWatchPort } from "#ports";
 
 /**
  * A simple mechanism for watching dependencies and invoking a callback when any of them change.

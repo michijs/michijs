@@ -1,4 +1,4 @@
-import type { ObservableProxyPort } from "@ports";
+import type { ObservableProxyPort } from "#ports";
 import { useObserve } from "../useObserve";
 import { describe, it, expect, jest, beforeEach, afterEach } from "bun:test";
 

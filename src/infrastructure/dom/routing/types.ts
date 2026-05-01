@@ -1,8 +1,8 @@
 import type { Router } from "./components/Router";
 import type { ExtendableComponentWithoutChildren } from "../rendering/types";
 import type { UrlFunction } from "../../platform";
-import type { ObservableProxyPort } from "@domain";
-import type { AnyObject, ExtractParamKeys } from "@shared";
+import type { ObservableProxyPort } from "#domain";
+import type { AnyObject, ExtractParamKeys } from "#shared";
 
 export type RouterProps<T> = ExtendableComponentWithoutChildren<T> & {
   routes?: Record<string, JSX.Element>;

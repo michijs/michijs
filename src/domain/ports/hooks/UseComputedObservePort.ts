@@ -2,7 +2,7 @@ import type {
   CallableReactiveValuePort,
   ObservableProxyPort,
   UseWatchDepsPort,
-} from "@ports";
+} from "#ports";
 
 export interface UseComputedObservePortSharedOptions {
   onBeforeUpdate?(): void;

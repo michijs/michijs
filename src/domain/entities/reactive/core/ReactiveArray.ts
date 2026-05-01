@@ -1,4 +1,4 @@
-import type { ReactiveArrayTargetPort, ReactiveArrayPort } from "@ports";
+import type { ReactiveArrayTargetPort, ReactiveArrayPort } from "#ports";
 
 export class ReactiveArray<
     V,

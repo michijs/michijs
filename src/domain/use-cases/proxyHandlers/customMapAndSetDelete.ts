@@ -1,4 +1,4 @@
-import type { ObservableProxyPort, ProxiedValuePort } from "@ports";
+import type { ObservableProxyPort, ProxiedValuePort } from "#ports";
 
 export const customMapAndSetDelete = (
   target: ProxiedValuePort<Map<any, any>> | ProxiedValuePort<Set<any>>,

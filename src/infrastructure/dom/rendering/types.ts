@@ -7,8 +7,8 @@ import type {
   ObservableNonNullableProxiedPrimitiveType,
   UnproxifyPort,
   ElementFactoryPort,
-} from "@domain";
-import type { PrimitiveType } from "@shared";
+} from "#domain";
+import type { PrimitiveType } from "#shared";
 
 export interface CommonJSXAttrs<T> {
   attrs: Record<string, any> & {

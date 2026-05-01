@@ -1,4 +1,4 @@
-import type { ProxiedValuePort, ProxyHandlerPort } from "@ports";
+import type { ProxiedValuePort, ProxyHandlerPort } from "#ports";
 
 export class ObservableProxyHandler<T> implements ProxyHandlerPort<T> {
   callIfExists(

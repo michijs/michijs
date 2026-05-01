@@ -22,8 +22,8 @@ The entire `src/michijs/` flat structure has been reorganized into a hexagonal (
   - Fragment support — `<>...</>` mapped to `DocumentFragment`
   - Dynamic/function tags — runtime dispatch for component functions
   - Per-file tree-shaken helpers — only injects the helper functions actually used -->
-- Port interfaces (`@ports`): `ProxyHandlerPort`, `ObservableProxyPort`, `ProxiedValuePort`, `UnproxifyPort`, `ObservablePort`, `ReactiveValuePort`, `ReactiveArrayPort`, `TargetPort`, `Subscription`, `ParentSubscription`, `HistoryManagerPort`, `VirtualFragmentPort`, `UseObservePort`, `UseComputedObservePort`, `UsePromisePort`, `UsePureFunctionPort`, `UseStringTemplatePort`, `UseWatchPort`, `UseAsyncComputedObservePort`, and more
-- TypeScript path aliases: `@domain`, `@domain/*`, `@ports`, `@shared`, `@shared/*`
+- Port interfaces (`#ports`): `ProxyHandlerPort`, `ObservableProxyPort`, `ProxiedValuePort`, `UnproxifyPort`, `ObservablePort`, `ReactiveValuePort`, `ReactiveArrayPort`, `TargetPort`, `Subscription`, `ParentSubscription`, `HistoryManagerPort`, `VirtualFragmentPort`, `UseObservePort`, `UseComputedObservePort`, `UsePromisePort`, `UsePureFunctionPort`, `UseStringTemplatePort`, `UseWatchPort`, `UseAsyncComputedObservePort`, and more
+- Subpath imports: `#domain`, `#ports`, `#shared` (defined in `package.json` `"imports"` field)
 - Barrel files for each module: `domain/index.ts`, `domain/ports/index.ts`, `shared/index.ts`, `infrastructure/dom/index.ts`, `infrastructure/platform/index.ts`
 - Architecture documentation: `ARQUITECTURE.md` with directory tree, dependency rules, and Mermaid dependency diagram
 - Duck-type `isProxiedValue` type guard in `shared/typewards/` — avoids cross-layer `instanceof` checks
@@ -33,7 +33,7 @@ The entire `src/michijs/` flat structure has been reorganized into a hexagonal (
 ### Changed
 - **Breaking: `usePrimitive` renamed to `useProxied` with inverted default behavior.** `useObserve`, `useComputedObserve`, and `useAsyncComputedObserve` now return a lightweight reactive value (similar to tc39 signals) by default. Pass `useProxied: true` to opt into the deep-proxy observable that was previously the default. The old `PrimitiveValue` class has been renamed to `ReactiveValue`.
 - All source files moved from `src/michijs/` to `src/domain/`, `src/shared/`, or `src/infrastructure/`
-- Cross-layer imports now use path aliases (`@domain`, `@ports`, `@shared`) instead of relative paths
+- Cross-layer imports migrated from TypeScript path aliases (`@domain`, `@ports`, `@shared`) to Node.js subpath imports (`#domain`, `#ports`, `#shared`) defined in `package.json` `"imports"` field
 - `getCSSStyleSheetText` moved from infrastructure to shared (pure function, zero DOM deps)
 - `getFormData` decoupled from infrastructure's `TypedEvent` — now uses native `Event` type
 - `unproxify` uses duck-type `isProxiedValue` instead of `instanceof ProxiedValue`

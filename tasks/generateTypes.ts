@@ -106,7 +106,7 @@ generateTypes({
       });
     },
     valueSetsAdditionalImports: [
-      'import type { ObservableOrConstOrPromise } from "@ports"',
+      'import type { ObservableOrConstOrPromise } from "#ports"',
     ],
   },
   typesFactoryProps: {

@@ -1,5 +1,5 @@
-import type { ElementFactoryPort } from "@domain";
-import type { AnyObject } from "@shared";
+import type { ElementFactoryPort } from "#domain";
+import type { AnyObject } from "#shared";
 
 /** JSX element types for server-side rendering. */
 export type NodeSingleJSXElement =

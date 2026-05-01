@@ -1,4 +1,4 @@
-import { useStringTemplate } from "@domain";
+import { useStringTemplate } from "#domain";
 import { useCssVariables } from "./hooks/useCssVariables";
 import { describe, it, expect } from "bun:test";
 
