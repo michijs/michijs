@@ -40,3 +40,4 @@ docs/license.md
 docs/javascripts
 
 src/infrastructure/plugin
+lib.tsconfig.tsbuildinfo
