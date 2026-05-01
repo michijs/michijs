@@ -33,7 +33,10 @@ export interface MichiAttributesCustomElement<E> {
       infer U
     >
       ? ObservablePort<U | undefined | null> | U | undefined | null
-      : ObservableProxyOrConst<GetPrimitiveType<E[k]> | undefined | null> | undefined | null;
+      :
+          | ObservableProxyOrConst<GetPrimitiveType<E[k]> | undefined | null>
+          | undefined
+          | null;
   };
 }
 
