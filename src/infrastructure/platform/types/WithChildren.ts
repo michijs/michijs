@@ -1,1 +1,1 @@
-export type WithChildren<T> = T & { children: JSX.Element };
+export type WithChildren<T> = T & { children?: JSX.Element };
