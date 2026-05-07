@@ -3,9 +3,9 @@
 > **Version**: 2.4.0  
 > **Package**: `@michijs/michijs`  
 > **License**: MIT  
-> **Runtime**: Browser (main), Node.js (SSR subset)  
-> **Package manager**: Bun  
-> **Build tool**: `@michijs/dev-server` (`michi-server`)
+> **Runtime**: Browser (main), Node.js (JSX-to-string rendering)  
+> **Package manager**: Bun (declared in `package.json`)  
+> **Dev/build tooling used in this repo**: `@michijs/dev-server` (`michi-server`) — not required for consumers
 
 ---
 
@@ -16,21 +16,22 @@ Hexagonal architecture. See [ARQUITECTURE.md](./ARQUITECTURE.md) for full diagra
 ```
 src/
 ├── domain/          # Core logic — zero infrastructure dependencies
-│   ├── entities/    # Observable, ReactiveValue, ProxiedValue, IdGenerator, etc.
+│   ├── entities/    # Observable, ReactiveValue, ProxiedValue, IdGenerator, garbage-collection, etc.
 │   ├── ports/       # Interfaces/contracts (importable by any layer)
-│   ├── use-cases/   # Hooks, I18n, proxy handlers
-│   ├── utils/       # getObservables, bindObservable
-│   └── typewards/   # isObservable
+│   ├── use-cases/   # hooks/, i18n/, proxyHandlers/
+│   ├── utils/       # unproxify, getObservables, bindObservable, dependencyTracker
+│   └── typewards/   # isObservable, isReactiveValue
 ├── shared/          # Utilities, types, type guards — no domain/infra deps
 │   ├── types/       # AnyObject, PrimitiveType, KebabCase, DeepReadonly, etc.
 │   ├── typewards/   # hasToJSON, isProxiedValue
-│   └── utils/       # unproxify, formatToKebabCase, clone/*, throttle, debounce, etc.
+│   └── utils/       # formatToKebabCase, clone/*, throttle, debounce, pick, omit, etc.
 ├── infrastructure/
 │   ├── dom/         # Browser adapter: custom elements, JSX, rendering, styles, routing, storage, URL
 │   ├── platform/    # DOM-agnostic JS APIs: fetch, EventDispatcher, constants
-│   └── node/        # Node.js SSR adapter
+│   ├── node/        # Node.js adapter: JSX runtime + NodeElementFactory (renders JSX to string)
+│   └── plugin/      # esbuild plugin: compile-time JSX transform (michiJSXPlugin, transformSource, PluginElementFactory)
 ├── index.ts         # Browser entry (re-exports domain + dom + shared + platform)
-├── index.node.ts    # Node entry (re-exports domain only)
+├── index.node.ts    # Node entry (re-exports domain + node adapter + shared + platform)
 ├── jsx-runtime.tsx  # JSX runtime re-export
 └── jsx-dev-runtime.tsx
 ```
@@ -416,7 +417,6 @@ From `@shared`:
 
 | Utility | Description |
 |---------|-------------|
-| `unproxify(value)` | Unwraps proxied observables to plain values |
 | `formatToKebabCase(str)` | Converts camelCase to kebab-case |
 | `getFormData(form)` | Extracts form data from a form element |
 | `getCSSStyleSheetText(sheet)` | Gets text content of a CSSStyleSheet |
@@ -443,6 +443,7 @@ From `@shared`:
 
 | Utility | Description |
 |---------|-------------|
+| `unproxify(value)` | Unwraps proxied observables to plain values (returns `UnproxifyPort<T>`) |
 | `bindObservable(obs, callback)` | Binds a callback to an observable (handles both observable and plain values) |
 | `getObservables(obj)` | Extracts all observable properties from an object |
 | `isObservable(value)` | Type guard for observables |
@@ -482,12 +483,22 @@ From `@shared`:
 
 ```json
 {
-  ".": { "node": "./dist/index.node.js", "import": "./dist/index.js" },
-  "./jsx-runtime": "./dist/infrastructure/dom/jsx-runtime/index.js",
-  "./jsx-dev-runtime": "./dist/infrastructure/dom/jsx-runtime/index.js",
+  ".": {
+    "node": { "import": "./dist/index.node.js", "require": "./dist/index.node.js" },
+    "import": "./dist/index.js",
+    "require": "./dist/index.js"
+  },
+  "./jsx-runtime": {
+    "node": { "import": "./dist/infrastructure/node/jsx-runtime/index.js", "require": "./dist/infrastructure/node/jsx-runtime/index.js" },
+    "import": "./dist/infrastructure/dom/jsx-runtime/index.js",
+    "require": "./dist/infrastructure/dom/jsx-runtime/index.js"
+  },
+  "./jsx-dev-runtime": { /* same as jsx-runtime */ },
   "./droppableFlags": "./droppableFlags.js"
 }
 ```
+
+The `node` condition swaps the JSX runtime to the Node adapter (string rendering) while browsers / bundlers get the DOM adapter.
 
 ---
 
@@ -499,7 +510,7 @@ From `@shared`:
 4. **Type guards**: Located in `typewards/` directories
 5. **Barrel files**: Each major module has an `index.ts` re-exporting all public API
 6. **Observables**: Never use `instanceof ProxiedValue` — use `isProxiedValue` (duck-type check on `$value`)
-7. **Cross-layer imports**: Always use path aliases (`@domain`, `@ports`, `@shared`)
+7. **Cross-layer imports**: Always use path aliases (`#domain`, `#ports`, `#shared`)
 8. **Intra-layer imports**: Use relative paths
 9. **English**: All code, comments, JSDoc, and documentation must be in English
 
@@ -511,4 +522,4 @@ From `@shared`:
 - `useStorage` always uses `useObserveInternal` (always-proxied internal path), not affected by the `useProxied` parameter
 - `I18n.createTranslation` explicitly passes `{ useProxied: true }` to `useAsyncComputedObserve`
 - Safari built-in element support requires the `createBuiltInElement` polyfill
-- `infrastructure/node/` (SSR) has not been fully audited in the architecture migration
+- `infrastructure/node/` is not a full SSR runtime — it provides a Node-side JSX runtime and a `NodeElementFactory` that renders JSX to strings (useful for static pages, initial `index.html`, etc.). The `index.node.ts` entry re-exports `domain`, `shared`, `platform`, and the `node` adapter (JSX runtime + generated HTML types + `NodeElementFactory`)

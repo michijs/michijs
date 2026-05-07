@@ -21,20 +21,20 @@ export interface UseComputedObservePort {
   <T>(
     callback: () => T,
     deps: UseWatchDepsPort,
-    options: UseComputedObservePortOptions,
+    options?: UseComputedObservePortOptions,
   ): CallableReactiveValuePort<T>;
   <T>(
     callback: () => T,
     deps: UseWatchDepsPort,
-    options?: UseProxiedComputedObservePortOptions,
+    options: UseProxiedComputedObservePortOptions,
   ): ObservableProxyPort<T>;
   // Auto-tracking (no deps)
   <T>(
     callback: () => T,
-    options: UseComputedObservePortOptions,
+    options?: UseComputedObservePortOptions,
   ): CallableReactiveValuePort<T>;
   <T>(
     callback: () => T,
-    options?: UseProxiedComputedObservePortOptions,
+    options: UseProxiedComputedObservePortOptions,
   ): ObservableProxyPort<T>;
 }

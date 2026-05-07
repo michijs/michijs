@@ -12,23 +12,23 @@ export interface UseAsyncComputedObservePort {
     callback: (abortSignal: AbortSignal) => Promise<T>,
     initialValue: T,
     deps: UseWatchDepsPort,
-    options?: UseProxiedComputedObservePortOptions,
-  ): ObservableProxyPort<T>;
+    options?: UseComputedObservePortOptions,
+  ): CallableReactiveValuePort<T>;
   <T>(
     callback: (abortSignal: AbortSignal) => Promise<T>,
     initialValue: T,
     deps: UseWatchDepsPort,
-    options?: UseComputedObservePortOptions,
-  ): CallableReactiveValuePort<T>;
+    options: UseProxiedComputedObservePortOptions,
+  ): ObservableProxyPort<T>;
   // Auto-tracking (no deps)
   <T>(
     callback: (abortSignal: AbortSignal) => Promise<T>,
     initialValue: T,
-    options?: UseProxiedComputedObservePortOptions,
-  ): ObservableProxyPort<T>;
+    options?: UseComputedObservePortOptions,
+  ): CallableReactiveValuePort<T>;
   <T>(
     callback: (abortSignal: AbortSignal) => Promise<T>,
     initialValue: T,
-    options?: UseComputedObservePortOptions,
-  ): CallableReactiveValuePort<T>;
+    options: UseProxiedComputedObservePortOptions,
+  ): ObservableProxyPort<T>;
 }
