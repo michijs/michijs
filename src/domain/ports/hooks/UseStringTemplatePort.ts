@@ -1,8 +1,8 @@
-import type { CallableReactiveOrConst, ReactiveValuePort } from "#ports";
+import type { CallableReactiveOrConst, CallableReactiveValuePort } from "#ports";
 
 export interface UseStringTemplatePort {
   (
     templateStringsArray: TemplateStringsArray,
     ...props: CallableReactiveOrConst<string | number | undefined>[]
-  ): ReactiveValuePort<string>;
+  ): CallableReactiveValuePort<string>;
 }
