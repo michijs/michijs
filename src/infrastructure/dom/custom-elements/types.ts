@@ -33,7 +33,9 @@ export interface MichiAttributesCustomElement<E> {
     >
       ? ObservablePort<U | undefined | null> | U | undefined | null
       :
-          | ObservableOrConstOrPromise<GetPrimitiveType<E[k]> | undefined | null>
+          | ObservableOrConstOrPromise<
+              GetPrimitiveType<E[k]> | undefined | null
+            >
           | undefined
           | null;
   };
