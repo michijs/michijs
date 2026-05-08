@@ -9,7 +9,6 @@ import type {
   ObservableProxiedComplexObjectPort,
   ObservableOrConstOrPromise,
   ObservablePort,
-  ObservableProxyOrConst,
 } from "#ports";
 import type { MappedIdGenerator } from "#domain";
 import type {
@@ -34,7 +33,7 @@ export interface MichiAttributesCustomElement<E> {
     >
       ? ObservablePort<U | undefined | null> | U | undefined | null
       :
-          | ObservableProxyOrConst<GetPrimitiveType<E[k]> | undefined | null>
+          | ObservableProxyOrConstOrPromise<GetPrimitiveType<E[k]> | undefined | null>
           | undefined
           | null;
   };
