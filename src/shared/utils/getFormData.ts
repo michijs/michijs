@@ -19,5 +19,5 @@ export const getFormData = <T extends object>(
       return obj[part];
     }, acc);
     return acc;
-  }, {});
+  }, {}) as T;
 };
