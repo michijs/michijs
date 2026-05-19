@@ -17,9 +17,9 @@ export type DeepPartialNullable<T> = T extends
   | Map<any, any>
   | Set<any>
   | Array<any>
-  ? T | undefined | null
+  ? T | undefined
   : T extends { addEventListener: any }
-    ? T | undefined | null
+    ? T | undefined
     : T extends object
       ? { [P in keyof T]?: DeepPartialNullable<T[P]> } | undefined | null
-      : T | undefined | null;
+      : T | undefined;
