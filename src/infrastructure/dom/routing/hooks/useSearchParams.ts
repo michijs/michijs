@@ -6,19 +6,16 @@ import { getSearchParamsValue } from "#shared";
 
 let isUpdating = false;
 
-const SearchParams = useComputedObserve(
-  () => getSearchParamsValue(),
-  {
-    deps: [HistoryManager],
-    useProxied: true,
-    onBeforeUpdate() {
-      isUpdating = true;
-    },
-    onAfterUpdate() {
-      isUpdating = false;
-    },
+const SearchParams = useComputedObserve(() => getSearchParamsValue(), {
+  deps: [HistoryManager],
+  useProxied: true,
+  onBeforeUpdate() {
+    isUpdating = true;
   },
-);
+  onAfterUpdate() {
+    isUpdating = false;
+  },
+});
 
 /**
  * It facilitates the management and observation of search parameters in the URL, providing a reactive way to handle changes and update the URL accordingly.

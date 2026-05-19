@@ -24,10 +24,9 @@ export const bindObservable = <T>(
     if (enableDeepBinding && extendsObject(observable)) {
       const observables = getObservables(observable);
       if (observables.length > 0) {
-        const finalObservable = useComputedObserve(
-          () => observable,
-          { deps: observables },
-        ) as T;
+        const finalObservable = useComputedObserve(() => observable, {
+          deps: observables,
+        }) as T;
         // @ts-ignore
         callback(finalObservable());
         return finalObservable;

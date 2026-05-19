@@ -34,7 +34,7 @@ export function extractParams(
  * @returns A reactive observable proxy with the extracted params
  */
 export const useParams: UseParams = (pattern, parentRoute?) =>
-  useComputedObserve(
-    () => extractParams(pattern, parentRoute),
-    { deps: [HistoryManager], useProxied: true },
-  ) as any;
+  useComputedObserve(() => extractParams(pattern, parentRoute), {
+    deps: [HistoryManager],
+    useProxied: true,
+  }) as any;

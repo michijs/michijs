@@ -20,10 +20,9 @@ export class FunctionProxyHandler implements ProxyHandlerPort<Function> {
     }
 
     if (this.rootObservableCallback)
-      return useComputedObserve(
-        () => target.$value(...args),
-        { deps: [this.rootObservableCallback()] },
-      );
+      return useComputedObserve(() => target.$value(...args), {
+        deps: [this.rootObservableCallback()],
+      });
     return target.$value(...args);
   }
   get(target: ProxiedValuePort<Function>, p: string | symbol, receiver) {
