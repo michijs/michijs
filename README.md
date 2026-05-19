@@ -364,7 +364,7 @@ createCustomElement("test-component", {
     },
   },
   render() {
-    const sum = useComputedObserve(() => this.valueA() + this.valueB(), [this.valueA, this.valueB]);
+    const sum = useComputedObserve(() => this.valueA() + this.valueB());
     return (
       <>
         <button onpointerup={this.incrementValueB}>Increment B</button>
@@ -455,12 +455,14 @@ console.log(sum(1, 2)); // Outputs 3 - without calling the callback - returning 
 </details>
 
 #### useAsyncComputedObserve
-It is used for computing a value and observing its changes. Takes up to four arguments:
+It is used for computing a value and observing its changes. Takes up to three arguments:
 
 - **callback**: A function that returns a promise of type T.
 - **initialValue**: Initial value of type T.
-- **deps** *(optional)*: Dependencies to watch for changes. When omitted, dependencies are **automatically tracked** by detecting which observables are accessed during the synchronous portion of the callback. Tracked dependencies are recalculated on each invocation, so conditional branches are handled correctly.
-- **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions. Also includes a `useProxied` option — when `true`, returns a deep-proxy observable; when omitted or `false` (the default), returns a lightweight reactive value similar to the [tc39 signals proposal](https://github.com/tc39/proposal-signals).
+- **options**: Optional object that may contain:
+  - `deps`: Dependencies to watch for changes. When omitted, dependencies are **automatically tracked** by detecting which observables are accessed during the synchronous portion of the callback. Tracked dependencies are recalculated on each invocation, so conditional branches are handled correctly.
+  - `onBeforeUpdate` / `onAfterUpdate`: lifecycle callbacks.
+  - `useProxied`: when `true`, returns a deep-proxy observable; when omitted or `false` (the default), returns a lightweight reactive value similar to the [tc39 signals proposal](https://github.com/tc39/proposal-signals).
 
 <details>
   <summary><b>Example (auto-tracking):</b></summary>
@@ -495,6 +497,7 @@ const fetchData = useAsyncComputedObserve(
   },
   [], // Initial value
   {
+    deps: [/* ...dependencies */],
     onBeforeUpdate: () => console.log("Fetching data..."),
     onAfterUpdate: () => console.log("Data fetched:", fetchData()),
   }
@@ -504,11 +507,13 @@ const fetchData = useAsyncComputedObserve(
 </details>
 
 #### useComputedObserve
-It is used for computing a value and observing its changes. Takes up to three arguments:
+It is used for computing a value and observing its changes. Takes up to two arguments:
 
 - **callback**: A function that returns a value of type T.
-- **deps** *(optional)*: Dependencies to watch for changes. When omitted, dependencies are **automatically tracked** by detecting which observables are accessed during the callback execution. Tracked dependencies are recalculated on each invocation, so conditional branches are handled correctly.
-- **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions. Also includes a `useProxied` option — when `true`, returns a deep-proxy observable; when omitted or `false` (the default), returns a lightweight reactive value similar to the [tc39 signals proposal](https://github.com/tc39/proposal-signals).
+- **options**: Optional object that may contain:
+  - `deps`: Dependencies to watch for changes. When omitted, dependencies are **automatically tracked** by detecting which observables are accessed during the callback execution. Tracked dependencies are recalculated on each invocation, so conditional branches are handled correctly.
+  - `onBeforeUpdate` / `onAfterUpdate`: lifecycle callbacks.
+  - `useProxied`: when `true`, returns a deep-proxy observable; when omitted or `false` (the default), returns a lightweight reactive value similar to the [tc39 signals proposal](https://github.com/tc39/proposal-signals).
 
 
 <details>
@@ -537,7 +542,8 @@ import { useComputedObserve, useObserve } from "@michijs/michijs";
 const a = useObserve(2);
 const b = useObserve(3);
 
-const sum = useComputedObserve(() => a() + b(), [a, b], {
+const sum = useComputedObserve(() => a() + b(), {
+  deps: [a, b],
   onBeforeUpdate: () => console.log("Calculating sum..."),
   onAfterUpdate: () => console.log("New sum:", sum()),
 });
@@ -800,7 +806,7 @@ const count = useAsyncComputedObserve(
     return (await storedCount.counter.get(1))?.count ?? 0;
   },
   (await storedCount.counter.get(1))?.count ?? 0,
-  [storedCount],
+  { deps: [storedCount] },
 );
 
 function decrementCount() {

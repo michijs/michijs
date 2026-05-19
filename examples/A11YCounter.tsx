@@ -49,7 +49,7 @@ export const A11YCounter = createCustomElement("a11y-counter", {
     this.count.subscribe(() => this.value(this.count()));
     const errorMessage = useComputedObserve(
       () => (this.value() > 0 ? undefined : "Value should be greater than 0"),
-      [this.value],
+      { deps: [this.value] },
     );
     return (
       <ElementInternals

@@ -58,7 +58,7 @@ export const ElementInternals = (
           errorMessage,
           validityStateFlags,
         }),
-        getObservables([validityStateFlags, errorMessage]),
+        { deps: getObservables([validityStateFlags, errorMessage]) },
       );
 
       bindObservable(errorObservable, (newValue) => {

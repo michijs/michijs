@@ -12,8 +12,7 @@ const Hash = useComputedObserve(
           [location.hash]: true,
         }
       : {},
-  [HistoryManager],
-  { useProxied: true },
+  { deps: [HistoryManager], useProxied: true },
 );
 
 /**

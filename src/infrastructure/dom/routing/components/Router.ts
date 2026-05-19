@@ -27,7 +27,7 @@ export const Router = <const T>({
       finalRoutesKeys.findIndex((key) =>
         HistoryManager.matches(urlFn(key, parentRoute)().pathname, true),
       ),
-    [HistoryManager],
+    { deps: [HistoryManager] },
   );
 
   return If<T, typeof matchedRoute>(

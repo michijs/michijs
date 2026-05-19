@@ -124,19 +124,21 @@ Creates an observable for a value.
 - `useProxied: false` (default) → `CallableReactiveValuePort<T>`
 - `useProxied: true` → `ObservableProxyPort<T>`
 
-### `useComputedObserve(callback, deps, options?)`
+### `useComputedObserve(callback, options?)`
 
-Computes a value and recomputes when `deps` change.
+Computes a value and recomputes when dependencies change.
 
-- When `deps` is omitted, dependencies are **automatically detected** by tracking observable reads during callback execution (auto-tracking). Dependencies are re-detected on each recomputation using a diff-based approach — only newly discovered deps are subscribed and only removed deps are unsubscribed, avoiding unnecessary work.
+- When `options.deps` is provided, only those dependencies are watched.
+- When `options.deps` is omitted, dependencies are **automatically detected** by tracking observable reads during callback execution (auto-tracking). Dependencies are re-detected on each recomputation using a diff-based approach — only newly discovered deps are subscribed and only removed deps are unsubscribed, avoiding unnecessary work.
 - `options.useProxied: true` → deep-proxy result
 - `options.onBeforeUpdate` / `options.onAfterUpdate` — lifecycle callbacks
 
-### `useAsyncComputedObserve(callback, initialValue, deps, options?)`
+### `useAsyncComputedObserve(callback, initialValue, options?)`
 
 Async version of `useComputedObserve`. Callback receives an `AbortSignal` that aborts if a newer invocation starts.
 
-- When `deps` is omitted, dependencies are **automatically detected** by tracking synchronous observable reads during callback invocation (before the first `await`). Uses the same diff-based subscription management as `useComputedObserve`.
+- When `options.deps` is provided, only those dependencies are watched.
+- When `options.deps` is omitted, dependencies are **automatically detected** by tracking synchronous observable reads during callback invocation (before the first `await`). Uses the same diff-based subscription management as `useComputedObserve`.
 
 ### `useWatch(callback, deps)`
 

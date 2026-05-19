@@ -7,6 +7,11 @@ import type {
 export interface UseComputedObservePortSharedOptions {
   onBeforeUpdate?(): void;
   onAfterUpdate?(): void;
+  /**
+   * Dependencies to watch for changes. When omitted, dependencies are automatically
+   * detected by tracking observable reads during callback execution.
+   */
+  deps?: UseWatchDepsPort;
 }
 export interface UseProxiedComputedObservePortOptions
   extends UseComputedObservePortSharedOptions {
@@ -17,18 +22,6 @@ export interface UseComputedObservePortOptions
   useProxied?: false;
 }
 export interface UseComputedObservePort {
-  // With explicit deps
-  <T>(
-    callback: () => T,
-    deps: UseWatchDepsPort,
-    options?: UseComputedObservePortOptions,
-  ): CallableReactiveValuePort<T>;
-  <T>(
-    callback: () => T,
-    deps: UseWatchDepsPort,
-    options: UseProxiedComputedObservePortOptions,
-  ): ObservableProxyPort<T>;
-  // Auto-tracking (no deps)
   <T>(
     callback: () => T,
     options?: UseComputedObservePortOptions,

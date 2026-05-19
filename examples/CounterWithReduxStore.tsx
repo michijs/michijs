@@ -25,7 +25,7 @@ export const CounterWithReduxStore = createCustomElement(
     render() {
       const count = useComputedObserve(
         () => store.getState().counterStore.count,
-        [store],
+        { deps: [store] },
       );
 
       return (

@@ -11,9 +11,9 @@ import { startTracking, stopTracking } from "../../utils/dependencyTracker";
  * @param callback A function that returns a promise of type T. Receives an `AbortSignal` that is
  *   aborted if a newer invocation starts before the current one resolves.
  * @param initialValue Initial value of type T.
- * @param depsOrOptions Dependencies to watch for changes, or options object. When omitted,
- *   dependencies are automatically detected by tracking synchronous observable reads during callback execution.
- * @param maybeOptions An optional object that may contain `onBeforeUpdate`, `onAfterUpdate` callbacks and `useProxied`.
+ * @param options An optional object that may contain `deps`, `onBeforeUpdate`, `onAfterUpdate` callbacks and `useProxied`.
+ *   When `options.deps` is provided, only those dependencies are watched. Otherwise dependencies
+ *   are automatically detected by tracking synchronous observable reads during callback execution.
  *   When `options.useProxied` is `true`, the returned observable is a deep-proxy (`ObservableProxyPort<T>`).
  *   When `false` or omitted (default), returns a lightweight `CallableReactiveValuePort<T>`.
  * @returns A new observable
@@ -21,11 +21,9 @@ import { startTracking, stopTracking } from "../../utils/dependencyTracker";
 export const useAsyncComputedObserve: UseAsyncComputedObservePort = ((
   callback: (abortSignal: AbortSignal) => Promise<any>,
   initialValue: any,
-  depsOrOptions?: any,
-  maybeOptions?: any,
+  options?: any,
 ) => {
-  const deps = Array.isArray(depsOrOptions) ? depsOrOptions : undefined;
-  const options = deps ? maybeOptions : depsOrOptions;
+  const deps = options?.deps;
 
   if (deps) {
     // Explicit deps — use the original behavior

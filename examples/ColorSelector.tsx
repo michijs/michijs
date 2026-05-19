@@ -25,7 +25,7 @@ export const ColorSelector = createCustomElement("color-selector", {
         color: "white",
         "--example": useComputedObserve(
           () => (this.color() === "#ff0000" ? '"red"' : '"not red"'),
-          [this.color],
+          { deps: [this.color] },
         ),
       },
     };

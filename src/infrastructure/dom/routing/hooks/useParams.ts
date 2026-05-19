@@ -36,6 +36,5 @@ export function extractParams(
 export const useParams: UseParams = (pattern, parentRoute?) =>
   useComputedObserve(
     () => extractParams(pattern, parentRoute),
-    [HistoryManager],
-    { useProxied: true },
+    { deps: [HistoryManager], useProxied: true },
   ) as any;

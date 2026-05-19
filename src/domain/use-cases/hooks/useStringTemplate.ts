@@ -19,5 +19,5 @@ export const useStringTemplate: UseStringTemplatePort = (
         // The accumulator takes the first value if you don't pass a value as the second argument:
         "",
       ),
-    props,
+    { deps: props },
   );

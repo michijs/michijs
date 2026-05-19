@@ -75,7 +75,9 @@ const jsIf: JSIfType = (
 
     const finalCondition = isSwitchMode
       ? condition
-      : useComputedObserve(() => Boolean(condition?.valueOf()), [condition]);
+      : useComputedObserve(() => Boolean(condition?.valueOf()), {
+          deps: [condition],
+        });
 
     // Bind the observable 'condition' to monitor changes.
     bindObservable<unknown>(finalCondition, (newValue) => {

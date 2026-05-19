@@ -26,7 +26,7 @@ export const bindObservable = <T>(
       if (observables.length > 0) {
         const finalObservable = useComputedObserve(
           () => observable,
-          observables,
+          { deps: observables },
         ) as T;
         // @ts-ignore
         callback(finalObservable());

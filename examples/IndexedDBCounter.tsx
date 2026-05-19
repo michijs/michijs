@@ -23,7 +23,7 @@ const count = useAsyncComputedObserve(
     return (await storedCount.counter.get(1))?.count ?? 0;
   },
   (await storedCount.counter.get(1))?.count ?? 0,
-  [storedCount],
+  { deps: [storedCount] },
 );
 
 function decrementCount() {

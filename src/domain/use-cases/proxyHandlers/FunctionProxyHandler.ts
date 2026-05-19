@@ -22,7 +22,7 @@ export class FunctionProxyHandler implements ProxyHandlerPort<Function> {
     if (this.rootObservableCallback)
       return useComputedObserve(
         () => target.$value(...args),
-        [this.rootObservableCallback()],
+        { deps: [this.rootObservableCallback()] },
       );
     return target.$value(...args);
   }

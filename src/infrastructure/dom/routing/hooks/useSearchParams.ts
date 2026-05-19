@@ -8,8 +8,8 @@ let isUpdating = false;
 
 const SearchParams = useComputedObserve(
   () => getSearchParamsValue(),
-  [HistoryManager],
   {
+    deps: [HistoryManager],
     useProxied: true,
     onBeforeUpdate() {
       isUpdating = true;

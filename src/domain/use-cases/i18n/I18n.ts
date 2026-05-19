@@ -72,8 +72,7 @@ export class I18n<K extends string = string> extends ReactiveValue<K> {
     return useAsyncComputedObserve<Partial<T>>(
       async () => await this.getCurrentTranslation(translation),
       translation[this.defaultLanguage] as Partial<T>,
-      [this],
-      { useProxied: true },
+      { deps: [this], useProxied: true },
     ) as unknown as ObservableProxiedObject<Partial<T>>;
   }
 

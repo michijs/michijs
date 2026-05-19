@@ -119,7 +119,7 @@ export function createCustomElement<O extends MichiElementOptions>(
           {
             [selector]: useComputedObserve<CSSObject>(
               () => convertCssObjectToCssVariablesObject(allCssVariables),
-              Object.values(allCssVariables),
+              { deps: Object.values(allCssVariables) },
             ),
           },
           this.$michi.adoptedBy,

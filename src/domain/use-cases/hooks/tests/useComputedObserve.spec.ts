@@ -5,13 +5,13 @@ import { describe, it, expect } from "bun:test";
 describe("useComputedObserve — explicit deps", () => {
   it("should compute initial value from callback", () => {
     const count = useObserve(2);
-    const doubled = useComputedObserve(() => count() * 2, [count]);
+    const doubled = useComputedObserve(() => count() * 2, { deps: [count] });
     expect(doubled()).toBe(4);
   });
 
   it("should recompute when a dependency changes", () => {
     const count = useObserve(1);
-    const doubled = useComputedObserve(() => count() * 2, [count]);
+    const doubled = useComputedObserve(() => count() * 2, { deps: [count] });
     count(5);
     expect(doubled()).toBe(10);
   });
@@ -19,7 +19,7 @@ describe("useComputedObserve — explicit deps", () => {
   it("should support multiple dependencies", () => {
     const a = useObserve(1);
     const b = useObserve(2);
-    const sum = useComputedObserve(() => a() + b(), [a, b]);
+    const sum = useComputedObserve(() => a() + b(), { deps: [a, b] });
     expect(sum()).toBe(3);
     a(10);
     expect(sum()).toBe(12);
