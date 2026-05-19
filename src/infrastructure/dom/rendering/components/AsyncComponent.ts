@@ -53,6 +53,15 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
   // If a loading component is provided, append it to the element.
   if (loadingComponent) el.append(factory.create(loadingComponent));
 
+  // Replace the element's children with the given JSX node.
+  const replaceWith = (node: JSX.Element) => {
+    el.replaceChildren(
+      factory.create(
+        node && typeof node === "function" ? jsx(node as any) : node,
+      ) as ChildNode & ParentNode,
+    );
+  };
+
   // Function to render the component when the promise resolves.
   const render = (promiseResult: P) => {
     const Res = (
@@ -63,16 +72,7 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
         : promiseResult
     ) as JSX.Element;
 
-    // Create and replace the element with the resolved component.
-    el.replaceChildren(
-      factory.create(
-        then
-          ? then(Res as P)
-          : Res && typeof Res === "function"
-            ? jsx(Res)
-            : Res,
-      ) as ChildNode & ParentNode,
-    );
+    replaceWith(then ? then(Res as P) : Res);
   };
 
   // Execute the promise and render the component when it resolves.
@@ -81,7 +81,7 @@ export const AsyncComponent = <P, const T = CreateFCResult>(
       .then((res) => render(res))
       .catch((e) => {
         if (errorComponent) {
-          render(errorComponent(e) as P);
+          replaceWith(errorComponent(e));
         } else throw e;
       });
 
