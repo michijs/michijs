@@ -25,7 +25,7 @@ describe("Observe object tests", () => {
 
   it("Reassigning the whole object should notify subscribers of existing child properties", () => {
     const a = useObserve({ b: 1 }, true);
-    
+
     const childCb = jest.fn();
     a.b.subscribe(childCb);
     a({ b: 2 });
