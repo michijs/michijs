@@ -2,6 +2,7 @@ export * from "./utils";
 export * from "./types/AnyObject";
 export * from "./types/ArrayWithOneOrMoreElements";
 export * from "./types/Browser";
+export * from "./types/DeepPartialNullable";
 export * from "./types/DeepReadonly";
 export * from "./types/DelimiterCase";
 export * from "./types/ExtractParamKeys";

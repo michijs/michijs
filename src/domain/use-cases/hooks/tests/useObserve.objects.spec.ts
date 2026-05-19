@@ -23,6 +23,16 @@ describe("Observe object tests", () => {
     expect(mockCallback).toHaveBeenCalledTimes(1);
   });
 
+  it("Reassigning the whole object should notify subscribers of existing child properties", () => {
+    const a = useObserve({ b: 1 }, true);
+    
+    const childCb = jest.fn();
+    a.b.subscribe(childCb);
+    a({ b: 2 });
+    expect(childCb).toHaveBeenCalledTimes(1);
+    expect(childCb).toHaveBeenLastCalledWith(2);
+  });
+
   describe("with nullable fields", () => {
     const object = useObserve<
       | {
@@ -34,7 +44,6 @@ describe("Observe object tests", () => {
     >(undefined, true);
     it("Getting test doesnt throw exception", () => {
       expect(() => object.test.test2).not.toThrow();
-      // @ts-ignore
       expect(object.test.test2()).toBe(undefined);
       expect(object()).toStrictEqual({ test: { test2: undefined } });
       object.test.test2(1);

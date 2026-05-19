@@ -8,7 +8,12 @@ import type {
   ObservableProxiedPrimitivePort,
   ObservableProxiedComplexObjectPort,
 } from "#ports";
-import type { IsAny, GetPrimitiveType, GetPrimitiveTypeClass } from "#shared";
+import type {
+  IsAny,
+  GetPrimitiveType,
+  GetPrimitiveTypeClass,
+  DeepPartialNullable,
+} from "#shared";
 
 // Needs to be partial to allow asignation operation
 
@@ -32,7 +37,11 @@ export type ObservableProxyPortHelper<
               : [T] extends [Date]
                 ? ObservableProxiedDatePort
                 : [T] extends [object]
-                  ? ObservableProxiedObject<Y>
+                  ? // When Y is nullable (T | undefined | null), every nested property is
+                    // also potentially undefined, so propagate the nullability down the tree.
+                    [Y] extends [T]
+                    ? ObservableProxiedObject<Y>
+                    : ObservableProxiedObject<DeepPartialNullable<Y>>
                   : ObservableProxiedPrimitivePort<GetPrimitiveType<Y>> &
                       GetPrimitiveTypeClass<T>;
 
