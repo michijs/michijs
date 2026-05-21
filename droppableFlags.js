@@ -1,4 +1,5 @@
 export const droppableFlags = {
+  removeTrackDependencies: "removeTrackDependencies",
   removeTopLevelAwaits: "removeTopLevelAwaits",
   removeObservableWithValueValidations: "removeObservableWithValueValidations",
   removeFunctionAndClassJSXElements: "removeFunctionAndClassJSXElements",

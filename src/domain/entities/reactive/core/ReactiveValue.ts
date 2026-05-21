@@ -26,7 +26,9 @@ export class ReactiveValue<T>
         this.notify(newValue);
         return;
       }
-      trackAccess(this);
+      removeTrackDependencies: {
+        trackAccess(this);
+      }
       return this.$value;
     }) as unknown as ObservableGettersAndSetters<T, T>,
   ) {
@@ -54,7 +56,9 @@ export class ReactiveValue<T>
   }
 
   override valueOf(): T {
-    trackAccess(this);
+    removeTrackDependencies: {
+      trackAccess(this);
+    }
     return this.$value;
   }
 

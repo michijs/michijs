@@ -68,7 +68,9 @@ export class ProxiedValue<V>
   }
 
   override valueOf(): V {
-    trackAccess(this);
+    removeTrackDependencies: {
+      trackAccess(this);
+    }
     return this.rawValue();
   }
 
