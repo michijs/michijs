@@ -5,6 +5,7 @@ import {
   create,
   type TypedMouseEvent,
   CloneFactory,
+  ElementArrayTarget,
 } from "@michijs/michijs";
 
 interface Row {
@@ -105,33 +106,6 @@ const adjectives = [
 let nextId = 1,
   selectedItem: Row | null = null;
 
-export const TableBody = create(
-  <List
-    data={rows}
-    as="tbody"
-    id="tbody"
-    elementFactory={new CloneFactory()}
-    renderItem={(row) => (
-      <tr class={row.selected}>
-        <td class="col-md-1">{row.id}</td>
-        <td class="col-md-4">
-          <a onclick={() => select(row)}>{row.label}</a>
-        </td>
-        <td class="col-md-1">
-          {/* biome-ignore-start lint/a11y/useAnchorContent: Intentional */}
-          <a onclick={() => deleteItem(row.id)}>
-            <span class="glyphicon glyphicon-remove" aria-hidden="true" />
-          </a>
-          {/* biome-ignore-end  lint/a11y/useAnchorContent: Intentional */}
-        </td>
-        <td class="col-md-6" />
-      </tr>
-    )}
-  />,
-);
-
-document.querySelector("table")?.appendChild(TableBody);
-
 const rowButton = (
   id: string,
   event: (ev: TypedMouseEvent<HTMLButtonElement>) => any,
@@ -160,3 +134,49 @@ export const TableManager = create(
   </div>,
 );
 document.getElementById("table-manager")?.appendChild(TableManager);
+
+export const TableBody = List({
+  data: rows,
+  as: "tbody",
+  id: "tbody",
+  elementFactory: new CloneFactory(),
+  renderItem: (row) => (
+    <tr class={row.selected}>
+      <td class="col-md-1">{row.id}</td>
+      <td class="col-md-4">
+        <a onclick={() => select(row)}>{row.label}</a>
+      </td>
+      <td class="col-md-1">
+        {/* biome-ignore-start lint/a11y/useAnchorContent: Intentional */}
+        <a onclick={() => deleteItem(row.id)}>
+          <span class="glyphicon glyphicon-remove" aria-hidden="true" />
+        </a>
+        {/* biome-ignore-end  lint/a11y/useAnchorContent: Intentional */}
+      </td>
+      <td class="col-md-6" />
+    </tr>
+  ),
+});
+
+rows.targets.push(
+  new ElementArrayTarget(
+    document.querySelector("tbody")!,
+    (row: Row) => (
+      <tr class={row.selected}>
+        <td class="col-md-1">{row.id}</td>
+        <td class="col-md-4">
+          <a onclick={() => select(row)}>{row.label}</a>
+        </td>
+        <td class="col-md-1">
+          {/* biome-ignore-start lint/a11y/useAnchorContent: Intentional */}
+          <a onclick={() => deleteItem(row.id)}>
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" />
+          </a>
+          {/* biome-ignore-end  lint/a11y/useAnchorContent: Intentional */}
+        </td>
+        <td class="col-md-6" />
+      </tr>
+    ),
+    new CloneFactory(),
+  ),
+);

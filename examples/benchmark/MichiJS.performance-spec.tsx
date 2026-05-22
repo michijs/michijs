@@ -66,7 +66,7 @@ describe("Performance tests - MichiJS", () => {
       undefined,
       2,
     );
-    writeFileSync("./tests/benchmark/generated/michijs.json", resultsString);
+    writeFileSync("./examples/benchmark/generated/michijs.json", resultsString);
     console.log("Results: ", JSON.stringify(results, undefined, 2));
     updateDiff();
     serverProcess.kill(2);

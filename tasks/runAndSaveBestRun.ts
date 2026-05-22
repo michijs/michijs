@@ -22,7 +22,7 @@ const run = () =>
     });
   });
 
-const fwJsonPath = `./tests/benchmark/generated/${fw}.json`;
+const fwJsonPath = `./examples/benchmark/generated/${fw}.json`;
 const jsonContent = (await import(`.${fwJsonPath}`)).default;
 let bestResults = jsonContent[currentVersion];
 

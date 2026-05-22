@@ -21,6 +21,6 @@ export const updateDiff = async () => {
     );
     const diffString = JSON.stringify(diff, undefined, 2);
     console.log("Diff results: ", diffString);
-    writeFileSync("./tests/benchmark/generated/diff.json", diffString);
+    writeFileSync("./examples/benchmark/generated/diff.json", diffString);
   }
 };

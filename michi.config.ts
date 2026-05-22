@@ -36,15 +36,15 @@ export const config: ServerConfigFactory<
     };
     if (environment === "TESTING") {
       defaultConfig.port = 3000;
-      defaultConfig.public!.path = "./tests/benchmark/michijs/public";
+      defaultConfig.public!.path = "./examples/benchmark/michijs/public";
       defaultConfig.esbuildOptions.entryPoints = [
-        "./tests/benchmark/michijs/src/index.tsx",
+        "./examples/benchmark/michijs/src/index.tsx",
       ];
     } else {
       defaultConfig.port = 3001;
-      defaultConfig.public!.path = "./tests/benchmark/vanillajs/public";
+      defaultConfig.public!.path = "./examples/benchmark/vanillajs/public";
       defaultConfig.esbuildOptions.entryPoints = [
-        "./tests/benchmark/vanillajs/src/index.js",
+        "./examples/benchmark/vanillajs/src/index.js",
       ];
     }
   } else {

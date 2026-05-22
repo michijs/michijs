@@ -65,7 +65,7 @@
   },
   "description": "Typescript library to build web components",
   "scripts": {
-    "start": "michi-server --start",
+    "start": "michi-server --start --env=TESTING",
     "install-docs": "python3 -m venv .venv && .venv/scripts/pip install . --no-color",
     "copy-md": "michi-server --build --env=WEB && node -e \"require('fs').copyFileSync('README.md','docs/index.md'); require('fs').copyFileSync('changelog.md','docs/changelog.md')\"",
     "start-page": "bun run copy-md && python -m zensical serve",
@@ -77,8 +77,8 @@
     "link": "bunx concurrently bun:dist-w bun:bun-link",
     "generate-disabled": "bun run ./tasks/generateTypes.ts",
     "run-benchmark-and-save-best-result": "bun run ./tasks/runAndSaveBestRun.ts",
-    "benchmark-michijs": "bun test --update-snapshots --timeout 30000 ./tests/benchmark/MichiJS.performance-spec.tsx",
-    "benchmark-vanillajs": "bun test --update-snapshots --timeout 30000 ./tests/benchmark/Vanilla.performance-spec.tsx",
+    "benchmark-michijs": "bun test --update-snapshots --timeout 30000 ./examples/benchmark/MichiJS.performance-spec.tsx",
+    "benchmark-vanillajs": "bun test --update-snapshots --timeout 30000 ./examples/benchmark/Vanilla.performance-spec.tsx",
     "e2e": "bun run benchmark-michijs && bun run benchmark-vanillajs",
     "coverage": "bun test --collect-coverage",
     "test-tsc": "michi-server --test-tsc",
@@ -96,7 +96,7 @@
   ],
   "devDependencies": {
     "@happy-dom/global-registrator": "20.9.0",
-    "@michijs/dev-server": "0.8.29",
+    "@michijs/dev-server": "0.8.32",
     "@michijs/htmltype": "0.4.10",
     "@michijs/shared-configs": "0.0.37",
     "@reduxjs/toolkit": "2.11.2",

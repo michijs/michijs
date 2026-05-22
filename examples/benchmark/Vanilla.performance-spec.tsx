@@ -50,7 +50,7 @@ describe("Performance tests - vanilla-js", () => {
   afterAll(async () => {
     const results = await resultsPromise;
     const resultsString = JSON.stringify(results, undefined, 2);
-    writeFileSync("./tests/benchmark/generated/vanillajs.json", resultsString);
+    writeFileSync("./examples/benchmark/generated/vanillajs.json", resultsString);
     console.log("Results: ", JSON.stringify(results, undefined, 2));
     updateDiff();
     serverProcess.kill(2);

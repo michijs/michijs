@@ -72,7 +72,8 @@ export const List = <
   }: ListComponentProps<T, E>,
   factory?: ElementFactoryPort<Element, SingleJSXElement>,
 ) => {
-  const resolvedFactory = elementFactory ?? factory ?? new ElementFactory();
+  const listFactory = elementFactory ?? factory ?? new ElementFactory();
+  const resolvedFactory = factory ?? new ElementFactory();
   const underlyingData = (data as any)?.$value ?? data;
   if (underlyingData instanceof ReactiveArray) {
     const castedData = underlyingData as ReactiveArray<any>;
@@ -89,8 +90,8 @@ export const List = <
 
     const newTarget =
       underlyingData instanceof ProxiedArray
-        ? new ElementProxiedArrayTarget(el, renderItem, resolvedFactory)
-        : new ElementArrayTarget(el, renderItem, resolvedFactory);
+        ? new ElementProxiedArrayTarget(el, renderItem, listFactory)
+        : new ElementArrayTarget(el, renderItem, listFactory);
 
     castedData.targets.push(newTarget);
 
@@ -107,13 +108,13 @@ export const List = <
       gc.ref.replaceChildren(
         ...data.map((x) =>
           create(
-            renderItem(x, resolvedFactory),
-            resolvedFactory.contextElement,
+            renderItem(x, listFactory),
+            listFactory.contextElement,
           ),
         ),
       ),
     );
     return el.valueOf();
   }
-  return data.map((x) => renderItem(x, resolvedFactory));
+  return data.map((x) => renderItem(x, listFactory));
 };
