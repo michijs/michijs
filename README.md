@@ -434,6 +434,31 @@ If the item contains a function, it will return an observable that observes for 
 
 **A function in an observable should never mutate the observable.**
 
+##### Disposing observables with `using`
+
+Reactive values implement the [Explicit Resource Management](https://github.com/tc39/proposal-explicit-resource-management) protocol via `Symbol.dispose`. This lets you use the `using` declaration to automatically clean up subscribers and release the held value reference when the observable goes out of scope.
+
+<details>
+  <summary><b>Example:</b></summary>
+
+```tsx
+import { useObserve } from "@michijs/michijs";
+
+function doWork() {
+  using counter = useObserve(0);
+
+  counter.subscribe((value) => console.log(value));
+  counter(1);
+  counter(2);
+  // `counter[Symbol.dispose]()` runs automatically here:
+  // all subscribers are cleared and the held value reference is released.
+}
+```
+
+You can also dispose manually by calling `observable[Symbol.dispose]()` — the call is idempotent and safe to invoke multiple times.
+
+</details>
+
 #### usePureFunction
 It is used to create a memoized function that encapsulates the result of the provided callback function and updates it only when any of the dependencies change. Takes two arguments:
 

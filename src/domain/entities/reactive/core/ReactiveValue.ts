@@ -72,4 +72,14 @@ export class ReactiveValue<T>
     // @ts-ignore
     return this.valueOf().toString();
   }
+
+  /**
+   * Implements the `Symbol.dispose` protocol so instances can be used with
+   * the `using` declaration. Clears all subscribers and releases the held
+   * value reference to help the garbage collector.
+   */
+  [Symbol.dispose](): void {
+    this.observers.clear();
+    this.$value = undefined as unknown as T;
+  }
 }
