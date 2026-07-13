@@ -1,9 +1,4 @@
-import {
-  type Browser,
-  type LaunchOptions,
-  chromium,
-  type Page,
-} from "playwright-core";
+import { type LaunchOptions, chromium, type Page } from "playwright-core";
 import { installPlaywright, makePerformanceTests } from "./shared";
 import { describe, beforeEach, afterAll } from "bun:test";
 import { spawn } from "bun";
@@ -49,7 +44,10 @@ describe("Performance tests - vanilla-js", () => {
   afterAll(async () => {
     const results = await resultsPromise;
     const resultsString = JSON.stringify(results, undefined, 2);
-    writeFileSync("./examples/benchmark/generated/vanillajs.json", resultsString);
+    writeFileSync(
+      "./examples/benchmark/generated/vanillajs.json",
+      resultsString,
+    );
     console.log("Results: ", JSON.stringify(results, undefined, 2));
     updateDiff();
     serverProcess.kill(2);

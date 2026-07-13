@@ -107,10 +107,7 @@ export const List = <
     bindObservable<T>(data, (data) =>
       gc.ref.replaceChildren(
         ...data.map((x) =>
-          create(
-            renderItem(x, listFactory),
-            listFactory.contextElement,
-          ),
+          create(renderItem(x, listFactory), listFactory.contextElement),
         ),
       ),
     );
