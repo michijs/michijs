@@ -1,10 +1,4 @@
-import {
-  type Browser,
-  type LaunchOptions,
-  chromium,
-  type Page,
-} from "playwright-core";
-import { installPlaywright, makePerformanceTests } from "./shared";
+import { makePerformanceTests } from "./shared";
 import { describe, beforeEach, afterAll } from "bun:test";
 import { spawn } from "bun";
 import { writeFileSync } from "fs";
@@ -16,36 +10,15 @@ const serverProcess = spawn([process.execPath, "run", "start"], {
   env: { ...process.env, NODE_ENV: "TESTING_VANILLA" },
 });
 
-let browserOptions: LaunchOptions | undefined;
-if (Bun.env.CI) {
-  browserOptions = {
-    executablePath: "/usr/bin/chromium",
-    args: [
-      "--no-sandbox",
-      "--single-process",
-      "--no-zygote",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-gpu",
-    ],
-  };
-} else {
-  await installPlaywright();
-}
-const browser = await chromium.launch(browserOptions);
-describe("Performance tests - vanilla-js", () => {
-  let page: Page;
+describe("Performance tests - vanilla-js", async () => {
+  await using view = new Bun.WebView();
+
   beforeEach(async () => {
-    page = await browser.newPage();
-    await page.goto("http://localhost:3001", {
-      waitUntil: "domcontentloaded",
-    });
+    await view.navigate("http://localhost:3001");
   });
 
-  const resultsPromise = makePerformanceTests(
-    () => browser,
-    () => page,
-  );
+  const resultsPromise = makePerformanceTests(() => view);
+  
   afterAll(async () => {
     const results = await resultsPromise;
     const resultsString = JSON.stringify(results, undefined, 2);
@@ -53,6 +26,5 @@ describe("Performance tests - vanilla-js", () => {
     console.log("Results: ", JSON.stringify(results, undefined, 2));
     updateDiff();
     serverProcess.kill(2);
-    browser.close();
   });
 });
