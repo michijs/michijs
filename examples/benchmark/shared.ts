@@ -41,10 +41,10 @@ export function getChromePath(): string | undefined {
   // CI environment
   if (Bun.env.CI) {
     const ciPaths = [
-      '/usr/bin/chromium',
-      '/usr/bin/chromium-browser',
-      '/usr/bin/google-chrome',
-      '/usr/bin/chrome',
+      "/usr/bin/chromium",
+      "/usr/bin/chromium-browser",
+      "/usr/bin/google-chrome",
+      "/usr/bin/chrome",
     ];
     for (const path of ciPaths) {
       if (existsSync(path)) return path;
@@ -54,15 +54,15 @@ export function getChromePath(): string | undefined {
   const platform = process.platform;
 
   // Windows paths
-  if (platform === 'win32') {
+  if (platform === "win32") {
     const windowsPaths = [
-      'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-      'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+      "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+      "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
       `${process.env.LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe`,
       `${process.env.PROGRAMFILES}\\Google\\Chrome\\Application\\chrome.exe`,
-      `${process.env['PROGRAMFILES(X86)']}\\Google\\Chrome\\Application\\chrome.exe`,
-      'C:\\Program Files\\Chromium\\Application\\chrome.exe',
-      'C:\\Program Files (x86)\\Chromium\\Application\\chrome.exe',
+      `${process.env["PROGRAMFILES(X86)"]}\\Google\\Chrome\\Application\\chrome.exe`,
+      "C:\\Program Files\\Chromium\\Application\\chrome.exe",
+      "C:\\Program Files (x86)\\Chromium\\Application\\chrome.exe",
     ];
     for (const path of windowsPaths) {
       if (path && existsSync(path)) return path;
@@ -70,10 +70,10 @@ export function getChromePath(): string | undefined {
   }
 
   // macOS paths
-  if (platform === 'darwin') {
+  if (platform === "darwin") {
     const macosPaths = [
-      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-      '/Applications/Chromium.app/Contents/MacOS/Chromium',
+      "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+      "/Applications/Chromium.app/Contents/MacOS/Chromium",
       `${process.env.HOME}/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`,
       `${process.env.HOME}/Applications/Chromium.app/Contents/MacOS/Chromium`,
     ];
@@ -83,15 +83,15 @@ export function getChromePath(): string | undefined {
   }
 
   // Linux paths
-  if (platform === 'linux') {
+  if (platform === "linux") {
     const linuxPaths = [
-      '/usr/bin/google-chrome',
-      '/usr/bin/google-chrome-stable',
-      '/usr/bin/chromium',
-      '/usr/bin/chromium-browser',
-      '/snap/bin/chromium',
-      '/usr/local/bin/chrome',
-      '/usr/local/bin/chromium',
+      "/usr/bin/google-chrome",
+      "/usr/bin/google-chrome-stable",
+      "/usr/bin/chromium",
+      "/usr/bin/chromium-browser",
+      "/snap/bin/chromium",
+      "/usr/local/bin/chrome",
+      "/usr/local/bin/chromium",
     ];
     for (const path of linuxPaths) {
       if (existsSync(path)) return path;
@@ -107,18 +107,18 @@ export function getChromePath(): string | undefined {
  */
 export function createWebViewOptions(): any {
   const chromePath = getChromePath();
-  
+
   if (chromePath) {
     return {
       backend: {
-        type: 'chrome',
-        path: chromePath
-      }
+        type: "chrome",
+        path: chromePath,
+      },
     };
   }
-  
+
   // Fallback to default (will auto-detect)
-  return { backend: 'chrome' };
+  return { backend: "chrome" };
 }
 
 const getRowId = async (view: Bun.WebView, index: number) => {

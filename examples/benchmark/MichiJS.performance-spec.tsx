@@ -15,7 +15,7 @@ const serverProcess = spawn([process.execPath, "run", "start"], {
 
 describe("Performance tests - MichiJS", async () => {
   await using view = new Bun.WebView(createWebViewOptions());
-  
+
   beforeEach(async () => {
     await view.navigate("http://localhost:3000");
   });
