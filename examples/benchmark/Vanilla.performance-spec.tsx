@@ -1,4 +1,4 @@
-import { makePerformanceTests } from "./shared";
+import { makePerformanceTests, createWebViewOptions } from "./shared";
 import { describe, beforeEach, afterAll } from "bun:test";
 import { spawn } from "bun";
 import { writeFileSync } from "fs";
@@ -11,7 +11,7 @@ const serverProcess = spawn([process.execPath, "run", "start"], {
 });
 
 describe("Performance tests - vanilla-js", async () => {
-  await using view = new Bun.WebView();
+  await using view = new Bun.WebView(createWebViewOptions());
 
   beforeEach(async () => {
     await view.navigate("http://localhost:3001");

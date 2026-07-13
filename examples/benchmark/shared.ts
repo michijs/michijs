@@ -1,5 +1,6 @@
 import { it, expect } from "bun:test";
 import type { AnyObject } from "@michijs/michijs/index";
+import { existsSync } from "fs";
 
 export type Result =
   | "create1000Rows"
@@ -26,6 +27,98 @@ interface TimingResult {
   mem?: number;
   pid: number;
   cat: string;
+}
+
+/**
+ * Detects Chrome/Chromium installation path across different platforms
+ */
+export function getChromePath(): string | undefined {
+  // Check environment variable first
+  if (Bun.env.BUN_CHROME_PATH) {
+    return Bun.env.BUN_CHROME_PATH;
+  }
+
+  // CI environment
+  if (Bun.env.CI) {
+    const ciPaths = [
+      '/usr/bin/chromium',
+      '/usr/bin/chromium-browser',
+      '/usr/bin/google-chrome',
+      '/usr/bin/chrome',
+    ];
+    for (const path of ciPaths) {
+      if (existsSync(path)) return path;
+    }
+  }
+
+  const platform = process.platform;
+
+  // Windows paths
+  if (platform === 'win32') {
+    const windowsPaths = [
+      'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+      'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+      `${process.env.LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe`,
+      `${process.env.PROGRAMFILES}\\Google\\Chrome\\Application\\chrome.exe`,
+      `${process.env['PROGRAMFILES(X86)']}\\Google\\Chrome\\Application\\chrome.exe`,
+      'C:\\Program Files\\Chromium\\Application\\chrome.exe',
+      'C:\\Program Files (x86)\\Chromium\\Application\\chrome.exe',
+    ];
+    for (const path of windowsPaths) {
+      if (path && existsSync(path)) return path;
+    }
+  }
+
+  // macOS paths
+  if (platform === 'darwin') {
+    const macosPaths = [
+      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+      '/Applications/Chromium.app/Contents/MacOS/Chromium',
+      `${process.env.HOME}/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`,
+      `${process.env.HOME}/Applications/Chromium.app/Contents/MacOS/Chromium`,
+    ];
+    for (const path of macosPaths) {
+      if (path && existsSync(path)) return path;
+    }
+  }
+
+  // Linux paths
+  if (platform === 'linux') {
+    const linuxPaths = [
+      '/usr/bin/google-chrome',
+      '/usr/bin/google-chrome-stable',
+      '/usr/bin/chromium',
+      '/usr/bin/chromium-browser',
+      '/snap/bin/chromium',
+      '/usr/local/bin/chrome',
+      '/usr/local/bin/chromium',
+    ];
+    for (const path of linuxPaths) {
+      if (existsSync(path)) return path;
+    }
+  }
+
+  // Return undefined to use system default
+  return undefined;
+}
+
+/**
+ * Creates WebView options with Chrome backend configuration
+ */
+export function createWebViewOptions(): any {
+  const chromePath = getChromePath();
+  
+  if (chromePath) {
+    return {
+      backend: {
+        type: 'chrome',
+        path: chromePath
+      }
+    };
+  }
+  
+  // Fallback to default (will auto-detect)
+  return { backend: 'chrome' };
 }
 
 const getRowId = async (view: Bun.WebView, index: number) => {
