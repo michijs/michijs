@@ -1,6 +1,7 @@
 import { it, expect } from "bun:test";
 import type { AnyObject } from "@michijs/michijs/index";
 import { existsSync } from "fs";
+import { spawn } from "bun";
 
 export type Result =
   | "create1000Rows"
@@ -103,9 +104,82 @@ export function getChromePath(): string | undefined {
 }
 
 /**
- * Creates WebView options with Chrome backend configuration
+ * Launch Chrome with remote debugging enabled (for Windows WebSocket connection)
  */
-export function createWebViewOptions(): any {
+export async function launchChromeWithDebugging(port = 9222): Promise<{ 
+  process: any; 
+  wsUrl: string | null;
+}> {
+  const chromePath = getChromePath();
+  if (!chromePath) {
+    throw new Error('Chrome not found. Please install Chrome or set BUN_CHROME_PATH');
+  }
+
+  const userDataDir = `${process.env.TEMP || '/tmp'}/chrome-debug-${Date.now()}`;
+  
+  const chromeProcess = spawn([
+    chromePath,
+    `--remote-debugging-port=${port}`,
+    `--user-data-dir=${userDataDir}`,
+    '--no-first-run',
+    '--no-default-browser-check',
+  ], {
+    stdout: 'pipe',
+    stderr: 'pipe',
+  });
+
+  // Wait for Chrome to be ready and get WebSocket URL
+  await new Promise(resolve => setTimeout(resolve, 2000));
+
+  try {
+    const response = await fetch(`http://localhost:${port}/json/version`);
+    const data = await response.json() as { webSocketDebuggerUrl?: string };
+    return {
+      process: chromeProcess,
+      wsUrl: data.webSocketDebuggerUrl || null,
+    };
+  } catch (error) {
+    return {
+      process: chromeProcess,
+      wsUrl: null,
+    };
+  }
+}
+
+/**
+ * Creates WebView options with Chrome backend configuration
+ * On Windows, uses WebSocket connection; on other platforms, uses spawn
+ */
+export async function createWebViewOptions(): Promise<any> {
+  const isWindows = process.platform === 'win32';
+  
+  if (isWindows) {
+    // On Windows, we need to use WebSocket connection
+    // Try to get existing Chrome debugging session
+    try {
+      const response = await fetch('http://localhost:9222/json/version');
+      const data = await response.json() as { webSocketDebuggerUrl?: string };
+      
+      if (data.webSocketDebuggerUrl) {
+        return {
+          backend: {
+            type: 'chrome',
+            url: data.webSocketDebuggerUrl
+          }
+        };
+      }
+    } catch {
+      // Chrome not running with debugging, will need to launch it
+    }
+    
+    throw new Error(
+      'Chrome with remote debugging is not running. ' +
+      'Please start Chrome with: chrome.exe --remote-debugging-port=9222 ' +
+      'or use launchChromeWithDebugging() helper'
+    );
+  }
+  
+  // On Linux/macOS, use spawn path
   const chromePath = getChromePath();
   
   if (chromePath) {
