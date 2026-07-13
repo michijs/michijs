@@ -186,6 +186,6 @@ export async function makePerformanceTests(
 export async function installPlaywright() {
   const playwrightVersion = `playwright@${packageJson.devDependencies["playwright-core"]}`;
   console.log(`Installing ${playwrightVersion}...`);
-
-  return $`bun x ${playwrightVersion} install chromium --with-deps`;
+  await $`bun x ${playwrightVersion} install chromium --with-deps`;
+  console.log('Installation complete')
 }

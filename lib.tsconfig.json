@@ -1,11 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "./tsconfig.json",
-  "include": ["src"],
   "compilerOptions": {
-    "noCheck": true,
-    "rootDir": "./src"
+    "noCheck": true
   },
+  "include": ["./src"],
   "exclude": [
     "src/**/*.spec.ts",
     "src/**/*.spec.tsx",

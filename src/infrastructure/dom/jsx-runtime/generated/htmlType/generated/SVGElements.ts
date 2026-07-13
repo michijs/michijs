@@ -1,4 +1,4 @@
-// file generated from @michijs/vscode-svg 2.1.6
+// file generated from @michijs/vscode-svg 2.1.7
        // HTML Data Version 1.1
        import type { AllAttributes } from './AllAttributes';
        import type { ValueSets } from "./ValueSets"

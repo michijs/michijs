@@ -4,16 +4,8 @@ import {
   supportedSVGElements,
 } from "@michijs/htmltype/supported";
 import { generateTypes } from "../node_modules/@michijs/htmltype/bin/tasks/index.js";
-import {
-  writeFileSync,
-  rmSync,
-  cpSync,
-  readdirSync,
-  statSync,
-  readFileSync,
-  renameSync,
-} from "node:fs";
 import path from "node:path";
+import { cp, readdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 
 const elements = new Map<
   string,
@@ -50,38 +42,38 @@ supportedSVGElements.forEach((x) => {
   }
 });
 
-function renameFiles(directory) {
+async function renameFiles(directory) {
   // Read the contents of the directory
-  const files = readdirSync(directory);
+  const files = await readdir(directory);
 
   // Iterate through each file in the directory
-  files.forEach((file) => {
+  Promise.all(files.map(async (file) => {
     const filePath = path.join(directory, file);
 
     // Check if it's a directory
-    const stats = statSync(filePath);
+    const stats = await stat(filePath);
     if (stats.isDirectory()) {
       // If it's a directory, recursively call the function
       renameFiles(filePath);
     } else if (file.endsWith(".d.ts")) {
       // If it's a .d.ts file, rename it to .ts
       const newFilePath = path.join(directory, file.replace(".d.ts", ".ts"));
-      renameSync(filePath, newFilePath);
+      await rename(filePath, newFilePath);
 
       // Read the contents of the file
-      const fileContent = readFileSync(newFilePath, "utf-8");
+      const fileContent = await readFile(newFilePath, "utf-8");
 
       // Remove the line "export {};"
       const modifiedContent = fileContent.replace(/export\s*\{\s*\};\n/, "");
 
       // Write the modified content back to the file
-      writeFileSync(newFilePath, modifiedContent);
+      await writeFile(newFilePath, modifiedContent);
     }
-  });
+  }));
 }
 
-cpSync(
-  "./node_modules/@michijs/htmltype/dist/src",
+await cp(
+  "./node_modules/@michijs/htmltype/dist",
   "src/infrastructure/dom/jsx-runtime/generated/htmlType",
   { force: true, recursive: true },
 );
@@ -124,7 +116,7 @@ generateTypes({
 });
 
 try {
-  rmSync("./src/infrastructure/dom/jsx-runtime/generated/JSX.ts", {
+  await rm("./src/infrastructure/dom/jsx-runtime/generated/JSX.ts", {
     recursive: true,
     force: true,
   });
@@ -134,7 +126,7 @@ const interfaceOverrideElements = Array.from(elements).filter(
   ([_name, x]) => x.elementInterfaces.length > 1,
 );
 
-writeFileSync(
+await writeFile(
   "./src/infrastructure/dom/jsx-runtime/generated/JSX.ts",
   ` import type { HTMLElements as HTMLElementsHTMLType, MathMLElements, SVGElements as SVGElementsHTMLType } from "./htmlType";
   import type { SingleJSXElement } from '../../rendering/types';

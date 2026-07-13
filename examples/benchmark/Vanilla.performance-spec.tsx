@@ -32,11 +32,10 @@ if (Bun.env.CI) {
 } else {
   await installPlaywright();
 }
+const browser = await chromium.launch(browserOptions);
 describe("Performance tests - vanilla-js", () => {
-  let browser: Browser;
   let page: Page;
   beforeEach(async () => {
-    browser = await chromium.launch(browserOptions);
     page = await browser.newPage();
     await page.goto("http://localhost:3001", {
       waitUntil: "domcontentloaded",
