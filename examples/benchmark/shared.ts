@@ -35,37 +35,39 @@ const getRowId = async (view: Bun.WebView, index: number) => {
   return Number(textContent);
 };
 
-export async function makePerformanceTests(
-  viewGetter: () => Bun.WebView,
-) {
+export async function makePerformanceTests(viewGetter: () => Bun.WebView) {
   const view = viewGetter();
-  
+
   const create1000Rows = async () => {
-    await view.click('#run');
+    await view.click("#run");
   };
   const add1000Rows = async () => {
-    await view.click('#add');
+    await view.click("#add");
   };
   const create10000Rows = async () => {
-    await view.click('#runlots');
+    await view.click("#runlots");
   };
   const updateEvery10Rows = async () => {
-    await view.click('#update');
+    await view.click("#update");
   };
   const swapRows = async () => {
-    await view.click('#swaprows');
+    await view.click("#swaprows");
   };
   const select = async (index: number) => {
-    await view.evaluate(`document.querySelectorAll('tr')[${index}]?.querySelector('a')?.click()`);
+    await view.evaluate(
+      `document.querySelectorAll('tr')[${index}]?.querySelector('a')?.click()`,
+    );
   };
   const deleteRow = async (index: number) => {
-    await view.evaluate(`document.querySelectorAll('tr')[${index}]?.querySelectorAll('a')[1]?.click()`);
+    await view.evaluate(
+      `document.querySelectorAll('tr')[${index}]?.querySelectorAll('a')[1]?.click()`,
+    );
   };
   const getTableBody = async (): Promise<number> => {
     return await view.evaluate(`document.querySelectorAll('tr').length`);
   };
   const clear = async () => {
-    await view.click('#clear');
+    await view.click("#clear");
   };
 
   const results: Partial<Record<Result, number>> = {};
@@ -92,7 +94,7 @@ export async function makePerformanceTests(
     await saveResult("replaceAllRows", create1000Rows);
     const tableBodyLength = await getTableBody();
     expect(tableBodyLength).toEqual(1000);
-    
+
     // Check that all row IDs are greater than 1000
     const allGreaterThan1000 = await view.evaluate(`
       Array.from(document.querySelectorAll('tr')).every(row => {
@@ -107,7 +109,7 @@ export async function makePerformanceTests(
     await saveResult("partialUpdate", updateEvery10Rows);
     const tableBodyLength = await getTableBody();
     expect(tableBodyLength).toEqual(1000);
-    
+
     // Check that every 10th row has !!!
     const updateResult = await view.evaluate(`
       Array.from(document.querySelectorAll('tr')).every((row, index) => {
@@ -124,11 +126,15 @@ export async function makePerformanceTests(
   it("select a row (1000 rows)", async () => {
     await create1000Rows();
     await saveResult("selectRow", () => select(999));
-    const className = await view.evaluate(`document.querySelectorAll('tr')[999]?.className`);
+    const className = await view.evaluate(
+      `document.querySelectorAll('tr')[999]?.className`,
+    );
     expect(className).toEqual("danger");
-    
+
     await select(998);
-    const classNameSecondTime = await view.evaluate(`document.querySelectorAll('tr')[999]?.className`);
+    const classNameSecondTime = await view.evaluate(
+      `document.querySelectorAll('tr')[999]?.className`,
+    );
     expect(classNameSecondTime).not.toBe("danger");
   });
   it("swap a row (1000 rows)", async () => {

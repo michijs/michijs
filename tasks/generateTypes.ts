@@ -5,7 +5,15 @@ import {
 } from "@michijs/htmltype/supported";
 import { generateTypes } from "../node_modules/@michijs/htmltype/bin/tasks/index.js";
 import path from "node:path";
-import { cp, readdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
+import {
+  cp,
+  readdir,
+  readFile,
+  rename,
+  rm,
+  stat,
+  writeFile,
+} from "node:fs/promises";
 
 const elements = new Map<
   string,
@@ -47,29 +55,31 @@ async function renameFiles(directory) {
   const files = await readdir(directory);
 
   // Iterate through each file in the directory
-  Promise.all(files.map(async (file) => {
-    const filePath = path.join(directory, file);
+  Promise.all(
+    files.map(async (file) => {
+      const filePath = path.join(directory, file);
 
-    // Check if it's a directory
-    const stats = await stat(filePath);
-    if (stats.isDirectory()) {
-      // If it's a directory, recursively call the function
-      renameFiles(filePath);
-    } else if (file.endsWith(".d.ts")) {
-      // If it's a .d.ts file, rename it to .ts
-      const newFilePath = path.join(directory, file.replace(".d.ts", ".ts"));
-      await rename(filePath, newFilePath);
+      // Check if it's a directory
+      const stats = await stat(filePath);
+      if (stats.isDirectory()) {
+        // If it's a directory, recursively call the function
+        renameFiles(filePath);
+      } else if (file.endsWith(".d.ts")) {
+        // If it's a .d.ts file, rename it to .ts
+        const newFilePath = path.join(directory, file.replace(".d.ts", ".ts"));
+        await rename(filePath, newFilePath);
 
-      // Read the contents of the file
-      const fileContent = await readFile(newFilePath, "utf-8");
+        // Read the contents of the file
+        const fileContent = await readFile(newFilePath, "utf-8");
 
-      // Remove the line "export {};"
-      const modifiedContent = fileContent.replace(/export\s*\{\s*\};\n/, "");
+        // Remove the line "export {};"
+        const modifiedContent = fileContent.replace(/export\s*\{\s*\};\n/, "");
 
-      // Write the modified content back to the file
-      await writeFile(newFilePath, modifiedContent);
-    }
-  }));
+        // Write the modified content back to the file
+        await writeFile(newFilePath, modifiedContent);
+      }
+    }),
+  );
 }
 
 await cp(
