@@ -21,12 +21,14 @@ describe("Performance tests - MichiJS", async () => {
   });
 
   it("matches the snapshot on initial render", async () => {
-    const innerHTML = await view.evaluate(`document.querySelector('body')?.innerHTML`);
+    const innerHTML = await view.evaluate(
+      `document.querySelector('body')?.innerHTML`,
+    );
     expect(innerHTML).toMatchSnapshot();
   });
 
   const resultsPromise = makePerformanceTests(() => view);
-  
+
   afterAll(async () => {
     const results = await resultsPromise;
     const resultsString = JSON.stringify(
