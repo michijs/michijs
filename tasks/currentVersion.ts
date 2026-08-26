@@ -1,3 +1,3 @@
 import packageJson from "../package.json";
 
-export const currentVersion = `${packageJson.version}-bun-webview`;
+export const currentVersion = `${packageJson.version}-${packageJson.packageManager}`;
