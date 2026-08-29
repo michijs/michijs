@@ -75,7 +75,7 @@
     "dist-w": "michi-server --dist --w",
     "bun-link": "bun link --force",
     "link": "bunx concurrently bun:dist-w bun:bun-link",
-    "generate-disabled": "bun run ./tasks/generateTypes.ts",
+    "generate-disabled": "bun run ./tasks/generateTypes.ts && bun run ./tasks/generateTypes.node.ts",
     "run-benchmark-and-save-best-result": "bun run ./tasks/runAndSaveBestRun.ts",
     "benchmark-michijs": "bun test --update-snapshots --timeout 30000 ./examples/benchmark/MichiJS.performance-spec.tsx",
     "benchmark-vanillajs": "bun test --update-snapshots --timeout 30000 ./examples/benchmark/Vanilla.performance-spec.tsx",
@@ -97,7 +97,7 @@
   "devDependencies": {
     "@happy-dom/global-registrator": "20.12.0",
     "@michijs/dev-server": "0.8.36",
-    "@michijs/htmltype": "0.4.13",
+    "@michijs/htmltype": "0.4.14",
     "@michijs/shared-configs": "0.0.37",
     "@reduxjs/toolkit": "2.12.0",
     "@types/bun": "1.4.0",
