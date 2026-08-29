@@ -124,8 +124,14 @@ allEventsContent = allEventsContent.replace(
 writeFileSync(allEventsPath, allEventsContent);
 
 // 2. Remove TypedEvents/ and TypedEventHandlers/ directories (no longer needed)
-rmSync(path.resolve(`${eventsPath}/TypedEvents`), { recursive: true, force: true });
-rmSync(path.resolve(`${eventsPath}/TypedEventHandlers`), { recursive: true, force: true });
+rmSync(path.resolve(`${eventsPath}/TypedEvents`), {
+  recursive: true,
+  force: true,
+});
+rmSync(path.resolve(`${eventsPath}/TypedEventHandlers`), {
+  recursive: true,
+  force: true,
+});
 
 // 3. Remove TypedElementEvent.ts and TypedDocumentAndElementEventHandlers.ts
 // (they Pick from AllEvents, but SVGEvents and MathMLEvents extend them —
@@ -145,7 +151,10 @@ writeFileSync(eventsIndexPath, eventsIndexContent);
 
 // Generate JSX.ts for Node (Element = string, no MichiAttributes, no SingleJSXElement)
 try {
-  rmSync(path.resolve(`${generatedPath}/JSX.ts`), { recursive: true, force: true });
+  rmSync(path.resolve(`${generatedPath}/JSX.ts`), {
+    recursive: true,
+    force: true,
+  });
 } catch {}
 
 const interfaceOverrideElements = Array.from(elements).filter(
