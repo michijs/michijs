@@ -31,7 +31,10 @@ describe("Performance tests - vanilla-js", async () => {
       undefined,
       2,
     );
-    writeFileSync("./examples/benchmark/generated/vanillajs.json", resultsString);
+    writeFileSync(
+      "./examples/benchmark/generated/vanillajs.json",
+      resultsString,
+    );
     console.log("Results: ", JSON.stringify(results, undefined, 2));
     updateDiff();
     serverProcess.kill(2);
