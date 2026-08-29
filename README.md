@@ -1286,54 +1286,6 @@ export const MyComponent = createCustomElement('my-component', {
 
 </details>
 
-## esbuild Plugin
-
-MichiJS provides an optional esbuild plugin that transforms JSX runtime calls (`jsx()`, `jsxs()`, `jsxDEV()`) into direct DOM API calls at build time, eliminating the `ElementFactory` runtime dispatching entirely.
-
-```ts
-import { michiJSXPlugin } from "@michijs/michijs/plugin";
-
-await esbuild.build({
-  entryPoints: ["src/index.tsx"],
-  plugins: [michiJSXPlugin()],
-  jsx: "automatic",
-  jsxImportSource: "@michijs/michijs",
-  bundle: true,
-  outdir: "dist",
-});
-```
-
-### What it does
-
-Instead of shipping `jsx("div", { id: "foo", children: "Hello" })` to the browser and relying on runtime type-checking, the plugin converts it at build time to:
-
-```js
-(() => {
-  const _el0 = document.createElement("div");
-  _el0.setAttribute("id", "foo");
-  _el0.appendChild(document.createTextNode("Hello"));
-  return _el0;
-})()
-```
-
-### Features
-
-- **Observable support** — reactive attributes and children are bound via `bindObservable` with `GarbageCollectableObject` for auto-cleanup
-- **SVG/MathML namespaces** — children of `<svg>` and `<math>` use `createElementNS` automatically
-- **Style objects** — each style property individually reactive
-- **Event handling** — `on*` attributes become `addEventListener` calls
-- **`_` property binding** — direct DOM property assignment with observable support
-- **Promise children** — placeholder comment nodes replaced on resolution
-- **Fragment support** — `<>...</>` mapped to `DocumentFragment`
-- **Dynamic/function tags** — runtime dispatch for component functions
-- **Tree-shaken helpers** — only injects the helper functions each file actually uses
-
-### Limitations
-
-- **Class components** — not automatically converted via `classJSXToObjectJSXElement`
-- **DOM element as tag** — passing an existing DOM element as a JSX tag is not supported
-- **Custom element class appending** — `isMichiCustomElement` className logic is skipped
-
 ## Limitations
 ### Observable objects
 Because some objects are not proxy compatible we limit the observable objects to:
