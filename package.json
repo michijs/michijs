@@ -87,7 +87,7 @@
     "test": "bun test",
     "test-w": "bun test --watch",
     "usnap": "bun test --update-snapshots",
-    "run-all-tests": "bunx concurrently bun:test-tsc bun:test bun:e2e"
+    "run-all-tests": "bun run --parallel test-tsc test e2e"
   },
   "keywords": [
     "web-components",
