@@ -2,7 +2,7 @@
   "name": "@michijs/michijs",
   "author": "Lucas M. Segurado",
   "license": "MIT",
-  "version": "2.3.35-beta.22",
+  "version": "2.4.0",
   "files": [
     "dist/",
     "droppableFlags.js",
