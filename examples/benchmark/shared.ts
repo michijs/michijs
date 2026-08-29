@@ -11,7 +11,6 @@ export type Result =
   | "appendRowsToLargeTable"
   | "clearRows";
 
-
 const getRowId = async (view: Bun.WebView, index: number) => {
   const textContent = await view.evaluate(`
     document.querySelectorAll('tr')[${index}]?.querySelector('td')?.textContent

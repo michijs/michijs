@@ -20,7 +20,7 @@ describe("Performance tests - vanilla-js", async () => {
   });
 
   const resultsPromise = makePerformanceTests(() => view);
-  
+
   afterAll(async () => {
     const results = await resultsPromise;
     const resultsString = JSON.stringify(
