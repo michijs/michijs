@@ -1,8 +1,11 @@
 import { makePerformanceTests } from "./shared";
 import { describe, beforeEach, afterAll } from "bun:test";
 import { spawn } from "bun";
+import vanillajs from "./generated/vanillajs.json";
 import { writeFileSync } from "fs";
 import { updateDiff } from "./updateDiff";
+import { currentVersion } from "../../tasks/currentVersion";
+import { omit } from "#shared";
 
 const serverProcess = spawn([process.execPath, "run", "start"], {
   stdout: "inherit",
@@ -20,7 +23,14 @@ describe("Performance tests - vanilla-js", async () => {
   
   afterAll(async () => {
     const results = await resultsPromise;
-    const resultsString = JSON.stringify(results, undefined, 2);
+    const resultsString = JSON.stringify(
+      {
+        [currentVersion]: results,
+        ...omit(vanillajs, [currentVersion]),
+      },
+      undefined,
+      2,
+    );
     writeFileSync("./examples/benchmark/generated/vanillajs.json", resultsString);
     console.log("Results: ", JSON.stringify(results, undefined, 2));
     updateDiff();

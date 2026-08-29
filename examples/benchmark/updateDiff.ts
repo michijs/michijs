@@ -13,7 +13,7 @@ export const updateDiff = async () => {
         // Bigger values are worst
         previousValue[key] = Math.max(
           0,
-          Number((value - vanillajs[key]).toFixed(2)),
+          Number((value - vanillajs[currentVersion][key]).toFixed(2)),
         );
         return previousValue;
       },

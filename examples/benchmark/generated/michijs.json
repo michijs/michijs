@@ -1,4 +1,15 @@
 {
+  "2.3.35-beta.14-bun@1.4.0": {
+    "create1000Rows": 102.1,
+    "replaceAllRows": 87.2,
+    "partialUpdate": 10.9,
+    "selectRow": 0.9,
+    "swapRows": 7.1,
+    "removeRow": 1,
+    "createManyRows": 813,
+    "appendRowsToLargeTable": 127.5,
+    "clearRows": 8.7
+  },
   "2.3.26-playwright@1.57.0": {
     "create1000Rows": 197.98,
     "replaceAllRows": 177.71,
