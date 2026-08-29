@@ -1,8 +1,4 @@
-import type { ElementHandle, Page, Browser } from "playwright-core";
 import { it, expect } from "bun:test";
-import packageJson from "../../package.json";
-import type { AnyObject } from "@michijs/michijs/index";
-import { $ } from "bun";
 
 export type Result =
   | "create1000Rows"
@@ -15,65 +11,46 @@ export type Result =
   | "appendRowsToLargeTable"
   | "clearRows";
 
-interface Trace {
-  traceEvents: TimingResult[];
-}
-
-interface TimingResult {
-  type: string;
-  ts: number;
-  name?: string;
-  args?: AnyObject;
-  dur?: number;
-  end?: number;
-  mem?: number;
-  pid: number;
-  cat: string;
-}
-
-const getRowId = async (element: ElementHandle<Element>) => {
-  const td = await element.$("td");
-  if (!td) throw "td not found";
-  const textContentProperty = await td.getProperty("textContent");
-  const textContent = await textContentProperty.jsonValue();
+const getRowId = async (view: Bun.WebView, index: number) => {
+  const textContent = await view.evaluate(`
+    document.querySelectorAll('tr')[${index}]?.querySelector('td')?.textContent
+  `);
   return Number(textContent);
 };
 
-export async function makePerformanceTests(
-  browser: () => Browser,
-  page: () => Page,
-) {
+export async function makePerformanceTests(viewGetter: () => Bun.WebView) {
+  const view = viewGetter();
+
   const create1000Rows = async () => {
-    await page().click("#run");
+    await view.click("#run");
   };
   const add1000Rows = async () => {
-    await page().click("#add");
+    await view.click("#add");
   };
   const create10000Rows = async () => {
-    await page().click("#runlots");
+    await view.click("#runlots");
   };
   const updateEvery10Rows = async () => {
-    await page().click("#update");
+    await view.click("#update");
   };
   const swapRows = async () => {
-    await page().click("#swaprows");
+    await view.click("#swaprows");
   };
   const select = async (index: number) => {
-    const tableBody = await getTableBody();
-    const linkToClick = await tableBody[index]?.$("a");
-    if (!linkToClick) throw "linkToClick not found";
-    await linkToClick.click();
+    await view.evaluate(
+      `document.querySelectorAll('tr')[${index}]?.querySelector('a')?.click()`,
+    );
   };
   const deleteRow = async (index: number) => {
-    const tableBody = await getTableBody();
-    const linkToClick = await tableBody[index]?.$$("a");
-    await linkToClick![1]!.evaluate((e) => e.click());
+    await view.evaluate(
+      `document.querySelectorAll('tr')[${index}]?.querySelectorAll('a')[1]?.click()`,
+    );
   };
-  const getTableBody = async () => {
-    return await page().$$("tr");
+  const getTableBody = async (): Promise<number> => {
+    return await view.evaluate(`document.querySelectorAll('tr').length`);
   };
   const clear = async () => {
-    await page().click("#clear");
+    await view.click("#clear");
   };
 
   const results: Partial<Record<Result, number>> = {};
@@ -81,111 +58,106 @@ export async function makePerformanceTests(
     key: Result,
     functionToMeasure: () => Promise<void>,
   ) => {
-    await browser().startTracing(page());
+    // Measure performance using Performance API
+    await view.evaluate(`performance.mark('start-${key}')`);
     await functionToMeasure();
-    const traceBuffer = await browser().stopTracing();
-    const trace: Trace = JSON.parse(traceBuffer.toString());
-    // console.log(traceBuffer.toString())
-    const duration =
-      (trace.traceEvents.find(
-        (x) => x?.name === "EventDispatch" && x?.args?.data?.type === "click",
-      )?.dur ?? 0) / 1000;
+    const duration = await view.evaluate<number>(`
+  (() => {
+    performance.mark('end-${key}');
+    const measure = performance.measure('${key}', 'start-${key}', 'end-${key}');
+    return measure.duration;
+  })()
+`);
     results[key] = Number(duration.toFixed(2));
   };
   it("creates 1000 rows when clicking run", async () => {
     await saveResult("create1000Rows", create1000Rows);
-    expect((await getTableBody()).length).toEqual(1000);
+    expect(await getTableBody()).toEqual(1000);
   });
   it("replaces 1000 rows when clicking run", async () => {
     await create1000Rows();
     await saveResult("replaceAllRows", create1000Rows);
-    const tableBody = await getTableBody();
-    expect(tableBody.length).toEqual(1000);
-    await Promise.all(
-      tableBody.map(async (row) => {
-        const rowId = await getRowId(row);
-        expect(rowId).toBeGreaterThan(1000);
-      }),
-    );
+    const tableBodyLength = await getTableBody();
+    expect(tableBodyLength).toEqual(1000);
+
+    // Check that all row IDs are greater than 1000
+    const allGreaterThan1000 = await view.evaluate(`
+      Array.from(document.querySelectorAll('tr')).every(row => {
+        const id = Number(row.querySelector('td')?.textContent);
+        return id > 1000;
+      })
+    `);
+    expect(allGreaterThan1000).toBeTruthy();
   });
   it("update every 10th row 1000 rows on a table with 1000 rows when clicking update", async () => {
     await create1000Rows();
     await saveResult("partialUpdate", updateEvery10Rows);
-    const tableBody = await getTableBody();
-    expect(tableBody.length).toEqual(1000);
-    // Run all checks in parallel
-    await Promise.all(
-      tableBody.map(async (row, index) => {
-        const innerHTMLProperty = await row.getProperty("innerHTML");
-        const innerHTML = await innerHTMLProperty.jsonValue();
+    const tableBodyLength = await getTableBody();
+    expect(tableBodyLength).toEqual(1000);
 
+    // Check that every 10th row has !!!
+    const updateResult = await view.evaluate(`
+      Array.from(document.querySelectorAll('tr')).every((row, index) => {
+        const innerHTML = row.innerHTML;
         if (index % 10 === 0) {
-          expect(innerHTML.includes("!!!")).toBeTruthy();
+          return innerHTML.includes('!!!');
         } else {
-          expect(innerHTML.includes("!!!")).toBeFalsy();
+          return !innerHTML.includes('!!!');
         }
-      }),
-    );
+      })
+    `);
+    expect(updateResult).toBeTruthy();
   });
   it("select a row (1000 rows)", async () => {
     await create1000Rows();
     await saveResult("selectRow", () => select(999));
-    const tableBody = await getTableBody();
-    const classNameProperty = await tableBody[999]!.getProperty("className");
-    const className = await classNameProperty.jsonValue();
+    const className = await view.evaluate(
+      `document.querySelectorAll('tr')[999]?.className`,
+    );
     expect(className).toEqual("danger");
-    await select(998);
 
-    const tableBodySecondTime = await getTableBody();
-    const classNamePropertySecondTime =
-      await tableBodySecondTime[999]!.getProperty("className");
-    const classNameSecondTime = await classNamePropertySecondTime.jsonValue();
+    await select(998);
+    const classNameSecondTime = await view.evaluate(
+      `document.querySelectorAll('tr')[999]?.className`,
+    );
     expect(classNameSecondTime).not.toBe("danger");
   });
   it("swap a row (1000 rows)", async () => {
     await create1000Rows();
     await saveResult("swapRows", swapRows);
-    const tableBody = await getTableBody();
-    const firstRowId = await getRowId(tableBody[1]!);
+    const firstRowId = await getRowId(view, 1);
     expect(firstRowId).toEqual(999);
-    const secondRowId = await getRowId(tableBody[998]!);
+    const secondRowId = await getRowId(view, 998);
     expect(secondRowId).toEqual(2);
   });
   it("remove a row (1000 rows)", async () => {
     await create1000Rows();
-    const tableBody = await getTableBody();
-    const rowToDeleteId = await getRowId(tableBody[996]!);
+    const rowToDeleteId = await getRowId(view, 996);
     await saveResult("removeRow", async () => await deleteRow(996));
-    const newTable = await getTableBody();
+    const newTableLength = await getTableBody();
 
-    await Promise.all(
-      newTable.map(async (row) => {
-        const rowId = await getRowId(row);
-        expect(rowId !== rowToDeleteId).toBeTruthy();
-      }),
-    );
-    expect(newTable.length).toEqual(999);
+    // Verify the deleted row ID is not in the table
+    const deletedRowNotFound = await view.evaluate(`
+      !Array.from(document.querySelectorAll('tr')).some(row => {
+        return Number(row.querySelector('td')?.textContent) === ${rowToDeleteId};
+      })
+    `);
+    expect(deletedRowNotFound).toBeTruthy();
+    expect(newTableLength).toEqual(999);
   });
   it("creates 10000 rows when clicking runlots", async () => {
     await saveResult("createManyRows", create10000Rows);
-    expect((await getTableBody()).length).toEqual(10000);
+    expect(await getTableBody()).toEqual(10000);
   });
   it("append 1000 rows on a large table", async () => {
     await create10000Rows();
     await saveResult("appendRowsToLargeTable", add1000Rows);
-    expect((await getTableBody()).length).toEqual(11000);
+    expect(await getTableBody()).toEqual(11000);
   });
   it("clear rows", async () => {
     await create1000Rows();
     await saveResult("clearRows", clear);
-    expect((await getTableBody()).length).toEqual(0);
+    expect(await getTableBody()).toEqual(0);
   });
   return results;
-}
-
-export async function installPlaywright() {
-  const playwrightVersion = `playwright@${packageJson.devDependencies["playwright-core"]}`;
-  console.log(`Installing ${playwrightVersion}...`);
-  await $`bun x ${playwrightVersion} install chromium --with-deps`;
-  console.log("Installation complete");
 }

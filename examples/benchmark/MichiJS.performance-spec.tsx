@@ -1,10 +1,4 @@
-import {
-  type Browser,
-  type LaunchOptions,
-  chromium,
-  type Page,
-} from "playwright-core";
-import { installPlaywright, makePerformanceTests } from "./shared";
+import { makePerformanceTests } from "./shared";
 import { describe, it, expect, beforeEach, afterAll } from "bun:test";
 import { writeFileSync } from "fs";
 import michijs from "./generated/michijs.json";
@@ -18,44 +12,23 @@ const serverProcess = spawn([process.execPath, "run", "start"], {
   stderr: "inherit",
   env: { ...process.env, NODE_ENV: "TESTING" },
 });
-let browserOptions: LaunchOptions | undefined;
-if (Bun.env.CI) {
-  browserOptions = {
-    executablePath: "/usr/bin/chromium",
-    args: [
-      "--no-sandbox",
-      "--single-process",
-      "--no-zygote",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-gpu",
-    ],
-  };
-} else {
-  await installPlaywright();
-}
-describe("Performance tests - MichiJS", () => {
-  let browser: Browser;
-  let page: Page;
+
+describe("Performance tests - MichiJS", async () => {
+  const view: Bun.WebView = new Bun.WebView();
+
   beforeEach(async () => {
-    browser = await chromium.launch(browserOptions);
-    page = await browser.newPage();
-    await page.goto("http://localhost:3000", {
-      waitUntil: "domcontentloaded",
-    });
+    await view.navigate("http://localhost:3000");
   });
 
   it("matches the snapshot on initial render", async () => {
-    const body = await page.$("body");
-    const innerHTMLProperty = await body!.getProperty("innerHTML");
-    const innerHTML = await innerHTMLProperty.jsonValue();
+    const innerHTML = await view.evaluate(
+      `document.querySelector('body')?.innerHTML`,
+    );
     expect(innerHTML).toMatchSnapshot();
   });
 
-  const resultsPromise = makePerformanceTests(
-    () => browser,
-    () => page,
-  );
+  const resultsPromise = makePerformanceTests(() => view);
+
   afterAll(async () => {
     const results = await resultsPromise;
     const resultsString = JSON.stringify(
@@ -70,7 +43,6 @@ describe("Performance tests - MichiJS", () => {
     console.log("Results: ", JSON.stringify(results, undefined, 2));
     updateDiff();
     serverProcess.kill(2);
-    browser.close();
   });
 });
 
