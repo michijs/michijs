@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "."
+  },
+  "include": [
+    "examples",
+    "examples/benchmark/generated/*.json",
+    "src",
+    "tasks",
+    "package.json"
+  ],
+  "exclude": [
+    "dist",
+    "build",
+    "node_modules",
+    "examples/**/*.spec.tsx.snap",
+    "src/infrastructure/plugin",
+    "src/infrastructure/node",
+    "src/index.node.ts"
+  ]
+}

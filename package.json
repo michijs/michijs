@@ -2,24 +2,44 @@
   "name": "@michijs/michijs",
   "author": "Lucas M. Segurado",
   "license": "MIT",
-  "version": "2.3.36",
+  "version": "2.3.35-beta.22",
   "files": [
     "dist/",
     "droppableFlags.js",
     "jsx-runtime/"
   ],
-  "packageManager": "bun@1.3.3",
+  "packageManager": "bun@1.4.0",
   "sideEffects": false,
   "main": "dist/index.js",
   "module": "dist/index.js",
+  "imports": {
+    "#domain": "./src/domain/index.ts",
+    "#shared": "./src/shared/index.ts",
+    "#ports": "./src/domain/ports/index.ts"
+  },
+  "publishConfig": {
+    "imports": {
+      "#domain": "./dist/domain/index.js",
+      "#shared": "./dist/shared/index.js",
+      "#ports": "./dist/domain/ports/index.js"
+    }
+  },
   "exports": {
     "./jsx-runtime": {
-      "import": "./jsx-runtime/index.js",
-      "require": "./jsx-runtime/index.js"
+      "node": {
+        "import": "./dist/infrastructure/node/jsx-runtime/index.js",
+        "require": "./dist/infrastructure/node/jsx-runtime/index.js"
+      },
+      "import": "./dist/infrastructure/dom/jsx-runtime/index.js",
+      "require": "./dist/infrastructure/dom/jsx-runtime/index.js"
     },
     "./jsx-dev-runtime": {
-      "import": "./jsx-runtime/index.js",
-      "require": "./jsx-runtime/index.js"
+      "node": {
+        "import": "./dist/infrastructure/node/jsx-runtime/index.js",
+        "require": "./dist/infrastructure/node/jsx-runtime/index.js"
+      },
+      "import": "./dist/infrastructure/dom/jsx-runtime/index.js",
+      "require": "./dist/infrastructure/dom/jsx-runtime/index.js"
     },
     "./droppableFlags": {
       "import": "./droppableFlags.js",
@@ -46,19 +66,20 @@
   "description": "Typescript library to build web components",
   "scripts": {
     "start": "michi-server --start",
-    "install-docs": "python3 -m venv .venv && .venv/scripts/pip install . --no-color",
+    "install-docs": "python -m venv .venv && .venv/scripts/pip install . --no-color",
     "copy-md": "michi-server --build --env=WEB && node -e \"require('fs').copyFileSync('README.md','docs/index.md'); require('fs').copyFileSync('changelog.md','docs/changelog.md')\"",
     "start-page": "bun run copy-md && python -m zensical serve",
+    "start-page-windows": "bun run copy-md && .venv/Scripts/zensical.exe serve",
     "start-testing": "michi-server --start --env=TESTING",
     "build": "bun run copy-md && .venv/bin/zensical build",
     "dist": "michi-server --dist",
     "dist-w": "michi-server --dist --w",
     "bun-link": "bun link --force",
-    "link": "bun run --parallel dist-w bun-link",
-    "generate": "bun run ./tasks/generateTypes.ts",
+    "link": "bunx concurrently bun:dist-w bun:bun-link",
+    "generate-disabled": "bun run ./tasks/generateTypes.ts && bun run ./tasks/generateTypes.node.ts",
     "run-benchmark-and-save-best-result": "bun run ./tasks/runAndSaveBestRun.ts",
-    "benchmark-michijs": "bun test --update-snapshots --timeout 30000 ./tests/benchmark/MichiJS.performance-spec.tsx",
-    "benchmark-vanillajs": "bun test --update-snapshots --timeout 30000 ./tests/benchmark/Vanilla.performance-spec.tsx",
+    "benchmark-michijs": "bun test --update-snapshots --timeout 30000 ./examples/benchmark/MichiJS.performance-spec.tsx",
+    "benchmark-vanillajs": "bun test --update-snapshots --timeout 30000 ./examples/benchmark/Vanilla.performance-spec.tsx",
     "e2e": "bun run benchmark-michijs && bun run benchmark-vanillajs",
     "coverage": "bun test --collect-coverage",
     "test-tsc": "michi-server --test-tsc",
@@ -75,20 +96,18 @@
     "Autonomous custom elements"
   ],
   "devDependencies": {
-    "@happy-dom/global-registrator": "20.6.3",
-    "@michijs/dev-server": "0.8.18",
-    "@michijs/htmltype": "0.4.8",
-    "@michijs/shared-configs": "0.0.35",
-    "@reduxjs/toolkit": "2.11.2",
-    "@types/bun": "1.3.9",
-    "playwright-core": "1.58.2",
+    "@happy-dom/global-registrator": "20.12.0",
+    "@michijs/dev-server": "0.8.36",
+    "@michijs/htmltype": "0.4.14",
+    "@michijs/shared-configs": "0.0.37",
+    "@reduxjs/toolkit": "2.12.0",
+    "@types/bun": "1.4.0",
+    "mermaid": "11.17.2",
     "redux": "5.0.1",
-    "typescript": "5.9.3",
-    "mermaid": "11.12.3",
-    "vscode-html-languageservice": "5.6.1"
+    "typescript": "7.0.2"
   },
   "peerDependencies": {
     "@types/trusted-types": "^2.0.7",
-    "csstype": "^3.1.3"
+    "csstype": "^3.2.3"
   }
 }

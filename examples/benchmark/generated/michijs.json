@@ -1,0 +1,178 @@
+{
+  "2.3.35-beta.14-bun@1.4.0": {
+    "create1000Rows": 102.1,
+    "replaceAllRows": 87.2,
+    "partialUpdate": 10.9,
+    "selectRow": 0.9,
+    "swapRows": 7.1,
+    "removeRow": 1,
+    "createManyRows": 813,
+    "appendRowsToLargeTable": 127.5,
+    "clearRows": 8.7
+  },
+  "2.3.26-playwright@1.57.0": {
+    "create1000Rows": 197.98,
+    "replaceAllRows": 177.71,
+    "partialUpdate": 7.34,
+    "selectRow": 1.42,
+    "swapRows": 0.69,
+    "removeRow": 1.16,
+    "createManyRows": 584.38,
+    "appendRowsToLargeTable": 77.61,
+    "clearRows": 31.08
+  },
+  "2.2.2-beta.10-playwright@1.53.1": {
+    "create1000Rows": 22.05,
+    "replaceAllRows": 23.41,
+    "partialUpdate": 0.55,
+    "selectRow": 0.16,
+    "swapRows": 0.28,
+    "removeRow": 0.52,
+    "createManyRows": 163.08,
+    "appendRowsToLargeTable": 18.27,
+    "clearRows": 6.27
+  },
+  "2.2.2-beta.9-playwright@1.53.1": {
+    "create1000Rows": 22.24,
+    "replaceAllRows": 24.62,
+    "partialUpdate": 0.57,
+    "selectRow": 0.18,
+    "swapRows": 0.28,
+    "removeRow": 0.53,
+    "createManyRows": 169.44,
+    "appendRowsToLargeTable": 17.75,
+    "clearRows": 6.35
+  },
+  "2.2.2-beta.8-playwright@1.53.1": {
+    "create1000Rows": 20.73,
+    "replaceAllRows": 24.82,
+    "partialUpdate": 0.57,
+    "selectRow": 0.17,
+    "swapRows": 0.27,
+    "removeRow": 0.52,
+    "createManyRows": 163.74,
+    "appendRowsToLargeTable": 16.91,
+    "clearRows": 6.12
+  },
+  "2.2.2-beta.7-playwright@1.53.1": {
+    "create1000Rows": 24.67,
+    "replaceAllRows": 24.27,
+    "partialUpdate": 0.62,
+    "selectRow": 0.18,
+    "swapRows": 0.3,
+    "removeRow": 0.55,
+    "createManyRows": 184.46,
+    "appendRowsToLargeTable": 16.67,
+    "clearRows": 6.49
+  },
+  "2.2.2-beta.6-playwright@1.53.1": {
+    "create1000Rows": 25.47,
+    "replaceAllRows": 27.24,
+    "partialUpdate": 0.61,
+    "selectRow": 0.17,
+    "swapRows": 0.28,
+    "removeRow": 0.53,
+    "createManyRows": 198.11,
+    "appendRowsToLargeTable": 17.83,
+    "clearRows": 6.18
+  },
+  "2.2.2-beta.5-playwright@1.53.1": {
+    "create1000Rows": 33.39,
+    "replaceAllRows": 31.54,
+    "partialUpdate": 0.69,
+    "selectRow": 0.19,
+    "swapRows": 0.32,
+    "removeRow": 0.55,
+    "createManyRows": 232.41,
+    "appendRowsToLargeTable": 22.79,
+    "clearRows": 6.48
+  },
+  "2.2.2-beta.4-playwright@1.53.1": {
+    "create1000Rows": 31.98,
+    "replaceAllRows": 31.4,
+    "partialUpdate": 0.63,
+    "selectRow": 0.17,
+    "swapRows": 0.3,
+    "removeRow": 0.54,
+    "createManyRows": 229.76,
+    "appendRowsToLargeTable": 21.96,
+    "clearRows": 6.25
+  },
+  "2.2.2-beta.3-playwright@1.53.1": {
+    "create1000Rows": 31.17,
+    "replaceAllRows": 31.57,
+    "partialUpdate": 0.59,
+    "selectRow": 0.15,
+    "swapRows": 0.29,
+    "removeRow": 0.54,
+    "createManyRows": 226.51,
+    "appendRowsToLargeTable": 21.91,
+    "clearRows": 6.28
+  },
+  "2.1.4-playwright@1.53.1": {
+    "create1000Rows": 34.97,
+    "replaceAllRows": 31.36,
+    "partialUpdate": 0.63,
+    "selectRow": 0.16,
+    "swapRows": 0.33,
+    "removeRow": 0.56,
+    "createManyRows": 240.51,
+    "appendRowsToLargeTable": 18.91,
+    "clearRows": 6.14
+  },
+  "2.1.3": {
+    "create1000Rows": 30.36,
+    "replaceAllRows": 27.32,
+    "partialUpdate": 0.49,
+    "selectRow": 0.14,
+    "swapRows": 0.37,
+    "removeRow": 0.52,
+    "createManyRows": 220.26,
+    "appendRowsToLargeTable": 20.59,
+    "clearRows": 5.47
+  },
+  "2.1.0": {
+    "create1000Rows": 30.41,
+    "replaceAllRows": 27.39,
+    "partialUpdate": 0.48,
+    "selectRow": 0.15,
+    "swapRows": 0.37,
+    "removeRow": 0.56,
+    "createManyRows": 212.69,
+    "appendRowsToLargeTable": 20.29,
+    "clearRows": 5.02
+  },
+  "2.0.10": {
+    "create1000Rows": 33.82,
+    "replaceAllRows": 32.51,
+    "partialUpdate": 0.79,
+    "selectRow": 0.29,
+    "swapRows": 0.45,
+    "removeRow": 0.59,
+    "createManyRows": 234.97,
+    "appendRowsToLargeTable": 26.89,
+    "clearRows": 5.96
+  },
+  "2.0.9": {
+    "create1000Rows": 48.44,
+    "replaceAllRows": 54.04,
+    "partialUpdate": 1.27,
+    "selectRow": 0.77,
+    "swapRows": 0.56,
+    "removeRow": 0.75,
+    "createManyRows": 356.57,
+    "appendRowsToLargeTable": 37.52,
+    "clearRows": 12.57
+  },
+  "2.0.8": {
+    "create1000Rows": 67.27,
+    "replaceAllRows": 76.94,
+    "partialUpdate": 2.16,
+    "selectRow": 0.64,
+    "swapRows": 0.54,
+    "removeRow": 0.75,
+    "createManyRows": 503.52,
+    "appendRowsToLargeTable": 59.35,
+    "clearRows": 15.79
+  }
+}

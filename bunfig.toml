@@ -1,4 +1,6 @@
 telemetry = false
 
 [test]
-preload = "./happydom.ts"
+preload = ["./happydom.ts"]
+# bugged in bun 1.4.0
+pathIgnorePatterns = ["**/jsx-runtime.spec.tsx"]

@@ -1,0 +1,24 @@
+import { useObserve } from "../useObserve";
+import { describe, it, expect } from "bun:test";
+
+const obj = useObserve(
+  {
+    text: "a",
+    testFunction() {
+      return obj.text();
+    },
+  },
+  true,
+);
+
+const effect = obj.testFunction();
+
+describe("Observe function tests", () => {
+  it("should return the same value than the object is listening to", () => {
+    expect(effect()).toStrictEqual(obj.text());
+  });
+  it("should listen for changes and update accordingly", () => {
+    obj.text("b");
+    expect(effect()).toStrictEqual(obj.text());
+  });
+});

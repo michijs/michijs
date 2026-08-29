@@ -1,0 +1,93 @@
+import { jsx } from "../../jsx-runtime";
+import { VirtualFragment } from "../VirtualFragment";
+import type {
+  ExtendableComponentWithoutChildren,
+  CreateFCResult,
+  SingleJSXElement,
+} from "../types";
+import {
+  isObservable,
+  bindObservable,
+  type ReactiveValuePort,
+  type ElementFactoryPort,
+} from "#domain";
+
+// Define a type for the return value of promises, which can be a JSX element, a function component, or a DOM element.
+type PromiseType<P> =
+  | Promise<{ default: P }>
+  | Promise<P>
+  | (() => Promise<P>)
+  | (() => Promise<{ default: P }>);
+
+// Define props for the AsyncComponent.
+type AsyncComponentProps<P, T> = ExtendableComponentWithoutChildren<T> & {
+  // The promise that resolves to the component to render asynchronously.
+  promise: ReactiveValuePort<PromiseType<P>> | PromiseType<P>;
+  // An optional loading component to display while the async component is loading.
+  loadingComponent?: JSX.Element;
+  then?(promiseResult: P): JSX.Element;
+  catch?(reason: any): JSX.Element;
+};
+
+/**
+ * Asynchronously renders a component after the promise ends. In the meantime you can choose to show a load component or not show anything.
+ */
+export const AsyncComponent = <P, const T = CreateFCResult>(
+  {
+    as: asTag,
+    promise,
+    loadingComponent,
+    catch: errorComponent,
+    then,
+    ...attrs
+  }: AsyncComponentProps<P, T>,
+  factory: ElementFactoryPort<Element, SingleJSXElement>,
+): Node => {
+  const el = asTag
+    ? factory.create<ParentNode>({
+        jsxTag: asTag,
+        attrs,
+      } as SingleJSXElement)
+    : new VirtualFragment();
+
+  // If a loading component is provided, append it to the element.
+  if (loadingComponent) el.append(factory.create(loadingComponent));
+
+  // Replace the element's children with the given JSX node.
+  const replaceWith = (node: JSX.Element) => {
+    el.replaceChildren(
+      factory.create(
+        node && typeof node === "function" ? jsx(node as any) : node,
+      ) as ChildNode & ParentNode,
+    );
+  };
+
+  // Function to render the component when the promise resolves.
+  const render = (promiseResult: P) => {
+    const Res = (
+      promiseResult &&
+      typeof promiseResult === "object" &&
+      "default" in promiseResult
+        ? promiseResult.default
+        : promiseResult
+    ) as JSX.Element;
+
+    replaceWith(then ? then(Res as P) : Res);
+  };
+
+  // Execute the promise and render the component when it resolves.
+  const renderCallback = (p: PromiseType<P>) =>
+    (typeof p === "function" ? p() : p)
+      .then((res) => render(res))
+      .catch((e) => {
+        if (errorComponent) {
+          replaceWith(errorComponent(e));
+        } else throw e;
+      });
+
+  if (isObservable(promise)) bindObservable(promise, renderCallback);
+  else renderCallback(promise);
+
+  // Return the rendered element.
+  return el.valueOf() as Node;
+};

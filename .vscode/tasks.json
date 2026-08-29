@@ -4,7 +4,8 @@
     {
       "label": "run",
       "type": "npm",
-      "script": "start-page",
+      "script": "start",
+      "isBackground": true,
       "group": {
         "kind": "test",
         "isDefault": true

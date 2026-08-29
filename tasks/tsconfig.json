@@ -1,0 +1,18 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "composite": false,
+    "rootDir": "..",
+    "types": ["@types/bun", "@types/trusted-types"],
+    "paths": {
+      "@michijs/michijs": ["../src/index"],
+      "@michijs/michijs/*": ["../src/*"]
+    }
+  },
+  "include": ["./**/*.ts"],
+  "exclude": [
+    "../src/infrastructure",
+    "../src/index.ts",
+    "../src/index.node.ts"
+  ]
+}

@@ -188,7 +188,7 @@ A component consists of the following properties:
           <td>This method is called after the component has mounted.</td>
         </tr>
         <tr>
-          <td>willReceiveAttributeCallback</td>
+          <td>willReceiveAttribute</td>
           <td>This method is called before a component does anything with an attribute.</td>
         </tr>
         <tr>
@@ -203,19 +203,19 @@ A component consists of the following properties:
       <tr>
         <td rowspan="5">Form-associated Custom Element related</td>
         <tr>
-          <td>formAssociatedCallback</td>
+          <td>formAssociated</td>
           <td>Called when the browser associates the element with a form element or disassociates the element from a form element.</td>
         </tr>
         <tr>
-          <td>formDisabledCallback</td>
+          <td>formDisabled</td>
           <td>Called after the disabled state of the element changes, either because the disabled attribute of this element was added or removed; or because the disabled state changed on a fieldset that's an ancestor of this element. The disabled parameter represents the new disabled state of the element. The element may disable elements in its shadow DOM when it is disabled.</td>
         </tr>
         <tr>
-          <td>formResetCallback</td>
+          <td>formReset</td>
           <td>Called after the form is reset. The element should reset itself to some kind of default state. For input elements, this usually involves setting the value property to match the value attribute set in markup (or, in the case of a checkbox, setting the checked property to match the checked attribute).</td>
         </tr>
         <tr>
-          <td>formStateRestoreCallback</td>
+          <td>formStateRestore</td>
           <td>Called in one of two circumstances: when the browser restores the state of the element (for example, after a navigation, or when the browser restarts) or when the browser's input-assist features such as form autofilling sets a value. The type of the first argument depends on how the setFormValue() method was called.</td>
         </tr>
       </tr>
@@ -364,7 +364,7 @@ createCustomElement("test-component", {
     },
   },
   render() {
-    const sum = useComputedObserve(() => this.valueA() + this.valueB(), [this.valueA, this.valueB]);
+    const sum = useComputedObserve(() => this.valueA() + this.valueB());
     return (
       <>
         <button onpointerup={this.incrementValueB}>Increment B</button>
@@ -424,13 +424,40 @@ It provides more flexibility in organizing code and separates concerns by allowi
 Responsible for observing changes on different types of values. Takes two arguments:
 
 - **item**: The value to be observed.
-- **isPrimitive**: If you want an unproxied version of useObserve. Similar to [tc39 signals proposal](https://github.com/tc39/proposal-signals)
+- **useProxied**: If `true`, returns a deep-proxy observable that tracks property-level changes on objects, arrays, maps, sets, and dates. If omitted or `false` (the default), returns a lightweight reactive value — similar to the [tc39 signals proposal](https://github.com/tc39/proposal-signals).
 
 This is the most basic hook and it is the basis of the entire component structure.
+
+By default, `useObserve` returns a simple reactive value (getter/setter with subscriptions). Pass `useProxied: true` when you need deep property-level reactivity (e.g. tracking mutations inside arrays, maps, or nested objects).
 
 If the item contains a function, it will return an observable that observes for changes in the object itself. 
 
 **A function in an observable should never mutate the observable.**
+
+##### Disposing observables with `using`
+
+Reactive values implement the [Explicit Resource Management](https://github.com/tc39/proposal-explicit-resource-management) protocol via `Symbol.dispose`. This lets you use the `using` declaration to automatically clean up subscribers and release the held value reference when the observable goes out of scope.
+
+<details>
+  <summary><b>Example:</b></summary>
+
+```tsx
+import { useObserve } from "@michijs/michijs";
+
+function doWork() {
+  using counter = useObserve(0);
+
+  counter.subscribe((value) => console.log(value));
+  counter(1);
+  counter(2);
+  // `counter[Symbol.dispose]()` runs automatically here:
+  // all subscribers are cleared and the held value reference is released.
+}
+```
+
+You can also dispose manually by calling `observable[Symbol.dispose]()` — the call is idempotent and safe to invoke multiple times.
+
+</details>
 
 #### usePureFunction
 It is used to create a memoized function that encapsulates the result of the provided callback function and updates it only when any of the dependencies change. Takes two arguments:
@@ -453,15 +480,37 @@ console.log(sum(1, 2)); // Outputs 3 - without calling the callback - returning 
 </details>
 
 #### useAsyncComputedObserve
-It is used for computing a value and observing its changes. Takes four arguments:
+It is used for computing a value and observing its changes. Takes up to three arguments:
 
 - **callback**: A function that returns a promise of type T.
 - **initialValue**: Initial value of type T.
-- **deps**: Dependencies to watch for changes.
-- **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions. Also includes an option usePrimitive if you want an unproxied version of useAsyncComputedObserve. Similar to [tc39 signals proposal](https://github.com/tc39/proposal-signals)
+- **options**: Optional object that may contain:
+  - `deps`: Dependencies to watch for changes. When omitted, dependencies are **automatically tracked** by detecting which observables are accessed during the synchronous portion of the callback. Tracked dependencies are recalculated on each invocation, so conditional branches are handled correctly.
+  - `onBeforeUpdate` / `onAfterUpdate`: lifecycle callbacks.
+  - `useProxied`: when `true`, returns a deep-proxy observable; when omitted or `false` (the default), returns a lightweight reactive value similar to the [tc39 signals proposal](https://github.com/tc39/proposal-signals).
 
 <details>
-  <summary><b>Example:</b></summary>
+  <summary><b>Example (auto-tracking):</b></summary>
+  
+```tsx
+import { useAsyncComputedObserve, useObserve } from "@michijs/michijs";
+
+const userId = useObserve(1);
+
+// deps are detected automatically — recomputes whenever userId changes
+const userData = useAsyncComputedObserve(
+  async () => {
+    const response = await fetch(`/api/users/${userId()}`);
+    return response.json();
+  },
+  null, // Initial value
+);
+```
+
+</details>
+
+<details>
+  <summary><b>Example (explicit deps):</b></summary>
   
 ```tsx
 import { useAsyncComputedObserve } from "@michijs/michijs";
@@ -473,6 +522,7 @@ const fetchData = useAsyncComputedObserve(
   },
   [], // Initial value
   {
+    deps: [/* ...dependencies */],
     onBeforeUpdate: () => console.log("Fetching data..."),
     onAfterUpdate: () => console.log("Data fetched:", fetchData()),
   }
@@ -482,23 +532,43 @@ const fetchData = useAsyncComputedObserve(
 </details>
 
 #### useComputedObserve
-It is used for computing a value and observing its changes. Takes three arguments:
+It is used for computing a value and observing its changes. Takes up to two arguments:
 
 - **callback**: A function that returns a value of type T.
-- **deps**: Dependencies to watch for changes.
-- **options**: Optional object that may contain `onBeforeUpdate` and `onAfterUpdate` callback functions. Also includes an option usePrimitive if you want an unproxied version of useComputedObserve. Similar to [tc39 signals proposal](https://github.com/tc39/proposal-signals)
+- **options**: Optional object that may contain:
+  - `deps`: Dependencies to watch for changes. When omitted, dependencies are **automatically tracked** by detecting which observables are accessed during the callback execution. Tracked dependencies are recalculated on each invocation, so conditional branches are handled correctly.
+  - `onBeforeUpdate` / `onAfterUpdate`: lifecycle callbacks.
+  - `useProxied`: when `true`, returns a deep-proxy observable; when omitted or `false` (the default), returns a lightweight reactive value similar to the [tc39 signals proposal](https://github.com/tc39/proposal-signals).
 
 
 <details>
-  <summary><b>Example:</b></summary>
+  <summary><b>Example (auto-tracking):</b></summary>
   
 ```tsx
-import { useComputedObserve } from "@michijs/michijs";
+import { useComputedObserve, useObserve } from "@michijs/michijs";
 
 const a = useObserve(2);
 const b = useObserve(3);
 
-const sum = useComputedObserve(() => a() + b(), [a, b], {
+// deps are detected automatically — recomputes whenever a or b changes
+const sum = useComputedObserve(() => a() + b());
+
+console.log(sum()); // Outputs 5
+```
+
+</details>
+
+<details>
+  <summary><b>Example (explicit deps):</b></summary>
+  
+```tsx
+import { useComputedObserve, useObserve } from "@michijs/michijs";
+
+const a = useObserve(2);
+const b = useObserve(3);
+
+const sum = useComputedObserve(() => a() + b(), {
+  deps: [a, b],
   onBeforeUpdate: () => console.log("Calculating sum..."),
   onAfterUpdate: () => console.log("New sum:", sum()),
 });
@@ -693,6 +763,23 @@ title('test')
 
 </details>
 
+#### useParams
+Reactively extracts dynamic route parameters from the current URL based on a route pattern. Re-computes whenever the URL changes via HistoryManager. Parameter names are inferred from the pattern string at the type level.
+
+
+<details>
+  <summary><b>Example:</b></summary>
+  
+```tsx
+import { useParams } from "@michijs/michijs";
+
+// Inside a component rendered at /users/42/profile
+const params = useParams("/users/:id/profile");
+// params.id reactively reflects the current :id value from the URL
+```
+
+</details>
+
 ### Storage hooks
 #### useStorage
 Allows for observing changes in an object and synchronizing it with the browser's storage (such as localStorage). Takes two parameters:
@@ -744,7 +831,7 @@ const count = useAsyncComputedObserve(
     return (await storedCount.counter.get(1))?.count ?? 0;
   },
   (await storedCount.counter.get(1))?.count ?? 0,
-  [storedCount],
+  { deps: [storedCount] },
 );
 
 function decrementCount() {
@@ -1083,19 +1170,22 @@ This will generate an element like:
 ## Routing
 The custom routing tool avoids using strings to represent URLs and instead utilizes modern APIs like the `URL` object. It also allows separating route components, promoting cleaner code.
 
+Route keys support dynamic segments with the `:param` syntax. When a route key contains dynamic segments, `params` is required and fully typed.
+
 <details>
   <summary><b>Example:</b></summary>
   
 ```tsx
 //Parent routes
-export const [urls, Router] = registerRoutes({
+export const [urls, Router] = createRouter({
   syncRoute: <div>Hello World</div>,
+  "users/:id": <UserPage />,
   //Redirect route
   '/': <Redirect to={url} />
 });
 
 //Child routes
-export const [urlsChild, RouterChild] = registerRoutes({
+export const [urlsChild, RouterChild] = createRouter({
   // Async route
   asyncChildRoute: (
     <AsyncComponent
@@ -1106,7 +1196,7 @@ export const [urlsChild, RouterChild] = registerRoutes({
   //The parent route
 }, urls.syncRoute);
 
-// Will generate this url: /sync-route/async-child-route?searchParam1=param+1&searchParam2=2#hash1
+// Static route — params is optional
 const generatedUrl = urlsChild.asyncChildRoute({ 
   searchParams: { 
     searchParam1: 'param 1', 
@@ -1114,6 +1204,11 @@ const generatedUrl = urlsChild.asyncChildRoute({
   }, 
   hash: '#hash1' 
 })
+// Will generate this url: /sync-route/async-child-route?searchParam1=param+1&searchParam2=2#hash1
+
+// Dynamic route — params is required and fully typed
+const userUrl = urls["users/:id"]({ params: { id: "42" } })
+// Will generate this url: /users/42
 ```
 Router and RouterChild are components representing the mount points for each registered route.
 
@@ -1135,6 +1230,22 @@ const AsyncChildExample: FC = () => {
 }
 
 export default AsyncChildExample
+```
+
+</details>
+
+### useParams
+Reactively extracts dynamic route parameters from the current URL based on a route pattern. Re-computes whenever the URL changes via HistoryManager. Fully typed — parameter names are inferred from the pattern string.
+
+<details>
+  <summary><b>Example:</b></summary>
+
+```tsx
+import { useParams } from "@michijs/michijs";
+
+// Inside a component rendered at /users/42/profile
+const params = useParams("/users/:id/profile");
+// params.id reactively reflects the current :id value from the URL
 ```
 
 </details>
@@ -1210,6 +1321,18 @@ We provide partial support for Safari's built-in elements by emulating their beh
 - **Autonomous custom elements**: [Chrome feature status](https://www.chromestatus.com/feature/4696261944934400) [WebComponents.org](https://www.webcomponents.org/)
 - **Framework Compatibility**: [Custom Elements Everywhere](https://custom-elements-everywhere.com)
 - **Element internals**: [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/attachInternals)
+
+## Architecture
+
+MichiJS follows a **hexagonal architecture** (ports & adapters) that separates the codebase into three layers:
+
+- **`domain/`** — Core logic with zero infrastructure dependencies: reactive primitives, observables, proxy handlers, hooks, i18n, and port interfaces (contracts).
+- **`shared/`** — Pure utilities, types, and type guards with no dependencies on domain or infrastructure.
+- **`infrastructure/`** — Platform adapters: `dom/` (browser DOM, custom elements, JSX, rendering, styles, routing, storage), `platform/` (JS APIs agnostic to the DOM), `node/` (SSR), and `plugin/` (esbuild JSX-to-DOM transform).
+
+Cross-layer communication uses TypeScript path aliases (`@domain`, `@ports`, `@shared`) to enforce dependency rules at the import level.
+
+For the full directory tree, dependency rules, and architecture diagram, see [ARQUITECTURE.md](./ARQUITECTURE.md).
 
 ## Supporting MichiJS
 ### Sponsors

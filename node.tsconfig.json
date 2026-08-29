@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "allowUnusedLabels": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "@michijs/michijs",
+    "paths": {
+      "@michijs/michijs/jsx-runtime": [
+        "./src/infrastructure/node/jsx-runtime/index"
+      ],
+      "@michijs/michijs/jsx-dev-runtime": [
+        "./src/infrastructure/node/jsx-runtime/index"
+      ],
+      "@michijs/michijs/*": ["./src/*"],
+      "@michijs/michijs": ["./src/index"]
+    }
+  },
+  "include": ["src"],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "src/**/*.spec.tsx",
+    "dist",
+    "build",
+    "src/infrastructure/plugin",
+    "src/infrastructure/dom",
+    "src/index.ts",
+    "node_modules"
+  ]
+}

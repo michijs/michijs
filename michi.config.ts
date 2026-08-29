@@ -4,20 +4,24 @@ import type {
   DefaultEnvironment,
 } from "@michijs/dev-server";
 import { droppableFlags } from "./droppableFlags";
+// import {michiJSXPlugin} from './src/infrastructure/plugin'
 
 export const config: ServerConfigFactory<
   "TESTING" | "WEB" | DefaultEnvironment
 > = ({ environment }) => {
   const defaultConfig: ServerConfig = {
     public: {
-      path: "./tests/public",
+      path: "./examples/public",
     },
     esbuildOptions: {
+      // plugins: [michiJSXPlugin()],
       // Forcing options so testing works like in production
       minify: true,
-      entryPoints: ["./tests/index.tsx"],
+      entryPoints: ["./examples/index.tsx"],
       tsconfig:
-        environment === "DISTRIBUTION" ? "dist.tsconfig.json" : "tsconfig.json",
+        environment === "DISTRIBUTION"
+          ? "lib.tsconfig.json"
+          : "./examples.tsconfig.json",
       splitting: true,
     },
   };
@@ -32,15 +36,15 @@ export const config: ServerConfigFactory<
     };
     if (environment === "TESTING") {
       defaultConfig.port = 3000;
-      defaultConfig.public!.path = "./tests/benchmark/michijs/public";
+      defaultConfig.public!.path = "./examples/benchmark/michijs/public";
       defaultConfig.esbuildOptions.entryPoints = [
-        "./tests/benchmark/michijs/src/index.tsx",
+        "./examples/benchmark/michijs/src/index.tsx",
       ];
     } else {
       defaultConfig.port = 3001;
-      defaultConfig.public!.path = "./tests/benchmark/vanillajs/public";
+      defaultConfig.public!.path = "./examples/benchmark/vanillajs/public";
       defaultConfig.esbuildOptions.entryPoints = [
-        "./tests/benchmark/vanillajs/src/index.js",
+        "./examples/benchmark/vanillajs/src/index.js",
       ];
     }
   } else {

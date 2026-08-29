@@ -1,6 +1,6 @@
 import { spawn } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
-import { omit } from "../src/michijs/utils/omit";
+import { omit } from "../src/shared";
 import { currentVersion } from "./currentVersion";
 
 const times = 1000;
@@ -22,7 +22,7 @@ const run = () =>
     });
   });
 
-const fwJsonPath = `./tests/benchmark/generated/${fw}.json`;
+const fwJsonPath = `./examples/benchmark/generated/${fw}.json`;
 const jsonContent = (await import(`.${fwJsonPath}`)).default;
 let bestResults = jsonContent[currentVersion];
 

@@ -3,17 +3,17 @@ import {
   supportedMathMLElements,
   supportedSVGElements,
 } from "@michijs/htmltype/supported";
-import { generateTypes } from "@michijs/htmltype/bin";
-import {
-  writeFileSync,
-  rmSync,
-  cpSync,
-  readdirSync,
-  statSync,
-  readFileSync,
-  renameSync,
-} from "node:fs";
+import { generateTypes } from "../node_modules/@michijs/htmltype/bin/tasks/index.js";
 import path from "node:path";
+import {
+  cp,
+  readdir,
+  readFile,
+  rename,
+  rm,
+  stat,
+  writeFile,
+} from "node:fs/promises";
 
 const elements = new Map<
   string,
@@ -50,42 +50,44 @@ supportedSVGElements.forEach((x) => {
   }
 });
 
-function renameFiles(directory) {
+async function renameFiles(directory) {
   // Read the contents of the directory
-  const files = readdirSync(directory);
+  const files = await readdir(directory);
 
   // Iterate through each file in the directory
-  files.forEach((file) => {
-    const filePath = path.join(directory, file);
+  Promise.all(
+    files.map(async (file) => {
+      const filePath = path.join(directory, file);
 
-    // Check if it's a directory
-    const stats = statSync(filePath);
-    if (stats.isDirectory()) {
-      // If it's a directory, recursively call the function
-      renameFiles(filePath);
-    } else if (file.endsWith(".d.ts")) {
-      // If it's a .d.ts file, rename it to .ts
-      const newFilePath = path.join(directory, file.replace(".d.ts", ".ts"));
-      renameSync(filePath, newFilePath);
+      // Check if it's a directory
+      const stats = await stat(filePath);
+      if (stats.isDirectory()) {
+        // If it's a directory, recursively call the function
+        renameFiles(filePath);
+      } else if (file.endsWith(".d.ts")) {
+        // If it's a .d.ts file, rename it to .ts
+        const newFilePath = path.join(directory, file.replace(".d.ts", ".ts"));
+        await rename(filePath, newFilePath);
 
-      // Read the contents of the file
-      const fileContent = readFileSync(newFilePath, "utf-8");
+        // Read the contents of the file
+        const fileContent = await readFile(newFilePath, "utf-8");
 
-      // Remove the line "export {};"
-      const modifiedContent = fileContent.replace(/export\s*\{\s*\};\n/, "");
+        // Remove the line "export {};"
+        const modifiedContent = fileContent.replace(/export\s*\{\s*\};\n/, "");
 
-      // Write the modified content back to the file
-      writeFileSync(newFilePath, modifiedContent);
-    }
-  });
+        // Write the modified content back to the file
+        await writeFile(newFilePath, modifiedContent);
+      }
+    }),
+  );
 }
 
-cpSync(
+await cp(
   "./node_modules/@michijs/htmltype/dist",
-  "src/michijs/generated/htmlType",
+  "src/infrastructure/dom/jsx-runtime/generated/htmlType",
   { force: true, recursive: true },
 );
-renameFiles("src/michijs/generated/htmlType");
+renameFiles("src/infrastructure/dom/jsx-runtime/generated/htmlType");
 
 generateTypes({
   generateAttributesAndValueSetsProps: {
@@ -106,15 +108,16 @@ generateTypes({
       });
     },
     valueSetsAdditionalImports: [
-      'import type { ObservableOrConstOrPromise } from "../../../types"',
+      'import type { ObservableOrConstOrPromise } from "#ports"',
     ],
   },
   typesFactoryProps: {
-    generatedPath: "src/michijs/generated/htmlType/generated",
+    generatedPath:
+      "src/infrastructure/dom/jsx-runtime/generated/htmlType/generated",
   },
   elements: {
     additionalImports: [
-      'import type { MichiAttributes } from "../../../types"',
+      'import type { MichiAttributes } from "../../../../custom-elements/types"',
     ],
     additionalExtends: (el, elementInterface) => [
       `MichiAttributes<I["${el}"] extends Element ? I["${el}"]: ${elementInterface}>`,
@@ -123,17 +126,20 @@ generateTypes({
 });
 
 try {
-  rmSync("./src/michijs/generated/JSX.ts", { recursive: true, force: true });
+  await rm("./src/infrastructure/dom/jsx-runtime/generated/JSX.ts", {
+    recursive: true,
+    force: true,
+  });
 } catch {}
 
 const interfaceOverrideElements = Array.from(elements).filter(
   ([_name, x]) => x.elementInterfaces.length > 1,
 );
 
-writeFileSync(
-  "./src/michijs/generated/JSX.ts",
+await writeFile(
+  "./src/infrastructure/dom/jsx-runtime/generated/JSX.ts",
   ` import type { HTMLElements as HTMLElementsHTMLType, MathMLElements, SVGElements as SVGElementsHTMLType } from "./htmlType";
-  import type { SingleJSXElement } from '../types';
+  import type { SingleJSXElement } from '../../rendering/types';
 
   interface ElementsInterfaceOverride {
     ${interfaceOverrideElements
