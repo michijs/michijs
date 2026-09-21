@@ -8,7 +8,7 @@
     "droppableFlags.js",
     "jsx-runtime/"
   ],
-  "packageManager": "bun@1.4.0",
+  "packageManager": "bun@1.4.2",
   "sideEffects": false,
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -96,13 +96,13 @@
     "Autonomous custom elements"
   ],
   "devDependencies": {
-    "@happy-dom/global-registrator": "20.12.0",
-    "@michijs/dev-server": "0.8.36",
-    "@michijs/htmltype": "0.4.14",
+    "@happy-dom/global-registrator": "20.14.5",
+    "@michijs/dev-server": "0.8.38",
+    "@michijs/htmltype": "0.4.16",
     "@michijs/shared-configs": "0.0.37",
     "@reduxjs/toolkit": "2.12.0",
-    "@types/bun": "1.4.0",
-    "mermaid": "11.17.2",
+    "@types/bun": "1.4.2",
+    "mermaid": "12.0.0",
     "redux": "5.0.1",
     "typescript": "7.0.2"
   },
