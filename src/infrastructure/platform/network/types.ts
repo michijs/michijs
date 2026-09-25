@@ -1,7 +1,7 @@
 import type {
-  CallableReactiveOrConst,
   ObservableOrConst,
-  ReactiveValuePort,
+  PromiseResult,
+  UsePromiseShouldWait,
 } from "#ports";
 import type { AnyObject, SearchParams } from "#shared";
 
@@ -30,13 +30,6 @@ export interface DoFetch {
   >(
     request: DoFetchProps<S, B>,
   ): Promise<R>;
-}
-
-type UsePromiseShouldWait = CallableReactiveOrConst<Promise<any>>[];
-
-interface PromiseResult<R> {
-  promise: ReactiveValuePort<R>;
-  recall(): void;
 }
 
 export interface UseFetch {

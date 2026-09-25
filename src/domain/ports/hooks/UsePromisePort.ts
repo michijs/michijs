@@ -1,16 +1,16 @@
-import type { CallableReactiveOrConst, ReactiveValuePort } from "#ports";
+import type { CallableReactiveOrConst, CallableReactiveValuePort } from "#ports";
 
-type usePromiseShouldWait = CallableReactiveOrConst<Promise<any>>[];
+export type UsePromiseShouldWait = CallableReactiveOrConst<Promise<any>>[];
 
 /**
  * Interface representing the result of a fetch operation.
  * @template R Type of the expected response data.
  */
-interface PromiseResult<R> {
+export interface PromiseResult<R> {
   /**
    * The promise
    */
-  promise: ReactiveValuePort<R>;
+  promise: CallableReactiveValuePort<R>;
   /**
    * Call again the promise. Available after first call
    */
@@ -20,6 +20,6 @@ interface PromiseResult<R> {
 export interface UsePromisePort {
   <R>(
     callback: () => Promise<R>,
-    shouldWait?: usePromiseShouldWait,
+    shouldWait?: UsePromiseShouldWait,
   ): PromiseResult<Promise<R>>;
 }
