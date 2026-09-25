@@ -1,4 +1,7 @@
-import type { CallableReactiveOrConst, CallableReactiveValuePort } from "#ports";
+import type {
+  CallableReactiveOrConst,
+  CallableReactiveValuePort,
+} from "#ports";
 
 export type UsePromiseShouldWait = CallableReactiveOrConst<Promise<any>>[];
 
