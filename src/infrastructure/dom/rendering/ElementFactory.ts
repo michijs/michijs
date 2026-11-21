@@ -178,8 +178,9 @@ export class ElementFactory<S extends Element> implements ElementFactoryPort<
       }
       removeFunctionAndClassJSXElements: {
         if (isFunctionOrClassJSXElement(jsx)) {
-          if (isClassJSXElement(jsx)) jsx = classJSXToObjectJSXElement(jsx);
-          else return this.createInternal(jsx.jsxTag(jsx.attrs, this));
+          if (isClassJSXElement(jsx))
+            return this.createInternal(classJSXToObjectJSXElement(jsx));
+          return this.createInternal(jsx.jsxTag(jsx.attrs, this));
         }
       }
       // Observables with values

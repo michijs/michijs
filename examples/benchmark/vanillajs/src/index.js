@@ -72,7 +72,8 @@ const [[TABLE], [TBODY], [TROW], BUTTONS] = "table,tbody,#trow,button"
 const { cloneNode, insertBefore } = Node.prototype;
 const clone = (n) => cloneNode.call(n, true);
 const insert = insertBefore.bind(TBODY);
-const create = (count, add) => {
+const create = (total, add) => {
+  let count = total;
   if (SIZE !== count)
     // @ts-ignore
     ((TMPL = clone(TROW.content)),

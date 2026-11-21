@@ -21,7 +21,6 @@ export class PrimitiveProxyHandler<T>
             new FunctionProxyHandler(this.rootObservableCallback),
           );
         }
-        // biome-ignore-start lint/suspicious/noFallthroughSwitchClause: Intentional
         case "object":
           // Ignore null
           if (value) {
@@ -33,8 +32,9 @@ export class PrimitiveProxyHandler<T>
             if (newHandler)
               return this.updateHandlerAndValue(target, value, newHandler);
           }
-        // biome-ignore-end lint/suspicious/noFallthroughSwitchClause: Intentional
-        // If its an non observable object continue
+          // If its an non observable object continue
+          this.applyNewValue(target, value);
+          break;
         default:
           this.applyNewValue(target, value);
       }

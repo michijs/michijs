@@ -118,7 +118,7 @@ export class NodeElementFactory implements ElementFactoryPort<
    */
   setProperties(
     _el: Element,
-    attributes: AnyObject,
+    _attributes: AnyObject,
     _shouldValidateInitialValue?: boolean,
   ): void {
     // No-op in SSR — properties are serialized directly in create().

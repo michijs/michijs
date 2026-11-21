@@ -49,11 +49,11 @@ export class ElementArrayTarget<V> implements ReactiveArrayTargetPort<V, Node> {
     this.element.childNodes[index]?.remove();
   }
 
-  $swap(indexA: number, indexB: number): void {
+  $swap(a: number, b: number): void {
+    const indexA = Math.min(a, b),
+      indexB = Math.max(a, b);
     removeSwapValidations: {
       if (indexA === indexB) return;
-
-      if (indexA > indexB) [indexA, indexB] = [indexB, indexA];
 
       if (indexB > this.element.childElementCount)
         throw `Index ${indexB} is out of bound`;
@@ -69,7 +69,7 @@ export class ElementArrayTarget<V> implements ReactiveArrayTargetPort<V, Node> {
       }
     }
 
-    (this.element.insertBefore(node1, node2),
-      this.element.insertBefore(node2, node1NextSibling));
+    this.element.insertBefore(node1, node2);
+    this.element.insertBefore(node2, node1NextSibling);
   }
 }

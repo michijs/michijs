@@ -7,11 +7,12 @@ interface ForEachChildrenCallback {
 }
 
 export const forEachChildren = (
-  currentNode: ChildNode | null,
+  firstNode: ChildNode | null,
   callback: ForEachChildrenCallback,
   shouldStopCallback?: (currentNode: ChildNode | null) => any,
 ): number => {
   let i = 0;
+  let currentNode = firstNode;
   while (currentNode && !shouldStopCallback?.(currentNode)) {
     const nextSibling = currentNode.nextSibling;
     callback(currentNode, i);

@@ -79,34 +79,35 @@ export const useIndexedDB: UseIndexedDB = (name, objectsStore, version = 1) => {
                   "transaction",
                 ].includes(method)
               ) {
-                return new Promise(async (resolve) => {
-                  const db = await dbPromise;
-                  const transaction = db.transaction(p, transactionMode);
-                  resolve(transaction.objectStore(p)[method]);
-                });
+                return dbPromise.then(
+                  (db) =>
+                    db.transaction(p, transactionMode).objectStore(p)[method],
+                );
               }
               return (...args) =>
-                new Promise(async (resolve, reject) => {
-                  const db = await dbPromise;
-                  const transaction = db.transaction(p, transactionMode);
-                  const result = (
-                    transaction.objectStore(p)[method] as Function
-                  ).call(transaction.objectStore(p), ...args);
-                  transaction.onabort = reject;
-                  transaction.onerror = reject;
-                  if (result instanceof IDBRequest) {
-                    result.onsuccess = () => {
-                      if (transactionMode === "readwrite") {
-                        observable.notify(p);
-                        bc.postMessage(p);
+                dbPromise.then(
+                  (db) =>
+                    new Promise((resolve, reject) => {
+                      const transaction = db.transaction(p, transactionMode);
+                      const result = (
+                        transaction.objectStore(p)[method] as Function
+                      ).call(transaction.objectStore(p), ...args);
+                      transaction.onabort = reject;
+                      transaction.onerror = reject;
+                      if (result instanceof IDBRequest) {
+                        result.onsuccess = () => {
+                          if (transactionMode === "readwrite") {
+                            observable.notify(p);
+                            bc.postMessage(p);
+                          }
+                          resolve(result.result);
+                        };
+                        result.onerror = reject;
+                      } else {
+                        resolve(result);
                       }
-                      resolve(result.result);
-                    };
-                    result.onerror = reject;
-                  } else {
-                    resolve(result);
-                  }
-                });
+                    }),
+                );
             },
           },
         );

@@ -8,5 +8,4 @@ export const store = configureStore({
   devTools: true,
 });
 
-const state = store.getState();
-export type StoreType = typeof state;
+export type StoreType = ReturnType<typeof store.getState>;

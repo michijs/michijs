@@ -1,12 +1,10 @@
 import { isObservable } from "#domain";
-import { classJSXToObjectJSXElement } from "./classJSXToObjectJSXElement";
 import { ElementFactory } from "./ElementFactory";
 import type {
   CloneFactoryType,
   SingleJSXElement,
   ObservableNonNullablePrimitiveType,
 } from "./types";
-import { isClassJSXElement } from "./typewards/isClassJSXElement";
 import { isFragmentElement } from "./typewards/isFragmentElement";
 import { isFunctionOrClassJSXElement } from "./typewards/isFunctionOrClassJSXElement";
 import { isNotAPrimitiveJSX } from "./typewards/isNotAPrimitiveJSX";
@@ -47,10 +45,8 @@ export class CloneFactory<S extends Element>
         if (isFragmentElement(jsx)) throw "Fragments are not supported yet";
       }
       removeFunctionAndClassJSXElements: {
-        if (isFunctionOrClassJSXElement(jsx)) {
-          if (isClassJSXElement(jsx)) jsx = classJSXToObjectJSXElement(jsx);
+        if (isFunctionOrClassJSXElement(jsx))
           throw "Functions are not supported yet";
-        }
       }
       if (isObservable(jsx))
         return updateObservableTextElement(
