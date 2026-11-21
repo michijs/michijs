@@ -7,10 +7,12 @@ import type {
 } from "#ports";
 
 interface ObservableProxiedArrayHelper<RV, SV = ObservableProxyPort<RV>>
-  extends ReadWriteArray<RV, SV>,
+  extends
+    ReadWriteArray<RV, SV>,
     ReactiveArrayPort<RV | SV>,
     ProxiedValuePort<RV[]>,
     ObservableGettersAndSetters<RV[], SV[]> {}
 
-export interface ObservableProxiedArray<RV>
-  extends ObservableProxiedArrayHelper<RV> {}
+export interface ObservableProxiedArray<
+  RV,
+> extends ObservableProxiedArrayHelper<RV> {}

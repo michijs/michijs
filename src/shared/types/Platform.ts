@@ -1,7 +1,2 @@
 export type Platform =
-  | "ios"
-  | "android"
-  | "macos"
-  | "chromeos"
-  | "windows"
-  | "unknown";
+  "ios" | "android" | "macos" | "chromeos" | "windows" | "unknown";

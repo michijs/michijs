@@ -10,21 +10,17 @@ export type CSSVar<T extends string> = <
 export type CssVariablesObject<
   T extends object | unknown,
   PK extends string = "-",
-> = IsAny<T> extends true
-  ? any
-  : T extends object
-    ? {
-        [k in StringKeyOf<T>]: CssVariablesObject<T[k], `${PK}-${k}`>;
-      }
-    : CSSVar<PK> & string;
+> =
+  IsAny<T> extends true
+    ? any
+    : T extends object
+      ? {
+          [k in StringKeyOf<T>]: CssVariablesObject<T[k], `${PK}-${k}`>;
+        }
+      : CSSVar<PK> & string;
 
 export type CSSProperty =
-  | CSSObject
-  | CSSProperties
-  | string
-  | number
-  | undefined
-  | null;
+  CSSObject | CSSProperties | string | number | undefined | null;
 export interface CSSObject {
   [key: string]: ObservableOrConst<CSSProperty>;
 }

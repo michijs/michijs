@@ -5,8 +5,9 @@ export interface UseStorage {
   <T extends object>(item: T, storage?: Storage): ObservableProxyPort<T>;
 }
 
-export interface TypedIDBObjectStoreParameters<T extends AnyObject>
-  extends Omit<IDBObjectStoreParameters, "keyPath"> {
+export interface TypedIDBObjectStoreParameters<
+  T extends AnyObject,
+> extends Omit<IDBObjectStoreParameters, "keyPath"> {
   keyPath?: keyof T | (keyof T)[] | null;
 }
 
@@ -31,8 +32,10 @@ export interface InitDb {
 }
 
 /** This example shows a variety of different uses of object stores, from updating the data structure with IDBObjectStore.createIndex inside an onupgradeneeded function, to adding a new item to our object store with IDBObjectStore.add. For a full working example, see our To-do Notifications app (view example live.) */
-export interface TypedIDBObjectStore<T extends AnyObject>
-  extends Omit<IDBObjectStore, "add" | "get" | "getAll" | "put"> {
+export interface TypedIDBObjectStore<T extends AnyObject> extends Omit<
+  IDBObjectStore,
+  "add" | "get" | "getAll" | "put"
+> {
   /**
    * Adds or updates a record in store with the given value and key.
    *
@@ -89,5 +92,7 @@ export type IndexeddbObservableResult<T extends AnyObject> = {
   [k in keyof T]: PromisableTypedIDBObjectStore<T[k]>;
 } & ObservablePort<keyof T>;
 
-export interface CookieStorageConstructor
-  extends Omit<CookieInit, "name" | "value"> {}
+export interface CookieStorageConstructor extends Omit<
+  CookieInit,
+  "name" | "value"
+> {}

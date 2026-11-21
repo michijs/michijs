@@ -1,17 +1,17 @@
 import { createCustomElement, css, useComputedObserve } from "@michijs/michijs";
 
 const style = css`
-    color-selector{
-      & span {
-          background: var(--color);
-          width: 50px;
-          height: 50px;
-          display: flex;
-      }
-      & span::before {
-          content: var(--example)
-      }
+  color-selector {
+    & span {
+      background: var(--color);
+      width: 50px;
+      height: 50px;
+      display: flex;
     }
+    & span::before {
+      content: var(--example);
+    }
+  }
 `;
 
 export const ColorSelector = createCustomElement("color-selector", {

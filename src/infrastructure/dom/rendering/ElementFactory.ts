@@ -102,9 +102,10 @@ export class AttributeManager<S extends Element> {
   }
 }
 
-export class ElementFactory<S extends Element>
-  implements ElementFactoryPort<S, SingleJSXElement>
-{
+export class ElementFactory<S extends Element> implements ElementFactoryPort<
+  S,
+  SingleJSXElement
+> {
   contextElement?: S;
 
   constructor(contextElement?: S) {

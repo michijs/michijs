@@ -1,12 +1,12 @@
 import type { ReactiveArrayTargetPort, ReactiveArrayPort } from "#ports";
 
 export class ReactiveArray<
+  V,
+  T extends ReactiveArrayTargetPort<V, unknown> = ReactiveArrayTargetPort<
     V,
-    T extends ReactiveArrayTargetPort<V, unknown> = ReactiveArrayTargetPort<
-      V,
-      unknown
-    >,
-  >
+    unknown
+  >,
+>
   extends Array<V>
   implements ReactiveArrayPort<V>
 {

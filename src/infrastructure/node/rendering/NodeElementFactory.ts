@@ -21,12 +21,12 @@ interface NodeCommonJSXAttrs<T> {
 }
 
 export interface NodeObjectJSXElement extends NodeCommonJSXAttrs<string> {}
-export interface NodeFunctionJSXElement
-  extends NodeCommonJSXAttrs<
-    (props: Record<string, unknown>, factory: NodeElementFactory) => string
-  > {}
-export interface NodeFragmentJSXElement
-  extends NodeCommonJSXAttrs<null | undefined> {}
+export interface NodeFunctionJSXElement extends NodeCommonJSXAttrs<
+  (props: Record<string, unknown>, factory: NodeElementFactory) => string
+> {}
+export interface NodeFragmentJSXElement extends NodeCommonJSXAttrs<
+  null | undefined
+> {}
 
 /** HTML void elements that must be self-closing (no closing tag). */
 const VOID_ELEMENTS = new Set([
@@ -105,9 +105,10 @@ function styleToString(
  * - Function components are called and their string result is returned
  * - Void elements are self-closing
  */
-export class NodeElementFactory
-  implements ElementFactoryPort<unknown, NodeSingleJSXElement>
-{
+export class NodeElementFactory implements ElementFactoryPort<
+  unknown,
+  NodeSingleJSXElement
+> {
   contextElement?: unknown;
 
   /**

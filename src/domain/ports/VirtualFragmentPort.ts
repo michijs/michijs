@@ -1,5 +1,6 @@
 export interface VirtualFragmentPort
-  extends Pick<
+  extends
+    Pick<
       ParentNode,
       | "textContent"
       | "prepend"

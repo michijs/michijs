@@ -18,14 +18,15 @@ export interface CommonJSXAttrs<T> {
 }
 export interface FragmentJSXElement extends CommonJSXAttrs<null | undefined> {}
 export interface ObjectJSXElement extends CommonJSXAttrs<string> {}
-export interface DOMElementJSXElement<E extends Element = Element>
-  extends CommonJSXAttrs<E> {}
-export interface FunctionJSXElement
-  extends CommonJSXAttrs<CreateFCResult<any>> {}
-export interface ClassJSXElement
-  extends CommonJSXAttrs<
-    (new (...args: any[]) => Element) & { tag: string; extends?: string }
-  > {}
+export interface DOMElementJSXElement<
+  E extends Element = Element,
+> extends CommonJSXAttrs<E> {}
+export interface FunctionJSXElement extends CommonJSXAttrs<
+  CreateFCResult<any>
+> {}
+export interface ClassJSXElement extends CommonJSXAttrs<
+  (new (...args: any[]) => Element) & { tag: string; extends?: string }
+> {}
 export type SingleJSXElement =
   | PrimitiveType
   | ObjectJSXElement
@@ -43,8 +44,9 @@ export type FCProps<T = {}> = {
   [k in keyof T]: k extends "children" ? T[k] : ObservableProxyPort<T[k]>;
 };
 
-export interface CloneFactoryType<S extends Element = Element>
-  extends ElementFactoryPort<S, SingleJSXElement> {
+export interface CloneFactoryType<
+  S extends Element = Element,
+> extends ElementFactoryPort<S, SingleJSXElement> {
   clone<T = Node>(
     template: Node,
     jsx: SingleJSXElement,
@@ -61,8 +63,10 @@ export type FC<T = {}, S extends Element = Element> = (
   attrs: T,
   factory: ElementFactoryPort<S, SingleJSXElement>,
 ) => SingleJSXElement;
-export interface FCC<T = {}, S extends Element = Element>
-  extends FC<T & { children?: JSX.Element }, S> {}
+export interface FCC<T = {}, S extends Element = Element> extends FC<
+  T & { children?: JSX.Element },
+  S
+> {}
 
 export type GetElementProps<El> = El extends (...args: infer Y) => any
   ? Y[0]

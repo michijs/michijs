@@ -11,12 +11,7 @@
  * plain data structures the deep-proxy is meant to deeply mirror.
  */
 export type DeepPartialNullable<T> = T extends
-  | Function
-  | Date
-  | Promise<any>
-  | Map<any, any>
-  | Set<any>
-  | Array<any>
+  Function | Date | Promise<any> | Map<any, any> | Set<any> | Array<any>
   ? T | undefined
   : T extends { addEventListener: any }
     ? T | undefined

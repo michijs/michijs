@@ -13,12 +13,10 @@ export interface UseComputedObservePortSharedOptions {
    */
   deps?: UseWatchDepsPort;
 }
-export interface UseProxiedComputedObservePortOptions
-  extends UseComputedObservePortSharedOptions {
+export interface UseProxiedComputedObservePortOptions extends UseComputedObservePortSharedOptions {
   useProxied: true;
 }
-export interface UseComputedObservePortOptions
-  extends UseComputedObservePortSharedOptions {
+export interface UseComputedObservePortOptions extends UseComputedObservePortSharedOptions {
   useProxied?: false;
 }
 export interface UseComputedObservePort {

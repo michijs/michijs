@@ -75,16 +75,16 @@ const insert = insertBefore.bind(TBODY);
 const create = (count, add) => {
   if (SIZE !== count)
     // @ts-ignore
-    (TMPL = clone(TROW.content)),
+    ((TMPL = clone(TROW.content)),
       [...Array((SIZE = count) / 50 - 1)].forEach(() =>
         TMPL.appendChild(clone(TMPL.firstChild)),
-      );
+      ));
   !add && (clear(), TBODY.remove());
   while (count) {
     for (const r of TMPL.children)
-      ((r.$id ??= r.firstChild.firstChild).nodeValue = ID++),
+      (((r.$id ??= r.firstChild.firstChild).nodeValue = ID++),
         ((r.$label ??= labelOf(r)).nodeValue = label()),
-        count--;
+        count--);
     insert(clone(TMPL), null);
   }
   !add && TABLE.appendChild(TBODY);

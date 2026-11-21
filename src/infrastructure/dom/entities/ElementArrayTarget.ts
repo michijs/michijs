@@ -69,7 +69,7 @@ export class ElementArrayTarget<V> implements ReactiveArrayTargetPort<V, Node> {
       }
     }
 
-    this.element.insertBefore(node1, node2),
-      this.element.insertBefore(node2, node1NextSibling);
+    (this.element.insertBefore(node1, node2),
+      this.element.insertBefore(node2, node1NextSibling));
   }
 }

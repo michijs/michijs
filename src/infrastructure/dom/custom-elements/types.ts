@@ -32,12 +32,9 @@ export interface MichiAttributesCustomElement<E> {
       infer U
     >
       ? ObservablePort<U | undefined | null> | U | undefined | null
-      :
-          | ObservableOrConstOrPromise<
-              GetPrimitiveType<E[k]> | undefined | null
-            >
-          | undefined
-          | null;
+      : | ObservableOrConstOrPromise<GetPrimitiveType<E[k]> | undefined | null>
+        | undefined
+        | null;
   };
 }
 
@@ -92,7 +89,8 @@ export interface LifecycleInternals {
 }
 
 export interface MichiProperties
-  extends Lifecycle,
+  extends
+    Lifecycle,
     LifecycleInternals,
     Partial<
       Pick<
@@ -260,9 +258,7 @@ export type MichiElementSelf<O extends MichiElementOptions> = {
   CustomElementEvents<O["events"]> &
   MichiProperties &
   (O["extends"] extends { class: infer E }
-    ? E extends new (
-        ...args: any
-      ) => any
+    ? E extends new (...args: any) => any
       ? InstanceType<E>
       : HTMLElement
     : HTMLElement);
@@ -282,19 +278,21 @@ type MichiElementProps<
   O extends MichiElementOptions,
   S extends HTMLElement = MichiElementSelf<O>,
   Attrs = {
-    [k in keyof O["reflectedAttributes"] as KebabCase<k>]?: ObservableOrConstOrPromise<
+    [
+      k in keyof O["reflectedAttributes"] as KebabCase<k>
+    ]?: ObservableOrConstOrPromise<
       GetPrimitiveType<O["reflectedAttributes"][k]> | undefined
     >;
   } & {
-    [k in keyof O["reflectedCssVariables"] as KebabCase<k>]?: ObservableOrConstOrPromise<
+    [
+      k in keyof O["reflectedCssVariables"] as KebabCase<k>
+    ]?: ObservableOrConstOrPromise<
       GetPrimitiveType<O["reflectedCssVariables"][k]> | undefined
     >;
   } & {
-    [k in keyof O["events"] as k extends string
-      ? `on${Lowercase<k>}`
-      : never]?: O["events"][k] extends EventDispatcher<infer D>
-      ? CEEvent<D>
-      : never;
+    [
+      k in keyof O["events"] as k extends string ? `on${Lowercase<k>}` : never
+    ]?: O["events"][k] extends EventDispatcher<infer D> ? CEEvent<D> : never;
   } & { name?: string } & GlobalEvents<S>,
   E = O["attributes"] &
     O["reflectedAttributes"] &
