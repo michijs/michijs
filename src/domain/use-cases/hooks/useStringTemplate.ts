@@ -13,9 +13,9 @@ export const useStringTemplate: UseStringTemplatePort = (
 ) =>
   useComputedObserve(
     () =>
-      templateStringsArray.raw.reduce(
+      templateStringsArray.reduce(
         (previousValue, currentValue, i) =>
-          `${previousValue}${currentValue}${props[i] ? (props[i].valueOf() ?? "") : ""}`,
+          `${previousValue}${currentValue}${i < props.length ? (props[i]?.valueOf() ?? "") : ""}`,
         // The accumulator takes the first value if you don't pass a value as the second argument:
         "",
       ),

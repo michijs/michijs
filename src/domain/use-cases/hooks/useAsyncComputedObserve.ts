@@ -44,7 +44,9 @@ export const useAsyncComputedObserve: UseAsyncComputedObservePort = ((
           options?.onAfterUpdate?.();
         }
       } catch (ex) {
-        currentAbortController?.abort();
+        // A newer invocation superseded this one: its error is irrelevant
+        if (currentAbortController.signal.aborted) return;
+        currentAbortController.abort();
         throw ex;
       }
     };
@@ -63,9 +65,16 @@ export const useAsyncComputedObserve: UseAsyncComputedObservePort = ((
     abortController = new AbortController();
     const currentAbortController = abortController;
 
-    // Track synchronous reads during callback invocation
+    // Track only synchronous reads. The tracking frame must be closed before
+    // awaiting, otherwise unrelated reads made while the promise is pending
+    // would be recorded as dependencies.
     startTracking();
-    const promise = callback(currentAbortController.signal);
+    let promise: Promise<any>;
+    try {
+      promise = callback(currentAbortController.signal);
+    } finally {
+      for (const dep of stopTracking()) dep.subscribe(listener);
+    }
 
     try {
       const callbackResult = await promise;
@@ -77,12 +86,10 @@ export const useAsyncComputedObserve: UseAsyncComputedObservePort = ((
         options?.onAfterUpdate?.();
       }
     } catch (ex) {
-      currentAbortController?.abort();
+      // A newer invocation superseded this one: its error is irrelevant
+      if (currentAbortController.signal.aborted) return;
+      currentAbortController.abort();
       throw ex;
-    } finally {
-      const newDeps = stopTracking();
-
-      for (const dep of newDeps) dep.subscribe(listener);
     }
   };
   listener();

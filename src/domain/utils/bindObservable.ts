@@ -16,7 +16,8 @@ export const bindObservable = <T>(
   }
   removePromiseAttributes: {
     if (observable instanceof Promise) {
-      observable.then(callback);
+      // Rejections belong to the promise owner; avoid a duplicated unhandled rejection
+      observable.then(callback, () => {});
       return observable;
     }
   }

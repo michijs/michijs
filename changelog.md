@@ -1,3 +1,12 @@
+## 2.4.1
+
+### Added
+- **`michijs-no-polyfills` build condition** — leaves out the polyfills and michijs' top-level awaits, for apps that only target modern Chromium-like browsers or bundle without code splitting (e.g. Electron). E.g. esbuild `conditions: ["michijs-no-polyfills"]`, Bun `--conditions=michijs-no-polyfills`. With it:
+  - `HistoryManager` is always the Navigation API one (no History API fallback).
+  - Customized built-in elements are always native (no Safari emulation).
+  - Without the condition everything works as before. Internally they are package.json `"imports"` (`#history-manager`, `#create-built-in-element`).
+- **`michijs-no-preloaded-with-cookie-storage` build condition** — `CookieStorage` reads the existing cookies synchronously from `document.cookie` instead of with a top-level await on `cookieStore.getAll()`. Without it, it works as before (`#cookie-storage`).
+
 ## 2.4.0
 
 ### Architecture — Hexagonal migration

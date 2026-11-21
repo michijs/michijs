@@ -1,21 +1,6 @@
 import type { CookieStorageConstructor } from "../types";
 import { Observable, ObservableFromEventListener } from "#domain";
-
-const mainCookieStorage = new Map<string, string | null>();
-
-const getCookieValue = (value: string | null | undefined): string | null => {
-  try {
-    return value ? decodeURIComponent(value) : null;
-  } catch {
-    return value ?? null;
-  }
-};
-
-removeTopLevelAwaits: {
-  (await cookieStore.getAll()).forEach((x) => {
-    if (x.name) mainCookieStorage.set(x.name, getCookieValue(x.value));
-  });
-}
+import { getCookieValue, mainCookieStorage } from "./cookieCache";
 
 const cookieStoreChange = new ObservableFromEventListener<{
   changed: CookieListItem[];

@@ -69,8 +69,7 @@ export class ReactiveValue<T>
   }
 
   override toString(): string {
-    // @ts-ignore
-    return this.valueOf().toString();
+    return String(this.valueOf());
   }
 
   /**

@@ -36,32 +36,25 @@ export const useComputedObserve: UseComputedObservePort = ((
     return newObservable;
   }
 
-  startTracking();
-  const initialValue = callback();
-  const trackedDeps = stopTracking();
-  const newObservable = useObserve(initialValue, options?.useProxied);
-
-  const listener = () => {
-    // Re-track
+  const trackedCallback = () => {
     startTracking();
-    let callbackResult: any;
     try {
-      callbackResult = callback();
+      return callback();
     } finally {
-      const newDeps = stopTracking();
-
-      for (const dep of newDeps) dep.subscribe(listener);
+      for (const dep of stopTracking()) dep.subscribe(listener);
     }
+  };
 
+  const newObservable = useObserve(trackedCallback(), options?.useProxied);
+
+  function listener() {
+    const callbackResult = trackedCallback();
     options?.onBeforeUpdate?.();
     (newObservable as CallableReactiveValuePort<object>)(
       callbackResult as object,
     );
     options?.onAfterUpdate?.();
-  };
-
-  // Initial subscriptions
-  for (const dep of trackedDeps) dep.subscribe(listener);
+  }
 
   return newObservable;
 }) as any;

@@ -1,14 +1,3 @@
-import type { HistoryManagerPort } from "#domain";
-
-let HistoryManager: HistoryManagerPort;
-removeTopLevelAwaits: {
-  if (window.navigation && window.URLPattern)
-    HistoryManager = new (
-      await import("./ModernHistoryManager")
-    ).ModernHistoryManager();
-  else
-    HistoryManager = new (
-      await import("./LegacyHistoryManager")
-    ).LegacyHistoryManager();
-}
-export { HistoryManager };
+// historyManager.ts, or historyManager.noPolyfills.ts with the `michijs-no-polyfills`
+// condition (package.json "imports").
+export { HistoryManager } from "#history-manager";

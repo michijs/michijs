@@ -15,13 +15,37 @@
   "imports": {
     "#domain": "./src/domain/index.ts",
     "#shared": "./src/shared/index.ts",
-    "#ports": "./src/domain/ports/index.ts"
+    "#ports": "./src/domain/ports/index.ts",
+    "#history-manager": {
+      "michijs-no-polyfills": "./src/infrastructure/dom/routing/entities/HistoryManager/historyManager.noPolyfills.ts",
+      "default": "./src/infrastructure/dom/routing/entities/HistoryManager/historyManager.ts"
+    },
+    "#create-built-in-element": {
+      "michijs-no-polyfills": "./src/infrastructure/dom/polyfills/createBuiltInElement.noPolyfills.ts",
+      "default": "./src/infrastructure/dom/polyfills/createBuiltInElement.ts"
+    },
+    "#cookie-storage": {
+      "michijs-no-preloaded-with-cookie-storage": "./src/infrastructure/dom/storage/entities/cookieStorage.documentCookie.ts",
+      "default": "./src/infrastructure/dom/storage/entities/cookieStorage.preloaded.ts"
+    }
   },
   "publishConfig": {
     "imports": {
       "#domain": "./dist/domain/index.js",
       "#shared": "./dist/shared/index.js",
-      "#ports": "./dist/domain/ports/index.js"
+      "#ports": "./dist/domain/ports/index.js",
+      "#history-manager": {
+        "michijs-no-polyfills": "./dist/infrastructure/dom/routing/entities/HistoryManager/historyManager.noPolyfills.js",
+        "default": "./dist/infrastructure/dom/routing/entities/HistoryManager/historyManager.js"
+      },
+      "#create-built-in-element": {
+        "michijs-no-polyfills": "./dist/infrastructure/dom/polyfills/createBuiltInElement.noPolyfills.js",
+        "default": "./dist/infrastructure/dom/polyfills/createBuiltInElement.js"
+      },
+      "#cookie-storage": {
+        "michijs-no-preloaded-with-cookie-storage": "./dist/infrastructure/dom/storage/entities/cookieStorage.documentCookie.js",
+        "default": "./dist/infrastructure/dom/storage/entities/cookieStorage.preloaded.js"
+      }
     }
   },
   "exports": {

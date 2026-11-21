@@ -81,7 +81,8 @@ export { isCSSVariable } from "./styles/typewards/isCSSVariable";
 export * from "./storage/types";
 
 // Storage - entities
-export { CookieStorage } from "./storage/entities/CookieStorage";
+// With the existing cookies read at startup (see package.json "imports" #cookie-storage).
+export { CookieStorage } from "#cookie-storage";
 
 // Storage - hooks
 export { useStorage } from "./storage/hooks/useStorage";
