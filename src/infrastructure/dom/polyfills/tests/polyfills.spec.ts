@@ -22,7 +22,7 @@ const bundle = async (contents: string, conditions: string[] = []) => {
         : {},
     logLevel: "silent",
   });
-  return result.outputFiles[0]!.text;
+  return result.outputFiles![0]!.text;
 };
 
 const app = `
