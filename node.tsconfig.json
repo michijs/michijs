@@ -26,6 +26,7 @@
     "src/infrastructure/plugin",
     "src/infrastructure/dom",
     "src/index.ts",
+    "src/index.worker.ts",
     "node_modules"
   ]
 }

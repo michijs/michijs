@@ -10,6 +10,7 @@
     "src/infrastructure/plugin",
     "src/infrastructure/node",
     "src/index.node.ts",
+    "src/index.worker.ts",
     "node_modules"
   ]
 }

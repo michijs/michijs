@@ -26,6 +26,9 @@
       "path": "./tests.lib.tsconfig.json"
     },
     {
+      "path": "./worker.tsconfig.json"
+    },
+    {
       "path": "./examples.tsconfig.json"
     }
   ],
