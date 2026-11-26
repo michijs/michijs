@@ -65,6 +65,10 @@
       "import": "./dist/infrastructure/dom/jsx-runtime/index.js",
       "require": "./dist/infrastructure/dom/jsx-runtime/index.js"
     },
+    "./worker": {
+      "import": "./dist/index.worker.js",
+      "require": "./dist/index.worker.js"
+    },
     "./droppableFlags": {
       "import": "./droppableFlags.js",
       "require": "./droppableFlags.js"

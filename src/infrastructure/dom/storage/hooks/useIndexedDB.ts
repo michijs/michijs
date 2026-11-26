@@ -26,7 +26,8 @@ const initDb: InitDb = (name, objectsStore, version = 1) => {
       resolve(db);
       db.onversionchange = () => {
         db.close();
-        location.reload();
+        // Workers have no location.reload: closing is enough there.
+        if (typeof location.reload === "function") location.reload();
       };
     };
   });
